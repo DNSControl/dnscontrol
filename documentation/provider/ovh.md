@@ -142,3 +142,38 @@ OVH now allows to host DNS zone for a domain that is not registered in their reg
 * OVH doesn't allow resetting the zone to the OVH DNS through the API. If for any reasons OVH NS entries were removed the only way to add them back is by using the OVH Control Panel (in the DNS Servers tab, click on the "Reset the DNS servers" button.
 * There may be a slight delay (1-10 minutes) before your modifications appear in the OVH Control Panel. However it seems that it's only cosmetic - the changes are indeed available at the DNS servers. You can confirm that the changes are taken into account by OVH by choosing "Change in text format", and see in the BIND compatible format that your changes are indeed there. And you can confirm by directly asking the DNS servers (e.g. with `dig`).
 * OVH enforces the [Restrictions on valid hostnames](https://en.wikipedia.org/wiki/Hostname#Syntax). A hostname with an underscore ("_") will cause the following error `FAILURE! OVHcloud API error (status code 400): Client::BadRequest: "Invalid domain name, underscore not allowed"`
+
+## Feature Flags
+
+<!-- provider-features-start -->
+- Provider Type
+  - Official Support: ❌
+  - DNS Provider: ✅
+  - Registrar: ✅
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ❌
+  - get-zones: ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❔
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+<!-- provider-features-end -->

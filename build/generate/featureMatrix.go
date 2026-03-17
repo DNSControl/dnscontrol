@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -13,6 +14,8 @@ import (
 )
 
 func generateFeatureMatrix() error {
+	updateProviderDocs()
+
 	var replacementContent strings.Builder
 	replacementContent.WriteString("Jump to a table:\n\n")
 	matrix := matrixData()
@@ -45,6 +48,40 @@ func generateFeatureMatrix() error {
 	)
 
 	return nil
+}
+
+func updateProviderDocs() {
+	matrix := matrixData()
+	docDir := "documentation/provider"
+	for _, providerName := range allProviderNames() {
+		docFile := filepath.Join(docDir, strings.ToLower(strings.ReplaceAll(providerName, "_", ""))+".md")
+		if _, err := os.Stat(docFile); os.IsNotExist(err) {
+			fmt.Printf("WARNING: Missing documentation page for provider %s: %s\n", providerName, docFile)
+		} else {
+			featureList := buildFeatureList(matrix, providerName)
+			replaceInlineContent(
+				docFile,
+				"<!-- provider-features-start -->",
+				"<!-- provider-features-end -->",
+				featureList,
+			)
+		}
+	}
+}
+
+func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
+	var sb strings.Builder
+	featureMap := matrix.Providers[providerName]
+
+	for i, category := range matrix.FeatureTablesTitles {
+		sb.WriteString("- " + category + "\n")
+		for _, feature := range matrix.FeatureTables[i] {
+			emoji := featureEmoji(featureMap, feature)
+			sb.WriteString("  - " + feature + ": " + emoji + "\n")
+		}
+	}
+
+	return sb.String()
 }
 
 func markdownTable(matrix *FeatureMatrix, tableNumber int32) (string, error) {
@@ -406,6 +443,12 @@ func replaceInlineContent(
 
 	start := strings.Index(content, startMarker)
 	end := strings.Index(content, endMarker)
+
+	if start == -1 || end == -1 {
+		fmt.Printf("WARNING: Missing delimiters in %s (start=%t, end=%t), skipping\n",
+			file, start != -1, end != -1)
+		return
+	}
 
 	newContentString := startMarker + "\n" + newContent + endMarker
 	newContentBytes := []byte(newContentString)

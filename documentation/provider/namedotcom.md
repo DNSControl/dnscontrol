@@ -94,3 +94,38 @@ integration_test.go:81: Failed getting nameservers Get https://https//api.name.c
 When running integration tests, this error means you included the `https://` in the `NAMEDOTCOM_URL` variable. You meant to do something like `export NAMEDOTCOM_URL='api.name.com' instead.
 
 In production, the `apiurl` setting in `creds.json` needs to be adjusted. You can simply leave this option out and use the default, which is correct. If you are using the EO&T system, leave the protocol (`http://`) off the URL.
+
+## Feature Flags
+
+<!-- provider-features-start -->
+- Provider Type
+  - Official Support: ❌
+  - DNS Provider: ✅
+  - Registrar: ✅
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ❌
+  - get-zones: ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ❔
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❔
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❔
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+<!-- provider-features-end -->
