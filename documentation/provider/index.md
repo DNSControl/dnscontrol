@@ -20,8 +20,8 @@ Jump to a table:
 
 ### Provider Type <!--(table 1/6)-->
 
-| Provider name | Official Support | DNS Provider | Registrar |
-| ------------- | ---------------- | ------------ | --------- |
+| Provider name | [Official Support](../provider/index#providers-with-official-support) | DNS Provider | Registrar |
+| ------------- | --------------------------------------------------------------------- | ------------ | --------- |
 | [`ADGUARDHOME`](adguardhome.md) | ❌ | ✅ | ❌ |
 | [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❌ | ✅ | ❌ |
 | [`ALIDNS`](alidns.md) | ❌ | ✅ | ❌ |
@@ -93,8 +93,8 @@ Jump to a table:
 
 ### Provider API <!--(table 2/6)-->
 
-| Provider name | [Concurrency Verified](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | get-zones |
-| ------------- | -------------------------------------------------------------------- | ---------------------------------------------- | -------------- | --------- |
+| Provider name | [Concurrency Verified](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | [get-zones](../commands/get-zones.md) |
+| ------------- | -------------------------------------------------------------------- | ---------------------------------------------- | -------------- | ------------------------------------- |
 | [`ADGUARDHOME`](adguardhome.md) | ❔ | ❔ | ❌ | ❌ |
 | [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❔ | ✅ | ✅ | ✅ |
 | [`ALIDNS`](alidns.md) | ✅ | ✅ | ❌ | ✅ |

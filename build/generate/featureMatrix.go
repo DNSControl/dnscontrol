@@ -139,7 +139,7 @@ func featureEmoji(
 
 func matrixData() *FeatureMatrix {
 	const (
-		OfficialSupport          = "Official Support" // vs. community supported
+		OfficialSupport          = "[Official Support](../provider/index#providers-with-official-support)" // vs. community supported
 		ProviderDNSProvider      = "DNS Provider"
 		ProviderRegistrar        = "Registrar"
 		ProviderThreadSafe       = "[Concurrency Verified](../advanced-features/concurrency-verified.md)"
@@ -164,7 +164,7 @@ func matrixData() *FeatureMatrix {
 		DomainModifierTlsa       = "[`TLSA`](../language-reference/domain-modifiers/TLSA.md)"
 		DualHost                 = "[dual host](../advanced-features/dual-host.md)"
 		CreateDomains            = "create-domains"
-		GetZones                 = "get-zones"
+		GetZones                 = "[get-zones](../commands/get-zones.md)"
 	)
 
 	matrix := &FeatureMatrix{

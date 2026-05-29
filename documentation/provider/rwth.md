@@ -44,14 +44,14 @@ The RWTH deploys zones every 15 minutes, so it might take some time for changes 
 
 <!-- provider-features-start -->
 - Provider Type
-  - Official Support: ❌
+  - [Official Support](../provider/index#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API
   - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
   - [dual host](../advanced-features/dual-host.md): ❌
   - create-domains: ❌
-  - get-zones: ✅
+  - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
