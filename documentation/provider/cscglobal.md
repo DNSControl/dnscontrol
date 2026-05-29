@@ -49,7 +49,7 @@ To get access to the [CSC Global API](https://www.cscglobal.com/cscglobal/docs/d
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ✅
+  - [Official Support](../provider/index.md#providers-with-official-support): ✅
   - DNS Provider: ✅
   - Registrar: ✅
 - Provider API

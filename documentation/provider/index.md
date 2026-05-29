@@ -20,8 +20,8 @@ Jump to a table:
 
 ### Provider Type <!--(table 1/6)-->
 
-| Provider name | [Official Support](../provider/index#providers-with-official-support) | DNS Provider | Registrar |
-| ------------- | --------------------------------------------------------------------- | ------------ | --------- |
+| Provider name | [Official Support](../provider/index.md#providers-with-official-support) | DNS Provider | Registrar |
+| ------------- | ------------------------------------------------------------------------ | ------------ | --------- |
 | [`ADGUARDHOME`](adguardhome.md) | ❌ | ✅ | ❌ |
 | [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❌ | ✅ | ❌ |
 | [`ALIDNS`](alidns.md) | ❌ | ✅ | ❌ |

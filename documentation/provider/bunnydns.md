@@ -95,7 +95,7 @@ You can configure Bunny's Pull Zone type with `BUNNY_DNS_PZ`. The target is the 
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API

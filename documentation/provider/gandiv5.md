@@ -108,7 +108,7 @@ Set `apiurl` key to the endpoint url for the sandbox (https://api.sandbox.gandi.
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
 - Provider API

@@ -22,7 +22,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_EXOSCALE),
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API

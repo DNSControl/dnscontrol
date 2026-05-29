@@ -44,7 +44,7 @@ Pay attention, you need to define white list of IP for API. But you always can c
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ❌
   - Registrar: ✅
 - Provider API

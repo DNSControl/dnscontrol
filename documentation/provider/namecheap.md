@@ -74,7 +74,7 @@ In order to activate API functionality on your Namecheap account, you must enabl
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
 - Provider API

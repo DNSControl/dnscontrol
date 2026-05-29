@@ -99,7 +99,7 @@ In production, the `apiurl` setting in `creds.json` needs to be adjusted. You ca
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
 - Provider API

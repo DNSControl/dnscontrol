@@ -159,7 +159,7 @@ You can obtain your API token on this page: <https://accounts.gcore.com/profile/
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API

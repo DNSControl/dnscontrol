@@ -109,7 +109,7 @@ If a domain does not exist in your Huawei Cloud account, DNSControl will automat
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API

@@ -62,7 +62,7 @@ these are the same thing but there may be situations where they are not.
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ❌
   - Registrar: ✅
 - Provider API

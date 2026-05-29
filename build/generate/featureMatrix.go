@@ -139,7 +139,7 @@ func featureEmoji(
 
 func matrixData() *FeatureMatrix {
 	const (
-		OfficialSupport          = "[Official Support](../provider/index#providers-with-official-support)" // vs. community supported
+		OfficialSupport          = "[Official Support](../provider/index.md#providers-with-official-support)" // vs. community supported
 		ProviderDNSProvider      = "DNS Provider"
 		ProviderRegistrar        = "Registrar"
 		ProviderThreadSafe       = "[Concurrency Verified](../advanced-features/concurrency-verified.md)"

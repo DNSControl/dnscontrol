@@ -47,7 +47,7 @@ You must enable API-Access for your account.
 
 <!-- provider-features-start -->
 - Provider Type
-  - [Official Support](../provider/index#providers-with-official-support): ❌
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ❌
   - Registrar: ✅
 - Provider API
