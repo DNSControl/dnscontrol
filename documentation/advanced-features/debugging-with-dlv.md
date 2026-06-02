@@ -32,8 +32,7 @@ If you are using VSCode, the equivalent configuration is:
                 "-test.run",
                 "^TestDNSProviders",
                 "-verbose",
-                "-profile",
-                "BIND",
+                "-profile", "BIND",
                 "-start", "7",
                 "-end", "7"
             ],
