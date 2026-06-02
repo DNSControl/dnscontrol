@@ -19,7 +19,10 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pquerna/otp/totp"
@@ -52,12 +55,18 @@ var features = providers.DocumentationNotes{
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanUseAlias:            providers.Can(),
 	providers.CanUseCAA:              providers.Can(),
+	providers.CanUseDHCID:            providers.Cannot(),
+	providers.CanUseDNAME:            providers.Cannot(),
+	providers.CanUseDNSKEY:           providers.Cannot(),
 	providers.CanUseDS:               providers.Cannot(),
 	providers.CanUseDSForChildren:    providers.Cannot(),
 	providers.CanUseHTTPS:            providers.Can(),
 	providers.CanUseLOC:              providers.Can(),
 	providers.CanUseNAPTR:            providers.Can(),
+	providers.CanUseOPENPGPKEY:       providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
+	providers.CanUseRP:               providers.Can(),
+	providers.CanUseSMIMEA:           providers.Cannot(),
 	providers.CanUseSOA:              providers.Cannot(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
@@ -150,12 +159,15 @@ type hednsProvider struct {
 
 // Record stores the HEDNS specific zone and record IDs.
 type Record struct {
-	RecordName string
-	RecordID   uint64
-	ZoneName   string
-	ZoneID     uint64
-	Dynamic    bool   // Whether this record has Dynamic DNS enabled
-	DDNSKey    string // The DDNS key/token for this record (populated on demand)
+	ZoneID      uint64
+	ZoneName    string
+	ID          uint64
+	Type        string
+	Name        string
+	Data        string
+	TTL         uint32
+	Priority    uint16
+	DDNSEnabled bool
 }
 
 func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -312,7 +324,7 @@ func resolveDynamic(newRec *models.RecordConfig, oldRec *Record) bool {
 	}
 	// Not explicitly set – inherit from old record if present.
 	if oldRec != nil {
-		return oldRec.Dynamic
+		return oldRec.DDNSEnabled
 	}
 	return false
 }
@@ -375,17 +387,17 @@ func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, zoneI
 			corrections = append(corrections, &models.Correction{
 				Msg: change.MsgsJoined,
 				F: func() error {
-					if err := c.changeZoneRecord(zoneID, oldRecord.RecordID, record, &oldRecord); err != nil {
+					if err := c.changeZoneRecord(zoneID, oldRecord.ID, record, &oldRecord); err != nil {
 						return err
 					}
 					if ddnsKey != "" {
-						return c.setRecordDDNSKey(zoneID, oldRecord.RecordName, ddnsKey)
+						return c.setRecordDDNSKey(zoneID, oldRecord.Name, ddnsKey)
 					}
 					return nil
 				},
 			})
 		case diff2.DELETE:
-			recordID := change.Old[0].Original.(Record).RecordID
+			recordID := change.Old[0].Original.(Record).ID
 			corrections = append(corrections, &models.Correction{
 				Msg: change.MsgsJoined,
 				F: func() error {
@@ -449,64 +461,74 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	// Load all the domain records
 	recordSelector := "tr.dns_tr, tr.dns_tr_dynamic, tr.dns_tr_locked"
 	document.Find(recordSelector).EachWithBreak(func(index int, element *goquery.Selection) bool {
+		// HEDNS renders each record as a table row with the following columns:
+		//  1. Zone ID
+		//  2. Record ID
+		//  3. Name (.dns_view)
+		//  4. Type (.rrlabel)
+		//  5. TTL
+		//  6. Priority
+		//  7. Data
+		//  8+. Hidden/UI Controls
 		parser := elementParser{}
-		isDynamic := element.HasClass("dns_tr_dynamic")
-
-		rc := &models.RecordConfig{
-			Type: parser.parseStringAttr(element.Find("td > .rrlabel"), "data"),
-			TTL:  parser.parseIntElementUint32(element.Find("td:nth-child(5)")),
-			Original: Record{
-				ZoneName:   domain,
-				ZoneID:     domainID,
-				RecordName: parser.parseStringElement(element.Find(".dns_view")),
-				RecordID:   parser.parseIntAttr(element, "id"),
-				Dynamic:    isDynamic,
-			},
+		rec := Record{
+			ZoneID:      domainID,
+			ZoneName:    domain,
+			ID:          parser.parseIntAttr(element, "id"),
+			Type:        parser.parseStringAttr(element.Find(".rrlabel"), "data"),
+			Name:        parser.parseStringElement(element.Find(".dns_view")),
+			Data:        parser.parseStringAttr(element.Find("td:nth-child(7)"), "data"),
+			TTL:         parser.parseIntElementUint32(element.Find("td:nth-child(5)")),
+			Priority:    parser.parseIntElementUint16(element.Find("td:nth-child(6)")),
+			DDNSEnabled: element.HasClass("dns_tr_dynamic"),
 		}
-		data := parser.parseStringAttr(element.Find("td:nth-child(7)"), "data")
-		if err != nil {
-			return false
-		}
-
-		priority := parser.parseIntElementUint16(element.Find("td:nth-child(6)"))
 		if parser.err != nil {
 			err = parser.err
 			return false
 		}
 
 		// Ignore record types that dnscontrol does not support
-		if rc.Type == "HINFO" || rc.Type == "AFSDB" || rc.Type == "RP" {
+		if rec.Type == "HINFO" || rec.Type == "AFSDB" {
 			return true
 		}
 
-		// Populate metadata so the diff engine can see the "dynamic" state.
-		rc.Metadata = map[string]string{}
-		if isDynamic {
-			rc.Metadata[metaDynamic] = "on"
+		var rc *models.RecordConfig
+		if rtypeinfo.IsModernType(rec.Type) {
+			// FQDNs for NewRecordConfigFromString require trailing "."
+			rc, err = rtypecontrol.NewRecordConfigFromString(
+				rec.Name+".", rec.TTL, rec.Type, rec.Data,
+				domaintags.MakeDomainNameVarieties(domain),
+			)
 		} else {
-			rc.Metadata[metaDynamic] = "off"
+			rc = &models.RecordConfig{Type: rec.Type, TTL: rec.TTL}
+			rc.SetLabelFromFQDN(rec.Name, domain)
+			switch rec.Type {
+			case "ALIAS":
+				err = rc.SetTarget(rec.Data)
+			case "MX":
+				// HEDNS omits the trailing "." on the hostnames for MX records
+				err = rc.SetTargetMX(rec.Priority, rec.Data+".")
+			case "SRV":
+				err = rc.SetTargetSRVPriorityString(rec.Priority, rec.Data)
+			case "SPF":
+				// Convert to TXT record as SPF is deprecated
+				rc.ChangeType("TXT", domain)
+				fallthrough
+			default:
+				err = rc.PopulateFromStringFunc(rec.Type, rec.Data, domain, txtutil.ParseQuoted)
+			}
 		}
-
-		rc.SetLabelFromFQDN(rc.Original.(Record).RecordName, domain)
-
-		switch rc.Type {
-		case "ALIAS":
-			err = rc.SetTarget(data)
-		case "MX":
-			// dns.he.net omits the trailing "." on the hostnames for MX records
-			err = rc.SetTargetMX(priority, data+".")
-		case "SRV":
-			err = rc.SetTargetSRVPriorityString(priority, data)
-		case "SPF":
-			// Convert to TXT record as SPF is deprecated
-			rc.ChangeType("TXT", domain)
-			fallthrough
-		default:
-			err = rc.PopulateFromStringFunc(rc.Type, data, domain, txtutil.ParseQuoted)
-		}
-
 		if err != nil {
 			return false
+		}
+
+		rc.Original = rec
+		rc.Metadata = map[string]string{
+			metaDynamic: "off",
+		}
+
+		if rec.DDNSEnabled {
+			rc.Metadata[metaDynamic] = "on"
 		}
 
 		zoneRecords = append(zoneRecords, rc)
