@@ -57,7 +57,7 @@ func init() {
 		DisplayName: "DNSimple",
 		Kind:        providers.KindDNS | providers.KindRegistrar,
 		DocsURL:     "https://docs.dnscontrol.org/provider/dnsimple",
-		PortalURL:   "https://dnsimple.com/user", // TODO: Verify
+		PortalURL:   "https://dnsimple.com/user",
 		Fields: []providers.CredsField{
 			{
 				Key:      "token",
