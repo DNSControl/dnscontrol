@@ -58,9 +58,9 @@ func init() {
 const stateRegistered = "registered"
 
 var defaultNameServerNames = []string{
-	"ns1.dnsimple.com",
+	"ns1.dnsimple-edge.com",
 	"ns2.dnsimple-edge.net",
-	"ns3.dnsimple.com",
+	"ns3.dnsimple-edge.io",
 	"ns4.dnsimple-edge.org",
 }
 
