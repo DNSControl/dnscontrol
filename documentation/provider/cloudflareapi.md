@@ -571,7 +571,7 @@ The integration tests assume that Cloudflare Workers are enabled and the credent
 
 ```shell
 cd integrationTest              # NOTE: Not needed if already in that subdirectory
-go test -v -verbose -profile CLOUDFLAREAPI -cfworkers=false
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfworkers=false
 ```
 
 When `-cfworkers=false` is set, tests related to Workers are skipped.  The Account ID is not required.
@@ -582,7 +582,7 @@ Tests for per-record CNAME flattening (`CF_CNAME_FLATTEN_ON`/`CF_CNAME_FLATTEN_O
 
 ```shell
 cd integrationTest
-go test -v -verbose -profile CLOUDFLAREAPI -cfflatten=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfflatten=true
 ```
 
 If you run with `-cfflatten=true` on a free zone, the tests will fail with an error from the Cloudflare API.
@@ -594,13 +594,13 @@ Tests for record comments (`CF_COMMENT`) always run since comments work on all p
 ```shell
 cd integrationTest
 # Tags disabled by default:
-go test -v -verbose -profile CLOUDFLAREAPI
+go test -v -args -verbose -profile CLOUDFLAREAPI
 
 # Enable tag tests (requires paid plan):
-go test -v -verbose -profile CLOUDFLAREAPI -cftags=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cftags=true
 
 # Enable all paid features:
-go test -v -verbose -profile CLOUDFLAREAPI -cfflatten=true -cftags=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfflatten=true -cftags=true
 ```
 
 ## Cloudflare special TTLs

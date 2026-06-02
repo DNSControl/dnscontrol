@@ -72,7 +72,7 @@ These prefixes are used by GoReleaser to categorize the release changelog. See `
 Integration tests run real DNS operations against a provider's API. They require credentials and a dedicated test zone. See the [integration test documentation](https://docs.dnscontrol.org/developer-info/integration-tests) for setup instructions.
 
 ```shell
-go test ./integrationTest/ -v -provider PROVIDERNAME
+go test ./integrationTest/ -v -args -provider PROVIDERNAME
 ```
 
 ## Writing a new provider

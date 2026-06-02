@@ -68,7 +68,7 @@ var features = providers.DocumentationNotes{
 	providers.CanGetZones:            providers.Can(),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
-	providers.CanUseAzureAlias:       providers.Can(),
+	providers.CanUseAzureAlias:       providers.Cannot(),
 	providers.CanUseCAA:              providers.Cannot("Azure Private DNS does not support CAA records"),
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUseNAPTR:            providers.Cannot(),
@@ -89,8 +89,46 @@ func init() {
 		RecordAuditor: AuditRecords,
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType("AZURE_ALIAS", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Azure Private DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/azureprivatedns",
+		PortalURL:   "https://portal.azure.com/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "SubscriptionID",
+				Label:    "Subscription ID",
+				Help:     "Azure subscription ID that contains the private DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "ResourceGroup",
+				Label:    "Resource group",
+				Help:     "Azure resource group that contains the private DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "TenantID",
+				Label:    "Tenant ID",
+				Help:     "Azure AD tenant ID for the service principal.",
+				Required: true,
+			},
+			{
+				Key:      "ClientID",
+				Label:    "Client ID",
+				Help:     "Service principal client (application) ID.",
+				Required: true,
+			},
+			{
+				Key:      "ClientSecret",
+				Label:    "Client secret",
+				Help:     "Service principal client secret.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func (a *azurednsProvider) getExistingZones() ([]*adns.PrivateZone, error) {
@@ -434,28 +472,16 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			if recordSet.Properties.ARecords == nil {
-				recordSet.Properties.ARecords = []*adns.ARecord{}
-			}
 			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
 		case "AAAA":
-			if recordSet.Properties.AaaaRecords == nil {
-				recordSet.Properties.AaaaRecords = []*adns.AaaaRecord{}
-			}
 			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
 		case "CNAME":
 			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
 		case "PTR":
-			if recordSet.Properties.PtrRecords == nil {
-				recordSet.Properties.PtrRecords = []*adns.PtrRecord{}
-			}
 			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
 		case "TXT":
-			if recordSet.Properties.TxtRecords == nil {
-				recordSet.Properties.TxtRecords = []*adns.TxtRecord{}
-			}
-			// Empty TXT record needs to have no value set in it's properties
-			if rec.GetTargetTXTJoined() == "" {
+			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "".
+			if rec.GetTargetTXTJoined() != "" {
 				var txts []*string
 				for _, txt := range rec.GetTargetTXTSegmented() {
 					txts = append(txts, new(txt))
@@ -463,14 +489,8 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			if recordSet.Properties.MxRecords == nil {
-				recordSet.Properties.MxRecords = []*adns.MxRecord{}
-			}
 			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
 		case "SRV":
-			if recordSet.Properties.SrvRecords == nil {
-				recordSet.Properties.SrvRecords = []*adns.SrvRecord{}
-			}
 			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
 			/* CAA records don't work in a private zone */
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":

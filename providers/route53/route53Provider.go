@@ -40,7 +40,13 @@ type route53Provider struct {
 }
 
 func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
-	return newRoute53(conf, nil)
+	// AWS European Sovereign Cloud (aws.eu) does not support registering domains, at least not yet.
+	// Let us assume only the global AWS is capable of registering domains currently.
+	if conf["Region"] != "" && conf["Region"] != "us-east-1" {
+		return nil, errors.New("Error! Domain register endpoint is only supported on the global AWS region us-east-1")
+	} else {
+		return newRoute53(conf, nil)
+	}
 }
 
 func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -48,11 +54,16 @@ func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.
 }
 
 func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error) {
-	optFns := []func(*config.LoadOptions) error{
+	optFns := []func(*config.LoadOptions) error{}
+
+	if m["Region"] != "" {
+		// AWS European Sovereign Cloud (aws.eu) region eusc-de-east-1 uses a separate Route 53 API endpoint from the global AWS
+		optFns = append(optFns, config.WithRegion(m["Region"]))
+	} else {
 		// Route53 uses a global endpoint and route53domains
 		// currently only has a single regional endpoint in us-east-1
 		// https://docs.aws.amazon.com/general/latest/gr/rande.html#r53_region
-		config.WithRegion("us-east-1"),
+		optFns = append(optFns, config.WithRegion("us-east-1"))
 	}
 
 	keyID, secretKey, tokenID, roleArn, externalID := m["KeyId"], m["SecretKey"], m["Token"], m["RoleArn"], m["ExternalId"]
@@ -145,6 +156,12 @@ func init() {
 		PortalURL:   "https://console.aws.amazon.com/route53/",
 		Notes:       "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
 		Fields: []providers.CredsField{
+			{
+				Key:    "Region",
+				Label:  "AWS Region to use for Route 53 control plane (optional)",
+				Help:   "Leave blank to use default global Route 53 in us-east-1. Type \"eusc-de-east-1\" for AWS European Sovereign Cloud.",
+				EnvVar: "AWS_DEFAULT_REGION",
+			},
 			{
 				Key:      "_authMethod",
 				Label:    "Which authentication method do you want to use?",

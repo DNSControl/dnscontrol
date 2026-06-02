@@ -627,32 +627,17 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			if recordSet.Properties.ARecords == nil {
-				recordSet.Properties.ARecords = []*adns.ARecord{}
-			}
 			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
 		case "AAAA":
-			if recordSet.Properties.AaaaRecords == nil {
-				recordSet.Properties.AaaaRecords = []*adns.AaaaRecord{}
-			}
 			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
 		case "CNAME":
 			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
 		case "NS":
-			if recordSet.Properties.NsRecords == nil {
-				recordSet.Properties.NsRecords = []*adns.NsRecord{}
-			}
 			recordSet.Properties.NsRecords = append(recordSet.Properties.NsRecords, &adns.NsRecord{Nsdname: new(rec.GetTargetField())})
 		case "PTR":
-			if recordSet.Properties.PtrRecords == nil {
-				recordSet.Properties.PtrRecords = []*adns.PtrRecord{}
-			}
 			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
 		case "TXT":
-			if recordSet.Properties.TxtRecords == nil {
-				recordSet.Properties.TxtRecords = []*adns.TxtRecord{}
-			}
-			// Empty TXT record needs to have no value set in it's properties
+			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "". Therefore we skip this.
 			if rec.GetTargetTXTSegmentCount() != 1 || rec.GetTargetTXTSegmented()[0] != "" {
 				var txts []*string
 				for _, txt := range rec.GetTargetTXTSegmented() {
@@ -661,26 +646,14 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			if recordSet.Properties.MxRecords == nil {
-				recordSet.Properties.MxRecords = []*adns.MxRecord{}
-			}
 			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
 		case "SRV":
-			if recordSet.Properties.SrvRecords == nil {
-				recordSet.Properties.SrvRecords = []*adns.SrvRecord{}
-			}
 			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
 		case "CAA":
-			if recordSet.Properties.CaaRecords == nil {
-				recordSet.Properties.CaaRecords = []*adns.CaaRecord{}
-			}
 			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(rec.GetTargetField()), Tag: new(rec.CaaTag), Flags: new(int32(rec.CaaFlag))})
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
-			aatype := rec.AzureAlias["type"]
-			recordSet.Type = &aatype
-			aatarg := new(rec.GetTargetField())
-			aasub := adns.SubResource{ID: aatarg}
-			recordSet.Properties.TargetResource = &aasub
+			recordSet.Type = new(rec.AzureAlias["type"])
+			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(rec.GetTargetField())})
 
 		default:
 			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder

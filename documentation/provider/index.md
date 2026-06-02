@@ -187,7 +187,7 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GCORE`](gcore.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ✅ | ❔ | ✅ | ✅ | ❌ |
+| [`HEDNS`](hedns.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
 | [`HETZNER`](hetzner.md) | ❌ | ❔ | ❌ | ❌ | ❌ |
 | [`HETZNER_V2`](hetznerv2.md) | ❌ | ❔ | ❌ | ✅ | ❌ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ❌ | ✅ | ✅ |
@@ -251,7 +251,7 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ❔ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ❔ | ❌ | ✅ | ✅ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ✅ | ❌ |
-| [`HEDNS`](hedns.md) | ❔ | ✅ | ✅ | ✅ |
+| [`HEDNS`](hedns.md) | ❌ | ✅ | ✅ | ✅ |
 | [`HETZNER`](hetzner.md) | ❔ | ❌ | ✅ | ❔ |
 | [`HETZNER_V2`](hetznerv2.md) | ❔ | ❌ | ✅ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ❔ | ❌ | ✅ | ❔ |
@@ -315,7 +315,7 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ✅ | ✅ | ❔ | ❌ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❔ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ✅ | ✅ | ❔ | ✅ | ❌ |
+| [`HEDNS`](hedns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`HETZNER`](hetzner.md) | ✅ | ❔ | ❔ | ❌ | ✅ |
 | [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ❔ | ❌ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
@@ -370,7 +370,7 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❔ |
 | [`GCORE`](gcore.md) | ✅ | ❔ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ❌ | ❔ | ❌ |
+| [`HEDNS`](hedns.md) | ❌ | ❌ | ❌ |
 | [`HETZNER`](hetzner.md) | ❌ | ❔ | ✅ |
 | [`HETZNER_V2`](hetznerv2.md) | ❌ | ❔ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ✅ |

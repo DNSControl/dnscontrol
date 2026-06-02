@@ -541,21 +541,21 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * ### Parameters
  *
  * * `label:` The label of the CAA record. (Optional. Default: `"@"`)
- * * `iodef:` Report all violation to configured mail address.
+ * * `iodef:` Report all violation to configured mail address. (Optional. Default: `""`)
  * * `iodef_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issue:` An array of CAs which are allowed to issue certificates. (Use `"none"` to refuse all CAs)
+ * * `issue:` An array of CAs which are allowed to issue certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issue_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuewild:` An array of CAs which are allowed to issue wildcard certificates. (Can be simply `"none"` to refuse issuing wildcard certificates for all CAs)
+ * * `issuewild:` An array of CAs which are allowed to issue wildcard certificates. (Optional. Default: `[]`. Can be simply `"none"` to refuse issuing wildcard certificates for all CAs)
  * * `issuewild_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuevmc:` An array of CAs which are allowed to issue VMC certificates. (Use `"none"` to refuse all CAs)
+ * * `issuevmc:` An array of CAs which are allowed to issue VMC certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issuevmc_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuemail:` An array of CAs which are allowed to issue email certificates. (Use `"none"` to refuse all CAs)
+ * * `issuemail:` An array of CAs which are allowed to issue email certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issuemail_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
  * * `ttl:` Input for `TTL` method (optional)
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/caa_builder
  */
-declare function CAA_BUILDER(opts: { label?: string; iodef: string; iodef_critical?: boolean; issue: string[]|string; issue_critical?: boolean; issuewild: string[]|string; issuewild_critical?: boolean; issuevmc: string[]|string; issuevmc_critical?: boolean; issuemail: string[]|string; issuemail_critical?: boolean; ttl?: Duration }): DomainModifier;
+declare function CAA_BUILDER(opts: { label?: string; iodef?: string; iodef_critical?: boolean; issue?: string[]|'none'; issue_critical?: boolean; issuewild?: string[]|'none'; issuewild_critical?: boolean; issuevmc?: string[]|'none'; issuevmc_critical?: boolean; issuemail?: string[]|'none'; issuemail_critical?: boolean; ttl?: Duration }): DomainModifier;
 
 /**
  * **WARNING:** Cloudflare is removing this feature and replacing it with a new
