@@ -294,8 +294,8 @@ github.com/mattn/go-colorable v0.1.2/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVc
 github.com/mattn/go-colorable v0.1.8/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.9/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.12/go.mod h1:u5H1YNBxpqRaxsYJYSkiCWKzEfiAb1Gb520KVy5xxl4=
-github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
-github.com/mattn/go-colorable v0.1.14/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
+github.com/mattn/go-colorable v0.1.15 h1:+u9SLTRGnXv73cEsnsmoZBom+dMU88B2M0aDcWy0/jY=
+github.com/mattn/go-colorable v0.1.15/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
 github.com/mattn/go-isatty v0.0.8/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/mattn/go-isatty v0.0.14/go.mod h1:7GGIvUiUoEMVVmxf/4nioHXj79iQHKdU27kJ6hsGG94=
@@ -325,8 +325,8 @@ github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04 h1:o6uBwrhM5C8Ll3MAA
 github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04/go.mod h1:5sN+Lt1CaY4wsPvgQH/jsuJi4XO2ssZbdsIizr4CVC8=
 github.com/netnod/netnod-primary-dns-client v1.0.0 h1:ISyr7eOsQtUAZ4c1ov0sFV22I4yB09Du1kf9zy/q85U=
 github.com/netnod/netnod-primary-dns-client v1.0.0/go.mod h1:MLvJf4UhbAB8WQdypLqYv9rwtOGD+3cZlAVXMwgad3c=
-github.com/nicholas-fedor/shoutrrr v0.15.1 h1:dfgqpaeyr0CwUhqtwWBHS4girmAvFPOoxroHaVH1q1Y=
-github.com/nicholas-fedor/shoutrrr v0.15.1/go.mod h1:xrdV1ab2W0/xa5kM6WP9mBuqVuJaDWqUwYvYvVuPTjk=
+github.com/nicholas-fedor/shoutrrr v0.16.0 h1:oUKfFZDM7CoENuZMsE/8sK/KbED92/urTWR0wv2BAq8=
+github.com/nicholas-fedor/shoutrrr v0.16.0/go.mod h1:l0IveCVC6V2uyjxCeK22JTRlzoiQp2c0Dam/HE6OLBk=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481 h1:Up6+btDp321ZG5/zdSLo48H9Iaq0UQGthrhWC6pCxzE=
 github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481/go.mod h1:yKZQO8QE2bHlgozqWDiRVqTFlLQSj30K/6SAK8EeYFw=
