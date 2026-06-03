@@ -42,10 +42,10 @@ require (
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/TomOnTime/utfutil v1.0.0
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883
-	github.com/aws/aws-sdk-go-v2 v1.41.9
+	github.com/aws/aws-sdk-go-v2 v1.41.10
 	github.com/aws/aws-sdk-go-v2/config v1.32.20
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.19
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.62.9
+	github.com/aws/aws-sdk-go-v2/service/route53 v1.63.0
 	github.com/aws/aws-sdk-go-v2/service/route53domains v1.35.2
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/billputer/go-namecheap v0.0.0-20210108011502-994a912fb7f9
@@ -122,8 +122,8 @@ require (
 	github.com/akamai/AkamaiOPEN-edgegrid-golang/v12 v12.3.0
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.25 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.25 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.25 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.26 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.26 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.10 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.25 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.1.1 // indirect
