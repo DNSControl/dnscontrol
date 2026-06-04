@@ -42,6 +42,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rc.RDATA = privatetypesrdata.BUNNYDNSPZ{}
 		case "LUA":
 			rc.RDATA = privatetypesrdata.LUA{}
+		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+			rc.RDATA = privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{}
 		case "CLOUDNS_WR":
 			rc.RDATA = privatetypesrdata.CLOUDNSWR{}
 		case "NETLIFY":
