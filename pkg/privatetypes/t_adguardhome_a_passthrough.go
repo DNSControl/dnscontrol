@@ -1,6 +1,7 @@
 package privatetypes
 
 import (
+	"fmt"
 	"strconv"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -18,6 +19,8 @@ const TypeADGUARDHOMEAPASSTHROUGH = 65301
 
 type ADGUARDHOMEAPASSTHROUGH struct {
 	Hdr dnsv2.Header
+
+	privatetypesrdata.ADGUARDHOMEAPASSTHROUGH
 }
 
 // Typer interface.
@@ -31,7 +34,11 @@ func (rr *ADGUARDHOMEAPASSTHROUGH) Len() int              { return rr.Hdr.Len() 
 func (rr *ADGUARDHOMEAPASSTHROUGH) Data() dnsv2.RDATA {
 	return &privatetypesrdata.ADGUARDHOMEAPASSTHROUGH{}
 }
-func (rr *ADGUARDHOMEAPASSTHROUGH) Clone() dnsv2.RR { return &ADGUARDHOMEAPASSTHROUGH{rr.Hdr} }
+func (rr *ADGUARDHOMEAPASSTHROUGH) Clone() dnsv2.RR {
+	return &ADGUARDHOMEAPASSTHROUGH{
+		rr.Hdr,
+		privatetypesrdata.ADGUARDHOMEAPASSTHROUGH{}}
+}
 func (rr *ADGUARDHOMEAPASSTHROUGH) String() string {
 	return rr.Header().Name + "\t" +
 		strconv.FormatInt(int64(rr.Header().TTL), 10) + "\t" +
@@ -40,5 +47,9 @@ func (rr *ADGUARDHOMEAPASSTHROUGH) String() string {
 
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *ADGUARDHOMEAPASSTHROUGH) Parse(tokens []string, _ string) error {
+	args := TokensToArgs(tokens)
+	if len(args) != 0 {
+		return fmt.Errorf("ADGUARDHOME_A_PASSTHROUGH requires exactly 0 arguments, got %d", len(args))
+	}
 	return nil
 }

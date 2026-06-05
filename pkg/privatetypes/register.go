@@ -34,7 +34,7 @@ func Register(codepoint uint16, typeName string, newFn func() dnsv2.RR, makeFn f
 
 	// typenum -> func() RR  i.e. a function that creates a new RR struct for the given code point.
 	if dnsv2.TypeToRR[codepoint] != nil {
-		panic(fmt.Sprintf("TypeToRR[%d] already in use", codepoint))
+		panic(fmt.Sprintf("TypeToRR[%d] already in use (check for duplicate codepoint assignments)", codepoint))
 	}
 	dnsv2.TypeToRR[codepoint] = newFn
 
@@ -63,4 +63,9 @@ func RegisterMaker(codepoint uint16, makeFn func(origin string, args ...any) (dn
 		panic(fmt.Sprintf("TypeToMakeRDATA[%d] a.k.a. %s already in use by %T", codepoint, typeName, s))
 	}
 	TypeToMakeRDATA[codepoint] = makeFn
+}
+
+func IsModernType(typeName string) bool {
+	_, ok := TypeToMakeRDATA[dnsv2.StringToType[typeName]]
+	return ok
 }
