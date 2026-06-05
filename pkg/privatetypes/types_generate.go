@@ -38,8 +38,97 @@ type Config struct {
 	Types []TypeDef `yaml:"types"`
 }
 
+// TypeInfo describes how a mustbe type maps to Go code.
+type TypeInfo struct {
+	GoType      string // Go type of the struct field
+	NeedsOrigin bool   // mustbe call needs an origin string as first arg
+	NeedsNetip  bool   // requires "net/netip" import
+	IsString    bool   // field is a Go string (affects len/string formatting)
+}
+
+var typeInfo = map[string]TypeInfo{
+	"RawString":  {GoType: "string", IsString: true},
+	"TargetHost": {GoType: "string", IsString: true, NeedsOrigin: true},
+	"BoolString": {GoType: "string", IsString: true},
+	"Bool":       {GoType: "bool"},
+	"Uint8":      {GoType: "uint8"},
+	"Uint16":     {GoType: "uint16"},
+	"Uint32":     {GoType: "uint32"},
+	"IPv4":       {GoType: "netip.Addr", NeedsNetip: true},
+	"IPv6":       {GoType: "netip.Addr", NeedsNetip: true},
+}
+
+func info(typeName string) TypeInfo {
+	ti, ok := typeInfo[typeName]
+	if !ok {
+		log.Fatalf("unknown mustbe type %q", typeName)
+	}
+	return ti
+}
+
+func anyNeedsNetip(fields []FieldDef) bool {
+	for _, f := range fields {
+		if info(f.Type).NeedsNetip {
+			return true
+		}
+	}
+	return false
+}
+
+func anyNonString(fields []FieldDef) bool {
+	for _, f := range fields {
+		if !info(f.Type).IsString {
+			return true
+		}
+	}
+	return false
+}
+
+// fieldStringExpr returns a Go expression that converts the named field to a string for printing.
+func fieldStringExpr(receiver string, f FieldDef) string {
+	ti := info(f.Type)
+	switch {
+	case ti.IsString:
+		return fmt.Sprintf("%s.%s", receiver, f.Name)
+	case ti.NeedsNetip:
+		return fmt.Sprintf("%s.%s.String()", receiver, f.Name)
+	case ti.GoType == "bool":
+		return fmt.Sprintf("fmt.Sprintf(\"%%t\", %s.%s)", receiver, f.Name)
+	default: // numeric
+		return fmt.Sprintf("fmt.Sprintf(\"%%d\", %s.%s)", receiver, f.Name)
+	}
+}
+
+// formatLiteral renders a test-data value as a Go literal appropriate for the field type.
+func formatLiteral(typeName string, v interface{}) string {
+	ti := info(typeName)
+	s := fmt.Sprintf("%v", v)
+	switch {
+	case ti.IsString:
+		return fmt.Sprintf("%q", s)
+	case ti.NeedsNetip:
+		return fmt.Sprintf("netip.MustParseAddr(%q)", s)
+	default:
+		return s // bool / numeric literal
+	}
+}
+
+// zeroLiteral renders the zero value of the field type as a Go literal.
+func zeroLiteral(typeName string) string {
+	ti := info(typeName)
+	switch {
+	case ti.IsString:
+		return `""`
+	case ti.NeedsNetip:
+		return "netip.Addr{}"
+	case ti.GoType == "bool":
+		return "false"
+	default:
+		return "0"
+	}
+}
+
 func main() {
-	// Read the YAML file
 	yamlFile, err := os.ReadFile("types_generate.yaml")
 	if err != nil {
 		log.Fatalf("Failed to read types_generate.yaml: %v", err)
@@ -51,7 +140,6 @@ func main() {
 		log.Fatalf("Failed to parse YAML: %v", err)
 	}
 
-	// Generate files for each type
 	for _, t := range config.Types {
 		if err := generateTypeFile(&t); err != nil {
 			log.Fatalf("Failed to generate type file for %s: %v", t.Name, err)
@@ -68,23 +156,19 @@ func main() {
 }
 
 func toConstName(name string) string {
-	// Convert Adguardhome_A_Passthrough to ADGUARDHOMEAPASSTHROUGH
 	s := strings.ToUpper(name)
 	return strings.ReplaceAll(s, "_", "")
 }
 
 func toTypeName(name string) string {
-	// Convert Adguardhome_A_Passthrough to ADGUARDHOMEAPASSTHROUGH (same as const name for simplicity)
 	return toConstName(name)
 }
 
 func toFileName(name string) string {
-	// Convert Adguardhome_A_Passthrough to adguardhome_a_passthrough
 	return strings.ToLower(name)
 }
 
 func camelCaseFromSnake(s string) string {
-	// Convert Adguardhome_A_Passthrough to AdguardhomeAPassthrough
 	parts := strings.Split(s, "_")
 	var result []string
 	for _, part := range parts {
@@ -96,7 +180,6 @@ func camelCaseFromSnake(s string) string {
 }
 
 func toDisplayName(name string) string {
-	// Convert Adguardhome_A_Passthrough to ADGUARDHOME_A_PASSTHROUGH
 	return strings.ToUpper(name)
 }
 
@@ -108,11 +191,13 @@ func generateTypeFile(t *TypeDef) error {
 
 	var buf bytes.Buffer
 
-	// Package and imports
 	buf.WriteString("package privatetypes\n\n")
 	buf.WriteString("import (\n")
 	buf.WriteString("\t\"fmt\"\n")
 	buf.WriteString("\t\"strconv\"\n")
+	if anyNeedsNetip(t.Fields) {
+		buf.WriteString("\t\"net/netip\"\n")
+	}
 	buf.WriteString("\n")
 	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
 	buf.WriteString("\tdnsutilv2 \"codeberg.org/miekg/dns/dnsutil\"\n")
@@ -124,56 +209,40 @@ func generateTypeFile(t *TypeDef) error {
 	buf.WriteString("\tprivatetypesrdata \"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata\"\n")
 	buf.WriteString(")\n\n")
 
-	// Comment
 	fmt.Fprintf(&buf, "// %s\n\n", displayName)
 
-	// init function
 	fmt.Fprintf(&buf, "func init() {\n")
 	fmt.Fprintf(&buf, "\tRegister(Type%s, \"%s\", func() dnsv2.RR { return new(%s) }, privatetypesrdata.Make%s)\n", constName, displayName, typeName, typeName)
 	fmt.Fprintf(&buf, "}\n\n")
 
-	// Constant
 	fmt.Fprintf(&buf, "const Type%s = %d\n\n", constName, t.Codepoint)
 
-	// Type definition
 	fmt.Fprintf(&buf, "type %s struct {\n", typeName)
 	buf.WriteString("\tHdr dnsv2.Header\n\n")
 	fmt.Fprintf(&buf, "\tprivatetypesrdata.%s\n", typeName)
 
-	// Comment for fields (optional)
 	if len(t.Fields) > 0 {
 		for _, f := range t.Fields {
-			fmt.Fprintf(&buf, "\t// %-20s string\n", f.Name)
+			fmt.Fprintf(&buf, "\t// %-20s %s\n", f.Name, info(f.Type).GoType)
 		}
 	}
 
 	buf.WriteString("}\n\n")
 
-	// Typer interface
 	buf.WriteString("// Typer interface.\n\n")
 	fmt.Fprintf(&buf, "func (rr *%s) Type() uint16 { return Type%s }\n\n", typeName, constName)
 
-	// RR interface
 	buf.WriteString("// RR interface.\n\n")
 	fmt.Fprintf(&buf, "func (rr *%s) Header() *dnsv2.Header { return &rr.Hdr }\n", typeName)
 
-	// Len method
 	fmt.Fprintf(&buf, "func (rr *%s) Len() int {\n", typeName)
 	if len(t.Fields) == 0 {
 		buf.WriteString("\treturn rr.Hdr.Len()\n")
 	} else {
-		buf.WriteString("\treturn rr.Hdr.Len() +\n")
-		for i, f := range t.Fields {
-			fmt.Fprintf(&buf, "\t\t1 + len(rr.%s)", f.Name)
-			if i < len(t.Fields)-1 {
-				buf.WriteString(" +")
-			}
-			buf.WriteString("\n")
-		}
+		buf.WriteString("\treturn rr.Hdr.Len() + rr.Data().Len()\n")
 	}
 	buf.WriteString("}\n")
 
-	// Data method
 	fmt.Fprintf(&buf, "func (rr *%s) Data() dnsv2.RDATA {\n", typeName)
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\treturn &privatetypesrdata.%s{}\n", typeName)
@@ -189,7 +258,6 @@ func generateTypeFile(t *TypeDef) error {
 	}
 	buf.WriteString("}\n")
 
-	// Clone method
 	fmt.Fprintf(&buf, "func (rr *%s) Clone() dnsv2.RR {\n", typeName)
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\treturn &%s{\n", typeName)
@@ -200,13 +268,12 @@ func generateTypeFile(t *TypeDef) error {
 		buf.WriteString("\t\tHdr: rr.Hdr,\n")
 		fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
 		for _, f := range t.Fields {
-			fmt.Fprintf(&buf, "\t\t\t%s:        rr.%s,\n", f.Name, f.Name)
+			fmt.Fprintf(&buf, "\t\t\t%s: rr.%s,\n", f.Name, f.Name)
 		}
 		buf.WriteString("\t\t}}\n")
 	}
 	buf.WriteString("}\n")
 
-	// String method
 	fmt.Fprintf(&buf, "func (rr *%s) String() string {\n", typeName)
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\treturn rr.Header().Name + \"\\t\" +\n")
@@ -219,7 +286,6 @@ func generateTypeFile(t *TypeDef) error {
 	}
 	buf.WriteString("}\n\n")
 
-	// Parse method
 	fmt.Fprintf(&buf, "// Parse makes an RDATA for this type using the tokens from dnsv2's parser.\n")
 	fmt.Fprintf(&buf, "func (rr *%s) Parse(tokens []string, s string) error {\n", typeName)
 	buf.WriteString("\targs := TokensToArgs(tokens)\n")
@@ -234,12 +300,12 @@ func generateTypeFile(t *TypeDef) error {
 
 	buf.WriteString("\t}\n")
 
-	// Parse field assignments
 	for i, f := range t.Fields {
-		if f.Type == "RawString" {
-			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(args[%d])\n", f.Name, f.Type, i)
-		} else {
+		ti := info(f.Type)
+		if ti.NeedsOrigin {
 			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(\"\", args[%d])\n", f.Name, f.Type, i)
+		} else {
+			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(args[%d])\n", f.Name, f.Type, i)
 		}
 	}
 
@@ -259,7 +325,11 @@ func generateTestFile(t *TypeDef) error {
 
 	buf.WriteString("package privatetypes\n\n")
 	buf.WriteString("import (\n")
-	buf.WriteString("\t\"testing\"\n\n")
+	buf.WriteString("\t\"testing\"\n")
+	if anyNeedsNetip(t.Fields) {
+		buf.WriteString("\t\"net/netip\"\n")
+	}
+	buf.WriteString("\n")
 	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
 
 	if len(t.Fields) > 0 {
@@ -268,7 +338,6 @@ func generateTestFile(t *TypeDef) error {
 
 	buf.WriteString(")\n\n")
 
-	// For types with no fields, generate a single test
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testFuncName)
 		fmt.Fprintf(&buf, "\ty := &%s{Hdr: dnsv2.Header{Name: \"example.org.\", Class: dnsv2.ClassINET}}\n", typeName)
@@ -281,15 +350,13 @@ func generateTestFile(t *TypeDef) error {
 		buf.WriteString("\t}\n")
 		buf.WriteString("}\n")
 	} else {
-		// For types with fields, generate one test per test_data entry
 		if len(t.TestData) == 0 {
-			// If no test data, generate one test with empty strings
 			fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testFuncName)
 			fmt.Fprintf(&buf, "\ty := &%s{\n", typeName)
 			buf.WriteString("\t\tHdr: dnsv2.Header{Name: \"example.org.\", Class: dnsv2.ClassINET},\n")
 			fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
 			for _, f := range t.Fields {
-				fmt.Fprintf(&buf, "\t\t\t%s:        \"\",\n", f.Name)
+				fmt.Fprintf(&buf, "\t\t\t%s: %s,\n", f.Name, zeroLiteral(f.Type))
 			}
 			buf.WriteString("\t\t},\n")
 			buf.WriteString("\t}\n")
@@ -302,7 +369,6 @@ func generateTestFile(t *TypeDef) error {
 			buf.WriteString("\t}\n")
 			buf.WriteString("}\n")
 		} else {
-			// Generate one test function per test data entry
 			for _, td := range t.TestData {
 				testName := testFuncName
 				if td.Name != "" {
@@ -315,11 +381,13 @@ func generateTestFile(t *TypeDef) error {
 				fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
 
 				for _, f := range t.Fields {
-					val := ""
+					var lit string
 					if v, ok := td.Values[f.Name]; ok {
-						val = fmt.Sprintf("%v", v)
+						lit = formatLiteral(f.Type, v)
+					} else {
+						lit = zeroLiteral(f.Type)
 					}
-					fmt.Fprintf(&buf, "\t\t\t%s:        %q,\n", f.Name, val)
+					fmt.Fprintf(&buf, "\t\t\t%s: %s,\n", f.Name, lit)
 				}
 
 				buf.WriteString("\t\t},\n")
@@ -351,7 +419,11 @@ func generateRdataFile(t *TypeDef) error {
 
 	buf.WriteString("package privatetypesrdata\n\n")
 	buf.WriteString("import (\n")
-	buf.WriteString("\t\"fmt\"\n\n")
+	buf.WriteString("\t\"fmt\"\n")
+	if anyNeedsNetip(t.Fields) {
+		buf.WriteString("\t\"net/netip\"\n")
+	}
+	buf.WriteString("\n")
 	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
 
 	if len(t.Fields) > 0 {
@@ -361,35 +433,26 @@ func generateRdataFile(t *TypeDef) error {
 
 	buf.WriteString(")\n\n")
 
-	// Type definition
+	// Silence unused-import warnings when no field needs them.
+	_ = anyNonString
+
 	fmt.Fprintf(&buf, "type %s struct {\n", typeName)
-
 	for _, f := range t.Fields {
-		fmt.Fprintf(&buf, "\t%-20s string\n", f.Name)
+		fmt.Fprintf(&buf, "\t%-20s %s\n", f.Name, info(f.Type).GoType)
 	}
-
 	buf.WriteString("}\n\n")
 
-	// Len method
+	// Len: bytes of the textual representation.
 	fmt.Fprintf(&buf, "func (rd %s) Len() int {\n", typeName)
-
 	if len(t.Fields) == 0 {
 		buf.WriteString("\treturn 0\n")
 	} else {
-		for i, f := range t.Fields {
-			if i == 0 {
-				fmt.Fprintf(&buf, "\treturn len(rd.%s)", f.Name)
-			} else {
-				fmt.Fprintf(&buf, " +\n\t\t1 + len(rd.%s)", f.Name)
-			}
-		}
-		buf.WriteString("\n")
+		buf.WriteString("\treturn len(rd.String())\n")
 	}
 	buf.WriteString("}\n\n")
 
-	// String method
+	// String: Zoneify the field values.
 	fmt.Fprintf(&buf, "func (rd %s) String() string {\n", typeName)
-
 	if len(t.Fields) == 0 {
 		buf.WriteString("\treturn \"\"\n")
 	} else {
@@ -398,14 +461,13 @@ func generateRdataFile(t *TypeDef) error {
 			if i > 0 {
 				buf.WriteString(", ")
 			}
-			fmt.Fprintf(&buf, "rd.%s", f.Name)
+			buf.WriteString(fieldStringExpr("rd", f))
 		}
 		buf.WriteString("})\n")
 	}
-
 	buf.WriteString("}\n\n")
 
-	// Make function
+	// Make: validate arg count, then build the rdata using mustbe.X conversions.
 	fmt.Fprintf(&buf, "func Make%s(origin string, args ...any) (dnsv2.RDATA, error) {\n", typeName)
 
 	if len(t.Fields) == 0 {
@@ -421,23 +483,40 @@ func generateRdataFile(t *TypeDef) error {
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\treturn %s{}, nil\n", typeName)
 	} else {
-		fmt.Fprintf(&buf, "\treturn %s{", typeName)
+		fmt.Fprintf(&buf, "\treturn %s{\n", typeName)
 		for i, f := range t.Fields {
-			if i > 0 {
-				buf.WriteString(", ")
-			}
-			if f.Type == "RawString" {
-				fmt.Fprintf(&buf, "mustbe.%s(args[%d])", f.Type, i)
+			ti := info(f.Type)
+			if ti.NeedsOrigin {
+				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(origin, args[%d]),\n", f.Name, f.Type, i)
 			} else {
-				fmt.Fprintf(&buf, "mustbe.%s(\"\", args[%d])", f.Type, i)
+				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(args[%d]),\n", f.Name, f.Type, i)
 			}
 		}
-		buf.WriteString("}, nil\n")
+		buf.WriteString("\t}, nil\n")
 	}
 
 	buf.WriteString("}\n")
 
-	// Ensure rdata directory exists
+	// "origin" is unused when there are no TargetHost fields.
+	if len(t.Fields) > 0 {
+		needsOrigin := false
+		for _, f := range t.Fields {
+			if info(f.Type).NeedsOrigin {
+				needsOrigin = true
+				break
+			}
+		}
+		if !needsOrigin {
+			// Rewrite the receiver to use _ instead of origin to avoid unused-var warnings.
+			out := bytes.Replace(buf.Bytes(),
+				[]byte(fmt.Sprintf("func Make%s(origin string, args ...any)", typeName)),
+				[]byte(fmt.Sprintf("func Make%s(_ string, args ...any)", typeName)),
+				1)
+			buf.Reset()
+			buf.Write(out)
+		}
+	}
+
 	os.MkdirAll("rdata", 0o755)
 
 	return os.WriteFile(filepath.Join("rdata", fmt.Sprintf("rdata_%s.go", fileName)), buf.Bytes(), 0o644)

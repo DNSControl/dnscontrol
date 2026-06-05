@@ -4,15 +4,21 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
-func TestCloudns_Wr(t *testing.T) {
-	y := &CLOUDNSWR{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
+func TestCloudnsWr(t *testing.T) {
+	y := &CLOUDNSWR{
+		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		CLOUDNSWR: privatetypesrdata.CLOUDNSWR{
+			Target: "example.com.",
+		},
+	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {
 		t.Fatal(err)
 	}
 	if rry.String() != y.String() {
-		t.Fatalf("CLOUDNS_WR string presentations should be identical:\n%q\n%q", rry.String(), y.String())
+		t.Fatalf("CLOUDNS_WR string presentations should be identical:\n%s\n%s", rry.String(), y.String())
 	}
 }

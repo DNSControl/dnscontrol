@@ -9,25 +9,26 @@ import (
 )
 
 type URL301 struct {
-	Location string
-
-	// Pornbun-specific fields:
-	//PorkbunType        string // TODO(tlim): This should be uint8 (301, 302, etc)
-	PorkbunIncludePath bool `json:"porkbun_include_path"`
-	PorkbunWildCard    bool `json:"porkbun_wildcard"`
+	Location             string
+	PorkbunIncludePath   bool
+	PorkbunWildCard      bool
 }
 
 func (rd URL301) Len() int {
-	return len(rd.Location) + 1
+	return len(rd.String())
 }
 
 func (rd URL301) String() string {
-	return txtutil.ZoneifyString(rd.Location) + fmt.Sprintf(" %t %t", rd.PorkbunIncludePath, rd.PorkbunWildCard)
+	return txtutil.Zoneify([]string{rd.Location, fmt.Sprintf("%t", rd.PorkbunIncludePath), fmt.Sprintf("%t", rd.PorkbunWildCard)})
 }
 
 func MakeURL301(origin string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 3 {
 		return URL301{}, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
 	}
-	return URL301{Location: mustbe.TargetHost(origin, args[0]), PorkbunIncludePath: mustbe.Bool(args[1]), PorkbunWildCard: mustbe.Bool(args[2])}, nil
+	return URL301{
+		Location: mustbe.TargetHost(origin, args[0]),
+		PorkbunIncludePath: mustbe.Bool(args[1]),
+		PorkbunWildCard: mustbe.Bool(args[2]),
+	}, nil
 }

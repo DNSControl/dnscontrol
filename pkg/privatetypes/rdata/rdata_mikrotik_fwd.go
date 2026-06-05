@@ -9,20 +9,22 @@ import (
 )
 
 type MIKROTIKFWD struct {
-	ForwardTo string `json:"forward_to"`
+	ForwardTo            string
 }
 
 func (rd MIKROTIKFWD) Len() int {
-	return len(rd.ForwardTo) + 1
+	return len(rd.String())
 }
 
 func (rd MIKROTIKFWD) String() string {
-	return txtutil.ZoneifyString(rd.ForwardTo)
+	return txtutil.Zoneify([]string{rd.ForwardTo})
 }
 
-func MakeMIKROTIKFWD(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeMIKROTIKFWD(_ string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
-		return MIKROTIKFWD{}, fmt.Errorf("MIKROTKIK_FWD requires 1 argument. Got %d: %+v", len(args), args)
+		return MIKROTIKFWD{}, fmt.Errorf("MIKROTIK_FWD expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return MIKROTIKFWD{mustbe.RawString(args[0])}, nil
+	return MIKROTIKFWD{
+		ForwardTo: mustbe.RawString(args[0]),
+	}, nil
 }

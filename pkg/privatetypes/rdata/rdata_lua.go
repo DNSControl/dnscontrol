@@ -9,21 +9,24 @@ import (
 )
 
 type LUA struct {
-	LuaType    string `json:"lua_type"`
-	LuaPayload string `json:"lua_payload"`
+	LuaType              string
+	LuaPayload           string
 }
 
 func (rd LUA) Len() int {
-	return 0
+	return len(rd.String())
 }
 
 func (rd LUA) String() string {
 	return txtutil.Zoneify([]string{rd.LuaType, rd.LuaPayload})
 }
 
-func MakeLUA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeLUA(_ string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 2 {
-		return LUA{}, fmt.Errorf("LUA requires exactly 2 arguments, got %d: %+v", len(args), args)
+		return LUA{}, fmt.Errorf("LUA expects 2 arguments, got %d: %+v", len(args), args)
 	}
-	return LUA{mustbe.RawString(args[0]), mustbe.RawString(args[1])}, nil
+	return LUA{
+		LuaType: mustbe.RawString(args[0]),
+		LuaPayload: mustbe.RawString(args[1]),
+	}, nil
 }

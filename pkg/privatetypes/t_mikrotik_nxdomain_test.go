@@ -6,7 +6,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 )
 
-func TestMikrotik_NxDomain(t *testing.T) {
+func TestMikrotikNxdomain(t *testing.T) {
 	y := &MIKROTIKNXDOMAIN{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

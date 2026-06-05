@@ -19,7 +19,7 @@ func (rd BUNNYDNSRDR) String() string {
 
 func MakeBUNNYDNSRDR(origin string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 0 {
-		return BUNNYDNSRDR{}, fmt.Errorf("BUNNY_DNS_RDR requires no arguments, got %d: %+v", len(args), args)
+		return BUNNYDNSRDR{}, fmt.Errorf("BUNNY_DNS_RDR expects 0 arguments, got %d: %+v", len(args), args)
 	}
 	return BUNNYDNSRDR{}, nil
 }

@@ -6,7 +6,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 )
 
-func TestNetlifyV6(t *testing.T) {
+func TestNetlifyv6(t *testing.T) {
 	y := &NETLIFYV6{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

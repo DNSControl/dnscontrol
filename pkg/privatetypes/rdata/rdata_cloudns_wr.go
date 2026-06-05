@@ -9,20 +9,22 @@ import (
 )
 
 type CLOUDNSWR struct {
-	Target string
+	Target               string
 }
 
 func (rd CLOUDNSWR) Len() int {
-	return 0
+	return len(rd.String())
 }
 
 func (rd CLOUDNSWR) String() string {
-	return txtutil.ZoneifyString(rd.Target)
+	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeCLOUDNSWR(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeCLOUDNSWR(_ string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
-		return CLOUDNSWR{}, fmt.Errorf("CLOUDNS_WR requires exactly 1 argument, got %d: %+v", len(args), args)
+		return CLOUDNSWR{}, fmt.Errorf("CLOUDNS_WR expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return CLOUDNSWR{Target: mustbe.RawString(args[0])}, nil
+	return CLOUDNSWR{
+		Target: mustbe.RawString(args[0]),
+	}, nil
 }

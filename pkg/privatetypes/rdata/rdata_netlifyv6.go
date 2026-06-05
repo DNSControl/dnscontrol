@@ -17,9 +17,9 @@ func (rd NETLIFYV6) String() string {
 	return ""
 }
 
-func MakeNETLIFYV6(orgin string, args ...any) (dnsv2.RDATA, error) {
+func MakeNETLIFYV6(origin string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 0 {
-		return NETLIFYV6{}, fmt.Errorf("NETLIFYV6: wrong number of arguments, expected 0, got %d: %+v", len(args), args)
+		return NETLIFYV6{}, fmt.Errorf("NETLIFYV6 expects 0 arguments, got %d: %+v", len(args), args)
 	}
 	return NETLIFYV6{}, nil
 }

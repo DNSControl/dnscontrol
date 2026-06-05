@@ -1,6 +1,7 @@
 package privatetypes
 
 import (
+	"fmt"
 	"strconv"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -18,6 +19,8 @@ const TypeMIKROTIKNXDOMAIN = 65308
 
 type MIKROTIKNXDOMAIN struct {
 	Hdr dnsv2.Header
+
+	privatetypesrdata.MIKROTIKNXDOMAIN
 }
 
 // Typer interface.
@@ -27,12 +30,16 @@ func (rr *MIKROTIKNXDOMAIN) Type() uint16 { return TypeMIKROTIKNXDOMAIN }
 // RR interface.
 
 func (rr *MIKROTIKNXDOMAIN) Header() *dnsv2.Header { return &rr.Hdr }
-func (rr *MIKROTIKNXDOMAIN) Len() int              { return rr.Hdr.Len() }
+func (rr *MIKROTIKNXDOMAIN) Len() int {
+	return rr.Hdr.Len()
+}
 func (rr *MIKROTIKNXDOMAIN) Data() dnsv2.RDATA {
 	return &privatetypesrdata.MIKROTIKNXDOMAIN{}
 }
 func (rr *MIKROTIKNXDOMAIN) Clone() dnsv2.RR {
-	return &MIKROTIKNXDOMAIN{rr.Hdr}
+	return &MIKROTIKNXDOMAIN{
+		rr.Hdr,
+		privatetypesrdata.MIKROTIKNXDOMAIN{}}
 }
 func (rr *MIKROTIKNXDOMAIN) String() string {
 	return rr.Header().Name + "\t" +
@@ -41,6 +48,10 @@ func (rr *MIKROTIKNXDOMAIN) String() string {
 }
 
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
-func (rr *MIKROTIKNXDOMAIN) Parse(tokens []string, _ string) error {
+func (rr *MIKROTIKNXDOMAIN) Parse(tokens []string, s string) error {
+	args := TokensToArgs(tokens)
+	if len(args) != 0 {
+		return fmt.Errorf("MIKROTIK_NXDOMAIN requires exactly 0 arguments, got %d", len(args))
+	}
 	return nil
 }

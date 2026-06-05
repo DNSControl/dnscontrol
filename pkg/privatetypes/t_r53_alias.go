@@ -36,11 +36,7 @@ func (rr *R53ALIAS) Type() uint16 { return TypeR53ALIAS }
 
 func (rr *R53ALIAS) Header() *dnsv2.Header { return &rr.Hdr }
 func (rr *R53ALIAS) Len() int {
-	return rr.Hdr.Len() +
-		1 + len(rr.AliasType) +
-		1 + len(rr.Target) +
-		1 + len(rr.EvalTargetHealth) +
-		1 + len(rr.ZoneID)
+	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *R53ALIAS) Data() dnsv2.RDATA {
 	return &privatetypesrdata.R53ALIAS{AliasType: rr.AliasType, Target: rr.Target, EvalTargetHealth: rr.EvalTargetHealth, ZoneID: rr.ZoneID}
@@ -49,10 +45,10 @@ func (rr *R53ALIAS) Clone() dnsv2.RR {
 	return &R53ALIAS{
 		Hdr: rr.Hdr,
 		R53ALIAS: privatetypesrdata.R53ALIAS{
-			AliasType:        rr.AliasType,
-			Target:        rr.Target,
-			EvalTargetHealth:        rr.EvalTargetHealth,
-			ZoneID:        rr.ZoneID,
+			AliasType: rr.AliasType,
+			Target: rr.Target,
+			EvalTargetHealth: rr.EvalTargetHealth,
+			ZoneID: rr.ZoneID,
 		}}
 }
 func (rr *R53ALIAS) String() string {

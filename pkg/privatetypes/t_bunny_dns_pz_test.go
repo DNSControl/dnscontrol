@@ -6,7 +6,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 )
 
-func TestBunny_DNS_Pz(t *testing.T) {
+func TestBunnyDnsPz(t *testing.T) {
 	y := &BUNNYDNSPZ{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

@@ -5,24 +5,28 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 type AZUREALIAS struct {
-	AliasType string
-	Target    string
+	AliasType            string
+	Target               string
 }
 
 func (rd AZUREALIAS) Len() int {
-	return len(rd.Target) + 1 + len(rd.AliasType)
+	return len(rd.String())
 }
 
 func (rd AZUREALIAS) String() string {
-	return rd.AliasType + " " + rd.Target
+	return txtutil.Zoneify([]string{rd.AliasType, rd.Target})
 }
 
 func MakeAZUREALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 2 {
-		return AZUREALIAS{}, fmt.Errorf("AZURE_ALIAS requires no arguments, got %d: %+v", len(args), args)
+		return AZUREALIAS{}, fmt.Errorf("AZURE_ALIAS expects 2 arguments, got %d: %+v", len(args), args)
 	}
-	return AZUREALIAS{mustbe.RawString(args[0]), mustbe.TargetHost(origin, args[1])}, nil
+	return AZUREALIAS{
+		AliasType: mustbe.RawString(args[0]),
+		Target: mustbe.TargetHost(origin, args[1]),
+	}, nil
 }

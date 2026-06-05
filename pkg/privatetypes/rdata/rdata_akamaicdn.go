@@ -4,22 +4,27 @@ import (
 	"fmt"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 type AKAMAICDN struct {
+	Target               string
 }
 
 func (rd AKAMAICDN) Len() int {
-	return 0
+	return len(rd.String())
 }
 
 func (rd AKAMAICDN) String() string {
-	return ""
+	return txtutil.Zoneify([]string{rd.Target})
 }
 
 func MakeAKAMAICDN(origin string, args ...any) (dnsv2.RDATA, error) {
-	if len(args) != 0 {
-		return AKAMAICDN{}, fmt.Errorf("AKAMAICDN requires exactly 0 arguments")
+	if len(args) != 1 {
+		return AKAMAICDN{}, fmt.Errorf("AKAMAICDN expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return AKAMAICDN{}, nil
+	return AKAMAICDN{
+		Target: mustbe.TargetHost(origin, args[0]),
+	}, nil
 }
