@@ -7,8 +7,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/DNSControl/dnscontrol/v4/providers/cloudflare/rtypes/cfsingleredirect"
 	"github.com/cloudflare/cloudflare-go"
@@ -364,12 +363,13 @@ func (c *cloudflareProvider) getSingleRedirects(id string, domain string) ([]*mo
 		srThen := pr.ActionParameters.FromValue.TargetURL.Expression
 		code := uint16(pr.ActionParameters.FromValue.StatusCode)
 
-		rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-			Type: "CLOUDFLAREAPI_SINGLE_REDIRECT",
-			TTL:  1,
-			Args: []any{srName, code, srWhen, srThen},
-			DCN:  domaintags.MakeDomainNameVarieties(domain),
-		})
+		// rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+		// 	Type: "CLOUDFLAREAPI_SINGLE_REDIRECT",
+		// 	TTL:  1,
+		// 	Args: []any{srName, code, srWhen, srThen},
+		// 	DCN:  domaintags.MakeDomainNameVarieties(domain),
+		// })
+		rec, err := models.NewRecordConfig(domain, "@", 0, privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT, srName, srWhen, srThen, code)
 		if err != nil {
 			return nil, err
 		}

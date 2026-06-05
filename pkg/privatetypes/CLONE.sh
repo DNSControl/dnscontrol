@@ -24,15 +24,16 @@ cp "rdata/rdata_${SRC_LC}.go"    "rdata/rdata_${DEST_LC}.go"
 for i in "t_${DEST_LC}.go" "t_${DEST_LC}_test.go" "rdata/rdata_${DEST_LC}.go" ; do
 	sed -i.bak \
 		-e "s@${SRC_UC}@${DEST_UC}@g"  	\
-		-e "s@${SRC_Func}@${DEST_Func}@g" \
 		-e "s@${SRC_VAR}@${DEST_VAR}@g" \
+		-e "s@${SRC_Func}@${DEST_Func}@g" \
+		-e "s@Test${SRC}@Test${DEST_Func}@g" \
 			"$i"
 	rm "$i".bak
 done
 
 num=$(echo 1 + $(grep -h  'const Type' *.go | awk '{ print $NF }'  |sort | tail -1) | bc)
 echo "Codepoint: $num"
-sed -i.bak -e 's/const Type'"${SRC_VAR}"'.*/const Type'"${DEST_VAR}"' = '"$num"'/g' t_"${DEST_LC}.go"
+sed -i.bak -e "s/const Type.*/const Type${DEST_VAR} = $num/g" t_"${DEST_LC}.go"
 rm "t_${DEST_LC}.go.bak"
 grep -E "^const Type${SRC_VAR}" "t_${DEST_LC}.go"
 

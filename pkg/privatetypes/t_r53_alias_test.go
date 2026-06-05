@@ -7,14 +7,14 @@ import (
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
-func TestR53Alias(t *testing.T) {
+func TestR53Alias_NormalUser(t *testing.T) {
 	y := &R53ALIAS{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		R53ALIAS: privatetypesrdata.R53ALIAS{
-			AliasType:        "A",
-			Target:           "kyle.example.com.",
-			EvalTargetHealth: "false",
-			ZoneID:           "Z1234567890",
+			AliasType:        "1",
+			Target:        "alice",
+			EvalTargetHealth:        "true",
+			ZoneID:        "1234",
 		},
 	}
 	rry, err := dnsv2.New(y.String())

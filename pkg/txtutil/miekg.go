@@ -1,6 +1,7 @@
 package txtutil
 
 import (
+	"fmt"
 	"strings"
 
 	"codeberg.org/miekg/dns/pkg/pool"
@@ -77,6 +78,15 @@ func ZoneifyString(s string) string {
 	return Zoneify([]string{s})
 }
 
+// ZoneifyManyAny is a convenience function for Zoneify when you have a []any
+func ZoneifyManyAny(args []any) string {
+	n := make([]string, len(args))
+	for i, arg := range args {
+		n[i] = fmt.Sprintf("%s", arg)
+	}
+	return Zoneify(n)
+}
+
 func writeTxtByte(sb *strings.Builder, b byte) {
 	switch {
 	case b == '"' || b == '\\':
@@ -91,12 +101,14 @@ func writeTxtByte(sb *strings.Builder, b byte) {
 
 // isPlain returns true if the string doesn't need to be quoted.
 // It errs on the side of caution, including only A-Z, a-z, 0-9, and ".", "@", and "*".
-// TODO: Optimize this code.
+// TODO: Optimize this code. Maybe use strings.ContainsAny() ?
 func isPlain(s string) bool {
 	if s == "" {
 		return false // Null string always requires quotes.
 	}
 	for _, r := range s {
+		// continue if we are safe: a-z A-Z 0-9 . @ *
+
 		if r >= 'a' && r <= 'z' {
 			continue
 		}

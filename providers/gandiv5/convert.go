@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
+	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/go-gandi/go-gandi/livedns"
 )
@@ -22,7 +20,7 @@ func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.Recor
 	// n.RrsetValues rather than having many livedns.DomainRecord's.
 	// We must split them out into individual records, one for each value.
 
-	dcn := domaintags.MakeDomainNameVarieties(origin)
+	// dcn := domaintags.MakeDomainNameVarieties(origin)
 
 	for _, value := range n.RrsetValues {
 		var rc *models.RecordConfig
@@ -30,8 +28,8 @@ func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.Recor
 
 		rtype := n.RrsetType
 
-		if rtypeinfo.IsModernType(rtype) {
-			rc, err = rtypecontrol.NewRecordConfigFromString(n.RrsetName, uint32(n.RrsetTTL), rtype, value, dcn)
+		if privatetypes.IsModernType(rtype) {
+			rc, err = models.NewRecordConfigParse(origin, n.RrsetName, uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
 			}

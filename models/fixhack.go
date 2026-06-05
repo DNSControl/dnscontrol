@@ -6,7 +6,6 @@ import (
 
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
-	dnsv1 "github.com/miekg/dns"
 
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 )
@@ -85,7 +84,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 		case "DNSKEY":
 			rc.RDATA, err = MakeDNSKEY(origin, rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey)
 		case "DS":
-			rc.RDATA, err = MakeDS(origin, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+			//rc.RDATA, err = MakeDS(origin, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+			// DS is native to RecordConfigV3. No FixUP is needed or possible.
 
 		case "FRAME":
 			rc.RDATA, err = privatetypesrdata.MakeFRAME(origin, rc.GetTargetField())
@@ -122,7 +122,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rc.RDATA, err = MakePTR(origin, rc.GetTargetField())
 
 		case "RP":
-			rc.RDATA, err = MakeRP(origin, rc.F.(dnsv1.RP).Mbox, rc.F.(dnsv1.RP).Txt)
+			//rc.RDATA, err = MakeRP(origin, rc.F.(dnsv1.RP).Mbox, rc.F.(dnsv1.RP).Txt)
+			// RP is native to RecordConfigV3. No FixUP is needed or possible.
 		case "R53_ALIAS":
 			rc.RDATA, err = privatetypesrdata.MakeR53ALIAS(origin, rc.R53Alias["type"], rc.GetTargetField(), rc.R53Alias["zone_id"], rc.R53Alias["evaluate_target_health"])
 

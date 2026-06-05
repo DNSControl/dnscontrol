@@ -30,8 +30,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
 )
 
 // defaultZonesDir is used when the BIND credentials do not specify a
@@ -274,34 +272,34 @@ func ParseZoneContents(content string, zoneName string, zonefileName string) (mo
 	foundRecords := models.Records{}
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
 		var rec models.RecordConfig
-		var prec *models.RecordConfig
+		// var prec *models.RecordConfig
 		var err error
 
 		// rtype := rr.Header().Rrtype
 		// rtypeStr := dnsv1.TypeToString[rtype]
 
 		// Set rtypeStr to the string version of the type, but if it's a fake type, use the fake type name instead.
-		rtype := dnsv2.RRToType(rr)
-		rtypeStr := dnsv2.TypeToString[rtype]
+		// rtype := dnsv2.RRToType(rr)
+		// rtypeStr := dnsv2.TypeToString[rtype]
 
-		if rtypeinfo.IsModernType(rtypeStr) {
-			// Modern types:
-			name := rr.Header().Name
-			prec, err = rtypecontrol.NewRecordConfigFromStruct(name, rr.Header().TTL, rtypeStr, rr.Data(), domaintags.MakeDomainNameVarieties(zoneName))
-			if err != nil {
-				return nil, err
-			}
-			rec = *prec
-			rec.TTL = rr.Header().TTL
-		} else {
-			// Legacy types:
-			rec, err = dnsrr.RRtoRCV2(rr, zoneName)
-			if err != nil {
-				return nil, err
-			}
+		// if rtypeinfo.IsModernType(rtypeStr) {
+		// 	// Modern types:
+		// 	name := rr.Header().Name
+		// 	prec, err = rtypecontrol.NewRecordConfigFromStruct(name, rr.Header().TTL, rtypeStr, rr.Data(), domaintags.MakeDomainNameVarieties(zoneName))
+		// 	if err != nil {
+		// 		return nil, err
+		// 	}
+		// 	rec = *prec
+		// 	rec.TTL = rr.Header().TTL
+		// } else {
+		// 	// Legacy types:
+		rec, err = dnsrr.RRtoRCV2(rr, zoneName)
+		if err != nil {
+			return nil, err
 		}
+		// }
 
-		rec.FixUp(zoneName) // hack
+		rec.FixUp(zoneName) // hack.  Maybe not needed.
 
 		foundRecords = append(foundRecords, &rec)
 	}

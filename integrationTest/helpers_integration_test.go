@@ -20,7 +20,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
@@ -101,7 +100,7 @@ func CfFlattenOn() *TestCase {
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
 	dc, _ := models.NewDomainConfig(domainName)
 	dc.PostProcess()
-	rtypecontrol.FixLegacyDC(dc)
+	dc.FixLegacyDC()
 
 	// fix up nameservers
 	ns, err := prv.GetNameservers(domainName)
@@ -229,7 +228,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 			TargetPattern: "",
 		})
 		models.PostProcessRecords(dom.Records)
-		rtypecontrol.FixLegacyDC(dom)
+		dom.FixLegacyDC()
 		dom2, _ := dom.Copy()
 
 		if err := providers.AuditRecords(*providerFlag, dom.Records); err != nil {
@@ -456,14 +455,17 @@ func cfSingleRedirectEnabled() bool {
 }
 
 func cfSingleRedirect(name string, code any, when, then string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "CLOUDFLAREAPI_SINGLE_REDIRECT",
-		TTL:  1,
-		Args: []any{name, code, when, then},
-		DCN:  globalDCN,
-	})
+	r, err := models.NewRecordConfig(globalDCN.NameASCII, "@", defaultTTL, dnsv2.TypeDS, name, code, when, then)
 	panicOnErr(err)
-	return rec
+	return r
+	// rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+	// 	Type: "CLOUDFLAREAPI_SINGLE_REDIRECT",
+	// 	TTL:  1,
+	// 	Args: []any{name, code, when, then},
+	// 	DCN:  globalDCN,
+	// })
+	// panicOnErr(err)
+	// return rec
 }
 
 func cfWorkerRoute(pattern, target string) *models.RecordConfig {
@@ -530,9 +532,7 @@ func dname(name, target string) *models.RecordConfig {
 
 func ds(name string, keyTag uint16, algorithm, digestType uint8, digest string) *models.RecordConfig {
 	r, err := models.NewRecordConfig(globalDCN.NameASCII, name, defaultTTL, dnsv2.TypeDS, keyTag, algorithm, digestType, digest)
-	if err != nil {
-		panic(err)
-	}
+	panicOnErr(err)
 	return r
 }
 
@@ -658,15 +658,18 @@ func r53weighted(name, target, rtype string, weight int, setID string) *models.R
 }
 
 func rp(name string, m, t string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "RP",
-		TTL:  defaultTTL,
-		Args: []any{name, m, t},
-		DCN:  globalDCN,
-	})
+	r, err := models.NewRecordConfig(globalDCN.NameASCII, name, defaultTTL, dnsv2.TypeDS, m, t)
 	panicOnErr(err)
-	rec.FixUp(globalDCN.NameASCII) // Hack. Populates .RDATA and .TypeNum if needed.
-	return rec
+	return r
+	// rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+	// 	Type: "RP",
+	// 	TTL:  defaultTTL,
+	// 	Args: []any{name, m, t},
+	// 	DCN:  globalDCN,
+	// })
+	// panicOnErr(err)
+	// rec.FixUp(globalDCN.NameASCII) // Hack. Populates .RDATA and .TypeNum if needed.
+	// return rec
 }
 
 func smimea(name string, usage, selector, matchingtype uint8, target string) *models.RecordConfig {

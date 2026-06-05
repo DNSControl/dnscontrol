@@ -32,7 +32,7 @@ func TestImportTransform(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// No need to call rtypecontrol.FixLegacyDC here.  makeRC will (in the future) populate .F as needed.
+	// No need to call rtypecontrol.FixLegacyDC here.  makeRC will (in the future) populate .RDATA as needed.
 
 	if errs := ValidateAndNormalizeConfig(cfg); len(errs) != 0 {
 		for _, err := range errs {

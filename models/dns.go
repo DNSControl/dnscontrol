@@ -5,6 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 // DefaultTTL is applied to any DNS record without an explicit TTL.
@@ -18,6 +21,71 @@ type DNSConfig struct {
 	RegistrarsByName   map[string]*RegistrarConfig   `json:"-"`
 	DNSProvidersByName map[string]*DNSProviderConfig `json:"-"`
 	SkipRecordAudit    bool                          `json:"skiprecordaudit,omitempty"`
+}
+
+// ImportRawRecords iterates over the dc.RawRecords from each domain,
+// converting each to a RecordConfig and deleting the raw version (to save
+// memory). This is how records get from dnsconfig.js to dc.Records.
+func (config *DNSConfig) ImportRawRecords() error {
+	for _, dc := range config.Domains {
+		for _, rawRec := range dc.RawRecords {
+			filePos := FixPosition(rawRec.FilePos)
+
+			label, err := dc.LabelFromConfig(rawRec.Args[0].(string))
+			if err != nil {
+				return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+			typeNum, err := dnsutilv2.StringToType(rawRec.Type)
+			if err != nil {
+				return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+
+			rec, err := NewRecordConfig(
+				dc.Name,
+				label,
+				rawRec.TTL,
+				typeNum,
+				rawRec.Args,
+			)
+			if err != nil {
+				return fmt.Errorf("record error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+
+			rec.FilePos = filePos
+
+			if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
+				return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+
+			if doesStutter(rec.Name, dc.Name) {
+				return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+
+			// Conversion complete!  Append it.
+			dc.Records = append(dc.Records, rec)
+
+			// We're never going to see this rawRec again. Free its Args.
+			clear(rawRec.Args)
+			rawRec.Args = nil
+		}
+
+		// We're never goign to see these RawRecords again. Let them go.
+		dc.RawRecords = nil
+	}
+
+	return nil
+}
+
+func doesStutter(name, origin string) bool {
+	// TODO(tlim): MAYBE: Never return true if last char is "."?
+	// TODO(tlim): Panic if called with name == ""?
+	if name == "@" {
+		return false
+	}
+	if name == origin || strings.HasSuffix(name, "."+origin) {
+		return true
+	}
+	return false
 }
 
 // FindDomain returns the *DomainConfig for domain query in config.

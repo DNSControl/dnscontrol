@@ -12,7 +12,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	"github.com/robertkrimen/otto"              // load underscore js into vm by default
 	_ "github.com/robertkrimen/otto/underscore" // required by otto
@@ -127,7 +126,7 @@ func ExecuteJavascriptString(script []byte, devMode bool, variables map[string]s
 	}
 	// No need to call FixLegacyDC here. These records were created from dnsconfig.js, not from a provider.
 
-	if err := rtypecontrol.ImportRawRecords(conf.Domains); err != nil {
+	if err := conf.ImportRawRecords(); err != nil {
 		return nil, err
 	}
 

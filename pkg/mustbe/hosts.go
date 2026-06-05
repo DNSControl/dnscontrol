@@ -7,8 +7,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 )
 
-// TargetHost returns a FQDN (or @) suitable as a target for CNAME and other
-// records.  origin must be a FQDN without a trailing dot.   arg may be a string or it will be converted to a string.
+// TargetHost returns a FQDN (or @) suitable as a target for CNAME and other records.
+// * origin must be a FQDN without a trailing dot OR "". If "", no attempt is made to turn the string into a FQDN.
+// * arg may be a string or it will be converted to a string.
 // * Unicode is converted to PunyCode.
 // * The result always ends with a "." unless it is "@".
 // * It does not try to turn a FQDN into a shortname, but it will replace the origin with "@". The reason for not shortening it is that "preview" output is unclear when the user sees a shortname. Explicit is better than implicit.
@@ -21,7 +22,7 @@ import (
 // * NOT: `$origin.` -> `@`  (We no longer do this for the same reason we don't product shortnames any more)
 func TargetHost(origin string, arg any) string {
 	if strings.HasSuffix(origin, ".") {
-		panic("mustbe.Host called with origin ending with .")
+		panic("mustbe.Host must NOT be called with an origin ending with .")
 	}
 
 	var name string
@@ -50,14 +51,17 @@ func TargetHost(origin string, arg any) string {
 	//	return "@"
 	//}
 
-	// Add domain if needed.
+	// Is this already a FQDN? Return it.
 	if strings.HasSuffix(name, ".") {
 		return name
 	}
 
+	// origin not specified. Leave things as-is.
 	if origin == "" {
 		return name + "."
 
 	}
+
+	// This must be a shortname without a dot. Add origin and dot.
 	return name + "." + origin + "."
 }

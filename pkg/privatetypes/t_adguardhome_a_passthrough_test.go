@@ -6,7 +6,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 )
 
-func TestAdguardhome_A_Passthrough(t *testing.T) {
+func TestAdguardhomeAPassthrough(t *testing.T) {
 	y := &ADGUARDHOMEAPASSTHROUGH{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

@@ -15,7 +15,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
 	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 	"github.com/urfave/cli/v3"
 )
 
@@ -316,7 +315,7 @@ func fetchZoneRecordsReal(entry InitCredsEntry, zone string) (models.Records, er
 	if err != nil {
 		return nil, err
 	}
-	rtypecontrol.FixLegacyRecords(&recs, zone)
+	recs.FixLegacyRecords(zone)
 	return recs, nil
 }
 

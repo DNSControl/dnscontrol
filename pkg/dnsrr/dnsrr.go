@@ -6,9 +6,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
 	dnsv1 "github.com/miekg/dns"
 )
 
@@ -27,15 +24,16 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	// Convert's dns.RR into DNSControl's models.RecordConfig struct.
 
 	header := rr.Header()
-	ty := dnsv2.TypeToString[header.Rrtype]
+	typeNum := header.Rrtype
+	//typeName := dnsv2.TypeToString[header.Rrtype]
 
-	if rtypeinfo.IsModernType(ty) {
-		switch v := rr.(type) {
-		default:
-			rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.Ttl, dnsv2.TypeToString[header.Rrtype], v, domaintags.MakeDomainNameVarieties(origin))
-			return *rec, err
-		}
-	}
+	// if rtypeinfo.IsModernType(ty) {
+	// 	switch v := rr.(type) {
+	// 	default:
+	// 		rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.Ttl, dnsv2.TypeToString[header.Rrtype], v, domaintags.MakeDomainNameVarieties(origin))
+	// 		return *rec, err
+	// 	}
+	// }
 
 	rc := new(models.RecordConfig)
 	rc.Type = dnsv2.TypeToString[header.Rrtype]
@@ -57,7 +55,9 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	case *dnsv1.DNAME:
 		err = rc.SetTarget(v.Target)
 	case *dnsv1.DS:
-		panic("DS should be handled as modern type")
+		if rec, err := models.NewRecordConfig(origin, header.Name, header.Ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.DNSKEY:
 		err = rc.SetTargetDNSKEY(v.Flags, v.Protocol, v.Algorithm, v.PublicKey)
 	case *dnsv1.HTTPS:
@@ -75,7 +75,9 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	case *dnsv1.PTR:
 		err = rc.SetTarget(v.Ptr)
 	case *dnsv1.RP:
-		panic("RP should be handled as modern type")
+		if rec, err := models.NewRecordConfig(origin, header.Name, header.Ttl, typeNum, v.Mbox, v.Txt); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.SMIMEA:
 		err = rc.SetTargetSMIMEA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
 	case *dnsv1.SOA:
@@ -111,19 +113,22 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	// Convert's dns.RR into DNSControl's models.RecordConfig struct.
 
 	header := rr.Header()
-	ty := dnsv2.TypeToString[dnsv2.RRToType(rr)]
+	ttl := header.TTL
+	typeName := dnsv2.TypeToString[dnsv2.RRToType(rr)]
+	typeNum := dnsv2.RRToType(rr)
 
-	if rtypeinfo.IsModernType(ty) {
-		switch v := rr.(type) {
-		default:
-			rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.TTL, ty, v, domaintags.MakeDomainNameVarieties(origin))
-			return *rec, err
-		}
-	}
+	// if rtypeinfo.IsModernType(ty) {
+	// 	switch v := rr.(type) {
+	// 	default:
+	// 		rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.TTL, ty, v, domaintags.MakeDomainNameVarieties(origin))
+	// 		return *rec, err
+	// 	}
+	// }
 
 	rc := new(models.RecordConfig)
-	rc.Type = ty
-	rc.TTL = header.TTL
+	rc.Type = typeName
+	rc.TypeNum = typeNum
+	rc.TTL = ttl
 	rc.Original = rr
 	rc.SetLabelFromFQDN(strings.TrimSuffix(header.Name, "."), origin)
 	var err error
@@ -141,7 +146,9 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	case *dnsv2.DNAME:
 		err = rc.SetTarget(v.Target)
 	case *dnsv2.DS:
-		panic("DS should be handled as modern type")
+		if rec, err := models.NewRecordConfig(origin, rc.Name, ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
+			return *rec, nil
+		}
 	case *dnsv2.DNSKEY:
 		err = rc.SetTargetDNSKEY(v.Flags, v.Protocol, v.Algorithm, v.PublicKey)
 	case *dnsv2.HTTPS:
@@ -161,7 +168,9 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	case *dnsv2.PTR:
 		err = rc.SetTarget(v.Ptr)
 	case *dnsv2.RP:
-		panic("RP should be handled as modern type")
+		if rec, err := models.NewRecordConfig(origin, header.Name, ttl, typeNum, v.Mbox, v.Txt); err == nil {
+			return *rec, nil
+		}
 	case *dnsv2.SMIMEA:
 		err = rc.SetTargetSMIMEA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
 	case *dnsv2.SOA:

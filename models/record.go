@@ -143,13 +143,39 @@ type RecordConfig struct {
 	UnknownTypeName    string            `json:"unknown_type_name,omitempty"`
 }
 
-func NewRecordConfig(origin string, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
+func NewRecordConfigParse(origin string, name string, ttl uint32, typeAny any, data string) (*RecordConfig, error) {
+	typeNum, err := anyToTypeNum(typeAny)
+	if err != nil {
+		return nil, err
+	}
+
+	rd, err := dnsv2.NewData(typeNum, data, origin)
+	if err != nil {
+		return nil, err
+	}
+	return NewRecordConfig(origin, name, ttl, typeNum, rd)
+}
+
+func anyToTypeNum(a any) (uint16, error) {
+	switch v := a.(type) {
+	case uint16:
+		return v, nil
+	case string:
+		return dnsutilv2.StringToType(v)
+	}
+	return 0, fmt.Errorf("anyToTypeNum called with unknown type: %T", a)
+}
+
+func NewRecordConfig(origin string, name string, ttl uint32, typeAny any, args ...any) (*RecordConfig, error) {
+	typeNum, err := anyToTypeNum(typeAny)
+	if err != nil {
+		return nil, err
+	}
 
 	rc := &RecordConfig{
 		TypeNum: typeNum,
 		Type:    dnsutilv2.TypeToString(typeNum),
-		// Name:    name,
-		TTL: ttl,
+		TTL:     ttl,
 	}
 	rc.SetLabel(name, origin)
 

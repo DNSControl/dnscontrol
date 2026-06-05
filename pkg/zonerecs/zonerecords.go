@@ -2,7 +2,6 @@ package zonerecs
 
 import (
 	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 )
 
 // CorrectZoneRecords calls both GetZoneRecords, does any
@@ -13,7 +12,7 @@ func CorrectZoneRecords(driver models.DNSProvider, dc *models.DomainConfig) ([]*
 	if err != nil {
 		return nil, nil, 0, err
 	}
-	rtypecontrol.FixLegacyRecords(&existingRecords, dc.Name) // Call this after GetZoneRecords() to fix providers that haven't been updated for RecordConfigV2.
+	existingRecords.FixLegacyRecords(dc.Name)
 
 	// downcase
 	models.Downcase(existingRecords)

@@ -22,10 +22,10 @@ type R53ALIAS struct {
 	Hdr dnsv2.Header
 
 	privatetypesrdata.R53ALIAS
-	// AliasType        string
-	// Target           string
-	// EvalTargetHealth string
-	// ZoneID           string
+	// AliasType            string
+	// Target               string
+	// EvalTargetHealth     string
+	// ZoneID               string
 }
 
 // Typer interface.
@@ -50,9 +50,9 @@ func (rr *R53ALIAS) Clone() dnsv2.RR {
 		Hdr: rr.Hdr,
 		R53ALIAS: privatetypesrdata.R53ALIAS{
 			AliasType:        rr.AliasType,
-			Target:           rr.Target,
-			EvalTargetHealth: rr.EvalTargetHealth,
-			ZoneID:           rr.ZoneID,
+			Target:        rr.Target,
+			EvalTargetHealth:        rr.EvalTargetHealth,
+			ZoneID:        rr.ZoneID,
 		}}
 }
 func (rr *R53ALIAS) String() string {

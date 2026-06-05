@@ -93,6 +93,22 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	return dc, nil
 }
 
+// FixLegacyDC calls .FixUp() on all records within DC.
+func (dc *DomainConfig) FixLegacyDC() {
+	dc.Records.FixLegacyRecords(dc.Name)
+}
+
+// FixLegacyDC calls .FixUp() on all records in recs.
+func (recs Records) FixLegacyRecords(origin string) {
+	for _, rec := range recs {
+		rec.FixUp(origin)
+	}
+}
+
+//func FixLegacyRecord(rec *models.RecordConfig, origin string) {
+//	rec.FixUp(origin) // Hack. Populates .RDATA and .TypeNum if needed.
+//}
+
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
