@@ -175,6 +175,7 @@ release:
     ##### Install with [Homebrew](https://brew.sh) (recommended)
 
     ```shell
+    brew trust --formula dnscontrol/tap/dnscontrol
     brew install DNSControl/tap/dnscontrol
     ```
 
