@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -459,11 +459,12 @@ func (c *porkbunProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*m
 	}
 	foundNameservers := strings.Join(nss, ",")
 
-	expected := []string{}
+	expected := make([]string, 0, len(dc.Nameservers))
 	for _, ns := range dc.Nameservers {
-		expected = append(expected, ns.Name)
+		expected = append(expected, strings.ToLower(strings.TrimRight(ns.Name, ".")))
 	}
-	sort.Strings(expected)
+	slices.Sort(expected)
+	expected = slices.Compact(expected)
 	expectedNameservers := strings.Join(expected, ",")
 
 	if foundNameservers == expectedNameservers {
