@@ -37,6 +37,19 @@ export BUNNY_DNS_API_KEY=XXXXXXXXX
 
 This provider does not recognize any special metadata fields unique to Bunny DNS.
 
+## Limitations
+
+### Records
+
+#### CNAME / ALIAS
+
+Bunny supports adding CNAME records for the root domain (`@`), but within
+DNSControl the `ALIAS` record should be used.
+
+```javascript
+D('example.com', REG_NONE, DnsProvider(DSP_BUNNY_DNS), ALIAS('@', 'example2.com'));
+```
+
 ## Usage
 
 An example configuration:
