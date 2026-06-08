@@ -487,7 +487,7 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 		var rc *models.RecordConfig
 
 		if privatetypes.IsModernType(rec.Type) {
-			rc, err = models.NewRecordConfig(domain, rec.Name, rec.TTL, rec.Type, rec.Data)
+			rc, err = dc.NewRecordConfig(rec.Name, rec.TTL, rec.Type, rec.Data)
 		} else {
 			rc = &models.RecordConfig{Type: rec.Type, TTL: rec.TTL}
 			rc.SetLabelFromFQDN(rec.Name, domain)

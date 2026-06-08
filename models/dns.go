@@ -30,50 +30,42 @@ func (config *DNSConfig) ImportRawRecords() error {
 	for _, dc := range config.Domains {
 		for _, rawRec := range dc.RawRecords {
 			filePos := FixPosition(rawRec.FilePos)
-
 			typeName := rawRec.Type
-			typeNum, err := dnsutilv2.StringToType(typeName)
-			if err != nil {
-				return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
-			}
+			//fmt.Printf("DEBUG: dc.Name=%s raw.Type=%s filepos=%s fp=%s\n", dc.Name, rawRec.Type, rawRec.FilePos, filePos)
 
-			label, err := dc.LabelFromConfig(rawRec.Args[0].(string))
-			if err != nil {
-				return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
-			}
-
-			if IsGenerator(typeName) {
-				records, err := ExecuteGenerator(typeName, dc.Name, rawRec.TTL, rawRec.Args)
+			if IsBuilder(typeName) {
+				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args)
 				if err != nil {
 					return err
+				}
+				for _, record := range records {
+					record.FilePos = filePos
 				}
 				// Generation complete!  Append it.
 				dc.Records = append(dc.Records, records...)
 			} else {
-
-				rec, err := NewRecordConfig(
-					dc.Name,
-					label,
-					rawRec.TTL,
-					typeNum,
-					rawRec.Args[1:]...,
-				)
+				typeNum, err := dnsutilv2.StringToType(typeName)
 				if err != nil {
-					return fmt.Errorf("record error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+					return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				rec.FilePos = filePos
+				label, err := dc.LabelFromDnsconfigjs(rawRec.Args[0].(string))
+				if err != nil {
+					return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
 
+				rec, err := dc.NewRecordConfig(label, rawRec.TTL, typeNum, rawRec.Args[1:]...)
+				rec.FilePos = filePos
 				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
 				if doesStutter(rec.Name, dc.Name) {
-					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+					return fmt.Errorf("stutter error at %s %s(%s): %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
 				}
 
 				// Conversion complete!  Append it.
-				dc.Records = append(dc.Records, rec)
+				dc.AddRecordConfig(rec)
 			}
 
 			// We're never going to see this rawRec again. Free its Args.

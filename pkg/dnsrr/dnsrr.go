@@ -39,7 +39,8 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	rc.Type = dnsv2.TypeToString[header.Rrtype]
 	rc.TTL = header.Ttl
 	rc.Original = rr
-	rc.SetLabelFromFQDN(strings.TrimSuffix(header.Name, "."), origin)
+	//rc.SetLabelFromFQDN(strings.TrimSuffix(header.Name, "."), origin)
+	rc.SetLabelFromFQDN(header.Name, origin)
 	var err error
 	switch v := rr.(type) { // #rtype_variations
 	case *dnsv1.A:
@@ -55,7 +56,7 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	case *dnsv1.DNAME:
 		err = rc.SetTarget(v.Target)
 	case *dnsv1.DS:
-		if rec, err := models.NewRecordConfig(origin, header.Name, header.Ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
 			return *rec, nil
 		}
 	case *dnsv1.DNSKEY:
@@ -75,7 +76,7 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	case *dnsv1.PTR:
 		err = rc.SetTarget(v.Ptr)
 	case *dnsv1.RP:
-		if rec, err := models.NewRecordConfig(origin, header.Name, header.Ttl, typeNum, v.Mbox, v.Txt); err == nil {
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum, v.Mbox, v.Txt); err == nil {
 			return *rec, nil
 		}
 	case *dnsv1.SMIMEA:
@@ -146,7 +147,7 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	case *dnsv2.DNAME:
 		err = rc.SetTarget(v.Target)
 	case *dnsv2.DS:
-		if rec, err := models.NewRecordConfig(origin, rc.Name, ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, rc.Name, ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
 			return *rec, nil
 		}
 	case *dnsv2.DNSKEY:
@@ -168,7 +169,7 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	case *dnsv2.PTR:
 		err = rc.SetTarget(v.Ptr)
 	case *dnsv2.RP:
-		if rec, err := models.NewRecordConfig(origin, header.Name, ttl, typeNum, v.Mbox, v.Txt); err == nil {
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, ttl, typeNum, v.Mbox, v.Txt); err == nil {
 			return *rec, nil
 		}
 	case *dnsv2.SMIMEA:

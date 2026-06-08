@@ -191,7 +191,7 @@ func (client *gandiv5Provider) GetZoneRecords(dc *models.DomainConfig) (models.R
 	// Convert them to DNScontrol's native format:
 	existingRecords := []*models.RecordConfig{}
 	for _, rr := range records {
-		rrs, err := nativeToRecords(rr, domain)
+		rrs, err := nativeToRecords(dc, rr)
 		if err != nil {
 			return nil, err
 		}

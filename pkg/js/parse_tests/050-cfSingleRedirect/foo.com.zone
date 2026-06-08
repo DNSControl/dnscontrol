@@ -1,7 +1,0 @@
-$TTL 300
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(name1) code=(301) when=(when1) then=(then1)
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(name2) code=(302) when=(when2) then=(then2)
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(name3) code=(301) when=(when3) then=(then3)
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(namemeta) code=(302) when=(whenmeta) then=(thenmeta)
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(namettl) code=(302) when=(whenttl) then=(thenttl)
-name1            IN A     1.2.3.4

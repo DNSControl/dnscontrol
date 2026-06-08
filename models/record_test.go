@@ -260,3 +260,48 @@ func TestFixPosition(t *testing.T) {
 		})
 	}
 }
+
+func Test_makeLabelNameFQDN(t *testing.T) {
+	tests := []struct {
+		tname string // description of this test case
+		// Named input parameters for target function.
+		origin string
+		name   string
+		want   string
+	}{
+		{"a", "bosun.org", "@", "bosun.org"},
+		{"b", "bosun.org", "foo", "foo.bosun.org"},
+		{"c", "bosun.org", "bosun.org.", "bosun.org"},
+		{"d", "bosun.org", "foo.bosun.org.", "foo.bosun.org"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.tname, func(t *testing.T) {
+			got := makeLabelNameFQDN(tt.origin, tt.name)
+			// TODO: update the condition below to compare got with tt.want.
+			if got != tt.want {
+				t.Errorf("makeNameFQDN(%q) = %v, want %v", tt.name, got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_makeLabelNameUnicode(t *testing.T) {
+	tests := []struct {
+		tname string // description of this test case
+		// Named input parameters for target function.
+		name string
+		want string
+	}{
+		{"a", "foo.com", "foo.com"},
+		{"b", "xn--mnchen-3ya.com", "münchen.com"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.tname, func(t *testing.T) {
+			got := makeLabelNameUnicode(tt.name)
+			// TODO: update the condition below to compare got with tt.want.
+			if got != tt.want {
+				t.Errorf("makeNameUnicode(%q) = %v, want %v", tt.name, got, tt.want)
+			}
+		})
+	}
+}

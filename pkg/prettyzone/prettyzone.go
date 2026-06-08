@@ -132,9 +132,9 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 
 		// the remaining line
 		target := rr.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-		if rr.Type == "HTTPS" || rr.Type == "SVCB" {
-			fmt.Printf("DEBUG: target for SVCB/HTTPS is %s\n", target)
-		}
+		// if rr.Type == "HTTPS" || rr.Type == "SVCB" {
+		// 	fmt.Printf("DEBUG: target for SVCB/HTTPS is %s\n", target)
+		// }
 
 		// comment
 		comment := ""

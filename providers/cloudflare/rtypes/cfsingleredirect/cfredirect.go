@@ -9,21 +9,21 @@ import (
 )
 
 func init() {
-	models.RegisterGenerator("CF_REDIRECT", GeneratorCFREDIRECT)
-	models.RegisterGenerator("CF_TEMP_REDIRECT", GeneratorCFTEMPREDIRECT)
+	models.RegisterGenerator("CF_REDIRECT", BuilderCFREDIRECT)
+	models.RegisterGenerator("CF_TEMP_REDIRECT", BuilderCFTEMPREDIRECT)
 }
 
-func GeneratorCFREDIRECT(origin string, ttl uint32, args []any) (models.Records, error) {
-	return generatorCFDIRECT(301, origin, ttl, args)
+func BuilderCFREDIRECT(dc *models.DomainConfig, ttl uint32, args []any) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 301, args)
 }
-func GeneratorCFTEMPREDIRECT(origin string, ttl uint32, args []any) (models.Records, error) {
-	return generatorCFDIRECT(302, origin, ttl, args)
+func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 302, args)
 }
 
-func generatorCFDIRECT(code uint16, origin string, ttl uint32, args []any) (models.Records, error) {
+func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any) (models.Records, error) {
 	// Convert old-style patterns to new-style rules:
-	prWhen := mustbe.RawString(args[0])
-	prThen := mustbe.RawString(args[1])
+	prWhen := mustbe.RawString(args[1])
+	prThen := mustbe.RawString(args[2])
 	srWhen, srThen, err := makeRuleFromPattern(prWhen, prThen)
 	if err != nil {
 		return nil, err
@@ -32,10 +32,9 @@ func generatorCFDIRECT(code uint16, origin string, ttl uint32, args []any) (mode
 	// Create a rule name:
 	name := fmt.Sprintf("%03d,%s,%s", code, prWhen, prThen)
 
-	rec, err := models.NewRecordConfig(
-		origin,
+	rec, err := dc.NewRecordConfig(
 		"@",
-		0,
+		1, // CF ignores the TTL. We always force it to 1.
 		"CLOUDFLAREAPI_SINGLE_REDIRECT",
 		name, code, srWhen, srThen,
 	)

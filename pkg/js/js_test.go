@@ -106,7 +106,7 @@ func TestParsedFiles(t *testing.T) {
 			if err := os.WriteFile(expectedFile+".ACTUAL", []byte(as), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			testifyrequire.JSONEqf(t, es, as, "EXPECTING %q = \n```\n%s\n```", expectedFile, as)
+			testifyrequire.JSONEqf(t, es, as, "ACTUAL %q = \n```\n%s\n```", expectedFile+".ACTUAL", as)
 
 			// For each domain, if there is a zone file, test against it:
 
@@ -141,7 +141,7 @@ func TestParsedFiles(t *testing.T) {
 						t.Fatal(err)
 					}
 				}
-				testifyrequire.Equal(t, es, as, "EXPECTING %q =\n```\n%s```", zoneFile, as)
+				testifyrequire.Equal(t, es, as, "2EXPECTING %q =\n```\n%s```", zoneFile, as)
 			}
 			if dCount > 0 && (len(conf.Domains) != dCount) {
 				t.Fatal(fmt.Errorf("only %d of %d domains in %q have zonefiles", dCount, len(conf.Domains), name))

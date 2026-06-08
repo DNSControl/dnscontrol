@@ -56,6 +56,9 @@ func NewRecordConfigParse(origin string, name string, ttl uint32, typeAny any, d
 You can save a little typing by 
 dc.AddRecord(name, ttl, typeAny, args...)
 
+func NewRecordConfigFromDnsconfigjs(origin string, name string, ttl uint32, typeAny any, data string) (*RecordConfig, error) {
+// Does extra checking.
+
 ## One true way to access the fields of models.RecordConfig()
 
     rc.DATA().(dnsv2.MX).Preference
@@ -63,4 +66,24 @@ dc.AddRecord(name, ttl, typeAny, args...)
 ## Generate
 
 
+
+
+API:
+label, err = dc.LabelFromShort() or dc.LabelFromFQDNNoDot()                 record_label.go
+rc, err := dc.NewRecordConfig(label, ttl, type, args)  or ...Parse()        record_new.go
+dc.AddRecordConfig(rc)                                                      domain.go
+
+DNSCONFIG:
+label, err = dc.LabelFromDnsconfigjs()                                      record_label.go
+rc, err := dc.NewRecordConfig(label, ttl, type, args)                      record_new.go
+Add metadata
+dc.AddRecordConfig(rc)                                                      domain.go
+
+TESTS: testutils_test.go
+rc := models.MakeTestRC(label, ttl, type, args)                             record_helpers_test.go
+rc := models.MakeTestRCParse(label, ttl, type, args)                        record_helpers_test.go
+If you need many...
+dc, err := models.NewDomainConfig(zone)                                     domain.go
+dc.AddRecordConfig(models.MakeTestRC(label, ttl, type, args))               domain.go
+dc.AddRecordConfig(models.MakeTestRCParse(label, ttl, type, args))          domain.go
 

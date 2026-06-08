@@ -27,7 +27,6 @@ func (z *ZoneGenData) Less(i, j int) bool {
 
 	// Sort by name.
 
-	//fmt.Printf("DEBUG: LabelLess(%q, %q) = %v %q %q\n", compA, compB, LabelLess(compA, compB), a.Name, b.Name)
 	compA, compB := a.NameFQDN, b.NameFQDN
 	// Unify FQDNs to "@". LabelLess needs FQDNs to be "@" to work properly.
 	if a.Name == "@" {
@@ -36,6 +35,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 	if b.Name == "@" {
 		compB = "@"
 	}
+	// fmt.Printf("DEBUG: %s Less(%q, %q) = %v %q %q\n", a.Type, compA, compB, (compA == compB), a.Name, b.Name)
 	if compA != compB {
 		return LabelLess(compA, compB)
 	}
@@ -132,7 +132,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 func LabelLess(a, b string) bool {
 	// Compare two zone labels for the purpose of sorting the RRs in a Zone.
 
-	// If they are equal, we are done. The remainingi code can assume a != b.
+	// If they are equal, we are done. The remaining code can assume a != b.
 	if a == b {
 		return false
 	}

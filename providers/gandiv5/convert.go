@@ -13,7 +13,7 @@ import (
 )
 
 // nativeToRecord takes a DNS record from Gandi and returns a native RecordConfig struct.
-func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.RecordConfig, err error) {
+func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*models.RecordConfig, err error) {
 	// Gandi returns all the values for a given label/rtype pair in each
 	// livedns.DomainRecord.  In other words, if there are multiple A
 	// records for a label, all the IP addresses are listed in
@@ -21,6 +21,7 @@ func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.Recor
 	// We must split them out into individual records, one for each value.
 
 	// dcn := domaintags.MakeDomainNameVarieties(origin)
+	origin := dc.Name
 
 	for _, value := range n.RrsetValues {
 		var rc *models.RecordConfig
@@ -29,7 +30,7 @@ func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.Recor
 		rtype := n.RrsetType
 
 		if privatetypes.IsModernType(rtype) {
-			rc, err = models.NewRecordConfigParse(origin, n.RrsetName, uint32(n.RrsetTTL), rtype, value)
+			rc, err = dc.NewRecordConfigParse(n.RrsetName, uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
 			}

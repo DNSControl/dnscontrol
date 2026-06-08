@@ -183,7 +183,7 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	// Fetch Single Redirects concurrently if enabled
 	if c.manageSingleRedirects {
 		go func() {
-			prs, err := c.getSingleRedirects(domainID, domain)
+			prs, err := c.getSingleRedirects(dc, domainID)
 			redirectCh <- result{records: prs, err: err}
 		}()
 	} else {

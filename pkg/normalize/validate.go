@@ -59,6 +59,11 @@ func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []strin
 		// Modern types do their own validation.
 		return nil
 	}
+	switch rec.Type {
+	// RCv3 records do not need this validation step.
+	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
+		return nil
+	}
 
 	// #rtype_variations
 	validTypes := map[string]bool{
@@ -89,9 +94,11 @@ func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []strin
 	}
 	_, ok := validTypes[rec.Type]
 	if !ok {
+
 		cType := providers.GetCustomRecordType(rec.Type)
 		if cType == nil {
-			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v", rec.Type, domain, rec.GetLabel())
+			//return fmt.Errorf("unsupported record type (%v) domain=%v name=%v", rec.Type, domain, rec.GetLabel())
+			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v Type=%s TypeNum=%d", rec.Type, domain, rec.GetLabel(), rec.Type, rec.TypeNum)
 		}
 		for _, providerType := range pTypes {
 			if providerType != cType.Provider {
@@ -180,6 +187,10 @@ func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox s
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	if rec.IsModernType() {
 		// Modern types do their own validation.
+		return nil
+	}
+	switch rec.Type {
+	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
 		return nil
 	}
 
