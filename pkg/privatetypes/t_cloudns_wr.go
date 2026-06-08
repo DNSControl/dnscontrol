@@ -16,7 +16,7 @@ func init() {
 	Register(TypeCLOUDNSWR, "CLOUDNS_WR", func() dnsv2.RR { return new(CLOUDNSWR) }, privatetypesrdata.MakeCLOUDNSWR)
 }
 
-const TypeCLOUDNSWR = 65315
+const TypeCLOUDNSWR = 65290
 
 type CLOUDNSWR struct {
 	Hdr dnsv2.Header

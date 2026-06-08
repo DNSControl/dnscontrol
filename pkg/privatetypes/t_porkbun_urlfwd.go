@@ -15,7 +15,7 @@ func init() {
 	Register(TypePORKBUNURLFWD, "PORKBUN_URLFWD", func() dnsv2.RR { return new(PORKBUNURLFWD) }, privatetypesrdata.MakePORKBUNURLFWD)
 }
 
-const TypePORKBUNURLFWD = 65321
+const TypePORKBUNURLFWD = 65297
 
 type PORKBUNURLFWD struct {
 	Hdr dnsv2.Header

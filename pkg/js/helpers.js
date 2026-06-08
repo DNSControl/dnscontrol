@@ -2533,10 +2533,14 @@ var DISABLE_REPEATED_DOMAIN_CHECK = { skip_fqdn_check: 'true' };
 // Javascript knowledge, and allows us to use the testing platform build into
 // Go.
 
-function rawrecordBuilder(type) {
+function rawrecordBuilder(type, noLabel) {
     return function () {
-        // Copy the raw args:
+
         var rawArgs = [];
+        if ((noLabel !== undefined) && (noLabel) ) {
+            rawArgs.push("@");
+        }
+        // Copy the raw args locally.
         for (var i = 0; i < arguments.length; i++) {
             rawArgs.push(arguments[i]);
         }
@@ -2591,8 +2595,8 @@ function rawrecordBuilder(type) {
 
 // PLEASE KEEP THIS LIST ALPHABETICAL!
 
-var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT');
-var CF_SINGLE_REDIRECT = rawrecordBuilder('CLOUDFLAREAPI_SINGLE_REDIRECT');
-var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT');
+var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
+var CF_SINGLE_REDIRECT = rawrecordBuilder('CLOUDFLAREAPI_SINGLE_REDIRECT', true);
+var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var DS = rawrecordBuilder('DS');
 var RP = rawrecordBuilder('RP');

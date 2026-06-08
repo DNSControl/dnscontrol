@@ -1,17 +1,18 @@
 ---
+# 65280 to 65534
 types:
   - name: Adguardhome_A_Passthrough
-    codepoint: 1001
+    codepoint: 65280
     fields: []
     test_data: []
 
   - name: Adguardhome_AAAA_Passthrough
-    codepoint: 65323
+    codepoint: 65281
     fields: []
     test_data: []
 
   - name: Akamaicdn
-    codepoint: 65318
+    codepoint: 65282
     fields:
       - name: Target
         type: TargetHost
@@ -21,7 +22,7 @@ types:
           Target: example.com.
 
   - name: Akamaitlc
-    codepoint: 65319
+    codepoint: 65284
     fields:
       - name: AnswerType
         type: RawString
@@ -34,7 +35,7 @@ types:
           Target: example.com.
 
   - name: Alias
-    codepoint: 65303
+    codepoint: 65285
     fields:
       - name: Target
         type: TargetHost
@@ -44,7 +45,7 @@ types:
           Target: example.com.
 
   - name: Azure_Alias
-    codepoint: 65304
+    codepoint: 65286
     fields:
       - name: AliasType
         type: RawString
@@ -57,7 +58,7 @@ types:
           Target: example.com.
 
   - name: Bunny_Dns_Pz
-    codepoint: 65313
+    codepoint: 65287
     fields: []
     test_data: []
 
@@ -67,7 +68,7 @@ types:
     test_data: []
 
   - name: Cfworkerroute
-    codepoint: 65305
+    codepoint: 65288
     fields:
       - name: When
         type: RawString
@@ -80,16 +81,17 @@ types:
           Then: ThenThen
 
   - name: Cloudflareapi_Single_Redirect
-    codepoint: 65322
+    codepoint: 65289
     fields:
-      - name: Name
-        type: RawString
       - name: Code
         type: Uint16
-      - name: When
+      - name: SRName
         type: RawString
-      - name: Then
+      - name: SRWhen
         type: RawString
+      - name: SRThen
+        type: RawString
+
     test_data:
       - name: ""
         values:
@@ -99,7 +101,7 @@ types:
           Then: then_string
 
   - name: Cloudns_Wr
-    codepoint: 65315
+    codepoint: 65290
     fields:
       - name: Target
         type: RawString
@@ -109,7 +111,7 @@ types:
           Target: example.com.
 
   - name: Frame
-    codepoint: 65312
+    codepoint: 65291
     fields:
       - name: Target
         type: RawString
@@ -119,7 +121,7 @@ types:
           Target: example.com.
 
   - name: Lua
-    codepoint: 65314
+    codepoint: 65292
     fields:
       - name: LuaType
         type: RawString
@@ -132,7 +134,7 @@ types:
           LuaPayload: return_127_0_0_1
 
   - name: Mikrotik_Fwd
-    codepoint: 65307
+    codepoint: 65293
     fields:
       - name: ForwardTo
         type: RawString
@@ -142,27 +144,27 @@ types:
           ForwardTo: example.com.
 
   - name: Mikrotik_Nxdomain
-    codepoint: 65308
+    codepoint: 65294
     fields: []
     test_data: []
 
   - name: Netlify
-    codepoint: 65316
+    codepoint: 65295
     fields: []
     test_data: []
 
   - name: Netlifyv6
-    codepoint: 65317
+    codepoint: 65296
     fields: []
     test_data: []
 
   - name: Porkbun_Urlfwd
-    codepoint: 65321
+    codepoint: 65297
     fields: []
     test_data: []
 
   - name: R53_Alias
-    codepoint: 65306
+    codepoint: 65298
     fields:
       - name: AliasType
         type: RawString
@@ -172,7 +174,6 @@ types:
         type: RawString
       - name: ZoneID
         type: RawString
-
     test_data:
       - name: normal_user
         values:
@@ -182,7 +183,7 @@ types:
           ZoneID: 1234
 
   - name: Url
-    codepoint: 65310
+    codepoint: 65299
     fields:
       - name: Location
         type: RawString
@@ -198,7 +199,7 @@ types:
           PorkbunWildCard: false
 
   - name: Url301
-    codepoint: 65311
+    codepoint: 65300
     fields:
       - name: Location
         type: TargetHost

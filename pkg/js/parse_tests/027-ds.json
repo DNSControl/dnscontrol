@@ -11,22 +11,13 @@
       "name": "foo.com",
       "records": [
         {
-          "comparable": "1 1 1 FFFF",
           "comparablev3": "1 1 1 FFFF",
           "dsalgorithm": 1,
           "dsdigest": "FFFF",
           "dsdigesttype": 1,
           "dskeytag": 1,
-          "fields": {
-            "Algorithm": 1,
-            "Digest": "FFFF",
-            "DigestType": 1,
-            "KeyTag": 1
-          },
           "filepos": "[line:3:5]",
           "name": "@",
-          "name_raw": "@",
-          "name_unicode": "@",
           "rdata": {
             "Algorithm": 1,
             "Digest": "FFFF",
@@ -36,25 +27,16 @@
           "target": "",
           "ttl": 300,
           "type": "DS",
-          "zonfefilepartial": "1 1 1 FFFF"
+          "typenum": 43
         },
         {
-          "comparable": "1000 13 2 AABBCCDDEEFF",
           "comparablev3": "1000 13 2 AABBCCDDEEFF",
           "dsalgorithm": 13,
           "dsdigest": "AABBCCDDEEFF",
           "dsdigesttype": 2,
           "dskeytag": 1000,
-          "fields": {
-            "Algorithm": 13,
-            "Digest": "AABBCCDDEEFF",
-            "DigestType": 2,
-            "KeyTag": 1000
-          },
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_raw": "@",
-          "name_unicode": "@",
           "rdata": {
             "Algorithm": 13,
             "Digest": "AABBCCDDEEFF",
@@ -64,7 +46,7 @@
           "target": "",
           "ttl": 300,
           "type": "DS",
-          "zonfefilepartial": "1000 13 2 AABBCCDDEEFF"
+          "typenum": 43
         }
       ],
       "registrar": "none",

@@ -16,7 +16,7 @@ func init() {
 	Register(TypeCFWORKERROUTE, "CFWORKERROUTE", func() dnsv2.RR { return new(CFWORKERROUTE) }, privatetypesrdata.MakeCFWORKERROUTE)
 }
 
-const TypeCFWORKERROUTE = 65305
+const TypeCFWORKERROUTE = 65288
 
 type CFWORKERROUTE struct {
 	Hdr dnsv2.Header

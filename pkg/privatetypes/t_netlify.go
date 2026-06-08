@@ -15,7 +15,7 @@ func init() {
 	Register(TypeNETLIFY, "NETLIFY", func() dnsv2.RR { return new(NETLIFY) }, privatetypesrdata.MakeNETLIFY)
 }
 
-const TypeNETLIFY = 65316
+const TypeNETLIFY = 65295
 
 type NETLIFY struct {
 	Hdr dnsv2.Header

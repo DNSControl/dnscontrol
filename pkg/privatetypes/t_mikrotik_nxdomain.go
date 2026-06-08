@@ -15,7 +15,7 @@ func init() {
 	Register(TypeMIKROTIKNXDOMAIN, "MIKROTIK_NXDOMAIN", func() dnsv2.RR { return new(MIKROTIKNXDOMAIN) }, privatetypesrdata.MakeMIKROTIKNXDOMAIN)
 }
 
-const TypeMIKROTIKNXDOMAIN = 65308
+const TypeMIKROTIKNXDOMAIN = 65294
 
 type MIKROTIKNXDOMAIN struct {
 	Hdr dnsv2.Header

@@ -1,5 +1,8 @@
 package models
 
+// Make*() functions for built-in types.
+// TODO(tlim): Autogenerate this.  use mustbe.* while we're at it.
+
 import (
 	"fmt"
 

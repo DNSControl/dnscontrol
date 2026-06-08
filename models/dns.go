@@ -31,38 +31,50 @@ func (config *DNSConfig) ImportRawRecords() error {
 		for _, rawRec := range dc.RawRecords {
 			filePos := FixPosition(rawRec.FilePos)
 
+			typeName := rawRec.Type
+			typeNum, err := dnsutilv2.StringToType(typeName)
+			if err != nil {
+				return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			}
+
 			label, err := dc.LabelFromConfig(rawRec.Args[0].(string))
 			if err != nil {
-				return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
-			}
-			typeNum, err := dnsutilv2.StringToType(rawRec.Type)
-			if err != nil {
-				return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 			}
 
-			rec, err := NewRecordConfig(
-				dc.Name,
-				label,
-				rawRec.TTL,
-				typeNum,
-				rawRec.Args,
-			)
-			if err != nil {
-				return fmt.Errorf("record error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
+			if IsGenerator(typeName) {
+				records, err := ExecuteGenerator(typeName, dc.Name, rawRec.TTL, rawRec.Args)
+				if err != nil {
+					return err
+				}
+				// Generation complete!  Append it.
+				dc.Records = append(dc.Records, records...)
+			} else {
+
+				rec, err := NewRecordConfig(
+					dc.Name,
+					label,
+					rawRec.TTL,
+					typeNum,
+					rawRec.Args[1:]...,
+				)
+				if err != nil {
+					return fmt.Errorf("record error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
+
+				rec.FilePos = filePos
+
+				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
+					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
+
+				if doesStutter(rec.Name, dc.Name) {
+					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
+
+				// Conversion complete!  Append it.
+				dc.Records = append(dc.Records, rec)
 			}
-
-			rec.FilePos = filePos
-
-			if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
-				return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
-			}
-
-			if doesStutter(rec.Name, dc.Name) {
-				return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, rawRec.Type, txtutil.ZoneifyManyAny(rawRec.Args), err)
-			}
-
-			// Conversion complete!  Append it.
-			dc.Records = append(dc.Records, rec)
 
 			// We're never going to see this rawRec again. Free its Args.
 			clear(rawRec.Args)

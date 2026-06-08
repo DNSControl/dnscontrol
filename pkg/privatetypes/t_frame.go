@@ -16,7 +16,7 @@ func init() {
 	Register(TypeFRAME, "FRAME", func() dnsv2.RR { return new(FRAME) }, privatetypesrdata.MakeFRAME)
 }
 
-const TypeFRAME = 65312
+const TypeFRAME = 65291
 
 type FRAME struct {
 	Hdr dnsv2.Header

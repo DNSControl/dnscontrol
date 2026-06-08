@@ -15,7 +15,7 @@ func init() {
 	Register(TypeBUNNYDNSPZ, "BUNNY_DNS_PZ", func() dnsv2.RR { return new(BUNNYDNSPZ) }, privatetypesrdata.MakeBUNNYDNSPZ)
 }
 
-const TypeBUNNYDNSPZ = 65313
+const TypeBUNNYDNSPZ = 65287
 
 type BUNNYDNSPZ struct {
 	Hdr dnsv2.Header

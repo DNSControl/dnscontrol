@@ -118,7 +118,7 @@ func (dc *DomainConfig) PostProcess() {
 	}
 
 	//  HACK: Fill in names (This means models.NewDomainConfig() was not used.  We can eliminate this when legacy code is removed.
-	ff := domaintags.MakeDomainNameVarieties(dc.Name)
+	ff := domaintags.MakeDomainNameVarieties(dc.Name) // FIXME: Slow.  Call only if needed.
 	if dc.Tag == "" {
 		dc.Tag = ff.Tag
 	}

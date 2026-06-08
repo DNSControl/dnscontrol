@@ -1,5 +1,53 @@
 package cfsingleredirect
 
+import (
+	"fmt"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+)
+
+func init() {
+	models.RegisterGenerator("CF_REDIRECT", GeneratorCFREDIRECT)
+	models.RegisterGenerator("CF_TEMP_REDIRECT", GeneratorCFTEMPREDIRECT)
+}
+
+func GeneratorCFREDIRECT(origin string, ttl uint32, args []any) (models.Records, error) {
+	return generatorCFDIRECT(301, origin, ttl, args)
+}
+func GeneratorCFTEMPREDIRECT(origin string, ttl uint32, args []any) (models.Records, error) {
+	return generatorCFDIRECT(302, origin, ttl, args)
+}
+
+func generatorCFDIRECT(code uint16, origin string, ttl uint32, args []any) (models.Records, error) {
+	// Convert old-style patterns to new-style rules:
+	prWhen := mustbe.RawString(args[0])
+	prThen := mustbe.RawString(args[1])
+	srWhen, srThen, err := makeRuleFromPattern(prWhen, prThen)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a rule name:
+	name := fmt.Sprintf("%03d,%s,%s", code, prWhen, prThen)
+
+	rec, err := models.NewRecordConfig(
+		origin,
+		"@",
+		0,
+		"CLOUDFLAREAPI_SINGLE_REDIRECT",
+		name, code, srWhen, srThen,
+	)
+	if err != nil {
+		return nil,
+			fmt.Errorf(
+				"record error in GeneratorCFREDIRECT at [CLOUDFLAREAPI_SINGLE_REDIRECT(%s)]: %w",
+				txtutil.ZoneifyManyAny(args), err)
+	}
+	return models.Records{rec}, nil
+}
+
 // import (
 // 	"fmt"
 

@@ -10,7 +10,6 @@ import (
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	dnsv1 "github.com/miekg/dns"
@@ -181,10 +180,10 @@ func NewRecordConfig(origin string, name string, ttl uint32, typeAny any, args .
 
 	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, args...)
 	if err != nil {
-		log.Fatalf("BUG: Failed to create RDATA for type %d: %v", typeNum, err)
+		log.Fatalf("BUG: Failed to create RDATA for type %s: %v", rc.Type, err)
 	}
 	rc.RDATA = rd
-	rc.FixUp(origin)
+	rc.FixUp(origin) // Add .ComparerV3
 
 	// Hack to back-fill legacy fields. This will go away eventually.
 	switch rd := rc.RDATA.(type) {
@@ -198,8 +197,10 @@ func NewRecordConfig(origin string, name string, ttl uint32, typeAny any, args .
 		rc.SvcParams = svcbv2ValueToString(rd.Value)
 	case dnsrdatav2.TLSA:
 		rc.SetTargetTLSA(rd.Usage, rd.Selector, rd.MatchingType, rd.Certificate)
-	case privatetypesrdata.URL:
-	case privatetypesrdata.URL301:
+	// case privatetypesrdata.CFREDIRECT:
+	// case privatetypesrdata.CFTEMPREDIRECT:
+	// case privatetypesrdata.URL:
+	// case privatetypesrdata.URL301:
 	default:
 		return nil, fmt.Errorf("assertion failed: NewRecordConfig back-fill has not implemented type %T", rd)
 	}

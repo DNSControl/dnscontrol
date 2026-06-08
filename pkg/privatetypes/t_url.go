@@ -16,7 +16,7 @@ func init() {
 	Register(TypeURL, "URL", func() dnsv2.RR { return new(URL) }, privatetypesrdata.MakeURL)
 }
 
-const TypeURL = 65310
+const TypeURL = 65299
 
 type URL struct {
 	Hdr dnsv2.Header

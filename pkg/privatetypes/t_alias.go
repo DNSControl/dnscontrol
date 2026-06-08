@@ -16,7 +16,7 @@ func init() {
 	Register(TypeALIAS, "ALIAS", func() dnsv2.RR { return new(ALIAS) }, privatetypesrdata.MakeALIAS)
 }
 
-const TypeALIAS = 65303
+const TypeALIAS = 65285
 
 type ALIAS struct {
 	Hdr dnsv2.Header

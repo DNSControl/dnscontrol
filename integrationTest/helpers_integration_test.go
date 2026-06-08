@@ -658,7 +658,7 @@ func r53weighted(name, target, rtype string, weight int, setID string) *models.R
 }
 
 func rp(name string, m, t string) *models.RecordConfig {
-	r, err := models.NewRecordConfig(globalDCN.NameASCII, name, defaultTTL, dnsv2.TypeDS, m, t)
+	r, err := models.NewRecordConfig(globalDCN.NameASCII, name, defaultTTL, dnsv2.TypeRP, m, t)
 	panicOnErr(err)
 	return r
 	// rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
