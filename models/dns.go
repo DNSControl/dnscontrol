@@ -54,7 +54,12 @@ func (config *DNSConfig) ImportRawRecords() error {
 					return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				rec, err := dc.NewRecordConfig(label, rawRec.TTL, typeNum, rawRec.Args[1:]...)
+				mm, err := mergeMetas(rawRec.Metas)
+				if err != nil {
+					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
+
+				rec, err := dc.NewRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm)
 				if err != nil {
 					return fmt.Errorf("ImprotRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}

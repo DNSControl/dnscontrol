@@ -20,7 +20,7 @@ func (rd FRAME) String() string {
 	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeFRAME(_ string, args ...any) (dnsv2.RDATA, error) {
+func MakeFRAME(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
 		return FRAME{}, fmt.Errorf("FRAME expects 1 arguments, got %d: %+v", len(args), args)
 	}

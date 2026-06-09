@@ -21,7 +21,7 @@ func (rd AKAMAITLC) String() string {
 	return txtutil.Zoneify([]string{rd.AnswerType, rd.Target})
 }
 
-func MakeAKAMAITLC(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeAKAMAITLC(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 2 {
 		return AKAMAITLC{}, fmt.Errorf("AKAMAITLC expects 2 arguments, got %d: %+v", len(args), args)
 	}

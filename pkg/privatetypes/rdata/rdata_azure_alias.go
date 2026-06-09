@@ -21,7 +21,7 @@ func (rd AZUREALIAS) String() string {
 	return txtutil.Zoneify([]string{rd.AliasType, rd.Target})
 }
 
-func MakeAZUREALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeAZUREALIAS(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 2 {
 		return AZUREALIAS{}, fmt.Errorf("AZURE_ALIAS expects 2 arguments, got %d: %+v", len(args), args)
 	}

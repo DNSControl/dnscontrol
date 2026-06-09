@@ -20,7 +20,7 @@ func (rd MIKROTIKFWD) String() string {
 	return txtutil.Zoneify([]string{rd.ForwardTo})
 }
 
-func MakeMIKROTIKFWD(_ string, args ...any) (dnsv2.RDATA, error) {
+func MakeMIKROTIKFWD(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
 		return MIKROTIKFWD{}, fmt.Errorf("MIKROTIK_FWD expects 1 arguments, got %d: %+v", len(args), args)
 	}

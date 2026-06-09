@@ -22,7 +22,7 @@ func (rd URL301) String() string {
 	return txtutil.Zoneify([]string{rd.Location, fmt.Sprintf("%t", rd.PorkbunIncludePath), fmt.Sprintf("%t", rd.PorkbunWildCard)})
 }
 
-func MakeURL301(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeURL301(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 3 {
 		return URL301{}, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
 	}

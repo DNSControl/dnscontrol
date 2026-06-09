@@ -20,7 +20,7 @@ func (rd CLOUDNSWR) String() string {
 	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeCLOUDNSWR(_ string, args ...any) (dnsv2.RDATA, error) {
+func MakeCLOUDNSWR(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
 		return CLOUDNSWR{}, fmt.Errorf("CLOUDNS_WR expects 1 arguments, got %d: %+v", len(args), args)
 	}

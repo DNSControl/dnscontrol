@@ -23,7 +23,7 @@ func (rd R53ALIAS) String() string {
 	return txtutil.Zoneify([]string{rd.AliasType, rd.Target, rd.EvalTargetHealth, rd.ZoneID})
 }
 
-func MakeR53ALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeR53ALIAS(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 4 {
 		return R53ALIAS{}, fmt.Errorf("R53_ALIAS expects 4 arguments, got %d: %+v", len(args), args)
 	}

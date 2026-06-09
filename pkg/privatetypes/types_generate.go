@@ -468,7 +468,7 @@ func generateRdataFile(t *TypeDef) error {
 	buf.WriteString("}\n\n")
 
 	// Make: validate arg count, then build the rdata using mustbe.X conversions.
-	fmt.Fprintf(&buf, "func Make%s(origin string, args ...any) (dnsv2.RDATA, error) {\n", typeName)
+	fmt.Fprintf(&buf, "func Make%s(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {\n", typeName)
 
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\tif len(args) != 0 {\n")

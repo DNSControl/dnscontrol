@@ -162,12 +162,12 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	if !ok {
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil\n", typeNum)
 	}
-	rd, err := f(dc.Name, args...)
+	rd, err := f(dc.Name, args, nil)
 	if err != nil {
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
 
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
 
 // NewRecordConfigParse is like NewRecordConfig but the fields of the record come from parsing a string (data).
@@ -180,16 +180,27 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 	if err != nil {
 		return nil, err
 	}
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
+}
+
+// NewRecordConfigForRRtoRC is only for use by dnsrr.go.
+func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, typeNum uint16, args []any, metadata map[string]string) (*RecordConfig, error) {
+
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, args, metadata)
+	if err != nil {
+		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
+	}
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
 }
 
 // NewRecordConfigForRRtoRC is only for use by dnsrr.go.
 func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
+
 	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
-	return newRecordConfigHelper(origin, name, ttl, typeNum, rd)
+	return newRecordConfigHelper(origin, name, ttl, typeNum, rd, nil)
 }
 
 // // newRecordConfigHelper creates a RecordConfig using a dnsv2.RDATA.
@@ -208,7 +219,7 @@ func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, a
 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.
 // All valid RecordConfig structs come through this function. Everything else is questionable.
-func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA) (*RecordConfig, error) {
+func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
 	rc := &RecordConfig{
 		TypeNum: typeNum,
 		Type:    dnsutilv2.TypeToString(typeNum),

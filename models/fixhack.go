@@ -116,7 +116,7 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rc.RDATA, err = MakeOPENPGPKEY(origin, rc.GetTargetField())
 
 		case "PORKBUN_URLFWD":
-			rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, []any{rc.GetTargetField()}, nil)
 
 		case "PTR":
 			rc.RDATA, err = MakePTR(origin, rc.GetTargetField())

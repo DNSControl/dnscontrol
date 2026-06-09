@@ -188,10 +188,10 @@ func MakeR53ALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
 		return nil, fmt.Errorf("MakeR53ALIAS expects exactly 5 arguments, got %d: %+v", len(args), args)
 	}
 	return privatetypesrdata.R53ALIAS{
-		AliasType:        mustbe.RawString(args[0]),
-		Target:           mustbe.TargetHost(origin, args[1]),
-		ZoneID:           mustbe.RawString(args[2]),
-		EvalTargetHealth: mustbe.RawString(args[3]),
+		AliasType: mustbe.RawString(args[0]),
+		Target:    mustbe.TargetHost(origin, args[1]),
+		// ZoneID:           mustbe.RawString(args[2]),
+		// EvalTargetHealth: mustbe.RawString(args[3]),
 		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. This is a hack to convert it to the expected format. We should probably change the R53ALIAS type to use a boolean for this field.
 	}, nil
 }

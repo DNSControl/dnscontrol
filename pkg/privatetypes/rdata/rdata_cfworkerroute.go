@@ -21,7 +21,7 @@ func (rd CFWORKERROUTE) String() string {
 	return txtutil.Zoneify([]string{rd.When, rd.Then})
 }
 
-func MakeCFWORKERROUTE(_ string, args ...any) (dnsv2.RDATA, error) {
+func MakeCFWORKERROUTE(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 2 {
 		return CFWORKERROUTE{}, fmt.Errorf("CFWORKERROUTE expects 2 arguments, got %d: %+v", len(args), args)
 	}

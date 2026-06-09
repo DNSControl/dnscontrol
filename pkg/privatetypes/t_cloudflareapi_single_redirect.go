@@ -22,10 +22,10 @@ type CLOUDFLAREAPISINGLEREDIRECT struct {
 	Hdr dnsv2.Header
 
 	privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT
-	// Name                 string
 	// Code                 uint16
-	// When                 string
-	// Then                 string
+	// SRName               string
+	// SRWhen               string
+	// SRThen               string
 }
 
 // Typer interface.
@@ -39,16 +39,16 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) Data() dnsv2.RDATA {
-	return &privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{Name: rr.Name, Code: rr.Code, When: rr.When, Then: rr.Then}
+	return &privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{Code: rr.Code, SRName: rr.SRName, SRWhen: rr.SRWhen, SRThen: rr.SRThen}
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) Clone() dnsv2.RR {
 	return &CLOUDFLAREAPISINGLEREDIRECT{
 		Hdr: rr.Hdr,
 		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
-			Name: rr.Name,
 			Code: rr.Code,
-			When: rr.When,
-			Then: rr.Then,
+			SRName: rr.SRName,
+			SRWhen: rr.SRWhen,
+			SRThen: rr.SRThen,
 		}}
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) String() string {
@@ -63,9 +63,9 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Parse(tokens []string, s string) error {
 	if len(args) != 4 {
 		return fmt.Errorf("CLOUDFLAREAPI_SINGLE_REDIRECT requires exactly 4 arguments, got %d: %v", len(args), args)
 	}
-	rr.Name = mustbe.RawString(args[0])
-	rr.Code = mustbe.Uint16(args[1])
-	rr.When = mustbe.RawString(args[2])
-	rr.Then = mustbe.RawString(args[3])
+	rr.Code = mustbe.Uint16(args[0])
+	rr.SRName = mustbe.RawString(args[1])
+	rr.SRWhen = mustbe.RawString(args[2])
+	rr.SRThen = mustbe.RawString(args[3])
 	return nil
 }

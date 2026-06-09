@@ -20,7 +20,7 @@ func (rd AKAMAICDN) String() string {
 	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeAKAMAICDN(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeAKAMAICDN(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
 		return AKAMAICDN{}, fmt.Errorf("AKAMAICDN expects 1 arguments, got %d: %+v", len(args), args)
 	}
