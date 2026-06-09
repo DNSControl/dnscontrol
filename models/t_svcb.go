@@ -47,7 +47,7 @@ func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []d
 	}
 	rc.Type = dnsv2.TypeToString[rc.TypeNum]
 
-	rd, err := MakeSVCB("", priority, target, params)
+	rd, err := MakeSVCB("", nil, priority, target, params)
 	if err != nil {
 		return fmt.Errorf("failed to create RDATA for SVCB record: %w", err)
 	}

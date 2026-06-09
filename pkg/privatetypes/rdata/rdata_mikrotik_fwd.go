@@ -9,7 +9,7 @@ import (
 )
 
 type MIKROTIKFWD struct {
-	ForwardTo            string
+	ForwardTo string
 }
 
 func (rd MIKROTIKFWD) Len() int {
@@ -20,7 +20,7 @@ func (rd MIKROTIKFWD) String() string {
 	return txtutil.Zoneify([]string{rd.ForwardTo})
 }
 
-func MakeMIKROTIKFWD(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeMIKROTIKFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 1 {
 		return MIKROTIKFWD{}, fmt.Errorf("MIKROTIK_FWD expects 1 arguments, got %d: %+v", len(args), args)
 	}

@@ -9,8 +9,8 @@ import (
 )
 
 type CFWORKERROUTE struct {
-	When                 string
-	Then                 string
+	When string
+	Then string
 }
 
 func (rd CFWORKERROUTE) Len() int {
@@ -21,7 +21,8 @@ func (rd CFWORKERROUTE) String() string {
 	return txtutil.Zoneify([]string{rd.When, rd.Then})
 }
 
-func MakeCFWORKERROUTE(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeCFWORKERROUTE(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return CFWORKERROUTE{}, fmt.Errorf("CFWORKERROUTE expects 2 arguments, got %d: %+v", len(args), args)
 	}

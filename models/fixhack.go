@@ -125,32 +125,32 @@ func (rc *RecordConfig) FixUp(origin string) {
 			//rc.RDATA, err = MakeRP(origin, rc.F.(dnsv1.RP).Mbox, rc.F.(dnsv1.RP).Txt)
 			// RP is native to RecordConfigV3. No FixUP is needed or possible.
 		case "R53_ALIAS":
-			rc.RDATA, err = privatetypesrdata.MakeR53ALIAS(origin, rc.R53Alias["type"], rc.GetTargetField(), rc.R53Alias["zone_id"], rc.R53Alias["evaluate_target_health"])
+			rc.RDATA, err = privatetypesrdata.MakeR53ALIAS(origin, nil, rc.R53Alias["type"], rc.GetTargetField(), rc.R53Alias["zone_id"], rc.R53Alias["evaluate_target_health"])
 
 		case "SMIMEA":
-			rc.RDATA, err = MakeSMIMEA(origin, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
+			rc.RDATA, err = MakeSMIMEA(origin, nil, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
 		case "SOA":
-			rc.RDATA, err = MakeSOA(origin, rc.GetTargetField(), rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
+			rc.RDATA, err = MakeSOA(origin, nil, rc.GetTargetField(), rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
 		case "SRV":
-			rc.RDATA, err = MakeSRV(origin, rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+			rc.RDATA, err = MakeSRV(origin, nil, rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
 		case "SSHFP":
-			rc.RDATA, err = MakeSSHFP(origin, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+			rc.RDATA, err = MakeSSHFP(origin, nil, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 		case "SVCB":
-			rc.RDATA, err = MakeSVCB(origin, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
+			rc.RDATA, err = MakeSVCB(origin, nil, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
 
 		case "TLSA":
-			rc.RDATA, err = MakeTLSA(origin, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+			rc.RDATA, err = MakeTLSA(origin, nil, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 		case "TXT":
-			rc.RDATA, err = MakeTXT(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeTXT(origin, nil, rc.GetTargetField())
 
 		case "URL":
-			rc.RDATA, err = privatetypesrdata.MakeURL(origin,
+			rc.RDATA, err = privatetypesrdata.MakeURL(origin, nil,
 				rc.GetTargetField(),
 				rc.Metadata["includePath"],
 				rc.Metadata["wildcard"],
 			)
 		case "URL301":
-			rc.RDATA, err = privatetypesrdata.MakeURL(origin, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeURL(origin, nil, rc.GetTargetField())
 
 		default:
 			panic(fmt.Sprintf("RDATA FIXUP NOT IMPLEMENTED TYPE=%q", rc.Type))

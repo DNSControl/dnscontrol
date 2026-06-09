@@ -13,7 +13,7 @@ import (
 //	demoRC2, err := TypeToMakeRDATA[dnsv2.TypeCNAME](mustbe.Host("www", "example.com"))
 //	demoRC3, err := TypeToMakeRDATA[privatetypes.TypeCFWORKERROUTE](mustbe.RawString("example.com/*"), mustbe.RawString("example.com/worker"))
 
-type MakerRn func(origin string, metadata map[string]string, args ...any) (dnsv2.RDATA, error)
+type MakerRn func(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error)
 
 var TypeToMakeRDATA = make(map[uint16]MakerRn)
 

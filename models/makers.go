@@ -129,7 +129,7 @@ func MakeHTTPS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeHTTPS expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
-	return MakeSVCB(origin, args[0], args[1], args[2])
+	return MakeSVCB(origin, nil, args[0], args[1], args[2])
 }
 
 func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
@@ -146,7 +146,7 @@ func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 
 func MakeMIKROTIKFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	return privatetypesrdata.MIKROTIKFWD{ForwardTo: mustbe.TargetHost(origin, target)}, nil
+	return privatetypesrdata.MIKROTIKFWD{ForwardTo: mustbe.TargetHost(origin, args[0])}, nil
 }
 func MakeMIKROTIKNXDOMAIN(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)

@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/jinzhu/copier"
@@ -152,6 +153,7 @@ type RecordConfig struct {
 // outside of a DomainConfig, consider using models.MakeTestRC() or
 // models.MakeTestRCParse() (both in record_helpers_test.go).
 func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, args ...any) (*RecordConfig, error) {
+	mustbe.ValidArgs(args)
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {
 		return nil, err
@@ -162,7 +164,7 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	if !ok {
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil\n", typeNum)
 	}
-	rd, err := f(dc.Name, args, nil)
+	rd, err := f(dc.Name, nil, args)
 	if err != nil {
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
@@ -186,7 +188,7 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 // NewRecordConfigForRRtoRC is only for use by dnsrr.go.
 func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, typeNum uint16, args []any, metadata map[string]string) (*RecordConfig, error) {
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, args, metadata)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, metadata, args)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
@@ -195,8 +197,9 @@ func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 
 // NewRecordConfigForRRtoRC is only for use by dnsrr.go.
 func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
+	mustbe.ValidArgs(args)
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, args...)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, args)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
@@ -221,10 +224,11 @@ func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, a
 // All valid RecordConfig structs come through this function. Everything else is questionable.
 func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
 	rc := &RecordConfig{
-		TypeNum: typeNum,
-		Type:    dnsutilv2.TypeToString(typeNum),
-		TTL:     ttl,
-		RDATA:   rd,
+		TypeNum:  typeNum,
+		Type:     dnsutilv2.TypeToString(typeNum),
+		TTL:      ttl,
+		RDATA:    rd,
+		Metadata: metadata,
 	}
 	rc.Name = name
 	rc.NameUnicode = makeLabelNameUnicode(name)

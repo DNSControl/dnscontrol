@@ -17,7 +17,7 @@ func (rd MIKROTIKNXDOMAIN) String() string {
 	return ""
 }
 
-func MakeMIKROTIKNXDOMAIN(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeMIKROTIKNXDOMAIN(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 0 {
 		return MIKROTIKNXDOMAIN{}, fmt.Errorf("MIKROTIK_NXDOMAIN expects 0 arguments, got %d: %+v", len(args), args)
 	}

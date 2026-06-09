@@ -9,10 +9,10 @@ import (
 )
 
 type CLOUDFLAREAPISINGLEREDIRECT struct {
-	Code                 uint16
-	SRName               string
-	SRWhen               string
-	SRThen               string
+	Code   uint16
+	SRName string
+	SRWhen string
+	SRThen string
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
@@ -23,12 +23,13 @@ func (rd CLOUDFLAREAPISINGLEREDIRECT) String() string {
 	return txtutil.Zoneify([]string{fmt.Sprintf("%d", rd.Code), rd.SRName, rd.SRWhen, rd.SRThen})
 }
 
-func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return CLOUDFLAREAPISINGLEREDIRECT{}, fmt.Errorf("CLOUDFLAREAPI_SINGLE_REDIRECT expects 4 arguments, got %d: %+v", len(args), args)
 	}
 	return CLOUDFLAREAPISINGLEREDIRECT{
-		Code: mustbe.Uint16(args[0]),
+		Code:   mustbe.Uint16(args[0]),
 		SRName: mustbe.RawString(args[1]),
 		SRWhen: mustbe.RawString(args[2]),
 		SRThen: mustbe.RawString(args[3]),

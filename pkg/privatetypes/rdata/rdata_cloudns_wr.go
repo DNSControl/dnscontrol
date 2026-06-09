@@ -9,7 +9,7 @@ import (
 )
 
 type CLOUDNSWR struct {
-	Target               string
+	Target string
 }
 
 func (rd CLOUDNSWR) Len() int {
@@ -20,7 +20,8 @@ func (rd CLOUDNSWR) String() string {
 	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeCLOUDNSWR(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeCLOUDNSWR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return CLOUDNSWR{}, fmt.Errorf("CLOUDNS_WR expects 1 arguments, got %d: %+v", len(args), args)
 	}
