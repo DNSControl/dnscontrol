@@ -53,7 +53,9 @@ Bunny supports adding CNAME records for the root domain (`@`), but within
 DNSControl the `ALIAS` record should be used.
 
 ```javascript
-D('example.com', REG_NONE, DnsProvider(DSP_BUNNY_DNS), ALIAS('@', 'example2.com'));
+D('example.com', REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+    ALIAS('@', 'example2.com'),
+);
 ```
 
 ## Usage
