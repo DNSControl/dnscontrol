@@ -34,9 +34,6 @@ func (rc *RecordConfig) FixUp(origin string) {
 		var err error
 		switch rc.Type {
 
-		// Incomplete
-		// case "PORKBUN_URLFWD":
-		// 	rc.RDATA = privatetypesrdata.PORKBUN_URLFWD{}
 		case "BUNNY_DNS_PZ":
 			rc.RDATA = privatetypesrdata.BUNNYDNSPZ{}
 		case "LUA":
@@ -115,8 +112,15 @@ func (rc *RecordConfig) FixUp(origin string) {
 		case "OPENPGPKEY":
 			rc.RDATA, err = MakeOPENPGPKEY(origin, nil, rc.GetTargetField())
 
+		// case "PORKBUN_URLFWD":
+		// 	rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, nil, []any{rc.GetTargetField()})
 		case "PORKBUN_URLFWD":
-			rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, nil, []any{rc.GetTargetField()})
+			rc.RDATA = privatetypesrdata.PORKBUNURLFWD{
+				Target:      rc.GetTargetField(),
+				TypeName:    rc.Metadata["type"],
+				IncludePath: rc.Metadata["includePath"],
+				Wildcard:    rc.Metadata["wildcard"],
+			}
 
 		case "PTR":
 			rc.RDATA, err = MakePTR(origin, nil, rc.GetTargetField())
@@ -150,7 +154,7 @@ func (rc *RecordConfig) FixUp(origin string) {
 				rc.Metadata["wildcard"],
 			)
 		case "URL301":
-			rc.RDATA, err = privatetypesrdata.MakeURL(origin, nil, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeURL301(origin, nil, rc.GetTargetField())
 
 		default:
 			panic(fmt.Sprintf("RDATA FIXUP NOT IMPLEMENTED TYPE=%q", rc.Type))

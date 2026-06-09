@@ -160,7 +160,15 @@ types:
 
   - name: Porkbun_Urlfwd
     codepoint: 65297
-    fields: []
+    fields:
+      - name: Target
+        type: RawString
+      - name: TypeName
+        type: RawString
+      - name: IncludePath
+        type: RawString
+      - name: Wildcard
+        type: RawString
     test_data: []
 
   - name: R53_Alias

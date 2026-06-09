@@ -164,7 +164,7 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	if !ok {
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil\n", typeNum)
 	}
-	rd, err := f(dc.Name, nil, args)
+	rd, err := f(dc.Name, nil, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
@@ -188,7 +188,7 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 // NewRecordConfigForRRtoRC is only for use by dnsrr.go.
 func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, typeNum uint16, args []any, metadata map[string]string) (*RecordConfig, error) {
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, metadata, args)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, metadata, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
@@ -271,17 +271,21 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 		rc.SetTargetSSHFP(rd.Algorithm, rd.Type, rd.FingerPrint)
 	case dnsrdatav2.TLSA:
 		rc.SetTargetTLSA(rd.Usage, rd.Selector, rd.MatchingType, rd.Certificate)
-		// TODO:
-		//case dnsrdatav2.AzureAlias:
-		//case dnsrdatav2.LUA:
-		//case dnsrdatav2.R53Alias:
-		//case dnsrdatav2.AKAMAITLC:
 	default:
 		switch rc.Type {
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
 			// no-op
+		case "PORKBUN_URLFWD":
+			rc.Metadata["type"] = rd.(privatetypes.PORKBUNURLFWD).TypeName
+			rc.Metadata["includePath"] = rd.(privatetypes.PORKBUNURLFWD).IncludePath
+			rc.Metadata["wildcard"] = rd.(privatetypes.PORKBUNURLFWD).Wildcard
 		default:
 			return nil, fmt.Errorf("assertion failed: NewRecordConfig back-fill has not implemented type %T", rd)
+			// TODO:
+			//case privatetypes..AzureAlias:
+			//case privatetypes..LUA:
+			//case privatetypes..R53Alias:
+			//case privatetypes..AKAMAITLC:
 		}
 	}
 
@@ -292,6 +296,8 @@ func anyToTypeNum(a any) (uint16, error) {
 	switch v := a.(type) {
 	case uint16:
 		return v, nil
+	case int:
+		return uint16(v), nil
 	case string:
 		typeNum, err := dnsutilv2.StringToType(v)
 		if err == nil {

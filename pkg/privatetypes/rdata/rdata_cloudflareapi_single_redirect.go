@@ -29,8 +29,8 @@ func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, _ map[string]string, args ..
 		return CLOUDFLAREAPISINGLEREDIRECT{}, fmt.Errorf("CLOUDFLAREAPI_SINGLE_REDIRECT expects 4 arguments, got %d: %+v", len(args), args)
 	}
 	return CLOUDFLAREAPISINGLEREDIRECT{
-		Code:   mustbe.Uint16(args[0]),
-		SRName: mustbe.RawString(args[1]),
+		SRName: mustbe.RawString(args[0]),
+		Code:   mustbe.Uint16(args[1]),
 		SRWhen: mustbe.RawString(args[2]),
 		SRThen: mustbe.RawString(args[3]),
 	}, nil

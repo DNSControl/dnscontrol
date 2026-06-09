@@ -13,7 +13,7 @@ import (
 // CFWORKERROUTE
 
 func init() {
-	Register(TypeCFWORKERROUTE, "CFWORKERROUTE", func() dnsv2.RR { return new(CFWORKERROUTE) }, privatetypesrdata.MakeCFWORKERROUTE)
+	Register(TypeCFWORKERROUTE, "CF_WORKER_ROUTE", func() dnsv2.RR { return new(CFWORKERROUTE) }, privatetypesrdata.MakeCFWORKERROUTE)
 }
 
 const TypeCFWORKERROUTE = 65288

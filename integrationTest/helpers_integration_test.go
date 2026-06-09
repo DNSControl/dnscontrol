@@ -457,7 +457,7 @@ func cfSingleRedirectEnabled() bool {
 }
 
 func cfSingleRedirect(name string, code any, when, then string) *models.RecordConfig {
-	r, err := globalDC.NewRecordConfig("@", defaultTTL, dnsv2.TypeDS, name, code, when, then)
+	r, err := globalDC.NewRecordConfig("@", defaultTTL, privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT, name, code, when, then)
 	panicOnErr(err)
 	return r
 }
@@ -815,13 +815,16 @@ func tlsa(name string, usage, selector, matchingtype uint8, target string) *mode
 }
 
 func porkbunUrlfwd(name, target, t, includePath, wildcard string) *models.RecordConfig {
-	r := makeRec(name, target, "PORKBUN_URLFWD")
-	r.Metadata = make(map[string]string)
-	r.Metadata["type"] = t
-	r.Metadata["includePath"] = includePath
-	r.Metadata["wildcard"] = wildcard
-	r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
-	return r
+	rc, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypePORKBUNURLFWD, target, includePath, wildcard)
+	if err != nil {
+		panic(err)
+	}
+	rc.Metadata = map[string]string{
+		"type":        t,
+		"includePath": includePath,
+		"wildcard":    wildcard,
+	}
+	return rc
 }
 
 func url(name, target string) *models.RecordConfig {
