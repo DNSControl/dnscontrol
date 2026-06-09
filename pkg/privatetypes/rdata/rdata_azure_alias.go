@@ -9,8 +9,8 @@ import (
 )
 
 type AZUREALIAS struct {
-	AliasType            string
-	Target               string
+	AliasType string
+	Target    string
 }
 
 func (rd AZUREALIAS) Len() int {
@@ -21,12 +21,13 @@ func (rd AZUREALIAS) String() string {
 	return txtutil.Zoneify([]string{rd.AliasType, rd.Target})
 }
 
-func MakeAZUREALIAS(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeAZUREALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return AZUREALIAS{}, fmt.Errorf("AZURE_ALIAS expects 2 arguments, got %d: %+v", len(args), args)
 	}
 	return AZUREALIAS{
 		AliasType: mustbe.RawString(args[0]),
-		Target: mustbe.TargetHost(origin, args[1]),
+		Target:    mustbe.TargetHost(origin, args[1]),
 	}, nil
 }

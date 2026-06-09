@@ -44,7 +44,8 @@ func init() {
 	privatetypes.RegisterMaker(dnsv2.TypeTXT, MakeTXT)
 }
 
-func MakeA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeA expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
@@ -52,26 +53,30 @@ func MakeA(origin string, args ...any) (dnsv2.RDATA, error) {
 	return dnsrdatav2.A{Addr: mustbe.IPv4(target)}, nil
 }
 
-func MakeALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeALIAS expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return privatetypesrdata.ALIAS{Target: mustbe.TargetHost(origin, args[0])}, nil
 }
-func MakeAAAA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeAAAA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeAAAA expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.AAAA{Addr: mustbe.IPv6(args[0])}, nil
 }
 
-func MakeCAA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeCAA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeCAA expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
 }
-func MakeCNAME(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeCNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeCNAME expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
@@ -79,22 +84,26 @@ func MakeCNAME(origin string, args ...any) (dnsv2.RDATA, error) {
 }
 
 // func MakeCFWORKERROUTE(origin string, when, then string) (dnsv2.RDATA, error) {
+//	mustbe.ValidArgs(args)
 // 	return privatetypesrdata.CFWORKERROUTE{When: mustbe.RawString(when), Then: mustbe.RawString(then)}, nil
 // }
 
-func MakeDHCID(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeDHCID(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeDHCID expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.DHCID{Digest: mustbe.RawString(args[0])}, nil
 }
-func MakeDNAME(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeDNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeDNAME expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.DNAME{Target: mustbe.TargetHost(origin, args[0])}, nil
 }
-func MakeDNSKEY(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeDNSKEY(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeDNSKEY expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
@@ -107,21 +116,24 @@ func MakeDNSKEY(origin string, args ...any) (dnsv2.RDATA, error) {
 	}, nil
 }
 
-func MakeDS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeDS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeDS expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.RawString(args[3])}, nil
 }
 
-func MakeHTTPS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeHTTPS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeHTTPS expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
 	return MakeSVCB(origin, args[0], args[1], args[2])
 }
 
-func MakeLOC(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 7 {
 		return nil, fmt.Errorf("MakeLOC expects exactly 7 arguments, got %d: %+v", len(args), args)
 	}
@@ -132,58 +144,68 @@ func MakeLOC(origin string, args ...any) (dnsv2.RDATA, error) {
 		Altitude: mustbe.Uint32(args[6])}, nil
 }
 
-func MakeMIKROTIKFWD(origin, target string) (dnsv2.RDATA, error) {
+func MakeMIKROTIKFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	return privatetypesrdata.MIKROTIKFWD{ForwardTo: mustbe.TargetHost(origin, target)}, nil
 }
-func MakeMIKROTIKNXDOMAIN() (dnsv2.RDATA, error) {
+func MakeMIKROTIKNXDOMAIN(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	return privatetypesrdata.MIKROTIKNXDOMAIN{}, nil
 }
-func MakeMX(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeMX(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return nil, fmt.Errorf("MakeMX expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.MX{Preference: mustbe.Uint16(args[0]), Mx: mustbe.TargetHost(origin, args[1])}, nil
 }
 
-func MakeNS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeNS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeNS expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.NS{Ns: mustbe.TargetHost(origin, args[0])}, nil
 }
-func MakeNAPTR(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeNAPTR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 6 {
 		return nil, fmt.Errorf("MakeNAPTR expects exactly 6 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.NAPTR{Order: mustbe.Uint16(args[0]), Preference: mustbe.Uint16(args[1]), Flags: mustbe.RawString(args[2]), Service: mustbe.RawString(args[3]), Regexp: mustbe.RawString(args[4]), Replacement: mustbe.TargetHost(origin, args[5])}, nil
 }
 
-func MakeOPENPGPKEY(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeOPENPGPKEY(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeOPENPGPKEY expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.OPENPGPKEY{PublicKey: mustbe.RawString(args[0])}, nil
 }
 
-func MakePORKBUNURLFWD() (dnsv2.RDATA, error) {
+func MakePORKBUNURLFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	return privatetypesrdata.PORKBUNURLFWD{}, nil
 }
 
-func MakePTR(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakePTR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakePTR expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.PTR{Ptr: mustbe.TargetHost(origin, args[0])}, nil
 }
 
-func MakeRP(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeRP(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return nil, fmt.Errorf("MakeRP expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.RP{Mbox: mustbe.TargetHost(origin, args[0]), Txt: mustbe.RawString(args[1])}, nil
 }
 
-func MakeR53ALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 5 {
 		return nil, fmt.Errorf("MakeR53ALIAS expects exactly 5 arguments, got %d: %+v", len(args), args)
 	}
@@ -196,14 +218,16 @@ func MakeR53ALIAS(origin string, args ...any) (dnsv2.RDATA, error) {
 	}, nil
 }
 
-func MakeSMIMEA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeSMIMEA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeSMIMEA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}, nil
 }
 
-func MakeSOA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeSOA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 7 {
 		return nil, fmt.Errorf("MakeSOA expects exactly 9 arguments, got %d: %+v", len(args), args)
 	}
@@ -218,21 +242,24 @@ func MakeSOA(origin string, args ...any) (dnsv2.RDATA, error) {
 	}, nil
 }
 
-func MakeSRV(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeSRV(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeSRV expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.SRV{Priority: mustbe.Uint16(args[0]), Weight: mustbe.Uint16(args[1]), Port: mustbe.Uint16(args[2]), Target: mustbe.TargetHost(origin, args[3])}, nil
 }
 
-func MakeSSHFP(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeSSHFP(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeSSHFP expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.RawString(args[2])}, nil
 }
 
-func MakeSVCB(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	// args can be a string (which we parse), a []dnsv1.SVCBKeyValue or a []svcbv2.Pair.
 	// If it's a string, this is where we turn `ech=IGNORE` into `ech=1000`.
 	if len(args) != 3 {
@@ -276,28 +303,32 @@ func MakeSVCB(origin string, args ...any) (dnsv2.RDATA, error) {
 	panic(fmt.Sprintf("BUG: Invalid params type for SVCB/HTTPS record: %T", params))
 }
 
-func MakeTLSA(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeTLSA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeTLSA expects exactly 5 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}, nil
 }
 
-func MakeTXT(origin string, args ...any) (dnsv2.RDATA, error) {
+func MakeTXT(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeTXT expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.TXT{Txt: mustbe.Txts(args[0])}, nil
 }
 
-// func MakeURL(origin string, args ...any) (dnsv2.RDATA, error) {
+// func MakeURL(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+//	mustbe.ValidArgs(args)
 // 	if len(args) != 1 {
 // 		return nil, fmt.Errorf("MakeURL expects exactly 1 argument, got %d: %+v", len(args), args)
 // 	}
 // 	return privatetypesrdata.URL{Location: mustbe.RawString(args[0])}, nil
 // }
 
-// func MakeURL301(origin string, args ...any) (dnsv2.RDATA, error) {
+// func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+//	mustbe.ValidArgs(args)
 // 	if len(args) != 1 {
 // 		return nil, fmt.Errorf("MakeURL301 expects exactly 1 argument, got %d: %+v", len(args), args)
 // 	}

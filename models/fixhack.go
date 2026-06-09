@@ -57,69 +57,69 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rc.RDATA = privatetypesrdata.BUNNYDNSRDR{}
 
 		case "A":
-			rc.RDATA, err = MakeA(origin, rc.GetTargetIP())
+			rc.RDATA, err = MakeA(origin, nil, rc.GetTargetIP())
 		case "ALIAS":
-			rc.RDATA, err = privatetypesrdata.MakeALIAS(origin, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeALIAS(origin, nil, rc.GetTargetField())
 		case "AAAA":
-			rc.RDATA, err = MakeAAAA(origin, rc.GetTargetIP())
+			rc.RDATA, err = MakeAAAA(origin, nil, rc.GetTargetIP())
 		case "ADGUARDHOME_A_PASSTHROUGH":
-			rc.RDATA, err = privatetypesrdata.MakeADGUARDHOMEAPASSTHROUGH(origin)
+			rc.RDATA, err = privatetypesrdata.MakeADGUARDHOMEAPASSTHROUGH(origin, nil)
 		case "ADGUARDHOME_AAAA_PASSTHROUGH":
-			rc.RDATA, err = privatetypesrdata.MakeADGUARDHOMEAAAAPASSTHROUGH(origin)
+			rc.RDATA, err = privatetypesrdata.MakeADGUARDHOMEAAAAPASSTHROUGH(origin, nil)
 		case "AZURE_ALIAS":
-			rc.RDATA, err = privatetypesrdata.MakeAZUREALIAS(origin, rc.AzureAlias["type"], rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeAZUREALIAS(origin, nil, rc.AzureAlias["type"], rc.GetTargetField())
 
 		case "CAA":
-			rc.RDATA, err = MakeCAA(origin, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+			rc.RDATA, err = MakeCAA(origin, nil, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
 		case "CNAME":
-			rc.RDATA, err = MakeCNAME(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeCNAME(origin, nil, rc.GetTargetField())
 		case "CF_WORKER_ROUTE":
 			part := strings.SplitN(rc.GetTargetField(), ",", 2)
-			rc.RDATA, err = privatetypesrdata.MakeCFWORKERROUTE(origin, part[0], part[1])
+			rc.RDATA, err = privatetypesrdata.MakeCFWORKERROUTE(origin, nil, part[0], part[1])
 
 		case "DHCID":
-			rc.RDATA, err = MakeDHCID(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeDHCID(origin, nil, rc.GetTargetField())
 		case "DNAME":
-			rc.RDATA, err = MakeDNAME(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeDNAME(origin, nil, rc.GetTargetField())
 		case "DNSKEY":
-			rc.RDATA, err = MakeDNSKEY(origin, rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey)
+			rc.RDATA, err = MakeDNSKEY(origin, nil, rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey)
 		case "DS":
-			//rc.RDATA, err = MakeDS(origin, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+			//rc.RDATA, err = MakeDS(origin, nil, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
 			// DS is native to RecordConfigV3. No FixUP is needed or possible.
 
 		case "FRAME":
-			rc.RDATA, err = privatetypesrdata.MakeFRAME(origin, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeFRAME(origin, nil, rc.GetTargetField())
 
 		case "HTTPS":
-			rd, err := MakeHTTPS(origin, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
+			rd, err := MakeHTTPS(origin, nil, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
 			if err != nil {
 				panic(fmt.Sprintf("BUG: FixUp: MakeHTTPS failed for record %s IN %s %s: %v", rc.NameFQDN, rc.Type, rc.GetTargetField(), err))
 			}
 			rc.RDATA = rd
 
 		case "LOC":
-			rc.RDATA, err = MakeLOC(origin, rc.LocVersion, rc.LocSize, rc.LocHorizPre, rc.LocVertPre, rc.LocLatitude, rc.LocLongitude, rc.LocAltitude)
+			rc.RDATA, err = MakeLOC(origin, nil, rc.LocVersion, rc.LocSize, rc.LocHorizPre, rc.LocVertPre, rc.LocLatitude, rc.LocLongitude, rc.LocAltitude)
 
 		case "MIKROTIK_FWD":
-			rc.RDATA, err = privatetypesrdata.MakeMIKROTIKFWD(origin, rc.GetTargetField())
+			rc.RDATA, err = privatetypesrdata.MakeMIKROTIKFWD(origin, nil, rc.GetTargetField())
 		case "MIKROTIK_NXDOMAIN":
-			rc.RDATA, err = privatetypesrdata.MakeMIKROTIKNXDOMAIN(origin)
+			rc.RDATA, err = privatetypesrdata.MakeMIKROTIKNXDOMAIN(origin, nil)
 		case "MX":
-			rc.RDATA, err = MakeMX(origin, rc.MxPreference, rc.GetTargetField())
+			rc.RDATA, err = MakeMX(origin, nil, rc.MxPreference, rc.GetTargetField())
 
 		case "NS":
-			rc.RDATA, err = MakeNS(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeNS(origin, nil, rc.GetTargetField())
 		case "NAPTR":
-			rc.RDATA, err = MakeNAPTR(origin, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
+			rc.RDATA, err = MakeNAPTR(origin, nil, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
 
 		case "OPENPGPKEY":
-			rc.RDATA, err = MakeOPENPGPKEY(origin, rc.GetTargetField())
+			rc.RDATA, err = MakeOPENPGPKEY(origin, nil, rc.GetTargetField())
 
 		case "PORKBUN_URLFWD":
-			rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, []any{rc.GetTargetField()}, nil)
+			rc.RDATA, err = privatetypesrdata.MakePORKBUNURLFWD(origin, nil, []any{rc.GetTargetField()})
 
 		case "PTR":
-			rc.RDATA, err = MakePTR(origin, rc.GetTargetField())
+			rc.RDATA, err = MakePTR(origin, nil, rc.GetTargetField())
 
 		case "RP":
 			//rc.RDATA, err = MakeRP(origin, rc.F.(dnsv1.RP).Mbox, rc.F.(dnsv1.RP).Txt)

@@ -9,7 +9,7 @@ import (
 )
 
 type ALIAS struct {
-	Target               string
+	Target string
 }
 
 func (rd ALIAS) Len() int {
@@ -20,7 +20,8 @@ func (rd ALIAS) String() string {
 	return txtutil.Zoneify([]string{rd.Target})
 }
 
-func MakeALIAS(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {
+func MakeALIAS(origin string, _ map[string]string, args []any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return ALIAS{}, fmt.Errorf("ALIAS expects 1 arguments, got %d: %+v", len(args), args)
 	}
