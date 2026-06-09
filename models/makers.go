@@ -18,7 +18,7 @@ import (
 )
 
 func init() {
-	// Register the Marker*() function for public types.
+	// Register the Maker*() function for public types.
 	privatetypes.RegisterMaker(dnsv2.TypeA, MakeA)
 	privatetypes.RegisterMaker(dnsv2.TypeAAAA, MakeAAAA)
 	privatetypes.RegisterMaker(dnsv2.TypeCAA, MakeCAA)

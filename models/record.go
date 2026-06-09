@@ -45,12 +45,12 @@ type RecordConfig struct {
 
 	// Name is the shortname i.e. the FQDN without the parent domains's suffix.
 	// It should never be "".  Record at the apex (naked domain) are represented by "@".
-	xNameRaw    string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
+	NameRaw     string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
 	Name        string `json:"name"`                   // The short name, PunyCode. See above.
 	NameUnicode string `json:"name_unicode,omitempty"` // .Name as Unicode (downcased, then convertedot Unicode).
 
 	// This is the FQDN version of .Name. It should never have a trailing ".".
-	xNameFQDNRaw    string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
+	NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
 
@@ -63,11 +63,11 @@ type RecordConfig struct {
 	// Comparable is an opaque string that can be used to compare two
 	// RecordConfigs for equality. Typically this is the Zonefile line minus the
 	// label and TTL.
-	xComparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
+	//xComparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
 
 	// ZonefilePartial is the partial zonefile line for this record, excluding
 	// the label and TTL.  If this is not an official RR type, we invent the format.
-	xZonefilePartial string `json:"zonfefilepartial,omitempty"`
+	ZonefilePartial string `json:"zonfefilepartial,omitempty"`
 
 	//// Fields only relevant when RecordConfig was created from data in dnsconfig.js:
 
@@ -157,7 +157,12 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		return nil, err
 	}
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, args...)
+	//rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, args...)
+	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
+	if !ok {
+		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil\n", typeNum)
+	}
+	rd, err := f(dc.Name, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
@@ -219,8 +224,12 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 
 	// Hack to back-fill legacy fields. This will go away eventually.
 	switch rd := rc.RDATA.(type) {
+	case dnsrdatav2.A:
+		rc.SetTargetIP(rd.Addr)
 	case dnsrdatav2.CAA:
 		rc.SetTargetCAA(rd.Flag, rd.Tag, rd.Value)
+	case dnsrdatav2.CNAME:
+		rc.SetTarget(rd.Target)
 	case dnsrdatav2.DS:
 		rc.SetTargetDS(rd.KeyTag, rd.Algorithm, rd.DigestType, rd.Digest)
 	case dnsrdatav2.DNSKEY:

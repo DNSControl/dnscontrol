@@ -170,10 +170,10 @@ types:
         type: RawString
       - name: Target
         type: TargetHost
-      - name: EvalTargetHealth
-        type: RawString
-      - name: ZoneID
-        type: RawString
+#      - name: EvalTargetHealth
+#        type: RawString
+#      - name: ZoneID
+#        type: RawString
     test_data:
       - name: normal_user
         values:

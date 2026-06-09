@@ -9,10 +9,10 @@ import (
 )
 
 type CLOUDFLAREAPISINGLEREDIRECT struct {
-	Name                 string
-	Code                 uint16
-	When                 string
-	Then                 string
+	Name string
+	Code uint16
+	When string
+	Then string
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
@@ -20,7 +20,7 @@ func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) String() string {
-	return txtutil.Zoneify([]string{rd.Name, fmt.Sprintf("%d", rd.Code), rd.When, rd.Then})
+	return "XYZ" + txtutil.Zoneify([]string{rd.Name, fmt.Sprintf("%d", rd.Code), rd.When, rd.Then})
 }
 
 func MakeCLOUDFLAREAPISINGLEREDIRECT(_ string, args ...any) (dnsv2.RDATA, error) {

@@ -74,6 +74,7 @@ type DomainConfig struct {
 
 func NewDomainConfig(name string) (*DomainConfig, error) {
 	dcn := domaintags.MakeDomainNameVarieties(name) // TODO(tlim): Create a version of MakeDomainNameVarieties that returns an error on failure.
+	//dcn := domaintags.DomainNameVarieties{NameASCII: name}
 	dc := &DomainConfig{
 		NameRaw:     dcn.NameRaw,
 		Name:        dcn.NameASCII,

@@ -55,6 +55,10 @@ func (rc *RecordConfig) GetTargetCombined() string {
 			return rc.luaCombined()
 		case "R53_ALIAS":
 			// Differentiate between multiple R53_ALIASs on the same label.
+			// if rc.ComparableV3 == "" {
+			// 	panic("GetTargetCombined() found blank comparablev3")
+			// }
+			// return rc.ComparableV3
 			return fmt.Sprintf("%s atype=%s zone_id=%s evaluate_target_health=%s", rc.target, rc.R53Alias["type"], rc.R53Alias["zone_id"], rc.R53Alias["evaluate_target_health"])
 		case "AZURE_ALIAS":
 			// Differentiate between multiple AZURE_ALIASs on the same label.

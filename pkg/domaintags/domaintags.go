@@ -53,10 +53,10 @@ func MakeDomainNameVarieties(n string) *DomainNameVarieties {
 	} else {
 		nameASCII = strings.ToLower(nameASCII)
 		// Avoid pointless duplication.
-		if strings.HasPrefix(n, nameASCII) {
-			// Avoid pointless duplication.
-			nameASCII = n[0:len(nameASCII)]
-		}
+		// if strings.HasPrefix(n, nameASCII) {
+		// 	// Avoid pointless duplication.
+		// 	nameASCII = n[0:len(nameASCII)]
+		// }
 	}
 
 	nameUnicode, err = idna.ToUnicode(nameASCII) // We use nameASCII since it is already lowercased.

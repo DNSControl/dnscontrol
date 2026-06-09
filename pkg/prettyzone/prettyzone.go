@@ -12,7 +12,6 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	dnsv1 "github.com/miekg/dns"
 )
 
 // MostCommonTTL returns the most common TTL in a set of records. If there is
@@ -105,10 +104,10 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 	for i, rr := range z.Records {
 		// Fake types are commented out.
 		prefix := ""
-		_, ok := dnsv1.StringToType[rr.Type]
-		if !ok {
-			prefix = ";"
-		}
+		// _, ok := dnsv1.StringToType[rr.Type]
+		// if !ok {
+		// 	prefix = ";"
+		// }
 
 		// name
 		nameShort := rr.Name

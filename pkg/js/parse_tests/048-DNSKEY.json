@@ -17,7 +17,6 @@
           "dnskeypublickey": "AABBCCDD",
           "filepos": "[line:2:5]",
           "name": "@",
-          "target": "",
           "ttl": 300,
           "type": "DNSKEY"
         }
