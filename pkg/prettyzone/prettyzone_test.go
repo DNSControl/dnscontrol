@@ -333,28 +333,28 @@ func TestWriteZoneFileTxt(t *testing.T) {
 
 // Test 1 of each record type
 
-func mustNewRR(s string) dnsv1.RR {
-	r, err := dnsv1.NewRR(s)
-	start := r.Header().Name
-	n := r.Header().Name
-	// fmt.Printf("DEBUG: OLD: %q (%s)\n", n, s)
-	n = strings.TrimSuffix(n, ".bosun.org.")
-	if n == "bosun.org." {
-		n = "@"
-	}
-	// fmt.Printf("DEBUG: NEW: %q\n", n)
-	r.Header().Name = n
-	if err != nil {
-		panic(err)
-	}
-	final := r.Header().Name
-	_ = start
-	_ = final
-	// if start == final {
-	// fmt.Printf("DEBUG: start=%q final=%q\n", start, final)
-	// }
-	return r
-}
+// func mustNewRR(s string) dnsv1.RR {
+// 	r, err := dnsv1.NewRR(s)
+// 	start := r.Header().Name
+// 	n := r.Header().Name
+// 	// fmt.Printf("DEBUG: OLD: %q (%s)\n", n, s)
+// 	n = strings.TrimSuffix(n, ".bosun.org.")
+// 	if n == "bosun.org." {
+// 		n = "@"
+// 	}
+// 	// fmt.Printf("DEBUG: NEW: %q\n", n)
+// 	r.Header().Name = n
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	final := r.Header().Name
+// 	_ = start
+// 	_ = final
+// 	// if start == final {
+// 	// fmt.Printf("DEBUG: start=%q final=%q\n", start, final)
+// 	// }
+// 	return r
+// }
 
 // 	i can't figure out why this ins't working!!!
 // It's something related to dns, not me.  I think.
@@ -394,28 +394,28 @@ func mustNewRR(s string) dnsv1.RR {
 // 	}
 // 	parseAndRegen(t, buf, testdataZFEach)
 // }
-
-var testdataZFEach = `$TTL 300
-@                IN A     1.2.3.4
-                 IN AAAA  4500:fe::1
-                 IN MX    1 bosun.org.
-                 IN SRV   10 10 9999 foo.com.
-                 IN TXT   "my text"
-                 IN CAA   0 issue "letsencrypt.org"
-                 IN DHCID AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA=
-                 IN HTTPS 1 . alpn="h3,h2"
-                 IN RP    user.example.com. example.com.
-                 IN SVCB  1 . alpn="h3,h2"
-4.5              IN PTR   y.bosun.org.
-9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15._openpgpkey IN OPENPGPKEY 9901a204447450b7110400d9bef554b145128ccc90d9f52df14bb878626e3db32112d47fbc5ee9cc5ffcbbd06bee487a580481674d9d31e368a85ccf4d4ef3bfa3e23fdde238bc32d8c40d39204b912f8cb1c47a7f34ba64bf3598dafe0f080e17facb678b6e700b0163d677960471d265a197e5ee9d53d71e1911f47f518a0e303abaf3c01b188e37d7bf00a0b90d4f43af944202fc49356a35a367955633cd4503ff7dfa21fb70a201ffb4aa7a755fc560ffd5a4b1d7b7015e7b4bdc0a1e45c1c28fd2f628f4d21f07a091da0d29c98b070566e178c5974554e509a5153a16b271df835e8c8a97715cc4beb5383d05fdf7a0d9412a1fb9f572c195d8c0c696a5ec179bab29d3d8701446e7aca79565ecdd6ec3ceef4937cb248564a75ddb4115adc10400a8f820174b32c99c5ac6ee483c0184fed24fa44d2fd4c9dc00af9ed048b51cfdb95747ab1e35df933382b08f8223da934bfcba59cb356b0d2f4158d647ab76d09c444fadf5e92b95d65f4aae667f33835226170c6625db872a6b72cb13638cf4754941730f5117a4f7c262044bea453839f95b806a0bd98a668073ba2d0fce1ab4326f70656e53555345204275696c642053657276696365203c6275696c6473657276696365406f70656e737573652e6f72673e8864041311020024021b03060b09080703020315020303160201021e01021780050253674e3b050921bf0084000a09103b3011b76b9d65234a5b00a095c38bcfaa29f80adefc0cf9ba2abf3a3e9b516b009e367296e1a96af211f8cded2493f7f6ac09de41
-f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73._smimecert IN SMIMEA 3 0 0 abcdef0
-_443._tcp        IN TLSA  3 1 1 abcdef0
-dname            IN DNAME example.com.
-dnssec           IN DNSKEY 257 3 13 rNR701yiOPHfqDP53GnsHZdlsRqI7O1ksk60rnFILZVk7Z4eTBd1U49oSkTNVNox9tb7N15N2hboXoMEyFFzcw==
-                 IN DS    31334 13 2 94CC505EBC36B1F4E051268B820EFB230F1572D445E833BB5BF7380D6C2CBC0A
-sub              IN NS    bosun.org.
-x                IN CNAME bosun.org.
-`
+//
+// var testdataZFEach = `$TTL 300
+// @                IN A     1.2.3.4
+//                  IN AAAA  4500:fe::1
+//                  IN MX    1 bosun.org.
+//                  IN SRV   10 10 9999 foo.com.
+//                  IN TXT   "my text"
+//                  IN CAA   0 issue "letsencrypt.org"
+//                  IN DHCID AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA=
+//                  IN HTTPS 1 . alpn="h3,h2"
+//                  IN RP    user.example.com. example.com.
+//                  IN SVCB  1 . alpn="h3,h2"
+// 4.5              IN PTR   y.bosun.org.
+// 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15._openpgpkey IN OPENPGPKEY 9901a204447450b7110400d9bef554b145128ccc90d9f52df14bb878626e3db32112d47fbc5ee9cc5ffcbbd06bee487a580481674d9d31e368a85ccf4d4ef3bfa3e23fdde238bc32d8c40d39204b912f8cb1c47a7f34ba64bf3598dafe0f080e17facb678b6e700b0163d677960471d265a197e5ee9d53d71e1911f47f518a0e303abaf3c01b188e37d7bf00a0b90d4f43af944202fc49356a35a367955633cd4503ff7dfa21fb70a201ffb4aa7a755fc560ffd5a4b1d7b7015e7b4bdc0a1e45c1c28fd2f628f4d21f07a091da0d29c98b070566e178c5974554e509a5153a16b271df835e8c8a97715cc4beb5383d05fdf7a0d9412a1fb9f572c195d8c0c696a5ec179bab29d3d8701446e7aca79565ecdd6ec3ceef4937cb248564a75ddb4115adc10400a8f820174b32c99c5ac6ee483c0184fed24fa44d2fd4c9dc00af9ed048b51cfdb95747ab1e35df933382b08f8223da934bfcba59cb356b0d2f4158d647ab76d09c444fadf5e92b95d65f4aae667f33835226170c6625db872a6b72cb13638cf4754941730f5117a4f7c262044bea453839f95b806a0bd98a668073ba2d0fce1ab4326f70656e53555345204275696c642053657276696365203c6275696c6473657276696365406f70656e737573652e6f72673e8864041311020024021b03060b09080703020315020303160201021e01021780050253674e3b050921bf0084000a09103b3011b76b9d65234a5b00a095c38bcfaa29f80adefc0cf9ba2abf3a3e9b516b009e367296e1a96af211f8cded2493f7f6ac09de41
+// f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73._smimecert IN SMIMEA 3 0 0 abcdef0
+// _443._tcp        IN TLSA  3 1 1 abcdef0
+// dname            IN DNAME example.com.
+// dnssec           IN DNSKEY 257 3 13 rNR701yiOPHfqDP53GnsHZdlsRqI7O1ksk60rnFILZVk7Z4eTBd1U49oSkTNVNox9tb7N15N2hboXoMEyFFzcw==
+//                  IN DS    31334 13 2 94CC505EBC36B1F4E051268B820EFB230F1572D445E833BB5BF7380D6C2CBC0A
+// sub              IN NS    bosun.org.
+// x                IN CNAME bosun.org.
+// `
 
 func TestWriteZoneFileSynth(t *testing.T) {
 	r1, _ := dnsv1.NewRR("bosun.org. 300 IN A 192.30.252.153")

@@ -55,13 +55,16 @@ func (config *DNSConfig) ImportRawRecords() error {
 				}
 
 				rec, err := dc.NewRecordConfig(label, rawRec.TTL, typeNum, rawRec.Args[1:]...)
+				if err != nil {
+					return fmt.Errorf("ImprotRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+				}
 				rec.FilePos = filePos
 				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
 				if doesStutter(rec.Name, dc.Name) {
-					return fmt.Errorf("stutter error at %s %s(%s): %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
+					return fmt.Errorf("stutter error at %s %s(%s)", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
 				}
 
 				// Conversion complete!  Append it.

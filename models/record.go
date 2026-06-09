@@ -45,12 +45,12 @@ type RecordConfig struct {
 
 	// Name is the shortname i.e. the FQDN without the parent domains's suffix.
 	// It should never be "".  Record at the apex (naked domain) are represented by "@".
-	NameRaw     string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
+	xNameRaw    string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
 	Name        string `json:"name"`                   // The short name, PunyCode. See above.
 	NameUnicode string `json:"name_unicode,omitempty"` // .Name as Unicode (downcased, then convertedot Unicode).
 
 	// This is the FQDN version of .Name. It should never have a trailing ".".
-	NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
+	xNameFQDNRaw    string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
 
@@ -63,11 +63,11 @@ type RecordConfig struct {
 	// Comparable is an opaque string that can be used to compare two
 	// RecordConfigs for equality. Typically this is the Zonefile line minus the
 	// label and TTL.
-	Comparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
+	xComparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
 
 	// ZonefilePartial is the partial zonefile line for this record, excluding
 	// the label and TTL.  If this is not an official RR type, we invent the format.
-	ZonefilePartial string `json:"zonfefilepartial,omitempty"`
+	xZonefilePartial string `json:"zonfefilepartial,omitempty"`
 
 	//// Fields only relevant when RecordConfig was created from data in dnsconfig.js:
 
@@ -474,6 +474,7 @@ func (rc *RecordConfig) SetLabel(short, origin string) {
 	}
 	if strings.HasSuffix(short, ".") {
 		if strings.HasSuffix(short, origin+".") {
+			fmt.Printf("DEBUG: ******** SetLabel on FQDNdot: %q origin=%q\n", short, origin)
 
 		}
 		if short != "**current-domain**" {
@@ -539,9 +540,9 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 	if rc.ComparableV3 != "" {
 		return rc.ComparableV3
 	}
-	if rc.IsModernType() {
-		return rc.Comparable
-	}
+	// if rc.IsModernType() {
+	// 	return rc.Comparable
+	// }
 
 	switch rc.Type {
 	case "SOA":
@@ -762,7 +763,6 @@ func (rc *RecordConfig) Key() RecordKey {
 
 // GetSVCBValue returns the SVCB Key/Values as a list of Key/Values.
 // Used to construct dnsv.RR of type SVCB or HTTPS. (This is legacy code that should go away eventualy).
-// func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
 func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
 	// if !strings.Contains(rc.SvcParams, "IGNORE+DNSCONTROL") {
 	// 	rc.SvcParams = strings.ReplaceAll(rc.SvcParams, "ech=IGNORE", "ech=IGNORE+DNSCONTROL+++")

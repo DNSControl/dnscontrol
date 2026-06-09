@@ -114,7 +114,7 @@ func svcbv2ValueToString(pairs []svcbv2.Pair) string {
 		}
 		knum := svcbv2.PairToKey(p)
 		k := svcbv2.KeyToString(knum)
-		sb.WriteString(fmt.Sprintf("%s=%s", k, p.String()))
+		fmt.Fprintf(&sb, "%s=%s", k, p.String())
 		//fmt.Printf("%d %s %s\n", i, k, p.String())
 	}
 	return sb.String()

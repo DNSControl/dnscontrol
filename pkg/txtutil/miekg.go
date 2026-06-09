@@ -78,7 +78,7 @@ func ZoneifyString(s string) string {
 	return Zoneify([]string{s})
 }
 
-// ZoneifyManyAny is a convenience function for Zoneify when you have a []any
+// ZoneifyManyAny is a convenience function for Zoneify when you have a []any and want a string.
 func ZoneifyManyAny(args []any) string {
 	n := make([]string, len(args))
 	for i, arg := range args {

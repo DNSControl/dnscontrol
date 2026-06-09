@@ -19,7 +19,7 @@ import (
 // * `foo.$origin.` -> `foo.$origin.`
 // * `short` -> `short.$origin`
 // * `other.com.` -> `other.com.`
-// * NOT: `$origin.` -> `@`  (We no longer do this for the same reason we don't product shortnames any more)
+// * NOT: `$origin.` -> `@`  (We no longer do this for the same reason we don't product shortnames any more.)
 func TargetHost(origin string, arg any) string {
 	if strings.HasSuffix(origin, ".") {
 		panic("mustbe.Host must NOT be called with an origin ending with .")

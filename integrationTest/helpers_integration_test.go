@@ -33,10 +33,11 @@ var (
 
 // Global variable to hold the current DomainConfig	for use in FromRaw calls.
 // This is an ugly, ugly, hack. We have to find something better.
-// var globalDCN *domaintags.DomainNameVarieties
 var globalDC *models.DomainConfig
 
-// Default TTL used in integration tests
+// var globalDCN *domaintags.DomainNameVarieties
+
+// Default TTL used in integration tests.
 var defaultTTL = uint32(300)
 
 // Helper constants/funcs for the HEDNS Dynamic DNS testing:
