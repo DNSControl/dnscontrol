@@ -9,7 +9,7 @@ import (
 )
 
 type FRAME struct {
-	Target string
+	Target               string
 }
 
 func (rd FRAME) Len() int {
@@ -21,6 +21,7 @@ func (rd FRAME) String() string {
 }
 
 func MakeFRAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return FRAME{}, fmt.Errorf("FRAME expects 1 arguments, got %d: %+v", len(args), args)
 	}

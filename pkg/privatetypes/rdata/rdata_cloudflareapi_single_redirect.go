@@ -9,10 +9,10 @@ import (
 )
 
 type CLOUDFLAREAPISINGLEREDIRECT struct {
-	Code   uint16
-	SRName string
-	SRWhen string
-	SRThen string
+	SRName               string
+	Code                 uint16
+	SRWhen               string
+	SRThen               string
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
@@ -20,7 +20,7 @@ func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) String() string {
-	return txtutil.Zoneify([]string{fmt.Sprintf("%d", rd.Code), rd.SRName, rd.SRWhen, rd.SRThen})
+	return txtutil.Zoneify([]string{rd.SRName, fmt.Sprintf("%d", rd.Code), rd.SRWhen, rd.SRThen})
 }
 
 func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
@@ -30,7 +30,7 @@ func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, _ map[string]string, args ..
 	}
 	return CLOUDFLAREAPISINGLEREDIRECT{
 		SRName: mustbe.RawString(args[0]),
-		Code:   mustbe.Uint16(args[1]),
+		Code: mustbe.Uint16(args[1]),
 		SRWhen: mustbe.RawString(args[2]),
 		SRThen: mustbe.RawString(args[3]),
 	}, nil

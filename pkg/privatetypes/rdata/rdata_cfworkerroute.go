@@ -9,8 +9,8 @@ import (
 )
 
 type CFWORKERROUTE struct {
-	When string
-	Then string
+	When                 string
+	Then                 string
 }
 
 func (rd CFWORKERROUTE) Len() int {

@@ -9,8 +9,8 @@ import (
 )
 
 type AZUREALIAS struct {
-	AliasType string
-	Target    string
+	AliasType            string
+	Target               string
 }
 
 func (rd AZUREALIAS) Len() int {
@@ -28,6 +28,6 @@ func MakeAZUREALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDAT
 	}
 	return AZUREALIAS{
 		AliasType: mustbe.RawString(args[0]),
-		Target:    mustbe.TargetHost(origin, args[1]),
+		Target: mustbe.TargetHost(origin, args[1]),
 	}, nil
 }

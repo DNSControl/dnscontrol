@@ -9,7 +9,7 @@ import (
 )
 
 type CLOUDNSWR struct {
-	Target string
+	Target               string
 }
 
 func (rd CLOUDNSWR) Len() int {
