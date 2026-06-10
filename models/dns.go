@@ -88,18 +88,6 @@ func (config *DNSConfig) ImportRawRecords() error {
 	return nil
 }
 
-func doesStutter(name, origin string) bool {
-	// TODO(tlim): MAYBE: Never return true if last char is "."?
-	// TODO(tlim): Panic if called with name == ""?
-	if name == "@" {
-		return false
-	}
-	if name == origin || strings.HasSuffix(name, "."+origin) {
-		return true
-	}
-	return false
-}
-
 // FindDomain returns the *DomainConfig for domain query in config.
 func (config *DNSConfig) FindDomain(query string) *DomainConfig {
 	for _, b := range config.Domains {

@@ -121,7 +121,6 @@ func MakeDS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeDS expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	fmt.Print("DEBUG MakeDS: args=", args)
 	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.RawString(args[3])}, nil
 }
 
