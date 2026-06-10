@@ -16,7 +16,7 @@ func init() {
 	Register(TypeLUA, "LUA", func() dnsv2.RR { return new(LUA) }, privatetypesrdata.MakeLUA)
 }
 
-const TypeLUA = 65292
+const TypeLUA = uint16(65292)
 
 type LUA struct {
 	Hdr dnsv2.Header

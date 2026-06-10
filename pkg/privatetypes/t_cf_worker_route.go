@@ -10,13 +10,13 @@ import (
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
-// CFWORKERROUTE
+// CF_WORKER_ROUTE
 
 func init() {
 	Register(TypeCFWORKERROUTE, "CF_WORKER_ROUTE", func() dnsv2.RR { return new(CFWORKERROUTE) }, privatetypesrdata.MakeCFWORKERROUTE)
 }
 
-const TypeCFWORKERROUTE = 65288
+const TypeCFWORKERROUTE = uint16(65288)
 
 type CFWORKERROUTE struct {
 	Hdr dnsv2.Header
@@ -50,14 +50,14 @@ func (rr *CFWORKERROUTE) Clone() dnsv2.RR {
 func (rr *CFWORKERROUTE) String() string {
 	return (rr.Header().Name + "\t" +
 		strconv.FormatInt(int64(rr.Header().TTL), 10) + "\t" +
-		dnsutilv2.ClassToString(rr.Header().Class) + "\tCFWORKERROUTE\t" + rr.Data().String())
+		dnsutilv2.ClassToString(rr.Header().Class) + "\tCF_WORKER_ROUTE\t" + rr.Data().String())
 }
 
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *CFWORKERROUTE) Parse(tokens []string, s string) error {
 	args := TokensToArgs(tokens)
 	if len(args) != 2 {
-		return fmt.Errorf("CFWORKERROUTE requires exactly 2 arguments, got %d: %v", len(args), args)
+		return fmt.Errorf("CF_WORKER_ROUTE requires exactly 2 arguments, got %d: %v", len(args), args)
 	}
 	rr.When = mustbe.RawString(args[0])
 	rr.Then = mustbe.RawString(args[1])

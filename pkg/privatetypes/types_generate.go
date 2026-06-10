@@ -180,6 +180,9 @@ func camelCaseFromSnake(s string) string {
 }
 
 func toDisplayName(name string) string {
+	// if strings.HasPrefix(name, "Cf_Worker_Route") {
+	// 	fmt.Printf("DEBUG: toDisplayName name=%q out=%q\n", name, strings.ToUpper(name))
+	// }
 	return strings.ToUpper(name)
 }
 
@@ -212,10 +215,11 @@ func generateTypeFile(t *TypeDef) error {
 	fmt.Fprintf(&buf, "// %s\n\n", displayName)
 
 	fmt.Fprintf(&buf, "func init() {\n")
-	fmt.Fprintf(&buf, "\tRegister(Type%s, \"%s\", func() dnsv2.RR { return new(%s) }, privatetypesrdata.Make%s)\n", constName, displayName, typeName, typeName)
+	fmt.Fprintf(&buf, "\tRegister(Type%s, \"%s\", func() dnsv2.RR { return new(%s) }, privatetypesrdata.Make%s)\n",
+		constName, displayName, typeName, typeName)
 	fmt.Fprintf(&buf, "}\n\n")
 
-	fmt.Fprintf(&buf, "const Type%s = %d\n\n", constName, t.Codepoint)
+	fmt.Fprintf(&buf, "const Type%s = uint16(%d)\n\n", constName, t.Codepoint)
 
 	fmt.Fprintf(&buf, "type %s struct {\n", typeName)
 	buf.WriteString("\tHdr dnsv2.Header\n\n")
@@ -425,9 +429,9 @@ func generateRdataFile(t *TypeDef) error {
 	}
 	buf.WriteString("\n")
 	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
+	buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/mustbe\"\n")
 
 	if len(t.Fields) > 0 {
-		buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/mustbe\"\n")
 		buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/txtutil\"\n")
 	}
 
@@ -468,7 +472,8 @@ func generateRdataFile(t *TypeDef) error {
 	buf.WriteString("}\n\n")
 
 	// Make: validate arg count, then build the rdata using mustbe.X conversions.
-	fmt.Fprintf(&buf, "func Make%s(origin string, args []any, _ map[string]string) (dnsv2.RDATA, error) {\n", typeName)
+	fmt.Fprintf(&buf, "func Make%s(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {\n", typeName)
+	buf.WriteString("\tmustbe.ValidArgs(args)\n")
 
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\tif len(args) != 0 {\n")

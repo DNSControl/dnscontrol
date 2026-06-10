@@ -67,7 +67,7 @@ types:
     fields: []
     test_data: []
 
-  - name: Cfworkerroute
+  - name: Cf_Worker_Route
     codepoint: 65288
     fields:
       - name: When
@@ -83,10 +83,10 @@ types:
   - name: Cloudflareapi_Single_Redirect
     codepoint: 65289
     fields:
-      - name: Code
-        type: Uint16
       - name: SRName
         type: RawString
+      - name: Code
+        type: Uint16
       - name: SRWhen
         type: RawString
       - name: SRThen

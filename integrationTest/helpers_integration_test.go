@@ -815,15 +815,15 @@ func tlsa(name string, usage, selector, matchingtype uint8, target string) *mode
 }
 
 func porkbunUrlfwd(name, target, t, includePath, wildcard string) *models.RecordConfig {
-	rc, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypePORKBUNURLFWD, target, includePath, wildcard)
+	rc, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypePORKBUNURLFWD, target, t, includePath, wildcard)
 	if err != nil {
 		panic(err)
 	}
-	rc.Metadata = map[string]string{
-		"type":        t,
-		"includePath": includePath,
-		"wildcard":    wildcard,
-	}
+	// rc.Metadata = map[string]string{
+	// 	"type":        t,
+	// 	"includePath": includePath,
+	// 	"wildcard":    wildcard,
+	// }
 	return rc
 }
 

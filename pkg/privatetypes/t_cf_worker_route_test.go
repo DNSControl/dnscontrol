@@ -7,7 +7,7 @@ import (
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
-func TestCfworkerroute(t *testing.T) {
+func TestCfWorkerRoute(t *testing.T) {
 	y := &CFWORKERROUTE{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		CFWORKERROUTE: privatetypesrdata.CFWORKERROUTE{
@@ -20,6 +20,6 @@ func TestCfworkerroute(t *testing.T) {
 		t.Fatal(err)
 	}
 	if rry.String() != y.String() {
-		t.Fatalf("CFWORKERROUTE string presentations should be identical:\n%s\n%s", rry.String(), y.String())
+		t.Fatalf("CF_WORKER_ROUTE string presentations should be identical:\n%s\n%s", rry.String(), y.String())
 	}
 }

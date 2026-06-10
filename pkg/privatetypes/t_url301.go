@@ -16,7 +16,7 @@ func init() {
 	Register(TypeURL301, "URL301", func() dnsv2.RR { return new(URL301) }, privatetypesrdata.MakeURL301)
 }
 
-const TypeURL301 = 65300
+const TypeURL301 = uint16(65300)
 
 type URL301 struct {
 	Hdr dnsv2.Header

@@ -16,7 +16,7 @@ func init() {
 	Register(TypeAKAMAITLC, "AKAMAITLC", func() dnsv2.RR { return new(AKAMAITLC) }, privatetypesrdata.MakeAKAMAITLC)
 }
 
-const TypeAKAMAITLC = 65284
+const TypeAKAMAITLC = uint16(65284)
 
 type AKAMAITLC struct {
 	Hdr dnsv2.Header

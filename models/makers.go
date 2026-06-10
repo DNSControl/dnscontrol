@@ -202,7 +202,7 @@ func MakeRP(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error
 	if len(args) != 2 {
 		return nil, fmt.Errorf("MakeRP expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.RP{Mbox: mustbe.TargetHost(origin, args[0]), Txt: mustbe.RawString(args[1])}, nil
+	return dnsrdatav2.RP{Mbox: mustbe.TargetHost(origin, args[0]), Txt: mustbe.TargetHost(origin, args[1])}, nil
 }
 
 func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {

@@ -11,6 +11,7 @@ import (
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	dnsv1 "github.com/miekg/dns"
@@ -199,7 +200,7 @@ func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
 	mustbe.ValidArgs(args)
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, args)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
@@ -276,9 +277,24 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
 			// no-op
 		case "PORKBUN_URLFWD":
-			rc.Metadata["type"] = rd.(privatetypes.PORKBUNURLFWD).TypeName
-			rc.Metadata["includePath"] = rd.(privatetypes.PORKBUNURLFWD).IncludePath
-			rc.Metadata["wildcard"] = rd.(privatetypes.PORKBUNURLFWD).Wildcard
+			p := rd.(privatetypesrdata.PORKBUNURLFWD)
+			if rc.Metadata == nil {
+				rc.Metadata = map[string]string{}
+			}
+			rc.Metadata["type"] = p.TypeName
+			rc.Metadata["includePath"] = p.IncludePath
+			rc.Metadata["wildcard"] = p.Wildcard
+		case "URL":
+			u := rd.(privatetypesrdata.URL)
+			rc.SetTarget(u.Location)
+			if rc.Metadata == nil {
+				rc.Metadata = map[string]string{}
+			}
+			rc.Metadata["includePath"] = fmt.Sprintf("%t", u.PorkbunIncludePath)
+			rc.Metadata["wildcard"] = fmt.Sprintf("%t", u.PorkbunWildCard)
+		case "URL301":
+			u := rd.(privatetypesrdata.URL301)
+			rc.SetTarget(u.Location)
 		default:
 			return nil, fmt.Errorf("assertion failed: NewRecordConfig back-fill has not implemented type %T", rd)
 			// TODO:

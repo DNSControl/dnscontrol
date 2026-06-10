@@ -16,7 +16,7 @@ func init() {
 	Register(TypeMIKROTIKFWD, "MIKROTIK_FWD", func() dnsv2.RR { return new(MIKROTIKFWD) }, privatetypesrdata.MakeMIKROTIKFWD)
 }
 
-const TypeMIKROTIKFWD = 65293
+const TypeMIKROTIKFWD = uint16(65293)
 
 type MIKROTIKFWD struct {
 	Hdr dnsv2.Header

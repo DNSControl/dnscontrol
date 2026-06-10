@@ -16,7 +16,7 @@ func init() {
 	Register(TypeAKAMAICDN, "AKAMAICDN", func() dnsv2.RR { return new(AKAMAICDN) }, privatetypesrdata.MakeAKAMAICDN)
 }
 
-const TypeAKAMAICDN = 65282
+const TypeAKAMAICDN = uint16(65282)
 
 type AKAMAICDN struct {
 	Hdr dnsv2.Header

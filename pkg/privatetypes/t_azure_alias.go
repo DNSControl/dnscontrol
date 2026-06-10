@@ -16,7 +16,7 @@ func init() {
 	Register(TypeAZUREALIAS, "AZURE_ALIAS", func() dnsv2.RR { return new(AZUREALIAS) }, privatetypesrdata.MakeAZUREALIAS)
 }
 
-const TypeAZUREALIAS = 65286
+const TypeAZUREALIAS = uint16(65286)
 
 type AZUREALIAS struct {
 	Hdr dnsv2.Header
