@@ -1,2 +1,2 @@
 $TTL 300
-;@                IN CF_WORKER_ROUTE test.foo.com,test-worker
+@                IN CF_WORKER_ROUTE test.foo.com,test-worker
