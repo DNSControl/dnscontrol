@@ -12,7 +12,7 @@ func TestAkamaitlc(t *testing.T) {
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		AKAMAITLC: privatetypesrdata.AKAMAITLC{
 			AnswerType: "cname",
-			Target: "example.com.",
+			Target:     "example.com.",
 		},
 	}
 	rry, err := dnsv2.New(y.String())

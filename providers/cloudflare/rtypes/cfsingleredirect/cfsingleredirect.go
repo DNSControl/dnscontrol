@@ -5,7 +5,6 @@ package cfsingleredirect
 
 // 	"github.com/DNSControl/dnscontrol/v4/models"
 // 	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-// 	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 // )
 
 // func init() {

@@ -45,10 +45,10 @@ func (rr *PORKBUNURLFWD) Clone() dnsv2.RR {
 	return &PORKBUNURLFWD{
 		Hdr: rr.Hdr,
 		PORKBUNURLFWD: privatetypesrdata.PORKBUNURLFWD{
-			Target: rr.Target,
-			TypeName: rr.TypeName,
+			Target:      rr.Target,
+			TypeName:    rr.TypeName,
 			IncludePath: rr.IncludePath,
-			Wildcard: rr.Wildcard,
+			Wildcard:    rr.Wildcard,
 		}}
 }
 func (rr *PORKBUNURLFWD) String() string {

@@ -45,10 +45,10 @@ func (rr *R53ALIAS) Clone() dnsv2.RR {
 	return &R53ALIAS{
 		Hdr: rr.Hdr,
 		R53ALIAS: privatetypesrdata.R53ALIAS{
-			AliasType: rr.AliasType,
-			Target: rr.Target,
+			AliasType:        rr.AliasType,
+			Target:           rr.Target,
 			EvalTargetHealth: rr.EvalTargetHealth,
-			ZoneID: rr.ZoneID,
+			ZoneID:           rr.ZoneID,
 		}}
 }
 func (rr *R53ALIAS) String() string {

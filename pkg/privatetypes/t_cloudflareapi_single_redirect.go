@@ -46,7 +46,7 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Clone() dnsv2.RR {
 		Hdr: rr.Hdr,
 		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
 			SRName: rr.SRName,
-			Code: rr.Code,
+			Code:   rr.Code,
 			SRWhen: rr.SRWhen,
 			SRThen: rr.SRThen,
 		}}

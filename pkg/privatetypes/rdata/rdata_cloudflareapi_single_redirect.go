@@ -9,10 +9,10 @@ import (
 )
 
 type CLOUDFLAREAPISINGLEREDIRECT struct {
-	SRName               string
-	Code                 uint16
-	SRWhen               string
-	SRThen               string
+	SRName string
+	Code   uint16
+	SRWhen string
+	SRThen string
 }
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
@@ -30,7 +30,7 @@ func MakeCLOUDFLAREAPISINGLEREDIRECT(origin string, _ map[string]string, args ..
 	}
 	return CLOUDFLAREAPISINGLEREDIRECT{
 		SRName: mustbe.RawString(args[0]),
-		Code: mustbe.Uint16(args[1]),
+		Code:   mustbe.Uint16(args[1]),
 		SRWhen: mustbe.RawString(args[2]),
 		SRThen: mustbe.RawString(args[3]),
 	}, nil

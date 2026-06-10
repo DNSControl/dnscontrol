@@ -44,7 +44,7 @@ func (rr *AKAMAITLC) Clone() dnsv2.RR {
 		Hdr: rr.Hdr,
 		AKAMAITLC: privatetypesrdata.AKAMAITLC{
 			AnswerType: rr.AnswerType,
-			Target: rr.Target,
+			Target:     rr.Target,
 		}}
 }
 func (rr *AKAMAITLC) String() string {

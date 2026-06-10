@@ -9,9 +9,9 @@ import (
 )
 
 type URL301 struct {
-	Location             string
-	PorkbunIncludePath   bool
-	PorkbunWildCard      bool
+	Location           string
+	PorkbunIncludePath bool
+	PorkbunWildCard    bool
 }
 
 func (rd URL301) Len() int {
@@ -28,8 +28,8 @@ func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, e
 		return URL301{}, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
 	}
 	return URL301{
-		Location: mustbe.TargetHost(origin, args[0]),
+		Location:           mustbe.TargetHost(origin, args[0]),
 		PorkbunIncludePath: mustbe.Bool(args[1]),
-		PorkbunWildCard: mustbe.Bool(args[2]),
+		PorkbunWildCard:    mustbe.Bool(args[2]),
 	}, nil
 }

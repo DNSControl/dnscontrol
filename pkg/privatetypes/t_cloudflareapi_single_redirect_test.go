@@ -12,7 +12,7 @@ func TestCloudflareapiSingleRedirect(t *testing.T) {
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
 			SRName: "",
-			Code: 301,
+			Code:   301,
 			SRWhen: "",
 			SRThen: "",
 		},

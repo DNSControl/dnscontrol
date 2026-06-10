@@ -9,7 +9,7 @@ import (
 )
 
 type ALIAS struct {
-	Target               string
+	Target string
 }
 
 func (rd ALIAS) Len() int {

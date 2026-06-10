@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	"github.com/andreyvit/diff"
 )
 

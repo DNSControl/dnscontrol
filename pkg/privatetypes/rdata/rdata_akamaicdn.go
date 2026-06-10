@@ -9,7 +9,7 @@ import (
 )
 
 type AKAMAICDN struct {
-	Target               string
+	Target string
 }
 
 func (rd AKAMAICDN) Len() int {

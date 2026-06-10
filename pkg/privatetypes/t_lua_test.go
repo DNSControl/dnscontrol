@@ -11,7 +11,7 @@ func TestLua(t *testing.T) {
 	y := &LUA{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		LUA: privatetypesrdata.LUA{
-			LuaType: "A",
+			LuaType:    "A",
 			LuaPayload: "return_127_0_0_1",
 		},
 	}

@@ -17,9 +17,9 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 301,
-            "Name": "301,test1.foo.com,https://goo.com/$1",
-            "Then": "concat(\"https://goo.com\", http.request.uri.path)",
-            "When": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
+            "SRName": "301,test1.foo.com,https://goo.com/$1",
+            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
+            "SRWhen": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
           },
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
@@ -32,9 +32,9 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 302,
-            "Name": "302,test2.foo.com,https://goo.com/$1",
-            "Then": "concat(\"https://goo.com\", http.request.uri.path)",
-            "When": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
+            "SRName": "302,test2.foo.com,https://goo.com/$1",
+            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
+            "SRWhen": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
           },
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",

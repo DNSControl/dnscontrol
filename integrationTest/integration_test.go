@@ -8,7 +8,6 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 )
 
 func TestDNSProviders(t *testing.T) {

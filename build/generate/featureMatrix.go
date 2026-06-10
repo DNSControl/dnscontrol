@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	"github.com/fbiville/markdown-table-formatter/pkg/markdown"
 )
 

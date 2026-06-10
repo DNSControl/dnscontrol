@@ -9,7 +9,7 @@ import (
 )
 
 type FRAME struct {
-	Target               string
+	Target string
 }
 
 func (rd FRAME) Len() int {

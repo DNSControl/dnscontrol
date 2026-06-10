@@ -14,7 +14,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 

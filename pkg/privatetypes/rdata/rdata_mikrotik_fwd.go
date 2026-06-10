@@ -9,7 +9,7 @@ import (
 )
 
 type MIKROTIKFWD struct {
-	ForwardTo            string
+	ForwardTo string
 }
 
 func (rd MIKROTIKFWD) Len() int {

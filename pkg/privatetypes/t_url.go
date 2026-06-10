@@ -44,9 +44,9 @@ func (rr *URL) Clone() dnsv2.RR {
 	return &URL{
 		Hdr: rr.Hdr,
 		URL: privatetypesrdata.URL{
-			Location: rr.Location,
+			Location:           rr.Location,
 			PorkbunIncludePath: rr.PorkbunIncludePath,
-			PorkbunWildCard: rr.PorkbunWildCard,
+			PorkbunWildCard:    rr.PorkbunWildCard,
 		}}
 }
 func (rr *URL) String() string {

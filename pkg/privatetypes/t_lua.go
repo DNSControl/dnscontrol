@@ -43,7 +43,7 @@ func (rr *LUA) Clone() dnsv2.RR {
 	return &LUA{
 		Hdr: rr.Hdr,
 		LUA: privatetypesrdata.LUA{
-			LuaType: rr.LuaType,
+			LuaType:    rr.LuaType,
 			LuaPayload: rr.LuaPayload,
 		}}
 }

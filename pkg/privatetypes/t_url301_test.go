@@ -11,9 +11,9 @@ func TestUrl301(t *testing.T) {
 	y := &URL301{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		URL301: privatetypesrdata.URL301{
-			Location: "example.com.",
+			Location:           "example.com.",
 			PorkbunIncludePath: true,
-			PorkbunWildCard: false,
+			PorkbunWildCard:    false,
 		},
 	}
 	rry, err := dnsv2.New(y.String())

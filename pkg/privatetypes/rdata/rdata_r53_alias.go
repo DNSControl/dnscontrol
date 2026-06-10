@@ -9,10 +9,10 @@ import (
 )
 
 type R53ALIAS struct {
-	AliasType            string
-	Target               string
-	EvalTargetHealth     string
-	ZoneID               string
+	AliasType        string
+	Target           string
+	EvalTargetHealth string
+	ZoneID           string
 }
 
 func (rd R53ALIAS) Len() int {
@@ -29,9 +29,9 @@ func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA,
 		return R53ALIAS{}, fmt.Errorf("R53_ALIAS expects 4 arguments, got %d: %+v", len(args), args)
 	}
 	return R53ALIAS{
-		AliasType: mustbe.RawString(args[0]),
-		Target: mustbe.TargetHost(origin, args[1]),
+		AliasType:        mustbe.RawString(args[0]),
+		Target:           mustbe.TargetHost(origin, args[1]),
 		EvalTargetHealth: mustbe.RawString(args[2]),
-		ZoneID: mustbe.RawString(args[3]),
+		ZoneID:           mustbe.RawString(args[3]),
 	}, nil
 }

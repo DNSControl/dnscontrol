@@ -11,10 +11,10 @@ func TestPorkbunUrlfwd(t *testing.T) {
 	y := &PORKBUNURLFWD{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		PORKBUNURLFWD: privatetypesrdata.PORKBUNURLFWD{
-			Target: "",
-			TypeName: "",
+			Target:      "",
+			TypeName:    "",
 			IncludePath: "",
-			Wildcard: "",
+			Wildcard:    "",
 		},
 	}
 	rry, err := dnsv2.New(y.String())
