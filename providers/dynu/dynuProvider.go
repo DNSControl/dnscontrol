@@ -178,27 +178,6 @@ func (d *dynuProvider) GetZones() ([]string, error) {
 	return zones, nil
 }
 
-// AuditRecords returns errors for any record types not supported by Dynu.
-func AuditRecords(records []*models.RecordConfig) []error {
-	var errs []error
-	for _, rc := range records {
-		switch rc.Type {
-		case "A", "AAAA", "AFSDB", "CAA", "CERT", "CNAME", "DHCID",
-			"HINFO", "HTTPS", "KEY", "LOC", "MX", "NAPTR", "NS", "OPENPGPKEY",
-			"PTR", "RP", "SMIMEA", "SRV", "SSHFP", "SVCB", "TLSA", "TXT", "URI":
-			if rc.Type == "TXT" && rc.GetTargetTXTJoined() == "" {
-				errs = append(errs, fmt.Errorf("Dynu does not support empty TXT records (label: %q)", rc.NameFQDN))
-			}
-			if strings.HasPrefix(rc.Name, "*") {
-				errs = append(errs, fmt.Errorf("Dynu does not support wildcard records (label: %q)", rc.NameFQDN))
-			}
-		default:
-			errs = append(errs, fmt.Errorf("Dynu provider does not support %q records (label: %q)", rc.Type, rc.NameFQDN))
-		}
-	}
-	return errs
-}
-
 // toRc converts a Dynu API record to a DNSControl RecordConfig.
 // Returns (nil, nil) for record types managed internally by Dynu (SOA, WCA).
 // NOTE: r.Content from the Dynu API is the full zone-file line (hostname TTL class
