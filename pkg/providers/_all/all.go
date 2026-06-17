@@ -68,4 +68,5 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/unifi"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/vercel"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/vultr"
+	_ "github.com/DNSControl/dnscontrol/v4/providers/websupport"
 )

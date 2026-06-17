@@ -406,5 +406,11 @@
     "TYPE": "VULTR",
     "domain": "$VULTR_DOMAIN",
     "token": "$VULTR_TOKEN"
+  },
+  "WEBSUPPORT": {
+    "TYPE": "WEBSUPPORT",
+    "api_key": "$WEBSUPPORT_API_KEY",
+    "domain": "$WEBSUPPORT_DOMAIN",
+    "secret": "$WEBSUPPORT_SECRET"
   }
 }
