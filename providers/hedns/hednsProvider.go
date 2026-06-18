@@ -532,7 +532,7 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	return zoneRecords, err
 }
 
-func (c *hednsProvider) authUsernameAndPassword() (authenticated bool, requiresTfa bool, err error) {
+func (c *hednsProvider) authUsernameAndPassword() (document *goquery.Document, requiresTfa bool, err error) {
 	// Login with username and password
 	response, err := c.httpClient.PostForm(apiEndpoint, url.Values{
 		"email":  {c.Username},
@@ -540,38 +540,34 @@ func (c *hednsProvider) authUsernameAndPassword() (authenticated bool, requiresT
 		"submit": {"Login!"},
 	})
 	if err != nil {
-		return false, false, err
+		return nil, false, err
 	}
 	defer response.Body.Close()
 
-	document, err := c.parseResponseForDocumentAndErrors(response)
+	document, err = c.parseResponseForDocumentAndErrors(response)
 	if err != nil {
 		if err.Error() == errorInvalidCredentials {
 			err = errors.New("authentication failed with incorrect username or password")
 		}
 		if err.Error() == errorTotpTokenRequired {
-			return false, true, nil
+			return nil, true, nil
 		}
-		return false, false, err
+		return nil, false, err
 	}
 
-	authenticated = document.Find("#_tlogout").Size() > 0
 	requiresTfa = document.Find("input#tfacode").Size() > 0
-
-	// Completed and 2FA is not required
-	return authenticated, requiresTfa, err
+	return document, requiresTfa, nil
 }
 
-func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
+func (c *hednsProvider) auth2FA() (document *goquery.Document, err error) {
 	if c.TfaValue == "" && c.TfaSecret == "" {
-		return false, errors.New("account requires two-factor authentication but neither totp or totp-key were provided")
+		return nil, errors.New("account requires two-factor authentication but neither totp or totp-key were provided")
 	}
 
 	if c.TfaValue == "" && c.TfaSecret != "" {
-		var err error
 		c.TfaValue, err = totp.GenerateCode(c.TfaSecret, time.Now())
 		if err != nil {
-			return false, err
+			return nil, err
 		}
 	}
 
@@ -580,11 +576,11 @@ func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
 		"submit":  {"Submit"},
 	})
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	defer response.Body.Close()
 
-	document, err := c.parseResponseForDocumentAndErrors(response)
+	document, err = c.parseResponseForDocumentAndErrors(response)
 	if err != nil {
 		switch err.Error() {
 		case errorInvalidTotpToken:
@@ -592,62 +588,69 @@ func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
 		case errorTotpTokenReused:
 			err = errors.New("TOTP token was reused within its period (30 seconds)")
 		}
-		return false, err
+		return nil, err
 	}
-	authenticated = document.Find("#_tlogout").Size() > 0
 
-	return authenticated, err
+	return document, nil
 }
 
-func (c *hednsProvider) authenticate() error {
-	authenticated, requiresTfa, err := c.authUsernameAndPassword()
+func (c *hednsProvider) authResumeSession() (document *goquery.Document, err error) {
+	response, err := c.httpClient.Get(apiEndpoint)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	document, err = goquery.NewDocumentFromReader(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	return document, nil
+}
+
+func (c *hednsProvider) authenticate() (*goquery.Document, error) {
+	// #_tlogout is only present once the session is authenticated.
+	isLoggedIn := func(document *goquery.Document) bool {
+		return document.Find("#_tlogout").Size() > 0
+	}
+
+	if c.hasSession() {
+		document, err := c.authResumeSession()
+		if err != nil {
+			return nil, err
+		}
+
+		if isLoggedIn(document) {
+			return document, nil
+		}
+	}
+
+	document, requiresTfa, err := c.authUsernameAndPassword()
+	if err != nil {
+		return nil, err
 	}
 
 	if requiresTfa {
-		authenticated, err = c.auth2FA()
-		if err != nil {
-			return err
+		if document, err = c.auth2FA(); err != nil {
+			return nil, err
 		}
 	}
 
-	if !authenticated {
-		return errors.New("unknown authentication failure")
+	if !isLoggedIn(document) {
+		return nil, errors.New("unknown authentication failure")
 	}
 
 	if c.SessionFilePath != "" {
-		return c.saveSessionFile()
+		if err := c.saveSessionFile(); err != nil {
+			return nil, err
+		}
 	}
-	return nil
+
+	return document, nil
 }
 
 func (c *hednsProvider) listDomains() (map[string]uint64, error) {
-	fetchRoot := func() (*goquery.Document, error) {
-		response, err := c.httpClient.Get(apiEndpoint)
-		if err != nil {
-			return nil, err
-		}
-		defer response.Body.Close()
-		return goquery.NewDocumentFromReader(response.Body)
-	}
-
-	// With a cached session, try it first; the page reveals if it is still valid.
-	if c.hasSession() {
-		document, err := fetchRoot()
-		if err != nil {
-			return nil, err
-		}
-		// #_tlogout is only present once the session is authenticated.
-		if document.Find("#_tlogout").Size() > 0 {
-			return parseDomainsTable(document)
-		}
-	}
-
-	if err := c.authenticate(); err != nil {
-		return nil, err
-	}
-	document, err := fetchRoot()
+	document, err := c.authenticate()
 	if err != nil {
 		return nil, err
 	}

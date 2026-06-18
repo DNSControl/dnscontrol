@@ -20,6 +20,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
+const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
+
 type azurednsProvider struct {
 	zonesClient    *adns.ZonesClient
 	recordsClient  *adns.RecordSetsClient
@@ -387,17 +389,14 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.CreateOrUpdate(ctx, *a.resourceGroup, zoneName, recordName, azRecType, *rrset, nil)
 
-	var e *azcore.ResponseError
-	if errors.As(err, &e) {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
@@ -421,20 +420,34 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.Delete(ctx, *a.resourceGroup, zoneName, shortName, azRecType, nil)
 
-	var e *azcore.ResponseError
-	if errors.As(err, &e) {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
+}
+
+func retryableRecordSetMutation(err error) string {
+	var e *azcore.ResponseError
+	if !errors.As(err, &e) {
+		return ""
+	}
+
+	if e.StatusCode == http.StatusTooManyRequests {
+		return "rate-limit"
+	}
+
+	if e.StatusCode == http.StatusConflict && e.ErrorCode == "Conflict" && strings.Contains(e.Error(), azurePendingOperationConflictMessage) {
+		return "pending operation"
+	}
+
+	return ""
 }
 
 func nativeToRecordTypeDiff2(recordType *string) (adns.RecordType, error) {

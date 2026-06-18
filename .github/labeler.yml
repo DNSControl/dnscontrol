@@ -193,3 +193,6 @@ provider-VERCEL:
 provider-VULTR:
   - changed-files:
       - any-glob-to-any-file: providers/vultr/**
+provider-WEBSUPPORT:
+  - changed-files:
+      - any-glob-to-any-file: providers/websupport/**

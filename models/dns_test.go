@@ -49,6 +49,20 @@ func TestRR(t *testing.T) {
 	}
 }
 
+func TestRRInvalidIPNoPanic(t *testing.T) {
+	// A malformed AAAA target (e.g. an incomplete IPv6 address) leaves the
+	// stored target unparseable. ToRR must not panic while building the RR so
+	// that normalize validation can report the error to the user.
+	experiment := RecordConfig{
+		Type:     "AAAA",
+		Name:     "@",
+		NameFQDN: "example.com",
+		target:   "2a00:1450:4003:809:1",
+		TTL:      300,
+	}
+	experiment.ToRR()
+}
+
 func TestSvcbAutoHintsTargetCombined(t *testing.T) {
 	experiment := RecordConfig{
 		Type:        "HTTPS",
