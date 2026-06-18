@@ -289,6 +289,8 @@ func backfill(rc *RecordConfig) error {
 		rc.SetTargetIP(rd.Addr)
 	case *dnsrdatav2.AAAA:
 		rc.SetTargetIP(rd.Addr)
+	case *privatetypesrdata.BUNNYDNSPZ:
+		rc.SetTarget(fmt.Sprintf("%v", rd.PullZoneID))
 	case *dnsrdatav2.CAA:
 		rc.SetTargetCAA(rd.Flag, rd.Tag, rd.Value)
 	case *privatetypesrdata.CFWORKERROUTE:

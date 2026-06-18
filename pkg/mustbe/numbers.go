@@ -118,6 +118,34 @@ func Uint32(arg any) uint32 {
 	panic(fmt.Sprintf("value %q is type %T, expected uint32", arg, arg))
 }
 
+func Uint64(arg any) uint64 {
+	switch v := arg.(type) {
+	case string:
+		num, err := strconv.ParseUint(v, 10, 64)
+		if err != nil {
+			panic(fmt.Sprintf("value %q is not a number (uint64 wanted)", v))
+		}
+		return uint64(num)
+	case uint64:
+		return uint64(v)
+	}
+	panic(fmt.Sprintf("value %q is type %T, expected uint64", arg, arg))
+}
+
+func Int64(arg any) int64 {
+	switch v := arg.(type) {
+	case string:
+		num, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			panic(fmt.Sprintf("value %q is not a number (int64 wanted)", v))
+		}
+		return int64(num)
+	case int64:
+		return int64(v)
+	}
+	panic(fmt.Sprintf("value %q is type %T, expected int64", arg, arg))
+}
+
 func Float32(arg any) float32 {
 	switch v := arg.(type) {
 	case float32:

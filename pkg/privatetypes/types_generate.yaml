@@ -69,8 +69,15 @@ types:
 
   - name: Bunny_Dns_Pz
     codepoint: 65287
-    fields: []
-    test_data: []
+    fields:
+    - name: PullZoneID
+      type: Int64
+    test_data:
+      - name: ""
+        values:
+          PullZoneID: 123
+
+# NOTE TO SELF: PullZoneID is an int64.  Should it be a uint16?
 
   - name: Bunny_Dns_Rdr
     codepoint: 65320
@@ -142,6 +149,55 @@ types:
       - name: ""
         values:
           Target: example.com.
+
+#  # Loc is not a privatetype, but because of legacy code, we're treating it that
+#  # way. The privatetypesrdata.LOC generates a dnsrdatav2.LOC.  Eventually we'll
+#  # rewrite it.
+#  # helpers.js converts a LOC() to a 12-tuple. We convert that to the 7-tuple of dnsrdatav2.LOC and store the result
+#  # in runtime fields.
+
+#   - name: Loc
+#     codepoint: 65292
+#     fields:
+#     - name: D1
+#       type: Uint8
+#     - name: M1
+#       type: Uint8
+#     - name: S1
+#       type: Float32
+#     - name: Ns
+#       type: RawString
+#     - name: D2
+#       type: Uint8
+#     - name: M2
+#       type: Uint8
+#     - name: S2
+#       type: Float32
+#     - name: Ew
+#       type: RawString
+#     - name: Al
+#       type: Float32
+#     - name: Sz
+#       type: Float32
+#     - name: Hp
+#       type: Float32
+#     - name: Vp
+#       type: Float32
+#     runtimeFields:
+#     - name: LocVersion
+#       type: uint8
+#     - name: LocLatitude
+#       type: uint8
+#     - name: LocLongitude
+#       type: float32
+#     - name: LocAltitude
+#       type: float32
+#     - name: LocSize
+#       type: float32
+#     - name: LocHorizPre
+#       type: float32
+#     - name: LocVertPre
+#       type: float32
 
   - name: Lua
     codepoint: 65292

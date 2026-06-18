@@ -11,7 +11,7 @@ import (
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
-	rc.rdata = rd
+	rc.rdata = AssureItsAPointer(rd)
 	rc.ValidateRDATA()
 }
 

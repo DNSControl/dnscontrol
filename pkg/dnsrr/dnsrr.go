@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	dnsv1 "github.com/miekg/dns"
 )
@@ -157,7 +158,17 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 		rdd := rd.(*dnsv2.HTTPS)
 		rc.SetRDATA(rdd)
 	case *dnsv2.LOC:
-		err = rc.SetTargetLOC(v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre)
+	// x := dnsv2.LOC{
+
+	// }
+	// 	// err = rc.SetTargetLOC(v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre)
+	// 	if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, ttl, typeNum,
+	// 		v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre,
+	// 		v.
+	// 	); err == nil {
+	// 		rec.ValidateRDATA()
+	// 		return *rec, nil
+	// 	}
 	case *dnsv2.MX:
 		err = rc.SetTargetMX(v.Preference, v.Mx)
 	case *dnsv2.NAPTR:
@@ -182,7 +193,7 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 		err = rc.SetTargetSSHFP(v.Algorithm, v.Type, v.FingerPrint)
 	case *dnsv2.SVCB:
 		rd := rr.Data()
-		rdd := rd.(*dnsv2.SVCB)
+		rdd := rd.(dnsrdatav2.SVCB)
 		rc.SetRDATA(rdd)
 	case *dnsv2.TLSA:
 		err = rc.SetTargetTLSA(v.Usage, v.Selector, v.MatchingType, v.Certificate)

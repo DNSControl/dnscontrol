@@ -63,6 +63,8 @@ var typeInfo = map[string]TypeInfo{
 	"Uint8":      {GoType: "uint8"},
 	"Uint16":     {GoType: "uint16"},
 	"Uint32":     {GoType: "uint32"},
+	"Uint64":     {GoType: "uint64"},
+	"Int64":      {GoType: "int64"},
 	"IPv4":       {GoType: "netip.Addr", NeedsNetip: true},
 	"IPv6":       {GoType: "netip.Addr", NeedsNetip: true},
 }
