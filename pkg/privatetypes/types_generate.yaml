@@ -70,8 +70,8 @@ types:
   - name: Bunny_Dns_Pz
     codepoint: 65287
     fields:
-    - name: PullZoneID
-      type: Int64
+      - name: PullZoneID
+        type: Int64
     test_data:
       - name: ""
         values:

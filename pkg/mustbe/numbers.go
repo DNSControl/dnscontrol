@@ -134,16 +134,18 @@ func Uint64(arg any) uint64 {
 
 func Int64(arg any) int64 {
 	switch v := arg.(type) {
-	case string:
-		num, err := strconv.ParseInt(v, 10, 64)
-		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (int64 wanted)", v))
-		}
-		return int64(num)
 	case int64:
+		return v
+	case uint16:
 		return int64(v)
+	case string:
+		ni, err := strconv.ParseInt(arg.(string), 10, 64)
+		if err != nil {
+			panic(fmt.Sprintf("value %q is not a number (int64 wanted)", arg))
+		}
+		return int64(ni)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected int64", arg, arg))
+	panic(fmt.Sprintf("value %q is type %T, expected uint32", arg, arg))
 }
 
 func Float32(arg any) float32 {

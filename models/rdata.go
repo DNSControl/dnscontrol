@@ -87,6 +87,6 @@ func assurePointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 	case dnsrdatav2.TXT:
 		return &v
 	}
-	fmt.Sprintf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
+	fmt.Printf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
 	return rd
 }

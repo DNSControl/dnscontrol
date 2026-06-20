@@ -155,7 +155,11 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 		err = rc.SetTargetDNSKEY(v.Flags, v.Protocol, v.Algorithm, v.PublicKey)
 	case *dnsv2.HTTPS:
 		rd := rr.Data()
-		rdd := rd.(*dnsv2.HTTPS)
+		rdd, ok := rd.(dnsrdatav2.SVCB)
+		if !ok {
+			m := fmt.Sprintf("DEBUG: HTTPS data is %T\n", rd)
+			panic(m)
+		}
 		rc.SetRDATA(rdd)
 	case *dnsv2.LOC:
 	// x := dnsv2.LOC{
@@ -193,7 +197,11 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 		err = rc.SetTargetSSHFP(v.Algorithm, v.Type, v.FingerPrint)
 	case *dnsv2.SVCB:
 		rd := rr.Data()
-		rdd := rd.(dnsrdatav2.SVCB)
+		rdd, ok := rd.(dnsrdatav2.SVCB)
+		if !ok {
+			m := fmt.Sprintf("DEBUG: HTTPS data is %T\n", rd)
+			panic(m)
+		}
 		rc.SetRDATA(rdd)
 	case *dnsv2.TLSA:
 		err = rc.SetTargetTLSA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
