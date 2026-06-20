@@ -266,38 +266,17 @@ func updateSerialNumber(origin string, recs models.Records, forcedSerial uint32)
 
 // ParseZoneContents parses a string as a BIND zone and returns the records.
 func ParseZoneContents(content string, zoneName string, zonefileName string) (models.Records, error) {
-	//zp := dnsv1.NewZoneParser(strings.NewReader(content), zoneName, zonefileName)
 	zp := dnsv2.NewZoneParser(strings.NewReader(content), zoneName, zonefileName)
 
 	foundRecords := models.Records{}
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
 		var rec models.RecordConfig
-		// var prec *models.RecordConfig
 		var err error
 
-		// rtype := rr.Header().Rrtype
-		// rtypeStr := dnsv1.TypeToString[rtype]
-
-		// Set rtypeStr to the string version of the type, but if it's a fake type, use the fake type name instead.
-		// rtype := dnsv2.RRToType(rr)
-		// rtypeStr := dnsv2.TypeToString[rtype]
-
-		// if rtypeinfo.IsModernType(rtypeStr) {
-		// 	// Modern types:
-		// 	name := rr.Header().Name
-		// 	prec, err = rtypecontrol.NewRecordConfigFromStruct(name, rr.Header().TTL, rtypeStr, rr.Data(), domaintags.MakeDomainNameVarieties(zoneName))
-		// 	if err != nil {
-		// 		return nil, err
-		// 	}
-		// 	rec = *prec
-		// 	rec.TTL = rr.Header().TTL
-		// } else {
-		// 	// Legacy types:
 		rec, err = dnsrr.RRtoRCV2(rr, zoneName)
 		if err != nil {
 			return nil, err
 		}
-		// }
 
 		rec.FixUp(zoneName) // hack.  Maybe not needed.
 

@@ -128,11 +128,24 @@ func MakeHTTPS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 }
 
 func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
-	mustbe.ValidArgs(args)
-	if len(args) != 12 {
-		return nil, fmt.Errorf("MakeLOC expects exactly 12 arguments, got %d: %+v", len(args), args)
+	if len(args) != 7 && len(args) != 12 {
+		return nil, fmt.Errorf("MakeLOC expects either 7 or 12 arguments, got %d: %+v", len(args), args)
 	}
+
+	if len(args) == 7 {
+		return &dnsrdatav2.LOC{
+			Version:   mustbe.Uint8(args[0]),
+			Size:      mustbe.Uint8(args[1]),
+			HorizPre:  mustbe.Uint8(args[2]),
+			VertPre:   mustbe.Uint8(args[3]),
+			Latitude:  mustbe.Uint32(args[4]),
+			Longitude: mustbe.Uint32(args[5]),
+			Altitude:  mustbe.Uint32(args[6]),
+		}, nil
+	}
+
 	rc := &RecordConfig{}
+	// TODO(tlim): Recfactor SetLOCParams to produce its results outside of an RC.
 	rc.SetLOCParams(
 		mustbe.Uint8(args[0]),
 		mustbe.Uint8(args[1]),
@@ -148,7 +161,6 @@ func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 		mustbe.Float32(args[11]),
 	)
 
-	// TODO(tlim): Recfactor SetLOCParams to produce its results.
 	return &dnsrdatav2.LOC{
 		Version:   rc.LocVersion,
 		Size:      rc.LocSize,
