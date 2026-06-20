@@ -63,6 +63,7 @@ providers/transip @blackshadev
 providers/unifi @zupolgec
 providers/vercel @SukkaW
 providers/vultr @pgaskin
+providers/websupport @mtmn
 
 * @TomOnTime
 .goreleaser.yml @cafferata @TomOnTime

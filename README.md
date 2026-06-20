@@ -42,7 +42,7 @@ See [Getting Started](https://docs.dnscontrol.org/getting-started/getting-starte
 
 ## Supported Providers
 
-DNSControl supports 63 DNS providers and registrars:
+DNSControl supports 64 DNS providers and registrars:
 
 | | | | | |
 | ----- | ----- | ----- | ----- | ----- |
@@ -59,6 +59,7 @@ DNSControl supports 63 DNS providers and registrars:
 | [Oracle Cloud](https://docs.dnscontrol.org/provider/oracle) | [OVH](https://docs.dnscontrol.org/provider/ovh)¹ | [Packetframe](https://docs.dnscontrol.org/provider/packetframe) | [Porkbun](https://docs.dnscontrol.org/provider/porkbun)¹ | [PowerDNS](https://docs.dnscontrol.org/provider/powerdns) |
 | [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH DNS-Admin](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) | [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) | [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ |
 | [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi Network](https://docs.dnscontrol.org/provider/unifi) | [Vercel](https://docs.dnscontrol.org/provider/vercel) | [Vultr](https://docs.dnscontrol.org/provider/vultr) | [Netbird](https://docs.dnscontrol.org/provider/netbird) |
+| [WebSupport](https://docs.dnscontrol.org/provider/websupport) | | | | |
 
 ¹also supports registrar functions
 ²registrar only
