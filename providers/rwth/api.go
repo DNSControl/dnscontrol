@@ -34,20 +34,50 @@ type RecordReply struct {
 	Editable  bool      `json:"editable"`
 }
 
+type dnssecKey struct {
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// dnssecStatus supports both API variants:
+// - dnssec: false
+// - dnssec: { ...keys... }.
+type dnssecStatus struct {
+	Enabled        bool       `json:"-"`
+	ZoneSigningKey *dnssecKey `json:"zone_signing_key,omitempty"`
+	KeySigningKey  *dnssecKey `json:"key_signing_key,omitempty"`
+}
+
+func (d *dnssecStatus) UnmarshalJSON(data []byte) error {
+	// RWTH may return either a boolean or an object for the same field.
+	var enabled bool
+	if err := json.Unmarshal(data, &enabled); err == nil {
+		*d = dnssecStatus{Enabled: enabled}
+		return nil
+	}
+
+	var payload struct {
+		ZoneSigningKey *dnssecKey `json:"zone_signing_key"`
+		KeySigningKey  *dnssecKey `json:"key_signing_key"`
+	}
+	if err := json.Unmarshal(data, &payload); err != nil {
+		return fmt.Errorf("invalid dnssec value: %w", err)
+	}
+
+	*d = dnssecStatus{
+		Enabled:        true,
+		ZoneSigningKey: payload.ZoneSigningKey,
+		KeySigningKey:  payload.KeySigningKey,
+	}
+	return nil
+}
+
 type zone struct {
-	ID         int       `json:"id"`
-	ZoneName   string    `json:"zone_name"`
-	Status     string    `json:"status"`
-	UpdatedAt  time.Time `json:"updated_at"`
-	LastDeploy time.Time `json:"last_deploy"`
-	Dnssec     struct {
-		ZoneSigningKey struct {
-			CreatedAt time.Time `json:"created_at"`
-		} `json:"zone_signing_key"`
-		KeySigningKey struct {
-			CreatedAt time.Time `json:"created_at"`
-		} `json:"key_signing_key"`
-	} `json:"dnssec"`
+	ID         int          `json:"id"`
+	ZoneName   string       `json:"zone_name"`
+	Status     string       `json:"status"`
+	UpdatedAt  time.Time    `json:"updated_at"`
+	LastDeploy time.Time    `json:"last_deploy"`
+	Dnssec     dnssecStatus `json:"dnssec"`
 }
 
 func checkIsLockedSystemAPIRecord(record RecordReply) error {

@@ -87,6 +87,7 @@ Jump to a table:
 | [`UNIFI`](unifi.md) | ❌ | ✅ | ❌ |
 | [`VERCEL`](vercel.md) | ❌ | ✅ | ❌ |
 | [`VULTR`](vultr.md) | ❌ | ✅ | ❌ |
+| [`WEBSUPPORT`](websupport.md) | ❌ | ✅ | ❌ |
 
 
 ### Provider API <!--(table 2/6)-->
@@ -157,6 +158,7 @@ Jump to a table:
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❔ | ❌ | ❌ | ❌ |
 | [`VULTR`](vultr.md) | ❔ | ❔ | ✅ | ✅ |
+| [`WEBSUPPORT`](websupport.md) | ❔ | ❌ | ❌ | ❌ |
 
 
 ### DNS extensions <!--(table 3/6)-->
@@ -183,7 +185,7 @@ Jump to a table:
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❔ | ❌ | ❌ | ❌ |
 | [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`FORTIGATE`](fortigate.md) | ❔ | ❔ | ❌ | ❌ | ❔ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
+| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ✅ | ✅ | ❔ |
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GCORE`](gcore.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -222,6 +224,7 @@ Jump to a table:
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❌ | ❌ | ❔ |
 | [`VERCEL`](vercel.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
 | [`VULTR`](vultr.md) | ❌ | ❔ | ❌ | ❌ | ❔ |
+| [`WEBSUPPORT`](websupport.md) | ❌ | ❔ | ❌ | ❌ | ❌ |
 
 
 ### Service discovery <!--(table 4/6)-->
@@ -247,7 +250,7 @@ Jump to a table:
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ❔ | ✅ | ❔ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❌ | ✅ | ❔ |
 | [`EXOSCALE`](exoscale.md) | ❔ | ❔ | ✅ | ❔ |
-| [`GANDI_V5`](gandiv5.md) | ❔ | ❔ | ✅ | ❔ |
+| [`GANDI_V5`](gandiv5.md) | ❔ | ✅ | ✅ | ✅ |
 | [`GCLOUD`](gcloud.md) | ❔ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ❔ | ❌ | ✅ | ✅ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ✅ | ❌ |
@@ -286,6 +289,7 @@ Jump to a table:
 | [`UNIFI`](unifi.md) | ❔ | ❔ | ✅ | ❔ |
 | [`VERCEL`](vercel.md) | ❌ | ❌ | ✅ | ❌ |
 | [`VULTR`](vultr.md) | ❔ | ❔ | ✅ | ❔ |
+| [`WEBSUPPORT`](websupport.md) | ❔ | ❌ | ✅ | ❔ |
 
 
 ### Security <!--(table 5/6)-->
@@ -311,7 +315,7 @@ Jump to a table:
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❔ | ❔ | ❌ | ❌ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ✅ | ❔ | ❔ | ❌ | ❔ |
 | [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❔ | ❔ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
+| [`GANDI_V5`](gandiv5.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`GCLOUD`](gcloud.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ✅ | ✅ | ❔ | ❌ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❔ | ❌ | ❌ |
@@ -347,6 +351,7 @@ Jump to a table:
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❔ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ✅ | ✅ | ❔ | ❌ | ❌ |
 | [`VULTR`](vultr.md) | ✅ | ❔ | ❔ | ✅ | ❌ |
+| [`WEBSUPPORT`](websupport.md) | ❌ | ❔ | ❔ | ❌ | ❌ |
 
 
 ### DNSSEC <!--(table 6/6)-->
@@ -391,6 +396,7 @@ Jump to a table:
 | [`SAKURACLOUD`](sakuracloud.md) | ❌ | ❌ | ❌ |
 | [`TRANSIP`](transip.md) | ❌ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❌ | ❌ | ❌ |
+| [`WEBSUPPORT`](websupport.md) | ❔ | ❔ | ❌ |
 
 <!-- provider-matrix-end -->
 
