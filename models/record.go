@@ -183,11 +183,11 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 	if err != nil {
 		return nil, err
 	}
-	rd, err := dnsv2.NewData(typeNum, data, dc.Name)
+	rd, err := MyNewData(typeNum, data, dc.Name)
 	if err != nil {
 		return nil, err
 	}
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, AssureItsAPointer(rd), nil)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
 
 // NewRecordConfigFromDnsconfigjs is only for use by dnsrr.go.
@@ -259,22 +259,11 @@ func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string,
 	rc.TypeNum = typeNum
 	rc.Type = typeName
 
-	rd, err := dnsv2.NewData(typeNum, contents, origin)
+	rd, err := MyNewData(typeNum, contents, origin)
 	if err != nil {
 		return err
 	}
-
-	switch v := rd.(type) {
-	case dnsrdatav2.A:
-		rc.SetRDATA(&v)
-	case dnsrdatav2.TXT:
-		rc.SetRDATA(&v)
-	case dnsrdatav2.RP:
-		rc.SetRDATA(&v)
-	default:
-		fmt.Printf("DEBUG: newRecordConfigHelperRC: unknown type %T\n", v)
-	}
-	rc.ValidateRDATA()
+	rc.SetRDATA(rd)
 
 	rc.FixUp(origin) // Add .RDATA and .ComparableV3
 	err = backfill(rc)

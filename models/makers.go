@@ -312,12 +312,11 @@ func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 
 		// NB(tlim): It's an abomination to construct this string just to parse it but dnsv2 doesn't expose the parser in a way to do a partial line.
 		line := fmt.Sprintf("%d %s %s", mustbe.Uint16(priority), mustbe.TargetHost(origin, target), v)
-		x, err := dnsv2.NewData(dnsv2.TypeHTTPS, line)
+		sr, err := MyNewData(dnsv2.TypeHTTPS, line, origin)
 		if err != nil {
 			return nil, err
 		}
-		sr := x.(dnsrdatav2.SVCB)
-		return &sr, nil
+		return sr, nil
 	}
 
 	panic(fmt.Sprintf("BUG: Invalid params type for SVCB/HTTPS record: %T", params))

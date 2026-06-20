@@ -239,7 +239,6 @@ func (rc *RecordConfig) FixUp(origin string) {
 		// 	//panic(fmt.Sprintf("BUG: FixUp: Make%s( failed for record %s IN %s %s: %v", rc.Type, rc.NameFQDN, rc.Type, rc.GetTargetField(), err))
 		// }
 	}
-	rc.ValidateRDATA()
 
 	// .ComparableV3:
 	if rc.ComparableV3 == "" {

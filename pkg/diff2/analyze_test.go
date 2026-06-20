@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/fatih/color"
@@ -72,13 +71,12 @@ func makeRec(label, rtype, content string) *models.RecordConfig {
 		panic(fmt.Sprintf("BUG: HackFixRecord: %s IN %s %v", r.Name, r.Type, r))
 	}
 	r.TypeNum = tn
-	rrv2, err := dnsv2.NewData(tn, content, origin+".")
+	rrv2, err := models.MyNewData(tn, content, origin+".")
 	if err != nil {
 		panic(fmt.Sprintf("could not parse: %s IN %s %s: %s", r.Name, rtype, content, err))
 	}
 	//fmt.Printf("DEBUG: makeRec should be pointer: %T\n", rrv2)
-	r.SetRDATA(models.AssureItsAPointer(rrv2))
-	r.ValidateRDATA()
+	r.SetRDATA(rrv2)
 	r.ComparableV3 = r.GetRDATA().String()
 	// End of hack
 
