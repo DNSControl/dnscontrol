@@ -456,7 +456,7 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 		RecordConfig: *rc,
 		Target:       rc.GetTargetField(),
 	}
-	recj.RDATA = rc.rdata
+	recj.RDATA = rc.GetRDATA()
 	j, err := json.Marshal(*recj)
 	if err != nil {
 		return nil, err

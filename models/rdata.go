@@ -54,12 +54,12 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		return nil, err
 	}
 
-	rd2 := AssureItsAPointer(rd)
+	rd2 := assurePointerRDATA(rd)
 
 	return rd2, nil
 }
 
-func AssureItsAPointer(rd dnsv2.RDATA) dnsv2.RDATA {
+func assurePointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 
 	//        Good: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//         Bad: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
@@ -87,6 +87,6 @@ func AssureItsAPointer(rd dnsv2.RDATA) dnsv2.RDATA {
 	case dnsrdatav2.TXT:
 		return &v
 	}
-	fmt.Sprintf("\n\nFIXME: AssureItsAPointer: Add %T to case statement\n\n", rd)
+	fmt.Sprintf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
 	return rd
 }
