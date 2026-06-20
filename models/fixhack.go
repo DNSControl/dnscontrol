@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
@@ -248,7 +249,9 @@ func (rc *RecordConfig) FixUp(origin string) {
 			// number, because the serial number changes on every update and
 			// would prevent correct diffing. List it as "X" so-as it stands out
 			// in debug output that the serial is intentionally excluded.
-			rc.ComparableV3 = fmt.Sprintf("%s %s X %d %d %d %d", rc.GetTargetField(), rc.SoaMbox, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
+			rd := rc.GetRDATA().(*dnsrdatav2.SOA)
+			rc.ComparableV3 = fmt.Sprintf("%s %s X %d %d %d %d", rd.Ns, rd.Mbox, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
+
 		// case "HTTPS", "SVCB":
 		// 	x := rc.RDATA.String()
 		// 	x = strings.TrimSpace(x)

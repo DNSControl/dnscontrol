@@ -162,17 +162,9 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 		}
 		rc.SetRDATA(rdd)
 	case *dnsv2.LOC:
-	// x := dnsv2.LOC{
-
-	// }
-	// 	// err = rc.SetTargetLOC(v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre)
-	// 	if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, ttl, typeNum,
-	// 		v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre,
-	// 		v.
-	// 	); err == nil {
-	// 		rec.ValidateRDATA()
-	// 		return *rec, nil
-	// 	}
+		rd := rr.Data()
+		rdd := rd.(dnsrdatav2.LOC)
+		rc.SetRDATA(rdd)
 	case *dnsv2.MX:
 		err = rc.SetTargetMX(v.Preference, v.Mx)
 	case *dnsv2.NAPTR:

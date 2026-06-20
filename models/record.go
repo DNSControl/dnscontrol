@@ -239,11 +239,12 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 	rc.NameFQDN = makeLabelNameFQDN(origin, name)
 	rc.NameFQDNUnicode = makeNameFQDNUnicode(rc.NameFQDN)
 
-	rc.FixUp(origin) // Add .ComparableV3
-	err := backfill(rc)
+	rc.FixUp(origin)    // Add .ComparableV3
+	err := backfill(rc) // Fill in the legacy rc.${TYPE}{Field} fields.
 	if err != nil {
 		return nil, err
 	}
+
 	return rc, nil
 }
 

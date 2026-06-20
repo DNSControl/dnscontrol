@@ -233,13 +233,15 @@ func humanDiff(a, b targetConfig) string {
 
 	if a.comparableNoTTL != b.comparableNoTTL {
 		// The recorddata is different:
-		return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
+		//return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
+		return fmt.Sprintf("(%s) -> (%s)", a.rec.String(), b.rec.String())
 	}
 
 	// Just the TTLs are different:
 	return fmt.Sprintf("ttl=(%d->%d) %s",
 		a.rec.TTL, b.rec.TTL,
-		a.comparableNoTTL)
+		//a.comparableNoTTL)
+		a.rec.String())
 }
 
 // diffTargets is the real workhorse of the diff2 system.  All the setup has been complete,
@@ -273,7 +275,6 @@ func diffTargets(existing, desired []targetConfig) ChangeList {
 	for i := range mi {
 		er := existing[i].rec
 		dr := desired[i].rec
-
 		m := color.YellowString("± MODIFY %s %s %s", dr.NameFQDN, dr.Type, humanDiff(existing[i], desired[i]))
 
 		mkc := mkChange(dr.NameFQDN, dr.Type, []string{m}, models.Records{er}, models.Records{dr})
