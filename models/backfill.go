@@ -97,13 +97,6 @@ func backfill(rc *RecordConfig) error {
 			rc.SetTarget(p.Target)
 			rc.R53Alias["zone_id"] = p.ZoneID
 			rc.R53Alias["evaluate_target_health"] = p.EvalTargetHealth
-		case "R53_WEIGHTED":
-			p := rd.(*privatetypesrdata.R53WEIGHTED)
-			if rc.Metadata == nil {
-				rc.Metadata = map[string]string{}
-			}
-			rc.Metadata["r53_weight"] = fmt.Sprintf("%d", p.Weight)
-			rc.Metadata["r53_set_identifier"] = p.SetID
 
 		case "URL":
 			u := rd.(*privatetypesrdata.URL)

@@ -709,11 +709,12 @@ func r53weighted(name, target, rtype string, weight int, setID string) *models.R
 	// }
 	// r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
 	// return r
-	// _, _, _, _, _ = name, target, rtype, weight, setID
-	// fmt.Println("DEBUG: r53weighted NOT IMPLEMENTED")
-	// return nil
-	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeR53WEIGHTED, target, rtype, weight, setID)
+	r, err := globalDC.NewRecordConfig(name, defaultTTL, rtype, target)
 	panicOnErr(err)
+	r.Metadata = map[string]string{
+		"r53_weight":         fmt.Sprintf("%d", weight),
+		"r53_set_identifier": setID,
+	}
 	return r
 }
 
@@ -800,9 +801,11 @@ func makeOvhNativeRecord(name, target, rType string) *models.RecordConfig {
 	// r.MustSetTarget(target)
 	// r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
 	// return r
-	_, _, _ = name, target, rType
-	fmt.Println("DEBUG: makeOvhNativeRecord NOT IMPLEMENTED")
-	return nil
+	r, err := globalDC.NewRecordConfig(name, defaultTTL, dnsv2.TypeTXT, target)
+	panicOnErr(err)
+	r.Metadata = map[string]string{}
+	r.Metadata["create_ovh_native_record"] = rType
+	return r
 }
 
 func testgroup(desc string, items ...any) *TestGroup {
