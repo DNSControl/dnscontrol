@@ -709,9 +709,12 @@ func r53weighted(name, target, rtype string, weight int, setID string) *models.R
 	// }
 	// r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
 	// return r
-	_, _, _, _, _ = name, target, rtype, weight, setID
-	fmt.Println("DEBUG: r53weighted NOT IMPLEMENTED")
-	return nil
+	// _, _, _, _, _ = name, target, rtype, weight, setID
+	// fmt.Println("DEBUG: r53weighted NOT IMPLEMENTED")
+	// return nil
+	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeR53WEIGHTED, target, rtype, weight, setID)
+	panicOnErr(err)
+	return r
 }
 
 func rp(name string, m, t string) *models.RecordConfig {

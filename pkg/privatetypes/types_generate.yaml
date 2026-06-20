@@ -288,6 +288,19 @@ types:
           EvalTargetHealth: true
           ZoneID: 1234
 
+  - name: R53_Weighted
+    codepoint: 65321
+    fields:
+      - name: Weight
+        type: Uint8
+      - name: SetID
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Weight: 123
+          SetID: abc
+
   - name: Url
     codepoint: 65299
     fields:

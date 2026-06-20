@@ -103,8 +103,9 @@ dc.AddRecordConfig(models.MakeTestRCParse(label, ttl, type, args))          doma
 
 ### How to add a non-standard type.
 
-* Add it to types_generator.yaml and run types_generator.go
-* 
+* Add it to types_generator.yaml and run:
+  - go run types_generator.go && goimports -w *.go */*.go
+* Add it to models/backfill.go
 
 ### How to add a Builder
 
