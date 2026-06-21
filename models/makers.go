@@ -200,7 +200,14 @@ func MakeNAPTR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 	if len(args) != 6 {
 		return nil, fmt.Errorf("MakeNAPTR expects exactly 6 arguments, got %d: %+v", len(args), args)
 	}
-	return &dnsrdatav2.NAPTR{Order: mustbe.Uint16(args[0]), Preference: mustbe.Uint16(args[1]), Flags: mustbe.RawString(args[2]), Service: mustbe.RawString(args[3]), Regexp: mustbe.RawString(args[4]), Replacement: mustbe.TargetHost(origin, args[5])}, nil
+	return &dnsrdatav2.NAPTR{
+		Order:       mustbe.Uint16(args[0]),
+		Preference:  mustbe.Uint16(args[1]),
+		Flags:       mustbe.RawString(args[2]),
+		Service:     mustbe.RawString(args[3]),
+		Regexp:      mustbe.RawString(args[4]),
+		Replacement: mustbe.RawString(args[5]),
+	}, nil
 }
 
 func MakeOPENPGPKEY(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {

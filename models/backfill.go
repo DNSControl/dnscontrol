@@ -54,7 +54,7 @@ func backfill(rc *RecordConfig) error {
 	case *dnsrdatav2.NS:
 		rc.SetTarget(rd.Ns)
 	case *dnsrdatav2.NAPTR:
-		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Service)
+		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Replacement)
 	case *rdata.OPENPGPKEY:
 		rc.SetTarget(rd.PublicKey)
 	case *dnsrdatav2.PTR:

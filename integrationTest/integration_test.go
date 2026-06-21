@@ -2253,6 +2253,9 @@ func makeTests() []*TestGroup {
 			),
 		),
 
+		// Clear everything out.
+		testgroup("CLEAR"), //tc("Create A", a("testa", "1.1.1.1")),
+
 		// This MUST be the last test.
 		testgroup("final",
 			tc("final", txt("final", `TestDNSProviders was successful!`)),
