@@ -231,10 +231,12 @@ func humanDiff(a, b targetConfig) string {
 	// FUTURE(tlim): Records like MX and SRV should have more clever output.
 	// For example if only the MX priority changes, show just that.
 
+	// FUTURE(tlim): If the data but NOT the TTLs are different, omit the TTLs.
+
 	if a.comparableNoTTL != b.comparableNoTTL {
 		// The recorddata is different:
 		//return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
-		return fmt.Sprintf("(%s) -> (%s)", a.rec.String(), b.rec.String())
+		return fmt.Sprintf("(%s ttl=%d) -> (%s ttl=%d)", a.rec.String(), a.rec.TTL, b.rec.String(), b.rec.TTL)
 	}
 
 	// Just the TTLs are different:
