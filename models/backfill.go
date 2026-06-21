@@ -65,7 +65,6 @@ func backfill(rc *RecordConfig) error {
 		rc.SetTargetSMIMEA(rd.Usage, rd.Selector, rd.MatchingType, rd.Certificate)
 	case *dnsrdatav2.SOA:
 		rc.SetTargetSOA(rd.Ns, rd.Mbox, rd.Serial, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
-		fmt.Printf("BACKFILL: rc=%v\n", rc)
 	case *dnsrdatav2.SRV:
 		rc.SetTargetSRV(rd.Priority, rd.Weight, rd.Port, rd.Target)
 	case *dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
