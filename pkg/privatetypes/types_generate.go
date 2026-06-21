@@ -1,7 +1,5 @@
 //go:build ignore
 
-//go:generate sh -c "go run types_generate.go && goimports -w *.go */*.go"
-
 package main
 
 import (

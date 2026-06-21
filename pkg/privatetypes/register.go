@@ -1,5 +1,7 @@
 package privatetypes
 
+//go:generate ./types_generate.sh
+
 import (
 	"fmt"
 
