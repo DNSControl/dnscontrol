@@ -374,6 +374,7 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 		sr := rec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT)
 		sr.SRRRulesetID = rules.ID
 		sr.SRRRulesetRuleID = pr.ID
+		rec.SetRDATA(sr)
 		// TODO(tlim) Make these paramters to the NewRecordConfig above.
 
 		recs = append(recs, rec)
