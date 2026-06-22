@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 
-	"codeberg.org/miekg/dns/rdata"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
@@ -55,7 +54,7 @@ func backfill(rc *RecordConfig) error {
 		rc.SetTarget(rd.Ns)
 	case dnsrdatav2.NAPTR:
 		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Replacement)
-	case rdata.OPENPGPKEY:
+	case dnsrdatav2.OPENPGPKEY:
 		rc.SetTarget(rd.PublicKey)
 	case dnsrdatav2.PTR:
 		rc.SetTarget(rd.Ptr)

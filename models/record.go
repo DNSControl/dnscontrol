@@ -248,7 +248,6 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 	return rc, nil
 }
 
-// func newRecordConfigHelperRC(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
 func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string, origin string) error {
 	typeNum, err := dnsutilv2.StringToType(typeName)
 	if err != nil {
