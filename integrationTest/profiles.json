@@ -147,6 +147,11 @@
     "secret": "$DOMAINNAMESHOP_SECRET",
     "token": "$DOMAINNAMESHOP_TOKEN"
   },
+  "DYNU": {
+    "TYPE": "DYNU",
+    "api_key": "$DYNU_API_KEY",
+    "domain": "$DYNU_DOMAIN"
+  },
   "EXOSCALE": {
     "TYPE": "EXOSCALE",
     "apikey": "$EXOSCALE_API_KEY",

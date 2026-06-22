@@ -25,6 +25,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/doh"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/domainnameshop"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/dynadot"
+	_ "github.com/DNSControl/dnscontrol/v4/providers/dynu"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/easyname"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/exoscale"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/fortigate"

@@ -463,6 +463,7 @@ func makeTests() []*TestGroup {
 				"AZURE_PRIVATE_DNS", // Apex NS records are managed by Azure.
 				"DNSCALE",           // Apex NS records are managed by DNScale.
 				"DNSIMPLE",          // Does not support NS records nor subdomains.
+				"DYNU",              // Apex NS records are managed by Dynu.
 				"EXOSCALE",          // Not supported.
 				"GANDI_V5",          // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
 				"JOKER",             // Not supported via the Zone API.

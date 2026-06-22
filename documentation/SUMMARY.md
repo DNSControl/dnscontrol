@@ -143,6 +143,7 @@
 * [DNS-over-HTTPS](provider/dnsoverhttps.md)
 * [DOMAINNAMESHOP](provider/domainnameshop.md)
 * [Dynadot](provider/dynadot.md)
+* [Dynu](provider/dynu.md)
 * [easyname](provider/easyname.md)
 * [Exoscale](provider/exoscale.md)
 * [Fortigate](provider/fortigate.md)

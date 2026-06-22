@@ -102,6 +102,7 @@ jobs:
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
+      DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
       FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
       GCLOUD_DOMAIN: ${{ vars.GCLOUD_DOMAIN }}
@@ -173,6 +174,8 @@ jobs:
       CNR_ENTITY: ${{ secrets.CNR_ENTITY }}
       #
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      #
+      DYNU_API_KEY: ${{ secrets.DYNU_API_KEY }}
       #
       FORTIGATE_API_KEY: ${{ secrets.FORTIGATE_API_KEY }}
       FORTIGATE_VDOM: ${{ secrets.FORTIGATE_VDOM }}
