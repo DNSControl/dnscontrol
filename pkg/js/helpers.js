@@ -322,11 +322,11 @@ function DnsProvider(name, nsCount) {
     };
 }
 
-// A(name,ip, recordModifiers...)
-var A = recordBuilder('A');
+// // A(name,ip, recordModifiers...)
+// var A = recordBuilder('A');
 
-// AAAA(name,ip, recordModifiers...)
-var AAAA = recordBuilder('AAAA');
+// // AAAA(name,ip, recordModifiers...)
+// var AAAA = recordBuilder('AAAA');
 
 // AKAMAICDN(name, target, recordModifiers...)
 var AKAMAICDN = recordBuilder('AKAMAICDN');
@@ -500,32 +500,32 @@ function validateR53AliasType(value) {
     );
 }
 
-// CAA(name,tag,value, recordModifiers...)
-var CAA = recordBuilder('CAA', {
-    // TODO(tlim): It should be an error if value is not 0 or 128.
-    args: [
-        ['name', _.isString],
-        ['tag', _.isString],
-        ['value', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.caatag = args.tag;
-        record.target = args.value;
-    },
-    modifierNumber: function (record, value) {
-        record.caaflags |= value;
-    },
-});
+// // CAA(name,tag,value, recordModifiers...)
+// var CAA = recordBuilder('CAA', {
+//     // TODO(tlim): It should be an error if value is not 0 or 128.
+//     args: [
+//         ['name', _.isString],
+//         ['tag', _.isString],
+//         ['value', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.caatag = args.tag;
+//         record.target = args.value;
+//     },
+//     modifierNumber: function (record, value) {
+//         record.caaflags |= value;
+//     },
+// });
 
-// CNAME(name,target, recordModifiers...)
-var CNAME = recordBuilder('CNAME');
+// // CNAME(name,target, recordModifiers...)
+// var CNAME = recordBuilder('CNAME');
 
-// DHCID(name,target, recordModifiers...)
-var DHCID = recordBuilder('DHCID');
+// // DHCID(name,target, recordModifiers...)
+// var DHCID = recordBuilder('DHCID');
 
-// DNAME(name,target, recordModifiers...)
-var DNAME = recordBuilder('DNAME');
+// // DNAME(name,target, recordModifiers...)
+// var DNAME = recordBuilder('DNAME');
 
 // DNSKEY(name, flags, protocol, algorithm, publickey)
 var DNSKEY = recordBuilder('DNSKEY', {
@@ -2628,3 +2628,9 @@ var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var DS = rawrecordBuilder('DS');
 var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
 var RP = rawrecordBuilder('RP');
+var A = rawrecordBuilder('A');
+var AAAA = rawrecordBuilder('AAAA');
+var CAA = rawrecordBuilder('CAA');
+var CNAME = rawrecordBuilder('CNAME');
+var DNAME = rawrecordBuilder('DNAME');
+var DHCID = rawrecordBuilder('DHCID');
