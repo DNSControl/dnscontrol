@@ -6,12 +6,11 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 )
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
-	rc.rdata = AssureItsAPointer(rd)
+	rc.rdata = assureNotPointerRDATA(rd)
 	rc.ValidateRDATA()
 }
 
@@ -35,17 +34,17 @@ func (rc *RecordConfig) ValidateRDATA() {
 	}
 
 	tn := fmt.Sprintf("%T", rc.GetRDATA())
-	if strings.HasPrefix(tn, "*rdata.") {
+	if strings.HasPrefix(tn, "rdata.") {
 		return
 	}
-	if strings.HasPrefix(tn, "*privatetypesrdata.") {
+	if strings.HasPrefix(tn, "privatetypesrdata.") {
 		return
 	}
 
 	l := fmt.Sprintf("\nDEBUG: ValidateRDATA: %s\n", tn)
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
-	// panic(l)
+	panic(l)
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
@@ -54,39 +53,55 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		return nil, err
 	}
 
-	rd2 := assurePointerRDATA(rd)
+	rd2 := assureNotPointerRDATA(rd)
 
 	return rd2, nil
 }
 
-func assurePointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
+func assureNotPointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 
-	//        Good: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	//         Bad: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	tn := fmt.Sprintf("%T", rd)
-	if (tn[0] == '*') && (tn[1] != '*') {
+	if tn[0] != '*' {
 		return rd
 	}
 
-	switch v := rd.(type) {
-	case dnsrdatav2.A:
-		return &v
-	case dnsrdatav2.AAAA:
-		return &v
-	case dnsrdatav2.CNAME:
-		return &v
-	case dnsrdatav2.MX:
-		return &v
-	case dnsrdatav2.NS:
-		return &v
-	case dnsrdatav2.RP:
-		return &v
-	case dnsrdatav2.SVCB:
-		return &v
-	case dnsrdatav2.TXT:
-		return &v
-	}
-	fmt.Printf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
-	return rd
+	fmt.Print("##########################\n")
+	fmt.Printf("########################## BROKEN %T\n", rd)
+	fmt.Print("##########################\n")
+	panic(fmt.Sprintf("########################## BROKEN %T", rd))
+	// switch v := rd.(type) {
+	// case *dnsrdatav2.A:
+	// 	return *v
+	// case *dnsrdatav2.AAAA:
+	// 	return *v
+	// case *dnsrdatav2.CAA:
+	// 	return *v
+	// case *dnsrdatav2.CNAME:
+	// 	return *v
+	// case *dnsrdatav2.DS:
+	// 	return *v
+	// case *dnsrdatav2.LOC:
+	// 	return *v
+	// case *dnsrdatav2.MX:
+	// 	return *v
+	// case *dnsrdatav2.NAPTR:
+	// 	return *v
+	// case *dnsrdatav2.NS:
+	// 	return *v
+	// case *dnsrdatav2.PTR:
+	// 	return *v
+	// case *dnsrdatav2.RP:
+	// 	return *v
+	// case *dnsrdatav2.SOA:
+	// 	return *v
+	// case *dnsrdatav2.SVCB:
+	// 	return *v
+	// case *dnsrdatav2.TXT:
+	// 	return *v
+	// }
+	// fmt.Printf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
+	// return rd
 }

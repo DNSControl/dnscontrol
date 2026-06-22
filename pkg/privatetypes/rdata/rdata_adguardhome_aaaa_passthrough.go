@@ -29,7 +29,7 @@ func MakeADGUARDHOMEAAAAPASSTHROUGH(origin string, _ map[string]string, args ...
 	if len(args) != 1 {
 		return nil, fmt.Errorf("ADGUARDHOME_AAAA_PASSTHROUGH expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return &ADGUARDHOMEAAAAPASSTHROUGH{
+	return ADGUARDHOMEAAAAPASSTHROUGH{
 		Target: mustbe.RawString(args[0]),
 	}, nil
 }

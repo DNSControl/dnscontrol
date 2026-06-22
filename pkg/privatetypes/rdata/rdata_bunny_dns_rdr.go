@@ -23,5 +23,5 @@ func MakeBUNNYDNSRDR(origin string, _ map[string]string, args ...any) (dnsv2.RDA
 	if len(args) != 0 {
 		return nil, fmt.Errorf("BUNNY_DNS_RDR expects 0 arguments, got %d: %+v", len(args), args)
 	}
-	return &BUNNYDNSRDR{}, nil
+	return BUNNYDNSRDR{}, nil
 }

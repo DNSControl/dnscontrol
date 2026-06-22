@@ -29,7 +29,7 @@ func MakeMIKROTIKFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDA
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MIKROTIK_FWD expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return &MIKROTIKFWD{
+	return MIKROTIKFWD{
 		ForwardTo: mustbe.RawString(args[0]),
 	}, nil
 }

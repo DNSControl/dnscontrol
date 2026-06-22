@@ -31,7 +31,7 @@ func MakeAZUREALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDAT
 	if len(args) != 2 {
 		return nil, fmt.Errorf("AZURE_ALIAS expects 2 arguments, got %d: %+v", len(args), args)
 	}
-	return &AZUREALIAS{
+	return AZUREALIAS{
 		AliasType: mustbe.RawString(args[0]),
 		Target:    mustbe.TargetHost(origin, args[1]),
 	}, nil

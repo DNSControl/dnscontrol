@@ -23,5 +23,5 @@ func MakeNETLIFY(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, 
 	if len(args) != 0 {
 		return nil, fmt.Errorf("NETLIFY expects 0 arguments, got %d: %+v", len(args), args)
 	}
-	return &NETLIFY{}, nil
+	return NETLIFY{}, nil
 }

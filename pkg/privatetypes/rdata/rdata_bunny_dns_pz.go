@@ -28,7 +28,7 @@ func MakeBUNNYDNSPZ(origin string, _ map[string]string, args ...any) (dnsv2.RDAT
 	if len(args) != 1 {
 		return nil, fmt.Errorf("BUNNY_DNS_PZ expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return &BUNNYDNSPZ{
+	return BUNNYDNSPZ{
 		PullZoneID: mustbe.Int64(args[0]),
 	}, nil
 }

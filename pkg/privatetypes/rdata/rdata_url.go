@@ -33,7 +33,7 @@ func MakeURL(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 	if len(args) != 3 {
 		return nil, fmt.Errorf("URL expects 3 arguments, got %d: %+v", len(args), args)
 	}
-	return &URL{
+	return URL{
 		Location:           mustbe.RawString(args[0]),
 		PorkbunIncludePath: mustbe.Bool(args[1]),
 		PorkbunWildCard:    mustbe.Bool(args[2]),

@@ -31,7 +31,7 @@ func MakeAKAMAITLC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA
 	if len(args) != 2 {
 		return nil, fmt.Errorf("AKAMAITLC expects 2 arguments, got %d: %+v", len(args), args)
 	}
-	return &AKAMAITLC{
+	return AKAMAITLC{
 		AnswerType: mustbe.RawString(args[0]),
 		Target:     mustbe.TargetHost(origin, args[1]),
 	}, nil

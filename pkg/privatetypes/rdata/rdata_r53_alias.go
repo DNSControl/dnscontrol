@@ -38,7 +38,7 @@ func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA,
 	for len(args) < 4 {
 		args = append(args, "")
 	}
-	return &R53ALIAS{
+	return R53ALIAS{
 		AliasType:        mustbe.RawString(args[0]),
 		Target:           mustbe.TargetHost(origin, args[1]),
 		EvalTargetHealth: mustbe.RawString(args[2]),

@@ -32,7 +32,7 @@ func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, e
 	if len(args) != 3 {
 		return nil, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
 	}
-	return &URL301{
+	return URL301{
 		Location:           mustbe.TargetHost(origin, args[0]),
 		PorkbunIncludePath: mustbe.Bool(args[1]),
 		PorkbunWildCard:    mustbe.Bool(args[2]),

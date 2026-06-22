@@ -371,7 +371,7 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 		rec.Original = thisPr
 
 		// Store the IDs. These will be needed for update/delete operations.
-		sr := rec.GetRDATA().(*privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT)
+		sr := rec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT)
 		sr.SRRRulesetID = rules.ID
 		sr.SRRRulesetRuleID = pr.ID
 		// TODO(tlim) Make these paramters to the NewRecordConfig above.
@@ -382,7 +382,7 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 	return recs, nil
 }
 
-func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr *privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
+func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
 	newSingleRedirectRulesActionParameters := cloudflare.RulesetRuleActionParameters{}
 	newSingleRedirectRule := cloudflare.RulesetRule{}
 	newSingleRedirectRules := []cloudflare.RulesetRule{}
@@ -425,7 +425,7 @@ func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr *privatet
 	return err
 }
 
-func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr *privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
+func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
 	err := c.cfClient.DeleteRulesetRule(context.Background(), cloudflare.ZoneIdentifier(domainID), cloudflare.DeleteRulesetRuleParams{
 		RulesetID:     cfr.SRRRulesetID,
 		RulesetRuleID: cfr.SRRRulesetRuleID,
@@ -440,10 +440,10 @@ func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr *private
 }
 
 func (c *cloudflareProvider) updateSingleRedirect(domainID string, oldrec, newrec *models.RecordConfig) error {
-	if err := c.deleteSingleRedirects(domainID, oldrec.GetRDATA().(*privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT)); err != nil {
+	if err := c.deleteSingleRedirects(domainID, oldrec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT)); err != nil {
 		return err
 	}
-	return c.createSingleRedirect(domainID, newrec.GetRDATA().(*privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT))
+	return c.createSingleRedirect(domainID, newrec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT))
 }
 
 func (c *cloudflareProvider) getWorkerRoutes(id string, domain string) ([]*models.RecordConfig, error) {

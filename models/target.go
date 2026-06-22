@@ -114,8 +114,8 @@ func (rc *RecordConfig) zoneFileQuoted() string {
 	// }
 	// if rc.Type == "RP" {
 	// 	switch rc.F.(type) {
-	// 	case *dnsrdatav2.RP:
-	// 		return fmt.Sprintf("%s %s", rc.F.(*dnsrdatav2.RP).Mbox, rc.F.(*dnsrdatav2.RP).Txt)
+	// 	case dnsrdatav2.RP:
+	// 		return fmt.Sprintf("%s %s", rc.F.(dnsrdatav2.RP).Mbox, rc.F.(dnsrdatav2.RP).Txt)
 	// 	default:
 	// 		panic(fmt.Sprintf("unexpected type for RP.zoneFileQuoted: %T", rc.F))
 	// 	}

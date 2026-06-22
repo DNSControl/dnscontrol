@@ -29,7 +29,7 @@ func MakeFRAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 	if len(args) != 1 {
 		return nil, fmt.Errorf("FRAME expects 1 arguments, got %d: %+v", len(args), args)
 	}
-	return &FRAME{
+	return FRAME{
 		Target: mustbe.RawString(args[0]),
 	}, nil
 }

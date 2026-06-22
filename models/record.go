@@ -332,7 +332,7 @@ func makeNameFQDNUnicode(nameFQDN string) string {
 
 // MarshalJSON marshals RecordConfig.
 func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
-	fmt.Printf("DEBUG: MARSHALING %v\n", rc.Name)
+	//fmt.Printf("DEBUG: MARSHALING %v\n", rc.Name)
 	recj := &struct {
 		RecordConfig
 		RDATA  dnsv2.RDATA `json:"rdata,omitempty"`
@@ -765,12 +765,12 @@ func (rc *RecordConfig) Key() RecordKey {
 
 // func (rc *RecordConfig) GetSVCBValueV2() []svcbv2.Pair {
 // 	switch v := rc.RDATA.(type) {
-// 	case *dnsrdatav2.SVCB:
+// 	case dnsrdatav2.SVCB:
 // 		return v.Value
 // 	default:
 // 		panic(fmt.Sprintf("GetSVCBValueV2 failed. Unknown rdata type: %T", rc.RDATA))
 // 	}
-// 	//return rc.RDATA.(*dnsrdatav2.SVCB).Value
+// 	//return rc.RDATA.(dnsrdatav2.SVCB).Value
 
 // 	return nil
 // }

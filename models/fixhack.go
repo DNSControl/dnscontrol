@@ -249,7 +249,7 @@ func (rc *RecordConfig) FixUp(origin string) {
 			// number, because the serial number changes on every update and
 			// would prevent correct diffing. List it as "X" so-as it stands out
 			// in debug output that the serial is intentionally excluded.
-			rd := rc.GetRDATA().(*dnsrdatav2.SOA)
+			rd := rc.GetRDATA().(dnsrdatav2.SOA)
 			rc.ComparableV3 = fmt.Sprintf("%s %s X %d %d %d %d", rd.Ns, rd.Mbox, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
 
 		// case "HTTPS", "SVCB":

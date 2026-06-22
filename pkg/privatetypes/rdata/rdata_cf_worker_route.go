@@ -31,7 +31,7 @@ func MakeCFWORKERROUTE(origin string, _ map[string]string, args ...any) (dnsv2.R
 	if len(args) != 2 {
 		return nil, fmt.Errorf("CF_WORKER_ROUTE expects 2 arguments, got %d: %+v", len(args), args)
 	}
-	return &CFWORKERROUTE{
+	return CFWORKERROUTE{
 		When: mustbe.RawString(args[0]),
 		Then: mustbe.RawString(args[1]),
 	}, nil
