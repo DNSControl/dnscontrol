@@ -15,7 +15,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	dnsv1 "github.com/miekg/dns"
 )
 
 var features = providers.DocumentationNotes{
@@ -287,12 +286,16 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		// cannot derive them (e.g. when the rtype package init has not run).
 		mbox := ensureTrailingDot(r.MailBox)
 		txt := ensureTrailingDot(r.TxtDomainName)
-		rc.F = &dnsv1.RP{
-			Mbox: mbox,
-			Txt:  txt,
+		// rc.F = &dnsv1.RP{
+		// 	Mbox: mbox,
+		// 	Txt:  txt,
+		// }
+		// rc.ZonefilePartial = mbox + " " + txt
+		// rc.Comparable = rc.ZonefilePartial
+		rd, err := models.MakeRP(domain, nil, mbox, txt)
+		if err == nil {
+			rc.SetRDATA(rd)
 		}
-		rc.ZonefilePartial = mbox + " " + txt
-		rc.Comparable = rc.ZonefilePartial
 	case "SMIMEA":
 		certHex, convErr := base64ToHex(r.CertificateAssociatedData)
 		if convErr != nil {
