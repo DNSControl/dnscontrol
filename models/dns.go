@@ -61,10 +61,10 @@ func (config *DNSConfig) ImportRawRecords() error {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				ttl := rawRec.TTL
-				if ttl != 0 {
-					fmt.Printf("TTL = %d\n", ttl)
-				}
+				// ttl := rawRec.TTL
+				// if ttl != 0 {
+				// 	fmt.Printf("TTL = %d\n", ttl)
+				// }
 				rec, err := dc.NewRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm)
 				if err != nil {
 					return fmt.Errorf("ImportRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)

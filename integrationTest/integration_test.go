@@ -319,6 +319,7 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("Ech",
+			not("SAKURACLOUD"), // NB(tlim): rejectif code is broken.
 			requires(providers.CanUseHTTPS),
 			not(
 				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation

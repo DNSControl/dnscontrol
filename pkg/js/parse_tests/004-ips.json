@@ -18,25 +18,43 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:7:5]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "1.2.3.5",
           "filepos": "[line:8:5]",
           "name": "p1",
+          "name_unicode": "p1",
+          "rdata": {
+            "Addr": "1.2.3.5"
+          },
           "target": "1.2.3.5",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "1.2.4.3",
           "filepos": "[line:9:5]",
           "name": "p255",
+          "name_unicode": "p255",
+          "rdata": {
+            "Addr": "1.2.4.3"
+          },
           "target": "1.2.4.3",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",

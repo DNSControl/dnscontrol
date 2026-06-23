@@ -11,18 +11,30 @@
       "name": "foo1.com",
       "records": [
         {
+          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "bar",
+          "name_unicode": "bar",
+          "rdata": {
+            "Addr": "1.1.1.1"
+          },
           "target": "1.1.1.1",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "5.5.5.5",
           "filepos": "[line:3:5]",
           "name": "foo",
+          "name_unicode": "foo",
+          "rdata": {
+            "Addr": "5.5.5.5"
+          },
           "target": "5.5.5.5",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "reg",
@@ -38,18 +50,30 @@
       "name": "inny",
       "records": [
         {
+          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "bar.foo1.com",
+          "name_unicode": "bar",
+          "rdata": {
+            "Addr": "1.1.1.1"
+          },
           "target": "4.4.4.101",
           "ttl": 60,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "5.5.5.5",
           "filepos": "[line:3:5]",
           "name": "foo.foo1.com",
+          "name_unicode": "foo",
+          "rdata": {
+            "Addr": "5.5.5.5"
+          },
           "target": "6.6.6.3",
           "ttl": 60,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "reg",
@@ -65,18 +89,30 @@
       "name": "com.inny",
       "records": [
         {
+          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "bar.foo1",
+          "name_unicode": "bar",
+          "rdata": {
+            "Addr": "1.1.1.1"
+          },
           "target": "1.1.1.1",
           "ttl": 99,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "5.5.5.5",
           "filepos": "[line:3:5]",
           "name": "foo.foo1",
+          "name_unicode": "foo",
+          "rdata": {
+            "Addr": "5.5.5.5"
+          },
           "target": "7.7.7.7",
           "ttl": 99,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "reg",

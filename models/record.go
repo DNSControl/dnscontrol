@@ -166,7 +166,7 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	}
 	rd, err := f(dc.Name, nil, args...)
 	if err != nil {
-		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
+		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v\n", typeNum, err)
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
 	//fmt.Printf("DEBUG rd=%T\n", rd)
@@ -192,7 +192,7 @@ func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 
 	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, metadata, args...)
 	if err != nil {
-		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
+		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
 		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)

@@ -304,6 +304,12 @@ function DefaultTTL(v) {
 function makeCAAFlag(value) {
     return function (record) {
         record.caaflag |= value;
+        if (!_.isObject(record.meta)) {
+            record.meta = {};
+        }
+        record.meta["caaflag"] = record.caaflag;
+        console.debug("DEBUG: helpers.js caaflag", record.caaflag);
+        console.debug("DEBUG: helpers.js meta.caaflag", record.meta.caaflag);
     };
 }
 
@@ -527,176 +533,176 @@ function validateR53AliasType(value) {
 // // DNAME(name,target, recordModifiers...)
 // var DNAME = recordBuilder('DNAME');
 
-// DNSKEY(name, flags, protocol, algorithm, publickey)
-var DNSKEY = recordBuilder('DNSKEY', {
-    args: [
-        ['name', _.isString],
-        ['flags', _.isNumber],
-        ['protocol', _.isNumber],
-        ['algorithm', _.isNumber],
-        ['publickey', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.dnskeyflags = args.flags;
-        record.dnskeyprotocol = args.protocol;
-        record.dnskeyalgorithm = args.algorithm;
-        record.dnskeypublickey = args.publickey;
-        record.target = args.target;
-    },
-});
+// // DNSKEY(name, flags, protocol, algorithm, publickey)
+// var DNSKEY = recordBuilder('DNSKEY', {
+//     args: [
+//         ['name', _.isString],
+//         ['flags', _.isNumber],
+//         ['protocol', _.isNumber],
+//         ['algorithm', _.isNumber],
+//         ['publickey', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.dnskeyflags = args.flags;
+//         record.dnskeyprotocol = args.protocol;
+//         record.dnskeyalgorithm = args.algorithm;
+//         record.dnskeypublickey = args.publickey;
+//         record.target = args.target;
+//     },
+// });
 
-// name, priority, target, params
-var HTTPS = recordBuilder('HTTPS', {
-    args: [
-        ['name', _.isString],
-        ['priority', _.isNumber],
-        ['target', _.isString],
-        ['params', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.svcpriority = args.priority;
-        record.target = args.target;
-        record.svcparams = args.params;
-    },
-});
+// // name, priority, target, params
+// var HTTPS = recordBuilder('HTTPS', {
+//     args: [
+//         ['name', _.isString],
+//         ['priority', _.isNumber],
+//         ['target', _.isString],
+//         ['params', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.svcpriority = args.priority;
+//         record.target = args.target;
+//         record.svcparams = args.params;
+//     },
+// });
 
-// PTR(name,target, recordModifiers...)
-var PTR = recordBuilder('PTR');
+// // PTR(name,target, recordModifiers...)
+// var PTR = recordBuilder('PTR');
 
-// NAPTR(name,order,preference,flags,service,regexp,target, recordModifiers...)
-var NAPTR = recordBuilder('NAPTR', {
-    args: [
-        ['name', _.isString],
-        ['order', _.isNumber],
-        ['preference', _.isNumber],
-        ['flags', _.isString],
-        ['service', _.isString],
-        ['regexp', _.isString],
-        ['target', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.naptrorder = args.order;
-        record.naptrpreference = args.preference;
-        record.naptrflags = args.flags;
-        record.naptrservice = args.service;
-        record.naptrregexp = args.regexp;
-        record.target = args.target;
-    },
-});
+// // NAPTR(name,order,preference,flags,service,regexp,target, recordModifiers...)
+// var NAPTR = recordBuilder('NAPTR', {
+//     args: [
+//         ['name', _.isString],
+//         ['order', _.isNumber],
+//         ['preference', _.isNumber],
+//         ['flags', _.isString],
+//         ['service', _.isString],
+//         ['regexp', _.isString],
+//         ['target', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.naptrorder = args.order;
+//         record.naptrpreference = args.preference;
+//         record.naptrflags = args.flags;
+//         record.naptrservice = args.service;
+//         record.naptrregexp = args.regexp;
+//         record.target = args.target;
+//     },
+// });
 
-// OPENPGPKEY(name,target, recordModifiers...)
-var OPENPGPKEY = recordBuilder('OPENPGPKEY');
+// // OPENPGPKEY(name,target, recordModifiers...)
+// var OPENPGPKEY = recordBuilder('OPENPGPKEY');
 
-// name, usage, selector, matchingtype, certificate
-var SMIMEA = recordBuilder('SMIMEA', {
-    args: [
-        ['name', _.isString],
-        ['usage', _.isNumber],
-        ['selector', _.isNumber],
-        ['matchingtype', _.isNumber],
-        ['target', _.isString], // recordBuilder needs a "target" argument
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name + '._smimecert';
-        record.smimeausage = args.usage;
-        record.smimeaselector = args.selector;
-        record.smimeamatchingtype = args.matchingtype;
-        record.target = args.target;
-    },
-});
+// // name, usage, selector, matchingtype, certificate
+// var SMIMEA = recordBuilder('SMIMEA', {
+//     args: [
+//         ['name', _.isString],
+//         ['usage', _.isNumber],
+//         ['selector', _.isNumber],
+//         ['matchingtype', _.isNumber],
+//         ['target', _.isString], // recordBuilder needs a "target" argument
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name + '._smimecert';
+//         record.smimeausage = args.usage;
+//         record.smimeaselector = args.selector;
+//         record.smimeamatchingtype = args.matchingtype;
+//         record.target = args.target;
+//     },
+// });
 
-// SOA(name,ns,mbox,refresh,retry,expire,minimum, recordModifiers...)
-var SOA = recordBuilder('SOA', {
-    args: [
-        ['name', _.isString],
-        ['target', _.isString],
-        ['mbox', _.isString],
-        ['refresh', _.isNumber],
-        ['retry', _.isNumber],
-        ['expire', _.isNumber],
-        ['minttl', _.isNumber],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.target = args.target;
-        record.soambox = args.mbox;
-        record.soarefresh = args.refresh;
-        record.soaretry = args.retry;
-        record.soaexpire = args.expire;
-        record.soaminttl = args.minttl;
-    },
-});
+// // SOA(name,ns,mbox,refresh,retry,expire,minimum, recordModifiers...)
+// var SOA = recordBuilder('SOA', {
+//     args: [
+//         ['name', _.isString],
+//         ['target', _.isString],
+//         ['mbox', _.isString],
+//         ['refresh', _.isNumber],
+//         ['retry', _.isNumber],
+//         ['expire', _.isNumber],
+//         ['minttl', _.isNumber],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.target = args.target;
+//         record.soambox = args.mbox;
+//         record.soarefresh = args.refresh;
+//         record.soaretry = args.retry;
+//         record.soaexpire = args.expire;
+//         record.soaminttl = args.minttl;
+//     },
+// });
 
-// SRV(name,priority,weight,port,target, recordModifiers...)
-var SRV = recordBuilder('SRV', {
-    args: [
-        ['name', _.isString],
-        ['priority', _.isNumber],
-        ['weight', _.isNumber],
-        ['port', _.isNumber],
-        ['target', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.srvpriority = args.priority;
-        record.srvweight = args.weight;
-        record.srvport = args.port;
-        record.target = args.target;
-    },
-});
+// // SRV(name,priority,weight,port,target, recordModifiers...)
+// var SRV = recordBuilder('SRV', {
+//     args: [
+//         ['name', _.isString],
+//         ['priority', _.isNumber],
+//         ['weight', _.isNumber],
+//         ['port', _.isNumber],
+//         ['target', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.srvpriority = args.priority;
+//         record.srvweight = args.weight;
+//         record.srvport = args.port;
+//         record.target = args.target;
+//     },
+// });
 
-// SSHFP(name,algorithm,type,value, recordModifiers...)
-var SSHFP = recordBuilder('SSHFP', {
-    args: [
-        ['name', _.isString],
-        ['algorithm', _.isNumber],
-        ['fingerprint', _.isNumber],
-        ['value', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.sshfpalgorithm = args.algorithm;
-        record.sshfpfingerprint = args.fingerprint;
-        record.target = args.value;
-    },
-});
+// // SSHFP(name,algorithm,type,value, recordModifiers...)
+// var SSHFP = recordBuilder('SSHFP', {
+//     args: [
+//         ['name', _.isString],
+//         ['algorithm', _.isNumber],
+//         ['fingerprint', _.isNumber],
+//         ['value', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.sshfpalgorithm = args.algorithm;
+//         record.sshfpfingerprint = args.fingerprint;
+//         record.target = args.value;
+//     },
+// });
 
-// name, priority, target, params
-var SVCB = recordBuilder('SVCB', {
-    args: [
-        ['name', _.isString],
-        ['priority', _.isNumber],
-        ['target', _.isString],
-        ['params', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.svcpriority = args.priority;
-        record.target = args.target;
-        record.svcparams = args.params;
-    },
-});
+// // name, priority, target, params
+// var SVCB = recordBuilder('SVCB', {
+//     args: [
+//         ['name', _.isString],
+//         ['priority', _.isNumber],
+//         ['target', _.isString],
+//         ['params', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.svcpriority = args.priority;
+//         record.target = args.target;
+//         record.svcparams = args.params;
+//     },
+// });
 
-// name, usage, selector, matchingtype, certificate
-var TLSA = recordBuilder('TLSA', {
-    args: [
-        ['name', _.isString],
-        ['usage', _.isNumber],
-        ['selector', _.isNumber],
-        ['matchingtype', _.isNumber],
-        ['target', _.isString], // recordBuilder needs a "target" argument
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.tlsausage = args.usage;
-        record.tlsaselector = args.selector;
-        record.tlsamatchingtype = args.matchingtype;
-        record.target = args.target;
-    },
-});
+// // name, usage, selector, matchingtype, certificate
+// var TLSA = recordBuilder('TLSA', {
+//     args: [
+//         ['name', _.isString],
+//         ['usage', _.isNumber],
+//         ['selector', _.isNumber],
+//         ['matchingtype', _.isNumber],
+//         ['target', _.isString], // recordBuilder needs a "target" argument
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.tlsausage = args.usage;
+//         record.tlsaselector = args.selector;
+//         record.tlsamatchingtype = args.matchingtype;
+//         record.target = args.target;
+//     },
+// });
 
 function isStringOrArray(x) {
     return _.isString(x) || _.isArray(x);
@@ -959,30 +965,30 @@ function locDMSBuilder(record, args) {
     record.locvertpre = getENotationInt(args.vp);
 }
 
-// LOC(name,d1,m1,s1,ns,d2,m2,s2,ew,alt,siz,hp,vp, recordModifiers...)
-var LOC = recordBuilder('LOC', {
-    args: [
-        ['name', _.isString], //i.e. subdomain
-        ['d1', _.isNumber], // N/S degrees
-        ['m1', _.isNumber], // N/S minutes
-        ['s1', _.isNumber], // N/S seconds
-        ['ns', _.isString], // N/S
-        ['d2', _.isNumber], // E/W degrees
-        ['m2', _.isNumber], // E/W minutes
-        ['s2', _.isNumber], // E/W seconds
-        ['ew', _.isString], // E/W
-        ['alt', _.isNumber], // altitude
-        ['siz', _.isNumber], // size/precision
-        ['hp', _.isNumber], // horizontal precision
-        ['vp', _.isNumber], // vertical precision
-    ],
-    transform: function (record, args, modifiers) {
-        validateIntegers(args);
+// // LOC(name,d1,m1,s1,ns,d2,m2,s2,ew,alt,siz,hp,vp, recordModifiers...)
+// var LOC = recordBuilder('LOC', {
+//     args: [
+//         ['name', _.isString], //i.e. subdomain
+//         ['d1', _.isNumber], // N/S degrees
+//         ['m1', _.isNumber], // N/S minutes
+//         ['s1', _.isNumber], // N/S seconds
+//         ['ns', _.isString], // N/S
+//         ['d2', _.isNumber], // E/W degrees
+//         ['m2', _.isNumber], // E/W minutes
+//         ['s2', _.isNumber], // E/W seconds
+//         ['ew', _.isString], // E/W
+//         ['alt', _.isNumber], // altitude
+//         ['siz', _.isNumber], // size/precision
+//         ['hp', _.isNumber], // horizontal precision
+//         ['vp', _.isNumber], // vertical precision
+//     ],
+//     transform: function (record, args, modifiers) {
+//         validateIntegers(args);
 
-        record = locStringBuilder(record, args);
-        record = locDMSBuilder(record, args);
-    },
-});
+//         record = locStringBuilder(record, args);
+//         record = locDMSBuilder(record, args);
+//     },
+// });
 
 // Post-validation function for LOC that checks if degrees and minutes are integers
 function validateIntegers(args) {
@@ -1050,22 +1056,22 @@ function ConvertDDToDMS(D, longitude) {
     };
 }
 
-// MX(name,priority,target, recordModifiers...)
-var MX = recordBuilder('MX', {
-    args: [
-        ['name', _.isString],
-        ['priority', _.isNumber],
-        ['target', _.isString],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.mxpreference = args.priority;
-        record.target = args.target;
-    },
-});
+// // MX(name,priority,target, recordModifiers...)
+// var MX = recordBuilder('MX', {
+//     args: [
+//         ['name', _.isString],
+//         ['priority', _.isNumber],
+//         ['target', _.isString],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         record.mxpreference = args.priority;
+//         record.target = args.target;
+//     },
+// });
 
-// NS(name,target, recordModifiers...)
-var NS = recordBuilder('NS');
+// // NS(name,target, recordModifiers...)
+// var NS = recordBuilder('NS');
 
 // NAMESERVER(name,target)
 function NAMESERVER(name) {
@@ -2589,6 +2595,7 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 if (_.isFunction(r)) {
                     r(record);
                 } else if (_.isObject(r)) {
+                    console.debug("DEBUG: Pushing Meta", r)
                     processedMetas.push(r);
                 } else {
                     processedArgs.push(r);
@@ -2619,18 +2626,29 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 // PLEASE KEEP THIS LIST ALPHABETICAL!
 
-var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
-var CF_SINGLE_REDIRECT = rawrecordBuilder(
-    'CLOUDFLAREAPI_SINGLE_REDIRECT',
-    true
-);
-var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
-var DS = rawrecordBuilder('DS');
-var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
-var RP = rawrecordBuilder('RP');
 var A = rawrecordBuilder('A');
 var AAAA = rawrecordBuilder('AAAA');
 var CAA = rawrecordBuilder('CAA');
+var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
+var CF_SINGLE_REDIRECT = rawrecordBuilder( 'CLOUDFLAREAPI_SINGLE_REDIRECT', true);
+var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var CNAME = rawrecordBuilder('CNAME');
-var DNAME = rawrecordBuilder('DNAME');
 var DHCID = rawrecordBuilder('DHCID');
+var DNAME = rawrecordBuilder('DNAME');
+var DNSKEY = rawrecordBuilder('DNSKEY');
+var DS = rawrecordBuilder('DS');
+var HTTPS = rawrecordBuilder('HTTPS');
+var LOC = rawrecordBuilder('LOC');
+var MX = rawrecordBuilder('MX');
+var NAPTR = rawrecordBuilder('NAPTR');
+var NS = rawrecordBuilder('NS');
+var OPENPGPKEY = rawrecordBuilder('OPENPGPKEY');
+var PTR = rawrecordBuilder('PTR');
+var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
+var RP = rawrecordBuilder('RP');
+var SMIMEA = rawrecordBuilder('SMIMEA');
+var SOA = rawrecordBuilder('SOA');
+var SRV = rawrecordBuilder('SRV');
+var SSHFP = rawrecordBuilder('SSHFP');
+var SVCB = rawrecordBuilder('SVCB');
+var TLSA = rawrecordBuilder('TLSA');

@@ -68,12 +68,17 @@ func MakeAAAA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 	return dnsrdatav2.AAAA{Addr: mustbe.IPv6(args[0])}, nil
 }
 
-func MakeCAA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeCAA(origin string, metadata map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 3 {
-		return nil, fmt.Errorf("MakeCAA expects exactly 3 arguments, got %d: %+v", len(args), args)
+	if len(args) != 2 {
+		return nil, fmt.Errorf("MakeCAA expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
+	var flag any
+	fmt.Printf("DEBUG: MakeCAA meta=%+v\n", metadata)
+	if cf, ok := metadata["caaflag"]; ok {
+		flag = cf
+	}
+	return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
 }
 func MakeCNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)

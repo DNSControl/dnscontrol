@@ -11,11 +11,17 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:1:1]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "none",
