@@ -20,6 +20,12 @@ var features = providers.DocumentationNotes{
 	// See providers/capabilities.go for the entire list of capabilities.
 	providers.CanGetZones: providers.Can(),
 	providers.CanConcur:   providers.Unimplemented(),
+	providers.CanUseAlias: providers.Can(),
+	providers.CanUseCAA:   providers.Can(),
+	providers.CanUseDNAME: providers.Can(),
+	providers.CanUseNAPTR: providers.Can(),
+	providers.CanUsePTR:   providers.Can(),
+	providers.CanUseSRV:   providers.Can(),
 }
 
 func init() {
@@ -64,6 +70,8 @@ func newGigahost(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 	a.Add("TXT", rejectif.TxtIsEmpty)
+	a.Add("CAA", rejectif.CaaTargetContainsWhitespace)
+	a.Add("SRV", rejectif.SrvHasNullTarget)
 	return a.Audit(records)
 }
 
@@ -149,6 +157,7 @@ func (c *gigahostProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 // supportedTypes is the set of record types this provider manages.
 var supportedTypes = map[string]bool{
 	"A": true, "AAAA": true, "CNAME": true, "MX": true, "TXT": true, "NS": true,
+	"ALIAS": true, "CAA": true, "DNAME": true, "NAPTR": true, "PTR": true, "SRV": true,
 }
 
 // GetZoneRecordsCorrections computes the changes needed to bring the zone in
@@ -216,12 +225,18 @@ func nativeToRecordConfig(domain string, r *record) (*models.RecordConfig, error
 	switch r.RecordType {
 	case "MX":
 		err = rc.SetTargetMX(uint16(r.RecordPrio.Value), addDot(r.RecordValue))
-	case "CNAME", "NS":
-		// Gigahost stores hostnames without a trailing dot; RecordConfig
-		// targets are FQDNs.
+	case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
+		// Gigahost stores hostname targets inconsistently (some with a trailing
+		// dot, some without); RecordConfig targets are always FQDNs.
 		err = rc.SetTarget(addDot(r.RecordValue))
 	case "TXT":
 		err = rc.SetTargetTXT(r.RecordValue)
+	case "CAA":
+		err = rc.SetTargetCAAString(r.RecordValue)
+	case "SRV":
+		err = rc.SetTargetSRVString(r.RecordValue)
+	case "NAPTR":
+		err = rc.SetTargetNAPTRString(r.RecordValue)
 	default:
 		err = rc.PopulateFromStringFunc(r.RecordType, r.RecordValue, domain, nil)
 	}
@@ -243,10 +258,15 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 		pref := rc.MxPreference
 		r.RecordPrio = &pref
 		r.RecordValue = strings.TrimSuffix(rc.GetTargetField(), ".")
-	case "CNAME", "NS":
+	case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
+		// Send hostname targets without a trailing dot; the API normalizes as
+		// needed and reads are re-dotted in nativeToRecordConfig.
 		r.RecordValue = strings.TrimSuffix(rc.GetTargetField(), ".")
 	case "TXT":
 		r.RecordValue = rc.GetTargetTXTJoined()
+	case "CAA", "SRV", "NAPTR":
+		// These are stored as full RFC1035 presentation strings in record_value.
+		r.RecordValue = rc.GetTargetCombined()
 	default:
 		r.RecordValue = rc.GetTargetField()
 	}

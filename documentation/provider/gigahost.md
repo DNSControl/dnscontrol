@@ -56,13 +56,22 @@ This provider supports the following record types:
 | ----- | ----------- |
 | A     | IPv4 address record |
 | AAAA  | IPv6 address record |
+| ALIAS | CNAME-like apex alias record |
+| CAA   | Certification Authority Authorization record |
 | CNAME | Canonical name (alias) record |
+| DNAME | Delegation name record |
 | MX    | Mail exchange record |
+| NAPTR | Naming Authority Pointer record |
 | NS    | Name server record |
+| PTR   | Pointer record |
+| SRV   | Service record |
 | TXT   | Text record |
 
-Any other record type present in a zone is left untouched: the provider ignores
-it on read (emitting a warning) so it is neither modified nor deleted.
+Record types not in this list (for example `TLSA`, `SSHFP`, `HTTPS`, `SVCB`,
+`DS`, `LOC`) are rejected by the Gigahost API and are not supported. Any
+unsupported record type already present in a zone is left untouched: the
+provider ignores it on read (emitting a warning) so it is neither modified nor
+deleted.
 
 ## Nameservers
 
