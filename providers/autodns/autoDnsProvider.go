@@ -36,8 +36,9 @@ var features = providers.DocumentationNotes{
 }
 
 type autoDNSProvider struct {
-	baseURL        url.URL
-	defaultHeaders http.Header
+	baseURL         url.URL
+	defaultHeaders  http.Header
+	includeChildren bool
 }
 
 func init() {
@@ -74,6 +75,10 @@ func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {
 		"Content-Type":          []string{"application/json; charset=UTF-8"},
 		"X-Domainrobot-Context": []string{settings["context"]},
 	}
+
+	// AutoDNS hides zones owned by sub-users unless "children" is requested
+	// (the same optional toggle the web UI offers). Opt-in via creds.json.
+	api.includeChildren = settings["children"] == "true"
 
 	return api
 }
