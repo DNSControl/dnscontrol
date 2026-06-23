@@ -82,6 +82,7 @@ func hasLabelExample(domain string) error {
 //   - exampleN, where N is a numerical character
 func rejectifTargetHasExample(rc *models.RecordConfig) error {
 	if rc.TypeNum == dnsv2.TypeHTTPS || rc.TypeNum == dnsv2.TypeSVCB {
+		fmt.Printf("DEBUG: SAKURACLOUD: rejectifTargetHasExample(%q) = %v\n", rc.GetRDATA().(dnsrdatav2.SVCB).Target, hasLabelExample(rc.GetRDATA().(dnsrdatav2.SVCB).Target))
 		return hasLabelExample(rc.GetRDATA().(dnsrdatav2.SVCB).Target)
 	}
 	return hasLabelExample(rc.GetTargetField())
