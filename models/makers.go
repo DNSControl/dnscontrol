@@ -73,12 +73,11 @@ func MakeCAA(origin string, metadata map[string]string, args ...any) (dnsv2.RDAT
 	if len(args) != 2 {
 		return nil, fmt.Errorf("MakeCAA expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
-	var flag any
-	fmt.Printf("DEBUG: MakeCAA meta=%+v\n", metadata)
+	var flag any = uint8(0)
 	if cf, ok := metadata["caaflag"]; ok {
 		flag = cf
 	}
-	return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
+	return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[0]), Value: mustbe.RawString(args[1])}, nil
 }
 func MakeCNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)

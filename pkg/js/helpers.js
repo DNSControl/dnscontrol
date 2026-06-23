@@ -307,9 +307,10 @@ function makeCAAFlag(value) {
         if (!_.isObject(record.meta)) {
             record.meta = {};
         }
-        record.meta["caaflag"] = record.caaflag;
-        console.debug("DEBUG: helpers.js caaflag", record.caaflag);
-        console.debug("DEBUG: helpers.js meta.caaflag", record.meta.caaflag);
+        // Store as a string: meta values cross to Go as strings (see
+        // mergeMetas), otherwise a numeric value would be mangled (e.g. into
+        // "%!s(float64=128)").
+        record.meta["caaflag"] = record.caaflag.toString();
     };
 }
 
@@ -2595,7 +2596,6 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 if (_.isFunction(r)) {
                     r(record);
                 } else if (_.isObject(r)) {
-                    console.debug("DEBUG: Pushing Meta", r)
                     processedMetas.push(r);
                 } else {
                     processedArgs.push(r);
@@ -2610,6 +2610,13 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                     processedArgs,
                     processedMetas
                 );
+            }
+
+            // Modifier functions (e.g. CAA_CRITICAL) may have written to
+            // record.meta. Capture that so it propagates to Go as a meta;
+            // otherwise it would be silently dropped.
+            if (_.isObject(record.meta) && !_.isEmpty(record.meta)) {
+                processedMetas.push(record.meta);
             }
 
             // Store the processed args.
