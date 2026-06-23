@@ -82,6 +82,9 @@ provider-GCORE:
 provider-GIDINET:
   - changed-files:
       - any-glob-to-any-file: providers/gidinet/**
+provider-GIGAHOST:
+  - changed-files:
+      - any-glob-to-any-file: providers/gigahost/**
 provider-HEDNS:
   - changed-files:
       - any-glob-to-any-file: providers/hedns/**

@@ -195,6 +195,11 @@
     "password": "$GIDINET_PASSWORD",
     "username": "$GIDINET_USERNAME"
   },
+  "GIGAHOST": {
+    "TYPE": "GIGAHOST",
+    "apikey": "$GIGAHOST_APIKEY",
+    "domain": "$GIGAHOST_DOMAIN"
+  },
   "HEDNS": {
     "TYPE": "HEDNS",
     "domain": "$HEDNS_DOMAIN",

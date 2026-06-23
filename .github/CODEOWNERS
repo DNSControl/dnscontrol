@@ -26,6 +26,7 @@ providers/gandiv5 @TomOnTime
 providers/gcloud @riyadhalnur
 providers/gcore @xddxdd
 providers/gidinet @zupolgec
+providers/gigahost @jochristian
 providers/hedns @rblenkinsopp
 providers/hetzner @das7pad
 providers/hetznerv2 @das7pad
