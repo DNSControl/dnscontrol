@@ -18,136 +18,6 @@
       "name": "6.10.in-addr.arpa",
       "records": [
         {
-          "comparablev3": "ip-10-6-119-0.example.com.",
-          "filepos": "[line:17:5]",
-          "name": "0",
-          "name_unicode": "0",
-          "rdata": {
-            "Ptr": "ip-10-6-119-0.example.com."
-          },
-          "target": "ip-10-6-119-0.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-119-1.example.com.",
-          "filepos": "[line:18:5]",
-          "name": "1",
-          "name_unicode": "1",
-          "rdata": {
-            "Ptr": "ip-10-6-119-1.example.com."
-          },
-          "target": "ip-10-6-119-1.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-119-2.example.com.",
-          "filepos": "[line:19:5]",
-          "name": "2",
-          "name_unicode": "2",
-          "rdata": {
-            "Ptr": "ip-10-6-119-2.example.com."
-          },
-          "target": "ip-10-6-119-2.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-119-3.example.com.",
-          "filepos": "[line:20:5]",
-          "name": "3",
-          "name_unicode": "3",
-          "rdata": {
-            "Ptr": "ip-10-6-119-3.example.com."
-          },
-          "target": "ip-10-6-119-3.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-220-20.example.com.",
-          "filepos": "[line:24:5]",
-          "name": "20",
-          "name_unicode": "20",
-          "rdata": {
-            "Ptr": "ip-10-6-220-20.example.com."
-          },
-          "target": "ip-10-6-220-20.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-230-30.example.com.",
-          "filepos": "[line:28:5]",
-          "name": "30",
-          "name_unicode": "30",
-          "rdata": {
-            "Ptr": "ip-10-6-230-30.example.com."
-          },
-          "target": "ip-10-6-230-30.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-200-50.example.com.",
-          "filepos": "[line:10:5]",
-          "name": "50",
-          "name_unicode": "50",
-          "rdata": {
-            "Ptr": "ip-10-6-200-50.example.com."
-          },
-          "target": "ip-10-6-200-50.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-200-51.example.com.",
-          "filepos": "[line:11:5]",
-          "name": "51",
-          "name_unicode": "51",
-          "rdata": {
-            "Ptr": "ip-10-6-200-51.example.com."
-          },
-          "target": "ip-10-6-200-51.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-200-52.example.com.",
-          "filepos": "[line:12:5]",
-          "name": "52",
-          "name_unicode": "52",
-          "rdata": {
-            "Ptr": "ip-10-6-200-52.example.com."
-          },
-          "target": "ip-10-6-200-52.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
-          "comparablev3": "ip-10-6-200-53.example.com.",
-          "filepos": "[line:13:5]",
-          "name": "53",
-          "name_unicode": "53",
-          "rdata": {
-            "Ptr": "ip-10-6-200-53.example.com."
-          },
-          "target": "ip-10-6-200-53.example.com.",
-          "ttl": 300,
-          "type": "PTR",
-          "typenum": 12
-        },
-        {
           "comparablev3": "example.site.com.",
           "filepos": "[line:5:5]",
           "name": "31.104",
@@ -169,6 +39,146 @@
             "Ptr": "example2.site.com."
           },
           "target": "example2.site.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-119-0.example.com.",
+          "filepos": "[line:17:5]",
+          "name": "0.119",
+          "name_unicode": "0.119",
+          "rdata": {
+            "Ptr": "ip-10-6-119-0.example.com."
+          },
+          "subdomain": "119",
+          "target": "ip-10-6-119-0.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-119-1.example.com.",
+          "filepos": "[line:18:5]",
+          "name": "1.119",
+          "name_unicode": "1.119",
+          "rdata": {
+            "Ptr": "ip-10-6-119-1.example.com."
+          },
+          "subdomain": "119",
+          "target": "ip-10-6-119-1.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-119-2.example.com.",
+          "filepos": "[line:19:5]",
+          "name": "2.119",
+          "name_unicode": "2.119",
+          "rdata": {
+            "Ptr": "ip-10-6-119-2.example.com."
+          },
+          "subdomain": "119",
+          "target": "ip-10-6-119-2.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-119-3.example.com.",
+          "filepos": "[line:20:5]",
+          "name": "3.119",
+          "name_unicode": "3.119",
+          "rdata": {
+            "Ptr": "ip-10-6-119-3.example.com."
+          },
+          "subdomain": "119",
+          "target": "ip-10-6-119-3.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-200-50.example.com.",
+          "filepos": "[line:10:5]",
+          "name": "50.200",
+          "name_unicode": "50.200",
+          "rdata": {
+            "Ptr": "ip-10-6-200-50.example.com."
+          },
+          "subdomain": "200",
+          "target": "ip-10-6-200-50.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-200-51.example.com.",
+          "filepos": "[line:11:5]",
+          "name": "51.200",
+          "name_unicode": "51.200",
+          "rdata": {
+            "Ptr": "ip-10-6-200-51.example.com."
+          },
+          "subdomain": "200",
+          "target": "ip-10-6-200-51.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-200-52.example.com.",
+          "filepos": "[line:12:5]",
+          "name": "52.200",
+          "name_unicode": "52.200",
+          "rdata": {
+            "Ptr": "ip-10-6-200-52.example.com."
+          },
+          "subdomain": "200",
+          "target": "ip-10-6-200-52.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-200-53.example.com.",
+          "filepos": "[line:13:5]",
+          "name": "53.200",
+          "name_unicode": "53.200",
+          "rdata": {
+            "Ptr": "ip-10-6-200-53.example.com."
+          },
+          "subdomain": "200",
+          "target": "ip-10-6-200-53.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-220-20.example.com.",
+          "filepos": "[line:24:5]",
+          "name": "20.220",
+          "name_unicode": "20.220",
+          "rdata": {
+            "Ptr": "ip-10-6-220-20.example.com."
+          },
+          "subdomain": "220",
+          "target": "ip-10-6-220-20.example.com.",
+          "ttl": 300,
+          "type": "PTR",
+          "typenum": 12
+        },
+        {
+          "comparablev3": "ip-10-6-230-30.example.com.",
+          "filepos": "[line:28:5]",
+          "name": "30.230",
+          "name_unicode": "30.230",
+          "rdata": {
+            "Ptr": "ip-10-6-230-30.example.com."
+          },
+          "subdomain": "230",
+          "target": "ip-10-6-230-30.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12

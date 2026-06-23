@@ -62,28 +62,46 @@
           "typenum": 65289
         },
         {
+          "comparablev3": "10.2.3.1",
           "filepos": "[line:6:5]",
           "name": "test1.foo.com.sub",
+          "name_unicode": "test1.foo.com.sub",
+          "rdata": {
+            "Addr": "10.2.3.1"
+          },
           "subdomain": "sub",
           "target": "10.2.3.1",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "10.2.3.2",
           "filepos": "[line:7:5]",
           "name": "test2.foo.com.sub",
+          "name_unicode": "test2.foo.com.sub",
+          "rdata": {
+            "Addr": "10.2.3.2"
+          },
           "subdomain": "sub",
           "target": "10.2.3.2",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "10.2.3.3",
           "filepos": "[line:8:5]",
           "name": "test3.foo.com.sub",
+          "name_unicode": "test3.foo.com.sub",
+          "rdata": {
+            "Addr": "10.2.3.3"
+          },
           "subdomain": "sub",
           "target": "10.2.3.3",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",

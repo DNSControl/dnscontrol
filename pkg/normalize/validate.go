@@ -462,8 +462,16 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				if rec.SubDomain != "" {
 					origin = rec.SubDomain + "." + origin
 				}
-				if err := rec.SetTarget(dnsutilv1.AddOrigin(rec.GetTargetField(), origin)); err != nil {
+				before := rec.GetTargetField()
+				after := dnsutilv1.AddOrigin(before, origin)
+				if err := rec.SetTarget(after); err != nil {
 					errs = append(errs, err)
+				} else if after != before {
+					// SetTarget only updates the raw target; when
+					// canonicalization actually changed it (e.g. a relative or
+					// "@" target expanded to a FQDN), refresh the cached
+					// RDATA/ComparableV3 so they reflect the new target.
+					refreshDerivedFields(rec, domain.Name)
 				}
 			case "A", "AAAA":
 				if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
@@ -977,7 +985,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := rec.SetTarget(newIP.String()); err != nil {
 					return err
 				}
-				refreshTransformedA(rec, domain.Name)
+				refreshDerivedFields(rec, domain.Name)
 			} else if i > 0 {
 				// any additional ips need identical records with the alternate ip added to the domain
 				cpy, err := rec.Copy()
@@ -987,7 +995,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := cpy.SetTarget(newIP.String()); err != nil {
 					return err
 				}
-				refreshTransformedA(cpy, domain.Name)
+				refreshDerivedFields(cpy, domain.Name)
 				domain.Records = append(domain.Records, cpy)
 			}
 		}
@@ -995,12 +1003,13 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 	return nil
 }
 
-// refreshTransformedA recomputes the derived fields (RDATA and ComparableV3)
-// of an A record after its target IP was changed by a transform. SetTarget
-// only updates the raw target string; the cached RDATA/ComparableV3 set at
-// IR-construction time would otherwise still describe the pre-transform IP,
-// causing transformed records to collide in checkDuplicates.
-func refreshTransformedA(rec *models.RecordConfig, origin string) {
+// refreshDerivedFields recomputes the derived fields (RDATA and ComparableV3)
+// of a record after its target was changed during normalization. SetTarget only
+// updates the raw target string; the cached RDATA/ComparableV3 set at
+// IR-construction time would otherwise still describe the pre-normalization
+// target. This matters when a transform rewrites an A record's IP, or when a
+// relative/"@" CNAME/MX/NS/SRV/ALIAS target is canonicalized to a FQDN.
+func refreshDerivedFields(rec *models.RecordConfig, origin string) {
 	rec.ComparableV3 = ""
 	rec.ClearRDATA()
 	rec.FixUp(origin)

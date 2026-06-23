@@ -51,7 +51,13 @@ func (config *DNSConfig) ImportRawRecords() error {
 					return fmt.Errorf("unknown record type at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				label, err := dc.LabelFromDnsconfigjs(rawRec.Args[0].(string))
+				// Apply D_EXTEND() subdomain label rewriting (in Go, on
+				// post-IDNA strings). Excluded types keep their label as-is.
+				subdomain := rawRec.SubDomain
+				if subdomainExcludedType(typeName) {
+					subdomain = ""
+				}
+				label, err := dc.LabelFromDnsconfigjsSubdomain(rawRec.Args[0].(string), subdomain)
 				if err != nil {
 					return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
@@ -65,16 +71,22 @@ func (config *DNSConfig) ImportRawRecords() error {
 				// if ttl != 0 {
 				// 	fmt.Printf("TTL = %d\n", ttl)
 				// }
-				rec, err := dc.NewRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm)
+				rec, err := dc.NewRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm, subdomain)
 				if err != nil {
 					return fmt.Errorf("ImportRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 				rec.FilePos = filePos
+				rec.SubDomain = subdomain
 				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				if doesStutter(rec.Name, dc.Name) {
+				// The stutter check catches labels that mistakenly include the
+				// zone name. It is skipped when the record opts out via
+				// skip_fqdn_check, and for reverse zones, where labels are
+				// legitimately written as full reverse names (e.g. via REV())
+				// and are reduced to relative form later by normalization.
+				if rec.Metadata["skip_fqdn_check"] != "true" && !isReverseZone(dc.Name) && doesStutter(rec.Name, dc.Name) {
 					return fmt.Errorf("stutter error at %s %s(%s)", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
 				}
 

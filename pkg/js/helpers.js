@@ -2631,6 +2631,12 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
             record.args = processedArgs;
             record.metas = processedMetas;
 
+            // Capture the D_EXTEND() subdomain (per-record, at push time).
+            // d.subdomain is domain-level mutable state that each D_EXTEND()
+            // call overwrites, so it must be snapshotted here. The label
+            // rewriting itself is done in Go (models.ImportRawRecords).
+            record.subdomain = d.subdomain;
+
             // Add this raw record to the list of records.
             d.rawrecords.push(record);
 

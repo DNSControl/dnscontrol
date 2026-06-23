@@ -10,4 +10,8 @@ type RawRecordConfig struct {
 	Metas   []map[string]any `json:"metas,omitempty"`
 	TTL     uint32           `json:"ttl,omitempty"`
 	FilePos string           `json:"filepos"` // Where in the file this record was defined.
+	// SubDomain (if non-empty) is the D_EXTEND() subdomain this record was
+	// declared under. It is used to rewrite the label and is stored in the
+	// resulting RecordConfig.SubDomain. See ImportRawRecords.
+	SubDomain string `json:"subdomain,omitempty"`
 }

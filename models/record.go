@@ -188,9 +188,18 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 }
 
 // NewRecordConfigFromDnsconfigjs is only for use by dnsrr.go.
-func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, typeNum uint16, args []any, metadata map[string]string) (*RecordConfig, error) {
+//
+// subdomain is the D_EXTEND() subdomain this record was declared under ("" if
+// none). Relative targets (CNAME/MX/NS/SRV/ALIAS) are canonicalized relative to
+// subdomain.zone, while the label is already relative to the zone, so the label
+// machinery still uses dc.Name.
+func (dc *DomainConfig) NewRecordConfigFromDnsconfigjs(name string, ttl uint32, typeNum uint16, args []any, metadata map[string]string, subdomain string) (*RecordConfig, error) {
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](dc.Name, metadata, args...)
+	targetOrigin := dc.Name
+	if subdomain != "" {
+		targetOrigin = subdomain + "." + dc.Name
+	}
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, args...)
 	if err != nil {
 		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
 		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
