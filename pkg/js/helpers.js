@@ -184,6 +184,10 @@ function INCLUDE(name) {
     }
     return function (d) {
         d.records.push.apply(d.records, domain.obj.records);
+        // New-style record types live in rawrecords (processed in Go), so they
+        // must be copied too. Each domain re-serializes these objects to its own
+        // IR, so sharing the references here is safe.
+        d.rawrecords.push.apply(d.rawrecords, domain.obj.rawrecords);
     };
 }
 
