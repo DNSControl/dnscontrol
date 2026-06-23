@@ -11,19 +11,30 @@
       "name": "example.com",
       "records": [
         {
-          "filepos": "[line:2:5]",
-          "name": "normal",
-          "target": "1.1.1.1",
-          "ttl": 300,
-          "type": "A"
-        }
-      ],
-      "recordsabsent": [
-        {
+          "comparablev3": "2.2.2.2",
           "filepos": "[line:3:5]",
           "name": "helper",
+          "name_unicode": "helper",
+          "rdata": {
+            "Addr": "2.2.2.2"
+          },
           "target": "2.2.2.2",
-          "type": "A"
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
+        },
+        {
+          "comparablev3": "1.1.1.1",
+          "filepos": "[line:2:5]",
+          "name": "normal",
+          "name_unicode": "normal",
+          "rdata": {
+            "Addr": "1.1.1.1"
+          },
+          "target": "1.1.1.1",
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "none",

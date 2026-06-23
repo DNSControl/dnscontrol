@@ -6,7 +6,6 @@ import (
 )
 
 func IPv4(a any) netip.Addr {
-	fmt.Printf("DEBUG: %v\n", a)
 	switch v := a.(type) {
 	case float64:
 		i := int32(v)

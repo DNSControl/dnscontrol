@@ -100,14 +100,20 @@
           "typenum": 65289
         },
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:2:5]",
           "meta": {
             "meta": "value"
           },
           "name": "name1",
+          "name_unicode": "name1",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "none",

@@ -70,14 +70,18 @@ func MakeAAAA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 
 func MakeCAA(origin string, metadata map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 2 {
-		return nil, fmt.Errorf("MakeCAA expects exactly 2 arguments, got %d: %+v", len(args), args)
+	if len(args) != 2 && len(args) != 3 {
+		return nil, fmt.Errorf("MakeCAA expects 2 or 3 arguments, got %d: %+v", len(args), args)
 	}
-	var flag any = uint8(0)
-	if cf, ok := metadata["caaflag"]; ok {
-		flag = cf
+	if len(args) == 2 {
+		var flag any = uint8(0)
+		if cf, ok := metadata["caaflag"]; ok {
+			flag = cf
+		}
+		return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[0]), Value: mustbe.RawString(args[1])}, nil
 	}
-	return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[0]), Value: mustbe.RawString(args[1])}, nil
+	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
+
 }
 func MakeCNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
@@ -120,7 +124,7 @@ func MakeDS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeDS expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.RawString(args[3])}, nil
+	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.ToUpperRawString(args[3])}, nil
 }
 
 func MakeHTTPS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
@@ -267,17 +271,19 @@ func MakeSMIMEA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, e
 
 func MakeSOA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 7 {
-		return nil, fmt.Errorf("MakeSOA expects exactly 9 arguments, got %d: %+v", len(args), args)
+	if len(args) != 6 {
+		return nil, fmt.Errorf("MakeSOA expects exactly 6 or 7 arguments, got %d: %+v", len(args), args)
 	}
+	// FYI: The user can not specify the serial number. It is managed by DNSControl.
+	// The one exception is that for hermedic builds/tests, "dnscontrol preview --bindserial" exists.
 	return dnsrdatav2.SOA{
 		Ns:      mustbe.TargetHost(origin, args[0]),
 		Mbox:    mustbe.SoaMailbox(args[1]),
-		Serial:  mustbe.Uint32(args[2]),
-		Refresh: mustbe.Uint32(args[3]),
-		Retry:   mustbe.Uint32(args[4]),
-		Expire:  mustbe.Uint32(args[5]),
-		Minttl:  mustbe.Uint32(args[6]),
+		Serial:  0,
+		Refresh: mustbe.Uint32(args[2]),
+		Retry:   mustbe.Uint32(args[3]),
+		Expire:  mustbe.Uint32(args[4]),
+		Minttl:  mustbe.Uint32(args[5]),
 	}, nil
 }
 
@@ -294,7 +300,7 @@ func MakeSSHFP(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeSSHFP expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.RawString(args[2])}, nil
+	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.ToUpperRawString(args[2])}, nil
 }
 
 func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
@@ -350,7 +356,7 @@ func MakeTLSA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeTLSA expects exactly 5 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}, nil
+	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToUpperRawString(args[3])}, nil
 }
 
 func MakeTXT(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {

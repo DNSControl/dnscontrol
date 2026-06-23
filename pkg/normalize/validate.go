@@ -977,6 +977,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := rec.SetTarget(newIP.String()); err != nil {
 					return err
 				}
+				refreshTransformedA(rec, domain.Name)
 			} else if i > 0 {
 				// any additional ips need identical records with the alternate ip added to the domain
 				cpy, err := rec.Copy()
@@ -986,9 +987,21 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := cpy.SetTarget(newIP.String()); err != nil {
 					return err
 				}
+				refreshTransformedA(cpy, domain.Name)
 				domain.Records = append(domain.Records, cpy)
 			}
 		}
 	}
 	return nil
+}
+
+// refreshTransformedA recomputes the derived fields (RDATA and ComparableV3)
+// of an A record after its target IP was changed by a transform. SetTarget
+// only updates the raw target string; the cached RDATA/ComparableV3 set at
+// IR-construction time would otherwise still describe the pre-transform IP,
+// causing transformed records to collide in checkDuplicates.
+func refreshTransformedA(rec *models.RecordConfig, origin string) {
+	rec.ComparableV3 = ""
+	rec.ClearRDATA()
+	rec.FixUp(origin)
 }

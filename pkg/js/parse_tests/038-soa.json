@@ -11,8 +11,19 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "ns1.foo.com. admin.foo.com X 3600 900 604800 86400",
           "filepos": "[line:2:5]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Expire": 604800,
+            "Mbox": "admin.foo.com",
+            "Minttl": 86400,
+            "Ns": "ns1.foo.com.",
+            "Refresh": 3600,
+            "Retry": 900,
+            "Serial": 0
+          },
           "soaexpire": 604800,
           "soambox": "admin.foo.com",
           "soaminttl": 86400,
@@ -20,7 +31,8 @@
           "soaretry": 900,
           "target": "ns1.foo.com.",
           "ttl": 300,
-          "type": "SOA"
+          "type": "SOA",
+          "typenum": 6
         }
       ],
       "registrar": "none",

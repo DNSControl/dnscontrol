@@ -11,39 +11,69 @@
       "name": "sortfoo.com",
       "records": [
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:1:1]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "a",
+          "name_unicode": "a",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "b",
+          "name_unicode": "b",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "c",
+          "name_unicode": "c",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "d",
+          "name_unicode": "d",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         }
       ],
       "registrar": "none",

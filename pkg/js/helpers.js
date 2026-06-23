@@ -2596,6 +2596,14 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 if (_.isFunction(r)) {
                     r(record);
                 } else if (_.isObject(r)) {
+                    // Convert a transform array to its encoded string form
+                    // (see format_tt), mirroring the legacy recordBuilder.
+                    // Otherwise the array crosses to Go as an unparseable
+                    // string and IP() numbers are never converted to dotted
+                    // decimal.
+                    if (r.transform && _.isArray(r.transform)) {
+                        r.transform = format_tt(r.transform);
+                    }
                     processedMetas.push(r);
                 } else {
                     processedArgs.push(r);

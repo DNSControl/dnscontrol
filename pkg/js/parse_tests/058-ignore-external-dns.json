@@ -39,18 +39,30 @@
       "name": "extdns-combined.com",
       "records": [
         {
+          "comparablev3": "www.extdns-combined.com.",
           "filepos": "[line:12:5]",
           "name": "api",
+          "name_unicode": "api",
+          "rdata": {
+            "Target": "www.extdns-combined.com."
+          },
           "target": "www.extdns-combined.com.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:11:5]",
           "name": "www",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "none",

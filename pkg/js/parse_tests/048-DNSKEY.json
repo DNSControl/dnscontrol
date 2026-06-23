@@ -11,14 +11,24 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "257 3 13 AABBCCDD",
           "dnskeyalgorithm": 13,
           "dnskeyflags": 257,
           "dnskeyprotocol": 3,
           "dnskeypublickey": "AABBCCDD",
           "filepos": "[line:2:5]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 13,
+            "Flags": 257,
+            "Protocol": 3,
+            "PublicKey": "AABBCCDD",
+            "Tag": 0
+          },
           "ttl": 300,
-          "type": "DNSKEY"
+          "type": "DNSKEY",
+          "typenum": 48
         }
       ],
       "registrar": "none",
