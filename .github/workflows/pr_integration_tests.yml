@@ -49,7 +49,7 @@ jobs:
     outputs:
       integration_test_providers: ${{ steps.get_integration_test_providers.outputs.integration_test_providers }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: integrationTest/profiles.json
           sparse-checkout-cone-mode: false
@@ -254,7 +254,7 @@ jobs:
       matrix:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: mkdir -p "$TEST_RESULTS"
       - name: restore_cache
         uses: actions/cache@v5.0.5
