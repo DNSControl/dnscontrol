@@ -153,10 +153,22 @@ func Float32(arg any) float32 {
 	case float32:
 		return v
 	case float64:
-		if v < 0 || v > math.MaxFloat32 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+		if v < -math.MaxFloat32 || v > math.MaxFloat32 {
+			panic(fmt.Sprintf("value %q overflows float32", arg))
 		}
 		return float32(v)
 	}
 	panic(fmt.Sprintf("value %q is type %T, expected float32", arg, arg))
+}
+
+func Float64(arg any) float64 {
+	switch v := arg.(type) {
+	case float64:
+		return v
+	case float32:
+		return float64(v)
+	case int:
+		return float64(v)
+	}
+	panic(fmt.Sprintf("value %q is type %T, expected float64", arg, arg))
 }

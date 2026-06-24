@@ -14,12 +14,14 @@ func init() {
 
 func BuilderLOC(dc *DomainConfig, ttl uint32, args []any) (Records, error) {
 
-	if len(args) != 7 && len(args) != 12 {
+	// args includes the label at args[0], so the parameter counts are +1:
+	// 8 = label + 7 preprocessed LOC fields; 13 = label + 12 DMS parameters.
+	if len(args) != 8 && len(args) != 13 {
 		return nil, fmt.Errorf("LOC should have 7 or 12 parameters")
 	}
 
-	// if there are 7 args, this was preprocessed already.  Return a dnsvrdata2.LOC{} with those fields.
-	if len(args) == 7 {
+	// if there are 7 params, this was preprocessed already.  Return a dnsvrdata2.LOC{} with those fields.
+	if len(args) == 8 {
 
 		rec, err := dc.NewRecordConfig(
 			mustbe.RawString(args[0]),
@@ -55,7 +57,7 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any) (Records, error) {
 		mustbe.Uint8(args[6]),
 		mustbe.Float32(args[7]),
 		mustbe.RawString(args[8]),
-		mustbe.Float32(args[9]),
+		mustbe.Float64(args[9]),
 		mustbe.Float32(args[10]),
 		mustbe.Float32(args[11]),
 		mustbe.Float32(args[12]),
@@ -70,6 +72,9 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any) (Records, error) {
 
 	rc.Type = "LOC"
 	rc.TypeNum = dnsv2.TypeLOC
+	// Populate the V3 fields (.RDATA and .ComparableV3) from the computed LOC
+	// fields, matching the 8-arg path (which goes through NewRecordConfig).
+	rc.FixUp(dc.Name)
 	backfill(rc)
 
 	return Records{rc}, nil

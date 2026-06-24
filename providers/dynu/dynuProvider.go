@@ -258,7 +258,7 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		if r.VerticalPrecision != nil {
 			vp = float32(*r.VerticalPrecision)
 		}
-		err = rc.SetLOCParams(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
+		err = rc.SetLOCParams(d1, m1, s1, ns, d2, m2, s2, ew, float64(al), sz, hp, vp)
 	case "MX":
 		host := r.Host
 		// Dynu stores null MX (priority 0, target ".") by returning the zone name as host.

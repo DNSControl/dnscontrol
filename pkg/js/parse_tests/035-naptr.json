@@ -57,7 +57,7 @@
           "typenum": 35
         },
         {
-          "comparablev3": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\"",
+          "comparablev3": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
           "filepos": "[line:4:5]",
           "name": "@",
           "name_unicode": "@",
@@ -71,7 +71,7 @@
             "Order": 103,
             "Preference": 10,
             "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": "",
+            "Replacement": ".",
             "Service": "E2U+email"
           },
           "target": ".",

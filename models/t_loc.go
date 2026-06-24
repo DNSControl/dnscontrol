@@ -31,7 +31,7 @@ func (rc *RecordConfig) SetTargetLOC(ver uint8, lat uint32, lon uint32, alt uint
 // for further processing to the LOC native 7 input binary format:
 // LocVersion (0), LocLatitude, LocLongitude, LocAltitude, LocSize, LocVertPre, LocHorizPre.
 func (rc *RecordConfig) SetLOCParams(d1 uint8, m1 uint8, s1 float32, ns string,
-	d2 uint8, m2 uint8, s2 float32, ew string, al float32, sz float32, hp float32, vp float32,
+	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
 ) error {
 	err := rc.calculateLOCFields(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
 
@@ -78,7 +78,7 @@ func (rc *RecordConfig) SetTargetLOCString(origin string, contents string) error
 // the 12 variable inputs of integers and strings.
 func (rc *RecordConfig) extractLOCFieldsFromStringInput(input string) error {
 	var d1, m1, d2, m2 uint8
-	var al float32
+	var al float64
 	var s1, s2 float32
 	var ns, ew string
 	var sz, hp, vp float32
@@ -95,7 +95,7 @@ func (rc *RecordConfig) extractLOCFieldsFromStringInput(input string) error {
 
 // calculateLOCFields converts from 12 user inputs to the LOC 7 binary fields.
 func (rc *RecordConfig) calculateLOCFields(d1 uint8, m1 uint8, s1 float32, ns string,
-	d2 uint8, m2 uint8, s2 float32, ew string, al float32, sz float32, hp float32, vp float32,
+	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
 ) error {
 	// Crazy hairy shit happens here.
 	// We already got the useful "string" version earlier. ¯\_(ツ)_/¯ code golf...
@@ -162,7 +162,9 @@ func getENotationInt(x float32) (uint8, error) {
 	   1cm = 1e0 == 16 (1^4 + 0) or 0<<4 + 0
 	   0cm = 0e0 == 0
 	*/
-	if x == 0 {
+	if x <= 0 {
+		// Zero (and out-of-range negative size/precision inputs) encode as 0;
+		// log10 of a non-positive number is undefined.
 		return 0, nil // both mantissa and exponent will be zero
 	}
 

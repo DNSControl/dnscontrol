@@ -163,7 +163,7 @@ func MakeLOC(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 		mustbe.Uint8(args[5]),
 		mustbe.Float32(args[6]),
 		mustbe.RawString(args[7]),
-		mustbe.Float32(args[8]),
+		mustbe.Float64(args[8]),
 		mustbe.Float32(args[9]),
 		mustbe.Float32(args[10]),
 		mustbe.Float32(args[11]),
@@ -208,13 +208,19 @@ func MakeNAPTR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, er
 	if len(args) != 6 {
 		return nil, fmt.Errorf("MakeNAPTR expects exactly 6 arguments, got %d: %+v", len(args), args)
 	}
+	// The NAPTR replacement is a domain name; an empty replacement is canonically
+	// the root, ".". Normalize so it renders consistently in zone files.
+	replacement := mustbe.RawString(args[5])
+	if replacement == "" {
+		replacement = "."
+	}
 	return dnsrdatav2.NAPTR{
 		Order:       mustbe.Uint16(args[0]),
 		Preference:  mustbe.Uint16(args[1]),
 		Flags:       mustbe.RawString(args[2]),
 		Service:     mustbe.RawString(args[3]),
 		Regexp:      mustbe.RawString(args[4]),
-		Replacement: mustbe.RawString(args[5]),
+		Replacement: replacement,
 	}, nil
 }
 
@@ -271,19 +277,28 @@ func MakeSMIMEA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, e
 
 func MakeSOA(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 6 {
+	if len(args) != 6 && len(args) != 7 {
 		return nil, fmt.Errorf("MakeSOA expects exactly 6 or 7 arguments, got %d: %+v", len(args), args)
 	}
-	// FYI: The user can not specify the serial number. It is managed by DNSControl.
-	// The one exception is that for hermedic builds/tests, "dnscontrol preview --bindserial" exists.
+	// dnsconfig.js's SOA() passes 6 args (no serial): the user can not specify
+	// the serial number, it is managed by DNSControl. Re-deriving the RDATA from
+	// an existing RecordConfig (FixUp) or parsing a zone (e.g. BIND) passes 7
+	// args, with the serial at args[2].
+	// The one exception is that for hermetic builds/tests, "dnscontrol preview --bindserial" exists.
+	var serial any = uint32(0)
+	rest := args[2:]
+	if len(args) == 7 {
+		serial = args[2]
+		rest = args[3:]
+	}
 	return dnsrdatav2.SOA{
 		Ns:      mustbe.TargetHost(origin, args[0]),
 		Mbox:    mustbe.SoaMailbox(args[1]),
-		Serial:  0,
-		Refresh: mustbe.Uint32(args[2]),
-		Retry:   mustbe.Uint32(args[3]),
-		Expire:  mustbe.Uint32(args[4]),
-		Minttl:  mustbe.Uint32(args[5]),
+		Serial:  mustbe.Uint32(serial),
+		Refresh: mustbe.Uint32(rest[0]),
+		Retry:   mustbe.Uint32(rest[1]),
+		Expire:  mustbe.Uint32(rest[2]),
+		Minttl:  mustbe.Uint32(rest[3]),
 	}, nil
 }
 
