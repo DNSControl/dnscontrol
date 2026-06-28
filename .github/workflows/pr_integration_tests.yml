@@ -182,6 +182,7 @@ jobs:
       FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
       #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
+      GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
       #
       GCLOUD_EMAIL: ${{ secrets.GCLOUD_EMAIL }}
       GCLOUD_PRIVATEKEY: ${{ secrets.GCLOUD_PRIVATEKEY }}
@@ -300,6 +301,12 @@ jobs:
           if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
             END=3
             echo "END: Exception for VERCEL: Run fewer tests. END=$END"
+          fi
+          # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
+          # the time about the same as other tests
+          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
+            END=10
+            echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
           echo "END: Final value: END=$END"
           echo "END=$END" >> $GITHUB_ENV

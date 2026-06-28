@@ -160,9 +160,9 @@ func (d *dynuProvider) do(method, path string, body any) ([]byte, error) {
 	if resp.StatusCode >= 400 {
 		var apiErr apiResponse
 		if json.Unmarshal(respBody, &apiErr) == nil && apiErr.Message != "" {
-			return nil, fmt.Errorf("Dynu API error %d: %s", resp.StatusCode, apiErr.Message)
+			return nil, fmt.Errorf("provider Dynu API error %d: %s", resp.StatusCode, apiErr.Message)
 		}
-		return nil, fmt.Errorf("Dynu API HTTP %d for %s %s", resp.StatusCode, method, path)
+		return nil, fmt.Errorf("provider Dynu API HTTP %d for %s %s", resp.StatusCode, method, path)
 	}
 
 	return respBody, nil
