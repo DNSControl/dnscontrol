@@ -182,6 +182,7 @@ jobs:
       FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
       #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
+      GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
       #
       GCLOUD_EMAIL: ${{ secrets.GCLOUD_EMAIL }}
       GCLOUD_PRIVATEKEY: ${{ secrets.GCLOUD_PRIVATEKEY }}
