@@ -119,10 +119,10 @@ func (d *dynuProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existi
 	for _, inst := range instructions {
 		// Apex NS records are managed by Dynu internally and cannot be created,
 		// modified, or deleted via the API.
-		if inst.New != nil && len(inst.New) > 0 && inst.New[0].Type == "NS" && inst.New[0].Name == "@" {
+		if len(inst.New) > 0 && inst.New[0].Type == "NS" && inst.New[0].Name == "@" {
 			continue
 		}
-		if inst.Old != nil && len(inst.Old) > 0 && inst.Old[0].Type == "NS" && inst.Old[0].Name == "@" {
+		if len(inst.Old) > 0 && inst.Old[0].Type == "NS" && inst.Old[0].Name == "@" {
 			continue
 		}
 
@@ -590,38 +590,38 @@ func svcParamsToString(params []svcParam) string {
 	return strings.Join(parts, " ")
 }
 
-// locRdata builds the LOC rdata string (rdata-only, no owner/TTL) from Dynu's
-// decimal-degree and metre fields so it can be passed to SetTargetLOCString.
-func locRdata(lat, lon, alt, size, horizPre, vertPre float64) string {
-	latD, latM, latS, latHemi := ddToDMS(lat, "N", "S")
-	lonD, lonM, lonS, lonHemi := ddToDMS(lon, "E", "W")
-	return fmt.Sprintf("%d %d %.3f %s %d %d %.3f %s %.2fm %.2fm %.2fm %.2fm",
-		latD, latM, latS, latHemi, lonD, lonM, lonS, lonHemi,
-		alt, size, horizPre, vertPre)
-}
+// // locRdata builds the LOC rdata string (rdata-only, no owner/TTL) from Dynu's
+// // decimal-degree and metre fields so it can be passed to SetTargetLOCString.
+// func locRdata(lat, lon, alt, size, horizPre, vertPre float64) string {
+// 	latD, latM, latS, latHemi := ddToDMS(lat, "N", "S")
+// 	lonD, lonM, lonS, lonHemi := ddToDMS(lon, "E", "W")
+// 	return fmt.Sprintf("%d %d %.3f %s %d %d %.3f %s %.2fm %.2fm %.2fm %.2fm",
+// 		latD, latM, latS, latHemi, lonD, lonM, lonS, lonHemi,
+// 		alt, size, horizPre, vertPre)
+// }
 
-// ddToDMS converts a signed decimal-degrees value to unsigned degrees, minutes,
-// seconds, and hemisphere strings (pos/neg for the two possible hemispheres).
-func ddToDMS(dd float64, pos, neg string) (d uint8, m uint8, s float32, hemi string) {
-	hemi = pos
-	if dd < 0 {
-		hemi = neg
-		dd = -dd
-	}
-	d = uint8(dd)
-	minutesTotal := (dd - float64(d)) * 60.0
-	m = uint8(minutesTotal)
-	s = float32((minutesTotal - float64(m)) * 60.0)
-	return
-}
+// // ddToDMS converts a signed decimal-degrees value to unsigned degrees, minutes,
+// // seconds, and hemisphere strings (pos/neg for the two possible hemispheres).
+// func ddToDMS(dd float64, pos, neg string) (d uint8, m uint8, s float32, hemi string) {
+// 	hemi = pos
+// 	if dd < 0 {
+// 		hemi = neg
+// 		dd = -dd
+// 	}
+// 	d = uint8(dd)
+// 	minutesTotal := (dd - float64(d)) * 60.0
+// 	m = uint8(minutesTotal)
+// 	s = float32((minutesTotal - float64(m)) * 60.0)
+// 	return
+// }
 
-// floatOrDefault returns *f if non-nil, otherwise the supplied default.
-func floatOrDefault(f *float64, def float64) float64 {
-	if f == nil {
-		return def
-	}
-	return *f
-}
+// // floatOrDefault returns *f if non-nil, otherwise the supplied default.
+// func floatOrDefault(f *float64, def float64) float64 {
+// 	if f == nil {
+// 		return def
+// 	}
+// 	return *f
+// }
 
 // extractRdata strips the owner name, TTL, optional class, and type from a full
 // DNS zone-file line ("hostname. TTL [IN] TYPE rdata") and returns just the rdata.
