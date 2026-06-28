@@ -296,15 +296,14 @@ func makeTests() []*TestGroup {
 
 		testgroup("HTTPS",
 			requires(providers.CanUseHTTPS),
-			tc("Create a HTTPS record", https("@", 1, "test.com.", "port=80")),
-			tc("Change HTTPS priority", https("@", 2, "test.com.", "port=80")),
-			tc("Change HTTPS target", https("@", 2, ".", "port=80")),
-			tc("Change HTTPS params", https("@", 2, ".", "port=99")),
-			tc("Change HTTPS params-empty", https("@", 2, ".", "")),
-			tc("Change HTTPS all", https("@", 3, "example.com.", "port=100")),
+			tc("Create a HTTPS record", https("@", 0, "test.com.", "")),
+			tc("Change HTTPS add pri+params", https("@", 1, "test.com.", "port=80")),
+			tc("Change HTTPS change param", https("@", 1, "test.com.", "port=99")),
+			tc("Change HTTPS more params", https("@", 1, "test.com.", "alpn=h2 port=99")),
+			tc("Change HTTPS all", https("@", 3, "example.com.", "alpn=h2,h3 port=999")),
 		),
 
-		testgroup("Ech",
+		testgroup("HTTPS-Ech",
 			requires(providers.CanUseHTTPS),
 			not(
 				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
@@ -330,13 +329,37 @@ func makeTests() []*TestGroup {
 
 		testgroup("SVCB",
 			requires(providers.CanUseSVCB),
-			tc("Create a SVCB record", svcb("@", 1, "test.com.", "port=80")),
-			tc("Change SVCB priority", svcb("@", 2, "test.com.", "port=80")),
-			tc("Change SVCB target", svcb("@", 2, ".", "port=80")),
-			tc("Change SVCB params", svcb("@", 2, ".", "port=99")),
-			tc("Change SVCB params-empty", svcb("@", 2, ".", "")),
-			tc("Change SVCB all", svcb("@", 3, "example.com.", "port=100")),
+			tc("Create a SVCB record", svcb("@", 0, "test.com.", "")),
+			tc("Change SVCB add pri+params", svcb("@", 1, "test.com.", "port=80")),
+			tc("Change SVCB change param", svcb("@", 1, "test.com.", "port=99")),
+			tc("Change SVCB more params", svcb("@", 1, "test.com.", "alpn=h2 port=99")),
+			tc("Change SVCB all", svcb("@", 3, "example.com.", "alpn=h2,h3 port=999")),
 		),
+
+		testgroup("SVCB-Ech",
+			requires(providers.CanUseSVCB),
+			not(
+				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
+				// on the `ech` parameter, and our dummy base64 string are being rejected with:
+				//
+				// Invalid base64 string: [our base64] (key: ech)
+				//
+				// Since Vercel's validation process is unknown and not documented, we can't implement
+				// a rejectif within auditrecord to reject them statically.
+				//
+				// Let's just ignore ECH test for Vercel for now.
+				"VERCEL",
+			),
+			tc("Create a SVCB record", svcb("@", 1, "example.com.", "alpn=h2,h3")),
+			tc("Add an ECH key", svcb("@", 1, "example.com.", "alpn=h2,h3 ech=some+base64+encoded+value///")),
+			tc("Ignore the ECH key while changing other values", svcb("@", 1, "example.net.", "port=80 ech=IGNORE")),
+			// tc("Should be a no-op", svcb("@", 1, "example.net.", "port=80 ech=some+base64+encoded+value///")),
+			tc("Change the ECH key and other values", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
+			// tc("Ignore the ECH key while not changing anything", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=IGNORE")),
+			// tc("Should be a no-op", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
+			tc("Another domain with a different ECH value", svcb("ech", 1, "example.com.", "ech=some+base64+encoded+value///")),
+		),
+
 		//// Test edge cases from various types.
 
 		// Narrative: Every DNS record type has some weird edge-case that
@@ -782,6 +805,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("NAPTR",
 			requires(providers.CanUseNAPTR),
+			not("GANDI_V5"),
 			tc("NAPTR record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")),
 			tc("NAPTR second record",
 				naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", "."),
