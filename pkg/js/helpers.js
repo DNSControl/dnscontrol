@@ -314,7 +314,7 @@ function makeCAAFlag(value) {
         // Store as a string: meta values cross to Go as strings (see
         // mergeMetas), otherwise a numeric value would be mangled (e.g. into
         // "%!s(float64=128)").
-        record.meta["caaflag"] = record.caaflag.toString();
+        record.meta['caaflag'] = record.caaflag.toString();
     };
 }
 
@@ -2655,7 +2655,10 @@ var A = rawrecordBuilder('A');
 var AAAA = rawrecordBuilder('AAAA');
 var CAA = rawrecordBuilder('CAA');
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
-var CF_SINGLE_REDIRECT = rawrecordBuilder( 'CLOUDFLAREAPI_SINGLE_REDIRECT', true);
+var CF_SINGLE_REDIRECT = rawrecordBuilder(
+    'CLOUDFLAREAPI_SINGLE_REDIRECT',
+    true
+);
 var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var CNAME = rawrecordBuilder('CNAME');
 var DHCID = rawrecordBuilder('DHCID');

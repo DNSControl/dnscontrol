@@ -234,7 +234,7 @@ func svcbDumpCache(cache map[string][]byte) {
 	// }
 }
 
-// newPairs, found :=
+// svcbReplaceIGNOREWithData searches through pairs for an ECH value == the magic number ("1000").
 func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec *RecordConfig) ([]svcbv2.Pair, bool) {
 	var result []svcbv2.Pair
 	found := false
