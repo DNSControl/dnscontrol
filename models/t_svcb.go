@@ -2,7 +2,6 @@ package models
 
 import (
 	"bytes"
-	"encoding/base64"
 	"fmt"
 	"strings"
 
@@ -226,13 +225,13 @@ func svcbEncValue(rec *RecordConfig) []byte {
 }
 
 func svcbDumpCache(cache map[string][]byte) {
-	if len(cache) > 0 {
-		fmt.Printf("\n##### SVCB Ech Cache:\n")
-		for k, v := range cache {
-			fmt.Printf("##### CACHE k=%q v=%q\n", k, base64.StdEncoding.EncodeToString(v))
-		}
-		fmt.Printf("#####\n\n")
-	}
+	// if len(cache) > 0 {
+	// 	fmt.Printf("\n##### SVCB Ech Cache:\n")
+	// 	for k, v := range cache {
+	// 		fmt.Printf("##### CACHE k=%q v=%q\n", k, base64.StdEncoding.EncodeToString(v))
+	// 	}
+	// 	fmt.Printf("#####\n\n")
+	// }
 }
 
 // newPairs, found :=

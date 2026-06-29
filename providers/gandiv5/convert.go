@@ -29,7 +29,10 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 
 		rtype := n.RrsetType
 
-		if privatetypes.IsModernType(rtype) {
+		if privatetypes.IsModernType(rtype) && rtype != "ALIAS" {
+			// if rtype == "ALIAS" {
+			// 	fmt.Printf("HERE\n")
+			// }
 			rc, err = dc.NewRecordConfigParse(n.RrsetName, uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
