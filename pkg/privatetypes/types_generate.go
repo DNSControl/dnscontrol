@@ -207,7 +207,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Code generation complete!")
+	fmt.Println("Generator pkg/privatetypes/types_generate.go complete!")
 }
 
 func toConstName(name string) string {
