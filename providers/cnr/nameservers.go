@@ -53,7 +53,6 @@ func (n *Client) getNameserversRaw(domain string) ([]string, error) {
 	}
 	nsColumn := r.GetColumn("NAMESERVER")
 	if nsColumn == nil {
-		fmt.Println("No nameservers found")
 		return []string{}, nil // No nameserver assigned
 	}
 	ns := nsColumn.GetData()

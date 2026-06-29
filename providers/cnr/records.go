@@ -61,12 +61,85 @@ func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error)
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
+	for _, rc := range actual {
+		if rc.Type == "SVCB" {
+			rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
+		}
+	}
+	for _, rc := range dc.Records {
+		if rc.Type != "SVCB" {
+			continue
+		}
+		fields := strings.Fields(rc.SvcParams)
+		params := make([]string, 0, len(fields))
+		for _, field := range fields {
+			key, value, _ := strings.Cut(field, "=")
+			if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
+				continue
+			}
+			params = append(params, field)
+		}
+		rc.SvcParams = strings.Join(params, " ")
+	}
+
+	var aliasSkip *models.Correction
+	hasAlias := false
+	for _, rc := range dc.Records {
+		if rc.Type == "ALIAS" {
+			hasAlias = true
+			break
+		}
+	}
+	if !hasAlias {
+		for _, rc := range actual {
+			if rc.Type == "ALIAS" {
+				hasAlias = true
+				break
+			}
+		}
+	}
+	if hasAlias {
+		signed, err := n.isZoneSigned(dc.Name)
+		if err != nil {
+			return nil, 0, err
+		}
+		if signed {
+			skipped := 0
+			desired := make(models.Records, 0, len(dc.Records))
+			for _, rc := range dc.Records {
+				if rc.Type == "ALIAS" {
+					skipped++
+					continue
+				}
+				desired = append(desired, rc)
+			}
+			dc.Records = desired
+
+			filteredActual := make(models.Records, 0, len(actual))
+			for _, rc := range actual {
+				if rc.Type != "ALIAS" {
+					filteredActual = append(filteredActual, rc)
+				}
+			}
+			actual = filteredActual
+
+			if skipped != 0 {
+				aliasSkip = &models.Correction{
+					Msg: fmt.Sprintf("SKIP ALIAS records in DNSSEC-signed CNR zone %s", dc.Name),
+					F:   func() error { return nil },
+				}
+			}
+		}
+	}
 	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
 		return nil, 0, err
 	}
 	// Start corrections with the reports
 	corrections := diff.GenerateMessageCorrections(toReport)
+	if aliasSkip != nil {
+		corrections = append(corrections, aliasSkip)
+	}
 
 	buf := &bytes.Buffer{}
 	// Print a list of changes. Generate an actual change that is the zone
@@ -130,6 +203,13 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		})
 	}
 
+	dnssecCorrections, err := n.getDNSSECCorrections(dc)
+	if err != nil {
+		return nil, 0, err
+	}
+	corrections = append(corrections, dnssecCorrections...)
+	actualChangeCount += len(dnssecCorrections)
+
 	return corrections, actualChangeCount, nil
 }
 
@@ -166,7 +246,7 @@ func toRecord(r *Record, origin string) *models.RecordConfig {
 		if err := rc.PopulateFromStringFunc(r.Type, r.Answer, strings.TrimSuffix(r.Fqdn, "."), txtutil.ParseQuoted); err != nil {
 			panic(fmt.Errorf("unparsable %s record received from centralnic reseller API: %w", r.Type, err))
 		}
-	default: // "A", "AAAA", "ANAME", "ALIAS", "CNAME", "NS", "TXT", "CAA", "TLSA", "PTR"
+	default: // "A", "AAAA", "ANAME", "ALIAS", "CNAME", "NS", "TXT", "CAA", "TLSA", "SMIMEA", "PTR"
 		if err := rc.PopulateFromStringFunc(r.Type, r.Answer, fqdn, txtutil.ParseQuoted); err != nil {
 			panic(fmt.Errorf("unparsable record received from centralnic reseller API: %w", err))
 		}
@@ -231,7 +311,6 @@ func (n *Client) getRecords(domain string) ([]*Record, error) {
 	rrs := r.GetRecords()
 	for i := range len(rrs) {
 		data := rrs[i].GetData()
-		// fmt.Printf("Data: %+v\n", data)
 		if _, exists := data["NAME"]; !exists {
 			continue
 		}
@@ -272,8 +351,6 @@ func (n *Client) getRecords(domain string) ([]*Record, error) {
 			TTL:        uint32(ttl),
 			Priority:   uint32(priority),
 		}
-		// fmt.Printf("Record: %+v\n", record)
-
 		// Append the record to the records slice
 		records = append(records, record)
 	}
@@ -313,6 +390,8 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 		answer = fmt.Sprintf(`%v %v "%v" "%v" "%v" %v`, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
 	case "TLSA":
 		answer = fmt.Sprintf(`%v %v %v %s`, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	case "SMIMEA":
+		answer = fmt.Sprintf(`%v %v %v %s`, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
 	case "CAA":
 		answer = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
 	case "TXT":
@@ -362,8 +441,6 @@ func (n *Client) deleteRecordString(record *Record) string {
 		values = append(values, strconv.FormatUint(uint64(record.Priority), 10))
 	}
 	values = append(values, record.Answer)
-
-	// fmt.Printf("Values: %+v\n", values)
 
 	// Remove IN if the record type is "NS" TODO
 	if record.Type == "NS" {

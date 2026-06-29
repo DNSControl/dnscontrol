@@ -35,7 +35,6 @@ func (n *Client) ListZones() ([]string, error) {
 		}
 		zoneColumn := r.GetColumn("DNSZONE")
 		if zoneColumn != nil {
-			// return nil, fmt.Errorf("failed getting DNSZONE BASIC column")
 			zones = append(zones, zoneColumn.GetData()...)
 		}
 	}
