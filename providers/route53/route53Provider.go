@@ -415,6 +415,10 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	for _, want := range dc.Records {
 		if want.Type == "R53_ALIAS" && want.R53Alias["zone_id"] == "" {
 			want.R53Alias["zone_id"] = getZoneID(zone, want)
+			// The zone_id was just filled in, but the cached RDATA/ComparableV3
+			// were computed (with an empty zone_id) when the record was built.
+			// Refresh them so the diff engine doesn't report a spurious change.
+			want.RecomputeV3Fields(dc.Name)
 		}
 	}
 

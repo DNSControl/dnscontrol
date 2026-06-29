@@ -11,6 +11,19 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 )
 
+// RecomputeV3Fields re-derives the cached "V3 Fields" (.RDATA and
+// .ComparableV3) after a record's underlying fields have been mutated after the
+// record was first constructed (for example, a provider filling in a default
+// value such as an R53_ALIAS zone_id). FixUp only populates these fields when
+// they are empty, so they must be cleared first; otherwise the diff engine
+// (which compares .ComparableV3) would keep seeing the pre-mutation values and
+// report a spurious change.
+func (rc *RecordConfig) RecomputeV3Fields(origin string) {
+	rc.ComparableV3 = ""
+	rc.ClearRDATA()
+	rc.FixUp(origin)
+}
+
 // FixUp populates the "V3 Fields": .TypeNum, .RDATA and .ComparableV3.
 func (rc *RecordConfig) FixUp(origin string) {
 

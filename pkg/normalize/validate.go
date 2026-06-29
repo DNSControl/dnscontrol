@@ -1010,7 +1010,5 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 // target. This matters when a transform rewrites an A record's IP, or when a
 // relative/"@" CNAME/MX/NS/SRV/ALIAS target is canonicalized to a FQDN.
 func refreshDerivedFields(rec *models.RecordConfig, origin string) {
-	rec.ComparableV3 = ""
-	rec.ClearRDATA()
-	rec.FixUp(origin)
+	rec.RecomputeV3Fields(origin)
 }
