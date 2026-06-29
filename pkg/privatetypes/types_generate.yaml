@@ -60,7 +60,7 @@ types:
       - name: AliasType
         type: RawString
       - name: Target
-        type: TargetHost
+        type: RawString
     test_data:
       - name: ""
         values:

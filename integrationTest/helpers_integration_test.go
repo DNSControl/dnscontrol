@@ -206,7 +206,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 				rc.ComparableV3 = ""
 			}
 			if strings.Contains(rc.GetTargetField(), "**resource-group**") {
-				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**resource-group**", origConfig["ResourceGroup"], 1))
+				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**resource-group**", strings.ToLower(origConfig["ResourceGroup"]), 1))
 				rc.ClearRDATA()
 				rc.ComparableV3 = ""
 			}

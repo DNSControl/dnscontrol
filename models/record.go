@@ -905,7 +905,7 @@ func Downcase(recs []*RecordConfig) {
 		r.Name = strings.ToLower(r.Name)
 		r.NameFQDN = strings.ToLower(r.NameFQDN)
 		switch r.Type { // #rtype_variations
-		case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA", "AZURE_ALIAS":
+		case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA":
 			// Target is case insensitive. Downcase it.
 			r.target = strings.ToLower(r.target)
 			// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
@@ -918,6 +918,8 @@ func Downcase(recs []*RecordConfig) {
 			//if r.SoaMbox != "DEFAULT_NOT_SET." {
 			r.SoaMbox = strings.ToLower(r.SoaMbox)
 			//}
+		case "AZURE_ALIAS":
+			// do nothing.
 		default:
 			// TODO: we'd like to panic here, but custom record types complicate things.
 		}

@@ -22,7 +22,7 @@ func (rd AZUREALIAS) Len() int {
 func (rd AZUREALIAS) String() string {
 	parts := make([]string, 0, 2)
 	parts = append(parts, txtutil.ZoneifyString(rd.AliasType))
-	parts = append(parts, rd.Target)
+	parts = append(parts, txtutil.ZoneifyString(rd.Target))
 	return strings.Join(parts, " ")
 }
 
@@ -33,6 +33,6 @@ func MakeAZUREALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDAT
 	}
 	return AZUREALIAS{
 		AliasType: mustbe.RawString(args[0]),
-		Target:    mustbe.TargetHost(origin, args[1]),
+		Target:    mustbe.RawString(args[1]),
 	}, nil
 }

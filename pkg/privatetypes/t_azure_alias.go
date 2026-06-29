@@ -60,6 +60,6 @@ func (rr *AZUREALIAS) Parse(tokens []string, s string) error {
 		return fmt.Errorf("AZURE_ALIAS requires exactly 2 arguments, got %d: %v", len(args), args)
 	}
 	rr.AliasType = mustbe.RawString(args[0])
-	rr.Target = mustbe.TargetHost("", args[1])
+	rr.Target = mustbe.RawString(args[1])
 	return nil
 }
