@@ -2,7 +2,7 @@ package models
 
 import (
 	"bytes"
-	b64 "encoding/base64"
+	"encoding/base64"
 	"fmt"
 	"strings"
 
@@ -185,10 +185,11 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 	for _, rec := range desired {
 		if rec.TypeNum == dnsv2.TypeSVCB || rec.TypeNum == dnsv2.TypeHTTPS {
 			k := svcbEncKey(rec)
-			if eValue, ok := cache[k]; ok {
+			if _, ok := cache[k]; ok {
+				// if eValue, ok := cache[k]; ok {
 				rd := rec.GetRDATA().(dnsrdatav2.SVCB)
 				desiredPairs := rd.Value
-				fmt.Printf("DEBUG: SVCB %q exists in existing (%q) and desired (%v)\n", k, b64.StdEncoding.EncodeToString(eValue), desiredPairs)
+				// fmt.Printf("DEBUG: SVCB %q exists in existing (%q) and desired (%v)\n", k, b64.StdEncoding.EncodeToString(eValue), desiredPairs)
 				newPairs, found := svcbReplaceIGNOREWithData(desiredPairs, cache, rec)
 				if found {
 					rd.Value = newPairs
@@ -199,7 +200,7 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 					if err != nil {
 						panic(err)
 					}
-					fmt.Printf("DEBUG: NEW SVCB %s\n", rec.String())
+					// fmt.Printf("DEBUG: NEW SVCB %s\n", rec.String())
 				}
 			}
 		}
@@ -228,7 +229,7 @@ func svcbDumpCache(cache map[string][]byte) {
 	if len(cache) > 0 {
 		fmt.Printf("\n##### SVCB Ech Cache:\n")
 		for k, v := range cache {
-			fmt.Printf("##### CACHE k=%q v=%q\n", k, b64.StdEncoding.EncodeToString(v))
+			fmt.Printf("##### CACHE k=%q v=%q\n", k, base64.StdEncoding.EncodeToString(v))
 		}
 		fmt.Printf("#####\n\n")
 	}
@@ -266,6 +267,7 @@ func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec
 		}
 	}
 
+	// Rebuild .ComparableV3 no matter what.
 	rec.ComparableV3 = ""
 	rec.FixUp("")
 

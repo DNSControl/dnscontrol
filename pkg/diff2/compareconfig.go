@@ -112,23 +112,23 @@ func NewCompareConfig(origin string, existing, desired models.Records, compFn Co
 	// but in the code that processes the changes.  That is, the problem is in
 	// the code that generates the new desired state, not in the code that
 	// generates the list of changes.
-	fmt.Printf("DEBUG: diff2 HYDRATING!!! %d %d\n", len(existing), len(desired))
+	// fmt.Printf("DEBUG: diff2 HYDRATING!!! %d %d\n", len(existing), len(desired))
 
-	fmt.Printf("\n**** BEFORE ****\n")
-	for _, r := range existing {
-		if r.Type == "SOA" {
-			continue
-		}
-		fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
-		fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
-	}
-	for _, r := range desired {
-		if r.Type == "SOA" {
-			continue
-		}
-		fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
-		fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
-	}
+	// fmt.Printf("\n**** BEFORE ****\n")
+	// for _, r := range existing {
+	// 	if r.Type == "SOA" {
+	// 		continue
+	// 	}
+	// 	fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
+	// 	fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
+	// }
+	// for _, r := range desired {
+	// 	if r.Type == "SOA" {
+	// 		continue
+	// 	}
+	// 	fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
+	// 	fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
+	// }
 
 	models.SVCBHydrateDesiredEchIgnore(existing, desired)
 
@@ -140,21 +140,21 @@ func NewCompareConfig(origin string, existing, desired models.Records, compFn Co
 		return prettyzone.LabelLess(cc.ldata[i].label, cc.ldata[j].label)
 	})
 
-	fmt.Printf("\n**** AFTER ****\n")
-	for _, r := range existing {
-		if r.Type == "SOA" {
-			continue
-		}
-		fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
-		fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
-	}
-	for _, r := range desired {
-		if r.Type == "SOA" {
-			continue
-		}
-		fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
-		fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
-	}
+	// fmt.Printf("\n**** AFTER ****\n")
+	// for _, r := range existing {
+	// 	if r.Type == "SOA" {
+	// 		continue
+	// 	}
+	// 	fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
+	// 	fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
+	// }
+	// for _, r := range desired {
+	// 	if r.Type == "SOA" {
+	// 		continue
+	// 	}
+	// 	fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
+	// 	fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
+	// }
 
 	return cc
 }
