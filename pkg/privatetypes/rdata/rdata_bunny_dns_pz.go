@@ -2,7 +2,6 @@ package privatetypesrdata
 
 import (
 	"fmt"
-
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"

@@ -5,6 +5,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"go/format"
 	"log"
 	"os"
 	"path/filepath"
@@ -75,6 +76,39 @@ func info(typeName string) TypeInfo {
 		log.Fatalf("unknown mustbe type %q", typeName)
 	}
 	return ti
+}
+
+// writeImports writes a properly grouped import block: standard-library imports
+// first, then a blank line, then third-party imports. gofmt (applied by
+// writeGoFile) sorts alphabetically within each group. Each entry is a full
+// import spec, e.g. `"fmt"` or `dnsv2 "codeberg.org/miekg/dns"`.
+func writeImports(buf *bytes.Buffer, std, third []string) {
+	buf.WriteString("import (\n")
+	for _, s := range std {
+		fmt.Fprintf(buf, "\t%s\n", s)
+	}
+	if len(std) > 0 && len(third) > 0 {
+		buf.WriteString("\n")
+	}
+	for _, s := range third {
+		fmt.Fprintf(buf, "\t%s\n", s)
+	}
+	buf.WriteString(")\n\n")
+}
+
+// writeGoFile runs the generated source through gofmt (go/format) and writes it
+// to path. This makes the output compliant with Go formatting standards —
+// struct/field alignment, struct-literal colon alignment, import sorting within
+// groups — so a separate `goimports`/`gofmt` pass is not needed. If formatting
+// fails, the unformatted source is written to aid debugging and an error is
+// returned.
+func writeGoFile(path string, src []byte) error {
+	formatted, err := format.Source(src)
+	if err != nil {
+		_ = os.WriteFile(path, src, 0o644)
+		return fmt.Errorf("gofmt %s: %w", path, err)
+	}
+	return os.WriteFile(path, formatted, 0o644)
 }
 
 func anyNeedsNetip(fields []FieldDef) bool {
@@ -217,22 +251,19 @@ func generateTypeFile(t *TypeDef) error {
 	var buf bytes.Buffer
 
 	buf.WriteString("package privatetypes\n\n")
-	buf.WriteString("import (\n")
-	buf.WriteString("\t\"fmt\"\n")
-	buf.WriteString("\t\"strconv\"\n")
+	std := []string{`"fmt"`, `"strconv"`}
 	if anyNeedsNetip(t.Fields) || anyNeedsNetip(t.RuntimeFields) {
-		buf.WriteString("\t\"net/netip\"\n")
+		std = append(std, `"net/netip"`)
 	}
-	buf.WriteString("\n")
-	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
-	buf.WriteString("\tdnsutilv2 \"codeberg.org/miekg/dns/dnsutil\"\n")
-
+	third := []string{
+		`dnsv2 "codeberg.org/miekg/dns"`,
+		`dnsutilv2 "codeberg.org/miekg/dns/dnsutil"`,
+	}
 	if len(t.Fields) > 0 {
-		buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/mustbe\"\n")
+		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`)
 	}
-
-	buf.WriteString("\tprivatetypesrdata \"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata\"\n")
-	buf.WriteString(")\n\n")
+	third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
+	writeImports(&buf, std, third)
 
 	fmt.Fprintf(&buf, "// %s\n\n", displayName)
 
@@ -349,7 +380,7 @@ func generateTypeFile(t *TypeDef) error {
 	buf.WriteString("\treturn nil\n")
 	buf.WriteString("}\n")
 
-	return os.WriteFile(fmt.Sprintf("t_%s.go", fileName), buf.Bytes(), 0o644)
+	return writeGoFile(fmt.Sprintf("t_%s.go", fileName), buf.Bytes())
 }
 
 func generateTestFile(t *TypeDef) error {
@@ -361,19 +392,15 @@ func generateTestFile(t *TypeDef) error {
 	var buf bytes.Buffer
 
 	buf.WriteString("package privatetypes\n\n")
-	buf.WriteString("import (\n")
-	buf.WriteString("\t\"testing\"\n")
+	std := []string{`"testing"`}
 	if anyNeedsNetip(t.Fields) {
-		buf.WriteString("\t\"net/netip\"\n")
+		std = append(std, `"net/netip"`)
 	}
-	buf.WriteString("\n")
-	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
-
+	third := []string{`dnsv2 "codeberg.org/miekg/dns"`}
 	if len(t.Fields) > 0 {
-		buf.WriteString("\tprivatetypesrdata \"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata\"\n")
+		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
 	}
-
-	buf.WriteString(")\n\n")
+	writeImports(&buf, std, third)
 
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testFuncName)
@@ -444,7 +471,7 @@ func generateTestFile(t *TypeDef) error {
 		}
 	}
 
-	return os.WriteFile(fmt.Sprintf("t_%s_test.go", fileName), buf.Bytes(), 0o644)
+	return writeGoFile(fmt.Sprintf("t_%s_test.go", fileName), buf.Bytes())
 }
 
 func generateRdataFile(t *TypeDef) error {
@@ -455,23 +482,21 @@ func generateRdataFile(t *TypeDef) error {
 	var buf bytes.Buffer
 
 	buf.WriteString("package privatetypesrdata\n\n")
-	buf.WriteString("import (\n")
-	buf.WriteString("\t\"fmt\"\n")
+	std := []string{`"fmt"`}
 	if anyNeedsNetip(t.Fields) || anyNeedsNetip(t.RuntimeFields) {
-		buf.WriteString("\t\"net/netip\"\n")
-	}
-	buf.WriteString("\n")
-	buf.WriteString("\tdnsv2 \"codeberg.org/miekg/dns\"\n")
-	buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/mustbe\"\n")
-
-	if needsTxtutil(t.Fields) || needsTxtutil(t.RuntimeFields) {
-		buf.WriteString("\t\"github.com/DNSControl/dnscontrol/v4/pkg/txtutil\"\n")
+		std = append(std, `"net/netip"`)
 	}
 	if len(t.Fields) > 0 || len(t.RuntimeFields) > 0 {
-		buf.WriteString("\t\"strings\"\n")
+		std = append(std, `"strings"`)
 	}
-
-	buf.WriteString(")\n\n")
+	third := []string{
+		`dnsv2 "codeberg.org/miekg/dns"`,
+		`"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`,
+	}
+	if needsTxtutil(t.Fields) || needsTxtutil(t.RuntimeFields) {
+		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"`)
+	}
+	writeImports(&buf, std, third)
 
 	// Silence unused-import warnings when no field needs them.
 	_ = anyNonString
@@ -549,7 +574,7 @@ func generateRdataFile(t *TypeDef) error {
 
 	buf.WriteString("\t}\n")
 	if minArgs < maxArgs {
-		fmt.Fprintf(&buf, "\tfor len(args) < %d {", maxArgs)
+		fmt.Fprintf(&buf, "\tfor len(args) < %d {\n", maxArgs)
 		fmt.Fprint(&buf, "\t\targs = append(args, \"\")\n")
 		fmt.Fprint(&buf, "\t}\n")
 	}
@@ -593,5 +618,5 @@ func generateRdataFile(t *TypeDef) error {
 
 	os.MkdirAll("rdata", 0o755)
 
-	return os.WriteFile(filepath.Join("rdata", fmt.Sprintf("rdata_%s.go", fileName)), buf.Bytes(), 0o644)
+	return writeGoFile(filepath.Join("rdata", fmt.Sprintf("rdata_%s.go", fileName)), buf.Bytes())
 }
