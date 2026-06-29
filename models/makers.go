@@ -5,6 +5,7 @@ package models
 
 import (
 	"fmt"
+	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
@@ -335,26 +336,23 @@ func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 
 	switch v := params.(type) {
 	case []dnsv1.SVCBKeyValue:
-		pv2, err := convertSVCBv1v2(v) // This hasn't tested extensively.
+		pv2, err := convertSVCBv1v2(v) // This hasn't been tested much.
 		if err != nil {
 			panic("BUG: Failed to convert SVCB parameters from v1 to v2: " + err.Error())
 		}
+		fmt.Printf("DEBUG: MakeSVCB: v1 v=%+v\n", pv2)
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: pv2}, nil
 	case []svcbv2.Pair:
+		fmt.Printf("DEBUG: MakeSVCB: v2 v=%+v\n", v)
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: v}, nil
 	case string:
-		// fmt.Printf("DEBUG MakeSVCB: Before conversion params=%q\n", v)
-		// v = strings.ReplaceAll(" "+v+" ", ` ech=IGNORE `, ` ech=1000`)
-		// v = strings.ReplaceAll(v, `  `, ` `) // Collapse 2 spaces into 1  (This may be unneeded but doesn't hurt)
-		// v = strings.TrimSpace(v)
-		// fmt.Printf("DEBUG MakeSVCB: After conversion params=%q\n", v)
-		// ech=1000 is a special value that indicates "use the ech value from
-		// the existing zone." This is not an RFC standard, just something we do
-		// in DNSControl. There is a very small chance that someone will
-		// actually have an ech value of "0000" but if that happens I will eat
-		// my hat.
+		// ech=IGNORE is special. It means "take the ech value from the existing record".  We replace it with the byte sequence 0x10 0x00
+		// here. Later,
+		fmt.Printf("DEBUG: MakeSVCB: str pre=%q\n", v)
+		v = strings.ReplaceAll(v, "IGNORE", "1000")
+		fmt.Printf("DEBUG: MakeSVCB: str aft=%q\n", v)
 
-		// NB(tlim): It's an abomination to construct this string just to parse it but dnsv2 doesn't expose the parser in a way to do a partial line.
+		// NB(tlim): It's overkill to construct this string just to parse it but dnsv2 doesn't expose the parser in a way to do just the params.
 		line := fmt.Sprintf("%d %s %s", mustbe.Uint16(priority), mustbe.TargetHost(origin, target), v)
 		sr, err := MyNewData(dnsv2.TypeHTTPS, line, origin)
 		if err != nil {

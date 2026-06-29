@@ -1,6 +1,8 @@
 package models
 
 import (
+	"bytes"
+	b64 "encoding/base64"
 	"fmt"
 	"strings"
 
@@ -52,6 +54,7 @@ func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []d
 		return fmt.Errorf("failed to create RDATA for SVCB record: %w", err)
 	}
 	rc.SetRDATA(rd)
+	rc.ComparableV3 = ""
 	rc.FixUp("")
 
 	return nil
@@ -82,6 +85,7 @@ func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 		return fmt.Errorf("could not parse SVCB record: %w", err)
 	}
 	rc.SetRDATA(rrv2)
+	// rc.ComparableV3 = ""
 
 	switch r := record.(type) {
 	case *dnsv1.HTTPS:
@@ -99,7 +103,7 @@ func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 		}
 		rc.SetRDATA(rd)
 	}
-	rc.FixUp(".")
+	rc.FixUp("")
 
 	return nil
 }
@@ -157,4 +161,113 @@ func convertSVCBv1v2(params []dnsv1.SVCBKeyValue) ([]svcbv2.Pair, error) {
 	}
 
 	return value, nil
+}
+
+// SVCBHydrateDesiredEchIgnore finds any ECH=IGNORE parameters (stored as
+// ECH=1000) and substitute the existing ECH value instead.
+func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
+	cache := map[string][]byte{}
+
+	// Gather the ECH= values from "existing"
+	for _, rec := range existing {
+		if rec.TypeNum == dnsv2.TypeSVCB || rec.TypeNum == dnsv2.TypeHTTPS {
+			k := svcbEncKey(rec)
+			v := svcbEncValue(rec)
+			if len(v) == 0 {
+				continue
+			}
+			cache[k] = v
+		}
+	}
+	svcbDumpCache(cache)
+
+	// Find any ECH=1000 values from "desired" and replace them.
+	for _, rec := range desired {
+		if rec.TypeNum == dnsv2.TypeSVCB || rec.TypeNum == dnsv2.TypeHTTPS {
+			k := svcbEncKey(rec)
+			if eValue, ok := cache[k]; ok {
+				rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+				desiredPairs := rd.Value
+				fmt.Printf("DEBUG: SVCB %q exists in existing (%q) and desired (%v)\n", k, b64.StdEncoding.EncodeToString(eValue), desiredPairs)
+				newPairs, found := svcbReplaceIGNOREWithData(desiredPairs, cache, rec)
+				if found {
+					rd.Value = newPairs
+					rec.SetRDATA(rd)
+					rec.ComparableV3 = ""
+					rec.FixUp("")
+					err := backfill(rec)
+					if err != nil {
+						panic(err)
+					}
+					fmt.Printf("DEBUG: NEW SVCB %s\n", rec.String())
+				}
+			}
+		}
+	}
+}
+
+func svcbEncKey(rec *RecordConfig) string {
+	rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+	//return fmt.Sprintf("%s %v %s", rec.NameFQDN, rd.Priority, rd.Target)
+	return fmt.Sprintf("%s:%v", rec.NameFQDN, rd.Priority)
+}
+
+func svcbEncValue(rec *RecordConfig) []byte {
+	rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+	for _, pair := range rd.Value {
+		kNum := svcbv2.PairToKey(pair)
+		if kNum != svcbv2.KeyEchConfig {
+			continue
+		}
+		return pair.(*svcbv2.ECHCONFIG).ECH
+	}
+	return nil
+}
+
+func svcbDumpCache(cache map[string][]byte) {
+	if len(cache) > 0 {
+		fmt.Printf("\n##### SVCB Ech Cache:\n")
+		for k, v := range cache {
+			fmt.Printf("##### CACHE k=%q v=%q\n", k, b64.StdEncoding.EncodeToString(v))
+		}
+		fmt.Printf("#####\n\n")
+	}
+}
+
+// newPairs, found :=
+func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec *RecordConfig) ([]svcbv2.Pair, bool) {
+	var result []svcbv2.Pair
+	found := false
+
+	for _, p := range pairs {
+		// fmt.Printf("DEBUG: svcb copying %s=%v\n", svcbv2.KeyToString(svcbv2.PairToKey(p)), p)
+		// pstr := fmt.Sprintf("%v", p)
+		// if pstr == "1000" {
+		// 	fmt.Printf("HERE\n")
+		// }
+		switch v := p.(type) {
+		case *svcbv2.ECHCONFIG:
+			//result = append(result, p)
+			// fmt.Printf("DEBUG ech=%v\n", b64.StdEncoding.EncodeToString(v.ECH))
+			if bytes.Equal(v.ECH, []byte{215, 77, 52}) { // "1000"
+				found = true
+				// fmt.Printf("DEBUG: ECH! FOUND %v\n", v)
+				ech := p.(*svcbv2.ECHCONFIG)
+				ech.ECH = cache[svcbEncKey(rec)]
+				result = append(result, ech)
+
+			} else {
+				// fmt.Printf("DEBUG: ECH! NOT FOUND %v\n", v)
+				result = append(result, p)
+			}
+
+		default:
+			result = append(result, p)
+		}
+	}
+
+	rec.ComparableV3 = ""
+	rec.FixUp("")
+
+	return result, found
 }

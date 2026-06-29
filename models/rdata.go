@@ -68,40 +68,5 @@ func assureNotPointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 		return rd
 	}
 
-	fmt.Print("##########################\n")
-	fmt.Printf("########################## BROKEN %T\n", rd)
-	fmt.Print("##########################\n")
 	panic(fmt.Sprintf("########################## BROKEN %T", rd))
-	// switch v := rd.(type) {
-	// case *dnsrdatav2.A:
-	// 	return *v
-	// case *dnsrdatav2.AAAA:
-	// 	return *v
-	// case *dnsrdatav2.CAA:
-	// 	return *v
-	// case *dnsrdatav2.CNAME:
-	// 	return *v
-	// case *dnsrdatav2.DS:
-	// 	return *v
-	// case *dnsrdatav2.LOC:
-	// 	return *v
-	// case *dnsrdatav2.MX:
-	// 	return *v
-	// case *dnsrdatav2.NAPTR:
-	// 	return *v
-	// case *dnsrdatav2.NS:
-	// 	return *v
-	// case *dnsrdatav2.PTR:
-	// 	return *v
-	// case *dnsrdatav2.RP:
-	// 	return *v
-	// case *dnsrdatav2.SOA:
-	// 	return *v
-	// case *dnsrdatav2.SVCB:
-	// 	return *v
-	// case *dnsrdatav2.TXT:
-	// 	return *v
-	// }
-	// fmt.Printf("\n\nFIXME: assurePointerRDATA: Add %T to case statement\n\n", rd)
-	// return rd
 }
