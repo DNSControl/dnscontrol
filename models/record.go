@@ -42,12 +42,12 @@ type RecordConfig struct {
 
 	// Name is the shortname i.e. the FQDN without the parent domains's suffix.
 	// It should never be "".  Record at the apex (naked domain) are represented by "@".
-	NameRaw     string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
+	//NameRaw     string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
 	Name        string `json:"name"`                   // The short name, PunyCode. See above.
 	NameUnicode string `json:"name_unicode,omitempty"` // .Name as Unicode (downcased, then convertedot Unicode).
 
 	// This is the FQDN version of .Name. It should never have a trailing ".".
-	NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
+	//NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
 
