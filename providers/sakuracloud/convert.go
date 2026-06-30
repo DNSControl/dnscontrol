@@ -46,6 +46,12 @@ func toNative(rc *models.RecordConfig) domainRecord {
 	switch rc.Type {
 	case "TXT":
 		rr.RData = rc.GetTargetTXTJoined()
+	case "CAA":
+		// SakuraCloud requires the CAA value to remain quoted, e.g.
+		// `0 issue "letsencrypt.org"`. The generic quote-stripping above
+		// produces `0 issue letsencrypt.org`, which the API rejects as
+		// malformed.
+		rr.RData = rc.GetTargetCombined()
 	}
 	return rr
 }
