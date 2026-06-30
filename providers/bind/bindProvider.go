@@ -260,8 +260,7 @@ func updateSerialNumber(origin string, recs models.Records, forcedSerial uint32)
 		recToUpdate.SoaSerial = generateSerial(recToUpdate.SoaSerial)
 	}
 
-	recToUpdate.ClearRDATA()
-	recToUpdate.FixUp(origin)
+	recToUpdate.RecomputeV3Fields(origin)
 }
 
 // ParseZoneContents parses a string as a BIND zone and returns the records.

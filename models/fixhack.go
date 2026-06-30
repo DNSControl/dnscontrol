@@ -173,9 +173,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 			errorChk(err)
 			rc.SetRDATA(rd)
 
-		// case "PORKBUN_URLFWD":
-		// 	rd, err = privatetypesrdata.MakePORKBUNURLFWD(origin, nil, []any{rc.GetTargetField()})
 		case "PORKBUN_URLFWD":
+			// NB(tlim): Should this use privatetypesrdata.MakePORKBUNURLFWD() instead?
 			rc.SetRDATA(&privatetypesrdata.PORKBUNURLFWD{
 				Target:      rc.GetTargetField(),
 				TypeName:    rc.Metadata["type"],
