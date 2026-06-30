@@ -29,54 +29,6 @@ func subdomainExcludedType(typeName string) bool {
 
 var ipv4LabelRe = regexp.MustCompile(`^\d+\.\d+\.\d+\.\d+$`)
 
-// LabelFromDnsconfigjsSubdomain is like LabelFromDnsconfigjs but additionally
-// applies D_EXTEND() subdomain label rewriting (mirroring the legacy
-// recordBuilder logic in pkg/js/helpers.js). All string manipulation is done on
-// post-IDNA (ASCII) strings, then any concatenation is performed. The returned
-// label is relative to the zone (dc.Name).
-//
-// subdomainASCII must already be in IDNA (punycode, lowercase) form; the caller
-// converts and memoizes it (see DNSConfig.ImportRawRecords), since the same
-// subdomain is shared by every record in a D_EXTEND block. If subdomainASCII is
-// empty, this is equivalent to LabelFromDnsconfigjs.
-func (dc *DomainConfig) LabelFromDnsconfigjsSubdomain(rawLabel, subdomainASCII string) (string, error) {
-	if subdomainASCII == "" {
-		return dc.LabelFromDnsconfigjs(rawLabel)
-	}
-
-	// Convert the label to ASCII (post-IDNA). "@" is preserved as-is.
-	labelASCII := rawLabel
-	if rawLabel != "@" {
-		var err error
-		labelASCII, err = idna.ToASCII(rawLabel)
-		if err != nil {
-			return "", fmt.Errorf("label %q rejected by IDNA: %w", rawLabel, err)
-		}
-		labelASCII = strings.ToLower(labelASCII)
-	}
-
-	// All branches below operate on post-IDNA strings.
-	switch {
-	case labelASCII == "@":
-		// @ sub -> sub
-		return subdomainASCII, nil
-	case ipv4LabelRe.MatchString(labelASCII):
-		// 1.2.3.4 sub -> 1.2.3.4 (leave it alone)
-		return labelASCII, nil
-	case strings.HasSuffix(dc.Name, ".ip6.arpa"):
-		return subdomainASCII, nil
-	case strings.HasSuffix(labelASCII, ".in-addr.arpa"):
-		// 4.3.2.1.in-addr.arpa -> 4.3 (strip the subdomain suffix)
-		if strings.HasSuffix(labelASCII, subdomainASCII) {
-			return labelASCII[:len(labelASCII)-len(subdomainASCII)-1], nil
-		}
-		return labelASCII, nil
-	default:
-		// one two -> one.two
-		return labelASCII + "." + subdomainASCII, nil
-	}
-}
-
 // LabelFromShort takes a label and prepares it for use in a RecordConfig.
 // name is a "shortname" ("foo", not "foo.example.com").
 // name is assumed to be ASCII, not Unicode (which is what most APIs return).
@@ -123,16 +75,6 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 // This does not check for stuttering. That should be done by the caller.
 func (dc *DomainConfig) LabelFromDnsconfigjs(nameRaw string) (string, error) {
 
-	// var name string
-	// switch v := nameRaw.(type) {
-	// case string:
-	// 	name = v
-	// // case float64:
-	// // 	name = strconv.FormatInt(int64(v), 10)
-	// default:
-	// 	// name = fmt.Sprintf("%v", nameRaw)
-	// 	panic(fmt.Sprintf("label %v is unknown type: %T", nameRaw, nameRaw))
-	// }
 	name := nameRaw
 
 	if name == "" {
@@ -165,4 +107,52 @@ func (dc *DomainConfig) LabelFromDnsconfigjs(nameRaw string) (string, error) {
 	}
 
 	return nameASCII, nil
+}
+
+// LabelFromDnsconfigjsSubdomain is like LabelFromDnsconfigjs but additionally
+// applies D_EXTEND() subdomain label rewriting (mirroring the legacy
+// recordBuilder logic in pkg/js/helpers.js). All string manipulation is done on
+// post-IDNA (ASCII) strings, then any concatenation is performed. The returned
+// label is relative to the zone (dc.Name).
+//
+// subdomainASCII must already be in IDNA (punycode, lowercase) form; the caller
+// converts and memoizes it (see DNSConfig.ImportRawRecords), since the same
+// subdomain is shared by every record in a D_EXTEND block. If subdomainASCII is
+// empty, this is equivalent to LabelFromDnsconfigjs.
+func (dc *DomainConfig) LabelFromDnsconfigjsSubdomain(rawLabel, subdomainASCII string) (string, error) {
+	if subdomainASCII == "" {
+		return dc.LabelFromDnsconfigjs(rawLabel)
+	}
+
+	// Convert the label to ASCII (post-IDNA). "@" is preserved as-is.
+	labelASCII := rawLabel
+	if rawLabel != "@" {
+		var err error
+		labelASCII, err = idna.ToASCII(rawLabel)
+		if err != nil {
+			return "", fmt.Errorf("label %q rejected by IDNA: %w", rawLabel, err)
+		}
+		labelASCII = strings.ToLower(labelASCII)
+	}
+
+	// All branches below operate on post-IDNA strings.
+	switch {
+	case labelASCII == "@":
+		// @ sub -> sub
+		return subdomainASCII, nil
+	case ipv4LabelRe.MatchString(labelASCII):
+		// 1.2.3.4 sub -> 1.2.3.4 (leave it alone)
+		return labelASCII, nil
+	case strings.HasSuffix(dc.Name, ".ip6.arpa"):
+		return subdomainASCII, nil
+	case strings.HasSuffix(labelASCII, ".in-addr.arpa"):
+		// 4.3.2.1.in-addr.arpa -> 4.3 (strip the subdomain suffix)
+		if strings.HasSuffix(labelASCII, subdomainASCII) {
+			return labelASCII[:len(labelASCII)-len(subdomainASCII)-1], nil
+		}
+		return labelASCII, nil
+	default:
+		// one two -> one.two
+		return labelASCII + "." + subdomainASCII, nil
+	}
 }

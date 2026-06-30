@@ -12,7 +12,7 @@ func init() {
 	RegisterBuilder("LOC", BuilderLOC)
 }
 
-func BuilderLOC(dc *DomainConfig, ttl uint32, args []any) (Records, error) {
+func BuilderLOC(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error) {
 
 	// args includes the label at args[0], so the parameter counts are +1:
 	// 8 = label + 7 preprocessed LOC fields; 13 = label + 12 DMS parameters.
@@ -46,7 +46,7 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any) (Records, error) {
 		TypeNum: dnsv2.TypeLOC,
 		TTL:     ttl,
 	}
-	name, _ := dc.LabelFromDnsconfigjs(args[0].(string))
+	name, _ := dc.LabelFromDnsconfigjsSubdomain(args[0].(string), subdomain)
 	rc.Name = name
 	rc.calculateLOCFields(
 		mustbe.Uint8(args[1]),

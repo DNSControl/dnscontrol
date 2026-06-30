@@ -2,7 +2,7 @@ package models
 
 import "fmt"
 
-type RecordBuilderFn func(dc *DomainConfig, ttl uint32, args []any) (Records, error)
+type RecordBuilderFn func(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error)
 
 var mapBuilderNameToFn = make(map[string]RecordBuilderFn)
 
@@ -21,6 +21,6 @@ func IsBuilder(name string) bool {
 	return ok
 }
 
-func (dc *DomainConfig) runBuilder(typeName string, ttl uint32, args []any) (Records, error) {
-	return mapBuilderNameToFn[typeName](dc, ttl, args)
+func (dc *DomainConfig) runBuilder(typeName string, ttl uint32, args []any, subdomain string) (Records, error) {
+	return mapBuilderNameToFn[typeName](dc, ttl, args, subdomain)
 }

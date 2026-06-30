@@ -59,7 +59,7 @@ func (config *DNSConfig) ImportRawRecords() error {
 			//fmt.Printf("DEBUG: IsBuilder(%q) = %v\n", typeName, IsBuilder(typeName))
 			// NB(tlim): We check if something is a builder first because LOC could be a builder or a dnsrdatav2.
 			if IsBuilder(typeName) {
-				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args)
+				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args, rawRec.SubDomain)
 				if err != nil {
 					return err
 				}

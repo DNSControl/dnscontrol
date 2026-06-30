@@ -13,14 +13,14 @@ func init() {
 	models.RegisterBuilder("CF_TEMP_REDIRECT", BuilderCFTEMPREDIRECT)
 }
 
-func BuilderCFREDIRECT(dc *models.DomainConfig, ttl uint32, args []any) (models.Records, error) {
-	return builderCFREDIRECThelper(dc, 301, args)
+func BuilderCFREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 301, args, subdomain)
 }
-func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any) (models.Records, error) {
-	return builderCFREDIRECThelper(dc, 302, args)
+func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 302, args, subdomain)
 }
 
-func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any) (models.Records, error) {
+func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any, subdomain string) (models.Records, error) {
 	// Convert old-style patterns to new-style rules:
 	prWhen := mustbe.RawString(args[1])
 	prThen := mustbe.RawString(args[2])
