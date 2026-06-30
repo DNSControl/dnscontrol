@@ -3,6 +3,7 @@ package models
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -103,6 +104,29 @@ func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 		rc.SetRDATA(rd)
 	}
 	rc.FixUp("")
+
+	return nil
+}
+
+// GetSVCBValue returns the SVCB Key/Values as a list of Key/Values.
+// Used to construct dnsv.RR of type SVCB or HTTPS. (This is legacy code that should go away eventualy).
+func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
+	var s string
+	if rc.GetRDATA() != nil {
+		s = fmt.Sprintf("%s %s %s", rc.NameFQDN, rc.Type, rc.GetRDATA().String())
+	} else {
+		s = fmt.Sprintf("%s %s %d %s %s", rc.NameFQDN, rc.Type, rc.SvcPriority, rc.target, rc.SvcParams)
+	}
+	record, err := dnsv1.NewRR(s)
+	if err != nil {
+		log.Fatalf("could not parse SVCB record: %s", err)
+	}
+	switch r := record.(type) {
+	case *dnsv1.HTTPS:
+		return r.Value
+	case *dnsv1.SVCB:
+		return r.Value
+	}
 
 	return nil
 }

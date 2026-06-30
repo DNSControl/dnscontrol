@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/net/idna"
 )
 
@@ -41,6 +42,27 @@ func (dc *DomainConfig) LabelFromShort(name string) string {
 	return strings.ToLower(name)
 }
 
+// SetLabelFromFQDN sets the .Name/.NameFQDN fields given a FQDN and origin.
+// fqdn may have a trailing "." but it is not required.
+// origin may not have a trailing dot.
+func (rc *RecordConfig) SetLabelFromFQDN(fqdn, origin string) {
+	// Assertions that make sure the function is being used correctly:
+	if strings.HasSuffix(origin, ".") {
+		panic(fmt.Errorf("origin (%s) is not supposed to end with a dot", origin))
+	}
+	if strings.HasSuffix(fqdn, "..") {
+		panic(fmt.Errorf("fqdn (%s) is not supposed to end with double dots", origin))
+	}
+
+	// Trim off a trailing dot.
+	fqdn = strings.TrimSuffix(fqdn, ".")
+
+	fqdn = strings.ToLower(fqdn)
+	origin = strings.ToLower(origin)
+	rc.Name = dnsutilv1.TrimDomainName(fqdn, origin)
+	rc.NameFQDN = fqdn
+}
+
 // LabelFromFQDNNoDot takes a label and prepares it for use in a RecordConfig.
 // Name is a FQDN without a dot ("foo.example.com").
 // Name is assumed to be ASCII, not Unicode (which is what most APIs return).
@@ -67,48 +89,6 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	return newName
 }
 
-// LabelFromDnsconfigjs takes a label from dnsconfig.js and prepares it for use in a RecordConfig.
-// This is where we implement the "if any dots, must be a FQDN" rule.
-// Unicode is converted to ASCII via IDNA (PunyCode).
-// An error is returned if this name is not in this zone.
-// nameRaw can be an
-// This does not check for stuttering. That should be done by the caller.
-func (dc *DomainConfig) LabelFromDnsconfigjs(nameRaw string) (string, error) {
-
-	name := nameRaw
-
-	if name == "" {
-		return "", fmt.Errorf(`label "" is invalid. Use "@" when a label is at the root (apex) of the zone`)
-	}
-	if name == "@" {
-		return name, nil
-	}
-
-	// Normalize to ASCII and Unicode
-	nameASCII, err := idna.ToASCII(name)
-	if err != nil {
-		return "", fmt.Errorf("label %q rejected by IDNA: %w", name, err)
-	}
-	nameASCII = strings.ToLower(nameASCII)
-	if nameASCII == name {
-		nameASCII = name // re-use memory
-	}
-
-	// Strip the zone.
-	if nameASCII == dc.Name+"." {
-		return "@", nil
-	}
-	if before, found := strings.CutSuffix(nameASCII, "."+dc.Name+"."); found {
-		return before, nil
-	}
-
-	if strings.HasSuffix(nameASCII, ".") {
-		return "", fmt.Errorf("label %q is not in domain %q", name, dc.Name)
-	}
-
-	return nameASCII, nil
-}
-
 // LabelFromDnsconfigjsSubdomain is like LabelFromDnsconfigjs but additionally
 // applies D_EXTEND() subdomain label rewriting (mirroring the legacy
 // recordBuilder logic in pkg/js/helpers.js). All string manipulation is done on
@@ -121,7 +101,7 @@ func (dc *DomainConfig) LabelFromDnsconfigjs(nameRaw string) (string, error) {
 // empty, this is equivalent to LabelFromDnsconfigjs.
 func (dc *DomainConfig) LabelFromDnsconfigjsSubdomain(rawLabel, subdomainASCII string) (string, error) {
 	if subdomainASCII == "" {
-		return dc.LabelFromDnsconfigjs(rawLabel)
+		return dc.labelFromDnsconfigjs(rawLabel)
 	}
 
 	// Convert the label to ASCII (post-IDNA). "@" is preserved as-is.
@@ -155,4 +135,46 @@ func (dc *DomainConfig) LabelFromDnsconfigjsSubdomain(rawLabel, subdomainASCII s
 		// one two -> one.two
 		return labelASCII + "." + subdomainASCII, nil
 	}
+}
+
+// labelFromDnsconfigjs takes a label from dnsconfig.js and prepares it for use in a RecordConfig.
+// This is where we implement the "if any dots, must be a FQDN" rule.
+// Unicode is converted to ASCII via IDNA (PunyCode).
+// An error is returned if this name is not in this zone.
+// nameRaw can be an
+// This does not check for stuttering. That should be done by the caller.
+func (dc *DomainConfig) labelFromDnsconfigjs(nameRaw string) (string, error) {
+
+	name := nameRaw
+
+	if name == "" {
+		return "", fmt.Errorf(`label "" is invalid. Use "@" when a label is at the root (apex) of the zone`)
+	}
+	if name == "@" {
+		return name, nil
+	}
+
+	// Normalize to ASCII and Unicode
+	nameASCII, err := idna.ToASCII(name)
+	if err != nil {
+		return "", fmt.Errorf("label %q rejected by IDNA: %w", name, err)
+	}
+	nameASCII = strings.ToLower(nameASCII)
+	if nameASCII == name {
+		nameASCII = name // re-use memory
+	}
+
+	// Strip the zone.
+	if nameASCII == dc.Name+"." {
+		return "@", nil
+	}
+	if before, found := strings.CutSuffix(nameASCII, "."+dc.Name+"."); found {
+		return before, nil
+	}
+
+	if strings.HasSuffix(nameASCII, ".") {
+		return "", fmt.Errorf("label %q is not in domain %q", name, dc.Name)
+	}
+
+	return nameASCII, nil
 }
