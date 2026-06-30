@@ -174,7 +174,8 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
 
-// NewRecordConfigParse is like NewRecordConfig but the fields of the record come from parsing a string (data).
+// NewRecordConfigParse is like NewRecordConfig but the fields of the record
+// come from parsing data which is assumed to be in RFC1038 Zonefile format.
 func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string) (*RecordConfig, error) {
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {
@@ -295,21 +296,6 @@ func anyToTypeNum(a any) (uint16, error) {
 	}
 	return 0, fmt.Errorf("anyToTypeNum called with unknown type: %T", a)
 }
-
-// func anyToType(a any) (uint16, string, error) {
-// 	switch v := a.(type) {
-// 	case uint16:
-// 		return v, dnsutilv2.TypeToString(v), nil
-// 	case string:
-// 		typeNum, err := dnsutilv2.StringToType(v)
-// 		if err == nil {
-// 			return typeNum, v, nil
-// 		} else {
-// 			return 0, "", fmt.Errorf("anyToTypeNum(%q) failed: %w", v, err)
-// 		}
-// 	}
-// 	return 0, "", fmt.Errorf("anyToTypeNum called with unknown type: %T", a)
-// }
 
 func makeLabelNameFQDN(origin, name string) string {
 	if name == "@" {
