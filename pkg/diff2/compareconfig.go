@@ -103,59 +103,15 @@ func NewCompareConfig(origin string, existing, desired models.Records, compFn Co
 		labelMap: map[string]bool{},
 		keyMap:   map[models.RecordKey]bool{},
 	}
-
 	cc.addRecords(existing, true) // Must be called first so that CNAME manipulations happen in the correct order.
-
-	// CLUE: The problem happens even if you comment out this next line.
-	// That means that the HTTPS record is being deleted before NewCompareConfig
-	// is called, so the problem is not in the code that generates the changes,
-	// but in the code that processes the changes.  That is, the problem is in
-	// the code that generates the new desired state, not in the code that
-	// generates the list of changes.
-	// fmt.Printf("DEBUG: diff2 HYDRATING!!! %d %d\n", len(existing), len(desired))
-
-	// fmt.Printf("\n**** BEFORE ****\n")
-	// for _, r := range existing {
-	// 	if r.Type == "SOA" {
-	// 		continue
-	// 	}
-	// 	fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
-	// 	fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
-	// }
-	// for _, r := range desired {
-	// 	if r.Type == "SOA" {
-	// 		continue
-	// 	}
-	// 	fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
-	// 	fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
-	// }
-
 	models.SVCBHydrateDesiredEchIgnore(existing, desired)
-
+	// It is a layering violation to post-process SVCB records here but I can't
+	// find a better place to do it.
 	cc.addRecords(desired, false)
-
 	cc.verifyCNAMEAssertions()
-
 	sort.Slice(cc.ldata, func(i, j int) bool {
 		return prettyzone.LabelLess(cc.ldata[i].label, cc.ldata[j].label)
 	})
-
-	// fmt.Printf("\n**** AFTER ****\n")
-	// for _, r := range existing {
-	// 	if r.Type == "SOA" {
-	// 		continue
-	// 	}
-	// 	fmt.Printf("DEBUG: EXISTING C %+v\n", r.ComparableV3)
-	// 	fmt.Printf("DEBUG: EXISTING S %+v\n", r.String())
-	// }
-	// for _, r := range desired {
-	// 	if r.Type == "SOA" {
-	// 		continue
-	// 	}
-	// 	fmt.Printf("DEBUG: DESIRED  C %+v\n", r.ComparableV3)
-	// 	fmt.Printf("DEBUG: DESIRED  S %+v\n", r.String())
-	// }
-
 	return cc
 }
 
@@ -217,11 +173,8 @@ func (cc *CompareConfig) verifyCNAMEAssertions() {
 // Generate a string that can be used to compare this record to others
 // for equality.
 func mkCompareBlobs(rc *models.RecordConfig, f func(*models.RecordConfig) string) (string, string) {
-	// // Start with the comparable string
-	// comp := rc.ToComparableNoTTL()
 	comp := rc.ComparableV3
 	if comp == "" {
-		fmt.Printf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc)
 		panic(fmt.Sprintf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc))
 	}
 
