@@ -31,10 +31,11 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 
 		rtype := n.RrsetType
 
+		if rtype == "TXT" {
+			fmt.Printf("DEBUG: gandi rcv3 txt get plain %+v\n", value)
+		}
+
 		if privatetypes.IsModernType(rtype) && rtype != "ALIAS" {
-			// if rtype == "ALIAS" {
-			// 	fmt.Printf("HERE\n")
-			// }
 			rc, err = dc.NewRecordConfigParse(n.RrsetName, uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
@@ -57,6 +58,9 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi2: %w", err)
 			}
+		}
+		if rtype == "TXT" {
+			fmt.Printf("DEBUG: gandi rcv3 txt get decoded %+v\n", rc.GetTargetDebug())
 		}
 		rcs = append(rcs, rc)
 
@@ -89,13 +93,9 @@ func recordsToNative(rcs []*models.RecordConfig, origin string) []livedns.Domain
 			}
 			if r.Type == "TXT" {
 				rdtxt := r.GetRDATA().(dnsrdatav2.TXT)
-				t := strings.Join(rdtxt.Txt, "")
-				if t == "" {
-					// Empty TXT records are encoded as `""` which means you can't have a txt record whose value is two double-quotes.
-					zr.RrsetValues = []string{`""`}
-				} else {
-					zr.RrsetValues = []string{t}
-				}
+				fmt.Printf("DEBUG: gandi rcv3 txt create plain %q\n", rdtxt)
+				zr.RrsetValues = []string{txtutil.EncodeQuoted(strings.Join(rdtxt.Txt, ""))}
+				fmt.Printf("DEBUG: gandi rcv3 txt create encoded %+v\n", zr.RrsetValues)
 			} else {
 				zr.RrsetValues = []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)}
 			}

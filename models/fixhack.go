@@ -269,6 +269,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 		// 	x := rc.RDATA.String()
 		// 	x = strings.TrimSpace(x)
 		// 	rc.ComparableV3 = x
+		// case "TXT":
+		// 	rc.ComparableV3 = strings.Join(rc.GetRDATA().(dnsrdatav2.TXT).Txt, "")
 		default:
 			if rc.GetRDATA() == nil {
 				panic(fmt.Sprintf("BUG: FixUp: .RDATA is nil for type %s", rc.Type))
