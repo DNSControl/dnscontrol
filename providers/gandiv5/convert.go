@@ -4,7 +4,9 @@ package gandiv5
 
 import (
 	"fmt"
+	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
@@ -81,10 +83,21 @@ func recordsToNative(rcs []*models.RecordConfig, origin string) []livedns.Domain
 		if zr, ok := keys[key]; !ok {
 			// Allocate a new ZoneRecord:
 			zr := livedns.DomainRecord{
-				RrsetType:   r.Type,
-				RrsetTTL:    int(r.TTL),
-				RrsetName:   label,
-				RrsetValues: []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)},
+				RrsetType: r.Type,
+				RrsetTTL:  int(r.TTL),
+				RrsetName: label,
+			}
+			if r.Type == "TXT" {
+				rdtxt := r.GetRDATA().(dnsrdatav2.TXT)
+				t := strings.Join(rdtxt.Txt, "")
+				if t == "" {
+					// Empty TXT records are encoded as `""` which means you can't have a txt record whose value is two double-quotes.
+					zr.RrsetValues = []string{`""`}
+				} else {
+					zr.RrsetValues = []string{t}
+				}
+			} else {
+				zr.RrsetValues = []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)}
 			}
 			keys[key] = &zr
 		} else {
