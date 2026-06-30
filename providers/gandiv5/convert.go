@@ -4,9 +4,8 @@ package gandiv5
 
 import (
 	"fmt"
-	"strings"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
@@ -31,17 +30,32 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 
 		rtype := n.RrsetType
 
-		if rtype == "TXT" {
-			fmt.Printf("DEBUG: gandi rcv3 txt get plain %+v\n", value)
-		}
-
-		if privatetypes.IsModernType(rtype) && rtype != "ALIAS" {
+		switch {
+		case rtype == "TXT":
+			// Gandi stores/returns TXT values in RFC1035 quoted+escaped
+			// presentation form. Decode them with the same scheme used to
+			// encode on the way out (txtutil, see recordsToNative), then build
+			// the record via the normal maker path so its RDATA/ComparableV3
+			// match a TXT created from dnsconfig.js. The generic dnsv2
+			// presentation parser escapes backslashes differently, which made
+			// TXT records containing backslashes fail to round-trip.
+			var decoded string
+			decoded, err = txtutil.ParseQuoted(value)
+			if err != nil {
+				return nil, fmt.Errorf("unparsable TXT received from gandi: %w", err)
+			}
+			rc, err = dc.NewRecordConfig(n.RrsetName, uint32(n.RrsetTTL), dnsv2.TypeTXT, decoded)
+			if err != nil {
+				return nil, fmt.Errorf("unparsable record received from gandi (txt): %w", err)
+			}
+			rc.Original = n
+		case privatetypes.IsModernType(rtype) && rtype != "ALIAS":
 			rc, err = dc.NewRecordConfigParse(n.RrsetName, uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
 			}
 			rc.Original = n
-		} else {
+		default:
 			rc = &models.RecordConfig{
 				TTL:      uint32(n.RrsetTTL),
 				Original: n,
@@ -58,9 +72,6 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi2: %w", err)
 			}
-		}
-		if rtype == "TXT" {
-			fmt.Printf("DEBUG: gandi rcv3 txt get decoded %+v\n", rc.GetTargetDebug())
 		}
 		rcs = append(rcs, rc)
 
@@ -87,17 +98,10 @@ func recordsToNative(rcs []*models.RecordConfig, origin string) []livedns.Domain
 		if zr, ok := keys[key]; !ok {
 			// Allocate a new ZoneRecord:
 			zr := livedns.DomainRecord{
-				RrsetType: r.Type,
-				RrsetTTL:  int(r.TTL),
-				RrsetName: label,
-			}
-			if r.Type == "TXT" {
-				rdtxt := r.GetRDATA().(dnsrdatav2.TXT)
-				fmt.Printf("DEBUG: gandi rcv3 txt create plain %q\n", rdtxt)
-				zr.RrsetValues = []string{txtutil.EncodeQuoted(strings.Join(rdtxt.Txt, ""))}
-				fmt.Printf("DEBUG: gandi rcv3 txt create encoded %+v\n", zr.RrsetValues)
-			} else {
-				zr.RrsetValues = []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)}
+				RrsetType:   r.Type,
+				RrsetTTL:    int(r.TTL),
+				RrsetName:   label,
+				RrsetValues: []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)},
 			}
 			keys[key] = &zr
 		} else {
