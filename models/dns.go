@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+	"golang.org/x/net/idna"
+
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
@@ -27,6 +29,27 @@ type DNSConfig struct {
 // converting each to a RecordConfig and deleting the raw version (to save
 // memory). This is how records get from dnsconfig.js to dc.Records.
 func (config *DNSConfig) ImportRawRecords() error {
+	// subdomainToASCII converts a D_EXTEND() subdomain to its IDNA (punycode)
+	// form. idna.ToASCII is comparatively expensive and every record in a
+	// D_EXTEND block shares the same subdomain value, so the results are
+	// memoized (keyed by the raw subdomain) across the whole import.
+	subdomainCache := map[string]string{}
+	subdomainToASCII := func(s string) (string, error) {
+		if s == "" {
+			return "", nil
+		}
+		if a, ok := subdomainCache[s]; ok {
+			return a, nil
+		}
+		a, err := idna.ToASCII(s)
+		if err != nil {
+			return "", err
+		}
+		a = strings.ToLower(a)
+		subdomainCache[s] = a
+		return a, nil
+	}
+
 	for _, dc := range config.Domains {
 		for _, rawRec := range dc.RawRecords {
 			filePos := FixPosition(rawRec.FilePos)
@@ -53,9 +76,16 @@ func (config *DNSConfig) ImportRawRecords() error {
 
 				// Apply D_EXTEND() subdomain label rewriting (in Go, on
 				// post-IDNA strings). Excluded types keep their label as-is.
+				// The subdomain is converted to IDNA (punycode) once and reused
+				// for the label, the target origin, and rec.SubDomain.
 				subdomain := rawRec.SubDomain
 				if subdomainExcludedType(typeName) {
 					subdomain = ""
+				} else {
+					subdomain, err = subdomainToASCII(subdomain)
+					if err != nil {
+						return fmt.Errorf("subdomain error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
+					}
 				}
 				label, err := dc.LabelFromDnsconfigjsSubdomain(rawRec.Args[0].(string), subdomain)
 				if err != nil {

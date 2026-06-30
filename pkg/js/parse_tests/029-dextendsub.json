@@ -491,7 +491,7 @@
           "rdata": {
             "Addr": "10.0.0.3"
           },
-          "subdomain": "d\u00fcsseldorf",
+          "subdomain": "xn--dsseldorf-q9a",
           "target": "10.0.0.3",
           "ttl": 300,
           "type": "A",
@@ -505,7 +505,7 @@
           "rdata": {
             "Addr": "10.0.0.4"
           },
-          "subdomain": "d\u00fcsseldorf",
+          "subdomain": "xn--dsseldorf-q9a",
           "target": "10.0.0.4",
           "ttl": 300,
           "type": "A",
@@ -519,7 +519,7 @@
           "rdata": {
             "Addr": "10.0.0.5"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.5",
           "ttl": 300,
           "type": "A",
@@ -533,7 +533,7 @@
           "rdata": {
             "Addr": "10.0.0.6"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.6",
           "ttl": 300,
           "type": "A",
@@ -616,7 +616,7 @@
           "rdata": {
             "Addr": "10.0.0.11"
           },
-          "subdomain": "d\u00fcsseltal",
+          "subdomain": "xn--dsseltal-65a",
           "target": "10.0.0.11",
           "ttl": 300,
           "type": "A",
@@ -630,7 +630,7 @@
           "rdata": {
             "Addr": "10.0.0.12"
           },
-          "subdomain": "d\u00fcsseltal",
+          "subdomain": "xn--dsseltal-65a",
           "target": "10.0.0.12",
           "ttl": 300,
           "type": "A",
@@ -644,7 +644,7 @@
           "rdata": {
             "Addr": "10.0.0.13"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.13",
           "ttl": 300,
           "type": "A",
@@ -658,7 +658,7 @@
           "rdata": {
             "Addr": "10.0.0.14"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.14",
           "ttl": 300,
           "type": "A",
@@ -741,7 +741,7 @@
           "rdata": {
             "Addr": "10.0.0.19"
           },
-          "subdomain": "d\u00fcsseldorf",
+          "subdomain": "xn--dsseldorf-q9a",
           "target": "10.0.0.19",
           "ttl": 300,
           "type": "A",
@@ -755,7 +755,7 @@
           "rdata": {
             "Addr": "10.0.0.20"
           },
-          "subdomain": "d\u00fcsseldorf",
+          "subdomain": "xn--dsseldorf-q9a",
           "target": "10.0.0.20",
           "ttl": 300,
           "type": "A",
@@ -769,7 +769,7 @@
           "rdata": {
             "Addr": "10.0.0.21"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.21",
           "ttl": 300,
           "type": "A",
@@ -783,7 +783,7 @@
           "rdata": {
             "Addr": "10.0.0.22"
           },
-          "subdomain": "\u00fc",
+          "subdomain": "xn--tda",
           "target": "10.0.0.22",
           "ttl": 300,
           "type": "A",

@@ -575,8 +575,6 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 	} else {
 		for _, rec := range set.ResourceRecords {
 			switch rtype := set.Type; rtype {
-			case r53Types.RRTypeSoa:
-				continue
 			case r53Types.RRTypeSpf:
 				// route53 uses a custom record type for SPF
 				rtype = "TXT"
