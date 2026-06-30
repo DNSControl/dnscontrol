@@ -129,6 +129,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseRoute53Alias:     providers.Can(),
+	providers.CanUseSOA:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
 	providers.CanUseSVCB:             providers.Can(),
@@ -575,8 +576,6 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 	} else {
 		for _, rec := range set.ResourceRecords {
 			switch rtype := set.Type; rtype {
-			case r53Types.RRTypeSoa:
-				continue
 			case r53Types.RRTypeSpf:
 				// route53 uses a custom record type for SPF
 				rtype = "TXT"
