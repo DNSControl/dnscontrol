@@ -94,6 +94,7 @@ func (rc *RecordConfig) extractLOCFieldsFromStringInput(input string) error {
 }
 
 // calculateLOCFields converts from 12 user inputs to the LOC 7 binary fields.
+// NB(tlim): this should be refactored to return an dnsrdatav2.LOC{} instead of saving the results to RecordConfig.
 func (rc *RecordConfig) calculateLOCFields(d1 uint8, m1 uint8, s1 float32, ns string,
 	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
 ) error {

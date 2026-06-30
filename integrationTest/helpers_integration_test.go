@@ -544,10 +544,6 @@ func ignore(labelSpec string, typeSpec string, targetSpec string) *models.Record
 func loc(name string, d1 uint8, m1 uint8, s1 float32, ns string,
 	d2 uint8, m2 uint8, s2 float32, ew string, al float32, sz float32, hp float32, vp float32,
 ) *models.RecordConfig {
-	// r := makeRec(name, "", "LOC")
-	// panicOnErr(r.SetLOCParams(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp))
-	// r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
-	// return r
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, dnsv2.TypeLOC, d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
 	panicOnErr(err)
 	return r

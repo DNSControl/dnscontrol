@@ -63,19 +63,9 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Rec
 		mustbe.Float32(args[12]),
 	)
 
-	// if err != nil {
-	// 	return nil,
-	// 		fmt.Errorf(
-	// 			"record error in BuilderLOC at [LOC(%s)]: %w",
-	// 			txtutil.ZoneifyManyAny(args), err)
-	// }
-
-	rc.Type = "LOC"
-	rc.TypeNum = dnsv2.TypeLOC
 	// Populate the V3 fields (.RDATA and .ComparableV3) from the computed LOC
 	// fields, matching the 8-arg path (which goes through NewRecordConfig).
 	rc.FixUp(dc.Name)
-	backfill(rc)
 
 	return Records{rc}, nil
 
