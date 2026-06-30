@@ -43,10 +43,10 @@ require (
 	github.com/TomOnTime/utfutil v1.0.0
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883
 	github.com/aws/aws-sdk-go-v2 v1.42.0
-	github.com/aws/aws-sdk-go-v2/config v1.32.25
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.24
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.63.3
-	github.com/aws/aws-sdk-go-v2/service/route53domains v1.36.3
+	github.com/aws/aws-sdk-go-v2/config v1.32.26
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.25
+	github.com/aws/aws-sdk-go-v2/service/route53 v1.63.4
+	github.com/aws/aws-sdk-go-v2/service/route53domains v1.36.4
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/billputer/go-namecheap v0.0.0-20210108011502-994a912fb7f9
 	github.com/cloudflare/cloudflare-go v0.117.0
@@ -84,7 +84,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
-	github.com/aws/aws-sdk-go-v2/service/sts v1.43.3
+	github.com/aws/aws-sdk-go-v2/service/sts v1.43.4
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.19
 	github.com/dustin/go-humanize v1.0.1
 	github.com/failsafe-go/failsafe-go v0.9.6
@@ -101,11 +101,11 @@ require (
 	github.com/nicholas-fedor/shoutrrr v0.16.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.118.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1432+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.123
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.123
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1434+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.125
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.124
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
-	github.com/urfave/cli/v3 v3.10.0
+	github.com/urfave/cli/v3 v3.10.1
 	github.com/vercel/terraform-provider-vercel v1.14.1
 	github.com/vultr/govultr/v2 v2.17.2
 	golang.org/x/text v0.38.0
@@ -126,9 +126,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.29 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.29 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.2.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.31.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.2.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.31.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.7 // indirect
 	github.com/aws/smithy-go v1.27.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.24.4 // indirect
