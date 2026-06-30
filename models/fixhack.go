@@ -245,13 +245,8 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rc.SetRDATA(rd)
 
 		default:
-			fmt.Printf("RDATA FIXUP NOT IMPLEMENTED TYPE=%q", rc.Type)
 			panic(fmt.Sprintf("RDATA FIXUP NOT IMPLEMENTED TYPE=%q", rc.Type))
 		}
-		// if err != nil {
-		// 	fmt.Printf("BUG: FixUp: Make%s( failed for record %s IN %s %s: %v", rc.Type, rc.NameFQDN, rc.Type, rc.GetTargetField(), err)
-		// 	//panic(fmt.Sprintf("BUG: FixUp: Make%s( failed for record %s IN %s %s: %v", rc.Type, rc.NameFQDN, rc.Type, rc.GetTargetField(), err))
-		// }
 	}
 
 	// .ComparableV3:
@@ -265,25 +260,12 @@ func (rc *RecordConfig) FixUp(origin string) {
 			rd := rc.GetRDATA().(dnsrdatav2.SOA)
 			rc.ComparableV3 = fmt.Sprintf("%s %s X %d %d %d %d", rd.Ns, rd.Mbox, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
 
-		// case "HTTPS", "SVCB":
-		// 	x := rc.RDATA.String()
-		// 	x = strings.TrimSpace(x)
-		// 	rc.ComparableV3 = x
-		// case "TXT":
-		// 	rc.ComparableV3 = strings.Join(rc.GetRDATA().(dnsrdatav2.TXT).Txt, "")
 		default:
 			if rc.GetRDATA() == nil {
 				panic(fmt.Sprintf("BUG: FixUp: .RDATA is nil for type %s", rc.Type))
 			}
-			x := rc.GetRDATA().String()
-			x = strings.TrimSpace(x)
-			rc.ComparableV3 = x
+			rc.ComparableV3 = strings.TrimSpace(rc.GetRDATA().String())
 		}
-
-		// Note to self: RDATA.String() sometimes leaves a trailing space.  File a bug.
-		// if strings.HasSuffix(rc.ComparableV3, " ") {
-		// 	rc.ComparableV3 = rc.ComparableV3 + "W"
-		// }
 	}
 }
 
