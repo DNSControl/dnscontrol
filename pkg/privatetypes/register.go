@@ -70,8 +70,3 @@ func RegisterMaker(codepoint uint16, makeFn MakerRn) {
 	}
 	TypeToMakeRDATA[codepoint] = makeFn
 }
-
-func IsModernType(typeName string) bool {
-	_, ok := TypeToMakeRDATA[dnsv2.StringToType[typeName]]
-	return ok
-}

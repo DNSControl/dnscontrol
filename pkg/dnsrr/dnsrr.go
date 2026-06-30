@@ -26,15 +26,6 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 
 	header := rr.Header()
 	typeNum := header.Rrtype
-	//typeName := dnsv2.TypeToString[header.Rrtype]
-
-	// if rtypeinfo.IsModernType(ty) {
-	// 	switch v := rr.(type) {
-	// 	default:
-	// 		rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.Ttl, dnsv2.TypeToString[header.Rrtype], v, domaintags.MakeDomainNameVarieties(origin))
-	// 		return *rec, err
-	// 	}
-	// }
 
 	rc := new(models.RecordConfig)
 	rc.Type = dnsv2.TypeToString[header.Rrtype]
@@ -118,14 +109,6 @@ func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
 	ttl := header.TTL
 	typeName := dnsv2.TypeToString[dnsv2.RRToType(rr)]
 	typeNum := dnsv2.RRToType(rr)
-
-	// if rtypeinfo.IsModernType(ty) {
-	// 	switch v := rr.(type) {
-	// 	default:
-	// 		rec, err := rtypecontrol.NewRecordConfigFromStruct(strings.TrimSuffix(header.Name, origin), header.TTL, ty, v, domaintags.MakeDomainNameVarieties(origin))
-	// 		return *rec, err
-	// 	}
-	// }
 
 	rc := new(models.RecordConfig)
 	rc.Type = typeName

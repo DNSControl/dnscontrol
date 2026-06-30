@@ -55,10 +55,6 @@ func checkTarget(target string) error {
 
 // validateRecordTypes list of valid rec.Type values. Returns true if this is a real DNS record type, false means it is a pseudo-type used internally.
 func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
-	if rec.IsModernType() {
-		// Modern types do their own validation.
-		return nil
-	}
 	switch rec.Type {
 	// RCv3 records do not need this validation step.
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
@@ -185,10 +181,6 @@ func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox s
 
 // checkTargets returns true if rec.Target is valid for the rec.Type.
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
-	if rec.IsModernType() {
-		// Modern types do their own validation.
-		return nil
-	}
 	switch rec.Type {
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
 		return nil

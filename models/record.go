@@ -537,24 +537,6 @@ func (rc *RecordConfig) Key() RecordKey {
 	return RecordKey{rc.NameFQDN, t}
 }
 
-// IsModernType returns true if this RecordConfig is a record type implemented
-// in the new ("Modern") style (i.e. uses the RecordConfig .F field to store
-// the rdata of the record).
-//
-// Since this relies on .F, it must be used only after the RecordConfig
-// has been populated. Otherwise, use rtypecontrol.IsModernType(recordTypeName),
-// which takes the type name as input.
-//
-// NOTE: Do not confuse this with rtypeinfo.IsModernType() which provides
-// similar functionality.  This function is used to have a RecordConfig reveal
-// if it uses a modern type.  rtypeinfo.IsModernType() takes the rtype name as
-// a string argument.
-//
-// FUTURE(tlim): Once all record types have been migrated to use ".F", this function can be removed.
-func (rc *RecordConfig) IsModernType() bool {
-	return false
-}
-
 func (rc *RecordConfig) IsTTLSignificant() bool {
 	// "private types" don't really have a useful TTL.
 	// There may be better ways to determine this.  Right now
@@ -630,10 +612,6 @@ func PostProcessRecords(recs []*RecordConfig) {
 // functions should do all downcasing, etc.
 func Downcase(recs []*RecordConfig) {
 	for _, r := range recs {
-		if r.IsModernType() {
-			continue
-		}
-
 		r.Name = strings.ToLower(r.Name)
 		r.NameFQDN = strings.ToLower(r.NameFQDN)
 		switch r.Type { // #rtype_variations
@@ -663,11 +641,6 @@ func CanonicalizeTargets(recs []*RecordConfig, origin string) {
 	originFQDN := origin + "."
 
 	for _, r := range recs {
-
-		if r.IsModernType() {
-			continue
-		}
-
 		switch r.Type { // #rtype_variations
 		case "ALIAS", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "PTR", "SRV":
 			// Target is a hostname that might be a shortname. Turn it into a FQDN.

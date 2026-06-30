@@ -8,7 +8,6 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/go-gandi/go-gandi/livedns"
 )
@@ -47,12 +46,6 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 			rc, err = dc.NewRecordConfig(n.RrsetName, uint32(n.RrsetTTL), dnsv2.TypeTXT, decoded)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi (txt): %w", err)
-			}
-			rc.Original = n
-		case privatetypes.IsModernType(rtype) && rtype != "ALIAS":
-			rc, err = dc.NewRecordConfigParse(n.RrsetName, uint32(n.RrsetTTL), rtype, value)
-			if err != nil {
-				return nil, fmt.Errorf("unparsable record received from gandi1: %w", err)
 			}
 			rc.Original = n
 		default:
