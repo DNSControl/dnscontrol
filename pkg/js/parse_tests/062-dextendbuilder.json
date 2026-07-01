@@ -19,7 +19,7 @@
       "records": [
         {
           "comparablev3": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
-          "filepos": "[line:19:5]",
+          "filepos": "[line:17:5]",
           "localtitude": 9997600,
           "loclatitude": 2299997648,
           "loclongitude": 1891505648,
@@ -40,7 +40,7 @@
         },
         {
           "comparablev3": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
-          "filepos": "[line:25:5]",
+          "filepos": "[line:23:5]",
           "localtitude": 9997600,
           "loclatitude": 2299997648,
           "loclongitude": 1891505648,

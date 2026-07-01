@@ -29,8 +29,8 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 
 		rtype := n.RrsetType
 
-		switch {
-		case rtype == "TXT":
+		switch rtype {
+		case "TXT":
 			// Gandi stores/returns TXT values in RFC1035 quoted+escaped
 			// presentation form. Decode them with the same scheme used to
 			// encode on the way out (txtutil, see recordsToNative), then build
