@@ -5,12 +5,12 @@ DELETE THIS BEFORE THE RELEASE
 ## Release Notes
 
 * Replacing github.com/miekg/dns (v1) with codeberg.org/miekg/dns (v2).
-* RecordConfigV3: We're adopting codeberg.org/miekg/dns in a big way!  It's now the prefered way to store a DNS record.  RecordConfig.RDATA stores a dns.RDATA interface, which can contain any DNS record type, even unofficial ones. This should save memory in the long run, but at this time it means storing a lot of data twice until legacy code is upgraded.
 
 ## Extra testing needed
 
 * BIND: SOA handling has been rewritten to be easier to debug and more reliable. Shouldn't have any user-visible changes but please be on the lookout.
 * CLOUDFLAREAPI: CF_WORKER_ROUTES() need extra testing. Internally they were represented sometimes as `WORKER_ROUTE` and sometimes as `CF_WORKER_ROUTE`. It's amazing such complex code ever worked.  Now we use `CF_WORKER_ROUTE` exclusively. The changes were core to the worker feature. Pleaes give extra attending and testing.
+* Any provider that implements pseudo-types such as CF_WORKER_ROUTES(), BUNNY_DNS_PZ(), etc.
 
 ## Developer notes
 
@@ -18,22 +18,21 @@ DELETE THIS BEFORE THE RELEASE
 
 ## TODOs
 
-* Fix HTTPS on SAKURACLOUD
-* Port Cloudflare Single Redirects
-* Port RP
-* Handle `ech=IGNORE` when it is ech=0000
 * PTR magic should be implemented in pkg/js??
 
 ## miekg requests
 
 * `pkg/txtutil/{miekg.go miekg_test.go ddd/ddd.go}` come from dnsv2.  Upstream changes?
-* dnsutil.Trim() -- Returning "" for z longer than s is unintuitive. I would have expected it to return s. I was going to check the output for "" to detect this, but "" also means "s == z".  I wrote txtutil.StripZone() which is more accepting of its inputs.
+* dnsutil.Trim() -- Returning "" for z longer than s is unintuitive. I would have expected it to return s. I was going to check the output for "" to detect this, but "" also means "s == z".  I wrote txtutil.StripZone() which is more accepting of its inputs. `models/makers.go` says, "dnsv2 doesn't expose the parser in a way to do just the params". File an issue?
 
 ## dnscontrol v5
 
-DNSControl v5 will adopt the miekg/dns version 2 ("dnsv2") module as the native way it stores DNS records. That is, the models.RecordConfig{} struct will include a pointer to
-a dnsv2's RDATA struct (technically its "a reference to an interface").  This will lead
-to the eventual removal of many fields in RecordConfig, such as DsKeyTag,           DsAlgorithm,        DsDigestType,       and DsDigest           , which hog memory while doing nothing if the record is not a DS record.
+DNSControl v5 will adopt the miekg/dns version 2 ("dnsv2") module as the native
+way it stores DNS records. That is, the models.RecordConfig{} struct will
+include a pointer to a dnsv2's RDATA struct (technically its "a reference to an
+interface"). This is in addition to rtype-specific fields such as DsKeyTag,
+DsAlgorithm, and so on. The conversion is done automatically, bidirectionally. In the future, those
+fields will go away and the data will only be stored once, saving considerable memory.
 
 DNSControl v5 will also adopt unified way to create and access RecordConfigs. Currently there is no standard, therefore some places use models.&RecordConfg{} (they create the struct), others use rtypecontrol.NewRecordConfigFromStruct (the first attempt to redo RecordConfig), or various other ways.
 

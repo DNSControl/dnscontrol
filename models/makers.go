@@ -340,17 +340,13 @@ func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 		if err != nil {
 			panic("BUG: Failed to convert SVCB parameters from v1 to v2: " + err.Error())
 		}
-		// fmt.Printf("DEBUG: MakeSVCB: v1 v=%+v\n", pv2)
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: pv2}, nil
 	case []svcbv2.Pair:
-		// fmt.Printf("DEBUG: MakeSVCB: v2 v=%+v\n", v)
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: v}, nil
 	case string:
 		// ech=IGNORE is special. It means "take the ech value from the existing record".  We replace it with the byte sequence 0x10 0x00
 		// here. Later,
-		// fmt.Printf("DEBUG: MakeSVCB: str pre=%q\n", v)
 		v = strings.ReplaceAll(v, "IGNORE", "1000")
-		// fmt.Printf("DEBUG: MakeSVCB: str aft=%q\n", v)
 
 		// NB(tlim): It's overkill to construct this string just to parse it but dnsv2 doesn't expose the parser in a way to do just the params.
 		line := fmt.Sprintf("%d %s %s", mustbe.Uint16(priority), mustbe.TargetHost(origin, target), v)
@@ -379,19 +375,3 @@ func MakeTXT(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 	}
 	return dnsrdatav2.TXT{Txt: mustbe.Txts(args[0])}, nil
 }
-
-// func MakeURL(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
-//	mustbe.ValidArgs(args)
-// 	if len(args) != 1 {
-// 		return nil, fmt.Errorf("MakeURL expects exactly 1 argument, got %d: %+v", len(args), args)
-// 	}
-// 	return privatetypesrdata.URL{Location: mustbe.RawString(args[0])}, nil
-// }
-
-// func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
-//	mustbe.ValidArgs(args)
-// 	if len(args) != 1 {
-// 		return nil, fmt.Errorf("MakeURL301 expects exactly 1 argument, got %d: %+v", len(args), args)
-// 	}
-// 	return privatetypesrdata.URL{Location: mustbe.RawString(args[0])}, nil
-// }

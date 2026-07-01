@@ -25,9 +25,7 @@ type RecordConfig struct {
 	// NB(tlim): Not currently used. Placeholder for future feature.
 	TypeNum uint16 `json:"typenum,omitempty"`
 
-	// RDATA is (the fields of the record).
-	// NB(tlim): Not currently used. Placeholder for future feature.
-	//RDATA dnsv2.RDATA `json:"rdata,omitempty"`
+	// rdata is the fields of the record.
 	rdata dnsv2.RDATA
 
 	// ComparableV3 is an opaque string that can be used to compare two
@@ -60,7 +58,7 @@ type RecordConfig struct {
 	// Comparable is an opaque string that can be used to compare two
 	// RecordConfigs for equality. Typically this is the Zonefile line minus the
 	// label and TTL.
-	//xComparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
+	//Comparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
 
 	// ZonefilePartial is the partial zonefile line for this record, excluding
 	// the label and TTL.  If this is not an official RR type, we invent the format.
