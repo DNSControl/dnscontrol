@@ -101,7 +101,7 @@ require (
 	github.com/nicholas-fedor/shoutrrr v0.16.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.118.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1434+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1435+incompatible
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.125
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.124
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
