@@ -258,7 +258,7 @@ jobs:
       - uses: actions/checkout@v7
       - run: mkdir -p "$TEST_RESULTS"
       - name: restore_cache
-        uses: actions/cache@v6.0.0
+        uses: actions/cache@v6.1.0
         with:
           key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
           restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
