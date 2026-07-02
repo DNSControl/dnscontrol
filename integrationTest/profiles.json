@@ -172,6 +172,7 @@
   "GANDI_V5": {
     "TYPE": "GANDI_V5",
     "apikey": "$GANDI_V5_APIKEY",
+    "apiurl": "$GANDI_V5_APIURL",
     "domain": "$GANDI_V5_DOMAIN",
     "token": "$GANDI_V5_TOKEN"
   },
