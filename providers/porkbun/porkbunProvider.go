@@ -143,7 +143,6 @@ func init() {
 			},
 		},
 	})
-	providers.RegisterCustomRecordType("PORKBUN_URLFWD", providerName, "")
 	providers.RegisterCustomRecordType("URL", providerName, "")
 	providers.RegisterCustomRecordType("URL301", providerName, "")
 }
@@ -155,7 +154,7 @@ func (c *porkbunProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 
 // isURLForwardingType returns true if the record type is a URL forwarding type.
 func isURLForwardingType(recordType string) bool {
-	return recordType == "PORKBUN_URLFWD" || recordType == "URL" || recordType == "URL301"
+	return recordType == "URL" || recordType == "URL301"
 }
 
 func genComparable(rec *models.RecordConfig) string {
@@ -185,7 +184,7 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 				if record.Type == "URL301" {
 					record.Metadata[metaType] = "permanent"
 				} else {
-					// Default for URL and PORKBUN_URLFWD
+					// Default for URL
 					record.Metadata[metaType] = "temporary"
 				}
 			}
@@ -194,14 +193,6 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 			}
 			if record.Metadata[metaWildcard] == "" {
 				record.Metadata[metaWildcard] = "yes"
-			}
-			if record.Type == "PORKBUN_URLFWD" {
-				printer.Warnf("`PORKBUN_URLFWD` is deprecated. Please use `URL` or `URL301` instead.\n")
-				if record.Metadata[metaType] == "permanent" {
-					record.Type = "URL301"
-				} else {
-					record.Type = "URL"
-				}
 			}
 		}
 	}

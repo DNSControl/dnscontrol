@@ -99,5 +99,5 @@ D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
 {% endcode %}
 
 {% hint style="info" %}
-**NOTE**: The legacy `PORKBUN_URLFWD` record type is deprecated. Please use `URL` or `URL301` instead.
+**NOTE**: The legacy `PORKBUN_URLFWD` record type is deprecated and is removed in v5.x. Please use `URL` or `URL301` instead.
 {% endhint %}

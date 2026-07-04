@@ -1368,7 +1368,6 @@ var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
 /**
  * @deprecated Please use URL or URL301 instead
  */
-var PORKBUN_URLFWD = recordBuilder('PORKBUN_URLFWD');
 var BUNNY_DNS_RDR = recordBuilder('BUNNY_DNS_RDR');
 
 // MIKROTIK_FWD(name, target, modifiers...)
