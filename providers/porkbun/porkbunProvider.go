@@ -110,6 +110,39 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Porkbun",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/porkbun",
+		PortalURL:   "https://porkbun.com/account/api",
+		Notes:       "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "The API Key generated from Porkbun API Access.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "secret_key",
+				Label:    "Secret key",
+				Help:     "The Secret Key shown when creating the Porkbun API key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "max_attempts",
+				Label: "Max attempts (optional)",
+				Help:  "Override retry attempts. Leave blank to use the default of 5.",
+			},
+			{
+				Key:   "max_duration",
+				Label: "Max duration (optional)",
+				Help:  "Retry duration limit, such as 5m. Leave blank for no limit.",
+			},
+		},
+	})
 	providers.RegisterCustomRecordType("PORKBUN_URLFWD", providerName, "")
 	providers.RegisterCustomRecordType("URL", providerName, "")
 	providers.RegisterCustomRecordType("URL301", providerName, "")
