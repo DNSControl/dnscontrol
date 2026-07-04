@@ -751,12 +751,6 @@ func tlsa(name string, usage, selector, matchingtype uint8, target string) *mode
 	return r
 }
 
-func porkbunUrlfwd(name, target, t, includePath, wildcard string) *models.RecordConfig {
-	rc, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypePORKBUNURLFWD, target, t, includePath, wildcard)
-	panicOnErr(err)
-	return rc
-}
-
 func url(name, target string) *models.RecordConfig {
 	rc, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeURL, target, false, false)
 	panicOnErr(err)

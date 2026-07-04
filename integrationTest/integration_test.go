@@ -2133,15 +2133,6 @@ func makeTests() []*TestGroup {
 			})).ExpectNoChanges(),
 		),
 
-		// PORKBUN features
-
-		testgroup("PORKBUN_URLFWD tests",
-			only("PORKBUN"),
-			tc("Add a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.com", "", "", "")),
-			tc("Update a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.org", "", "", "")),
-			tc("Update a urlfwd with metadata", porkbunUrlfwd("urlfwd1", "http://example.org", "permanent", "no", "no")),
-		),
-
 		// GCORE features
 
 		testgroup("GCORE metadata tests",

@@ -66,13 +66,6 @@ func backfill(rc *RecordConfig) error {
 	case dnsrdatav2.OPENPGPKEY:
 		rc.SetTarget(rd.PublicKey)
 
-	case privatetypesrdata.PORKBUNURLFWD:
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		rc.Metadata["type"] = rd.TypeName
-		rc.Metadata["includePath"] = rd.IncludePath
-		rc.Metadata["wildcard"] = rd.Wildcard
 	case dnsrdatav2.PTR:
 		rc.SetTarget(rd.Ptr)
 

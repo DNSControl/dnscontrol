@@ -233,11 +233,6 @@ func MakeOPENPGPKEY(origin string, _ map[string]string, args ...any) (dnsv2.RDAT
 	return dnsrdatav2.OPENPGPKEY{PublicKey: mustbe.OpenPGPKey(args[0])}, nil
 }
 
-func MakePORKBUNURLFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
-	mustbe.ValidArgs(args)
-	return privatetypesrdata.PORKBUNURLFWD{}, nil
-}
-
 func MakePTR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
