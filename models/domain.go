@@ -63,8 +63,7 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	if strings.HasSuffix(name, ".") {
 		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
 	}
-	dcn := domaintags.MakeDomainNameVarieties(name) // TODO(tlim): Create a version of MakeDomainNameVarieties that returns an error on failure.
-	//dcn := domaintags.DomainNameVarieties{NameASCII: name}
+	dcn := domaintags.MakeDomainNameVarieties(name)
 	dc := &DomainConfig{
 		NameRaw:     dcn.NameRaw,
 		Name:        dcn.NameASCII,
@@ -73,12 +72,7 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 		UniqueName:  dcn.UniqueName,
 		DisplayName: dcn.DisplayName,
 
-		// TODO(tlim): Eliminate the need for this Metedata. It was a hack to avoid changing legacy code but should be easier to eliminate now.
-		Metadata: map[string]string{
-			// DomainUniqueName: dcn.UniqueName,
-			// DomainNameRaw:     dcn.NameRaw,
-			// DomainNameUnicode: dcn.NameUnicode,
-		},
+		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
 	}
 
 	return dc, nil
@@ -96,23 +90,19 @@ func (recs Records) FixLegacyRecords(origin string) {
 	}
 }
 
-//func FixLegacyRecord(rec *models.RecordConfig, origin string) {
-//	rec.FixUp(origin) // Hack. Populates .RDATA and .TypeNum if needed.
-//}
-
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
 }
 
 func (dc *DomainConfig) NormalizeDomainNamesFromDnsconfigjs() {
-	ff := domaintags.MakeDomainNameVarieties(dc.Name)
-	dc.Name = ff.NameASCII
-	dc.Tag = ff.Tag
-	dc.NameRaw = ff.NameRaw
-	dc.NameUnicode = ff.NameUnicode
-	dc.DisplayName = ff.DisplayName
-	dc.UniqueName = ff.UniqueName
+	dcn := domaintags.MakeDomainNameVarieties(dc.Name)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
