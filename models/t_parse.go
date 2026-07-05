@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"net/netip"
+
+	dnsv2 "codeberg.org/miekg/dns"
 )
 
 // PopulateFromStringFunc populates a RecordConfig by parsing a common RFC1035-like format.
@@ -78,7 +80,7 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 	case "CAA":
 		return rc.SetTargetCAAString(contents)
 	case "DS":
-		return rc.SetTargetDSString(contents)
+		return legacySetTargetParse(rc, dnsv2.TypeDS, contents)
 	case "DNSKEY":
 		return rc.SetTargetDNSKEYString(contents)
 	case "DHCID":
@@ -191,7 +193,7 @@ func (rc *RecordConfig) PopulateFromString(rtype, contents, origin string) error
 	case "CAA":
 		return rc.SetTargetCAAString(contents)
 	case "DS":
-		return rc.SetTargetDSString(contents)
+		return legacySetTargetParse(rc, dnsv2.TypeDS, contents)
 	case "DNSKEY":
 		return rc.SetTargetDNSKEYString(contents)
 	case "DHCID":
