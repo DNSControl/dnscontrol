@@ -143,6 +143,71 @@ func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string,
 	return nil
 }
 
+func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
+	typeStr := dnsutilv2.TypeToString(typeNum)
+
+	// Make sure .Type isn't already set to something else.
+	if rc.Type != "" && rc.Type != typeStr {
+		return fmt.Errorf("legacySetTargetArgs(%s) called with .Type set to %s", typeStr, rc.Type)
+	}
+
+	rc.TypeNum = typeNum
+	rc.Type = typeStr
+
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
+
+	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
+	if !ok {
+		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
+		return fmt.Errorf("legacySetTargetArgs: failed TypeToMakeRDATA[%d] == nil", typeNum)
+	}
+	rd, err := f("", nil, args...)
+	if err != nil {
+		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
+	}
+	rc.SetRDATA(rd)
+
+	rc.FixUp("")       // Add .ComparableV3
+	err = backfill(rc) // Port .RDATA to legacy fields.
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func legacySetTargetParse(rc *RecordConfig, typeNum uint16, contents string) error {
+	typeStr := dnsutilv2.TypeToString(typeNum)
+
+	// Make sure .Type isn't already set to something else.
+	if rc.Type != "" && rc.Type != typeStr {
+		return fmt.Errorf("legacySetTargetArgs(%s) called with .Type set to %s", typeStr, rc.Type)
+	}
+
+	rc.TypeNum = typeNum
+	rc.Type = typeStr
+
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
+
+	rd, err := MyNewData(typeNum, contents, "")
+	if err != nil {
+		return err
+	}
+	rc.SetRDATA(rd)
+
+	rc.FixUp("")       // Add .ComparableV3
+	err = backfill(rc) // Port .RDATA to legacy fields.
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func anyToTypeNum(a any) (uint16, error) {
 	switch v := a.(type) {
 	case uint16:

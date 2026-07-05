@@ -41,7 +41,7 @@ func backfill(rc *RecordConfig) error {
 	case dnsrdatav2.DNAME:
 		rc.SetTarget(rd.Target)
 	case dnsrdatav2.DS:
-		rc.SetTargetDS(rd.KeyTag, rd.Algorithm, rd.DigestType, rd.Digest)
+		rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest = rd.KeyTag, rd.Algorithm, rd.DigestType, rd.Digest
 	case dnsrdatav2.DNSKEY:
 		rc.SetTargetDNSKEY(rd.Flags, rd.Protocol, rd.Algorithm, rd.PublicKey)
 
