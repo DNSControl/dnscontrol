@@ -23,8 +23,6 @@ type URL struct {
 
 	privatetypesrdata.URL
 	// Location             string
-	// PorkbunIncludePath   bool
-	// PorkbunWildCard      bool
 }
 
 // Typer interface.
@@ -38,15 +36,13 @@ func (rr *URL) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *URL) Data() dnsv2.RDATA {
-	return &privatetypesrdata.URL{Location: rr.Location, PorkbunIncludePath: rr.PorkbunIncludePath, PorkbunWildCard: rr.PorkbunWildCard}
+	return &privatetypesrdata.URL{Location: rr.Location}
 }
 func (rr *URL) Clone() dnsv2.RR {
 	return &URL{
 		Hdr: rr.Hdr,
 		URL: privatetypesrdata.URL{
-			Location:           rr.Location,
-			PorkbunIncludePath: rr.PorkbunIncludePath,
-			PorkbunWildCard:    rr.PorkbunWildCard,
+			Location: rr.Location,
 		}}
 }
 func (rr *URL) String() string {
@@ -58,11 +54,9 @@ func (rr *URL) String() string {
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *URL) Parse(tokens []string, s string) error {
 	args := TokensToArgs(tokens)
-	if len(args) != 3 {
-		return fmt.Errorf("URL requires exactly 3 arguments, got %d: %v", len(args), args)
+	if len(args) != 1 {
+		return fmt.Errorf("URL requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
 	rr.Location = mustbe.RawString(args[0])
-	rr.PorkbunIncludePath = mustbe.Bool(args[1])
-	rr.PorkbunWildCard = mustbe.Bool(args[2])
 	return nil
 }

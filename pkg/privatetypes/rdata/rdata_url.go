@@ -10,9 +10,7 @@ import (
 )
 
 type URL struct {
-	Location           string
-	PorkbunIncludePath bool
-	PorkbunWildCard    bool
+	Location string
 }
 
 func (rd URL) Len() int {
@@ -20,21 +18,17 @@ func (rd URL) Len() int {
 }
 
 func (rd URL) String() string {
-	parts := make([]string, 0, 3)
+	parts := make([]string, 0, 1)
 	parts = append(parts, txtutil.ZoneifyString(rd.Location))
-	parts = append(parts, fmt.Sprintf("%t", rd.PorkbunIncludePath))
-	parts = append(parts, fmt.Sprintf("%t", rd.PorkbunWildCard))
 	return strings.Join(parts, " ")
 }
 
 func MakeURL(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 3 {
-		return nil, fmt.Errorf("URL expects 3 arguments, got %d: %+v", len(args), args)
+	if len(args) != 1 {
+		return nil, fmt.Errorf("URL expects 1 arguments, got %d: %+v", len(args), args)
 	}
 	return URL{
-		Location:           mustbe.RawString(args[0]),
-		PorkbunIncludePath: mustbe.Bool(args[1]),
-		PorkbunWildCard:    mustbe.Bool(args[2]),
+		Location: mustbe.RawString(args[0]),
 	}, nil
 }

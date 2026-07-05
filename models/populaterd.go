@@ -222,13 +222,9 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case privatetypes.TypePORKBUNURLFWD:
-		// NB(tlim): Should this use privatetypesrdata.MakePORKBUNURLFWD() instead?
-		rc.SetRDATA(&privatetypesrdata.PORKBUNURLFWD{
-			Target:      rc.GetTargetField(),
-			TypeName:    rc.Metadata["type"],
-			IncludePath: rc.Metadata["includePath"],
-			Wildcard:    rc.Metadata["wildcard"],
-		})
+		rd, err := privatetypesrdata.MakePORKBUNURLFWD(origin, nil, rc.GetTargetField())
+		errorChk(err)
+		rc.SetRDATA(rd)
 
 	case dnsv2.TypePTR:
 		rd, err := MakePTR(origin, nil, rc.GetTargetField())
@@ -279,11 +275,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case privatetypes.TypeURL:
-		rd, err := privatetypesrdata.MakeURL(origin, nil,
-			rc.GetTargetField(),
-			rc.Metadata["includePath"],
-			rc.Metadata["wildcard"],
-		)
+		rd, err := privatetypesrdata.MakeURL(origin, nil, rc.GetTargetField())
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case privatetypes.TypeURL301:

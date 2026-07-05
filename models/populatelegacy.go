@@ -71,12 +71,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(rd.PublicKey)
 
 	case privatetypesrdata.PORKBUNURLFWD:
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		rc.Metadata["type"] = rd.TypeName
-		rc.Metadata["includePath"] = rd.IncludePath
-		rc.Metadata["wildcard"] = rd.Wildcard
+		rc.SetTarget(rd.Location)
 	case dnsrdatav2.PTR:
 		rc.SetTarget(rd.Ptr)
 
@@ -113,11 +108,6 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 
 	case privatetypesrdata.URL:
 		rc.SetTarget(rd.Location)
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		rc.Metadata["includePath"] = fmt.Sprintf("%t", rd.PorkbunIncludePath)
-		rc.Metadata["wildcard"] = fmt.Sprintf("%t", rd.PorkbunWildCard)
 	case privatetypesrdata.URL301:
 		rc.SetTarget(rd.Location)
 

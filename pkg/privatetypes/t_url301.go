@@ -23,8 +23,6 @@ type URL301 struct {
 
 	privatetypesrdata.URL301
 	// Location             string
-	// PorkbunIncludePath   bool
-	// PorkbunWildCard      bool
 }
 
 // Typer interface.
@@ -38,15 +36,13 @@ func (rr *URL301) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *URL301) Data() dnsv2.RDATA {
-	return &privatetypesrdata.URL301{Location: rr.Location, PorkbunIncludePath: rr.PorkbunIncludePath, PorkbunWildCard: rr.PorkbunWildCard}
+	return &privatetypesrdata.URL301{Location: rr.Location}
 }
 func (rr *URL301) Clone() dnsv2.RR {
 	return &URL301{
 		Hdr: rr.Hdr,
 		URL301: privatetypesrdata.URL301{
-			Location:           rr.Location,
-			PorkbunIncludePath: rr.PorkbunIncludePath,
-			PorkbunWildCard:    rr.PorkbunWildCard,
+			Location: rr.Location,
 		}}
 }
 func (rr *URL301) String() string {
@@ -58,11 +54,9 @@ func (rr *URL301) String() string {
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *URL301) Parse(tokens []string, s string) error {
 	args := TokensToArgs(tokens)
-	if len(args) != 3 {
-		return fmt.Errorf("URL301 requires exactly 3 arguments, got %d: %v", len(args), args)
+	if len(args) != 1 {
+		return fmt.Errorf("URL301 requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
-	rr.Location = mustbe.TargetHost("", args[0])
-	rr.PorkbunIncludePath = mustbe.Bool(args[1])
-	rr.PorkbunWildCard = mustbe.Bool(args[2])
+	rr.Location = mustbe.RawString(args[0])
 	return nil
 }

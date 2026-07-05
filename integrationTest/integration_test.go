@@ -2135,11 +2135,24 @@ func makeTests() []*TestGroup {
 
 		// PORKBUN features
 
-		testgroup("PORKBUN_URLFWD tests",
+		testgroup("PORKBUN url forwarding tests",
 			only("PORKBUN"),
-			tc("Add a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.com", "", "", "")),
-			tc("Update a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.org", "", "", "")),
-			tc("Update a urlfwd with metadata", porkbunUrlfwd("urlfwd1", "http://example.org", "permanent", "no", "no")),
+			tc("Add a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.com")),
+			tc("Update a urlfwd with metadata", withMeta(porkbunUrlfwd("urlfwd1", "http://example.com"), map[string]string{
+				"type":        "permanent",
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
+			tc("Add a url", url("urlfwd2", "http://example.com")),
+			tc("Update a url with metadata", withMeta(url("urlfwd2", "http://example.com"), map[string]string{
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
+			tc("Add a url301", url301("urlfwd3", "http://example.com")),
+			tc("Update a url with metadata", withMeta(url301("urlfwd3", "http://example.com"), map[string]string{
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
 		),
 
 		// GCORE features

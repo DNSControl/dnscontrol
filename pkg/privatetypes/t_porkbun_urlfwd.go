@@ -22,10 +22,7 @@ type PORKBUNURLFWD struct {
 	Hdr dnsv2.Header
 
 	privatetypesrdata.PORKBUNURLFWD
-	// Target               string
-	// TypeName             string
-	// IncludePath          string
-	// Wildcard             string
+	// Location             string
 }
 
 // Typer interface.
@@ -39,16 +36,13 @@ func (rr *PORKBUNURLFWD) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *PORKBUNURLFWD) Data() dnsv2.RDATA {
-	return &privatetypesrdata.PORKBUNURLFWD{Target: rr.Target, TypeName: rr.TypeName, IncludePath: rr.IncludePath, Wildcard: rr.Wildcard}
+	return &privatetypesrdata.PORKBUNURLFWD{Location: rr.Location}
 }
 func (rr *PORKBUNURLFWD) Clone() dnsv2.RR {
 	return &PORKBUNURLFWD{
 		Hdr: rr.Hdr,
 		PORKBUNURLFWD: privatetypesrdata.PORKBUNURLFWD{
-			Target:      rr.Target,
-			TypeName:    rr.TypeName,
-			IncludePath: rr.IncludePath,
-			Wildcard:    rr.Wildcard,
+			Location: rr.Location,
 		}}
 }
 func (rr *PORKBUNURLFWD) String() string {
@@ -60,12 +54,9 @@ func (rr *PORKBUNURLFWD) String() string {
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *PORKBUNURLFWD) Parse(tokens []string, s string) error {
 	args := TokensToArgs(tokens)
-	if len(args) != 4 {
-		return fmt.Errorf("PORKBUN_URLFWD requires exactly 4 arguments, got %d: %v", len(args), args)
+	if len(args) != 1 {
+		return fmt.Errorf("PORKBUN_URLFWD requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
-	rr.Target = mustbe.RawString(args[0])
-	rr.TypeName = mustbe.RawString(args[1])
-	rr.IncludePath = mustbe.RawString(args[2])
-	rr.Wildcard = mustbe.RawString(args[3])
+	rr.Location = mustbe.RawString(args[0])
 	return nil
 }

@@ -6,12 +6,11 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 type URL301 struct {
-	Location           string
-	PorkbunIncludePath bool
-	PorkbunWildCard    bool
+	Location string
 }
 
 func (rd URL301) Len() int {
@@ -19,21 +18,17 @@ func (rd URL301) Len() int {
 }
 
 func (rd URL301) String() string {
-	parts := make([]string, 0, 3)
-	parts = append(parts, rd.Location)
-	parts = append(parts, fmt.Sprintf("%t", rd.PorkbunIncludePath))
-	parts = append(parts, fmt.Sprintf("%t", rd.PorkbunWildCard))
+	parts := make([]string, 0, 1)
+	parts = append(parts, txtutil.ZoneifyString(rd.Location))
 	return strings.Join(parts, " ")
 }
 
 func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 3 {
-		return nil, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
+	if len(args) != 1 {
+		return nil, fmt.Errorf("URL301 expects 1 arguments, got %d: %+v", len(args), args)
 	}
 	return URL301{
-		Location:           mustbe.TargetHost(origin, args[0]),
-		PorkbunIncludePath: mustbe.Bool(args[1]),
-		PorkbunWildCard:    mustbe.Bool(args[2]),
+		Location: mustbe.RawString(args[0]),
 	}, nil
 }

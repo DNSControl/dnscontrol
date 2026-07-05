@@ -191,33 +191,12 @@ types:
   - name: Porkbun_Urlfwd
     codepoint: 65297
     fields:
-      - name: Target
-        type: RawString
-      - name: TypeName
-        type: RawString
-      - name: IncludePath
-        type: RawString
-      - name: Wildcard
+      - name: Location
         type: RawString
     test_data:
       - name: "plain"
         values:
           Target: http://example.com
-          TypeName: urlfwd
-          IncludePath: no
-          Wildcard: no
-      - name: "with metadata"
-        values:
-          Target: http://example.com
-          TypeName: urlfwd
-          IncludePath: permanent
-          Wildcard: no
-      - name: "with wildcard"
-        values:
-          Target: http://example.com
-          TypeName: urlfwd
-          IncludePath: no
-          Wildcard: yes
 
   - name: R53_Alias
     codepoint: 65298
@@ -244,29 +223,17 @@ types:
     fields:
       - name: Location
         type: RawString
-      - name: PorkbunIncludePath
-        type: Bool
-      - name: PorkbunWildCard
-        type: Bool
     test_data:
       - name: ""
         values:
           Location: https://example.com/
-          PorkbunIncludePath: true
-          PorkbunWildCard: false
 
   - name: Url301
     codepoint: 65300
     fields:
       - name: Location
-        type: TargetHost
-      - name: PorkbunIncludePath
-        type: Bool
-      - name: PorkbunWildCard
-        type: Bool
+        type: RawString
     test_data:
       - name: ""
         values:
-          Location: example.com.
-          PorkbunIncludePath: true
-          PorkbunWildCard: false
+          Location: https://example.com/

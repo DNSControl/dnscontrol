@@ -165,6 +165,47 @@ func genComparable(rec *models.RecordConfig) string {
 	return ""
 }
 
+func porkbunURLForwardingMetadata(recordType string, metadata map[string]string) (string, string, string) {
+	t := metadata[metaType]
+	if t == "" {
+		if recordType == "URL301" {
+			t = "permanent"
+		} else {
+			t = "temporary"
+		}
+	}
+	includePath := metadata[metaIncludePath]
+	if includePath == "" {
+		includePath = "no"
+	}
+	wildcard := metadata[metaWildcard]
+	if wildcard == "" {
+		wildcard = "yes"
+	}
+	return t, includePath, wildcard
+}
+
+func normalizeURLForwardingRecord(record *models.RecordConfig, origin string) {
+	if !isURLForwardingType(record.Type) {
+		return
+	}
+	record.TTL = 0
+	if record.Metadata == nil {
+		record.Metadata = make(map[string]string)
+	}
+	t, includePath, wildcard := porkbunURLForwardingMetadata(record.Type, record.Metadata)
+	record.Metadata[metaType] = t
+	record.Metadata[metaIncludePath] = includePath
+	record.Metadata[metaWildcard] = wildcard
+	if record.Type == "PORKBUN_URLFWD" {
+		if record.Metadata[metaType] == "permanent" {
+			record.Type = "URL301"
+		} else {
+			record.Type = "URL"
+		}
+	}
+}
+
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
@@ -175,35 +216,7 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	// Make sure TTL larger than the minimum TTL
 	for _, record := range dc.Records {
 		record.TTL = fixTTL(record.TTL)
-		if isURLForwardingType(record.Type) {
-			record.TTL = 0
-			if record.Metadata == nil {
-				record.Metadata = make(map[string]string)
-			}
-			// Set metadata type based on record type
-			if record.Metadata[metaType] == "" {
-				if record.Type == "URL301" {
-					record.Metadata[metaType] = "permanent"
-				} else {
-					// Default for URL and PORKBUN_URLFWD
-					record.Metadata[metaType] = "temporary"
-				}
-			}
-			if record.Metadata[metaIncludePath] == "" {
-				record.Metadata[metaIncludePath] = "no"
-			}
-			if record.Metadata[metaWildcard] == "" {
-				record.Metadata[metaWildcard] = "yes"
-			}
-			if record.Type == "PORKBUN_URLFWD" {
-				printer.Warnf("`PORKBUN_URLFWD` is deprecated. Please use `URL` or `URL301` instead.\n")
-				if record.Metadata[metaType] == "permanent" {
-					record.Type = "URL301"
-				} else {
-					record.Type = "URL"
-				}
-			}
-		}
+		normalizeURLForwardingRecord(record, dc.Name)
 	}
 
 	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, genComparable)
