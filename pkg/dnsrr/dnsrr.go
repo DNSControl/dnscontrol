@@ -102,99 +102,39 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	return *rc, nil
 }
 
-func RRtoRCV2(rr dnsv2.RR, origin string) (models.RecordConfig, error) {
-	// Convert's dns.RR into DNSControl's models.RecordConfig struct.
+// RRv2toRC converts dnsv2.RR to models.RecordConfig. It assumes:
+// - The header.Name is a fully qualified domain name (FQDN) with a trailing dot.
+// - The fields in the RDATA are already in the correct format (e.g., IDNA for domain names), FQDN+"." for targets.
+func RRv2toRC(dc *models.DomainConfig, rr dnsv2.RR) (*models.RecordConfig, error) {
+	// Convert's dnsv2.RR into DNSControl's models.RecordConfig struct.
 
 	header := rr.Header()
 	ttl := header.TTL
-	typeName := dnsv2.TypeToString[dnsv2.RRToType(rr)]
 	typeNum := dnsv2.RRToType(rr)
+	rd := rr.Data()
 
-	rc := new(models.RecordConfig)
-	rc.Type = typeName
-	rc.TypeNum = typeNum
-	rc.TTL = ttl
-	rc.Original = rr
-	rc.SetLabelFromFQDN(strings.TrimSuffix(header.Name, "."), origin)
 	var err error
-	switch v := rr.(type) { // #rtype_variations
-	case *dnsv2.A:
-		err = rc.SetTarget(v.A.String())
-	case *dnsv2.AAAA:
-		err = rc.SetTarget(v.AAAA.String())
-	case *dnsv2.CAA:
-		err = rc.SetTargetCAA(v.Flag, v.Tag, v.Value)
-	case *dnsv2.CNAME:
-		err = rc.SetTarget(v.Target)
-	case *dnsv2.DHCID:
-		err = rc.SetTarget(v.Digest)
-	case *dnsv2.DNAME:
-		err = rc.SetTarget(v.Target)
-	case *dnsv2.DS:
-		if rec, err := models.NewRecordConfigForRRtoRC(origin, rc.Name, ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
-			return *rec, nil
+	switch v := rd.(type) {
+	case dnsrdatav2.TXT:
+		// TXT is special case because we need to work around the backslack.
+		rd = dnsrdatav2.TXT{Txt: []string{fixRRv2TXT(v)}}
+	case dnsrdatav2.TLSA:
+		// TLSA is a special case because we need to normalize the certificate data to uppercase.
+		rd, err = models.MakeTLSA(dc.Name, nil, v.Usage, v.Selector, v.MatchingType, v.Certificate)
+		if err != nil {
+			return nil, fmt.Errorf("error creating TLSA record: %w", err)
 		}
-	case *dnsv2.DNSKEY:
-		err = rc.SetTargetDNSKEY(v.Flags, v.Protocol, v.Algorithm, v.PublicKey)
-	case *dnsv2.HTTPS:
-		rd := rr.Data()
-		rdd, ok := rd.(dnsrdatav2.SVCB)
-		if !ok {
-			m := fmt.Sprintf("DEBUG: HTTPS data is %T\n", rd)
-			panic(m)
-		}
-		rc.SetRDATA(rdd)
-	case *dnsv2.LOC:
-		rd := rr.Data()
-		rdd := rd.(dnsrdatav2.LOC)
-		rc.SetRDATA(rdd)
-	case *dnsv2.MX:
-		err = rc.SetTargetMX(v.Preference, v.Mx)
-	case *dnsv2.NAPTR:
-		err = rc.SetTargetNAPTR(v.Order, v.Preference, v.Flags, v.Service, v.Regexp, v.Replacement)
-	case *dnsv2.OPENPGPKEY:
-		err = rc.SetTarget(v.PublicKey)
-	case *dnsv2.NS:
-		err = rc.SetTarget(v.Ns)
-	case *dnsv2.PTR:
-		err = rc.SetTarget(v.Ptr)
-	case *dnsv2.RP:
-		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, ttl, typeNum, v.Mbox, v.Txt); err == nil {
-			return *rec, nil
-		}
-	case *dnsv2.SMIMEA:
-		err = rc.SetTargetSMIMEA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
-	case *dnsv2.SOA:
-		err = rc.SetTargetSOA(v.Ns, v.Mbox, v.Serial, v.Refresh, v.Retry, v.Expire, v.Minttl)
-	case *dnsv2.SRV:
-		err = rc.SetTargetSRV(v.Priority, v.Weight, v.Port, v.Target)
-	case *dnsv2.SSHFP:
-		err = rc.SetTargetSSHFP(v.Algorithm, v.Type, v.FingerPrint)
-	case *dnsv2.SVCB:
-		rd := rr.Data()
-		rdd, ok := rd.(dnsrdatav2.SVCB)
-		if !ok {
-			m := fmt.Sprintf("DEBUG: HTTPS data is %T\n", rd)
-			panic(m)
-		}
-		rc.SetRDATA(rdd)
-	case *dnsv2.TLSA:
-		err = rc.SetTargetTLSA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
-	case *dnsv2.TXT:
-		if true {
-			t := strings.Join(v.Txt, "")
-			te := t
-			te = strings.ReplaceAll(te, `\\`, `\`)
-			te = strings.ReplaceAll(te, `\"`, `"`)
-			err = rc.SetTargetTXT(te)
-		} else {
-			err = rc.SetTargetTXTs(v.Txt)
-		}
-	default:
-		return *rc, fmt.Errorf("rrToRecord: Unimplemented zone record type=%s (%v)", rc.Type, rr)
 	}
+
+	rec, err := dc.NewRecordConfigForRRv2toRC(dc.LabelFromFQDNWithDot(header.Name), ttl, typeNum, rd)
 	if err != nil {
-		return *rc, fmt.Errorf("unparsable record received: %w", err)
+		return nil, fmt.Errorf("error creating record config: %w", err)
 	}
-	return *rc, nil
+	return rec, nil
+}
+
+func fixRRv2TXT(rd dnsrdatav2.TXT) string {
+	j := strings.Join(rd.Txt, "")
+	j = strings.ReplaceAll(j, `\\`, `\`)
+	return j
 }

@@ -42,15 +42,11 @@ rc, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
 - `LABEL`: Must be the output of one of these functions:
   - `models.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
   - `models.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
-  - `models.LabelFromFQDNWithDot()`: (does not exist. We'll create this if its ever needed)
-- Why not just test the string and do the right thing? There are too many
-  ambiguous cases to get this correct every time. The truth is that your
-  provider's API is going to only deliver the label one way or another. It is
-  faster and more accurate to simply have multiple functions, one for each
-  situation.
-- Why not future-proof the code by handling both situations? I assure you your
-  provider is not going to change their API. It would break too much code for
-  no benefit.
+  - `models.LabelFromFQDNWithDot()`: Use this if your provider always give syou the FQDN+"." (`foo.example.com.`)
+- Why doesn't NewRecordConfig just test the string and do the right thing?
+  - There are too many ambiguous cases to get this correct every time.
+  - It is faster and more accurate to simply have multiple functions, one for each situation.
+  - The truth is that your provider's API is going to only deliver the label one way. They're not going to change, as that would break too much code.
 
 - `TTL` must be the desired TTL or `0` if it is unknown. Unknown TTLs are converted into the default TTL.
 

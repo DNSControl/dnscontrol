@@ -83,7 +83,33 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	}
 
 	// These other possibilities all indicate the function was called wrong.
-	fmt.Printf("DEBUG: LabelFromFQDNNoDot(%v) called\n", name)
+	fmt.Printf("DEBUG: LabelFromFQDNNoDot(%v) called WRONG\n", name)
+	if newName == "" {
+		return "@"
+	}
+	return newName
+}
+
+// LabelFromFQDNWithDot takes a label and prepares it for use in a RecordConfig.
+// Name is a FQDN with a dot ("foo.example.com.").
+// Name is assumed to be ASCII, not Unicode (which is what most APIs return).
+// Name is assumed to end with the zone name (which is what most APIs return).
+func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
+	if name == "" {
+		return "IMPOSSIBLE"
+	}
+
+	newName := strings.ToLower(name)
+
+	if before, found := strings.CutSuffix(newName, "."+dc.Name+"."); found {
+		return before
+	}
+	if newName == dc.Name+"." {
+		return "@"
+	}
+
+	// These other possibilities all indicate the function was called wrong.
+	fmt.Printf("DEBUG: LabelFromFQDNWithDot(%v) called WRONG\n", name)
 	if newName == "" {
 		return "@"
 	}

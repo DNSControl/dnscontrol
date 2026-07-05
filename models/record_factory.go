@@ -37,7 +37,6 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v\n", typeNum, err)
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
-	//fmt.Printf("DEBUG rd=%T\n", rd)
 
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
@@ -53,6 +52,12 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 	if err != nil {
 		return nil, err
 	}
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
+}
+
+// NewRecordConfigForRRv2toRC is like NewRecordConfig but takes an RDATA. It
+// should only be used by RRv2toRC. It is not intended for general use.
+func (dc *DomainConfig) NewRecordConfigForRRv2toRC(name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA) (*RecordConfig, error) {
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
 

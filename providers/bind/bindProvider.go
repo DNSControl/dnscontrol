@@ -235,7 +235,7 @@ func (c *bindProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, 
 		return nil, fmt.Errorf("can't open %s: %w", zonefile, err)
 	}
 
-	return ParseZoneContents(string(content), domain, zonefile)
+	return ParseZoneContents(dc, string(content), zonefile)
 }
 
 func findSoaRecord(recs models.Records) *models.RecordConfig {
@@ -264,22 +264,18 @@ func updateSerialNumber(origin string, recs models.Records, forcedSerial uint32)
 }
 
 // ParseZoneContents parses a string as a BIND zone and returns the records.
-func ParseZoneContents(content string, zoneName string, zonefileName string) (models.Records, error) {
+func ParseZoneContents(dc *models.DomainConfig, content string, zonefileName string) (models.Records, error) {
+	zoneName := dc.Name
 	zp := dnsv2.NewZoneParser(strings.NewReader(content), zoneName, zonefileName)
 
 	foundRecords := models.Records{}
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
-		var rec models.RecordConfig
-		var err error
 
-		rec, err = dnsrr.RRtoRCV2(rr, zoneName)
+		rec, err := dnsrr.RRv2toRC(dc, rr)
 		if err != nil {
 			return nil, err
 		}
-
-		rec.FixUp(zoneName) // hack.  Maybe not needed.
-
-		foundRecords = append(foundRecords, &rec)
+		foundRecords = append(foundRecords, rec)
 	}
 
 	if err := zp.Err(); err != nil {

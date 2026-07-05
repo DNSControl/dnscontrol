@@ -47,14 +47,15 @@ func parseAndRegen(t *testing.T, buf *bytes.Buffer, expected string) {
 
 // rrstoRCs converts []dns.RR to []RecordConfigs.
 func rrstoRCs(rrs []dnsv2.RR, origin string) (models.Records, error) {
+	dc, _ := models.NewDomainConfig(origin)
 	rcs := make(models.Records, 0, len(rrs))
 	for _, r := range rrs {
-		rc, err := dnsrr.RRtoRCV2(r, origin)
+		rc, err := dnsrr.RRv2toRC(dc, r)
 		if err != nil {
 			return nil, err
 		}
 
-		rcs = append(rcs, &rc)
+		rcs = append(rcs, rc)
 	}
 	return rcs, nil
 }
@@ -296,21 +297,21 @@ func r(s string, c int) string { return strings.Repeat(s, c) }
 
 func TestWriteZoneFileTxt(t *testing.T) {
 	// Do round-trip tests on various length TXT records.
-	t10 := `t10              IN TXT   "ten4567890"`
-	t254 := `t254             IN TXT   "` + r("a", 254) + `"`
-	t255 := `t255             IN TXT   "` + r("b", 255) + `"`
-	t256 := `t256             IN TXT   "` + r("c", 255) + `" "` + r("D", 1) + `"`
-	t509 := `t509             IN TXT   "` + r("e", 255) + `" "` + r("F", 254) + `"`
-	t510 := `t510             IN TXT   "` + r("g", 255) + `" "` + r("H", 255) + `"`
-	t511 := `t511             IN TXT   "` + r("i", 255) + `" "` + r("J", 255) + `" "` + r("k", 1) + `"`
-	t512 := `t511             IN TXT   "` + r("L", 255) + `" "` + r("M", 255) + `" "` + r("n", 2) + `"`
-	t513 := `t511             IN TXT   "` + r("o", 255) + `" "` + r("P", 255) + `" "` + r("q", 3) + `"`
+	t10 := `t10.bosun.org.   IN TXT   "ten4567890"`
+	t254 := `t254.bosun.org.  IN TXT   "` + r("a", 254) + `"`
+	t255 := `t255.bosun.org.  IN TXT   "` + r("b", 255) + `"`
+	t256 := `t256.bosun.org.  IN TXT   "` + r("c", 255) + `" "` + r("D", 1) + `"`
+	t509 := `t509.bosun.org.  IN TXT   "` + r("e", 255) + `" "` + r("F", 254) + `"`
+	t510 := `t510.bosun.org.  IN TXT   "` + r("g", 255) + `" "` + r("H", 255) + `"`
+	t511 := `t511.bosun.org.  IN TXT   "` + r("i", 255) + `" "` + r("J", 255) + `" "` + r("k", 1) + `"`
+	t512 := `t511.bosun.org.  IN TXT   "` + r("L", 255) + `" "` + r("M", 255) + `" "` + r("n", 2) + `"`
+	t513 := `t511.bosun.org.  IN TXT   "` + r("o", 255) + `" "` + r("P", 255) + `" "` + r("q", 3) + `"`
 	for i, d := range []string{t10, t254, t255, t256, t509, t510, t511, t512, t513} {
 		// Make the rr:
 		rr := dnstestv2.New(d)
 
 		// Make the expected zonefile:
-		ez := "$TTL 3600\n" + d + "\n"
+		ez := "$TTL 3600\n" + strings.Replace(d, ".bosun.org.", "           ", 1) + "\n"
 
 		// Generate the zonefile:
 		buf := &bytes.Buffer{}
@@ -389,7 +390,7 @@ var testdataZFEach = `$TTL 300
 4.5              IN PTR   y.bosun.org.
 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15._openpgpkey IN OPENPGPKEY 9901a204447450b7110400d9bef554b145128ccc90d9f52df14bb878626e3db32112d47fbc5ee9cc5ffcbbd06bee487a580481674d9d31e368a85ccf4d4ef3bfa3e23fdde238bc32d8c40d39204b912f8cb1c47a7f34ba64bf3598dafe0f080e17facb678b6e700b0163d677960471d265a197e5ee9d53d71e1911f47f518a0e303abaf3c01b188e37d7bf00a0b90d4f43af944202fc49356a35a367955633cd4503ff7dfa21fb70a201ffb4aa7a755fc560ffd5a4b1d7b7015e7b4bdc0a1e45c1c28fd2f628f4d21f07a091da0d29c98b070566e178c5974554e509a5153a16b271df835e8c8a97715cc4beb5383d05fdf7a0d9412a1fb9f572c195d8c0c696a5ec179bab29d3d8701446e7aca79565ecdd6ec3ceef4937cb248564a75ddb4115adc10400a8f820174b32c99c5ac6ee483c0184fed24fa44d2fd4c9dc00af9ed048b51cfdb95747ab1e35df933382b08f8223da934bfcba59cb356b0d2f4158d647ab76d09c444fadf5e92b95d65f4aae667f33835226170c6625db872a6b72cb13638cf4754941730f5117a4f7c262044bea453839f95b806a0bd98a668073ba2d0fce1ab4326f70656e53555345204275696c642053657276696365203c6275696c6473657276696365406f70656e737573652e6f72673e8864041311020024021b03060b09080703020315020303160201021e01021780050253674e3b050921bf0084000a09103b3011b76b9d65234a5b00a095c38bcfaa29f80adefc0cf9ba2abf3a3e9b516b009e367296e1a96af211f8cded2493f7f6ac09de41
 f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73._smimecert IN SMIMEA 3 0 0 abcdef0
-_443._tcp        IN TLSA  3 1 1 abcdef0
+_443._tcp        IN TLSA  3 1 1 ABCDEF0
 dname            IN DNAME example.com.
 dnssec           IN DNSKEY 257 3 13 rNR701yiOPHfqDP53GnsHZdlsRqI7O1ksk60rnFILZVk7Z4eTBd1U49oSkTNVNox9tb7N15N2hboXoMEyFFzcw==
                  IN DS    31334 13 2 94CC505EBC36B1F4E051268B820EFB230F1572D445E833BB5BF7380D6C2CBC0A
