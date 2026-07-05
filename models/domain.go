@@ -63,17 +63,10 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	if strings.HasSuffix(name, ".") {
 		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
 	}
-	dcn := domaintags.MakeDomainNameVarieties(name)
 	dc := &DomainConfig{
-		NameRaw:     dcn.NameRaw,
-		Name:        dcn.NameASCII,
-		NameUnicode: dcn.NameUnicode,
-		Tag:         dcn.Tag,
-		UniqueName:  dcn.UniqueName,
-		DisplayName: dcn.DisplayName,
-
 		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
 	}
+	dc.PopulateNamesFromRaw(name)
 
 	return dc, nil
 }
@@ -95,8 +88,8 @@ func (recs Records) FixLegacyRecords(origin string) {
 func (dc *DomainConfig) PostProcess() {
 }
 
-func (dc *DomainConfig) NormalizeDomainNamesFromDnsconfigjs() {
-	dcn := domaintags.MakeDomainNameVarieties(dc.Name)
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
 	dc.Name = dcn.NameASCII
 	dc.Tag = dcn.Tag
 	dc.NameRaw = dcn.NameRaw
