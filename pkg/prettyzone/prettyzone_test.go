@@ -344,7 +344,7 @@ func TestWriteZoneFileEach(t *testing.T) {
 	// If an rtype has more than one variations, add a test like TestWriteZoneFileCaa to test each.
 	var d []dnsv2.RR
 	// #rtype_variations
-	d = append(d, mustNewRR(`4.5                  300 IN PTR   y.bosun.org.`)) // Wouldn't actually be in this domain.
+	d = append(d, mustNewRR(`4.5.bosun.org.       300 IN PTR   y.bosun.org.`)) // Wouldn't actually be in this domain.
 	d = append(d, mustNewRR(`bosun.org.           300 IN A     1.2.3.4`))
 	d = append(d, mustNewRR(`bosun.org.           300 IN MX    1 bosun.org.`))
 	d = append(d, mustNewRR(`bosun.org.           300 IN TXT   "my text"`))
