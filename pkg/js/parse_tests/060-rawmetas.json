@@ -3,11 +3,6 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "bar.com",
-        "dnscontrol_nameunicode": "bar.com",
-        "dnscontrol_uniquename": "bar.com"
-      },
       "name": "bar.com",
       "records": [
         {

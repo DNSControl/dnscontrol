@@ -162,7 +162,7 @@ func (p *mikrotikProvider) GetNameservers(_ string) ([]*models.Nameserver, error
 
 // EnsureZoneExists is a no-op for RouterOS. Zones are virtual constructs
 // derived from record names — the zone will "exist" once records are pushed.
-func (p *mikrotikProvider) EnsureZoneExists(_ string, _ map[string]string) error {
+func (p *mikrotikProvider) EnsureZoneExists(_ *models.DomainConfig) error {
 	return nil
 }
 

@@ -10,20 +10,6 @@ import (
 	"golang.org/x/net/idna"
 )
 
-const (
-	// DomainTag is the key used to store a copy of DomainConfig.Tag in the Metadata map.
-	DomainTag = "dnscontrol_tag"
-
-	// DomainUniqueName is the key used to store a copy of DomainConfig.UniqueName in the Metadata map.
-	DomainUniqueName = "dnscontrol_uniquename"
-
-	// DomainNameRaw is the key used to store a copy of DomainConfig.NameRaw in the Metadata map.
-	DomainNameRaw = "dnscontrol_nameraw"
-
-	// DomainNameUnicode is the key used to store a copy of DomainConfig.NameUnicode in the Metadata map.
-	DomainNameUnicode = "dnscontrol_nameunicode"
-)
-
 // DomainConfig describes a DNS domain (technically a DNS zone).
 // Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
@@ -89,9 +75,9 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 
 		// TODO(tlim): Eliminate the need for this Metedata. It was a hack to avoid changing legacy code but should be easier to eliminate now.
 		Metadata: map[string]string{
-			DomainUniqueName:  dcn.UniqueName,
-			DomainNameRaw:     dcn.NameRaw,
-			DomainNameUnicode: dcn.NameUnicode,
+			// DomainUniqueName: dcn.UniqueName,
+			// DomainNameRaw:     dcn.NameRaw,
+			// DomainNameUnicode: dcn.NameUnicode,
 		},
 	}
 
@@ -127,13 +113,6 @@ func (dc *DomainConfig) NormalizeDomainNamesFromDnsconfigjs() {
 	dc.NameUnicode = ff.NameUnicode
 	dc.DisplayName = ff.DisplayName
 	dc.UniqueName = ff.UniqueName
-
-	dc.Metadata[DomainNameRaw] = ff.NameRaw
-	dc.Metadata[DomainNameUnicode] = ff.NameUnicode
-	dc.Metadata[DomainUniqueName] = ff.UniqueName
-	if ff.Tag != "" {
-		dc.Metadata[DomainTag] = ff.Tag
-	}
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.

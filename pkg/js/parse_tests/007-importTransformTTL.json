@@ -3,11 +3,6 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo1.com",
-        "dnscontrol_nameunicode": "foo1.com",
-        "dnscontrol_uniquename": "foo1.com"
-      },
       "name": "foo1.com",
       "records": [
         {
@@ -42,11 +37,6 @@
     },
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "inny",
-        "dnscontrol_nameunicode": "inny",
-        "dnscontrol_uniquename": "inny"
-      },
       "name": "inny",
       "records": [
         {
@@ -81,11 +71,6 @@
     },
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "com.inny",
-        "dnscontrol_nameunicode": "com.inny",
-        "dnscontrol_uniquename": "com.inny"
-      },
       "name": "com.inny",
       "records": [
         {

@@ -316,7 +316,9 @@ func parsePriority(priority int) int {
 	return priority
 }
 
-func (api *realtimeregisterAPI) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *realtimeregisterAPI) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	exists, err := api.zoneExists(domain)
 	if err != nil {
 		return err

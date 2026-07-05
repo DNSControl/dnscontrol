@@ -103,7 +103,8 @@ func (h *hetznerv2Provider) fetchAllZones() (map[string]*hcloud.Zone, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (h *hetznerv2Provider) EnsureZoneExists(domain string, _ map[string]string) error {
+func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	encoded, err := idna.ToASCII(domain)
 	if err != nil {
 		return err

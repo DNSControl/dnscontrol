@@ -10,11 +10,6 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "domain.tld",
-        "dnscontrol_nameunicode": "domain.tld",
-        "dnscontrol_uniquename": "domain.tld"
-      },
       "name": "domain.tld",
       "records": [
         {
@@ -186,11 +181,6 @@
     {
       "dnsProviders": {
         "Cloudflare": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "sub.domain.tld",
-        "dnscontrol_nameunicode": "sub.domain.tld",
-        "dnscontrol_uniquename": "sub.domain.tld"
       },
       "name": "sub.domain.tld",
       "records": [
