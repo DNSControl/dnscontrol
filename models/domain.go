@@ -117,38 +117,23 @@ func (recs Records) FixLegacyRecords(origin string) {
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
-	// Ensure the metadata map is initialized.
-	if dc.Metadata == nil {
-		dc.Metadata = map[string]string{}
-	}
+}
 
-	//  HACK: Fill in names (This means models.NewDomainConfig() was not used.  We can eliminate this when legacy code is removed.
-	ff := domaintags.MakeDomainNameVarieties(dc.Name) // FIXME: Slow.  Call only if needed.
-	if dc.Tag == "" {
-		dc.Tag = ff.Tag
-	}
-	if dc.NameRaw == "" {
-		dc.NameRaw = ff.NameRaw
-	}
-	dc.Name = ff.NameASCII // We always overwrite this. It's a hack, but it works. Good enough until legacy code is removed.
-	if dc.NameUnicode == "" {
-		dc.NameUnicode = ff.NameUnicode
-	}
-	if dc.UniqueName == "" {
-		dc.UniqueName = ff.UniqueName
-	}
-	if dc.DisplayName == "" {
-		dc.DisplayName = ff.DisplayName
-	}
+func (dc *DomainConfig) NormalizeDomainNamesFromDnsconfigjs() {
+	ff := domaintags.MakeDomainNameVarieties(dc.Name)
+	dc.Name = ff.NameASCII
+	dc.Tag = ff.Tag
+	dc.NameRaw = ff.NameRaw
+	dc.NameUnicode = ff.NameUnicode
+	dc.DisplayName = ff.DisplayName
+	dc.UniqueName = ff.UniqueName
 
-	// Store the FixForms is Metadata so we don't have to change the signature of every function that might need them.
-	// This is a bit ugly but avoids a huge refactor. Please avoid using these to make the future refactor easier.
-	if dc.Tag != "" {
-		dc.Metadata[DomainTag] = dc.Tag
+	dc.Metadata[DomainNameRaw] = ff.NameRaw
+	dc.Metadata[DomainNameUnicode] = ff.NameUnicode
+	dc.Metadata[DomainUniqueName] = ff.UniqueName
+	if ff.Tag != "" {
+		dc.Metadata[DomainTag] = ff.Tag
 	}
-	dc.Metadata[DomainNameRaw] = dc.NameRaw
-	dc.Metadata[DomainNameUnicode] = dc.NameUnicode
-	dc.Metadata[DomainUniqueName] = dc.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
