@@ -18,11 +18,6 @@
       "dnsProviders": {
         "otherconfig": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_uniquename": "example.com"
-      },
       "name": "example.com",
       "records": [
         {
@@ -58,12 +53,6 @@
     {
       "dnsProviders": {
         "Cloudflare": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_tag": "inside",
-        "dnscontrol_uniquename": "example.com!inside"
       },
       "name": "example.com",
       "records": [
@@ -102,12 +91,6 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_tag": "outside",
-        "dnscontrol_uniquename": "example.com!outside"
-      },
       "name": "example.com",
       "records": [
         {
@@ -131,11 +114,6 @@
     {
       "dnsProviders": {
         "bind": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_uniquename": "example.net"
       },
       "name": "example.net",
       "records": [
@@ -172,12 +150,6 @@
     {
       "dnsProviders": {
         "Cloudflare": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_tag": "inside",
-        "dnscontrol_uniquename": "example.net!inside"
       },
       "name": "example.net",
       "records": [
@@ -229,12 +201,6 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_tag": "outside",
-        "dnscontrol_uniquename": "example.net!outside"
-      },
       "name": "example.net",
       "records": [
         {
@@ -285,11 +251,6 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "empty.example.net",
-        "dnscontrol_nameunicode": "empty.example.net",
-        "dnscontrol_uniquename": "empty.example.net"
-      },
       "name": "empty.example.net",
       "records": [
         {
@@ -325,11 +286,6 @@
     {
       "dnsProviders": {
         "bind": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "example-b.net",
-        "dnscontrol_nameunicode": "example-b.net",
-        "dnscontrol_uniquename": "example-b.net!"
       },
       "name": "example-b.net",
       "records": [

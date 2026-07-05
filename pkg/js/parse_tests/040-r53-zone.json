@@ -4,9 +4,6 @@
     {
       "dnsProviders": {},
       "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com",
         "zone_id": "Z2FTEDLFRTZ"
       },
       "name": "foo.com",
@@ -17,10 +14,6 @@
     {
       "dnsProviders": {},
       "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_tag": "internal",
-        "dnscontrol_uniquename": "foo.com!internal",
         "zone_id": "Z2FTEDLFRTF"
       },
       "name": "foo.com",

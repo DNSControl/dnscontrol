@@ -4,11 +4,6 @@
     {
       "dnsProviders": {},
       "ignore_external_dns": true,
-      "meta": {
-        "dnscontrol_nameraw": "extdns-default.com",
-        "dnscontrol_nameunicode": "extdns-default.com",
-        "dnscontrol_uniquename": "extdns-default.com"
-      },
       "name": "extdns-default.com",
       "records": [],
       "registrar": "none",
@@ -18,11 +13,6 @@
       "dnsProviders": {},
       "external_dns_prefix": "extdns-",
       "ignore_external_dns": true,
-      "meta": {
-        "dnscontrol_nameraw": "extdns-custom.com",
-        "dnscontrol_nameunicode": "extdns-custom.com",
-        "dnscontrol_uniquename": "extdns-custom.com"
-      },
       "name": "extdns-custom.com",
       "records": [],
       "registrar": "none",
@@ -31,11 +21,6 @@
     {
       "dnsProviders": {},
       "ignore_external_dns": true,
-      "meta": {
-        "dnscontrol_nameraw": "extdns-combined.com",
-        "dnscontrol_nameunicode": "extdns-combined.com",
-        "dnscontrol_uniquename": "extdns-combined.com"
-      },
       "name": "extdns-combined.com",
       "records": [
         {

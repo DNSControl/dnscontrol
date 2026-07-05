@@ -10,12 +10,6 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_tag": "external",
-        "dnscontrol_uniquename": "foo.com!external"
-      },
       "name": "foo.com",
       "records": [
         {
@@ -39,12 +33,6 @@
     {
       "dnsProviders": {
         "Cloudflare": -1
-      },
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_tag": "internal",
-        "dnscontrol_uniquename": "foo.com!internal"
       },
       "name": "foo.com",
       "records": [

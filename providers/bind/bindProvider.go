@@ -198,27 +198,23 @@ func (c *bindProvider) ListZones() ([]string, error) {
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *bindProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
-	meta := dc.Metadata
+	// meta := dc.Metadata
 
 	var zonefile string
 
 	if _, err := os.Stat(c.directory); os.IsNotExist(err) {
 		printer.Printf("\nWARNING: BIND directory %q does not exist! (will create)\n", c.directory)
 	}
-	ff := domaintags.DomainNameVarieties{
-		Tag:         meta[models.DomainTag],
-		NameRaw:     meta[models.DomainNameRaw],
-		NameASCII:   domain,
-		NameUnicode: meta[models.DomainNameUnicode],
-		UniqueName:  meta[models.DomainUniqueName],
-		// NB(tlim): When "get-zones" is called, these values are populated
-		// directly by commands/getZones.go near where provider.GetZoneRecords()
-		// is called. Changes here may need to be reflected there too.
-	}
 	zonefile = filepath.Join(c.directory,
 		makeFileName(
 			c.filenameformat,
-			ff,
+			domaintags.DomainNameVarieties{
+				Tag:         dc.Tag,
+				NameRaw:     dc.NameRaw,
+				NameASCII:   domain,
+				NameUnicode: dc.NameUnicode,
+				UniqueName:  dc.UniqueName,
+			},
 		),
 	)
 	//fmt.Printf("DEBUG: Reading zonefile %q\n", zonefile)
@@ -284,7 +280,7 @@ func ParseZoneContents(dc *models.DomainConfig, content string, zonefileName str
 	return foundRecords, nil
 }
 
-func (c *bindProvider) EnsureZoneExists(_ string, _ map[string]string) error {
+func (c *bindProvider) EnsureZoneExists(_ *models.DomainConfig) error {
 	return nil
 }
 

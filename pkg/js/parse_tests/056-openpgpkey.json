@@ -3,11 +3,6 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "hex.example.com",
-        "dnscontrol_nameunicode": "hex.example.com",
-        "dnscontrol_uniquename": "hex.example.com"
-      },
       "name": "hex.example.com",
       "records": [
         {
@@ -29,11 +24,6 @@
     },
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "base64.example.com",
-        "dnscontrol_nameunicode": "base64.example.com",
-        "dnscontrol_uniquename": "base64.example.com"
-      },
       "name": "base64.example.com",
       "records": [
         {

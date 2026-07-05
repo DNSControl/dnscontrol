@@ -257,7 +257,9 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	return existingRecords, nil
 }
 
-func (api *autoDNSProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *autoDNSProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	// try to get zone
 	_, err := api.getZone(domain)
 

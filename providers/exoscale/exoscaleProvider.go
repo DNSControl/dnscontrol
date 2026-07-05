@@ -80,7 +80,8 @@ func init() {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (provider *exoscaleProvider) EnsureZoneExists(domain string) error {
+func (provider *exoscaleProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := provider.findDomainByName(domain)
 	if errors.Is(err, egoscale.ErrNotFound) {
 		_, err = provider.client.CreateDNSDomain(context.Background(), egoscale.CreateDNSDomainRequest{

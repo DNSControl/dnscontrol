@@ -10,20 +10,6 @@ import (
 	"golang.org/x/net/idna"
 )
 
-const (
-	// DomainTag is the key used to store a copy of DomainConfig.Tag in the Metadata map.
-	DomainTag = "dnscontrol_tag"
-
-	// DomainUniqueName is the key used to store a copy of DomainConfig.UniqueName in the Metadata map.
-	DomainUniqueName = "dnscontrol_uniquename"
-
-	// DomainNameRaw is the key used to store a copy of DomainConfig.NameRaw in the Metadata map.
-	DomainNameRaw = "dnscontrol_nameraw"
-
-	// DomainNameUnicode is the key used to store a copy of DomainConfig.NameUnicode in the Metadata map.
-	DomainNameUnicode = "dnscontrol_nameunicode"
-)
-
 // DomainConfig describes a DNS domain (technically a DNS zone).
 // Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
@@ -77,23 +63,10 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	if strings.HasSuffix(name, ".") {
 		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
 	}
-	dcn := domaintags.MakeDomainNameVarieties(name) // TODO(tlim): Create a version of MakeDomainNameVarieties that returns an error on failure.
-	//dcn := domaintags.DomainNameVarieties{NameASCII: name}
 	dc := &DomainConfig{
-		NameRaw:     dcn.NameRaw,
-		Name:        dcn.NameASCII,
-		NameUnicode: dcn.NameUnicode,
-		Tag:         dcn.Tag,
-		UniqueName:  dcn.UniqueName,
-		DisplayName: dcn.DisplayName,
-
-		// TODO(tlim): Eliminate the need for this Metedata. It was a hack to avoid changing legacy code but should be easier to eliminate now.
-		Metadata: map[string]string{
-			DomainUniqueName:  dcn.UniqueName,
-			DomainNameRaw:     dcn.NameRaw,
-			DomainNameUnicode: dcn.NameUnicode,
-		},
+		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
 	}
+	dc.PopulateNamesFromRaw(name)
 
 	return dc, nil
 }
@@ -110,45 +83,19 @@ func (recs Records) FixLegacyRecords(origin string) {
 	}
 }
 
-//func FixLegacyRecord(rec *models.RecordConfig, origin string) {
-//	rec.FixUp(origin) // Hack. Populates .RDATA and .TypeNum if needed.
-//}
-
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
-	// Ensure the metadata map is initialized.
-	if dc.Metadata == nil {
-		dc.Metadata = map[string]string{}
-	}
+}
 
-	//  HACK: Fill in names (This means models.NewDomainConfig() was not used.  We can eliminate this when legacy code is removed.
-	ff := domaintags.MakeDomainNameVarieties(dc.Name) // FIXME: Slow.  Call only if needed.
-	if dc.Tag == "" {
-		dc.Tag = ff.Tag
-	}
-	if dc.NameRaw == "" {
-		dc.NameRaw = ff.NameRaw
-	}
-	dc.Name = ff.NameASCII // We always overwrite this. It's a hack, but it works. Good enough until legacy code is removed.
-	if dc.NameUnicode == "" {
-		dc.NameUnicode = ff.NameUnicode
-	}
-	if dc.UniqueName == "" {
-		dc.UniqueName = ff.UniqueName
-	}
-	if dc.DisplayName == "" {
-		dc.DisplayName = ff.DisplayName
-	}
-
-	// Store the FixForms is Metadata so we don't have to change the signature of every function that might need them.
-	// This is a bit ugly but avoids a huge refactor. Please avoid using these to make the future refactor easier.
-	if dc.Tag != "" {
-		dc.Metadata[DomainTag] = dc.Tag
-	}
-	dc.Metadata[DomainNameRaw] = dc.NameRaw
-	dc.Metadata[DomainNameUnicode] = dc.NameUnicode
-	dc.Metadata[DomainUniqueName] = dc.UniqueName
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.

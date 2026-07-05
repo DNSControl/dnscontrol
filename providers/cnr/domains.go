@@ -1,9 +1,12 @@
 package cnr
 
+import "github.com/DNSControl/dnscontrol/v4/models"
+
 // EnsureZoneExists returns an error
 // * if access to dnszone is not allowed (not authorized) or
 // * if it doesn't exist and creating it fails.
-func (n *Client) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (n *Client) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	command := map[string]any{
 		"COMMAND": "AddDNSZone",
 		"DNSZONE": domain,

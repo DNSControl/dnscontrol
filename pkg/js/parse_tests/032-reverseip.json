@@ -10,11 +10,6 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "3.2.1.in-addr.arpa",
-        "dnscontrol_nameunicode": "3.2.1.in-addr.arpa",
-        "dnscontrol_uniquename": "3.2.1.in-addr.arpa"
-      },
       "name": "3.2.1.in-addr.arpa",
       "records": [
         {

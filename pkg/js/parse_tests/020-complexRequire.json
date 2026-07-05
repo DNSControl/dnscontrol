@@ -3,11 +3,6 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "sortfoo.com",
-        "dnscontrol_nameunicode": "sortfoo.com",
-        "dnscontrol_uniquename": "sortfoo.com"
-      },
       "name": "sortfoo.com",
       "records": [
         {

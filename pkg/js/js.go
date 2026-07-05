@@ -120,6 +120,12 @@ func ExecuteJavascriptString(script []byte, devMode bool, variables map[string]s
 		return nil, err
 	}
 
+	// dc.Name and related fields are not populated when the DomainConfig is created from dnsconfig.js.  We need to populate them here.
+	// This includes IDN processing, setting up Tags, stripping the "!tag" from .Name, and more.
+	for _, dc := range conf.Domains {
+		dc.PopulateNamesFromRaw(dc.Name)
+	}
+
 	err = conf.PostProcess()
 	if err != nil {
 		return nil, err

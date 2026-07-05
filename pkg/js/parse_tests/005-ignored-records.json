@@ -3,11 +3,6 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [],
       "registrar": "none",
@@ -57,11 +52,6 @@
     },
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "diff2.com",
-        "dnscontrol_nameunicode": "diff2.com",
-        "dnscontrol_uniquename": "diff2.com"
-      },
       "name": "diff2.com",
       "records": [],
       "registrar": "none",
