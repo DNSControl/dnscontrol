@@ -121,6 +121,20 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		return nil
 	}
 
+	if typeNum == privatetypes.TypeALIAS {
+		// ALIAS is a private type: its rdata is a single hostname target. The
+		// dnsv2 presentation parser has no parser for private types and would
+		// treat the target as RFC3597 rdata, so set the target directly and
+		// derive the V3 fields (.RDATA and .ComparableV3) via FixUp.
+		rc.TypeNum = typeNum
+		rc.Type = "ALIAS"
+		if err := rc.SetTarget(contents); err != nil {
+			return err
+		}
+		rc.FixUp(origin)
+		return nil
+	}
+
 	return legacySetTargetParse(rc, typeNum, contents)
 
 }
