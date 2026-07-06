@@ -65,6 +65,15 @@ func (dc *DomainConfig) NewRecordConfigForRRv2toRC(name string, ttl uint32, type
 func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
 	mustbe.ValidArgs(args)
 
+	// Make sure label is a shortname.
+	name = strings.ToLower(name)
+	if before, found := strings.CutSuffix(name, "."+origin+"."); found {
+		name = before
+	}
+	if name == origin+"." {
+		name = "@"
+	}
+
 	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
