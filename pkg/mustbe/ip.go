@@ -2,6 +2,7 @@ package mustbe
 
 import (
 	"fmt"
+	"net"
 	"net/netip"
 )
 
@@ -31,6 +32,16 @@ func IPv4(a any) netip.Addr {
 			return netip.Addr{}
 		}
 		return v
+	case net.IP:
+		ipv4Bytes := v.To4()
+		if ipv4Bytes == nil {
+			panic(fmt.Sprintf("not a valid IPv4 address: %v", v))
+		}
+		addr, ok := netip.AddrFromSlice(ipv4Bytes)
+		if !ok {
+			panic(fmt.Sprintf("failed to convert IPv4 address: %v", v))
+		}
+		return addr
 	}
 	panic(fmt.Sprintf("mustbe.IPv4: unhandled type: %T", a))
 }
@@ -48,6 +59,17 @@ func IPv6(a any) netip.Addr {
 			return netip.Addr{}
 		}
 		return v
+	case net.IP:
+		ipv6Bytes := v.To16()
+		if ipv6Bytes == nil {
+			panic(fmt.Sprintf("not a valid IPv6 address: %v", v))
+		}
+		addr, ok := netip.AddrFromSlice(ipv6Bytes)
+		if !ok {
+			panic(fmt.Sprintf("failed to convert IPv6 address: %v", v))
+		}
+		return addr
+
 	}
 	panic(fmt.Sprintf("mustbe.IPv6: unhandled type: %T", a))
 }
