@@ -51,7 +51,7 @@ func (rc *RecordConfig) ValidateRDATA() {
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
-	rd, err := dnsv2.NewData(typeNum, contents, origin)
+	rd, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
 		return nil, err
 	}

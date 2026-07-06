@@ -58,6 +58,7 @@ func TargetHost(origin string, arg any) string {
 
 	// origin not specified. Leave things as-is.
 	if origin == "" {
+		// TODO(tlim): Shouldn't this be "return name"?
 		return name + "."
 
 	}

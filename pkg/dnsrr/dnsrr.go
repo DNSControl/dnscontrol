@@ -31,58 +31,129 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 	rc.Type = dnsv2.TypeToString[header.Rrtype]
 	rc.TTL = header.Ttl
 	rc.Original = rr
-	//rc.SetLabelFromFQDN(strings.TrimSuffix(header.Name, "."), origin)
 	rc.SetLabelFromFQDN(header.Name, origin)
 	var err error
 	switch v := rr.(type) { // #rtype_variations
+
 	case *dnsv1.A:
-		err = rc.SetTarget(v.A.String())
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.A); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.AAAA:
-		err = rc.SetTarget(v.AAAA.String())
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.AAAA); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.CAA:
-		err = rc.SetTargetCAA(v.Flag, v.Tag, v.Value)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Flag, v.Tag, v.Value); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.CNAME:
-		err = rc.SetTarget(v.Target)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Target); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.DHCID:
-		err = rc.SetTarget(v.Digest)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Digest); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.DNAME:
-		err = rc.SetTarget(v.Target)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Target); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.DS:
-		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum, v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.KeyTag, v.Algorithm, v.DigestType, v.Digest); err == nil {
 			return *rec, nil
 		}
 	case *dnsv1.DNSKEY:
-		err = rc.SetTargetDNSKEY(v.Flags, v.Protocol, v.Algorithm, v.PublicKey)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Flags, v.Protocol, v.Algorithm, v.PublicKey); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.HTTPS:
-		err = rc.SetTargetSVCB(v.Priority, v.Target, v.Value)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Priority, v.Target, v.Value); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.LOC:
-		err = rc.SetTargetLOC(v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.MX:
-		err = rc.SetTargetMX(v.Preference, v.Mx)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Preference, v.Mx); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.NAPTR:
-		err = rc.SetTargetNAPTR(v.Order, v.Preference, v.Flags, v.Service, v.Regexp, v.Replacement)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Order, v.Preference, v.Flags, v.Service, v.Regexp, v.Replacement); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.OPENPGPKEY:
-		err = rc.SetTarget(v.PublicKey)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.PublicKey); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.NS:
-		err = rc.SetTarget(v.Ns)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Ns); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.PTR:
-		err = rc.SetTarget(v.Ptr)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Ptr); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.RP:
 		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum, v.Mbox, v.Txt); err == nil {
 			return *rec, nil
 		}
 	case *dnsv1.SMIMEA:
-		err = rc.SetTargetSMIMEA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Usage, v.Selector, v.MatchingType, v.Certificate); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.SOA:
-		err = rc.SetTargetSOA(v.Ns, v.Mbox, v.Serial, v.Refresh, v.Retry, v.Expire, v.Minttl)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Ns, v.Mbox, v.Serial, v.Refresh, v.Retry, v.Expire, v.Minttl); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.SRV:
-		err = rc.SetTargetSRV(v.Priority, v.Weight, v.Port, v.Target)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Priority, v.Weight, v.Port, v.Target); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.SSHFP:
-		err = rc.SetTargetSSHFP(v.Algorithm, v.Type, v.FingerPrint)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Algorithm, v.Type, v.FingerPrint); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.SVCB:
-		err = rc.SetTargetSVCB(v.Priority, v.Target, v.Value)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Priority, v.Target, v.Value); err == nil {
+			return *rec, nil
+		}
+
 	case *dnsv1.TLSA:
-		err = rc.SetTargetTLSA(v.Usage, v.Selector, v.MatchingType, v.Certificate)
+		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
+			v.Usage, v.Selector, v.MatchingType, v.Certificate); err == nil {
+			return *rec, nil
+		}
 	case *dnsv1.TXT:
 		if fixBug {
 			t := strings.Join(v.Txt, "")

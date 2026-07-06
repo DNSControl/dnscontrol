@@ -2,9 +2,9 @@ package models
 
 import (
 	"fmt"
-	"net/netip"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 )
 
 // PopulateFromStringFunc populates a RecordConfig by parsing a common RFC1035-like format.
@@ -61,80 +61,50 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		return fmt.Errorf("assertion failed: rtype already set (%s) (%s)", rtype, rc.Type)
 	}
 
-	switch rc.Type = rtype; rtype { // #rtype_variations
+	typeNum, ok := dnsv2.StringToType[rtype]
+	if ok {
 
-	case "A":
-		ip, err := netip.ParseAddr(contents)
-		if err != nil || !ip.Is4() {
-			return fmt.Errorf("invalid IP in A record: %s", contents)
+		// Treat SPF as TXT.
+		if typeNum == dnsv2.TypeSPF {
+			typeNum = dnsv2.TypeTXT
 		}
-		return rc.SetTargetIP(ip) // Reformat to canonical form.
-	case "AAAA":
-		ip, err := netip.ParseAddr(contents)
-		if err != nil || !ip.Is6() {
-			return fmt.Errorf("invalid IP in AAAA record: %s", contents)
-		}
-		return rc.SetTargetIP(ip) // Reformat to canonical form.
-	case "AKAMAICDN", "AKAMAITLC", "ALIAS", "ANAME", "CNAME", "NS", "PTR":
-		return rc.SetTarget(contents)
-	case "CAA":
-		return rc.SetTargetCAAString(contents)
-	case "DS":
-		return legacySetTargetParse(rc, dnsv2.TypeDS, contents)
-	case "DNSKEY":
-		return rc.SetTargetDNSKEYString(contents)
-	case "DHCID":
-		return rc.SetTarget(contents)
-	case "DNAME":
-		return rc.SetTarget(contents)
-	case "LOC":
-		return rc.SetTargetLOCString(origin, contents)
-	case "MX":
-		return rc.SetTargetMXString(contents)
-	case "NAPTR":
-		return rc.SetTargetNAPTRString(contents)
-	case "OPENPGPKEY":
-		return rc.SetTarget(contents)
-	case "RP":
-		return newRecordConfigHelperRC(rc, rtype, contents, origin)
-	case "SMIMEA":
-		return rc.SetTargetSMIMEAString(contents)
-	case "SOA":
-		return rc.SetTargetSOAString(contents)
-	case "SPF", "TXT":
-		if txtFn == nil {
-			return rc.SetTargetTXT(contents)
-		}
-		t, err := txtFn(contents)
-		if err != nil {
-			return fmt.Errorf("invalid TXT record: %s", contents)
-		}
-		return rc.SetTargetTXT(t)
-	case "LUA":
-		luaType, payload := ParseLuaContent(contents)
-		rc.LuaRType = luaType
-		if txtFn != nil {
-			value, err := txtFn(payload)
-			if err != nil {
-				return fmt.Errorf("invalid LUA record: %s", contents)
+
+		// Use txtFn if provided to parse TXT records.
+		if typeNum == dnsv2.TypeTXT {
+			rc.TypeNum = dnsv2.TypeTXT
+			rc.Type = "TXT"
+			if txtFn != nil {
+				t, err := txtFn(contents)
+				if err != nil {
+					return fmt.Errorf("invalid TXT record: %s", contents)
+				}
+				return legacySetTargetParse(rc, typeNum, t)
+			} else {
+				rd := dnsrdatav2.TXT{Txt: []string{contents}}
+				rc.SetRDATA(rd)
+				rc.FixUp(origin) // Add .ComparableV3
+				return rc.SetTargetTXT(contents)
 			}
-			return rc.SetTargetTXT(value)
 		}
-		value, err := DecodeLuaPayload(payload)
-		if err != nil {
-			return fmt.Errorf("invalid LUA record: %s", contents)
-		}
-		return rc.SetTargetTXT(value)
-	case "SRV":
-		return rc.SetTargetSRVString(contents)
-	case "SSHFP":
-		return rc.SetTargetSSHFPString(contents)
-	case "SVCB", "HTTPS":
-		return rc.SetTargetSVCBString(origin, contents)
-	case "TLSA":
-		return rc.SetTargetTLSAString(contents)
+
+		return legacySetTargetParse(rc, typeNum, contents)
 	}
-	// return fmt.Errorf("unknown rtype (%s) when parsing (%s) domain=(%s)", rtype, contents, origin)
+	// case "LUA":
+	// 	luaType, payload := ParseLuaContent(contents)
+	// 	rc.LuaRType = luaType
+	// 	if txtFn != nil {
+	// 		value, err := txtFn(payload)
+	// 		if err != nil {
+	// 			return fmt.Errorf("invalid LUA record: %s", contents)
+	// 		}
+	// 		return rc.SetTargetTXT(value)
+	// 	}
+	// 	value, err := DecodeLuaPayload(payload)
+	// 	if err != nil {
+	// 		return fmt.Errorf("invalid LUA record: %s", contents)
+	// 	}
+	// 	return rc.SetTargetTXT(value)
+
 	return MakeUnknown(rc, rtype, contents, origin)
 }
 
@@ -169,69 +139,5 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 //		}
 //		return rc, nil
 func (rc *RecordConfig) PopulateFromString(rtype, contents, origin string) error {
-	if rc.Type != "" && rc.Type != rtype {
-		panic(fmt.Errorf("assertion failed: rtype already set (%s) (%s)", rtype, rc.Type))
-	}
-
-	// TODO(tlim): If this is a modern type, use NewRecordConfigForPopulateFromString.
-
-	switch rc.Type = rtype; rtype { // #rtype_variations
-	case "A":
-		ip, err := netip.ParseAddr(contents)
-		if err != nil || !ip.Is4() {
-			return fmt.Errorf("invalid IP in A record: %s", contents)
-		}
-		return rc.SetTargetIP(ip) // Reformat to canonical form.
-	case "AAAA":
-		ip, err := netip.ParseAddr(contents)
-		if err != nil || !ip.Is6() {
-			return fmt.Errorf("invalid IP in AAAA record: %s", contents)
-		}
-		return rc.SetTargetIP(ip) // Reformat to canonical form.
-	case "AKAMAICDN", "AKAMAITLC", "ALIAS", "ANAME", "CNAME", "NS", "PTR":
-		return rc.SetTarget(contents)
-	case "CAA":
-		return rc.SetTargetCAAString(contents)
-	case "DS":
-		return legacySetTargetParse(rc, dnsv2.TypeDS, contents)
-	case "DNSKEY":
-		return rc.SetTargetDNSKEYString(contents)
-	case "DHCID":
-		return rc.SetTarget(contents)
-	case "DNAME":
-		return rc.SetTarget(contents)
-	case "LOC":
-		return rc.SetTargetLOCString(origin, contents)
-	case "MX":
-		return rc.SetTargetMXString(contents)
-	case "NAPTR":
-		return rc.SetTargetNAPTRString(contents)
-	case "OPENPGPKEY":
-		return rc.SetTarget(contents)
-	case "SMIMEA":
-		return rc.SetTargetSMIMEAString(contents)
-	case "SOA":
-		return rc.SetTargetSOAString(contents)
-	case "SPF", "TXT":
-		return rc.SetTargetTXTs(ParseQuotedTxt(contents))
-	case "LUA":
-		luaType, payload := ParseLuaContent(contents)
-		rc.LuaRType = luaType
-		value, err := DecodeLuaPayload(payload)
-		if err != nil {
-			return fmt.Errorf("invalid LUA record: %s", contents)
-		}
-		return rc.SetTargetTXT(value)
-	case "SRV":
-		return rc.SetTargetSRVString(contents)
-	case "SSHFP":
-		return rc.SetTargetSSHFPString(contents)
-	case "SVCB", "HTTPS":
-		return rc.SetTargetSVCBString(origin, contents)
-	case "TLSA":
-		return rc.SetTargetTLSAString(contents)
-	default:
-		return fmt.Errorf("unknown rtype (%s) when parsing (%s) domain=(%s)",
-			rtype, contents, origin)
-	}
+	return rc.PopulateFromStringFunc(rtype, contents, origin, nil)
 }

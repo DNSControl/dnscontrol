@@ -1,52 +1,23 @@
 package models
 
 import (
-	"strconv"
-	"strings"
-
-	"github.com/pkg/errors"
+	dnsv2 "codeberg.org/miekg/dns"
 )
 
 // SetTargetDNSKEY sets the DNSKEY fields.
-func (rc *RecordConfig) SetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
-	rc.DnskeyFlags = flags
-	rc.DnskeyProtocol = protocol
-	rc.DnskeyAlgorithm = algorithm
-	rc.DnskeyPublicKey = publicKey
-
-	if rc.Type == "" {
-		rc.Type = "DNSKEY"
-	}
-	if rc.Type != "DNSKEY" {
-		panic("assertion failed: SetTargetDNSKEY called when .Type is not DNSKEY")
-	}
-
-	return nil
+// Deprecated. Use models.NewRecordConfig() instead.
+func (rc *RecordConfig) xSetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
+	return legacySetTargetArgs(rc, dnsv2.TypeDNSKEY, flags, protocol, algorithm, publicKey)
 }
 
-// SetTargetDNSKEYStrings is like SetTargetDNSKEY but accepts strings.
-func (rc *RecordConfig) SetTargetDNSKEYStrings(flags, protocol, algorithm, publicKey string) error {
-	u16flags, err := strconv.ParseUint(flags, 10, 16)
-	if err != nil {
-		return errors.Wrap(err, "DNSKEY Flags can't fit in 16 bits")
-	}
-	u8protocol, err := strconv.ParseUint(protocol, 10, 8)
-	if err != nil {
-		return errors.Wrap(err, "DNSKEY Protocol can't fit in 8 bits")
-	}
-	u8algorithm, err := strconv.ParseUint(algorithm, 10, 8)
-	if err != nil {
-		return errors.Wrap(err, "DNSKEY Algorithm can't fit in 8 bits")
-	}
-
-	return rc.SetTargetDNSKEY(uint16(u16flags), uint8(u8protocol), uint8(u8algorithm), publicKey)
-}
+// // SetTargetDNSKEYStrings is like SetTargetDNSKEY but accepts strings.
+// // Deprecated. Use models.NewRecordConfig() instead.
+// func (rc *RecordConfig) SetTargetDNSKEYStrings(flags, protocol, algorithm, publicKey string) error {
+// 	return legacySetTargetArgs(rc, dnsv2.TypeDNSKEY, flags, protocol, algorithm, publicKey)
+// }
 
 // SetTargetDNSKEYString is like SetTargetDNSKEY but accepts one big string.
+// Deprecated. Use models.NewRecordConfigParse() instead.
 func (rc *RecordConfig) SetTargetDNSKEYString(s string) error {
-	part := strings.Fields(s)
-	if len(part) != 4 {
-		return errors.Errorf("DNSKEY value does not contain 4 fieldnskey: (%#v)", s)
-	}
-	return rc.SetTargetDNSKEYStrings(part[0], part[1], part[2], part[3])
+	return legacySetTargetParse(rc, dnsv2.TypeDNSKEY, s)
 }

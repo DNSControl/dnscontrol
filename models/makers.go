@@ -5,6 +5,7 @@ package models
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -81,7 +82,14 @@ func MakeCAA(origin string, metadata map[string]string, args ...any) (dnsv2.RDAT
 		}
 		return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[0]), Value: mustbe.RawString(args[1])}, nil
 	}
-	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: mustbe.RawString(args[1]), Value: mustbe.RawString(args[2])}, nil
+
+	tag := mustbe.RawString(args[1])
+	allowedTags := []string{"issue", "issuewild", "iodef", "contactemail", "contactphone", "issuemail", "issuevmc"}
+	if !slices.Contains(allowedTags, tag) {
+		return nil, fmt.Errorf("CAA tag (%v) is not one of the valid types", tag)
+	}
+
+	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: tag, Value: mustbe.RawString(args[2])}, nil
 
 }
 func MakeCNAME(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {

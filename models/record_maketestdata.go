@@ -17,3 +17,12 @@ func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNu
 	dc.AddRecordConfig(rc)
 	return rc
 }
+
+func (dc *DomainConfig) AddTestRCParse(label string, ttl uint32, typeNum uint16, contents string) *RecordConfig {
+	rc, err := dc.NewRecordConfigParse(label, ttl, typeNum, contents)
+	if err != nil {
+		panic(fmt.Sprintf("dc.NewRecordConfigParse() returned %v", err))
+	}
+	dc.AddRecordConfig(rc)
+	return rc
+}

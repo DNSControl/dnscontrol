@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/fatih/color"
@@ -58,29 +59,16 @@ func (cl ChangeList) String() string {
 // Make sample data
 
 func makeRec(label, rtype, content string) *models.RecordConfig {
-	origin := "f.com"
-	r := models.RecordConfig{TTL: 300}
-	r.SetLabel(label, origin)
-	if err := r.PopulateFromString(rtype, content, origin); err != nil {
-		panic(err)
+	dc, _ := models.NewDomainConfig("f.com")
+	typeNum, err := dnsutilv2.StringToType(rtype)
+	if typeNum == dnsv2.TypeMX {
+		fmt.Printf("HERE\n")
 	}
-
-	// Hack to set .RDATA without importing miekg/dns in pkg/rtypecontrol/fixlegacy.go
-	tn, err := dnsutilv2.StringToType(rtype)
 	if err != nil {
-		panic(fmt.Sprintf("BUG: HackFixRecord: %s IN %s %v", r.Name, r.Type, r))
+		panic(fmt.Sprintf("BUG: makeRec does not support %q", rtype))
 	}
-	r.TypeNum = tn
-	rrv2, err := models.MyNewData(tn, content, origin+".")
-	if err != nil {
-		panic(fmt.Sprintf("could not parse: %s IN %s %s: %s", r.Name, rtype, content, err))
-	}
-	//fmt.Printf("DEBUG: makeRec should be pointer: %T\n", rrv2)
-	r.SetRDATA(rrv2)
-	r.ComparableV3 = r.GetRDATA().String()
-	// End of hack
-
-	return &r
+	rec := dc.AddTestRCParse(dc.LabelFromShort(label), 300, typeNum, content)
+	return rec
 }
 
 func makeRecTTL(label, rtype, content string, ttl uint32) *models.RecordConfig {
