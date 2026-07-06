@@ -58,23 +58,51 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 
 	rd2 := assureNotPointerRDATA(rd)
 
-	// DNSControl stores TXT data as a single string (see models/t_txt.go); the
-	// provider is responsible for splitting it into 255-octet segments on the
-	// wire. The presentation-format parser, however, yields one Txt element per
-	// segment, so a >255-octet TXT round-trips as multiple strings and its
-	// RDATA.String() (used for ComparableV3) would differ from the same value
-	// built via MakeTXT, causing a spurious diff. Rejoin into a single string.
-	if txt, ok := rd2.(dnsrdatav2.TXT); ok && len(txt.Txt) > 1 {
-		txt.Txt = []string{strings.Join(txt.Txt, "")}
-		rd2 = txt
+	switch v := rd2.(type) {
+
+	case dnsrdatav2.DS:
+		v.Digest = strings.ToUpper(v.Digest)
+		rd2 = v
+
+	case dnsrdatav2.SSHFP:
+		v.FingerPrint = strings.ToUpper(v.FingerPrint)
+		rd2 = v
+
+	case dnsrdatav2.TLSA:
+		v.Certificate = strings.ToUpper(v.Certificate)
+		rd2 = v
+
+	case dnsrdatav2.TXT:
+		// DNSControl stores TXT data as a single string (see models/t_txt.go); the
+		// provider is responsible for splitting it into 255-octet segments on the
+		// wire. The presentation-format parser, however, yields one Txt element per
+		// segment, so a >255-octet TXT round-trips as multiple strings and its
+		// RDATA.String() (used for ComparableV3) would differ from the same value
+		// built via MakeTXT, causing a spurious diff. Rejoin into a single string.
+		if len(v.Txt) > 1 {
+			v.Txt = []string{strings.Join(v.Txt, "")}
+			rd2 = v
+		}
+
 	}
 
-	if tlsa, ok := rd2.(dnsrdatav2.TLSA); ok {
-		// fmt.Printf("DEBUG: MyNewData TLSA cert OLD=%s\n", tlsa.Certificate)
-		tlsa.Certificate = strings.ToUpper(tlsa.Certificate)
-		// fmt.Printf("DEBUG: MyNewData TLSA cert NEW=%s\n", tlsa.Certificate)
-		rd2 = tlsa
-	}
+	//	// DNSControl stores TXT data as a single string (see models/t_txt.go); the
+	//	// provider is responsible for splitting it into 255-octet segments on the
+	//	// wire. The presentation-format parser, however, yields one Txt element per
+	//	// segment, so a >255-octet TXT round-trips as multiple strings and its
+	//	// RDATA.String() (used for ComparableV3) would differ from the same value
+	//	// built via MakeTXT, causing a spurious diff. Rejoin into a single string.
+	//	if txt, ok := rd2.(dnsrdatav2.TXT); ok && len(txt.Txt) > 1 {
+	//		txt.Txt = []string{strings.Join(txt.Txt, "")}
+	//		rd2 = txt
+	//	}
+
+	//	if tlsa, ok := rd2.(dnsrdatav2.TLSA); ok {
+	//		// fmt.Printf("DEBUG: MyNewData TLSA cert OLD=%s\n", tlsa.Certificate)
+	//		tlsa.Certificate = strings.ToUpper(tlsa.Certificate)
+	//		// fmt.Printf("DEBUG: MyNewData TLSA cert NEW=%s\n", tlsa.Certificate)
+	//		rd2 = tlsa
+	//	}
 
 	return rd2, nil
 }

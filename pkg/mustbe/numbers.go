@@ -21,7 +21,6 @@ func Uint8(arg any) uint8 {
 		}
 		return uint8(v)
 	case uint32:
-		fmt.Printf("DEBUG: uint32 %v %s %d\n", v, v, v)
 		if v > math.MaxUint8 {
 			panic(fmt.Sprintf("value %q overflows uint8", arg))
 		}

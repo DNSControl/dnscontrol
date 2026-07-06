@@ -34,7 +34,7 @@ func TestMakeTests(t *testing.T) {
 	}
 	globalDC = dc
 
-	//debug.SetTraceback("all")
+	debug.SetTraceback("all")
 
 	_ = makeTests()
 }
