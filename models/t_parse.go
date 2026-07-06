@@ -82,15 +82,13 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 			if err != nil {
 				return fmt.Errorf("invalid TXT record: %s", contents)
 			}
-			//return legacySetTargetParse(rc, typeNum, t)
-			//} else {
-			rd := dnsrdatav2.TXT{Txt: []string{contents}}
-			rc.SetRDATA(rd)
-			rc.FixUp(origin) // Add .ComparableV3
-
-			// Populate legacy fields for backwards compatibility.
-			return rc.SetTargetTXT(contents)
 		}
+		rd := dnsrdatav2.TXT{Txt: []string{contents}}
+		rc.SetRDATA(rd)
+		rc.FixUp(origin) // Add .ComparableV3
+
+		// Populate legacy fields for backwards compatibility.
+		return rc.SetTargetTXT(contents)
 	}
 
 	if typeNum == privatetypes.TypeLUA {
