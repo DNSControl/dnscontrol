@@ -115,6 +115,14 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		// dnsv2 presentation parser used by legacySetTargetParse requires them
 		// quoted, so parse the fields ourselves (tolerating either form) and
 		// then derive the V3 fields (.RDATA and .ComparableV3) via FixUp.
+
+		// // The ultimate solution might look like:
+		// fields := strings.Fields(contents)
+		// if missingQuotes(fields[2]) {
+		// 	fields[2] = `"` + fields[2] + `"`
+		// 	contents = strings.Join(fields, " ")
+		// }
+
 		if err := rc.SetTargetNAPTRString(contents); err != nil {
 			return err
 		}

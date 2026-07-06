@@ -131,26 +131,26 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 	return rc, nil
 }
 
-func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string, origin string) error {
-	typeNum, err := dnsutilv2.StringToType(typeName)
-	if err != nil {
-		return err
-	}
-	rc.TypeNum = typeNum
-	rc.Type = typeName
+// func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string, origin string) error {
+// 	typeNum, err := dnsutilv2.StringToType(typeName)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	rc.TypeNum = typeNum
+// 	rc.Type = typeName
 
-	rd, err := MyNewData(typeNum, contents, origin)
-	if err != nil {
-		return err
-	}
-	rc.SetRDATA(rd)
-	rc.FixUp(origin) // Add .ComparableV3
-	err = backfill(rc)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// 	rd, err := MyNewData(typeNum, contents, origin)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	rc.SetRDATA(rd)
+// 	rc.FixUp(origin) // Add .ComparableV3
+// 	err = backfill(rc)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
 	typeStr := dnsutilv2.TypeToString(typeNum)
