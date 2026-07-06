@@ -6,7 +6,7 @@ import (
 
 // // SetTargetDNSKEY sets the DNSKEY fields.
 // // Deprecated. Use models.NewRecordConfig() instead.
-// func (rc *RecordConfig) xSetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
+// func (rc *RecordConfig) SetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
 // 	return legacySetTargetArgs(rc, dnsv2.TypeDNSKEY, flags, protocol, algorithm, publicKey)
 // }
 
