@@ -108,6 +108,19 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		return nil
 	}
 
+	if typeNum == dnsv2.TypeNAPTR {
+		// A NAPTR's flags/service/regexp fields are character-strings that some
+		// providers return quoted and others (e.g. NS1) return unquoted. The
+		// dnsv2 presentation parser used by legacySetTargetParse requires them
+		// quoted, so parse the fields ourselves (tolerating either form) and
+		// then derive the V3 fields (.RDATA and .ComparableV3) via FixUp.
+		if err := rc.SetTargetNAPTRString(contents); err != nil {
+			return err
+		}
+		rc.FixUp(origin)
+		return nil
+	}
+
 	return legacySetTargetParse(rc, typeNum, contents)
 
 }
