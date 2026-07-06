@@ -58,6 +58,12 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 
 	rd2 := assureNotPointerRDATA(rd)
 
+	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
+	// sadly those functions aren't called by dnsv2.NewData(). It is
+	// unclear what would be better. Maybe privatetypes.RegisterMaker() can
+	// also register a function that does this cleanup, and this
+	// function would call privatetypes.PostParseCleanup(rd)?
+
 	switch v := rd2.(type) {
 
 	case dnsrdatav2.DS:
@@ -85,24 +91,6 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		}
 
 	}
-
-	//	// DNSControl stores TXT data as a single string (see models/t_txt.go); the
-	//	// provider is responsible for splitting it into 255-octet segments on the
-	//	// wire. The presentation-format parser, however, yields one Txt element per
-	//	// segment, so a >255-octet TXT round-trips as multiple strings and its
-	//	// RDATA.String() (used for ComparableV3) would differ from the same value
-	//	// built via MakeTXT, causing a spurious diff. Rejoin into a single string.
-	//	if txt, ok := rd2.(dnsrdatav2.TXT); ok && len(txt.Txt) > 1 {
-	//		txt.Txt = []string{strings.Join(txt.Txt, "")}
-	//		rd2 = txt
-	//	}
-
-	//	if tlsa, ok := rd2.(dnsrdatav2.TLSA); ok {
-	//		// fmt.Printf("DEBUG: MyNewData TLSA cert OLD=%s\n", tlsa.Certificate)
-	//		tlsa.Certificate = strings.ToUpper(tlsa.Certificate)
-	//		// fmt.Printf("DEBUG: MyNewData TLSA cert NEW=%s\n", tlsa.Certificate)
-	//		rd2 = tlsa
-	//	}
 
 	return rd2, nil
 }
