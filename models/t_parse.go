@@ -5,6 +5,8 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
 // PopulateFromStringFunc populates a RecordConfig by parsing a common RFC1035-like format.
@@ -62,50 +64,52 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 	}
 
 	typeNum, ok := dnsv2.StringToType[rtype]
-	if ok {
-
-		// Treat SPF as TXT.
-		if typeNum == dnsv2.TypeSPF {
-			typeNum = dnsv2.TypeTXT
-		}
-
-		// Use txtFn if provided to parse TXT records.
-		if typeNum == dnsv2.TypeTXT {
-			rc.TypeNum = dnsv2.TypeTXT
-			rc.Type = "TXT"
-			if txtFn != nil {
-				t, err := txtFn(contents)
-				if err != nil {
-					return fmt.Errorf("invalid TXT record: %s", contents)
-				}
-				return legacySetTargetParse(rc, typeNum, t)
-			} else {
-				rd := dnsrdatav2.TXT{Txt: []string{contents}}
-				rc.SetRDATA(rd)
-				rc.FixUp(origin) // Add .ComparableV3
-				return rc.SetTargetTXT(contents)
-			}
-		}
-
-		return legacySetTargetParse(rc, typeNum, contents)
+	if !ok {
+		return MakeUnknown(rc, rtype, contents, origin)
 	}
-	// case "LUA":
-	// 	luaType, payload := ParseLuaContent(contents)
-	// 	rc.LuaRType = luaType
-	// 	if txtFn != nil {
-	// 		value, err := txtFn(payload)
-	// 		if err != nil {
-	// 			return fmt.Errorf("invalid LUA record: %s", contents)
-	// 		}
-	// 		return rc.SetTargetTXT(value)
-	// 	}
-	// 	value, err := DecodeLuaPayload(payload)
-	// 	if err != nil {
-	// 		return fmt.Errorf("invalid LUA record: %s", contents)
-	// 	}
-	// 	return rc.SetTargetTXT(value)
 
-	return MakeUnknown(rc, rtype, contents, origin)
+	// Treat SPF as TXT.
+	if typeNum == dnsv2.TypeSPF {
+		typeNum = dnsv2.TypeTXT
+	}
+
+	// Use txtFn if provided to parse TXT records.
+	if typeNum == dnsv2.TypeTXT {
+		rc.TypeNum = dnsv2.TypeTXT
+		rc.Type = "TXT"
+		if txtFn != nil {
+			t, err := txtFn(contents)
+			if err != nil {
+				return fmt.Errorf("invalid TXT record: %s", contents)
+			}
+			return legacySetTargetParse(rc, typeNum, t)
+		} else {
+			rd := dnsrdatav2.TXT{Txt: []string{contents}}
+			rc.SetRDATA(rd)
+			rc.FixUp(origin) // Add .ComparableV3
+			return rc.SetTargetTXT(contents)
+		}
+	}
+
+	if typeNum == privatetypes.TypeLUA {
+		luaType, payload := ParseLuaContent(contents)
+		rc.LuaRType = luaType
+		value, err := DecodeLuaPayload(payload)
+		if err != nil {
+			return fmt.Errorf("invalid LUA record: %s", contents)
+		}
+		err = rc.SetTargetTXT(value)
+		if err != nil {
+			return err
+		}
+		rd := privatetypesrdata.LUA{LuaType: luaType, LuaPayload: value}
+		rc.SetRDATA(rd)
+		rc.FixUp(origin)
+		return nil
+	}
+
+	return legacySetTargetParse(rc, typeNum, contents)
+
 }
 
 // PopulateFromString populates a RecordConfig given a type and string.  Many
