@@ -87,6 +87,8 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 			rd := dnsrdatav2.TXT{Txt: []string{contents}}
 			rc.SetRDATA(rd)
 			rc.FixUp(origin) // Add .ComparableV3
+
+			// Populate legacy fields for backwards compatibility.
 			return rc.SetTargetTXT(contents)
 		}
 	}
