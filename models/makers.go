@@ -344,17 +344,20 @@ func MakeSVCB(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, err
 	case []svcbv2.Pair:
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: v}, nil
 	case string:
-		// ech=IGNORE is special. It means "take the ech value from the existing record".  We replace it with the byte sequence 0x10 0x00
-		// here. Later,
+		// ech=IGNORE is special. It means "take the ech value from the existing
+		// record".  We replace it with the byte sequence 0x10 0x00 here. Later,
+		// we look for that value and replace it with the existing record's
+		// value. This works because we can assume there are no ech= values that
+		// are actually 0x10 0x00.  (The ech=IGNORE value is stored as ech=1000
+		// in the wire format.)
 		v = strings.ReplaceAll(v, "IGNORE", "1000")
 
-		// NB(tlim): It's overkill to construct this string just to parse it but dnsv2 doesn't expose the parser in a way to do just the params.
-		line := fmt.Sprintf("%d %s %s", mustbe.Uint16(priority), mustbe.TargetHost(origin, target), v)
-		sr, err := MyNewData(dnsv2.TypeHTTPS, line, origin)
+		pairs, err := stringToSvcbv2Values(origin, v)
 		if err != nil {
 			return nil, err
 		}
-		return sr, nil
+		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, target), Value: pairs}, nil
+
 	}
 
 	panic(fmt.Sprintf("BUG: Invalid params type for SVCB/HTTPS record: %T", params))
