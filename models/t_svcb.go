@@ -20,6 +20,7 @@ func (rc *RecordConfig) targetCombinedSVCBRaw() string {
 }
 
 // SetTargetSVCB sets the SVCB fields.
+// FUTURE(tlim): This will either go away or changed such that params is []svcbv2.Pair.
 func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
 	rc.SvcPriority = priority
 	if err := rc.SetTarget(target); err != nil {
@@ -123,6 +124,41 @@ func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
 	}
 
 	return nil
+}
+
+// stringToSvcbv2Values converts a string to a SVCB value list.
+// TODO(tlim): THIS NEEDS A UNIT TEST!
+func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error) {
+	fields := strings.Fields(contents)
+	fmt.Printf("DEBUG: stringToSvcbv2Values: origin=%q contents=%q fields=%v\n", origin, contents, fields)
+
+	var result []svcbv2.Pair
+
+	for _, field := range fields {
+		keyValue := strings.SplitN(field, "=", 2)
+		if len(keyValue) != 2 {
+			return nil, fmt.Errorf("invalid svcb.Pair: %q", field)
+		}
+
+		// Make the pair.
+		pairFn := svcbv2.KeyToPair(svcbv2.StringToKey(keyValue[0]))
+		pair := pairFn()
+
+		// Strip the value of any quotes:
+		v := keyValue[1]
+		if len(v) >= 2 && v[0] == '"' && v[len(v)-1] == '"' { // Strip quotes if present
+			v = v[1 : len(v)-1]
+		}
+
+		// Parse it:
+		err := svcbv2.Parse(pair, v, origin)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, pair)
+	}
+	return result, nil
 }
 
 // svcbv2ValueToString converts a SVCB value list to a string.
