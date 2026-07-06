@@ -78,7 +78,8 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		rc.TypeNum = dnsv2.TypeTXT
 		rc.Type = "TXT"
 		if txtFn != nil {
-			contents, err := txtFn(contents)
+			var err error
+			contents, err = txtFn(contents)
 			if err != nil {
 				return fmt.Errorf("invalid TXT record: %s", contents)
 			}
