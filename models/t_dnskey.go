@@ -4,11 +4,11 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 )
 
-// SetTargetDNSKEY sets the DNSKEY fields.
-// Deprecated. Use models.NewRecordConfig() instead.
-func (rc *RecordConfig) xSetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
-	return legacySetTargetArgs(rc, dnsv2.TypeDNSKEY, flags, protocol, algorithm, publicKey)
-}
+// // SetTargetDNSKEY sets the DNSKEY fields.
+// // Deprecated. Use models.NewRecordConfig() instead.
+// func (rc *RecordConfig) xSetTargetDNSKEY(flags uint16, protocol, algorithm uint8, publicKey string) error {
+// 	return legacySetTargetArgs(rc, dnsv2.TypeDNSKEY, flags, protocol, algorithm, publicKey)
+// }
 
 // // SetTargetDNSKEYStrings is like SetTargetDNSKEY but accepts strings.
 // // Deprecated. Use models.NewRecordConfig() instead.
