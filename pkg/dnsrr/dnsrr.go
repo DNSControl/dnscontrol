@@ -86,7 +86,7 @@ func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig,
 
 	case *dnsv1.LOC:
 		if rec, err := models.NewRecordConfigForRRtoRC(origin, header.Name, header.Ttl, typeNum,
-			v.Version, v.Latitude, v.Longitude, v.Altitude, v.Size, v.HorizPre, v.VertPre); err == nil {
+			v.Version, v.Size, v.HorizPre, v.VertPre, v.Latitude, v.Longitude, v.Altitude); err == nil {
 			return *rec, nil
 		}
 

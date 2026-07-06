@@ -69,6 +69,13 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		rd2 = txt
 	}
 
+	if tlsa, ok := rd2.(dnsrdatav2.TLSA); ok {
+		// fmt.Printf("DEBUG: MyNewData TLSA cert OLD=%s\n", tlsa.Certificate)
+		tlsa.Certificate = strings.ToUpper(tlsa.Certificate)
+		// fmt.Printf("DEBUG: MyNewData TLSA cert NEW=%s\n", tlsa.Certificate)
+		rd2 = tlsa
+	}
+
 	return rd2, nil
 }
 

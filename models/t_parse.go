@@ -78,12 +78,12 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		rc.TypeNum = dnsv2.TypeTXT
 		rc.Type = "TXT"
 		if txtFn != nil {
-			t, err := txtFn(contents)
+			contents, err := txtFn(contents)
 			if err != nil {
 				return fmt.Errorf("invalid TXT record: %s", contents)
 			}
-			return legacySetTargetParse(rc, typeNum, t)
-		} else {
+			//return legacySetTargetParse(rc, typeNum, t)
+			//} else {
 			rd := dnsrdatav2.TXT{Txt: []string{contents}}
 			rc.SetRDATA(rd)
 			rc.FixUp(origin) // Add .ComparableV3
