@@ -28,6 +28,16 @@ func (rd URL301) String() string {
 
 func MakeURL301(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
+
+	// backwards compatibility for providers which aren't porkbun
+	if len(args) == 1 {
+		return URL301{
+			Location:           mustbe.TargetHost(origin, args[0]),
+			PorkbunIncludePath: false,
+			PorkbunWildCard:    false,
+		}, nil
+	}
+
 	if len(args) != 3 {
 		return nil, fmt.Errorf("URL301 expects 3 arguments, got %d: %+v", len(args), args)
 	}
