@@ -45,6 +45,20 @@ func TestAuditRecords(t *testing.T) {
 			},
 			wantCount: 1,
 		},
+		{
+			name: "valid SRV record",
+			records: []*models.RecordConfig{
+				makeRC("SRV", "_sip._tcp", "foo.com."),
+			},
+			wantCount: 0,
+		},
+		{
+			name: "SRV with null target should fail",
+			records: []*models.RecordConfig{
+				makeRC("SRV", "_sip._tcp", "."),
+			},
+			wantCount: 1,
+		},
 	}
 
 	for _, tt := range tests {
