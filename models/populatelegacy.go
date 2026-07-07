@@ -51,6 +51,9 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 
 	case dnsrdatav2.LOC:
 		rc.SetTargetLOC(rd.Version, rd.Latitude, rd.Longitude, rd.Altitude, rd.Size, rd.HorizPre, rd.VertPre)
+	case privatetypesrdata.LUA:
+		rc.LuaRType = rd.LuaType
+		rc.SetTarget(rd.LuaPayload)
 
 	case privatetypesrdata.MIKROTIKFWD:
 		rc.SetTarget(rd.ForwardTo)
@@ -58,10 +61,6 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		// no-op
 	case dnsrdatav2.MX:
 		rc.SetTargetMX(rd.Preference, rd.Mx)
-
-	case privatetypesrdata.LUA:
-		rc.LuaRType = rd.LuaType
-		rc.SetTarget(rd.LuaPayload)
 
 	case dnsrdatav2.NAPTR:
 		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Replacement)
