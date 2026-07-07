@@ -107,27 +107,6 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		return nil
 	}
 
-	if typeNum == dnsv2.TypeNAPTR {
-		// A NAPTR's flags/service/regexp fields are character-strings that some
-		// providers return quoted and others (e.g. NS1) return unquoted. The
-		// dnsv2 presentation parser used by legacySetTargetParse requires them
-		// quoted, so parse the fields ourselves (tolerating either form) and
-		// then derive the V3 fields (.RDATA and .ComparableV3) via FixUp.
-
-		// // The ultimate solution might look like:
-		// fields := strings.Fields(contents)
-		// if missingQuotes(fields[2]) {
-		// 	fields[2] = `"` + fields[2] + `"`
-		// 	contents = strings.Join(fields, " ")
-		// }
-
-		if err := rc.SetTargetNAPTRString(contents); err != nil {
-			return err
-		}
-		rc.RecomputeV3Fields(origin)
-		return nil
-	}
-
 	if typeNum == privatetypes.TypeALIAS {
 		// ALIAS is a private type: its rdata is a single hostname target. The
 		// dnsv2 presentation parser has no parser for private types and would
