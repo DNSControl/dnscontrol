@@ -46,8 +46,9 @@ type dnsPolicyRecord struct {
 	Metadata *dnsPolicyMetadata `json:"metadata,omitempty"` // Metadata (origin, read-only in API responses)
 	Domain   string             `json:"domain"`             // FQDN (e.g., "test.example.com")
 
-	// TTL in seconds (required by the API, always sent)
-	TTLSeconds int `json:"ttlSeconds"`
+	// TTL in seconds. Only A/AAAA/CNAME accept it in the new API; for
+	// MX/TXT/SRV the property is rejected, so it is omitted when zero.
+	TTLSeconds int `json:"ttlSeconds,omitempty"`
 
 	// Type-specific fields
 	IPv4Address      string `json:"ipv4Address,omitempty"`      // A record
@@ -283,11 +284,15 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 		Domain:  rc.NameFQDN,
 	}
 
-	// Always send TTL; the API requires ttlSeconds to be non-null.
-	if rc.TTL > 0 {
-		r.TTLSeconds = int(rc.TTL)
-	} else {
-		r.TTLSeconds = 300
+	// The new API only accepts ttlSeconds for A/AAAA/CNAME; sending it for
+	// MX/TXT/SRV is rejected with "Unknown request body property '$.ttlSeconds'".
+	switch rc.Type {
+	case "A", "AAAA", "CNAME":
+		if rc.TTL > 0 {
+			r.TTLSeconds = int(rc.TTL)
+		} else {
+			r.TTLSeconds = 300
+		}
 	}
 
 	switch rc.Type {

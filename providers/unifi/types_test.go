@@ -355,7 +355,7 @@ func TestRecordToNew(t *testing.T) {
 			name: "MX",
 			in:   &dnsPolicyRecord{Type: NewAPITypeMX, Domain: "example.com", MailServerDomain: "mail.example.com", Priority: 10, TTLSeconds: 300},
 			check: func(t *testing.T, r *dnsPolicyRecord) {
-				if r.Type != NewAPITypeMX || r.MailServerDomain != "mail.example.com" || r.Priority != 10 {
+				if r.Type != NewAPITypeMX || r.MailServerDomain != "mail.example.com" || r.Priority != 10 || r.TTLSeconds != 0 {
 					t.Errorf("unexpected MX record: %+v", r)
 				}
 			},
@@ -364,7 +364,7 @@ func TestRecordToNew(t *testing.T) {
 			name: "SRV",
 			in:   &dnsPolicyRecord{Type: NewAPITypeSRV, Domain: "_sip._tcp.example.com", ServerDomain: "sip.example.com", Priority: 1, Weight: 5, Port: 5060, TTLSeconds: 300},
 			check: func(t *testing.T, r *dnsPolicyRecord) {
-				if r.Type != NewAPITypeSRV || r.ServerDomain != "sip.example.com" || r.Priority != 1 || r.Weight != 5 || r.Port != 5060 {
+				if r.Type != NewAPITypeSRV || r.ServerDomain != "sip.example.com" || r.Priority != 1 || r.Weight != 5 || r.Port != 5060 || r.TTLSeconds != 0 {
 					t.Errorf("unexpected SRV record: %+v", r)
 				}
 			},
