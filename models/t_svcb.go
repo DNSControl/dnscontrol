@@ -19,13 +19,14 @@ func (rc *RecordConfig) targetCombinedSVCBRaw() string {
 	return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.target, rc.SvcParams)
 }
 
-// SetTargetSVCB sets the SVCB fields.
-// FUTURE(tlim): This will either go away or changed such that params is []svcbv2.Pair.
-func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
-	return legacySetTargetArgs(rc, dnsv2.TypeSVCB, priority, target, params)
-}
+// // SetTargetSVCB sets the SVCB fields.
+// Deprecated. Use models.NewRecordConfig() instead.
+// func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
+// 	return legacySetTargetArgs(rc, dnsv2.TypeSVCB, priority, target, params)
+// }
 
 // SetTargetSVCBString is like SetTargetSVCB but accepts one big string and the origin so parsing can be done using miekg/dns.
+// Deprecated. Use models.NewRecordConfigParse() instead.
 func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 	return legacySetTargetParse(rc, dnsv2.TypeSVCB, contents)
 }
