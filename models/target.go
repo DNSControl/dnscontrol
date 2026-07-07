@@ -17,6 +17,11 @@ Not the best design, but we're stuck with it until we re-do RecordConfig, possib
 // GetTargetField returns the target. There may be other fields, but they are
 // not included. For example, the .MxPreference field of an MX record isn't included.
 func (rc *RecordConfig) GetTargetField() string {
+	if rc.Type == "TXT" {
+		// TXT stores its value in .rdata (the single source of truth); .target
+		// is not populated for TXT.
+		return rc.GetTargetTXTJoined()
+	}
 	return rc.target
 }
 
@@ -35,9 +40,9 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 func (rc *RecordConfig) GetTargetCombinedFunc(encodeFn func(s string) string) string {
 	if rc.Type == "TXT" || rc.Type == "LUA" {
 		if encodeFn == nil {
-			return rc.target
+			return rc.GetTargetField()
 		}
-		return encodeFn(rc.target)
+		return encodeFn(rc.GetTargetField())
 	}
 	return rc.GetTargetCombined()
 }
@@ -47,6 +52,11 @@ func (rc *RecordConfig) GetTargetCombinedFunc(encodeFn func(s string) string) st
 // WARNING: How TXT records are handled is buggy but we can't change it because
 // code depends on the bugs. Use Get GetTargetCombinedFunc() instead.
 func (rc *RecordConfig) GetTargetCombined() string {
+	// A TXT record's combined value is its raw (unquoted, unchunked) text.
+	// Presentation quoting/chunking is applied by String().
+	if rc.Type == "TXT" {
+		return rc.GetTargetTXTJoined()
+	}
 	if rc.GetRDATA() != nil {
 		return rc.GetRDATA().String()
 	}
@@ -139,7 +149,7 @@ func (rc *RecordConfig) GetTargetDebug() string {
 
 	// TODO(tlim): If possible, use .String().
 
-	target := rc.target
+	target := rc.GetTargetField()
 	//if rc.Type == "TXT" {
 	if rc.HasFormatIdenticalToTXT() {
 		target = fmt.Sprintf("%q", target)
@@ -199,7 +209,7 @@ func (rc *RecordConfig) GetTargetDebug() string {
 //	We should extract the common logic into a function they can both use.
 func (rc *RecordConfig) GetTargetJS() string {
 	if rc.Type == "TXT" || rc.Type == "LUA" {
-		return fmt.Sprintf("%q", rc.target)
+		return fmt.Sprintf("%q", rc.GetTargetField())
 	}
 	switch rc.Type {
 	case "A", "AAAA", "AKAMAICDN", "CNAME", "DHCID", "NS", "OPENPGPKEY", "PTR":
@@ -217,6 +227,11 @@ func (rc *RecordConfig) GetTargetJS() string {
 
 // SetTarget sets the target, assuming that the rtype is appropriate.
 func (rc *RecordConfig) SetTarget(target string) error {
+	// TXT stores its value in .rdata (the single source of truth). Route legacy
+	// SetTarget callers there so .target is never the TXT store.
+	if rc.Type == "TXT" {
+		return rc.SetTargetTXT(target)
+	}
 	rc.target = target
 	return nil
 }

@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"strings"
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
@@ -119,7 +118,9 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
 		rc.SetTarget(rd.Certificate)
 	case dnsrdatav2.TXT:
-		rc.target = strings.Join(rd.Txt, "")
+		// TXT stores its value only in .rdata (the single source of truth).
+		// The TXT accessors (GetTargetField/GetTargetTXTJoined/...) read it
+		// from there; there is no legacy .target back-fill.
 
 	case privatetypesrdata.URL:
 		rc.SetTarget(rd.Location)
