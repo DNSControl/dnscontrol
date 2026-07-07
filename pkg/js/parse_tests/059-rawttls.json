@@ -97,11 +97,19 @@
           "typenum": 17
         },
         {
+          "comparablev3": "\"Do not call me on my phone\"",
           "filepos": "[line:3:5]",
           "name": "mytxt",
+          "name_unicode": "mytxt",
+          "rdata": {
+            "Txt": [
+              "Do not call me on my phone"
+            ]
+          },
           "target": "Do not call me on my phone",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         }
       ],
       "registrar": "none",

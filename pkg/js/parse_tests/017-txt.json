@@ -6,39 +6,79 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "\"simple\"",
           "filepos": "[line:2:5]",
           "name": "a",
+          "name_unicode": "a",
+          "rdata": {
+            "Txt": [
+              "simple"
+            ]
+          },
           "target": "simple",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"ws at end \"",
           "filepos": "[line:3:5]",
           "name": "b",
+          "name_unicode": "b",
+          "rdata": {
+            "Txt": [
+              "ws at end "
+            ]
+          },
           "target": "ws at end ",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"one\"",
           "filepos": "[line:4:5]",
           "name": "c",
+          "name_unicode": "c",
+          "rdata": {
+            "Txt": [
+              "one"
+            ]
+          },
           "target": "one",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"bonieclyde\"",
           "filepos": "[line:5:5]",
           "name": "d",
+          "name_unicode": "d",
+          "rdata": {
+            "Txt": [
+              "bonieclyde"
+            ]
+          },
           "target": "bonieclyde",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"strawwoodbrick\"",
           "filepos": "[line:6:5]",
           "name": "e",
+          "name_unicode": "e",
+          "rdata": {
+            "Txt": [
+              "strawwoodbrick"
+            ]
+          },
           "target": "strawwoodbrick",
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         }
       ],
       "registrar": "none",

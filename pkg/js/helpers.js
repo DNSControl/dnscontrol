@@ -494,22 +494,22 @@ function isStringOrArray(x) {
 // AUTOSPLIT is deprecated. It is now a no-op.
 var AUTOSPLIT = {};
 
-// TXT(name,target, recordModifiers...)
-var TXT = recordBuilder('TXT', {
-    args: [
-        ['name', _.isString],
-        ['target', isStringOrArray],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        // Store the strings from the user verbatim.
-        if (_.isString(args.target)) {
-            record.target = args.target;
-        } else {
-            record.target = args.target.join('');
-        }
-    },
-});
+// // TXT(name,target, recordModifiers...)
+// var TXT = recordBuilder('TXT', {
+//     args: [
+//         ['name', _.isString],
+//         ['target', isStringOrArray],
+//     ],
+//     transform: function (record, args, modifiers) {
+//         record.name = args.name;
+//         // Store the strings from the user verbatim.
+//         if (_.isString(args.target)) {
+//             record.target = args.target;
+//         } else {
+//             record.target = args.target.join('');
+//         }
+//     },
+// });
 
 var LUA = recordBuilder('LUA', {
     args: [
@@ -2360,6 +2360,13 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 var r = rawArgs[i];
                 if (_.isFunction(r)) {
                     r(record);
+                } else if (_.isArray(r)) {
+                    // An array argument (e.g. TXT("n", ["a", "b"])) is a set of
+                    // string segments; join them into a single argument,
+                    // mirroring the legacy recordBuilder. Arrays are never
+                    // metadata, so this must be checked before _.isObject()
+                    // (which is true for arrays).
+                    processedArgs.push(r.join(''));
                 } else if (_.isObject(r)) {
                     // Convert a transform array to its encoded string form
                     // (see format_tt), mirroring the legacy recordBuilder.
@@ -2441,3 +2448,4 @@ var SRV = rawrecordBuilder('SRV');
 var SSHFP = rawrecordBuilder('SSHFP');
 var SVCB = rawrecordBuilder('SVCB');
 var TLSA = rawrecordBuilder('TLSA');
+var TXT = rawrecordBuilder('TXT');
