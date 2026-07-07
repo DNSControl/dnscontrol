@@ -242,8 +242,8 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rd, err := privatetypesrdata.MakeR53ALIAS(origin, nil,
 			rc.R53Alias["type"],
 			rc.GetTargetField(),
-			rc.R53Alias["zone_id"],
 			rc.R53Alias["evaluate_target_health"],
+			rc.R53Alias["zone_id"],
 		)
 		errorChk(err)
 		rc.SetRDATA(rd)

@@ -88,7 +88,9 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		}
 		rc.R53Alias["type"] = rd.AliasType
 		rc.SetTarget(rd.Target)
-		rc.R53Alias["zone_id"] = rd.ZoneID
+		if rd.ZoneID != "" {
+			rc.R53Alias["zone_id"] = rd.ZoneID
+		}
 		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
 
 	case dnsrdatav2.SMIMEA:
