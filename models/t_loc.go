@@ -1,35 +1,23 @@
 package models
 
 import (
-	"fmt"
 	"math"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsv1 "github.com/miekg/dns"
 )
 
-// SetTargetLOC sets the LOC fields from the rr.LOC type properties.
-func (rc *RecordConfig) SetTargetLOC(ver uint8, lat uint32, lon uint32, alt uint32, siz uint8, hzp uint8, vtp uint8) error {
-	rc.LocVersion = ver
-	rc.LocLatitude = lat
-	rc.LocLongitude = lon
-	rc.LocAltitude = alt
-	rc.LocSize = siz
-	rc.LocHorizPre = hzp
-	rc.LocVertPre = vtp
-
-	if rc.Type == "" {
-		rc.Type = "LOC"
-	}
-	if rc.Type != "LOC" {
-		panic("assertion failed: SetTargetLOC called when .Type is not LOC")
-	}
-	return nil
-}
+// // SetTargetLOC sets the LOC fields from the rr.LOC type properties.
+// Deprecated. Use models.NewRecordConfig() instead.
+// func (rc *RecordConfig) SetTargetLOC(ver uint8, lat uint32, lon uint32, alt uint32, siz uint8, hzp uint8, vtp uint8) error {
+// 	return legacySetTargetArgs(rc, dnsv2.TypeLOC, ver, lat, lon, alt, siz, hzp, vtp)
+// }
 
 // SetLOCParams is an intermediate function which passes the 12 input parameters
 // for further processing to the LOC native 7 input binary format:
 // LocVersion (0), LocLatitude, LocLongitude, LocAltitude, LocSize, LocVertPre, LocHorizPre.
+// Deprecated. Use models.NewRecordConfig() instead.
 func (rc *RecordConfig) SetLOCParams(d1 uint8, m1 uint8, s1 float32, ns string,
 	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
 ) error {
@@ -41,56 +29,9 @@ func (rc *RecordConfig) SetLOCParams(d1 uint8, m1 uint8, s1 float32, ns string,
 // SetTargetLOCString is like SetTargetLOC but accepts one big string and origin
 // Normally this is used when we receive a record string from provider records
 // because e.g. the provider API passed rc.PopulateFromString().
+// Deprecated. Use models.NewRecordConfigParse() instead.
 func (rc *RecordConfig) SetTargetLOCString(origin string, contents string) error {
-	// This is where text from provider records ingresses into the target field.
-	// Fill the other fields derived from the TEXT here. LOC is special, and
-	// needs more math.
-	// We have to re-invent the wheel because the miekg dns library gives no
-	// access to the objects properties, and internally the object is represented
-	// by the dns.LOC format 💩
-
-	// Build a string with which to init the rr.LOC object:
-	str := fmt.Sprintf("%s. LOC %s\n", origin, contents)
-	loc, err := dnsv1.NewRR(str)
-	if err != nil {
-		return fmt.Errorf("can't parse LOC data: %w", err)
-	}
-	// We 'normalize' the record thru rr.LOC, to get defaults for absent properties.
-
-	loctext := loc.String()
-	loctext = strings.TrimSpace(strings.Split(loctext, "LOC")[1])
-
-	err = rc.extractLOCFieldsFromStringInput(loctext)
-	if err != nil {
-		return fmt.Errorf("can't extractLOCFieldsFromStringInput from LOC data: %w", err)
-	}
-	rc.target = loctext
-	if rc.Type == "" {
-		rc.Type = "LOC"
-	}
-	if rc.Type != "LOC" {
-		panic("assertion failed: SetTargetLOC called when .Type is not LOC")
-	}
-	return nil
-}
-
-// extractLOCFieldsFromStringInput is a helper to split an input string to
-// the 12 variable inputs of integers and strings.
-func (rc *RecordConfig) extractLOCFieldsFromStringInput(input string) error {
-	var d1, m1, d2, m2 uint8
-	var al float64
-	var s1, s2 float32
-	var ns, ew string
-	var sz, hp, vp float32
-
-	_, err := fmt.Sscanf(input+"~", "%d %d %f %s %d %d %f %s %fm %fm %fm %fm~",
-		&d1, &m1, &s1, &ns, &d2, &m2, &s2, &ew, &al, &sz, &hp, &vp)
-	if err != nil {
-		return fmt.Errorf("extractLOCFieldsFromStringInput: can't unpack LOC text input data: %w", err)
-	}
-	// fmt.Printf("\ngot: %d %d %g %s %d %d %g %s %0.2fm %0.2fm %0.2fm %0.2fm \n", d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
-
-	return rc.calculateLOCFields(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
+	return legacySetTargetParse(rc, dnsv2.TypeLOC, contents)
 }
 
 // calculateLOCFields converts from 12 user inputs to the LOC 7 binary fields.

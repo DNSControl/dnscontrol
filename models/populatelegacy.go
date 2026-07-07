@@ -50,7 +50,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(rd.Target)
 
 	case dnsrdatav2.LOC:
-		rc.SetTargetLOC(rd.Version, rd.Latitude, rd.Longitude, rd.Altitude, rd.Size, rd.HorizPre, rd.VertPre)
+		rc.LocVersion, rc.LocLatitude, rc.LocLongitude, rc.LocAltitude, rc.LocSize, rc.LocHorizPre, rc.LocVertPre = rd.Version, rd.Latitude, rd.Longitude, rd.Altitude, rd.Size, rd.HorizPre, rd.VertPre
 	case privatetypesrdata.LUA:
 		rc.LuaRType = rd.LuaType
 		rc.SetTarget(rd.LuaPayload)
@@ -60,10 +60,13 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.MIKROTIKNXDOMAIN:
 		// no-op
 	case dnsrdatav2.MX:
-		rc.SetTargetMX(rd.Preference, rd.Mx)
+		rc.MxPreference = rd.Preference
+		rc.SetTarget(rd.Mx)
 
 	case dnsrdatav2.NAPTR:
-		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Replacement)
+		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp = rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp
+		rc.SetTarget(rd.Replacement)
+
 	case dnsrdatav2.NS:
 		rc.SetTarget(rd.Ns)
 
@@ -94,20 +97,26 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
 
 	case dnsrdatav2.SMIMEA:
-		rc.SetTargetSMIMEA(rd.Usage, rd.Selector, rd.MatchingType, rd.Certificate)
+		rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
+		rc.SetTarget(rd.Certificate)
 	case dnsrdatav2.SOA:
-		rc.SetTargetSOA(rd.Ns, rd.Mbox, rd.Serial, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
+		rc.SetTarget(rd.Ns)
+		rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl = rd.Mbox, rd.Serial, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl
 	case dnsrdatav2.SRV:
-		rc.SetTargetSRV(rd.Priority, rd.Weight, rd.Port, rd.Target)
+		rc.SrvPriority, rc.SrvWeight, rc.SrvPort = rd.Priority, rd.Weight, rd.Port
+		rc.SetTarget(rd.Target)
 	case dnsrdatav2.SSHFP:
-		rc.SetTargetSSHFP(rd.Algorithm, rd.Type, rd.FingerPrint)
+		rc.SshfpAlgorithm = rd.Algorithm
+		rc.SshfpFingerprint = rd.Type // Yes, all these years we've been storing things in the wrong field.
+		rc.SetTarget(rd.FingerPrint)
 	case dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
 		rc.SvcPriority = rd.Priority
 		rc.SetTarget(rd.Target)
 		rc.SvcParams = svcbv2ValueToString(rd.Value)
 
 	case dnsrdatav2.TLSA:
-		rc.SetTargetTLSA(rd.Usage, rd.Selector, rd.MatchingType, rd.Certificate)
+		rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
+		rc.SetTarget(rd.Certificate)
 	case dnsrdatav2.TXT:
 		rc.SetTargetTXTs(rd.Txt)
 
