@@ -4,6 +4,8 @@ import (
 	"strings"
 	"unicode"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
@@ -44,33 +46,30 @@ func (rc *RecordConfig) HasFormatIdenticalToTXT() bool {
 
 // SetTargetTXT sets the TXT fields when there is 1 string.
 func (rc *RecordConfig) SetTargetTXT(s string) error {
-	if rc.Type == "" {
-		rc.Type = "TXT"
-	} else if !rc.HasFormatIdenticalToTXT() {
-		panic("assertion failed: SetTargetTXT called when .Type is not TXT or compatible type")
-	}
-
-	return rc.SetTarget(s)
+	return legacySetTargetArgs(rc, dnsv2.TypeTXT, s)
 }
 
 // SetTargetTXTs sets the TXT fields when there are many strings. They are stored concatenated.
 func (rc *RecordConfig) SetTargetTXTs(s []string) error {
-	return rc.SetTargetTXT(strings.Join(s, ""))
+	return legacySetTargetArgs(rc, dnsv2.TypeTXT, strings.Join(s, ""))
 }
 
 // GetTargetTXTJoined returns the TXT target as one string.
 func (rc *RecordConfig) GetTargetTXTJoined() string {
-	return rc.target
+	rd := rc.GetRDATA().(dnsrdatav2.TXT)
+	return strings.Join(rd.Txt, "")
 }
 
 // GetTargetTXTSegmented returns the TXT target as 255-octet segments, with the remainder in the last segment.
 func (rc *RecordConfig) GetTargetTXTSegmented() []string {
-	return splitChunks(rc.target, 255)
+	rd := rc.GetRDATA().(dnsrdatav2.TXT)
+	return splitChunks(strings.Join(rd.Txt, ""), 255)
 }
 
 // GetTargetTXTSegmentCount returns the number of 255-octet segments required to store TXT target.
 func (rc *RecordConfig) GetTargetTXTSegmentCount() int {
-	total := len(rc.target)
+	rd := rc.GetRDATA().(dnsrdatav2.TXT)
+	total := len(strings.Join(rd.Txt, ""))
 	segs := total / 255 // integer division, decimals are truncated
 	if (total % 255) > 0 {
 		return segs + 1
