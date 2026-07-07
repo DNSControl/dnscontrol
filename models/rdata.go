@@ -11,7 +11,7 @@ import (
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
-	rc.rdata = assureNotPointerRDATA(rd)
+	rc.rdata = rd
 	rc.validateRDATA()
 	rc.RegenerateComparableV3()
 	if err := rc.copyRDtoLegacyFields(); err != nil {
@@ -35,44 +35,31 @@ func (rc *RecordConfig) ClearRDATA() {
 // mistakes.  Eventually this may become a no-op.
 func (rc *RecordConfig) validateRDATA() {
 
-	if rc.GetRDATA() == nil {
+	rd := rc.GetRDATA()
+	if rd == nil {
 		return
 	}
-
-	tn := fmt.Sprintf("%T", rc.GetRDATA())
-	if strings.HasPrefix(tn, "rdata.") {
-		return
-	}
-	if strings.HasPrefix(tn, "privatetypesrdata.") {
-		return
-	}
-
-	l := fmt.Sprintf("\nDEBUG: validateRDATA: %s\n", tn)
-	fmt.Println(l)
-	fmt.Println(string(debug.Stack()))
-	panic(l)
-}
-
-func assureNotPointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 
 	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	tn := fmt.Sprintf("%T", rd)
-	if tn[0] != '*' {
-		return rd
+	ts := fmt.Sprintf("%T", rd)
+	if ts[0] != '*' {
+		return
 	}
 
-	panic(fmt.Sprintf("########################## BROKEN %T", rd))
+	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%s", rc.TypeNum, rc.Type, ts)
+	fmt.Println(l)
+	fmt.Println(string(debug.Stack()))
+	panic(l)
+
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
-	rd, err := dnsv2.NewData(typeNum, contents, origin+".")
+	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
 		return nil, err
 	}
-
-	rd2 := assureNotPointerRDATA(rd)
 
 	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
 	// sadly those functions aren't called by dnsv2.NewData(). It is

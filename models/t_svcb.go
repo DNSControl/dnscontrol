@@ -128,7 +128,6 @@ func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
 // TODO(tlim): THIS NEEDS A UNIT TEST!
 func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error) {
 	fields := strings.Fields(contents)
-	fmt.Printf("DEBUG: stringToSvcbv2Values: origin=%q contents=%q fields=%v\n", origin, contents, fields)
 
 	var result []svcbv2.Pair
 
@@ -184,7 +183,6 @@ func convertSVCBv1v2(params []dnsv1.SVCBKeyValue) ([]svcbv2.Pair, error) {
 		if len(vV1) > 2 && vV1[0] == '"' && vV1[len(vV1)-1] == '"' {
 			panic("V has quotes")
 		}
-		//fmt.Printf("DEBUG: convertSVCBv1v2: k=%s keyCode=%d v1=%s\n", kV1, keyCodeV2, vV1)
 
 		pairFn := svcbv2.KeyToPair(keyCodeV2)
 		if pairFn == nil {
@@ -239,7 +237,6 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 				// if eValue, ok := cache[k]; ok {
 				rd := rec.GetRDATA().(dnsrdatav2.SVCB)
 				desiredPairs := rd.Value
-				// fmt.Printf("DEBUG: SVCB %q exists in existing (%q) and desired (%v)\n", k, b64.StdEncoding.EncodeToString(eValue), desiredPairs)
 				newPairs, found := svcbReplaceIGNOREWithData(desiredPairs, cache, rec)
 				if found {
 					rd.Value = newPairs

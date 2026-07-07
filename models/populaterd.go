@@ -44,8 +44,6 @@ func (rc *RecordConfig) fixTypeNum() {
 	switch rc.Type {
 	case "IGNORE":
 		return
-	case "ALIAS":
-		return
 	case "IMPORT_TRANSFORM":
 		return
 	default:
@@ -61,9 +59,6 @@ func (rc *RecordConfig) fixTypeNum() {
 // RegenerateComparableV3 generates or regenerates the .ComparableV3 field from the current .RDATA. It does not modify .RDATA.
 func (rc *RecordConfig) RegenerateComparableV3() {
 	switch rc.Type {
-
-	case "ALIAS":
-		return
 
 	case "IGNORE":
 		return
@@ -91,8 +86,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	if rc.TypeNum == 0 {
 		switch rc.Type {
 		case "IGNORE":
-			return
-		case "ALIAS":
 			return
 		}
 		fmt.Printf("DEBUG: copyLegacyFieldsToRD: typeNum=0, Type=%q, Comparablev3=%q\n", rc.Type, rc.ComparableV3)
