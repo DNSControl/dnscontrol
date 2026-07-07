@@ -52,10 +52,12 @@ func (rc *RecordConfig) GetTargetCombinedFunc(encodeFn func(s string) string) st
 // WARNING: How TXT records are handled is buggy but we can't change it because
 // code depends on the bugs. Use Get GetTargetCombinedFunc() instead.
 func (rc *RecordConfig) GetTargetCombined() string {
-	// A TXT record's combined value is its raw (unquoted, unchunked) text.
-	// Presentation quoting/chunking is applied by String().
+	// TXT presentation must split the value into quoted, 255-octet
+	// character-strings (this is the form providers send to their APIs, e.g.
+	// PowerDNS). The stored rdata is the raw text (the single source of truth),
+	// so quote/chunk it here.
 	if rc.Type == "TXT" {
-		return rc.GetTargetTXTJoined()
+		return txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
 	}
 	if rc.GetRDATA() != nil {
 		return rc.GetRDATA().String()
