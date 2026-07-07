@@ -15,8 +15,7 @@
           "name_unicode": "aaaatest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "AAAA",
-            "zone_id": ""
+            "type": "AAAA"
           },
           "rdata": {
             "AliasType": "AAAA",
@@ -63,8 +62,7 @@
           "name_unicode": "aevaltargethealthtest",
           "r53_alias": {
             "evaluate_target_health": "false",
-            "type": "A",
-            "zone_id": ""
+            "type": "A"
           },
           "rdata": {
             "AliasType": "A",
@@ -87,8 +85,7 @@
           "name_unicode": "atest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "A",
-            "zone_id": ""
+            "type": "A"
           },
           "rdata": {
             "AliasType": "A",
@@ -135,8 +132,7 @@
           "name_unicode": "caatest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "CAA",
-            "zone_id": ""
+            "type": "CAA"
           },
           "rdata": {
             "AliasType": "CAA",
@@ -159,8 +155,7 @@
           "name_unicode": "cnametest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "CNAME",
-            "zone_id": ""
+            "type": "CNAME"
           },
           "rdata": {
             "AliasType": "CNAME",
@@ -183,8 +178,7 @@
           "name_unicode": "dstest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "DS",
-            "zone_id": ""
+            "type": "DS"
           },
           "rdata": {
             "AliasType": "DS",
@@ -207,8 +201,7 @@
           "name_unicode": "httpstest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "HTTPS",
-            "zone_id": ""
+            "type": "HTTPS"
           },
           "rdata": {
             "AliasType": "HTTPS",
@@ -231,8 +224,7 @@
           "name_unicode": "mxtest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "MX",
-            "zone_id": ""
+            "type": "MX"
           },
           "rdata": {
             "AliasType": "MX",
@@ -255,8 +247,7 @@
           "name_unicode": "naptrtest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "NAPTR",
-            "zone_id": ""
+            "type": "NAPTR"
           },
           "rdata": {
             "AliasType": "NAPTR",
@@ -279,8 +270,7 @@
           "name_unicode": "ptrtest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "PTR",
-            "zone_id": ""
+            "type": "PTR"
           },
           "rdata": {
             "AliasType": "PTR",
@@ -303,8 +293,7 @@
           "name_unicode": "soatest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "SOA",
-            "zone_id": ""
+            "type": "SOA"
           },
           "rdata": {
             "AliasType": "SOA",
@@ -327,8 +316,7 @@
           "name_unicode": "spftest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "SPF",
-            "zone_id": ""
+            "type": "SPF"
           },
           "rdata": {
             "AliasType": "SPF",
@@ -351,8 +339,7 @@
           "name_unicode": "srvtest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "SRV",
-            "zone_id": ""
+            "type": "SRV"
           },
           "rdata": {
             "AliasType": "SRV",
@@ -375,8 +362,7 @@
           "name_unicode": "sshfptest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "SSHFP",
-            "zone_id": ""
+            "type": "SSHFP"
           },
           "rdata": {
             "AliasType": "SSHFP",
@@ -399,8 +385,7 @@
           "name_unicode": "svcbtest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "SVCB",
-            "zone_id": ""
+            "type": "SVCB"
           },
           "rdata": {
             "AliasType": "SVCB",
@@ -423,8 +408,7 @@
           "name_unicode": "tlsatest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "TLSA",
-            "zone_id": ""
+            "type": "TLSA"
           },
           "rdata": {
             "AliasType": "TLSA",
@@ -447,8 +431,7 @@
           "name_unicode": "txttest",
           "r53_alias": {
             "evaluate_target_health": "",
-            "type": "TXT",
-            "zone_id": ""
+            "type": "TXT"
           },
           "rdata": {
             "AliasType": "TXT",
