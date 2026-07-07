@@ -62,6 +62,9 @@ func (rc *RecordConfig) fixTypeNum() {
 func (rc *RecordConfig) RegenerateComparableV3() {
 	switch rc.Type {
 
+	case "ALIAS":
+		return
+
 	case "IGNORE":
 		return
 

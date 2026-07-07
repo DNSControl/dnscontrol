@@ -51,7 +51,6 @@ func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []d
 		return fmt.Errorf("failed to create RDATA for SVCB record: %w", err)
 	}
 	rc.SetRDATA(rd)
-	//rc.FixUp("")
 
 	return nil
 }
@@ -98,7 +97,6 @@ func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 		}
 		rc.SetRDATA(rd)
 	}
-	//rc.FixUp("")
 
 	return nil
 }
@@ -246,12 +244,6 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 				if found {
 					rd.Value = newPairs
 					rec.SetRDATA(rd)
-					//rec.FixUp("")
-					//err := backfill(rec)
-					// if err != nil {
-					// 	panic(err)
-					// }
-					// fmt.Printf("DEBUG: NEW SVCB %s\n", rec.String())
 				}
 			}
 		}
@@ -260,7 +252,6 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 
 func svcbEncKey(rec *RecordConfig) string {
 	rd := rec.GetRDATA().(dnsrdatav2.SVCB)
-	//return fmt.Sprintf("%s %v %s", rec.NameFQDN, rd.Priority, rd.Target)
 	return fmt.Sprintf("%s:%v", rec.NameFQDN, rd.Priority)
 }
 
