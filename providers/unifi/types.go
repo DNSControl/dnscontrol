@@ -107,25 +107,21 @@ func legacyToRecord(domain string, r *legacyDNSRecord) (*models.RecordConfig, er
 		err = rc.SetTarget(target)
 
 	case "MX":
-		rc.MxPreference = uint16(r.Priority)
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		err = rc.SetTargetMX(uint16(r.Priority), target)
 
 	case "TXT":
 		err = rc.SetTargetTXT(r.Value)
 
 	case "SRV":
-		rc.SrvPriority = uint16(r.Priority)
-		rc.SrvWeight = uint16(r.Weight)
-		rc.SrvPort = uint16(r.Port)
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		err = rc.SetTargetSRV(uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
 
 	default:
 		err = fmt.Errorf("unsupported record type: %s", r.RecordType)
@@ -260,25 +256,21 @@ func newToRecord(domain string, r *dnsPolicyRecord) (*models.RecordConfig, error
 		err = rc.SetTarget(target)
 
 	case NewAPITypeMX:
-		rc.MxPreference = uint16(r.Priority)
 		target := r.MailServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		err = rc.SetTargetMX(uint16(r.Priority), target)
 
 	case NewAPITypeTXT:
 		err = rc.SetTargetTXT(r.Text)
 
 	case NewAPITypeSRV:
-		rc.SrvPriority = uint16(r.Priority)
-		rc.SrvWeight = uint16(r.Weight)
-		rc.SrvPort = uint16(r.Port)
 		target := r.ServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		err = rc.SetTargetSRV(uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
 	}
 
 	return rc, err
