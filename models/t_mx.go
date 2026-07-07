@@ -5,13 +5,13 @@ import (
 )
 
 // SetTargetMX sets the MX fields.
-// // Deprecated. Use models.NewRecordConfig() instead.
+// Deprecated. Use models.NewRecordConfig() instead.
 func (rc *RecordConfig) SetTargetMX(pref uint16, target string) error {
 	return legacySetTargetArgs(rc, dnsv2.TypeMX, pref, target)
 }
 
 // // SetTargetMXStrings is like SetTargetMX but accepts strings.
-// // Deprecated. Use models.NewRecordConfig() instead.
+// Deprecated. Use models.NewRecordConfig() instead.
 // func (rc *RecordConfig) SetTargetMXStrings(pref, target string) error {
 // 	return legacySetTargetArgs(rc, dnsv2.TypeMX, pref, target)
 // }

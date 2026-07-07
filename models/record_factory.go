@@ -188,6 +188,17 @@ func legacySetTargetParse(rc *RecordConfig, typeNum uint16, contents string) err
 		rc.Metadata = map[string]string{}
 	}
 
+	var err error
+	switch rc.TypeNum {
+	case dnsv2.TypeNAPTR:
+		// NS1 (maybe others) produce a flag that is unquoted.  `U` instead of `"U"`.
+		// Maybe we should move this into the NS1 provider.
+		contents, err = naptrAssureQuotedFields(contents)
+		if err != nil {
+			return err
+		}
+	}
+
 	rd, err := MyNewData(typeNum, contents, "")
 	if err != nil {
 		return err
