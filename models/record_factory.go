@@ -170,12 +170,6 @@ func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
 	}
 	rc.SetRDATA(rd)
 
-	rc.FixRD("")                    // Add .ComparableV3
-	err = rc.copyRDtoLegacyFields() // Port .RDATA to legacy fields.
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -199,12 +193,6 @@ func legacySetTargetParse(rc *RecordConfig, typeNum uint16, contents string) err
 		return err
 	}
 	rc.SetRDATA(rd)
-
-	rc.FixRD("")                    // Add .ComparableV3
-	err = rc.copyRDtoLegacyFields() // Port .RDATA to legacy fields.
-	if err != nil {
-		return err
-	}
 
 	return nil
 }

@@ -292,24 +292,14 @@ func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec
 	found := false
 
 	for _, p := range pairs {
-		// fmt.Printf("DEBUG: svcb copying %s=%v\n", svcbv2.KeyToString(svcbv2.PairToKey(p)), p)
-		// pstr := fmt.Sprintf("%v", p)
-		// if pstr == "1000" {
-		// 	fmt.Printf("HERE\n")
-		// }
 		switch v := p.(type) {
 		case *svcbv2.ECHCONFIG:
-			//result = append(result, p)
-			// fmt.Printf("DEBUG ech=%v\n", b64.StdEncoding.EncodeToString(v.ECH))
 			if bytes.Equal(v.ECH, []byte{215, 77, 52}) { // "1000"
 				found = true
-				// fmt.Printf("DEBUG: ECH! FOUND %v\n", v)
 				ech := p.(*svcbv2.ECHCONFIG)
 				ech.ECH = cache[svcbEncKey(rec)]
 				result = append(result, ech)
-
 			} else {
-				// fmt.Printf("DEBUG: ECH! NOT FOUND %v\n", v)
 				result = append(result, p)
 			}
 
@@ -318,9 +308,6 @@ func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec
 		}
 	}
 
-	// Rebuild .ComparableV3 no matter what.
-	rec.ComparableV3 = ""
-	//rec.FixRD("")
 	rec.RegenerateComparableV3()
 
 	return result, found

@@ -82,7 +82,7 @@ func AddNSRecords(dc *models.DomainConfig) {
 			fmt.Printf("failed AddNSRecords rc.SetTarget(%q): %s\n", t, err)
 		}
 
-		// Hack
+		// Hack. We should use a NewRecordConfig constructor instead.
 		rc.FixRD(dc.Name)
 
 		dc.Records = append(dc.Records, rc)
