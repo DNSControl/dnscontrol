@@ -537,7 +537,7 @@ func ignore(labelSpec string, typeSpec string, targetSpec string) *models.Record
 	r.Metadata["ignore_LabelPattern"] = labelSpec
 	r.Metadata["ignore_RTypePattern"] = typeSpec
 	r.Metadata["ignore_TargetPattern"] = targetSpec
-	r.FixUp(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
+	r.FixRD(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
 	return r
 }
 

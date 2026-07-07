@@ -110,24 +110,16 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 // All valid RecordConfig structs come through this function. Everything else is questionable.
 func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
 	rc := &RecordConfig{
-		TypeNum:  typeNum,
-		Type:     dnsutilv2.TypeToString(typeNum),
-		TTL:      ttl,
-		Metadata: metadata,
+		Type:        dnsutilv2.TypeToString(typeNum),
+		TypeNum:     typeNum,
+		TTL:         ttl,
+		Name:        name,
+		NameUnicode: makeLabelNameUnicode(name),
+		NameFQDN:    makeLabelNameFQDN(origin, name),
+		Metadata:    metadata,
 	}
-	rc.SetRDATA(rd)
-
-	rc.Name = name
-	rc.NameUnicode = makeLabelNameUnicode(name)
-	rc.NameFQDN = makeLabelNameFQDN(origin, name)
 	rc.NameFQDNUnicode = makeNameFQDNUnicode(rc.NameFQDN)
-
-	rc.FixUp(origin)    // Add .ComparableV3
-	err := backfill(rc) // Fill in the legacy rc.${TYPE}{Field} fields.
-	if err != nil {
-		return nil, err
-	}
-
+	rc.SetRDATA(rd)
 	return rc, nil
 }
 
@@ -178,8 +170,8 @@ func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
 	}
 	rc.SetRDATA(rd)
 
-	rc.FixUp("")       // Add .ComparableV3
-	err = backfill(rc) // Port .RDATA to legacy fields.
+	rc.FixRD("")                    // Add .ComparableV3
+	err = rc.copyRDtoLegacyFields() // Port .RDATA to legacy fields.
 	if err != nil {
 		return err
 	}
@@ -208,8 +200,8 @@ func legacySetTargetParse(rc *RecordConfig, typeNum uint16, contents string) err
 	}
 	rc.SetRDATA(rd)
 
-	rc.FixUp("")       // Add .ComparableV3
-	err = backfill(rc) // Port .RDATA to legacy fields.
+	rc.FixRD("")                    // Add .ComparableV3
+	err = rc.copyRDtoLegacyFields() // Port .RDATA to legacy fields.
 	if err != nil {
 		return err
 	}

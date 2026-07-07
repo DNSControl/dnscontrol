@@ -59,7 +59,7 @@ func TestDualProviders(t *testing.T) {
 	// run again to make sure no corrections
 	t.Log("Running again to ensure stability")
 	for _, r := range dc.Records {
-		r.FixUp(dc.Name)
+		r.FixRD(dc.Name)
 	}
 	rs, cs, actualChangeCount, err := zonerecs.CorrectZoneRecords(p, dc)
 	if err != nil {

@@ -86,7 +86,6 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		}
 		rd := dnsrdatav2.TXT{Txt: []string{contents}}
 		rc.SetRDATA(rd)
-		rc.FixUp(origin) // Add .ComparableV3
 
 		// Populate legacy fields for backwards compatibility.
 		return rc.SetTargetTXT(contents)
@@ -105,7 +104,6 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		}
 		rd := privatetypesrdata.LUA{LuaType: luaType, LuaPayload: value}
 		rc.SetRDATA(rd)
-		rc.FixUp(origin)
 		return nil
 	}
 
@@ -126,7 +124,7 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		if err := rc.SetTargetNAPTRString(contents); err != nil {
 			return err
 		}
-		rc.FixUp(origin)
+		rc.RecomputeV3Fields(origin)
 		return nil
 	}
 
@@ -140,7 +138,8 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 		if err := rc.SetTarget(contents); err != nil {
 			return err
 		}
-		rc.FixUp(origin)
+		rc.RecomputeV3Fields(origin)
+		//rc.FixRD(origin)
 		return nil
 	}
 

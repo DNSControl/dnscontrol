@@ -51,7 +51,7 @@ func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []d
 		return fmt.Errorf("failed to create RDATA for SVCB record: %w", err)
 	}
 	rc.SetRDATA(rd)
-	rc.FixUp("")
+	//rc.FixUp("")
 
 	return nil
 }
@@ -98,7 +98,7 @@ func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
 		}
 		rc.SetRDATA(rd)
 	}
-	rc.FixUp("")
+	//rc.FixUp("")
 
 	return nil
 }
@@ -246,11 +246,11 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 				if found {
 					rd.Value = newPairs
 					rec.SetRDATA(rd)
-					rec.FixUp("")
-					err := backfill(rec)
-					if err != nil {
-						panic(err)
-					}
+					//rec.FixUp("")
+					//err := backfill(rec)
+					// if err != nil {
+					// 	panic(err)
+					// }
 					// fmt.Printf("DEBUG: NEW SVCB %s\n", rec.String())
 				}
 			}
@@ -320,7 +320,8 @@ func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec
 
 	// Rebuild .ComparableV3 no matter what.
 	rec.ComparableV3 = ""
-	rec.FixUp("")
+	//rec.FixRD("")
+	rec.RegenerateComparableV3()
 
 	return result, found
 }

@@ -37,7 +37,7 @@ func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {
 		panic(err) // Should never happen.
 	}
 	soaRec.SetLabel("@", dc.Name)
-	soaRec.FixUp(dc.Name)
+	soaRec.FixRD(dc.Name)
 
 	dc.Records = append(dc.Records, &soaRec)
 }

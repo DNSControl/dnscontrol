@@ -12,8 +12,11 @@ import (
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 	rc.rdata = assureNotPointerRDATA(rd)
-	rc.ValidateRDATA()
-	rc.ComparableV3 = ""
+	rc.validateRDATA()
+	rc.RegenerateComparableV3()
+	if err := rc.copyRDtoLegacyFields(); err != nil {
+		panic(err) // Should not happen.
+	}
 }
 
 // GetRDATA is a getter for RecordConfig.rdata.
@@ -27,10 +30,10 @@ func (rc *RecordConfig) ClearRDATA() {
 	rc.ComparableV3 = ""
 }
 
-// ValidateRDATA is used to verify that .rdata didn't accidentally get set to
+// validateRDATA is used to verify that .rdata didn't accidentally get set to
 // rdata (instead of *rdata).  This shouldn't be needed, but it catches coding
 // mistakes.  Eventually this may become a no-op.
-func (rc *RecordConfig) ValidateRDATA() {
+func (rc *RecordConfig) validateRDATA() {
 
 	if rc.GetRDATA() == nil {
 		return
@@ -44,10 +47,23 @@ func (rc *RecordConfig) ValidateRDATA() {
 		return
 	}
 
-	l := fmt.Sprintf("\nDEBUG: ValidateRDATA: %s\n", tn)
+	l := fmt.Sprintf("\nDEBUG: validateRDATA: %s\n", tn)
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
+}
+
+func assureNotPointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
+
+	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	tn := fmt.Sprintf("%T", rd)
+	if tn[0] != '*' {
+		return rd
+	}
+
+	panic(fmt.Sprintf("########################## BROKEN %T", rd))
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
@@ -93,17 +109,4 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 	}
 
 	return rd2, nil
-}
-
-func assureNotPointerRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
-
-	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	tn := fmt.Sprintf("%T", rd)
-	if tn[0] != '*' {
-		return rd
-	}
-
-	panic(fmt.Sprintf("########################## BROKEN %T", rd))
 }

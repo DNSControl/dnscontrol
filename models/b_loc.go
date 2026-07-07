@@ -65,7 +65,7 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Rec
 
 	// Populate the V3 fields (.RDATA and .ComparableV3) from the computed LOC
 	// fields, matching the 8-arg path (which goes through NewRecordConfig).
-	rc.FixUp(dc.Name)
+	rc.RecomputeV3Fields(dc.Name)
 
 	return Records{rc}, nil
 

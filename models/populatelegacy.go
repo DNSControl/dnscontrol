@@ -7,7 +7,7 @@ import (
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
 
-func backfill(rc *RecordConfig) error {
+func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	// Hack to back-fill legacy fields. This will go away eventually.
 	switch rd := rc.GetRDATA().(type) {
 	case privatetypesrdata.ADGUARDHOMEAPASSTHROUGH:
@@ -58,6 +58,10 @@ func backfill(rc *RecordConfig) error {
 		// no-op
 	case dnsrdatav2.MX:
 		rc.SetTargetMX(rd.Preference, rd.Mx)
+
+	case privatetypesrdata.LUA:
+		rc.LuaRType = rd.LuaType
+		rc.SetTarget(rd.LuaPayload)
 
 	case dnsrdatav2.NAPTR:
 		rc.SetTargetNAPTR(rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp, rd.Replacement)
@@ -117,7 +121,7 @@ func backfill(rc *RecordConfig) error {
 		rc.SetTarget(rd.Location)
 
 	default:
-		return fmt.Errorf("assertion failed: NewRecordConfig back-fill has not implemented type %T", rd)
+		return fmt.Errorf("assertion failed: copyRDtoLegacyFields has not implemented type %T", rd)
 	}
 
 	return nil

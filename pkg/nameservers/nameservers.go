@@ -83,7 +83,7 @@ func AddNSRecords(dc *models.DomainConfig) {
 		}
 
 		// Hack
-		rc.FixUp(dc.Name)
+		rc.FixRD(dc.Name)
 
 		dc.Records = append(dc.Records, rc)
 	}
