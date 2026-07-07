@@ -19,86 +19,16 @@ func (rc *RecordConfig) targetCombinedSVCBRaw() string {
 	return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.target, rc.SvcParams)
 }
 
-// SetTargetSVCB sets the SVCB fields.
-// FUTURE(tlim): This will either go away or changed such that params is []svcbv2.Pair.
-func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
-	rc.SvcPriority = priority
-	if err := rc.SetTarget(target); err != nil {
-		return err
-	}
-	paramsStr := []string{}
-	for _, kv := range params {
-		paramsStr = append(paramsStr, fmt.Sprintf("%s=%s", kv.Key(), kv.String()))
-	}
-	rc.SvcParams = strings.Join(paramsStr, " ")
-	if rc.Type == "" {
-		rc.Type = "SVCB"
-	}
-	if rc.Type != "SVCB" && rc.Type != "HTTPS" {
-		panic("assertion failed: SetTargetSVCB called when .Type is not SVCB or HTTPS")
-	}
-
-	switch rc.Type {
-	case "HTTPS":
-		rc.TypeNum = dnsv2.TypeHTTPS
-	case "SVCB":
-		rc.TypeNum = dnsv2.TypeSVCB
-	}
-	rc.Type = dnsv2.TypeToString[rc.TypeNum]
-
-	rd, err := MakeSVCB("", nil, priority, target, params)
-	if err != nil {
-		return fmt.Errorf("failed to create RDATA for SVCB record: %w", err)
-	}
-	rc.SetRDATA(rd)
-
-	return nil
-}
+// // SetTargetSVCB sets the SVCB fields.
+// Deprecated. Use models.NewRecordConfig() instead.
+// func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
+// 	return legacySetTargetArgs(rc, dnsv2.TypeSVCB, priority, target, params)
+// }
 
 // SetTargetSVCBString is like SetTargetSVCB but accepts one big string and the origin so parsing can be done using miekg/dns.
+// Deprecated. Use models.NewRecordConfigParse() instead.
 func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
-	if rc.Type == "" {
-		rc.Type = "SVCB"
-	}
-	record, err := dnsv1.NewRR(fmt.Sprintf("%s. %s %s", origin, rc.Type, contents))
-	if err != nil {
-		return fmt.Errorf("could not parse SVCB record: %w", err)
-	}
-
-	// Hack to set .RDATA without importing miekg/dns in pkg/rtypecontrol/fixlegacy.go
-	var rty uint16
-	switch record.(type) {
-	case *dnsv1.HTTPS:
-		rty = dnsv1.TypeHTTPS
-	case *dnsv1.SVCB:
-		rty = dnsv1.TypeSVCB
-	default:
-		return fmt.Errorf("unexpected record type after parsing SVCB record: %T", record)
-	}
-	rrv2, err := MyNewData(rty, contents, origin)
-	if err != nil {
-		return fmt.Errorf("could not parse SVCB record: %w", err)
-	}
-	rc.SetRDATA(rrv2)
-
-	switch r := record.(type) {
-	case *dnsv1.HTTPS:
-		return rc.SetTargetSVCB(r.Priority, r.Target, r.Value)
-	case *dnsv1.SVCB:
-		return rc.SetTargetSVCB(r.Priority, r.Target, r.Value)
-	}
-
-	if rc.SvcPriority == 0 {
-		rc.SetRDATA(&dnsrdatav2.SVCB{Priority: rc.SvcPriority, Target: rc.GetTargetField()})
-	} else {
-		rd, err := MyNewData(dnsv2.TypeSVCB, fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.GetTargetField(), rc.SvcParams), origin)
-		if err != nil {
-			panic(fmt.Sprintf("BUG: Failed to create RDATA for HTTPS record: %v", err))
-		}
-		rc.SetRDATA(rd)
-	}
-
-	return nil
+	return legacySetTargetParse(rc, dnsv2.TypeSVCB, contents)
 }
 
 // GetSVCBValue returns the SVCB Key/Values as a list of Key/Values.
