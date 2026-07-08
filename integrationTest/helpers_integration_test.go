@@ -15,6 +15,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
@@ -32,6 +33,9 @@ var (
 // Global variable to hold the current DomainConfig for use in NewRecordConfig calls.
 // This is an ugly, ugly, hack. We have to find something better.
 var globalDC *models.DomainConfig
+
+// Global variable to hold the current DomainConfig     for use in FromRaw calls.
+var globalDCN *domaintags.DomainNameVarieties
 
 // Default TTL used in integration tests.
 var defaultTTL = uint32(300)
