@@ -350,9 +350,14 @@ func (c *unifiClient) deleteRecordNew(id string) error {
 // ============================================================================
 
 // detectAPIAvailability probes both APIs to determine which are available.
+// Only positive results are cached: a transient probe failure must not
+// permanently mark an API unavailable for the life of the client (otherwise a
+// single network blip poisons every later request). If no API is found yet, the
+// next call re-probes.
 func (c *unifiClient) detectAPIAvailability() {
-	if c.newAPIAvailable != nil && c.legacyAPIAvailable != nil {
-		return // Already detected
+	if (c.newAPIAvailable != nil && *c.newAPIAvailable) ||
+		(c.legacyAPIAvailable != nil && *c.legacyAPIAvailable) {
+		return // Already found a working API.
 	}
 
 	// Try new API first
@@ -365,7 +370,9 @@ func (c *unifiClient) detectAPIAvailability() {
 			newAvailable = true
 		}
 	}
-	c.newAPIAvailable = &newAvailable
+	if newAvailable {
+		c.newAPIAvailable = &newAvailable
+	}
 
 	// Try legacy API
 	legacyAvailable := false
@@ -373,7 +380,9 @@ func (c *unifiClient) detectAPIAvailability() {
 	if _, err := c.do("GET", path, nil); err == nil {
 		legacyAvailable = true
 	}
-	c.legacyAPIAvailable = &legacyAvailable
+	if legacyAvailable {
+		c.legacyAPIAvailable = &legacyAvailable
+	}
 
 	if c.debug {
 		fmt.Printf("[UNIFI] [DEBUG] API availability - New: %v, Legacy: %v\n", newAvailable, legacyAvailable)
