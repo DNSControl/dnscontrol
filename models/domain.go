@@ -73,6 +73,18 @@ type DomainConfig struct {
 	pendingPopulateCorrections map[string][]*Correction // Corrections for zone creations at each provider
 }
 
+func NewDomainConfig(name string) (*DomainConfig, error) {
+	if strings.HasSuffix(name, ".") {
+		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
+	}
+	dc := &DomainConfig{
+		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
+	}
+	dc.PopulateNamesFromRaw(name)
+
+	return dc, nil
+}
+
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
@@ -243,18 +255,6 @@ func (dc *DomainConfig) StorePopulateCorrections(providerName string, correction
 		dc.pendingPopulateCorrections = make(map[string][]*Correction, 1)
 	}
 	dc.pendingPopulateCorrections[providerName] = append(dc.pendingPopulateCorrections[providerName], corrections...)
-}
-
-func NewDomainConfig(name string) (*DomainConfig, error) {
-	if strings.HasSuffix(name, ".") {
-		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
-	}
-	dc := &DomainConfig{
-		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
-	}
-	dc.PopulateNamesFromRaw(name)
-
-	return dc, nil
 }
 
 // GetPopulateCorrections returns zone corrections in a thread-safe way.
