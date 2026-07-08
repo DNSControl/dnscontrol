@@ -37,3 +37,8 @@ if command -v staticcheck >/dev/null 2>&1; then
 else
   echo "staticcheck not found, skipping"
 fi
+
+# NOTE:
+# This is one way to make sure Unicode chars haven't crept into pkg/js/parse_tests
+# pcre2grep --color='auto' -n '[^\x00-\x7F]' $(find * . -type f -name \*.json)
+

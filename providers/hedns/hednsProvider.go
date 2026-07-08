@@ -410,7 +410,7 @@ func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, recor
 }
 
 // setDDNSKeyForNewRecord sets the DDNS key on a newly created record.
-func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, domain string, record *models.RecordConfig, key string) error {
+func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, _ string, record *models.RecordConfig, key string) error {
 	return c.setRecordDDNSKey(zoneID, record.GetLabelFQDN(), key)
 }
 

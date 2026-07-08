@@ -3,15 +3,18 @@ package main
 // Data-driven tests that exercize the DNS Provider APIs.
 
 import (
+	"runtime/debug"
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 )
 
 func TestDNSProviders(t *testing.T) {
+	debug.SetTraceback("all")
 	provider, domain, cfg := getProvider(t)
 	if provider == nil {
 		return
@@ -23,6 +26,19 @@ func TestDNSProviders(t *testing.T) {
 	t.Run(domain, func(t *testing.T) {
 		runTests(t, provider, domain, cfg)
 	})
+}
+
+func TestMakeTests(t *testing.T) {
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.FailNow()
+	}
+	globalDC = dc
+	globalDCN = dc.DomainNameVarieties()
+
+	debug.SetTraceback("all")
+
+	_ = makeTests()
 }
 
 func makeTests() []*TestGroup {
@@ -306,6 +322,7 @@ func makeTests() []*TestGroup {
 		testgroup("HTTPS-Ech",
 			requires(providers.CanUseHTTPS),
 			not(
+				"SAKURACLOUD", // NB(tlim): rejectif code is broken.
 				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
 				// on the `ech` parameter, and our dummy base64 string are being rejected with:
 				//
@@ -316,15 +333,20 @@ func makeTests() []*TestGroup {
 				//
 				// Let's just ignore ECH test for Vercel for now.
 				"VERCEL",
+				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
 			),
-			tc("Create a HTTPS record", https("@", 1, "example.com.", "alpn=h2,h3")),
-			tc("Add an ECH key", https("@", 1, "example.com.", "alpn=h2,h3 ech=some+base64+encoded+value///")),
-			tc("Ignore the ECH key while changing other values", https("@", 1, "example.net.", "port=80 ech=IGNORE")),
-			// tc("Should be a no-op", https("@", 1, "example.net.", "port=80 ech=some+base64+encoded+value///")),
-			tc("Change the ECH key and other values", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			// tc("Ignore the ECH key while not changing anything", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=IGNORE")),
-			// tc("Should be a no-op", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			tc("Another domain with a different ECH value", https("ech", 1, "example.com.", "ech=some+base64+encoded+value///")),
+			tc("Start",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999")),
+			tc("Add an ECH key",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=some+base64+encoded+value///")),
+			tc("IGNORE ECH",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=IGNORE")).ExpectNoChanges(),
+			tc("Ignore the ECH key while changing other values",
+				https("@", 3, "example.com.", "alpn=h2 port=80 ech=IGNORE")),
+			tc("Change the ECH key and other values",
+				https("@", 3, "example.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
+			tc("Another domain with a same ECH value",
+				https("@", 3, "yetanother.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
 		),
 
 		testgroup("SVCB",
@@ -339,6 +361,7 @@ func makeTests() []*TestGroup {
 		testgroup("SVCB-Ech",
 			requires(providers.CanUseSVCB),
 			not(
+				"SAKURACLOUD", // NB(tlim): rejectif code is broken.
 				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
 				// on the `ech` parameter, and our dummy base64 string are being rejected with:
 				//
@@ -349,15 +372,20 @@ func makeTests() []*TestGroup {
 				//
 				// Let's just ignore ECH test for Vercel for now.
 				"VERCEL",
+				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
 			),
-			tc("Create a SVCB record", svcb("@", 1, "example.com.", "alpn=h2,h3")),
-			tc("Add an ECH key", svcb("@", 1, "example.com.", "alpn=h2,h3 ech=some+base64+encoded+value///")),
-			tc("Ignore the ECH key while changing other values", svcb("@", 1, "example.net.", "port=80 ech=IGNORE")),
-			// tc("Should be a no-op", svcb("@", 1, "example.net.", "port=80 ech=some+base64+encoded+value///")),
-			tc("Change the ECH key and other values", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			// tc("Ignore the ECH key while not changing anything", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=IGNORE")),
-			// tc("Should be a no-op", svcb("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			tc("Another domain with a different ECH value", svcb("ech", 1, "example.com.", "ech=some+base64+encoded+value///")),
+			tc("Start",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999")),
+			tc("Add an ECH key",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=some+base64+encoded+value///")),
+			tc("IGNORE ECH",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=IGNORE")).ExpectNoChanges(),
+			tc("Ignore the ECH key while changing other values",
+				svcb("@", 3, "example.com.", "alpn=h2 port=80 ech=IGNORE")),
+			tc("Change the ECH key and other values",
+				svcb("@", 3, "example.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
+			tc("Another domain with a same ECH value",
+				svcb("@", 3, "yetanother.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
 		),
 
 		//// Test edge cases from various types.
