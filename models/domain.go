@@ -85,6 +85,16 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	return dc, nil
 }
 
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
+}
+
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
@@ -105,16 +115,6 @@ func (dc *DomainConfig) PostProcess() {
 	dc.Metadata[DomainNameRaw] = dc.NameRaw
 	dc.Metadata[DomainNameUnicode] = dc.NameUnicode
 	dc.Metadata[DomainUniqueName] = dc.UniqueName
-}
-
-func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
-	dcn := domaintags.MakeDomainNameVarieties(rawname)
-	dc.Name = dcn.NameASCII
-	dc.Tag = dcn.Tag
-	dc.NameRaw = dcn.NameRaw
-	dc.NameUnicode = dcn.NameUnicode
-	dc.DisplayName = dcn.DisplayName
-	dc.UniqueName = dcn.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
