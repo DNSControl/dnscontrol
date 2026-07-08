@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
@@ -281,9 +282,6 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 	case "PTR":
 		err = rc.SetTarget(ensureTrailingDot(r.Host))
 	case "RP":
-		// RP uses the modern rc.F-based system. We also set ZonefilePartial and
-		// Comparable directly so comparison works even if CopyFromLegacyFields
-		// cannot derive them (e.g. when the rtype package init has not run).
 		mbox := ensureTrailingDot(r.MailBox)
 		txt := ensureTrailingDot(r.TxtDomainName)
 		rd, err := models.MakeRP(domain, nil, mbox, txt)
@@ -456,12 +454,9 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// Target is the base64-encoded public key (zone-file format == API format).
 		req.PublicKey = rc.GetTargetField()
 	case "RP":
-		// rc.ZonefilePartial contains "mailbox. txtdomain." set by FromStruct/CopyFromLegacyFields.
-		parts := strings.Fields(rc.ZonefilePartial)
-		if len(parts) >= 2 {
-			req.MailBox = strings.TrimSuffix(parts[0], ".")
-			req.TxtDomainName = strings.TrimSuffix(parts[1], ".")
-		}
+		rd := rc.GetRDATA().(dnsrdatav2.RP)
+		req.MailBox = rd.Mbox
+		req.TxtDomainName = rd.Txt
 	case "SMIMEA":
 		usage := int(rc.SmimeaUsage)
 		selector := int(rc.SmimeaSelector)

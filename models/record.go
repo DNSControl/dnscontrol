@@ -49,21 +49,6 @@ type RecordConfig struct {
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
 
-	// F is the binary representation of the record's data usually a dns.XYZ struct.
-	// Always stored in Punycode, not Unicode. Downcased where applicable.
-	// F any `json:"fields,omitempty"`
-	//FieldsAsRaw     []string // Fields as received from the dnsconfig.js file, converted to strings.
-	//FieldsAsUnicode []string // fields with IDN fields converted to Unicode for display purposes.
-
-	// Comparable is an opaque string that can be used to compare two
-	// RecordConfigs for equality. Typically this is the Zonefile line minus the
-	// label and TTL.
-	//Comparable string `json:"comparable,omitempty"` // Cache of ToComparableNoTTL()
-
-	// ZonefilePartial is the partial zonefile line for this record, excluding
-	// the label and TTL.  If this is not an official RR type, we invent the format.
-	ZonefilePartial string `json:"zonfefilepartial,omitempty"`
-
 	//// Fields only relevant when RecordConfig was created from data in dnsconfig.js:
 
 	// Metadata (desired) added to the record via dnsconfig.js. For example: A("foo", "1.2.3.4", {metakey: "value"})
