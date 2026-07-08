@@ -27,6 +27,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 	// TXT records have limitations
 	a.Add("TXT", rejectif.TxtIsEmpty)
 	a.Add("TXT", rejectif.TxtLongerThan(255)) // UniFi limits TXT to 255 chars per record
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // New API rejects interior double quotes ("incorrectly quoted value")
 
 	// MX records cannot have null/empty target
 	a.Add("MX", rejectif.MxNull)
