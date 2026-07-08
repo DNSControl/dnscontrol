@@ -9,6 +9,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -221,7 +222,7 @@ func nativeToRecord(r *Record, origin string) (*models.RecordConfig, error) {
 	}
 
 	rec.SetLabel(r.SubDomain, origin)
-	if err := rec.PopulateFromString(rtype, r.Target, origin); err != nil {
+	if err := rec.PopulateFromStringFunc(rtype, r.Target, origin, txtutil.ParseQuoted); err != nil {
 		return nil, fmt.Errorf("unparsable record received from ovh: %w", err)
 	}
 
