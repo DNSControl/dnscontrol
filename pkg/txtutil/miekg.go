@@ -2,52 +2,30 @@ package txtutil
 
 import (
 	"fmt"
-	"strings"
 
 	"codeberg.org/miekg/dns/pkg/pool"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil/ddd"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 )
 
 var builderPool = pool.NewBuilder()
 
 // ZoneifyQuoted prints strings, each individually quoted and escaped, as used by Txt records.
-// However, this is also useful for spewing untrusted data into a zonefile, or URLs and other things that private types might want to use.
+// This is useful for spewing untrusted data into a zonefile, or URLs and other things that private types might want to use.
 // Example: []string{"one", "tw o", "three"} outputs: `"one" "tw o" "three"`.
-// TODO: Request to upstream this and make it a public function in miekg/dns, and then remove this code from dnscontrol.
-// TODO: Harden this so that it works with all possible strings, including backslashes, binary data, etc.
-func ZoneifyQuoted(txt []string) string {
-	sb := builderPool.Get()
-	defer builderPool.Put(sb)
-
-	for i, s := range txt {
-		sb.Grow(3 + len(s))
-		if i > 0 {
-			sb.WriteString(` "`)
-		} else {
-			sb.WriteByte('"')
-		}
-		for j := 0; j < len(s); {
-			b, n := ddd.Next(s, j)
-			if n == 0 {
-				break
-			}
-			writeTxtByte(&sb, b)
-			j += n
-		}
-		sb.WriteByte('"')
-	}
-	return sb.String()
+func ZoneifyQuoted(txts []string) string {
+	rdtxt := dnsrdatav2.TXT{Txt: txts}
+	return rdtxt.String()
 }
 
 // Zoneify is like ZoneifyQuoted, but omits the quotes when not needed. (Note:
 // It might quote things that don't strictly need quoting, but it won't fail to
 // quote things that do need quoting.)
 // Example: []string{"one", "tw o", "three"} outputs: `one "t wo" three`.
-func Zoneify(txt []string) string {
+func Zoneify(txts []string) string {
 	sb := builderPool.Get()
 	defer builderPool.Put(sb)
 
-	for i, s := range txt {
+	for i, s := range txts {
 		if i > 0 {
 			sb.Grow(1)
 			sb.WriteString(` `)
@@ -57,17 +35,9 @@ func Zoneify(txt []string) string {
 			sb.Grow(len(s))
 			sb.WriteString(s)
 		} else {
-			sb.Grow(2 + len(s))
-			sb.WriteByte('"')
-			for j := 0; j < len(s); {
-				b, n := ddd.Next(s, j)
-				if n == 0 {
-					break
-				}
-				writeTxtByte(&sb, b)
-				j += n
-			}
-			sb.WriteByte('"')
+			q := ZoneifyStringQuoted(s)
+			sb.Grow(2 + len(q))
+			sb.WriteString(q)
 		}
 	}
 	return sb.String()
@@ -75,10 +45,14 @@ func Zoneify(txt []string) string {
 
 // ZoneifyString is a convenience function for Zoneify when you have only one string.
 func ZoneifyString(s string) string {
-	return Zoneify([]string{s})
+	if isPlain(s) {
+		return s
+	}
+	return ZoneifyStringQuoted(s)
 }
 func ZoneifyStringQuoted(s string) string {
-	return ZoneifyQuoted([]string{s})
+	rdtxt := dnsrdatav2.TXT{Txt: []string{s}}
+	return rdtxt.String()
 }
 
 // ZoneifyManyAny is a convenience function for Zoneify when you have a []any and want a string.
@@ -88,18 +62,6 @@ func ZoneifyManyAny(args []any) string {
 		n[i] = fmt.Sprint(arg)
 	}
 	return Zoneify(n)
-}
-
-func writeTxtByte(sb *strings.Builder, b byte) {
-	switch {
-	case b == '"' || b == '\\':
-		sb.WriteByte('\\')
-		sb.WriteByte(b)
-	case b < ' ' || b > '~':
-		sb.WriteString(ddd.Escape(b))
-	default:
-		sb.WriteByte(b)
-	}
 }
 
 // isPlain returns true if the string doesn't need to be quoted.
