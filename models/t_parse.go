@@ -118,7 +118,6 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 			return err
 		}
 		rc.RecomputeV3Fields(origin)
-		//rc.FixRD(origin)
 		return nil
 	}
 
@@ -126,36 +125,7 @@ func (rc *RecordConfig) PopulateFromStringFunc(rtype, contents, origin string, t
 
 }
 
-// PopulateFromString populates a RecordConfig given a type and string.  Many
-// providers give all the parameters of a resource record in one big string.
-// This helper function lets you not re-invent the wheel.
-//
-// NOTE: You almost always want to special-case TXT records. Every provider
-// seems to quote them differently.
-//
-// Recommended calling convention:  Process the exceptions first, then use the
-// PopulateFromString function for everything else.
-//
-//	 rtype := FILL_IN_TYPE
-//		var err error
-//	 rc := &models.RecordConfig{Type: rtype}
-//	 rc.SetLabelFromFQDN(FILL_IN_NAME, origin)
-//	 rc.TTL = uint32(FILL_IN_TTL)
-//	 rc.Original = FILL_IN_ORIGINAL // The raw data received from provider (if needed later)
-//		switch rtype {
-//		case "MX":
-//			// MX priority in a separate field.
-//			err = rc.SetTargetMX(cr.Priority, target)
-//		case "TXT":
-//			// TXT records are stored verbatim; no quoting/escaping to parse.
-//			err = rc.SetTargetTXT(target)
-//		default:
-//			err = rc.PopulateFromString(rtype, target, origin)
-//		}
-//		if err != nil {
-//			return nil, fmt.Errorf("unparsable record type=%q received from PROVDER_NAME: %w", rtype, err)
-//		}
-//		return rc, nil
+// PopulateFromString populates a RecordConfig given a type and string.  See PopulateFromStringFunc() for details.
 func (rc *RecordConfig) PopulateFromString(rtype, contents, origin string) error {
 	return rc.PopulateFromStringFunc(rtype, contents, origin, nil)
 }
