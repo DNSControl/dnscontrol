@@ -81,6 +81,11 @@ func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 	dc.UniqueName = dcn.UniqueName
 }
 
+// PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
+// It is called by dns.go's PostProcess() function.
+func (dc *DomainConfig) PostProcess() {
+}
+
 // FixLegacyDC calls .FixUp() on all records within DC.
 func (dc *DomainConfig) FixLegacyDC() {
 	dc.Records.FixLegacyRecords(dc.Name)
@@ -91,11 +96,6 @@ func (recs Records) FixLegacyRecords(origin string) {
 	for _, rec := range recs {
 		rec.FixRD(origin)
 	}
-}
-
-// PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
-// It is called by dns.go's PostProcess() function.
-func (dc *DomainConfig) PostProcess() {
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
