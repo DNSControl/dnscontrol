@@ -355,7 +355,8 @@ func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *cloudnsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *cloudnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok, err := c.idForDomain(domain); err != nil {
 		return err
 	} else if ok { // zone already exists

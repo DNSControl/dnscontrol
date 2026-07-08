@@ -208,7 +208,8 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (l *luadnsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (l *luadnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if l.zones == nil {
 		if err := l.fetchDomainList(); err != nil {
 			return err

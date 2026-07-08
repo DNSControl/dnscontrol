@@ -218,7 +218,8 @@ func (c *hednsProvider) ListZones() ([]string, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *hednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *hednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	ok, err := c.zoneCache.HasZone(domain)
 	if err != nil {
 		return err

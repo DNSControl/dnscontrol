@@ -47,7 +47,7 @@ type Record struct {
 func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	records, err := n.getRecords(domain)
+	records, err := n.getRecords(dc)
 	if err != nil {
 		return nil, err
 	}
@@ -270,8 +270,9 @@ func (n *Client) updateZoneBy(params map[string]any, domain string) error {
 }
 
 // getRecords queries the API for all resource records of a zone.
-func (n *Client) getRecords(domain string) ([]*Record, error) {
+func (n *Client) getRecords(dc *models.DomainConfig) ([]*Record, error) {
 	var records []*Record
+	domain := dc.Name
 
 	// Command to find out the total numbers of resource records for the zone
 	// so that the follow-up query can be done with the correct limit
@@ -290,7 +291,7 @@ func (n *Client) getRecords(domain string) ([]*Record, error) {
 		if r.GetCode() == 545 {
 			// If dns zone does not exist create a new one automatically
 			if !isNoPopulate() {
-				err := n.EnsureZoneExists(domain, nil)
+				err := n.EnsureZoneExists(dc)
 				if err != nil {
 					return nil, err
 				}

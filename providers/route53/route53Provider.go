@@ -820,7 +820,8 @@ func unescape(s *string) string {
 	return name
 }
 
-func (r *route53Provider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (r *route53Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := r.getZoneByDomain(domain); ok {
 		return nil
 	}
