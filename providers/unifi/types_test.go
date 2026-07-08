@@ -187,7 +187,7 @@ func TestNewToRecord(t *testing.T) {
 		},
 		{
 			name:       "SRV",
-			in:         &dnsPolicyRecord{Type: NewAPITypeSRV, Domain: "_sip._tcp.example.com", ServerDomain: "sip.example.com", Priority: 1, Weight: 5, Port: 5060, TTLSeconds: 300},
+			in:         &dnsPolicyRecord{Type: NewAPITypeSRV, Domain: "example.com", Service: "_sip", Protocol: "_tcp", ServerDomain: "sip.example.com", Priority: 1, Weight: 5, Port: 5060, TTLSeconds: 300},
 			wantType:   "SRV",
 			wantLabel:  "_sip._tcp",
 			wantTTL:    300,
@@ -362,9 +362,9 @@ func TestRecordToNew(t *testing.T) {
 		},
 		{
 			name: "SRV",
-			in:   &dnsPolicyRecord{Type: NewAPITypeSRV, Domain: "_sip._tcp.example.com", ServerDomain: "sip.example.com", Priority: 1, Weight: 5, Port: 5060, TTLSeconds: 300},
+			in:   &dnsPolicyRecord{Type: NewAPITypeSRV, Domain: "example.com", Service: "_sip", Protocol: "_tcp", ServerDomain: "sip.example.com", Priority: 1, Weight: 5, Port: 5060, TTLSeconds: 300},
 			check: func(t *testing.T, r *dnsPolicyRecord) {
-				if r.Type != NewAPITypeSRV || r.ServerDomain != "sip.example.com" || r.Priority != 1 || r.Weight != 5 || r.Port != 5060 || r.TTLSeconds != 0 {
+				if r.Type != NewAPITypeSRV || r.Service != "_sip" || r.Protocol != "_tcp" || r.Domain != "example.com" || r.ServerDomain != "sip.example.com" || r.Priority != 1 || r.Weight != 5 || r.Port != 5060 || r.TTLSeconds != 0 {
 					t.Errorf("unexpected SRV record: %+v", r)
 				}
 			},

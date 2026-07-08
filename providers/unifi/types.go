@@ -61,9 +61,12 @@ type dnsPolicyRecord struct {
 	// MX/SRV specific
 	Priority int `json:"priority,omitempty"` // MX/SRV priority
 
-	// SRV specific
-	Weight int `json:"weight,omitempty"` // SRV weight
-	Port   int `json:"port,omitempty"`   // SRV port
+	// SRV specific. The new API splits the "_service._proto.name" label into
+	// separate fields; service/protocol keep their leading underscore.
+	Service  string `json:"service,omitempty"`  // SRV service, e.g. "_sip"
+	Protocol string `json:"protocol,omitempty"` // SRV protocol, e.g. "_tcp"
+	Weight   int    `json:"weight,omitempty"`   // SRV weight
+	Port     int    `json:"port,omitempty"`     // SRV port
 }
 
 // dnsPolicyResponse wraps the response from the new API list endpoint.
@@ -238,8 +241,13 @@ func newToRecord(domain string, r *dnsPolicyRecord) (*models.RecordConfig, error
 		rc.TTL = 300
 	}
 
-	// Set label from FQDN
-	rc.SetLabelFromFQDN(r.Domain, domain)
+	// Set label from FQDN. For SRV the new API splits the label, so rebuild
+	// "_service._proto.name" from the separate fields.
+	fqdn := r.Domain
+	if r.Type == NewAPITypeSRV && r.Service != "" && r.Protocol != "" {
+		fqdn = r.Service + "." + r.Protocol + "." + r.Domain
+	}
+	rc.SetLabelFromFQDN(fqdn, domain)
 
 	var err error
 	switch r.Type {
@@ -319,6 +327,16 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 
 	case "SRV":
 		r.Type = NewAPITypeSRV
+		// The new API wants the "_service._proto.name" label split apart, e.g.
+		// "_sip._tcp.example.com" => service="_sip", protocol="_tcp",
+		// domain="example.com".
+		labels := strings.SplitN(rc.NameFQDN, ".", 3)
+		if len(labels) < 3 {
+			return nil, fmt.Errorf("SRV record %q is not in _service._proto.name form", rc.NameFQDN)
+		}
+		r.Service = labels[0]
+		r.Protocol = labels[1]
+		r.Domain = labels[2]
 		r.Priority = int(rc.SrvPriority)
 		r.Weight = int(rc.SrvWeight)
 		r.Port = int(rc.SrvPort)
