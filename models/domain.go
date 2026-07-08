@@ -95,6 +95,16 @@ func (dc *DomainConfig) PostProcess() {
 	dc.Metadata[DomainUniqueName] = dc.UniqueName
 }
 
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
+}
+
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
 // Deprecated: use .Name, .Uniquename, and .Tag directly instead.
 func (dc *DomainConfig) GetSplitHorizonNames() (name, uniquename, tag string) {
@@ -242,6 +252,7 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	dc := &DomainConfig{
 		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
 	}
+	dc.PopulateNamesFromRaw(name)
 
 	return dc, nil
 }
