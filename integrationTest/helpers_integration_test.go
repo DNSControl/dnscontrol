@@ -30,6 +30,10 @@ var (
 	printElapsed = flag.Bool("elapsed", false, "Print elapsed time for each testgroup")
 )
 
+// Global variable to hold the current DomainConfig for use in NewRecordConfig calls.
+// This is an ugly, ugly, hack. We have to find something better.
+var globalDC *models.DomainConfig
+
 // Global variable to hold the current DomainConfig	for use in FromRaw calls.
 var globalDCN *domaintags.DomainNameVarieties
 
@@ -93,9 +97,7 @@ func CfFlattenOn() *TestCase {
 }
 
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
-	dc := &models.DomainConfig{
-		Name: domainName,
-	}
+	dc, _ := models.NewDomainConfig(domainName)
 	dc.PostProcess()
 	rtypecontrol.FixLegacyDC(dc)
 
@@ -265,6 +267,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 
 func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string, origConfig map[string]string) {
 	dc := getDomainConfigWithNameservers(t, prv, domainName)
+	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
 
 	testGroups := makeTests()

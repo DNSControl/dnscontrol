@@ -17,8 +17,8 @@ import (
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
-	enableCFWorkers      = flag.Bool("cfworkers", false, "enable CF worker tests (default false)")
-	enableCFRedirectMode = flag.Bool("cfredirect", false, "enable CF SingleRedirect tests (default false)")
+	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
+	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
 	enableCFTags         = flag.Bool("cftags", false, "enable CF tag tests (requires paid plan, default false)")
 )
