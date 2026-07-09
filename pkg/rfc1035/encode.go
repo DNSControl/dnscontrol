@@ -7,6 +7,10 @@ import (
 	"fmt"
 )
 
+func EncodeString(s string) string {
+	return Encode([]string{s})
+}
+
 // Encode encodes a TXT record into an RFC1035-encoded string as Tom inteprets RFC1035, which is a very loose interpretation such that all strings (even with binary data) can be encoded.
 func Encode(txts []string) string {
 	if len(txts) == 0 {
@@ -48,7 +52,7 @@ func escape(b *bytes.Buffer, s string) {
 }
 
 // isPlainString returns true if the string doesn't need to be quoted.
-// It errs on the side of caution, including only A-Z, a-z, 0-9, and ".", and "*".
+// It errs on the side of caution, including only A-Z, a-z, 0-9, and any of "._:/*"
 // "@" is plain but strings that contain an "@" are not.
 // TODO: Optimize this code. Maybe use strings.ContainsAny() ?
 func isPlainString(s string) bool {
@@ -72,5 +76,9 @@ func isPlainByte(c byte) bool {
 		(c >= 'A' && c <= 'Z') ||
 		(c >= '0' && c <= '9') ||
 		(c == '.') ||
+		(c == '_') ||
+		(c == ':') ||
+		(c == ',') ||
+		(c == '/') ||
 		(c == '*'))
 }

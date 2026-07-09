@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type LUA struct {
@@ -20,8 +20,8 @@ func (rd LUA) Len() int {
 
 func (rd LUA) String() string {
 	parts := make([]string, 0, 2)
-	parts = append(parts, txtutil.ZoneifyString(rd.LuaType))
-	parts = append(parts, txtutil.ZoneifyString(rd.LuaPayload))
+	parts = append(parts, rfc1035.EncodeString(rd.LuaType))
+	parts = append(parts, rfc1035.EncodeString(rd.LuaPayload))
 	return strings.Join(parts, " ")
 }
 

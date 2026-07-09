@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
@@ -123,7 +124,7 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 		}
 
 		// the remaining line
-		target := rr.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+		target := rr.GetTargetCombinedFunc(rfc1035.EncodeString)
 
 		// comment
 		comment := ""

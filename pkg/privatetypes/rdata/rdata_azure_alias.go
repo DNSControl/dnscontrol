@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type AZUREALIAS struct {
@@ -20,8 +20,8 @@ func (rd AZUREALIAS) Len() int {
 
 func (rd AZUREALIAS) String() string {
 	parts := make([]string, 0, 2)
-	parts = append(parts, txtutil.ZoneifyString(rd.AliasType))
-	parts = append(parts, txtutil.ZoneifyString(rd.Target))
+	parts = append(parts, rfc1035.EncodeString(rd.AliasType))
+	parts = append(parts, rfc1035.EncodeString(rd.Target))
 	return strings.Join(parts, " ")
 }
 

@@ -129,8 +129,8 @@ func anyNonString(fields []FieldDef) bool {
 	return false
 }
 
-// needsTxtutil returns true if any field requires txtutil functions.
-func needsTxtutil(fields []FieldDef) bool {
+// needsRfc1035 returns true if any field requires txtutil functions.
+func needsRfc1035(fields []FieldDef) bool {
 	for _, f := range fields {
 		if f.Type == "RawString" {
 			return true
@@ -493,8 +493,8 @@ func generateRdataFile(t *TypeDef) error {
 		`dnsv2 "codeberg.org/miekg/dns"`,
 		`"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`,
 	}
-	if needsTxtutil(t.Fields) || needsTxtutil(t.RuntimeFields) {
-		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"`)
+	if needsRfc1035(t.Fields) || needsRfc1035(t.RuntimeFields) {
+		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"`)
 	}
 	writeImports(&buf, std, third)
 
@@ -532,7 +532,7 @@ func generateRdataFile(t *TypeDef) error {
 			// Special-case behaviors requested by generator requirements.
 			switch f.Type {
 			case "RawString":
-				fmt.Fprintf(&buf, "\tparts = append(parts, txtutil.ZoneifyString(rd.%s))\n", f.Name)
+				fmt.Fprintf(&buf, "\tparts = append(parts, rfc1035.EncodeString(rd.%s))\n", f.Name)
 			case "TargetHost":
 				fmt.Fprintf(&buf, "\tparts = append(parts, rd.%s)\n", f.Name)
 			default:

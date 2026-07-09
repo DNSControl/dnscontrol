@@ -5,7 +5,7 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 	dnsv1 "github.com/miekg/dns"
 )
 
@@ -57,7 +57,7 @@ func (rc *RecordConfig) GetTargetCombined() string {
 	// PowerDNS). The stored rdata is the raw text (the single source of truth),
 	// so quote/chunk it here.
 	if rc.Type == "TXT" {
-		return txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
+		return rfc1035.EncodeString(rc.GetTargetTXTJoined())
 	}
 	if rc.GetRDATA() != nil {
 		return rc.GetRDATA().String()
@@ -124,7 +124,7 @@ func (rc *RecordConfig) luaCombined() string {
 	if rtype == "" {
 		return payload
 	}
-	payload = txtutil.EncodeQuoted(payload)
+	payload = rfc1035.EncodeString(payload)
 	if payload == "" {
 		return rtype
 	}

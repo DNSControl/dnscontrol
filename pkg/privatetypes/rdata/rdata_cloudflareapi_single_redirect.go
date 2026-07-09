@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type CLOUDFLAREAPISINGLEREDIRECT struct {
@@ -24,10 +24,10 @@ func (rd CLOUDFLAREAPISINGLEREDIRECT) Len() int {
 
 func (rd CLOUDFLAREAPISINGLEREDIRECT) String() string {
 	parts := make([]string, 0, 4)
-	parts = append(parts, txtutil.ZoneifyString(rd.SRName))
+	parts = append(parts, rfc1035.EncodeString(rd.SRName))
 	parts = append(parts, fmt.Sprintf("%d", rd.Code))
-	parts = append(parts, txtutil.ZoneifyString(rd.SRWhen))
-	parts = append(parts, txtutil.ZoneifyString(rd.SRThen))
+	parts = append(parts, rfc1035.EncodeString(rd.SRWhen))
+	parts = append(parts, rfc1035.EncodeString(rd.SRThen))
 	return strings.Join(parts, " ")
 }
 

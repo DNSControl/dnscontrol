@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type R53ALIAS struct {
@@ -22,10 +22,10 @@ func (rd R53ALIAS) Len() int {
 
 func (rd R53ALIAS) String() string {
 	parts := make([]string, 0, 4)
-	parts = append(parts, txtutil.ZoneifyString(rd.AliasType))
+	parts = append(parts, rfc1035.EncodeString(rd.AliasType))
 	parts = append(parts, rd.Target)
-	parts = append(parts, txtutil.ZoneifyString(rd.EvalTargetHealth))
-	parts = append(parts, txtutil.ZoneifyString(rd.ZoneID))
+	parts = append(parts, rfc1035.EncodeString(rd.EvalTargetHealth))
+	parts = append(parts, rfc1035.EncodeString(rd.ZoneID))
 	return strings.Join(parts, " ")
 }
 

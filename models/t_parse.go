@@ -22,7 +22,7 @@ import (
 // Typical values for txtFn include:
 //
 //	nil:  no parsing required.
-//	txtutil.ParseQuoted: Parse via Tom's interpretation of RFC1035.
+//	rfc1035.Decode: Parse via Tom's interpretation of RFC1035.
 //	txtutil.ParseCombined: Backwards compatible with Parse via miekg's interpretation of RFC1035.
 //
 // Many providers deliver record data in this format or something close to it.

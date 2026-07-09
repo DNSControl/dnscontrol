@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type PORKBUNURLFWD struct {
@@ -19,7 +19,7 @@ func (rd PORKBUNURLFWD) Len() int {
 
 func (rd PORKBUNURLFWD) String() string {
 	parts := make([]string, 0, 1)
-	parts = append(parts, txtutil.ZoneifyString(rd.Location))
+	parts = append(parts, rfc1035.EncodeString(rd.Location))
 	return strings.Join(parts, " ")
 }
 

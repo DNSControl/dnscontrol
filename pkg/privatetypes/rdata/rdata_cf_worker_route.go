@@ -6,7 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc1035"
 )
 
 type CFWORKERROUTE struct {
@@ -20,8 +20,8 @@ func (rd CFWORKERROUTE) Len() int {
 
 func (rd CFWORKERROUTE) String() string {
 	parts := make([]string, 0, 2)
-	parts = append(parts, txtutil.ZoneifyString(rd.When))
-	parts = append(parts, txtutil.ZoneifyString(rd.Then))
+	parts = append(parts, rfc1035.EncodeString(rd.When))
+	parts = append(parts, rfc1035.EncodeString(rd.Then))
 	return strings.Join(parts, " ")
 }
 
