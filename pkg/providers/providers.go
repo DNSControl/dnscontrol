@@ -22,7 +22,7 @@ type DNSServiceProvider interface {
 // ZoneCreator should be implemented by providers that have the ability to create zones
 // (used for automatically creating zones if they don't exist).
 type ZoneCreator interface {
-	EnsureZoneExists(domain string, metadata map[string]string) error
+	EnsureZoneExists(dc *models.DomainConfig) error
 }
 
 // ZoneLister should be implemented by providers that have the

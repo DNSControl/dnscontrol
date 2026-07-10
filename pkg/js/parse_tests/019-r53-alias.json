@@ -111,6 +111,34 @@
           "type": "R53_ALIAS"
         },
         {
+          "filepos": "[line:16:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "dstest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "DS"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
+          "filepos": "[line:20:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "httpstest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "HTTPS"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
           "filepos": "[line:2:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
@@ -153,6 +181,20 @@
           "type": "R53_ALIAS"
         },
         {
+          "filepos": "[line:15:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "soatest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "SOA"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
           "filepos": "[line:12:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
@@ -175,6 +217,48 @@
           "r53_alias": {
             "evaluate_target_health": "false",
             "type": "SRV"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
+          "filepos": "[line:18:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "sshfptest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "SSHFP"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
+          "filepos": "[line:19:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "svcbtest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "SVCB"
+          },
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS"
+        },
+        {
+          "filepos": "[line:17:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "tlsatest",
+          "r53_alias": {
+            "evaluate_target_health": "false",
+            "type": "TLSA"
           },
           "target": "foo.com.",
           "ttl": 300,

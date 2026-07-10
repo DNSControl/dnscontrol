@@ -43,6 +43,27 @@ func init() {
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterRegistrarType(providerName, newReg)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Loopia",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/loopia",
+		PortalURL:   "https://support.loopia.com/wiki/loopiaapi/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "API username",
+				Help:     "Your Loopia API username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "API password",
+				Help:     "Your Loopia API password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // features declares which features and options are available.

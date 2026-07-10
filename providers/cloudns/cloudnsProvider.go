@@ -84,6 +84,44 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newReg)
 	providers.RegisterCustomRecordType("CLOUDNS_WR", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "ClouDNS",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/cloudns",
+		PortalURL:   "https://www.cloudns.net/api-settings/",
+		Notes:       "ClouDNS supports two auth methods: a main API user (auth-id) or a sub-user API account (sub-auth-id). Both use the same auth-password.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "_authMethod",
+				Label:    "Which authentication method do you want to use?",
+				Help:     "Choose whether to authenticate with your main API auth-id or with a sub-user sub-auth-id.",
+				Choices:  []string{"auth-id", "sub-auth-id"},
+				Required: true,
+				Internal: true,
+			},
+			{
+				Key:      "auth-id",
+				Label:    "Auth ID",
+				Help:     "Your ClouDNS API auth-id.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "auth-id"},
+			},
+			{
+				Key:      "sub-auth-id",
+				Label:    "Sub-auth ID",
+				Help:     "Your ClouDNS sub-user API sub-auth-id.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "sub-auth-id"},
+			},
+			{
+				Key:      "auth-password",
+				Label:    "Auth password",
+				Help:     "The API password associated with the chosen auth-id or sub-auth-id.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -317,7 +355,8 @@ func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *cloudnsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *cloudnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok, err := c.idForDomain(domain); err != nil {
 		return err
 	} else if ok { // zone already exists

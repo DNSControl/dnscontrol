@@ -2,6 +2,10 @@ This is the provider for [Cloudflare](https://www.cloudflare.com/).
 
 ## Important notes
 
+* The following features are not regularly tested: (free tier accounts don't support these features. Contact the project if you'd like to sponsor a higher tier)
+  * CNAME flattening
+  * Tags
+  * "Single redirects" that use the "Matches" subcommand
 * SPF records are silently converted to RecordType `TXT` as Cloudflare API fails otherwise. See [DNSControl/dnscontrol#446](https://github.com/DNSControl/dnscontrol/issues/446).
 * This provider currently fails if there are more than 1000 corrections on one domain. This only affects "push". This usually when moving a domain with many records to Cloudflare.  Try commenting out most records, then uncomment groups of 999. Typical updates are less than 1000 corrections and will not trigger this bug. See [DNSControl/dnscontrol#1440](https://github.com/DNSControl/dnscontrol/issues/1440).
 * DNS records that Cloudflare injects and maintains are ignored. That includes SOA records, NS records at the domain's apex, and the MX/DKIM records created as part of Cloudflare mail routing.
@@ -567,7 +571,7 @@ The integration tests assume that Cloudflare Workers are enabled and the credent
 
 ```shell
 cd integrationTest              # NOTE: Not needed if already in that subdirectory
-go test -v -verbose -profile CLOUDFLAREAPI -cfworkers=false
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfworkers=false
 ```
 
 When `-cfworkers=false` is set, tests related to Workers are skipped.  The Account ID is not required.
@@ -578,7 +582,7 @@ Tests for per-record CNAME flattening (`CF_CNAME_FLATTEN_ON`/`CF_CNAME_FLATTEN_O
 
 ```shell
 cd integrationTest
-go test -v -verbose -profile CLOUDFLAREAPI -cfflatten=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfflatten=true
 ```
 
 If you run with `-cfflatten=true` on a free zone, the tests will fail with an error from the Cloudflare API.
@@ -590,13 +594,13 @@ Tests for record comments (`CF_COMMENT`) always run since comments work on all p
 ```shell
 cd integrationTest
 # Tags disabled by default:
-go test -v -verbose -profile CLOUDFLAREAPI
+go test -v -args -verbose -profile CLOUDFLAREAPI
 
 # Enable tag tests (requires paid plan):
-go test -v -verbose -profile CLOUDFLAREAPI -cftags=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cftags=true
 
 # Enable all paid features:
-go test -v -verbose -profile CLOUDFLAREAPI -cfflatten=true -cftags=true
+go test -v -args -verbose -profile CLOUDFLAREAPI -cfflatten=true -cftags=true
 ```
 
 ## Cloudflare special TTLs

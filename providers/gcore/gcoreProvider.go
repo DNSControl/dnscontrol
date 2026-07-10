@@ -77,6 +77,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "G-Core Labs",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gcore",
+		PortalURL:   "https://accounts.gcore.com/profile/api-tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api-key",
+				Label:    "API key",
+				Help:     "G-Core Labs permanent API key.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -115,7 +130,8 @@ func (c *gcoreProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *gcoreProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *gcoreProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	zones, err := c.provider.Zones(c.ctx)
 	if err != nil {
 		return err

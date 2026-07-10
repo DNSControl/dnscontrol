@@ -58,7 +58,7 @@ export CNR_UID=test.user
 export CNR_PW=test.passw0rd
 export CNR_DEBUGMODE=2
 cd integrationTest              # NOTE: Not needed if already in that subdirectory
-go test -v -verbose -profile CNR
+go test -v -args -verbose -profile CNR
 ```
 
 ## Usage

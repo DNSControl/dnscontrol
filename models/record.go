@@ -351,6 +351,8 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 		return rc.luaCombined()
 	case "UNKNOWN":
 		return fmt.Sprintf("rtype=%s rdata=%s", rc.UnknownTypeName, rc.target)
+	case "HTTPS", "SVCB":
+		return rc.targetCombinedSVCBRaw()
 	}
 	return rc.GetTargetCombined()
 }
@@ -391,12 +393,14 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 	switch rdtype { // #rtype_variations
 	case dnsv1.TypeA:
 		addr := rc.GetTargetIP()
-		s := addr.AsSlice()
-		rr.(*dnsv1.A).A = s[0:4]
+		if s := addr.AsSlice(); len(s) == 4 {
+			rr.(*dnsv1.A).A = s
+		}
 	case dnsv1.TypeAAAA:
 		addr := rc.GetTargetIP()
-		s := addr.AsSlice()
-		rr.(*dnsv1.AAAA).AAAA = s[0:16]
+		if s := addr.AsSlice(); len(s) == 16 {
+			rr.(*dnsv1.AAAA).AAAA = s
+		}
 	case dnsv1.TypeCAA:
 		rr.(*dnsv1.CAA).Flag = rc.CaaFlag
 		rr.(*dnsv1.CAA).Tag = rc.CaaTag

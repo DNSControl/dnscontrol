@@ -76,6 +76,42 @@ func TestCheckSoa(t *testing.T) {
 	}
 }
 
+func TestCheckMultipleSOAs(t *testing.T) {
+	dcSingleSoa := &models.DomainConfig{
+		Name:          "foo.com",
+		RegistrarName: "BIND",
+		Records: []*models.RecordConfig{
+			makeRC("@", "foo.com", "ns1.foo.com.", models.RecordConfig{
+				Type:      "SOA",
+				SoaExpire: 1, SoaMinttl: 1, SoaRefresh: 1, SoaRetry: 1, SoaSerial: 1, SoaMbox: "bar.foo.com",
+			}),
+		},
+	}
+
+	t.Run("single_SOA", func(t *testing.T) {
+		errs := checkMultipleSOAs(dcSingleSoa)
+		if errs != nil {
+			t.Error("checkMultipleSOAs function failed with single SOA record")
+		}
+	})
+
+	dcTwoSoas := dcSingleSoa
+	// Add another SOA record to DC
+	dcTwoSoas.Records = append(dcTwoSoas.Records,
+		makeRC("@", "foo.com", "ns2.foo.com.", models.RecordConfig{
+			Type:      "SOA",
+			SoaExpire: 1, SoaMinttl: 1, SoaRefresh: 1, SoaRetry: 1, SoaSerial: 1, SoaMbox: "bar.foo.com",
+		}),
+	)
+
+	t.Run("two_SOAs", func(t *testing.T) {
+		errs := checkMultipleSOAs(dcTwoSoas)
+		if len(errs) < 1 {
+			t.Error("checkMultipleSOAs function failed to catch two SOAs")
+		}
+	})
+}
+
 func TestCheckLabel(t *testing.T) {
 	tests := []struct {
 		label       string

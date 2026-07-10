@@ -188,7 +188,7 @@ To run the integration test with the BIND provider:
 
 ```shell
 pushd integrationTest
-go test -v -verbose -profile BIND
+go test -v -args -verbose -profile BIND
 popd
 ```
 
@@ -207,7 +207,7 @@ export R53_DOMAIN=dnscontroltest-r53.com  # Use a test domain.
 export R53_KEY_ID=CHANGE_TO_THE_ID
 export R53_KEY='CHANGE_TO_THE_KEY'
 pushd integrationTest
-go test -v -verbose -profile ROUTE53
+go test -v -args -verbose -profile ROUTE53
 popd
 ```
 

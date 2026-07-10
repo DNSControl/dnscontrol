@@ -13,6 +13,8 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-11
 	a.Add("TXT", rejectif.TxtHasBackslash)    // Last verified 2023-11-11
+	a.Add("HTTPS", rejectPowerDNSSVCBAutoHintsUnsorted)
+	a.Add("SVCB", rejectPowerDNSSVCBAutoHintsUnsorted)
 
 	return a.Audit(records)
 }

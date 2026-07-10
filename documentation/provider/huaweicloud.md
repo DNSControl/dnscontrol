@@ -88,7 +88,10 @@ The minimum permissions required are as follows:
                 "dns:zone:list",
                 "dns:recordset:update",
                 "dns:recordset:list",
-                "dns:zone:get"
+                "dns:zone:get",
+                "dns:zone:getDnssecConfig",
+                "dns:zone:enableDnssecConfig",
+                "dns:zone:disableDnssecConfig"
             ]
         }
     ]
