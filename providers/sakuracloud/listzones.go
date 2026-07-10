@@ -1,6 +1,9 @@
 package sakuracloud
 
-import "github.com/DNSControl/dnscontrol/v4/pkg/printer"
+import (
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+)
 
 // ListZones return all the zones in the account.
 func (s *sakuracloudProvider) ListZones() ([]string, error) {
@@ -17,7 +20,8 @@ func (s *sakuracloudProvider) ListZones() ([]string, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (s *sakuracloudProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (s *sakuracloudProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	itemMap, err := s.api.GetCommonServiceItemMap()
 	if err != nil {
 		return err

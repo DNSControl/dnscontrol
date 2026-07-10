@@ -24,7 +24,6 @@ redirects:
   service-providers/providers/gcloud: provider/gcloud.md
   service-providers/providers/gcore: provider/gcore.md
   service-providers/providers/hedns: provider/hedns.md
-  service-providers/providers/hetzner: provider/hetzner.md
   service-providers/providers/hexonet: provider/cnr.md
   service-providers/providers/hostingde: provider/hostingde.md
   service-providers/providers/internetbs: provider/internetbs.md

@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
@@ -24,6 +25,7 @@ const (
 )
 
 // DomainConfig describes a DNS domain (technically a DNS zone).
+// Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
 	NameRaw     string `json:"-"`    // name as entered by user in dnsconfig.js
 	Name        string `json:"name"` // NO trailing "."   Converted to IDN (punycode) early in the pipeline.
@@ -69,6 +71,28 @@ type DomainConfig struct {
 	pendingCorrectionsOrder    []string                 // Call the providers in this order
 	pendingActualChangeCount   map[string]int           // Number of changes to report (cumulative)
 	pendingPopulateCorrections map[string][]*Correction // Corrections for zone creations at each provider
+}
+
+func NewDomainConfig(name string) (*DomainConfig, error) {
+	if strings.HasSuffix(name, ".") {
+		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
+	}
+	dc := &DomainConfig{
+		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
+	}
+	dc.PopulateNamesFromRaw(name)
+
+	return dc, nil
+}
+
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
 }
 
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
@@ -128,6 +152,7 @@ func (dc *DomainConfig) Filter(f func(r *RecordConfig) bool) {
 // - Name
 // - NameFQDN
 // - Target (CNAME and MX only).
+// NOTE: This will go away when RCv3 is adopted.
 func (dc *DomainConfig) Punycode() error {
 	for _, rec := range dc.Records {
 		if rec.IsModernType() {

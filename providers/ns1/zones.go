@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/dns"
 )
@@ -40,9 +41,9 @@ func (n *nsone) GetZone(domain string) (*dns.Zone, error) {
 	}
 }
 
-func (n *nsone) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (n *nsone) EnsureZoneExists(dc *models.DomainConfig) error {
 	// This enables the create-domains subcommand
-	zone := dns.NewZone(domain)
+	zone := dns.NewZone(dc.Name)
 
 	for rtr := 0; ; rtr++ {
 		httpResp, err := n.Zones.Create(zone)

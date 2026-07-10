@@ -50,6 +50,22 @@ func init() {
 
 	providers.RegisterCustomRecordType("BUNNY_DNS_RDR", providerName, "")
 	providers.RegisterCustomRecordType("BUNNY_DNS_PZ", providerName, "")
+
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Bunny DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/bunnydns",
+		PortalURL:   "https://dash.bunny.net/account/api-key",
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "Bunny.net account API key.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func newBunnydns(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {

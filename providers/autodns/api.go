@@ -98,6 +98,12 @@ func (api *autoDNSProvider) request(method string, requestPath string, data any)
 func (api *autoDNSProvider) findZoneSystemNameServer(domain string) (*models.Nameserver, error) {
 	request := &ZoneListRequest{}
 
+	// When opted in, request child zones so master/admin users can locate
+	// zones owned by sub-users (the optional "include subusers" UI toggle).
+	if api.includeChildren {
+		request.View = &ZoneListView{Limit: 1, Offset: 0, Children: true}
+	}
+
 	request.Filter = append(request.Filter, &ZoneListFilter{
 		Key:      "name",
 		Value:    domain,
@@ -186,7 +192,7 @@ func (api *autoDNSProvider) getZones() ([]string, error) {
 		View: &ZoneListView{
 			Limit:    0,
 			Offset:   0,
-			Children: false,
+			Children: api.includeChildren,
 		},
 	}
 
@@ -206,7 +212,7 @@ func (api *autoDNSProvider) getZones() ([]string, error) {
 			View: &ZoneListView{
 				Limit:    100,
 				Offset:   i * 100,
-				Children: false,
+				Children: api.includeChildren,
 			},
 		}
 

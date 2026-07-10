@@ -84,7 +84,7 @@ func (dsp *powerdnsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, 
 func buildRecordList(change diff2.Change) (records []zones.Record) {
 	for _, recordContent := range change.New {
 		record := zones.Record{
-			Content: recordContent.GetTargetCombined(),
+			Content: powerDNSTargetCombined(recordContent),
 		}
 		if recordContent.Type == "HTTPS" || recordContent.Type == "SVCB" {
 			// PowerDNS API will return HTTP 422 error if record content contains double quotes.

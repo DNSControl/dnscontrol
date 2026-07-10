@@ -3,12 +3,15 @@ package huaweicloud
 import (
 	"strings"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/model"
 )
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *huaweicloudProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *huaweicloudProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	if err := c.getZones(); err != nil {
 		return err
 	}

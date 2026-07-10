@@ -103,6 +103,27 @@ func TestRenderDnsconfigJS(t *testing.T) {
 			},
 			golden: "config_registrar_only.js",
 		},
+		{
+			name: "imported_records",
+			choice: InitDnsconfigChoice{
+				RegistrarVar:  "REG_CLOUDFLAREAPI",
+				RegistrarName: "cloudflare",
+				DNSVar:        "DNS_CLOUDFLAREAPI",
+				DNSName:       "cloudflare",
+				Domains:       []string{"example.com"},
+				DomainRecords: map[string]DomainImport{
+					"example.com": {
+						DefaultTTL: 3600,
+						Records: []string{
+							`A("@", "192.0.2.1")`,
+							`A("www", "192.0.2.1")`,
+							`MX("@", 10, "mx.example.com.")`,
+						},
+					},
+				},
+			},
+			golden: "config_imported.js",
+		},
 	}
 
 	for _, testCase := range cases {

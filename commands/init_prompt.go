@@ -18,6 +18,8 @@ type Asker interface {
 	// Select asks the user to pick one value from a list. The default is
 	// suggested and returned when the user accepts without typing.
 	Select(message, help string, options []string, defaultOption string) (string, error)
+	// MultiSelect asks the user to pick zero or more values from a list.
+	MultiSelect(message, help string, options []string) ([]string, error)
 	// Input asks for a free form string.
 	Input(message, help, defaultValue string) (string, error)
 	// Secret asks for a string and masks the input.
@@ -50,6 +52,21 @@ func (surveyAsker) Select(message, help string, options []string, defaultOption 
 		return "", err
 	}
 	return answer, nil
+}
+
+// MultiSelect implements Asker.
+func (surveyAsker) MultiSelect(message, help string, options []string) ([]string, error) {
+	var answers []string
+	prompt := &survey.MultiSelect{
+		Message:  message,
+		Options:  options,
+		Help:     help,
+		PageSize: 15,
+	}
+	if err := survey.AskOne(prompt, &answers); err != nil {
+		return nil, err
+	}
+	return answers, nil
 }
 
 // Input implements Asker.
@@ -114,6 +131,8 @@ func askField(asker Asker, field providers.CredsField) (string, error) {
 	label := field.Label
 	if label == "" {
 		label = field.Key
+	} else if !strings.EqualFold(label, field.Key) {
+		label += " [" + field.Key + "]"
 	}
 	if field.Required {
 		label += " (required)"
