@@ -546,7 +546,9 @@ func (api *inwxAPI) fetchRegistrationNSSet(domain string) []string {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (api *inwxAPI) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *inwxAPI) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	if api.domainIndex == nil { // only pull the data once.
 		if err := api.fetchNameserverDomains(); err != nil {
 			return err

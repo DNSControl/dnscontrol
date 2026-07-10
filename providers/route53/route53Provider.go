@@ -129,6 +129,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseRoute53Alias:     providers.Can(),
+	providers.CanUseSOA:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
 	providers.CanUseSVCB:             providers.Can(),
@@ -496,6 +497,11 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 			}
 
 		case diff2.DELETE:
+			// SOA record can not be deleted, only updated
+			if instType == "SOA" {
+				actualChangeCount--
+				continue
+			}
 			rrset := inst.Old[0].Original.(r53Types.ResourceRecordSet) // The native record as downloaded via the API
 			chg = r53Types.Change{
 				Action:            r53Types.ChangeActionDelete,
@@ -571,8 +577,6 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 	} else {
 		for _, rec := range set.ResourceRecords {
 			switch rtype := set.Type; rtype {
-			case r53Types.RRTypeSoa:
-				continue
 			case r53Types.RRTypeSpf:
 				// route53 uses a custom record type for SPF
 				rtype = "TXT"
@@ -816,7 +820,8 @@ func unescape(s *string) string {
 	return name
 }
 
-func (r *route53Provider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (r *route53Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := r.getZoneByDomain(domain); ok {
 		return nil
 	}

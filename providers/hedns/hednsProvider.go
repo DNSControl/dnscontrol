@@ -218,7 +218,8 @@ func (c *hednsProvider) ListZones() ([]string, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *hednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *hednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	ok, err := c.zoneCache.HasZone(domain)
 	if err != nil {
 		return err
@@ -409,7 +410,7 @@ func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, recor
 }
 
 // setDDNSKeyForNewRecord sets the DDNS key on a newly created record.
-func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, domain string, record *models.RecordConfig, key string) error {
+func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, _ string, record *models.RecordConfig, key string) error {
 	return c.setRecordDDNSKey(zoneID, record.GetLabelFQDN(), key)
 }
 
