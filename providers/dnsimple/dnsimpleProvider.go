@@ -53,14 +53,34 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "DNSimple",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/dnsimple",
+		PortalURL:   "https://dnsimple.com/user",
+		Fields: []providers.CredsField{
+			{
+				Key:      "token",
+				Label:    "Account access token",
+				Help:     "DNSimple account access token (must be an account token, not a user token).",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "baseurl",
+				Label: "Base URL (optional)",
+				Help:  "Override the API base URL (for example, the sandbox URL https://api.sandbox.dnsimple.com). Leave blank to use the production endpoint.",
+			},
+		},
+	})
 }
 
 const stateRegistered = "registered"
 
 var defaultNameServerNames = []string{
-	"ns1.dnsimple.com",
+	"ns1.dnsimple-edge.com",
 	"ns2.dnsimple-edge.net",
-	"ns3.dnsimple.com",
+	"ns3.dnsimple-edge.io",
 	"ns4.dnsimple-edge.org",
 }
 

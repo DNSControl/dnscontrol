@@ -9,7 +9,7 @@ providers/bind @TomOnTime
 providers/bunnydns @ppmathis
 providers/cloudflare @tresni
 providers/cloudns @pragmaton
-providers/cnr @KaiSchwarz-cnic
+providers/cnr @AsifNawaz-cnic
 providers/cscglobal @mikenz
 providers/desec @D3luxee
 providers/digitalocean @chicks-net
@@ -26,8 +26,8 @@ providers/gandiv5 @TomOnTime
 providers/gcloud @riyadhalnur
 providers/gcore @xddxdd
 providers/gidinet @zupolgec
+providers/gigahost @jochristian
 providers/hedns @rblenkinsopp
-providers/hetzner @das7pad
 providers/hetznerv2 @das7pad
 providers/hostingde @juliusrickert
 providers/huaweicloud @huihuimoe
@@ -42,8 +42,10 @@ providers/mikrotik @hedger
 providers/mythicbeasts @tomfitzhenry
 providers/namecheap @willpower232
 # providers/namedotcom NEEDS VOLUNTEER
+providers/netbird @yzqzss
 providers/netcup @kordianbruck
 providers/netlify @SphericalKat
+providers/netnod @Netnod
 providers/ns1 @costasd
 # providers/opensrs NEEDS VOLUNTEER
 providers/oracle @kallsyms
@@ -56,10 +58,12 @@ providers/route53 @tresni
 providers/rwth @mistererwin
 providers/sakuracloud @ttkzw
 # providers/softlayer NEEDS VOLUNTEER
+providers/tencentdns @cylonchau
 providers/transip @blackshadev
 providers/unifi @zupolgec
 providers/vercel @SukkaW
 providers/vultr @pgaskin
+providers/websupport @mtmn
 
 * @TomOnTime
 .goreleaser.yml @cafferata @TomOnTime

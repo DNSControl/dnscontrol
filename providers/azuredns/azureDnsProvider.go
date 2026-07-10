@@ -20,6 +20,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
+const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
+
 type azurednsProvider struct {
 	zonesClient    *adns.ZonesClient
 	recordsClient  *adns.RecordSetsClient
@@ -36,6 +38,7 @@ func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers
 // Updated function to prioritize DefaultAzureCredential and fallback to OIDC or client-secret-based methods.
 func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, error) {
 	subID, rg := m["SubscriptionID"], m["ResourceGroup"]
+	rg = strings.ToLower(rg)
 	clientID, clientSecret, tenantID := m["ClientID"], m["ClientSecret"], m["TenantID"]
 	useOIDC := m["UseOIDC"] == "true"
 
@@ -121,6 +124,45 @@ func init() {
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterCustomRecordType("AZURE_ALIAS", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Azure DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/azuredns",
+		PortalURL:   "https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps",
+		Fields: []providers.CredsField{
+			{
+				Key:      "SubscriptionID",
+				Label:    "Subscription ID",
+				Help:     "Azure subscription ID that contains the DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "ResourceGroup",
+				Label:    "Resource group",
+				Help:     "Azure resource group that contains the DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "TenantID",
+				Label:    "Tenant ID",
+				Help:     "Azure AD tenant ID for the service principal.",
+				Required: true,
+			},
+			{
+				Key:      "ClientID",
+				Label:    "Client ID",
+				Help:     "Service principal client (application) ID.",
+				Required: true,
+			},
+			{
+				Key:      "ClientSecret",
+				Label:    "Client secret",
+				Help:     "Service principal client secret.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func (a *azurednsProvider) getExistingZones() ([]*adns.Zone, error) {
@@ -348,17 +390,14 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.CreateOrUpdate(ctx, *a.resourceGroup, zoneName, recordName, azRecType, *rrset, nil)
 
-	var e *azcore.ResponseError
-	if errors.As(err, &e) {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
@@ -382,20 +421,34 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.Delete(ctx, *a.resourceGroup, zoneName, shortName, azRecType, nil)
 
-	var e *azcore.ResponseError
-	if errors.As(err, &e) {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
+}
+
+func retryableRecordSetMutation(err error) string {
+	var e *azcore.ResponseError
+	if !errors.As(err, &e) {
+		return ""
+	}
+
+	if e.StatusCode == http.StatusTooManyRequests {
+		return "rate-limit"
+	}
+
+	if e.StatusCode == http.StatusConflict && e.ErrorCode == "Conflict" && strings.Contains(e.Error(), azurePendingOperationConflictMessage) {
+		return "pending operation"
+	}
+
+	return ""
 }
 
 func nativeToRecordTypeDiff2(recordType *string) (adns.RecordType, error) {
@@ -588,32 +641,17 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			if recordSet.Properties.ARecords == nil {
-				recordSet.Properties.ARecords = []*adns.ARecord{}
-			}
 			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
 		case "AAAA":
-			if recordSet.Properties.AaaaRecords == nil {
-				recordSet.Properties.AaaaRecords = []*adns.AaaaRecord{}
-			}
 			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
 		case "CNAME":
 			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
 		case "NS":
-			if recordSet.Properties.NsRecords == nil {
-				recordSet.Properties.NsRecords = []*adns.NsRecord{}
-			}
 			recordSet.Properties.NsRecords = append(recordSet.Properties.NsRecords, &adns.NsRecord{Nsdname: new(rec.GetTargetField())})
 		case "PTR":
-			if recordSet.Properties.PtrRecords == nil {
-				recordSet.Properties.PtrRecords = []*adns.PtrRecord{}
-			}
 			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
 		case "TXT":
-			if recordSet.Properties.TxtRecords == nil {
-				recordSet.Properties.TxtRecords = []*adns.TxtRecord{}
-			}
-			// Empty TXT record needs to have no value set in it's properties
+			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "". Therefore we skip this.
 			if rec.GetTargetTXTSegmentCount() != 1 || rec.GetTargetTXTSegmented()[0] != "" {
 				var txts []*string
 				for _, txt := range rec.GetTargetTXTSegmented() {
@@ -622,26 +660,14 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			if recordSet.Properties.MxRecords == nil {
-				recordSet.Properties.MxRecords = []*adns.MxRecord{}
-			}
 			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
 		case "SRV":
-			if recordSet.Properties.SrvRecords == nil {
-				recordSet.Properties.SrvRecords = []*adns.SrvRecord{}
-			}
 			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
 		case "CAA":
-			if recordSet.Properties.CaaRecords == nil {
-				recordSet.Properties.CaaRecords = []*adns.CaaRecord{}
-			}
 			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(rec.GetTargetField()), Tag: new(rec.CaaTag), Flags: new(int32(rec.CaaFlag))})
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
-			aatype := rec.AzureAlias["type"]
-			recordSet.Type = &aatype
-			aatarg := new(rec.GetTargetField())
-			aasub := adns.SubResource{ID: aatarg}
-			recordSet.Properties.TargetResource = &aasub
+			recordSet.Type = new(rec.AzureAlias["type"])
+			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(rec.GetTargetField())})
 
 		default:
 			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
@@ -692,7 +718,8 @@ func (a *azurednsProvider) fetchRecordSets(zoneName string) ([]*adns.RecordSet, 
 	return records, nil
 }
 
-func (a *azurednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (a *azurednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := a.zones[domain]; ok {
 		return nil
 	}

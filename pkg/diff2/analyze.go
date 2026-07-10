@@ -267,7 +267,7 @@ func diffTargets(existing, desired []targetConfig) ChangeList {
 			var unquoted, quoted string
 			if _, ok := echs[v.rec.NameFQDN]; ok {
 				unquoted = fmt.Sprintf("ech=%s", echs[v.rec.NameFQDN])
-				quoted = fmt.Sprintf("ech=%q", echs[v.rec.NameFQDN])
+				quoted = fmt.Sprintf("ech=%s", echs[v.rec.NameFQDN])
 			} else {
 				unquoted = ""
 				quoted = ""

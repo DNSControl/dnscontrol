@@ -28,7 +28,7 @@ as usual. The directory to be in is `/go/dnscontrol/integrationTest`.
 
 ```shell
 cd /go/dnscontrol/integrationTest
-go test -v -verbose -profile INSERT_PROVIDER_NAME -start 1 -end 3
+go test -v -args -verbose -profile INSERT_PROVIDER_NAME -start 1 -end 3
 ```
 
 Change `INSERT_PROVIDER_NAME` to the name of your provider (`BIND`, `ROUTE53`, `GCLOUD`, etc.)

@@ -1,10 +1,16 @@
 package namecheap
 
 import (
+	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,6 +30,30 @@ type namecheapProvider struct {
 	APIKEY  string
 	APIUser string
 	client  *nc.Client
+}
+
+const namecheapListZonesPageSize = 100
+
+type domainsGetListResponse struct {
+	Status  string                        `xml:"Status,attr"`
+	Domains []nc.DomainGetListResult      `xml:"CommandResponse>DomainGetListResult>Domain"`
+	Paging  domainsGetListResponsePaging  `xml:"CommandResponse>Paging"`
+	Errors  []domainsGetListResponseError `xml:"Errors>Error"`
+}
+
+type domainsGetListResponsePaging struct {
+	TotalItems  int `xml:"TotalItems"`
+	CurrentPage int `xml:"CurrentPage"`
+	PageSize    int `xml:"PageSize"`
+}
+
+type domainsGetListResponseError struct {
+	Number  int    `xml:"Number,attr"`
+	Message string `xml:",innerxml"`
+}
+
+func (e domainsGetListResponseError) Error() string {
+	return fmt.Sprintf("Error %d: %s", e.Number, e.Message)
 }
 
 var features = providers.DocumentationNotes{
@@ -56,6 +86,32 @@ func init() {
 	providers.RegisterCustomRecordType("URL301", providerName, "")
 	providers.RegisterCustomRecordType("FRAME", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Namecheap",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/namecheap",
+		PortalURL:   "https://ap.www.namecheap.com/settings/tools/apiaccess/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "apiuser",
+				Label:    "API user",
+				Help:     "Your Namecheap API username (usually your account login).",
+				Required: true,
+			},
+			{
+				Key:      "apikey",
+				Label:    "API key",
+				Help:     "The Namecheap API key generated from the API Access page.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "BaseURL",
+				Label: "Base URL (optional)",
+				Help:  "Override the API base URL (for example to use the sandbox). Leave blank to use the production URL.",
+			},
+		},
+	})
 }
 
 func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -269,17 +325,79 @@ func (n *namecheapProvider) GetNameservers(domainName string) ([]*models.Nameser
 }
 
 func (n *namecheapProvider) ListZones() ([]string, error) {
-	zones, err := n.client.DomainsGetList()
-	if err != nil {
-		return nil, err
-	}
-
 	var zoneList []string
-	for _, zone := range zones {
-		zoneList = append(zoneList, zone.Name)
+	page := 1
+	for {
+		zones, paging, err := n.listZonesPage(page)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, zone := range zones {
+			zoneList = append(zoneList, zone.Name)
+		}
+
+		if paging.TotalItems == 0 || paging.PageSize == 0 || len(zoneList) >= paging.TotalItems {
+			return zoneList, nil
+		}
+
+		page++
+	}
+}
+
+func (n *namecheapProvider) listZonesPage(page int) ([]nc.DomainGetListResult, domainsGetListResponsePaging, error) {
+	params := url.Values{}
+	params.Set("ApiUser", n.client.ApiUser)
+	params.Set("ApiKey", n.client.ApiToken)
+	params.Set("UserName", n.client.UserName)
+	params.Set("ClientIp", n.client.ClientIp)
+	params.Set("Command", "namecheap.domains.getList")
+	params.Set("Page", strconv.Itoa(page))
+	params.Set("PageSize", strconv.Itoa(namecheapListZonesPageSize))
+
+	encodedParams := params.Encode()
+	var err error
+	var resp *http.Response
+	doWithRetry(func() error {
+		req, reqErr := http.NewRequest(http.MethodPost, n.client.BaseURL, strings.NewReader(encodedParams))
+		if reqErr != nil {
+			err = reqErr
+			return reqErr
+		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Set("Content-Length", strconv.Itoa(len(encodedParams)))
+		resp, err = n.client.HttpClient.Do(req)
+		return err
+	})
+	if err != nil {
+		return nil, domainsGetListResponsePaging{}, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, domainsGetListResponsePaging{}, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, domainsGetListResponsePaging{}, fmt.Errorf("unexpected status code from api: %d", resp.StatusCode)
 	}
 
-	return zoneList, nil
+	parsed := domainsGetListResponse{}
+	if err := xml.Unmarshal(body, &parsed); err != nil {
+		return nil, domainsGetListResponsePaging{}, err
+	}
+	if parsed.Status == "ERROR" {
+		messages := make([]string, 0, len(parsed.Errors))
+		for _, apiErr := range parsed.Errors {
+			messages = append(messages, apiErr.Error())
+		}
+		return nil, domainsGetListResponsePaging{}, errors.New(strings.Join(messages, "\n"))
+	}
+	if parsed.Status == "" {
+		return nil, domainsGetListResponsePaging{}, fmt.Errorf("failed to parse xml from api: %s", bytes.TrimSpace(body))
+	}
+
+	return parsed.Domains, parsed.Paging, nil
 }
 
 // GetRegistrarCorrections returns corrections to update nameservers.

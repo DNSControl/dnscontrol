@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"maps"
 	"strings"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // InitCredsEntry represents a single provider entry ready to be written
@@ -57,6 +59,17 @@ type InitDnsconfigChoice struct {
 	DNSName string
 	// Domains lists the domain names to include in the starter.
 	Domains []string
+	// DomainRecords maps domain names to their imported DNS records.
+	// Domains with an entry here get real records instead of the
+	// placeholder A("@", "1.2.3.4").
+	DomainRecords map[string]DomainImport
+}
+
+// DomainImport holds the imported record lines and optional DefaultTTL
+// for a single domain.
+type DomainImport struct {
+	DefaultTTL uint32
+	Records    []string
 }
 
 // renderDnsconfigJS produces a minimal dnsconfig.js body for the provided
@@ -96,7 +109,16 @@ func renderDnsconfigJS(choice InitDnsconfigChoice) []byte {
 		} else {
 			fmt.Fprintf(&buf, "D(%q, %s,\n", domain, regVar)
 		}
-		buf.WriteString("    A(\"@\", \"1.2.3.4\")\n")
+		if imp, ok := choice.DomainRecords[domain]; ok && len(imp.Records) > 0 {
+			if imp.DefaultTTL != 0 && imp.DefaultTTL != models.DefaultTTL {
+				fmt.Fprintf(&buf, "    DefaultTTL(%d),\n", imp.DefaultTTL)
+			}
+			for _, line := range imp.Records {
+				fmt.Fprintf(&buf, "    %s,\n", line)
+			}
+		} else {
+			buf.WriteString("    A(\"@\", \"1.2.3.4\")\n")
+		}
 		buf.WriteString(");\n\n")
 	}
 	return buf.Bytes()

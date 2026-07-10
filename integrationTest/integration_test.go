@@ -3,15 +3,18 @@ package main
 // Data-driven tests that exercize the DNS Provider APIs.
 
 import (
+	"runtime/debug"
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 )
 
 func TestDNSProviders(t *testing.T) {
+	debug.SetTraceback("all")
 	provider, domain, cfg := getProvider(t)
 	if provider == nil {
 		return
@@ -23,6 +26,19 @@ func TestDNSProviders(t *testing.T) {
 	t.Run(domain, func(t *testing.T) {
 		runTests(t, provider, domain, cfg)
 	})
+}
+
+func TestMakeTests(t *testing.T) {
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.FailNow()
+	}
+	globalDC = dc
+	globalDCN = dc.DomainNameVarieties()
+
+	debug.SetTraceback("all")
+
+	_ = makeTests()
 }
 
 func makeTests() []*TestGroup {
@@ -296,17 +312,17 @@ func makeTests() []*TestGroup {
 
 		testgroup("HTTPS",
 			requires(providers.CanUseHTTPS),
-			tc("Create a HTTPS record", https("@", 1, "test.com.", "port=80")),
-			tc("Change HTTPS priority", https("@", 2, "test.com.", "port=80")),
-			tc("Change HTTPS target", https("@", 2, ".", "port=80")),
-			tc("Change HTTPS params", https("@", 2, ".", "port=99")),
-			tc("Change HTTPS params-empty", https("@", 2, ".", "")),
-			tc("Change HTTPS all", https("@", 3, "example.com.", "port=100")),
+			tc("Create a HTTPS record", https("@", 0, "test.com.", "")),
+			tc("Change HTTPS add pri+params", https("@", 1, "test.com.", "port=80")),
+			tc("Change HTTPS change param", https("@", 1, "test.com.", "port=99")),
+			tc("Change HTTPS more params", https("@", 1, "test.com.", "alpn=h2 port=99")),
+			tc("Change HTTPS all", https("@", 3, "example.com.", "alpn=h2,h3 port=999")),
 		),
 
-		testgroup("Ech",
+		testgroup("HTTPS-Ech",
 			requires(providers.CanUseHTTPS),
 			not(
+				"SAKURACLOUD", // NB(tlim): rejectif code is broken.
 				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
 				// on the `ech` parameter, and our dummy base64 string are being rejected with:
 				//
@@ -317,26 +333,61 @@ func makeTests() []*TestGroup {
 				//
 				// Let's just ignore ECH test for Vercel for now.
 				"VERCEL",
+				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
 			),
-			tc("Create a HTTPS record", https("@", 1, "example.com.", "alpn=h2,h3")),
-			tc("Add an ECH key", https("@", 1, "example.com.", "alpn=h2,h3 ech=some+base64+encoded+value///")),
-			tc("Ignore the ECH key while changing other values", https("@", 1, "example.net.", "port=80 ech=IGNORE")),
-			// tc("Should be a no-op", https("@", 1, "example.net.", "port=80 ech=some+base64+encoded+value///")),
-			tc("Change the ECH key and other values", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			// tc("Ignore the ECH key while not changing anything", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=IGNORE")),
-			// tc("Should be a no-op", https("@", 1, "example.org.", "port=80 ipv4hint=127.0.0.1 ech=another+base64+encoded+value")),
-			tc("Another domain with a different ECH value", https("ech", 1, "example.com.", "ech=some+base64+encoded+value///")),
+			tc("Start",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999")),
+			tc("Add an ECH key",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=some+base64+encoded+value///")),
+			tc("IGNORE ECH",
+				https("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=IGNORE")).ExpectNoChanges(),
+			tc("Ignore the ECH key while changing other values",
+				https("@", 3, "example.com.", "alpn=h2 port=80 ech=IGNORE")),
+			tc("Change the ECH key and other values",
+				https("@", 3, "example.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
+			tc("Another domain with a same ECH value",
+				https("@", 3, "yetanother.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
 		),
 
 		testgroup("SVCB",
 			requires(providers.CanUseSVCB),
-			tc("Create a SVCB record", svcb("@", 1, "test.com.", "port=80")),
-			tc("Change SVCB priority", svcb("@", 2, "test.com.", "port=80")),
-			tc("Change SVCB target", svcb("@", 2, ".", "port=80")),
-			tc("Change SVCB params", svcb("@", 2, ".", "port=99")),
-			tc("Change SVCB params-empty", svcb("@", 2, ".", "")),
-			tc("Change SVCB all", svcb("@", 3, "example.com.", "port=100")),
+			tc("Create a SVCB record", svcb("@", 0, "test.com.", "")),
+			tc("Change SVCB add pri+params", svcb("@", 1, "test.com.", "port=80")),
+			tc("Change SVCB change param", svcb("@", 1, "test.com.", "port=99")),
+			tc("Change SVCB more params", svcb("@", 1, "test.com.", "alpn=h2 port=99")),
+			tc("Change SVCB all", svcb("@", 3, "example.com.", "alpn=h2,h3 port=999")),
 		),
+
+		testgroup("SVCB-Ech",
+			requires(providers.CanUseSVCB),
+			not(
+				"SAKURACLOUD", // NB(tlim): rejectif code is broken.
+				// Last tested in 2025-12-04. Turns out that Vercel implements an unknown validation
+				// on the `ech` parameter, and our dummy base64 string are being rejected with:
+				//
+				// Invalid base64 string: [our base64] (key: ech)
+				//
+				// Since Vercel's validation process is unknown and not documented, we can't implement
+				// a rejectif within auditrecord to reject them statically.
+				//
+				// Let's just ignore ECH test for Vercel for now.
+				"VERCEL",
+				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
+			),
+			tc("Start",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999")),
+			tc("Add an ECH key",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=some+base64+encoded+value///")),
+			tc("IGNORE ECH",
+				svcb("@", 3, "example.com.", "alpn=h2,h3 port=999 ech=IGNORE")).ExpectNoChanges(),
+			tc("Ignore the ECH key while changing other values",
+				svcb("@", 3, "example.com.", "alpn=h2 port=80 ech=IGNORE")),
+			tc("Change the ECH key and other values",
+				svcb("@", 3, "example.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
+			tc("Another domain with a same ECH value",
+				svcb("@", 3, "yetanother.com.", "alpn=h2 port=80 ech=another+base64+encoded+value")),
+		),
+
 		//// Test edge cases from various types.
 
 		// Narrative: Every DNS record type has some weird edge-case that
@@ -417,10 +468,11 @@ func makeTests() []*TestGroup {
 
 		testgroup("NS",
 			not(
-				"DNSIMPLE",  // Does not support NS records nor subdomains.
-				"EXOSCALE",  // Not supported.
-				"NETCUP",    // NS records not currently supported.
-				"FORTIGATE", // Not supported
+				"AZURE_PRIVATE_DNS", // Not supported
+				"DNSIMPLE",          // Does not support NS records nor subdomains.
+				"EXOSCALE",          // Not supported.
+				"FORTIGATE",         // Not supported
+				"NETCUP",            // NS records not currently supported.
 			),
 			tc("NS for subdomain", ns("xyz", "ns2.foo.com.")),
 			tc("Dual NS for subdomain", ns("xyz", "ns2.foo.com."), ns("xyz", "ns1.foo.com.")),
@@ -429,17 +481,19 @@ func makeTests() []*TestGroup {
 
 		testgroup("NS only APEX",
 			not(
-				"DNSCALE",     // Apex NS records are managed by DNScale.
-				"DNSIMPLE",    // Does not support NS records nor subdomains.
-				"EXOSCALE",    // Not supported.
-				"GANDI_V5",    // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
-				"JOKER",       // Not supported via the Zone API.
-				"NAMEDOTCOM",  // "Ignores @ for NS records"
-				"NETCUP",      // NS records not currently supported.
-				"PORKBUN",     // Record ignored.
-				"SAKURACLOUD", // Silently ignores requests to remove NS at @.
-				"TRANSIP",     // "it is not allowed to have an NS for an @ record"
-				"VERCEL",      // "invalid_name - Cannot set NS records at the root level. Only subdomain NS records are supported"
+				"AZURE_PRIVATE_DNS", // Apex NS records are managed by Azure.
+				"DNSCALE",           // Apex NS records are managed by DNScale.
+				"DNSIMPLE",          // Does not support NS records nor subdomains.
+				"DYNU",              // Apex NS records are managed by Dynu.
+				"EXOSCALE",          // Not supported.
+				"GANDI_V5",          // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
+				"JOKER",             // Not supported via the Zone API.
+				"NAMEDOTCOM",        // "Ignores @ for NS records"
+				"NETCUP",            // NS records not currently supported.
+				"PORKBUN",           // Record ignored.
+				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
+				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
+				"VERCEL",            // "invalid_name - Cannot set NS records at the root level. Only subdomain NS records are supported"
 			),
 			tc("Single NS at apex", ns("@", "ns1.foo.com.")),
 			tc("Dual NS at apex", ns("@", "ns2.foo.com."), ns("@", "ns1.foo.com.")),
@@ -653,21 +707,22 @@ func makeTests() []*TestGroup {
 			//  - DIGITALOCEAN: page size is 100 (default: 20)
 			//  - VERCEL: up to 100 per pages
 			not(
-				"AZURE_DNS",     // Removed because it is too slow
-				"CLOUDFLAREAPI", // Infinite pagesize but due to slow speed, skipping.
-				"DIGITALOCEAN",  // No paging. Why bother?
-				"DESEC",         // Skip due to daily update limits.
+				"AZURE_DNS",         // Removed because it is too slow
+				"AZURE_PRIVATE_DNS", // Removed because it is too slow
+				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
+				"CNR",               // Test beaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
-				"GANDI_V5",   // Their API is so damn slow. We'll add it back as needed.
-				"HEDNS",      // Doesn't page. Works fine.  Due to the slow API we skip.
-				"LOOPIA",     // Their API is so damn slow. Plus, no paging.
-				"NAMEDOTCOM", // Their API is so damn slow. We'll add it back as needed.
-				"NS1",        // Free acct only allows 50 records, therefore we skip
+				"DESEC",        // Skip due to daily update limits.
+				"DIGITALOCEAN", // No paging. Why bother?
+				"FORTIGATE",    // No paging
+				"GANDI_V5",     // Their API is so damn slow. We'll add it back as needed.
+				"HEDNS",        // Doesn't page. Works fine.  Due to the slow API we skip.
+				"LOOPIA",       // Their API is so damn slow. Plus, no paging.
+				"NAMEDOTCOM",   // Their API is so damn slow. We'll add it back as needed.
+				"NS1",          // Free acct only allows 50 records, therefore we skip
 				// "ROUTE53",       // Batches up changes in pages.
-				"TRANSIP",   // Doesn't page. Works fine.  Due to the slow API we skip.
-				"CNR",       // Test beaks limits.
-				"FORTIGATE", // No paging
-				"VERCEL",    // Rate limit 100 creation per hour, 101 needs an hour, too much
+				"TRANSIP", // Doesn't page. Works fine.  Due to the slow API we skip.
+				"VERCEL",  // Rate limit 100 creation per hour, 101 needs an hour, too much
 			),
 			tc("99 records", manyA("pager101-rec%04d", "1.2.3.4", 99)...),
 			tc("100 records", manyA("pager101-rec%04d", "1.2.3.4", 100)...),
@@ -676,12 +731,14 @@ func makeTests() []*TestGroup {
 
 		testgroup("pager601",
 			only(
-				// "AZURE_DNS",     // Removed because it is too slow
-				//"CLOUDFLAREAPI", // Infinite pagesize but due to slow speed, skipping.
-				//"CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
-				//"DESEC",         // Skip due to daily update limits.
-				//"GANDI_V5",      // Their API is so damn slow. We'll add it back as needed.
-				//"GCLOUD",
+				// "AZURE_DNS",         // Removed because it is too slow
+				// "AZURE_PRIVATE_DNS", // Removed because it is too slow
+				// "CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
+				// "CSCGLOBAL",         // Doesn't page. Works fine.  Due to the slow API we skip.
+				// "DESEC",             // Skip due to daily update limits.
+				// "GANDI_V5",          // Their API is so damn slow. We'll add it back as needed.
+				// "GCLOUD",
+				"ORACLE",
 				"ROUTE53", // Batches up changes in pages.
 			),
 			tc("601 records", manyA("pager601-rec%04d", "1.2.3.4", 600)...),
@@ -690,16 +747,18 @@ func makeTests() []*TestGroup {
 
 		testgroup("pager1201",
 			only(
-				// "AKAMAIEDGEDNS", // No paging done. No need to test.
-				//"AZURE_DNS",     // Currently failing. See https://github.com/DNSControl/dnscontrol/issues/770
-				//"CLOUDFLAREAPI", // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
-				//"CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
-				//"DESEC",         // Skip due to daily update limits.
-				//"GANDI_V5",      // Their API is so damn slow. We'll add it back as needed.
-				//"HEDNS",         // No paging done. No need to test.
-				//"GCLOUD",
+				// "AKAMAIEDGEDNS",     // No paging done. No need to test.
+				// "AZURE_DNS",         // Too slow
+				// "AZURE_PRIVATE_DNS", // Too slow
+				// "CLOUDFLAREAPI",     // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
+				// "CSCGLOBAL", // Doesn't page. Works fine.  Due to the slow API we skip.
+				// "DESEC",     // Skip due to daily update limits.
+				// "GANDI_V5",  // Their API is so damn slow. We'll add it back as needed.
+				"GCLOUD",
+				// "HEDNS",     // No paging done. No need to test.
 				"HOSTINGDE", // Pages.
-				"ROUTE53",   // Batches up changes in pages.
+				"ORACLE",
+				"ROUTE53", // Batches up changes in pages.
 			),
 			tc("1200 records", manyA("pager1201-rec%04d", "1.2.3.4", 1200)...),
 			tc("Update 1200 records", manyA("pager1201-rec%04d", "1.2.3.5", 1200)...),
@@ -712,6 +771,7 @@ func makeTests() []*TestGroup {
 			only(
 				//"GCLOUD",
 				"HOSTINGDE", // Pages.
+				"ORACLE",
 			),
 			tc("1200 records",
 				manyA("batch-rec%04d", "1.2.3.4", 1200)...),
@@ -773,6 +833,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("NAPTR",
 			requires(providers.CanUseNAPTR),
+			not("GANDI_V5"),
 			tc("NAPTR record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")),
 			tc("NAPTR second record",
 				naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", "."),
@@ -1226,14 +1287,17 @@ func makeTests() []*TestGroup {
 
 		// CLOUDFLAREAPI: Redirects:
 
-		// go test -v -verbose -profile CLOUDFLAREAPI -cfredirect=true  // Convert: Test Single Redirects
+		// go test -v -args -verbose -profile CLOUDFLAREAPI -cfredirect=true  // Convert: Test Single Redirects
 
-		testgroup("CF_REDIRECT_CONVERT",
-			only("CLOUDFLAREAPI"),
-			alltrue(cfSingleRedirectEnabled()),
-			tc("start301", cfRedir("cnn.**current-domain**/*", "https://www.cnn.com/$1")),
-			tc("convert302", cfRedirTemp("cnn.**current-domain**/*", "https://www.cnn.com/$1")),
-		),
+		// This test is commented out because of this error:
+		// "helpers_integration_test.go:241: not entitled: the use of operator Matches is not allowed, a Business plan or a WAF Advanced plan is required"
+		// There's no obvious way to have this test only run when a Business plan is used.
+		// testgroup("CF_REDIRECT_CONVERT",
+		// 	only("CLOUDFLAREAPI"),
+		// 	alltrue(cfSingleRedirectEnabled()),
+		// 	tc("start301", cfRedir("cnn.**current-domain**/*", "https://www.cnn.com/$1")),
+		// 	tc("convert302", cfRedirTemp("cnn.**current-domain**/*", "https://www.cnn.com/$1")),
+		// ),
 
 		testgroup("CLOUDFLAREAPI_SINGLE_REDIRECT",
 			only("CLOUDFLAREAPI"),
@@ -1440,6 +1504,7 @@ func makeTests() []*TestGroup {
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
 
+			not("NETBIRD"), // MX/TXT records not supported
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
@@ -1587,6 +1652,7 @@ func makeTests() []*TestGroup {
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
 
+			not("NETBIRD"), // MX/TXT records not supported
 			tc("Create some records",
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
@@ -1767,6 +1833,7 @@ func makeTests() []*TestGroup {
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
 
+			not("NETBIRD"), // MX/TXT records not supported
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
