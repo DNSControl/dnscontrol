@@ -558,6 +558,8 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	for _, d := range config.Domains {
 		// Check that CNAMES don't have to co-exist with any other records
 		errs = append(errs, checkCNAMEs(d)...)
+		// Check that only one SOA record exist for a zone
+		errs = append(errs, checkMultipleSOAs(d)...)
 		// Check that if any advanced record types are used in a domain, every provider for that domain supports them
 		err := checkProviderCapabilities(d)
 		if err != nil {
@@ -663,6 +665,19 @@ func checkCNAMEs(dc *models.DomainConfig) (errs []error) {
 				continue
 			}
 			errs = append(errs, fmt.Errorf("%s: cannot have CNAME and %s record with same name: %s", r.FilePos, r.Type, r.GetLabelFQDN()))
+		}
+	}
+	return
+}
+
+func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
+	soas := map[string]bool{}
+	for _, r := range dc.Records {
+		if r.Type == "SOA" {
+			if soas[r.GetLabel()] {
+				errs = append(errs, fmt.Errorf("%s: cannot have multiple SOAs with same name: %s", r.FilePos, r.GetLabelFQDN()))
+			}
+			soas[r.GetLabel()] = true
 		}
 	}
 	return

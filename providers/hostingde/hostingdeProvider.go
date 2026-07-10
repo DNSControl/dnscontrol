@@ -369,7 +369,8 @@ func (hp *hostingdeProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([
 	return nil, nil
 }
 
-func (hp *hostingdeProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (hp *hostingdeProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := hp.getZoneConfig(domain)
 	if errors.Is(err, errZoneNotFound) {
 		if err := hp.createZone(domain); err != nil {

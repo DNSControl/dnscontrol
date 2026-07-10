@@ -24,7 +24,7 @@ var features = providers.DocumentationNotes{
 	// See providers/capabilities.go for the entire list of capabilities.
 	// The default for unlisted capabilities is 'Cannot'.
 	// --- Supported Features ---
-	providers.CanAutoDNSSEC:          providers.Unimplemented("Ask for this feature."),
+	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanConcur:              providers.Can(),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanOnlyDiff1Features:   providers.Can(),
@@ -33,7 +33,7 @@ var features = providers.DocumentationNotes{
 	providers.DocOfficiallySupported: providers.Cannot("Actively maintained provider module."),
 	// --- Supported record types ---
 	// providers.CanUseAKAMAICDN: 	      providers.Cannot(), // can only be supported by Akamai EdgeDns provider
-	providers.CanUseAlias: providers.Can(),
+	providers.CanUseAlias: providers.Can("ALIAS records require an unsigned zone served through RCodeZero and cannot be used with DNSSEC-signed zones."),
 	// providers.CanUseAzureAlias:		  providers.Cannot(), // can only be supported by Azure provider
 	providers.CanUseCAA:           providers.Can(),
 	providers.CanUseDHCID:         providers.Can(),
@@ -46,11 +46,12 @@ var features = providers.DocumentationNotes{
 	providers.CanUseNAPTR:         providers.Can(),
 	providers.CanUsePTR:           providers.Can(),
 	// providers.CanUseRoute53Alias:	  providers.Cannot(), // can only be supported by AWS Route53 provider
-	providers.CanUseSOA:   providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."), // supported by bind, honstingde
-	providers.CanUseSRV:   providers.Can("SRV records with empty targets are not supported"),
-	providers.CanUseSSHFP: providers.Can(),
-	providers.CanUseSVCB:  providers.Can(),
-	providers.CanUseTLSA:  providers.Can(),
+	providers.CanUseSMIMEA: providers.Can(),
+	providers.CanUseSOA:    providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."), // supported by bind, honstingde
+	providers.CanUseSRV:    providers.Can("SRV records with empty targets are not supported"),
+	providers.CanUseSSHFP:  providers.Can(),
+	providers.CanUseSVCB:   providers.Can(),
+	providers.CanUseTLSA:   providers.Can(),
 }
 
 func newProvider(conf map[string]string) (*Client, error) {

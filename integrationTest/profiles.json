@@ -147,6 +147,11 @@
     "secret": "$DOMAINNAMESHOP_SECRET",
     "token": "$DOMAINNAMESHOP_TOKEN"
   },
+  "DYNU": {
+    "TYPE": "DYNU",
+    "api_key": "$DYNU_API_KEY",
+    "domain": "$DYNU_DOMAIN"
+  },
   "EXOSCALE": {
     "TYPE": "EXOSCALE",
     "apikey": "$EXOSCALE_API_KEY",
@@ -167,6 +172,7 @@
   "GANDI_V5": {
     "TYPE": "GANDI_V5",
     "apikey": "$GANDI_V5_APIKEY",
+    "apiurl": "$GANDI_V5_APIURL",
     "domain": "$GANDI_V5_DOMAIN",
     "token": "$GANDI_V5_TOKEN"
   },
@@ -189,6 +195,11 @@
     "password": "$GIDINET_PASSWORD",
     "username": "$GIDINET_USERNAME"
   },
+  "GIGAHOST": {
+    "TYPE": "GIGAHOST",
+    "apikey": "$GIGAHOST_APIKEY",
+    "domain": "$GIGAHOST_DOMAIN"
+  },
   "HEDNS": {
     "TYPE": "HEDNS",
     "domain": "$HEDNS_DOMAIN",
@@ -196,11 +207,6 @@
     "session-file-path": ".",
     "totp-key": "$HEDNS_TOTP_SECRET",
     "username": "$HEDNS_USERNAME"
-  },
-  "HETZNER": {
-    "TYPE": "HETZNER",
-    "api_key": "$HETZNER_API_KEY",
-    "domain": "$HETZNER_DOMAIN"
   },
   "HETZNER_V2": {
     "TYPE": "HETZNER_V2",
@@ -357,6 +363,7 @@
   },
   "ROUTE53": {
     "KeyId": "$ROUTE53_KEY_ID",
+    "Region": "$ROUTE53_REGION",
     "SecretKey": "$ROUTE53_KEY",
     "TYPE": "ROUTE53",
     "domain": "$ROUTE53_DOMAIN"

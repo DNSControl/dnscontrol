@@ -145,7 +145,10 @@ func parseEnableSearchDomain(metadata map[string]string) *bool {
 }
 
 // EnsureZoneExists creates a zone if it does not exist, or updates it if metadata specifies different settings.
-func (api *netbirdProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *netbirdProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+	metadata := dc.Metadata
+
 	zones, err := api.listZones()
 	if err != nil {
 		return err
