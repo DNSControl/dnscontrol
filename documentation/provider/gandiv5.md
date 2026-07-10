@@ -53,6 +53,8 @@ This provider does not support using `ALIAS` in combination with DNSSEC, whether
 
 This provider only supports `ALIAS` on the `"@"` zone apex, not on any other names.
 
+Support for NAPTR records is limited. We have been unable to create test data that Gandi doesn't reject. If you require NAPTR support, please open an issue and include NAPTR records that you were able to create using the Gandi web portal. Your help will be greatly appreciated!
+
 ## Usage
 An example configuration:
 

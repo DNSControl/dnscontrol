@@ -38,6 +38,7 @@ func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers
 // Updated function to prioritize DefaultAzureCredential and fallback to OIDC or client-secret-based methods.
 func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, error) {
 	subID, rg := m["SubscriptionID"], m["ResourceGroup"]
+	rg = strings.ToLower(rg)
 	clientID, clientSecret, tenantID := m["ClientID"], m["ClientSecret"], m["TenantID"]
 	useOIDC := m["UseOIDC"] == "true"
 
@@ -717,7 +718,8 @@ func (a *azurednsProvider) fetchRecordSets(zoneName string) ([]*adns.RecordSet, 
 	return records, nil
 }
 
-func (a *azurednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (a *azurednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := a.zones[domain]; ok {
 		return nil
 	}

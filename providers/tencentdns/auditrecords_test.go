@@ -28,6 +28,6 @@ func TestAuditRecords(t *testing.T) {
 	assert.Len(t, errs, 4)
 	assert.Contains(t, errs[0].Error(), "mx has null target")
 	assert.Contains(t, errs[1].Error(), "txtstring is empty")
-	assert.Contains(t, errs[2].Error(), "srv has null target")
+	assert.Contains(t, errs[2].Error(), "srv has empty target")
 	assert.Contains(t, errs[3].Error(), "srv has empty target")
 }

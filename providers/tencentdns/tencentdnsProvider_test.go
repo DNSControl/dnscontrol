@@ -113,13 +113,12 @@ func TestSiteConfigForSite(t *testing.T) {
 }
 
 func TestPrepDesiredRecordsRewritesLowTTL(t *testing.T) {
-	dc := &models.DomainConfig{
-		Records: models.Records{
-			{TTL: 0},
-			{TTL: 300},
-			{TTL: 600},
-			{TTL: 3600},
-		},
+	dc, _ := models.NewDomainConfig("example.com")
+	dc.Records = models.Records{
+		{TTL: 0},
+		{TTL: 300},
+		{TTL: 600},
+		{TTL: 3600},
 	}
 
 	prepDesiredRecords(dc, 600)
@@ -131,10 +130,9 @@ func TestPrepDesiredRecordsRewritesLowTTL(t *testing.T) {
 }
 
 func TestPrepDesiredRecordsAllowsPaidDomainTTL(t *testing.T) {
-	dc := &models.DomainConfig{
-		Records: models.Records{
-			{TTL: 300},
-		},
+	dc, _ := models.NewDomainConfig("example.com")
+	dc.Records = models.Records{
+		{TTL: 300},
 	}
 
 	prepDesiredRecords(dc, 1)

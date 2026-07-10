@@ -64,7 +64,9 @@ func (dsp *netnodProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (dsp *netnodProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (dsp *netnodProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+	metadata := dc.Metadata
 	domainVariant := domain + "."
 	zone, err := dsp.client.GetZone(domainVariant)
 	if err != nil {

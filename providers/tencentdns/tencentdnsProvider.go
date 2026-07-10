@@ -280,7 +280,9 @@ func normalizeNameserverSet(nameservers []string) []string {
 	return normalized
 }
 
-func (p *tencentdnsProvider) EnsureZoneExists(domainName string, metadata map[string]string) error {
+func (p *tencentdnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domainName := dc.Name
+
 	request := dnspod.NewCreateDomainRequest()
 	request.Domain = &domainName
 	_, err := p.client.dnspodClient.CreateDomain(request)

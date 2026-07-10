@@ -43,6 +43,7 @@ Jump to a table:
 | [`DNSOVERHTTPS`](dnsoverhttps.md) | ❌ | ❌ | ✅ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❌ | ✅ | ❌ |
 | [`DYNADOT`](dynadot.md) | ❌ | ❌ | ✅ |
+| [`DYNU`](dynu.md) | ❌ | ✅ | ❌ |
 | [`EASYNAME`](easyname.md) | ❌ | ❌ | ✅ |
 | [`EXOSCALE`](exoscale.md) | ❌ | ✅ | ❌ |
 | [`FORTIGATE`](fortigate.md) | ❌ | ✅ | ❌ |
@@ -50,8 +51,8 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ✅ | ✅ | ❌ |
 | [`GCORE`](gcore.md) | ❌ | ✅ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ✅ | ✅ |
+| [`GIGAHOST`](gigahost.md) | ❌ | ✅ | ❌ |
 | [`HEDNS`](hedns.md) | ❌ | ✅ | ❌ |
-| [`HETZNER`](hetzner.md) | ❌ | ✅ | ❌ |
 | [`HETZNER_V2`](hetznerv2.md) | ❌ | ✅ | ❌ |
 | [`HOSTINGDE`](hostingde.md) | ❌ | ✅ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ❌ | ✅ | ❌ |
@@ -114,6 +115,7 @@ Jump to a table:
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ✅ | ✅ | ✅ |
 | [`DNSOVERHTTPS`](dnsoverhttps.md) | ❔ | ❔ | ❌ | ❔ |
 | [`DYNADOT`](dynadot.md) | ❔ | ❔ | ❌ | ❔ |
+| [`DYNU`](dynu.md) | ❌ | ❔ | ❌ | ✅ |
 | [`EASYNAME`](easyname.md) | ❔ | ❔ | ❌ | ❔ |
 | [`EXOSCALE`](exoscale.md) | ❌ | ❌ | ❌ | ❔ |
 | [`FORTIGATE`](fortigate.md) | ❔ | ❔ | ✅ | ✅ |
@@ -121,8 +123,8 @@ Jump to a table:
 | [`GCLOUD`](gcloud.md) | ✅ | ✅ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ✅ | ✅ | ✅ | ✅ |
 | [`GIDINET`](gidinet.md) | ✅ | ✅ | ❌ | ✅ |
+| [`GIGAHOST`](gigahost.md) | ❔ | ❔ | ❌ | ✅ |
 | [`HEDNS`](hedns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`HETZNER`](hetzner.md) | ✅ | ✅ | ✅ | ✅ |
 | [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ✅ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ❔ | ✅ | ✅ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ❔ | ✅ | ✅ | ✅ |
@@ -183,14 +185,15 @@ Jump to a table:
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❔ | ❌ | ❌ | ❌ |
+| [`DYNU`](dynu.md) | ❌ | ✅ | ✅ | ✅ | ❔ |
 | [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`FORTIGATE`](fortigate.md) | ❔ | ❔ | ❌ | ❌ | ❔ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
+| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ✅ | ✅ | ❔ |
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GCORE`](gcore.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
+| [`GIGAHOST`](gigahost.md) | ✅ | ✅ | ❔ | ✅ | ❔ |
 | [`HEDNS`](hedns.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
-| [`HETZNER`](hetzner.md) | ❌ | ❔ | ❌ | ❌ | ❌ |
 | [`HETZNER_V2`](hetznerv2.md) | ❌ | ❔ | ❌ | ✅ | ❌ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ❌ | ✅ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ❌ | ❔ | ❌ | ❌ | ❌ |
@@ -215,7 +218,7 @@ Jump to a table:
 | [`PORKBUN`](porkbun.md) | ✅ | ❔ | ❌ | ❌ | ❌ |
 | [`POWERDNS`](powerdns.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❔ | ✅ | ❌ | ❌ |
-| [`ROUTE53`](route53.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
+| [`ROUTE53`](route53.md) | ❌ | ❔ | ❌ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
 | [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ❌ | ❔ | ❔ |
@@ -249,13 +252,14 @@ Jump to a table:
 | [`DNSIMPLE`](dnsimple.md) | ❔ | ✅ | ✅ | ✅ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ❔ | ✅ | ❔ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❌ | ✅ | ❔ |
+| [`DYNU`](dynu.md) | ✅ | ✅ | ✅ | ✅ |
 | [`EXOSCALE`](exoscale.md) | ❔ | ❔ | ✅ | ❔ |
-| [`GANDI_V5`](gandiv5.md) | ❔ | ❔ | ✅ | ❔ |
+| [`GANDI_V5`](gandiv5.md) | ❔ | ✅ | ✅ | ✅ |
 | [`GCLOUD`](gcloud.md) | ❔ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ❔ | ❌ | ✅ | ✅ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ✅ | ❌ |
+| [`GIGAHOST`](gigahost.md) | ❔ | ✅ | ✅ | ❔ |
 | [`HEDNS`](hedns.md) | ❌ | ✅ | ✅ | ✅ |
-| [`HETZNER`](hetzner.md) | ❔ | ❌ | ✅ | ❔ |
 | [`HETZNER_V2`](hetznerv2.md) | ❔ | ❌ | ✅ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ❔ | ❌ | ✅ | ❔ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ❔ | ❌ | ✅ | ❌ |
@@ -306,7 +310,7 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ✅ | ❔ | ❌ | ✅ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
-| [`CNR`](cnr.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
+| [`CNR`](cnr.md) | ✅ | ❌ | ✅ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ❔ | ❔ | ❔ | ❔ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
@@ -314,13 +318,14 @@ Jump to a table:
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❔ | ❔ | ❌ | ❌ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ✅ | ❔ | ❔ | ❌ | ❔ |
+| [`DYNU`](dynu.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❔ | ❔ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
+| [`GANDI_V5`](gandiv5.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`GCLOUD`](gcloud.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`GCORE`](gcore.md) | ✅ | ✅ | ❔ | ❌ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❔ | ❌ | ❌ |
+| [`GIGAHOST`](gigahost.md) | ✅ | ❔ | ❔ | ❔ | ❔ |
 | [`HEDNS`](hedns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
-| [`HETZNER`](hetzner.md) | ✅ | ❔ | ❔ | ❌ | ✅ |
 | [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ❔ | ❌ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ❌ | ❔ | ❌ | ❌ |
@@ -366,17 +371,18 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ❔ | ❌ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ❔ | ❌ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
+| [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ❔ | ❌ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ❔ | ❌ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❌ | ❔ | ❔ |
+| [`DYNU`](dynu.md) | ❌ | ❔ | ❔ |
 | [`GANDI_V5`](gandiv5.md) | ❔ | ❔ | ❌ |
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❔ |
 | [`GCORE`](gcore.md) | ✅ | ❔ | ❌ |
 | [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ |
 | [`HEDNS`](hedns.md) | ❌ | ❌ | ❌ |
-| [`HETZNER`](hetzner.md) | ❌ | ❔ | ✅ |
 | [`HETZNER_V2`](hetznerv2.md) | ❌ | ❔ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ✅ | ❔ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ❔ | ❌ |
@@ -462,7 +468,7 @@ Providers in this category and their maintainers are:
 |[`GCORE`](gcore.md)|@xddxdd|
 |[`GIDINET`](gidinet.md)|@zupolgec|
 |[`HEDNS`](hedns.md)|@rblenkinsopp|
-|[`HETZNER`](hetzner.md)|@das7pad|
+|[`HETZNER_V2`](hetznerv2.md)|@das7pad|
 |[`HOSTINGDE`](hostingde.md)|@membero|
 |[`HUAWEICLOUD`](huaweicloud.md)|@huihuimoe|
 |[`INFOMANIAK`](infomaniak.md)|@jbelien|

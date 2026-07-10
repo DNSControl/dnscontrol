@@ -49,7 +49,7 @@ jobs:
     outputs:
       integration_test_providers: ${{ steps.get_integration_test_providers.outputs.integration_test_providers }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: integrationTest/profiles.json
           sparse-checkout-cone-mode: false
@@ -102,6 +102,7 @@ jobs:
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
+      DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
       FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
       GCLOUD_DOMAIN: ${{ vars.GCLOUD_DOMAIN }}
@@ -174,11 +175,14 @@ jobs:
       #
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
       #
+      DYNU_API_KEY: ${{ secrets.DYNU_API_KEY }}
+      #
       FORTIGATE_API_KEY: ${{ secrets.FORTIGATE_API_KEY }}
       FORTIGATE_VDOM: ${{ secrets.FORTIGATE_VDOM }}
       FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
       #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
+      GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
       #
       GCLOUD_EMAIL: ${{ secrets.GCLOUD_EMAIL }}
       GCLOUD_PRIVATEKEY: ${{ secrets.GCLOUD_PRIVATEKEY }}
@@ -251,10 +255,10 @@ jobs:
       matrix:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: mkdir -p "$TEST_RESULTS"
       - name: restore_cache
-        uses: actions/cache@v5.0.5
+        uses: actions/cache@v6.1.0
         with:
           key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
           restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
@@ -297,6 +301,12 @@ jobs:
           if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
             END=3
             echo "END: Exception for VERCEL: Run fewer tests. END=$END"
+          fi
+          # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
+          # the time about the same as other tests
+          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
+            END=10
+            echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
           echo "END: Final value: END=$END"
           echo "END=$END" >> $GITHUB_ENV
