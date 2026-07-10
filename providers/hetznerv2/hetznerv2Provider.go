@@ -50,6 +50,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Hetzner DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/hetzner_v2",
+		PortalURL:   "https://dns.hetzner.com/settings/api-token", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_token",
+				Label:    "API token",
+				Help:     "Your Hetzner Cloud API token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // New creates a new API handle.
@@ -88,7 +103,8 @@ func (h *hetznerv2Provider) fetchAllZones() (map[string]*hcloud.Zone, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (h *hetznerv2Provider) EnsureZoneExists(domain string, _ map[string]string) error {
+func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	encoded, err := idna.ToASCII(domain)
 	if err != nil {
 		return err

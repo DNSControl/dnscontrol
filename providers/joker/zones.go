@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // EnsureZoneExists creates a zone if it doesn't exist.
-func (api *jokerProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *jokerProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	// For Joker, all domains you manage automatically have DNS zones available
 	// We just need to verify we can access the zone
 	_, body, err := api.makeRequest("dns-zone-get", url.Values{"domain": {domain}})

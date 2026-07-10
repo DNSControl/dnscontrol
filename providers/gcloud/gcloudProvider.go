@@ -62,6 +62,41 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Google Cloud DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gcloud",
+		PortalURL:   "https://console.cloud.google.com/iam-admin/serviceaccounts", // TODO: Verify
+		Notes:       "These values come from a Google Cloud service account JSON key file.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "project_id",
+				Label:    "Project ID",
+				Help:     "GCP project ID that owns the Cloud DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "client_email",
+				Label:    "Client email",
+				Help:     "Service account email from the JSON key.",
+				Required: true,
+			},
+			{
+				Key:       "private_key",
+				Label:     "Private key (opens $EDITOR)",
+				Help:      "Paste the full PEM block (including BEGIN/END lines) from the service account JSON, then save and close the editor.",
+				Multiline: true,
+				Required:  true,
+			},
+			{
+				Key:      "type",
+				Label:    "Credential type",
+				Help:     "Credential type from the service account JSON. Typically \"service_account\".",
+				Default:  "service_account",
+				Required: true,
+			},
+		},
+	})
 }
 
 type gcloudProvider struct {
@@ -460,7 +495,8 @@ func (g *gcloudProvider) getRecords(domain string) ([]*gdns.ResourceRecordSet, e
 	return sets, nil
 }
 
-func (g *gcloudProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (g *gcloudProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	z, err := g.getZone(domain)
 	if err != nil {
 		if _, ok := err.(errNoExist); !ok {

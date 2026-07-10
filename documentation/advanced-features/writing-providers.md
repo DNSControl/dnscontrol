@@ -173,7 +173,7 @@ For example, test BIND:
 ```shell
 cd integrationTest              # NOTE: Not needed if already there
 export BIND_DOMAIN='example.com'
-go test -v -verbose -profile BIND
+go test -v -args -verbose -profile BIND
 ```
 
 (BIND is a good place to start since it doesn't require API keys.)
@@ -185,22 +185,23 @@ export R53_DOMAIN='dnscontroltest-r53.com'    # Use a test domain.
 export R53_KEY_ID='CHANGE_TO_THE_ID'
 export R53_KEY='CHANGE_TO_THE_KEY'
 cd integrationTest              # NOTE: Not needed if already there
-go test -v -verbose -profile ROUTE53
+go test -v -args -verbose -profile ROUTE53
 ```
 
 Some useful `go test` flags:
 
+* Flags before `-args` go to the `go test` program. Flags after `-args` go to the program being tested.
 * Run only certain tests using the `-start` and `-end` flags.
   * Rather than running all the tests, run just the tests you want.
   * These flags must be *after* the `-profile FOO` flag.
-  * Example: `go test -v -verbose -profile ROUTE53 -start 10 -end 20` run tests 10-20 inclusive.
-  * Example: `go test -v -verbose -profile ROUTE53 -start 5 -end 5` runs only test 5.
-  * Example: `go test -v -verbose -profile ROUTE53 -start 20` skip the first 19 tests.
-  * Example: `go test -v -verbose -profile ROUTE53 -end 20` only run the first 20 tests.
+  * Example: `go test -v -args -verbose -profile ROUTE53 -start 10 -end 20` run tests 10-20 inclusive.
+  * Example: `go test -v -args -verbose -profile ROUTE53 -start 5 -end 5` runs only test 5.
+  * Example: `go test -v -args -verbose -profile ROUTE53 -start 20` skip the first 19 tests.
+  * Example: `go test -v -args -verbose -profile ROUTE53 -end 20` only run the first 20 tests.
 * Slow tests? Add `-timeout n` to increase the timeout for tests
   * `go test` kills the tests after 10 minutes by default.  Some providers need more time.
-  * This flag must be *before* the `-verbose` flag.  Usually it is the first flag after `go test`.
-  * Example:  `go test -timeout 20m -v -verbose -profile CLOUDFLAREAPI`
+  * This flag must be *before* the `-args` flag.
+  * Example:  `go test -timeout 20m -v -args -verbose -profile CLOUDFLAREAPI`
 * If a test will always fail because the provider doesn't support the feature, you can opt out of the test.  Look at `func makeTests()` in [integrationTest/integration_test.go](https://github.com/DNSControl/dnscontrol/blob/2f65533e1b92c2967229a92a304fff7c14f7f4b6/integrationTest/integration_test.go#L675) for more details.
 
 ## Step 8: Manual tests

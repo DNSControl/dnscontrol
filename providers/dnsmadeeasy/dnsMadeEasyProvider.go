@@ -150,7 +150,9 @@ func (api *dnsMadeEasyProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (api *dnsMadeEasyProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *dnsMadeEasyProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	exists, err := api.domainExists(domain)
 	if err != nil {
 		return err
