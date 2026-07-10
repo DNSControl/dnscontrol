@@ -3,6 +3,7 @@ package azureprivatedns
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -16,6 +17,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
+
+const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
 
 type azurednsProvider struct {
 	zonesClient    *adns.PrivateZonesClient
@@ -68,7 +71,7 @@ var features = providers.DocumentationNotes{
 	providers.CanGetZones:            providers.Can(),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
-	providers.CanUseAzureAlias:       providers.Can(),
+	providers.CanUseAzureAlias:       providers.Cannot(),
 	providers.CanUseCAA:              providers.Cannot("Azure Private DNS does not support CAA records"),
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUseNAPTR:            providers.Cannot(),
@@ -77,7 +80,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseSSHFP:            providers.Cannot(),
 	providers.CanUseTLSA:             providers.Cannot(),
 	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can("Azure does not permit modifying the existing NS records, only adding/removing additional records."),
+	providers.DocDualHost:            providers.Cannot("Private zones can not change NS records"),
 	providers.DocOfficiallySupported: providers.Can(),
 }
 
@@ -89,8 +92,46 @@ func init() {
 		RecordAuditor: AuditRecords,
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType("AZURE_ALIAS", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Azure Private DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/azureprivatedns",
+		PortalURL:   "https://portal.azure.com/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "SubscriptionID",
+				Label:    "Subscription ID",
+				Help:     "Azure subscription ID that contains the private DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "ResourceGroup",
+				Label:    "Resource group",
+				Help:     "Azure resource group that contains the private DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "TenantID",
+				Label:    "Tenant ID",
+				Help:     "Azure AD tenant ID for the service principal.",
+				Required: true,
+			},
+			{
+				Key:      "ClientID",
+				Label:    "Client ID",
+				Help:     "Service principal client (application) ID.",
+				Required: true,
+			},
+			{
+				Key:      "ClientSecret",
+				Label:    "Client secret",
+				Help:     "Service principal client secret.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func (a *azurednsProvider) getExistingZones() ([]*adns.PrivateZone, error) {
@@ -250,16 +291,14 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.CreateOrUpdate(ctx, *a.resourceGroup, zoneName, azRecType, recordName, *rrset, nil)
 
-	if e, ok := err.(*azcore.ResponseError); ok {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_PRIVATE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_PRIVATE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
@@ -283,19 +322,34 @@ retry:
 	defer cancel()
 	_, err = a.recordsClient.Delete(ctx, *a.resourceGroup, zoneName, azRecType, shortName, nil)
 
-	if e, ok := err.(*azcore.ResponseError); ok {
-		if e.StatusCode == http.StatusTooManyRequests {
-			waitTime = waitTime * 2
-			if waitTime > 300 {
-				return err
-			}
-			printer.Printf("AZURE_PRIVATE_DNS: rate-limit paused for %v.\n", waitTime)
-			time.Sleep(time.Duration(waitTime+1) * time.Second)
-			goto retry
+	if retryReason := retryableRecordSetMutation(err); retryReason != "" {
+		waitTime = waitTime * 2
+		if waitTime > 300 {
+			return err
 		}
+		printer.Printf("AZURE_PRIVATE_DNS: %s paused for %v.\n", retryReason, waitTime)
+		time.Sleep(time.Duration(waitTime+1) * time.Second)
+		goto retry
 	}
 
 	return err
+}
+
+func retryableRecordSetMutation(err error) string {
+	var e *azcore.ResponseError
+	if !errors.As(err, &e) {
+		return ""
+	}
+
+	if e.StatusCode == http.StatusTooManyRequests {
+		return "rate-limit"
+	}
+
+	if e.StatusCode == http.StatusConflict && e.ErrorCode == "Conflict" && strings.Contains(e.Error(), azurePendingOperationConflictMessage) {
+		return "pending operation"
+	}
+
+	return ""
 }
 
 func nativeToRecordTypeDiff(recordType *string) (adns.RecordType, error) {
@@ -434,28 +488,16 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			if recordSet.Properties.ARecords == nil {
-				recordSet.Properties.ARecords = []*adns.ARecord{}
-			}
 			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
 		case "AAAA":
-			if recordSet.Properties.AaaaRecords == nil {
-				recordSet.Properties.AaaaRecords = []*adns.AaaaRecord{}
-			}
 			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
 		case "CNAME":
 			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
 		case "PTR":
-			if recordSet.Properties.PtrRecords == nil {
-				recordSet.Properties.PtrRecords = []*adns.PtrRecord{}
-			}
 			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
 		case "TXT":
-			if recordSet.Properties.TxtRecords == nil {
-				recordSet.Properties.TxtRecords = []*adns.TxtRecord{}
-			}
-			// Empty TXT record needs to have no value set in it's properties
-			if rec.GetTargetTXTJoined() == "" {
+			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "".
+			if rec.GetTargetTXTJoined() != "" {
 				var txts []*string
 				for _, txt := range rec.GetTargetTXTSegmented() {
 					txts = append(txts, new(txt))
@@ -463,14 +505,8 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			if recordSet.Properties.MxRecords == nil {
-				recordSet.Properties.MxRecords = []*adns.MxRecord{}
-			}
 			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
 		case "SRV":
-			if recordSet.Properties.SrvRecords == nil {
-				recordSet.Properties.SrvRecords = []*adns.SrvRecord{}
-			}
 			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
 			/* CAA records don't work in a private zone */
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
@@ -524,7 +560,8 @@ func (a *azurednsProvider) fetchRecordSets(zoneName string) ([]*adns.RecordSet, 
 	return records, nil
 }
 
-func (a *azurednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (a *azurednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := a.zones[domain]; ok {
 		return nil
 	}

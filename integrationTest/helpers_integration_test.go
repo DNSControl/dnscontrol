@@ -30,6 +30,10 @@ var (
 	printElapsed = flag.Bool("elapsed", false, "Print elapsed time for each testgroup")
 )
 
+// Global variable to hold the current DomainConfig for use in NewRecordConfig calls.
+// This is an ugly, ugly, hack. We have to find something better.
+var globalDC *models.DomainConfig
+
 // Global variable to hold the current DomainConfig	for use in FromRaw calls.
 var globalDCN *domaintags.DomainNameVarieties
 
@@ -93,9 +97,7 @@ func CfFlattenOn() *TestCase {
 }
 
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
-	dc := &models.DomainConfig{
-		Name: domainName,
-	}
+	dc, _ := models.NewDomainConfig(domainName)
 	dc.PostProcess()
 	rtypecontrol.FixLegacyDC(dc)
 
@@ -265,6 +267,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 
 func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string, origConfig map[string]string) {
 	dc := getDomainConfigWithNameservers(t, prv, domainName)
+	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
 
 	testGroups := makeTests()
@@ -289,8 +292,9 @@ func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string,
 		// Abide by filter
 		// fmt.Printf("DEBUG testPermitted: prov=%q profile=%q\n", *providerFlag, *profileFlag)
 		if err := testPermitted(*profileFlag, *group); err != nil {
-			// t.Logf("%s: ***SKIPPED(%v)***", group.Desc, err)
-			makeChanges(t, prv, dc, tc("Empty"), fmt.Sprintf("%02d:%s ***SKIPPED(%v)***", gIdx, group.Desc, err), false, origConfig, nil)
+			t.Run(fmt.Sprintf("%02d:%s ***SKIPPED(%v)***:Empty", gIdx, group.Desc, err), func(t *testing.T) {
+				t.SkipNow()
+			})
 			continue
 		}
 
@@ -447,27 +451,27 @@ func bunnyPullZone(name, pullZoneID string) *models.RecordConfig {
 	return makeRec(name, pullZoneID, "BUNNY_DNS_PZ")
 }
 
-func cfRedir(pattern, target string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "CF_REDIRECT",
-		TTL:  1,
-		Args: []any{pattern, target},
-		DCN:  globalDCN,
-	})
-	panicOnErr(err)
-	return rec
-}
+// func cfRedir(pattern, target string) *models.RecordConfig {
+// 	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+// 		Type: "CF_REDIRECT",
+// 		TTL:  1,
+// 		Args: []any{pattern, target},
+// 		DCN:  globalDCN,
+// 	})
+// 	panicOnErr(err)
+// 	return rec
+// }
 
-func cfRedirTemp(pattern, target string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "CF_TEMP_REDIRECT",
-		TTL:  1,
-		Args: []any{pattern, target},
-		DCN:  globalDCN,
-	})
-	panicOnErr(err)
-	return rec
-}
+// func cfRedirTemp(pattern, target string) *models.RecordConfig {
+// 	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+// 		Type: "CF_TEMP_REDIRECT",
+// 		TTL:  1,
+// 		Args: []any{pattern, target},
+// 		DCN:  globalDCN,
+// 	})
+// 	panicOnErr(err)
+// 	return rec
+// }
 
 func aghAPassthrough(pattern, target string) *models.RecordConfig {
 	r := makeRec(pattern, target, "ADGUARDHOME_A_PASSTHROUGH")

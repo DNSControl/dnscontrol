@@ -86,6 +86,32 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "INWX",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/inwx",
+		PortalURL:   "https://www.inwx.com/en/customer",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "Your INWX account username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "Your INWX account password.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "sandbox",
+				Label: "Use sandbox (optional)",
+				Help:  "Set to 1 to use the INWX sandbox API (ote.inwx.com) instead of production. Leave blank for production.",
+			},
+		},
+	})
 }
 
 // getOTP either returns the TOTPValue or uses TOTPKey and the current time to generate a valid TOTPValue.
@@ -520,7 +546,9 @@ func (api *inwxAPI) fetchRegistrationNSSet(domain string) []string {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (api *inwxAPI) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *inwxAPI) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	if api.domainIndex == nil { // only pull the data once.
 		if err := api.fetchNameserverDomains(); err != nil {
 			return err

@@ -744,7 +744,7 @@ func writeReport(report string, reportItems []*ReportItem) error {
 	return nil
 }
 
-func generatePopulateCorrections(provider *models.DNSProviderInstance, zone *models.DomainConfig, zcache *CmdZoneCache) ([]*models.Correction, error) {
+func generatePopulateCorrections(provider *models.DNSProviderInstance, dc *models.DomainConfig, zcache *CmdZoneCache) ([]*models.Correction, error) {
 	lister, ok := provider.Driver.(providers.ZoneLister)
 	if !ok {
 		return nil, nil // We can't generate a list. No corrections are possible.
@@ -757,7 +757,9 @@ func generatePopulateCorrections(provider *models.DNSProviderInstance, zone *mod
 	}
 	zones := *z
 
-	aceZoneName, _ := idna.ToASCII(zone.Name)
+	// TODO(tlim): This conversion shouldn't be needed.  The provider should return the zone names in ACE format.
+	// "aceZoneName := dc.Name" should be sufficient.
+	aceZoneName, _ := idna.ToASCII(dc.Name)
 	if slices.Contains(zones, aceZoneName) {
 		return nil, nil // zone exists. Nothing to do.
 	}
@@ -770,7 +772,7 @@ func generatePopulateCorrections(provider *models.DNSProviderInstance, zone *mod
 
 	return []*models.Correction{{
 		Msg: fmt.Sprintf("Ensuring zone %q exists in %q", aceZoneName, provider.Name),
-		F:   func() error { return creator.EnsureZoneExists(aceZoneName, zone.Metadata) },
+		F:   func() error { return creator.EnsureZoneExists(dc) },
 	}}, nil
 }
 

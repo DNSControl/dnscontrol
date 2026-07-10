@@ -32,16 +32,15 @@ If you are using VSCode, the equivalent configuration is:
                 "-test.run",
                 "^TestDNSProviders",
                 "-verbose",
-                "-profile",
-                "BIND",
-                "-start",
-                "7",
-                "-end",
-                "7"
+                "-profile", "BIND",
+                "-start", "7",
+                "-end", "7"
             ],
             "buildFlags": "",
             "env": {},
-            "showLog": true
+            "showLog": false,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
 
     ]

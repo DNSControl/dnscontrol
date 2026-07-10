@@ -466,16 +466,22 @@ function validateR53AliasType(value) {
     }
     return (
         [
+            'SOA',
             'A',
-            'AAAA',
-            'CNAME',
-            'CAA',
-            'MX',
             'TXT',
-            'PTR',
-            'SPF',
-            'SRV',
+            'CNAME',
+            'MX',
             'NAPTR',
+            'PTR',
+            'SRV',
+            'SPF',
+            'AAAA',
+            'CAA',
+            'DS',
+            'TLSA',
+            'SSHFP',
+            'SVCB',
+            'HTTPS',
         ].indexOf(value) !== -1
     );
 }

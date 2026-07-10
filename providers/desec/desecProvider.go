@@ -103,7 +103,8 @@ func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *desecProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *desecProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, ok, err := c.searchDomainIndex(domain)
 	if err != nil {
 		return err

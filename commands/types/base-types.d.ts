@@ -25,7 +25,8 @@ type DomainModifier =
 
 type RecordModifier =
     | ((record: DNSRecord) => void)
-    | Partial<DNSRecord['meta']>;
+    | Partial<DNSRecord['meta']>
+    | RecordModifier[];
 
 type Duration =
     | `${number}${'s' | 'm' | 'h' | 'd' | 'w' | 'n' | 'y' | ''}`

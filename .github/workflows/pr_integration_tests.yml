@@ -49,7 +49,7 @@ jobs:
     outputs:
       integration_test_providers: ${{ steps.get_integration_test_providers.outputs.integration_test_providers }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: integrationTest/profiles.json
           sparse-checkout-cone-mode: false
@@ -94,6 +94,7 @@ jobs:
       AXFRDDNS_DOMAIN: ${{ vars.AXFRDDNS_DOMAIN }}
       AXFRDDNS_DNSSEC_DOMAIN: ${{ vars.AXFRDDNS_DNSSEC_DOMAIN }}
       AZURE_DNS_DOMAIN: ${{ vars.AZURE_DNS_DOMAIN }}
+      AZURE_PRIVATE_DNS_DOMAIN: ${{ vars.AZURE_PRIVATE_DNS_DOMAIN }}
       BIND_DOMAIN: ${{ vars.BIND_DOMAIN }}
       BUNNY_DNS_DOMAIN: ${{ vars.BUNNY_DNS_DOMAIN }}
       CLOUDFLAREAPI_DOMAIN: ${{ vars.CLOUDFLAREAPI_DOMAIN }}
@@ -101,6 +102,7 @@ jobs:
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
+      DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
       FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
       GCLOUD_DOMAIN: ${{ vars.GCLOUD_DOMAIN }}
@@ -113,6 +115,8 @@ jobs:
       MIKROTIK_DOMAIN: ${{ vars.MIKROTIK_DOMAIN }}
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
+      NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
+      NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
       ROUTE53_DOMAIN: ${{ vars.ROUTE53_DOMAIN }}
@@ -148,6 +152,12 @@ jobs:
       AZURE_DNS_SUBSCRIPTION_ID: ${{ secrets.AZURE_DNS_SUBSCRIPTION_ID }}
       AZURE_DNS_TENANT_ID: ${{ secrets.AZURE_DNS_TENANT_ID }}
       #
+      AZURE_PRIVATE_DNS_CLIENT_ID: ${{ secrets.AZURE_PRIVATE_DNS_CLIENT_ID }}
+      AZURE_PRIVATE_DNS_CLIENT_SECRET: ${{ secrets.AZURE_PRIVATE_DNS_CLIENT_SECRET }}
+      AZURE_PRIVATE_DNS_RESOURCE_GROUP: ${{ secrets.AZURE_PRIVATE_DNS_RESOURCE_GROUP }}
+      AZURE_PRIVATE_DNS_SUBSCRIPTION_ID: ${{ secrets.AZURE_PRIVATE_DNS_SUBSCRIPTION_ID }}
+      AZURE_PRIVATE_DNS_TENANT_ID: ${{ secrets.AZURE_PRIVATE_DNS_TENANT_ID }}
+      #
       BUNNY_DNS_API_KEY: ${{ secrets.BUNNY_DNS_API_KEY }}
       #
       CLOUDFLAREAPI_ACCOUNTID: ${{ secrets.CLOUDFLAREAPI_ACCOUNTID }}
@@ -165,11 +175,14 @@ jobs:
       #
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
       #
+      DYNU_API_KEY: ${{ secrets.DYNU_API_KEY }}
+      #
       FORTIGATE_API_KEY: ${{ secrets.FORTIGATE_API_KEY }}
       FORTIGATE_VDOM: ${{ secrets.FORTIGATE_VDOM }}
       FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
       #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
+      GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
       #
       GCLOUD_EMAIL: ${{ secrets.GCLOUD_EMAIL }}
       GCLOUD_PRIVATEKEY: ${{ secrets.GCLOUD_PRIVATEKEY }}
@@ -205,6 +218,11 @@ jobs:
       NAMEDOTCOM_URL: ${{ secrets.NAMEDOTCOM_URL }}
       NAMEDOTCOM_USER: ${{ secrets.NAMEDOTCOM_USER }}
       #
+      NETBIRD_TOKEN: ${{ secrets.NETBIRD_TOKEN }}
+      #
+      NETNOD_APIKEY: ${{ secrets.NETNOD_APIKEY }}
+      NETNOD_APIURL: ${{ secrets.NETNOD_APIURL }}
+      #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
       #
       POWERDNS_APIKEY: ${{ secrets.POWERDNS_APIKEY }}
@@ -227,6 +245,8 @@ jobs:
       #
       VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
+      TENCENTDNS_SECRET_ID: ${{ secrets.TENCENTDNS_SECRET_ID }}
+      TENCENTDNS_SECRET_KEY: ${{ secrets.TENCENTDNS_SECRET_KEY }}
 
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.provider }}
@@ -235,10 +255,10 @@ jobs:
       matrix:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: mkdir -p "$TEST_RESULTS"
       - name: restore_cache
-        uses: actions/cache@v5.0.5
+        uses: actions/cache@v6.1.0
         with:
           key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
           restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
@@ -254,7 +274,6 @@ jobs:
         run: |
           END=3
           echo "END: Default set to $END"
-          DO_WORKERS=false
 
           # Only for PRs
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -263,7 +282,6 @@ jobs:
             if [[ " $LABELS " =~ " longtest " ]]; then
               END=999
               echo "END: Pull request + longtest label. END=$END"
-              DO_WORKERS=true
             else
               echo "END: longtest not set. No change."
             fi
@@ -278,18 +296,23 @@ jobs:
           if [[ "${{ github.ref_name }}" == "main" ]]; then
             END=999
             echo "END: github.ref_name is main. END=$END"
-            DO_WORKERS=true
           fi
           # VERCEL it limited to 100 updates per hour. Therefore we never run more than the first few tests.
           if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
             END=3
             echo "END: Exception for VERCEL: Run fewer tests. END=$END"
           fi
+          # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
+          # the time about the same as other tests
+          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
+            END=10
+            echo "END: Exception for HEDNS: Run fewer tests. END=$END"
+          fi
           echo "END: Final value: END=$END"
           echo "END=$END" >> $GITHUB_ENV
-          echo "DO_WORKERS=$DO_WORKERS" >> $GITHUB_ENV
 
       - name: Run integration tests for ${{ matrix.provider }} provider
+        shell: bash -eo pipefail {0}
         run: |-
           #
           echo "END: Running tests 0 to $END"
@@ -298,11 +321,11 @@ jobs:
             # NB(tlim): THe output of gotestsum needs to go to stdout AND the
             # gotestsum-output.txt file. That's why "tee" is used.
             gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- \
-                -timeout 40m -v \
+                -timeout 70m -v \
                 -verbose \
                 -profile ${{ matrix.provider }} \
-                -cfworkers=$DO_WORKERS \
-                -cfredirect=false \
+                -cfworkers=true \
+                -cfredirect=true \
                 -cfflatten=false \
                 -cftags=false \
                 -end $END \

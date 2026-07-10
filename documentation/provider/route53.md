@@ -10,6 +10,7 @@ Example:
   "r53_main": {
     "TYPE": "ROUTE53",
     "DelegationSet": "optional-delegation-set-id",
+    "Region": "optional-aws-region-id",
     "KeyId": "your-aws-key",
     "SecretKey": "your-aws-secret-key",
     "Token": "optional-sts-token"
@@ -58,6 +59,21 @@ Example:
 ```
 {% endcode %}
 
+You can also select a named profile on a per-provider basis using the `Profile` field. This reads from `~/.aws/config` and supports AWS IAM Identity Center (SSO) profiles — run `aws sso login` first so a valid SSO session is cached. `Profile` is mutually exclusive with `KeyId`/`SecretKey` (setting both will return an error), but composes with `RoleArn`: the profile provides the source credentials and `RoleArn` is then assumed on top. This lets a single `dnscontrol push` target multiple AWS accounts in one run.
+
+Example:
+
+{% code title="creds.json" %}
+```json
+{
+  "r53_main": {
+    "TYPE": "ROUTE53",
+    "Profile": "my-aws-profile"
+  }
+}
+```
+{% endcode %}
+
 Alternatively, this provider also supports `RoleArn` with an optional `ExternalId`
 
 Example:
@@ -75,6 +91,12 @@ Example:
 {% endcode %}
 
 You can find some other ways to authenticate to Route53 in the [go sdk configuration](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html).
+
+## AWS European Sovereign Cloud (aws.eu)
+
+You can use AWS European Sovereign Cloud API endpoints by setting the `Region` variable to `eusc-de-east-1` in `creds.json`. By default global AWS uses region "us-east-1" if not set explicitly.
+
+Notice that AWS ESC doesn't support domain registration endpoints. Currently you'll need to use global AWS to register domains with Route 53.
 
 ## Metadata
 

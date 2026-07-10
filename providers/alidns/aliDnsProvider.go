@@ -39,6 +39,27 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Alibaba Cloud DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/alidns",
+		PortalURL:   "https://ram.console.aliyun.com/manage/ak", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "access_key_id",
+				Label:    "Access key ID",
+				Help:     "Alibaba Cloud RAM AccessKey ID.",
+				Required: true,
+			},
+			{
+				Key:      "access_key_secret",
+				Label:    "Access key secret",
+				Help:     "Alibaba Cloud RAM AccessKey secret.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 	// Register default TTL of 600 seconds (10 minutes) for Alibaba Cloud DNS
 	// This is the minimum TTL for free/personal edition domains
 	providers.RegisterDefaultTTL(providerName, 600)

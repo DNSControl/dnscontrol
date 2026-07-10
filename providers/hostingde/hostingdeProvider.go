@@ -48,6 +48,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "hosting.de",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/hostingde",
+		PortalURL:   "https://secure.hosting.de/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "authToken",
+				Label:    "Auth token",
+				Help:     "Your hosting.de API auth token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 type providerMeta struct {
@@ -354,7 +369,8 @@ func (hp *hostingdeProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([
 	return nil, nil
 }
 
-func (hp *hostingdeProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (hp *hostingdeProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := hp.getZoneConfig(domain)
 	if errors.Is(err, errZoneNotFound) {
 		if err := hp.createZone(domain); err != nil {

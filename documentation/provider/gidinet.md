@@ -75,7 +75,8 @@ When used as a registrar, Gidinet will manage the nameserver delegation at the r
 ## Activation
 
 1. Log in to the [Gidinet Control Panel](https://www.gidinet.com/)
-2. Your account credentials (username and password) are the same ones you use to log in to the control panel
+2. Generate an **API password** at [https://www.gidinet.com/modules/private/account_password/](https://www.gidinet.com/modules/private/account_password/)
+3. In `creds.json`, use your account **username** together with that **API password** -- the API password is distinct from your normal login password
 
 ## Supported record types
 

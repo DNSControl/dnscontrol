@@ -58,6 +58,27 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Mythic Beasts",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/mythicbeasts",
+		PortalURL:   "https://www.mythic-beasts.com/customer/api-users", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "keyID",
+				Label:    "Key ID",
+				Help:     "Your Mythic Beasts API key ID.",
+				Required: true,
+			},
+			{
+				Key:      "secret",
+				Label:    "Secret",
+				Help:     "The secret paired with the key ID.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
