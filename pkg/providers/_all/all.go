@@ -34,7 +34,6 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/gidinet"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/gigahost"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/hedns"
-	_ "github.com/DNSControl/dnscontrol/v4/providers/hetzner"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/hetznerv2"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/hostingde"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/huaweicloud"

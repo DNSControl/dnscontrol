@@ -28,7 +28,6 @@ providers/gcore @xddxdd
 providers/gidinet @zupolgec
 providers/gigahost @jochristian
 providers/hedns @rblenkinsopp
-providers/hetzner @das7pad
 providers/hetznerv2 @das7pad
 providers/hostingde @juliusrickert
 providers/huaweicloud @huihuimoe

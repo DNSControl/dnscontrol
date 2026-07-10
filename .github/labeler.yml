@@ -88,9 +88,6 @@ provider-GIGAHOST:
 provider-HEDNS:
   - changed-files:
       - any-glob-to-any-file: providers/hedns/**
-provider-HETZNER:
-  - changed-files:
-      - any-glob-to-any-file: providers/hetzner/**
 provider-HETZNER_V2:
   - changed-files:
       - any-glob-to-any-file: providers/hetznerv2/**

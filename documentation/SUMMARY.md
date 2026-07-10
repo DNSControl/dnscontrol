@@ -153,7 +153,6 @@
 * [Gigahost](provider/gigahost.md)
 * [Google Cloud DNS](provider/gcloud.md)
 * [Hetzner DNS API](provider/hetznerv2.md)
-* [Hetzner DNS Console (legacy)](provider/hetzner.md)
 * [hosting.de](provider/hostingde.md)
 * [Huawei Cloud DNS](provider/huaweicloud.md)
 * [Hurricane Electric DNS](provider/hedns.md)
