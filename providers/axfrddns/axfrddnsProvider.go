@@ -322,9 +322,11 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			dnsv1.TypeNSEC3,
 			dnsv1.TypeNSEC3PARAM,
 			dnsv1.TypeZONEMD,
+			65281,
 			65534:
 			// Ignoring DNSSec RRs, but replacing it with a single
 			// "TXT" placeholder
+			// Ignoring TYPE65281 Technitium Conditional Forwarder Zone Record
 			// Also ignoring spurious TYPE65534, see:
 			// https://bind9-users.isc.narkive.com/zX29ay0j/rndc-signing-list-not-working#post2
 			if foundDNSSecRecords == nil {

@@ -72,9 +72,7 @@ func (c *huaweicloudProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 		switch change.Type {
 		case diff2.REPORT:
 			reports = append(reports, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			fallthrough
-		case diff2.CHANGE:
+		case diff2.CREATE, diff2.CHANGE:
 			newRecordsColl := collectRecordsByLineAndWeightAndKey(change.New)
 			oldRecordsColl := collectRecordsByLineAndWeightAndKey(change.Old)
 			corrections = append(corrections, &models.Correction{
@@ -133,9 +131,15 @@ func (c *huaweicloudProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 		}
 	}
 
+	dnssecCorrections, dnssecChangeCount, err := c.getDNSSECCorrections(dc)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	result := append(reports, deletions...)
 	result = append(result, corrections...)
-	return result, actualChangeCount, nil
+	result = append(result, dnssecCorrections...)
+	return result, actualChangeCount + dnssecChangeCount, nil
 }
 
 func collectRecordsByLineAndWeightAndKey(records models.Records) map[string]models.Records {
@@ -219,10 +223,7 @@ func (c *huaweicloudProvider) createRRSet(zoneID string, rc *model.ShowRecordSet
 		_, err = c.client.CreateRecordSetWithLine(createPayload)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (c *huaweicloudProvider) updateRRSet(zoneID, rrsetID string, rc *model.ShowRecordSetByZoneResp) error {
@@ -243,10 +244,7 @@ func (c *huaweicloudProvider) updateRRSet(zoneID, rrsetID string, rc *model.Show
 		_, err = c.client.UpdateRecordSets(updatePayload)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func parseMarkerFromURL(link string) (string, error) {

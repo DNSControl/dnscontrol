@@ -240,7 +240,8 @@ func (p *dnscaleProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (p *dnscaleProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (p *dnscaleProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := p.getZoneByName(domain)
 	if err == nil {
 		return nil // Zone exists

@@ -11,5 +11,11 @@ D("foo.com", "none",
     R53_ALIAS("srvtest", "SRV", "foo.com."),
     R53_ALIAS("spftest", "SPF", "foo.com."),
     R53_ALIAS("caatest", "CAA", "foo.com."),
-    R53_ALIAS("naptrtest", "NAPTR", "foo.com.")
+    R53_ALIAS("naptrtest", "NAPTR", "foo.com."),
+    R53_ALIAS("soatest", "SOA", "foo.com."),
+    R53_ALIAS("dstest", "DS", "foo.com."),
+    R53_ALIAS("tlsatest", "TLSA", "foo.com."),
+    R53_ALIAS("sshfptest", "SSHFP", "foo.com."),
+    R53_ALIAS("svcbtest", "SVCB", "foo.com."),
+    R53_ALIAS("httpstest", "HTTPS", "foo.com.")
 );

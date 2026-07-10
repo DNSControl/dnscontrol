@@ -82,7 +82,7 @@ func newHuaweicloud(m map[string]string, metadata json.RawMessage) (providers.DN
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
 	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Unimplemented("No public api provided, but can be turned on manually in the console."),
+	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanUseAlias:            providers.Cannot(),
 	providers.CanUseCAA:              providers.Can(),
@@ -119,6 +119,33 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Huawei Cloud DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/huaweicloud",
+		PortalURL:   "https://console-intl.huaweicloud.com/iam/?locale=en-us#/iam/users",
+		Fields: []providers.CredsField{
+			{
+				Key:      "KeyId",
+				Label:    "Access key ID",
+				Help:     "Your Huawei Cloud Access Key ID (AK).",
+				Required: true,
+			},
+			{
+				Key:      "SecretKey",
+				Label:    "Secret access key",
+				Help:     "Your Huawei Cloud Secret Access Key (SK).",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "Region",
+				Label:    "Region",
+				Help:     "The Huawei Cloud region the DNS API call is routed through (for example ap-southeast-1).",
+				Required: true,
+			},
+		},
+	})
 }
 
 // huaweicloud has request limiting like above.

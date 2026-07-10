@@ -66,6 +66,16 @@ D("example.com", REG_NONE, DnsProvider(DSP_POWERDNS),
 ## Activation
 See the [PowerDNS documentation](https://doc.powerdns.com/authoritative/http-api/index.html) how the API can be enabled.
 
+## HTTPS/SVCB Automatic Hints
+
+PowerDNS supports automatic address hints for `HTTPS` and `SVCB` records. DNSControl preserves the PowerDNS-specific `ipv4hint=auto` and `ipv6hint=auto` parameters when using this provider:
+
+{% code title="dnsconfig.js" %}
+```javascript
+HTTPS("foo", 1, ".", "alpn=h3,h2 ipv4hint=auto ipv6hint=auto");
+```
+{% endcode %}
+
 ## Tags and Variants
 If you use a dnscontrol *tag* (like `example.com!internal`) it will be mapped to a powerdns *variant* (like `example.com..internal`) when `use_views` is enabled in the provider metadata.
 

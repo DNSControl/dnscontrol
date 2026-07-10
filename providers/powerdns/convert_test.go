@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/mittwald/go-powerdns/apis/zones"
 	"github.com/stretchr/testify/assert"
 )
@@ -46,6 +48,37 @@ func TestToRecordConfig(t *testing.T) {
 	assert.Equal(t, "return 'Hello, world!'", recordConfig.GetTargetTXTJoined())
 	assert.Equal(t, "TXT \"return 'Hello, world!'\"", recordConfig.GetTargetCombined())
 	assert.Equal(t, uint32(3600), recordConfig.TTL)
+
+	autoHintRecord := zones.Record{
+		Content: "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto",
+	}
+	recordConfig, err = toRecordConfig("example.com", autoHintRecord, 300, "auto", "HTTPS")
+
+	assert.NoError(t, err)
+	assert.Equal(t, "auto.example.com", recordConfig.NameFQDN)
+	assert.Equal(t, "HTTPS", recordConfig.Type)
+	assert.Equal(t, uint16(1), recordConfig.SvcPriority)
+	assert.Equal(t, ".", recordConfig.GetTargetField())
+	assert.Equal(t, "alpn=h3,h2 ipv4hint=auto ipv6hint=auto", recordConfig.SvcParams)
+	assert.Equal(t, "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto", powerDNSTargetCombined(recordConfig))
+	assert.Equal(t, uint32(300), recordConfig.TTL)
+}
+
+func TestBuildRecordListSvcbAutoHints(t *testing.T) {
+	recordConfig := &models.RecordConfig{
+		Type:        "HTTPS",
+		Name:        "auto",
+		NameFQDN:    "auto.example.com",
+		SvcPriority: 1,
+		SvcParams:   "alpn=h3,h2 ipv4hint=auto ipv6hint=auto",
+		TTL:         300,
+	}
+	recordConfig.MustSetTarget(".")
+
+	records := buildRecordList(diff2.Change{New: models.Records{recordConfig}})
+
+	assert.Len(t, records, 1)
+	assert.Equal(t, "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto", records[0].Content)
 }
 
 func TestParseText(t *testing.T) {

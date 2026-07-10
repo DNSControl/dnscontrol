@@ -2,14 +2,14 @@
 name: R53_ALIAS
 parameters:
   - name
+  - type
   - target
-  - ZONE_ID modifier
-  - EvaluateTargetHealth modifier
+  - modifiers...
 parameter_types:
   name: string
+  type: '"SOA" | "A" | "TXT" | "CNAME" | "MX" | "NAPTR" | "PTR" | "SRV" | "SPF" | "AAAA" | "CAA" | "DS" | "TLSA" | "SSHFP" | "SVCB" | "HTTPS"'
   target: string
-  ZONE_ID modifier: DomainModifier & RecordModifier
-  EvaluateTargetHealth modifier: RecordModifier
+  "modifiers...": RecordModifier[]
 provider: ROUTE53
 ---
 

@@ -71,6 +71,28 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newRegistrar)
 
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Gidinet",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gidinet",
+		PortalURL:   "https://www.gidinet.com/modules/private/account_password/",
+		Notes:       "The username is your usual Gidinet account username, but the password must be the dedicated \"API password\" generated in the Gidinet control panel — not your normal login password.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "Your Gidinet account username (same as the control-panel login).",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "API password",
+				Help:     "The \"API password\" generated at https://www.gidinet.com/modules/private/account_password/ — not your normal login password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // newRegistrar creates a new Gidinet registrar instance.

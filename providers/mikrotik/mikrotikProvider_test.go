@@ -577,7 +577,8 @@ func TestGetZoneRecords_FiltersAndConverts(t *testing.T) {
 	})
 	defer srv.Close()
 
-	rcs, err := p.GetZoneRecords(&models.DomainConfig{Name: "example.com"})
+	dc, _ := models.NewDomainConfig("example.com")
+	rcs, err := p.GetZoneRecords(dc)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -602,7 +603,8 @@ func TestGetZoneRecords_ForwarderZone(t *testing.T) {
 	})
 	defer srv.Close()
 
-	rcs, err := p.GetZoneRecords(&models.DomainConfig{Name: ForwarderZone})
+	dc, _ := models.NewDomainConfig(ForwarderZone)
+	rcs, err := p.GetZoneRecords(dc)
 
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
