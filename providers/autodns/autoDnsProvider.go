@@ -80,6 +80,11 @@ func init() {
 				Help:     "Value for the X-Domainrobot-Context header.",
 				Required: true,
 			},
+			{
+				Key:   "children",
+				Label: "Include sub-user zones",
+				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
+			},
 		},
 	})
 }
