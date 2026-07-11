@@ -321,7 +321,7 @@ func TestTransforms(t *testing.T) {
 	}
 	const transform = "0.0.0.0~1.0.0.0~2.0.0.0~;   3.0.0.0~4.0.0.0~~5.5.5.5; 7.0.0.0~8.0.0.0~~9.9.9.9,10.10.10.10"
 	for i, test := range tests {
-		dc, _ := models.NewDomainConfig("example.tld")
+		dc := models.MustNewDomainConfig("example.tld")
 		dc.Records = []*models.RecordConfig{
 			makeRC("f", "example.tld", test.givenIP, models.RecordConfig{Type: "A", Metadata: map[string]string{"transform": transform}}),
 		}
@@ -362,7 +362,7 @@ func TestCNAMEMutex(t *testing.T) {
 			recB := &models.RecordConfig{Type: tst.rType}
 			recB.SetLabel(tst.name, "example.com")
 			recB.MustSetTarget("example2.com.")
-			dc, _ := models.NewDomainConfig("example.com")
+			dc := models.MustNewDomainConfig("example.com")
 			dc.Records = []*models.RecordConfig{recA, recB}
 			errs := checkCNAMEs(dc)
 			if errs != nil && !tst.fail {
@@ -386,7 +386,7 @@ func TestCNAMECloudflareProxied(t *testing.T) {
 	recMX := &models.RecordConfig{Type: "MX"}
 	recMX.SetLabel("mail", "mail.example.com")
 	recMX.MustSetTarget("smtp.example.com.")
-	dc, _ := models.NewDomainConfig("example.com")
+	dc := models.MustNewDomainConfig("example.com")
 	dc.Records = []*models.RecordConfig{recCNAME, recMX}
 	errs := checkCNAMEs(dc)
 	if len(errs) != 0 {
@@ -397,7 +397,7 @@ func TestCNAMECloudflareProxied(t *testing.T) {
 	recCNAME2 := &models.RecordConfig{Type: "CNAME"}
 	recCNAME2.SetLabel("mail", "mail.example.com")
 	recCNAME2.MustSetTarget("example.com.")
-	dc2, _ := models.NewDomainConfig("example.com")
+	dc2 := models.MustNewDomainConfig("example.com")
 	dc2.Records = []*models.RecordConfig{recCNAME2, recMX}
 	errs2 := checkCNAMEs(dc2)
 	if len(errs2) == 0 {

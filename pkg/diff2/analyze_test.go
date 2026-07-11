@@ -59,7 +59,7 @@ func (cl ChangeList) String() string {
 // Make sample data
 
 func makeRec(label, rtype, content string) *models.RecordConfig {
-	dc, _ := models.NewDomainConfig("f.com")
+	dc := models.MustNewDomainConfig("f.com")
 	typeNum, err := dnsutilv2.StringToType(rtype)
 	if typeNum == dnsv2.TypeMX {
 		fmt.Printf("HERE\n")

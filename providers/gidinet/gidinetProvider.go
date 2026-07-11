@@ -258,13 +258,12 @@ func toRecordConfig(domain string, r *DNSRecordListItem) (*models.RecordConfig, 
 	// Handle different record types
 	switch r.RecordType {
 	case "MX":
-		rc.MxPreference = uint16(r.Priority)
 		// MX target should be FQDN with trailing dot
 		target := r.Data
 		if !strings.HasSuffix(target, ".") {
 			target = dnsutil.AddOrigin(target+".", domain)
 		}
-		if err := rc.SetTarget(target); err != nil {
+		if err := rc.SetTargetMX(uint16(r.Priority), target); err != nil {
 			return nil, err
 		}
 
@@ -280,10 +279,7 @@ func toRecordConfig(domain string, r *DNSRecordListItem) (*models.RecordConfig, 
 			if !strings.HasSuffix(target, ".") {
 				target = target + "."
 			}
-			rc.SrvPriority = uint16(priority)
-			rc.SrvWeight = uint16(weight)
-			rc.SrvPort = uint16(port)
-			if err := rc.SetTarget(target); err != nil {
+			if err := rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), target); err != nil {
 				return nil, err
 			}
 		} else {

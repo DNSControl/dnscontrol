@@ -195,6 +195,11 @@
     "password": "$GIDINET_PASSWORD",
     "username": "$GIDINET_USERNAME"
   },
+  "GIGAHOST": {
+    "TYPE": "GIGAHOST",
+    "apikey": "$GIGAHOST_APIKEY",
+    "domain": "$GIGAHOST_DOMAIN"
+  },
   "HEDNS": {
     "TYPE": "HEDNS",
     "domain": "$HEDNS_DOMAIN",
@@ -202,11 +207,6 @@
     "session-file-path": ".",
     "totp-key": "$HEDNS_TOTP_SECRET",
     "username": "$HEDNS_USERNAME"
-  },
-  "HETZNER": {
-    "TYPE": "HETZNER",
-    "api_key": "$HETZNER_API_KEY",
-    "domain": "$HETZNER_DOMAIN"
   },
   "HETZNER_V2": {
     "TYPE": "HETZNER_V2",

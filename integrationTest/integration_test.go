@@ -486,6 +486,7 @@ func makeTests() []*TestGroup {
 				"DYNU",              // Apex NS records are managed by Dynu.
 				"EXOSCALE",          // Not supported.
 				"GANDI_V5",          // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
+				"GIDINET",           // "GIDINET does not support modifying NS records at apex."
 				"JOKER",             // Not supported via the Zone API.
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NETCUP",            // NS records not currently supported.
@@ -893,6 +894,7 @@ func makeTests() []*TestGroup {
 		// https://github.com/DNSControl/dnscontrol/issues/2066
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
+			not("UNIFI"), // UniFi has no per-record TTL for SRV records.
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
 			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
 		),

@@ -22,7 +22,7 @@ func makeRCmeta(meta map[string]string) *models.RecordConfig {
 func TestPreprocess_BoolValidation(t *testing.T) {
 	cf := &cloudflareProvider{}
 
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "on"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "fUll"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{}))
@@ -43,7 +43,7 @@ func TestPreprocess_BoolValidation(t *testing.T) {
 
 func TestPreprocess_BoolValidation_Fails(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Records = append(domain.Records, &models.RecordConfig{Metadata: map[string]string{metaProxy: "true"}})
 	err := cf.preprocessConfig(domain)
 	if err == nil {
@@ -53,7 +53,7 @@ func TestPreprocess_BoolValidation_Fails(t *testing.T) {
 
 func TestPreprocess_DefaultProxy(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaProxyDefault] = "full"
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "on"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "off"}))
@@ -72,7 +72,7 @@ func TestPreprocess_DefaultProxy(t *testing.T) {
 
 func TestPreprocess_DefaultProxy_Validation(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaProxyDefault] = "true"
 	err := cf.preprocessConfig(domain)
 	if err == nil {
@@ -82,7 +82,7 @@ func TestPreprocess_DefaultProxy_Validation(t *testing.T) {
 
 func TestPreprocess_CNAMEFlattenProxyMutualExclusion(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	rec := &models.RecordConfig{
 		Type:     "CNAME",
 		Metadata: map[string]string{metaCNAMEFlatten: "on", metaProxy: "on"},
@@ -102,7 +102,7 @@ func TestPreprocess_CNAMEFlattenProxyMutualExclusion(t *testing.T) {
 // determines whether to send the comment field to the API.
 func TestPreprocess_ManageComments_SetsEmptyKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaManageComments] = "true"
 
 	// Record without any comment
@@ -132,7 +132,7 @@ func TestPreprocess_ManageComments_SetsEmptyKey(t *testing.T) {
 // the metaComment key to records.
 func TestPreprocess_NoManageComments_NoKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	// No CF_MANAGE_COMMENTS
 
 	rec := makeRCmeta(map[string]string{})
@@ -151,7 +151,7 @@ func TestPreprocess_NoManageComments_NoKey(t *testing.T) {
 // record has the metaTags key in its metadata (empty string if not set).
 func TestPreprocess_ManageTags_SetsEmptyKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaManageTags] = "true"
 
 	// Record without any tags
@@ -181,7 +181,7 @@ func TestPreprocess_ManageTags_SetsEmptyKey(t *testing.T) {
 // the metaTags key to records.
 func TestPreprocess_NoManageTags_NoKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	// No CF_MANAGE_TAGS
 
 	rec := makeRCmeta(map[string]string{})
@@ -282,7 +282,7 @@ func TestIpRewriting(t *testing.T) {
 		{"1.2.3.4", "255.255.255.4", "full"},
 	}
 	cf := &cloudflareProvider{}
-	domain, _ := models.NewDomainConfig("test.com")
+	domain := models.MustNewDomainConfig("test.com")
 	cf.ipConversions = []transform.IPConversion{{
 		Low:      netip.MustParseAddr("1.2.3.0"),
 		High:     netip.MustParseAddr("1.2.3.40"),

@@ -151,10 +151,17 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 func (p *unifiProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	// UniFi doesn't care about TTL much, but we normalize it
+	// Normalize TTL. UniFi has no per-record TTL for MX/TXT/SRV (the API omits
+	// it and always reads them back as 300), so force those to 300 to avoid a
+	// perpetual TTL diff. Other types keep their TTL, defaulting 0 to 300.
 	for _, record := range dc.Records {
-		if record.TTL == 0 {
+		switch record.Type {
+		case "MX", "TXT", "SRV":
 			record.TTL = 300
+		default:
+			if record.TTL == 0 {
+				record.TTL = 300
+			}
 		}
 	}
 

@@ -14,7 +14,7 @@ import (
 func TestGetDNSSECCorrectionsSkipsCryptokeysWhenAutoDNSSECUnset(t *testing.T) {
 	dsp := &powerdnsProvider{}
 
-	dc, _ := models.NewDomainConfig("example.com")
+	dc := models.MustNewDomainConfig("example.com")
 	corrections, err := dsp.getDNSSECCorrections(dc)
 
 	require.NoError(t, err)
@@ -36,7 +36,7 @@ func TestGetDNSSECCorrectionsIgnoresMissingCryptokeysEndpoint(t *testing.T) {
 		ServerName: "localhost",
 	}
 
-	dc, _ := models.NewDomainConfig("example.com")
+	dc := models.MustNewDomainConfig("example.com")
 	dc.AutoDNSSEC = "on"
 	corrections, err := dsp.getDNSSECCorrections(dc)
 
