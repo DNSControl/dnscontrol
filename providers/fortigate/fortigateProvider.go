@@ -33,6 +33,43 @@ func init() {
 		RecordAuditor: AuditRecords,
 	}, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "FortiGate",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/fortigate",
+		PortalURL:   "https://docs.fortinet.com/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "FortiGate host",
+				Help:     "Hostname or IP of the FortiGate appliance (with or without https://).",
+				Required: true,
+			},
+			{
+				Key:      "vdom",
+				Label:    "VDOM",
+				Help:     "FortiGate virtual domain (vdom) name.",
+				Required: true,
+			},
+			{
+				Key:      "apiKey",
+				Label:    "API key",
+				Help:     "FortiGate REST API key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "insecure_tls",
+				Label: "Skip TLS verification (optional)",
+				Help:  "Set to \"true\" to skip TLS certificate verification when connecting to the FortiGate.",
+			},
+			{
+				Key:   "debug_http",
+				Label: "Debug HTTP (optional)",
+				Help:  "Set to \"true\" to log HTTP requests and responses for debugging.",
+			},
+		},
+	})
 }
 
 // Provider Struct

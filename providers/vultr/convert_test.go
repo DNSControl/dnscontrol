@@ -8,7 +8,7 @@ import (
 )
 
 func TestConversion(t *testing.T) {
-	dc, _ := models.NewDomainConfig("example.com")
+	dc := models.MustNewDomainConfig("example.com")
 
 	records := []govultr.DomainRecord{
 		{

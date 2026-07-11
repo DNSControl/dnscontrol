@@ -71,6 +71,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "deSEC",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/desec",
+		PortalURL:   "https://desec.io/tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "auth-token",
+				Label:    "Auth token",
+				Help:     "Your deSEC API auth token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.

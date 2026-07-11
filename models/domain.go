@@ -73,6 +73,7 @@ type DomainConfig struct {
 	pendingPopulateCorrections map[string][]*Correction // Corrections for zone creations at each provider
 }
 
+// NewDomainConfig creates and initializes a *models.DomainConfig.
 func NewDomainConfig(name string) (*DomainConfig, error) {
 	if strings.HasSuffix(name, ".") {
 		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
@@ -83,6 +84,16 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	dc.PopulateNamesFromRaw(name)
 
 	return dc, nil
+}
+
+// MustNewDomainConfig is like NewDomainConfig but panics if initialization
+// fails.  It is intended for use in variable initializations in unit tests.
+func MustNewDomainConfig(name string) *DomainConfig {
+	dc, err := NewDomainConfig(name)
+	if err != nil {
+		panic(err)
+	}
+	return dc
 }
 
 func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
