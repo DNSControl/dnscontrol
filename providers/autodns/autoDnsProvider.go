@@ -55,6 +55,38 @@ func init() {
 	}, features)
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "AutoDNS",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/autodns",
+		PortalURL:   "https://login.autodns.com/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "AutoDNS / Domainrobot username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "AutoDNS / Domainrobot password.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "context",
+				Label:    "Context",
+				Help:     "Value for the X-Domainrobot-Context header.",
+				Required: true,
+			},
+			{
+				Key:   "children",
+				Label: "Include sub-user zones",
+				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
+			},
+		},
+	})
 }
 
 func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {

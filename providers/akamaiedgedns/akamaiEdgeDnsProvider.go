@@ -64,6 +64,52 @@ func init() {
 	providers.RegisterCustomRecordType("AKAMAICDN", providerName, "")
 	providers.RegisterCustomRecordType("AKAMAITLC", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Akamai Edge DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/akamaiedgedns",
+		PortalURL:   "https://control.akamai.com/apps/identity-management/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "EdgeGrid host",
+				Help:     "EdgeGrid API host, e.g. akaa-xxxx.xxxx.akamaiapis.net.",
+				Required: true,
+			},
+			{
+				Key:      "client_token",
+				Label:    "Client token",
+				Help:     "EdgeGrid client_token from your API client credentials.",
+				Required: true,
+			},
+			{
+				Key:      "client_secret",
+				Label:    "Client secret",
+				Help:     "EdgeGrid client_secret from your API client credentials.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "access_token",
+				Label:    "Access token",
+				Help:     "EdgeGrid access_token from your API client credentials.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "contract_id",
+				Label:    "Contract ID",
+				Help:     "Akamai contract ID used when creating zones (e.g. X-XXXX).",
+				Required: true,
+			},
+			{
+				Key:      "group_id",
+				Label:    "Group ID",
+				Help:     "Akamai group ID used when creating zones (numeric).",
+				Required: true,
+			},
+		},
+	})
 }
 
 // DnsServiceProvider.
