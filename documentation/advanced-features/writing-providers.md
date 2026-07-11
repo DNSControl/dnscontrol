@@ -38,7 +38,7 @@ A provider can be a DnsProvider, a Registrar, or both. We recommend you write th
 
 If you have any questions, please discuss them in the GitHub issue related to the request for this provider.
 
-This document is constantly being updated.  Please let us know what was confusing so we can update this document with advice for future authors (or even better send a PR!).
+This document is constantly being updated.  Please let us know what was confusing so we can update this document with advice for future authors (or even better send a PR! We love PRs!).
 
 ## Step 2: Pick a base provider
 
@@ -50,14 +50,14 @@ Each DNS provider's API falls into one of 4 category. Some update one DNS record
 
 In summary, provider APIs basically fall into four general categories:
 
-* Updates are done one record at a time (Record)
-* Updates are done one label at a time (Label)
-* Updates are done one label+type at a time (RecordSet)
-* Updates require the entire zone to be uploaded (Zone).
+* Updates are done one record at a time (ByRecord)
+* Updates are done one label at a time (ByLabel)
+* Updates are done one label+type at a time (ByRecordSet)
+* Updates require the entire zone to be uploaded (ByZone).
 
 To determine your provider's category, review your API documentation.
 
-To determine an existing provider's category, see which `diff2.By*()` function is used.
+To determine an existing provider's category, see which `diff2.By*()` function is used: `grep diff2.By providers/*.go`
 
 DNSControl provides 4 helper functions that do all the hard work for you.  As input, they take the existing zone (what was downloaded via the API) and the desired zone (what is in `dnsconfig.js`).  They return a list of instructions. Implement handlers for the instructions and DNSControl is able to perform `dnscontrol push`.
 
@@ -139,7 +139,13 @@ via the wizard.
 
 Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/providers#DNSServiceProvider).
 
+* The function that converts the API's native records to models.RecordConfig{} structs should be called toRC().
+* There are helper functions for creating `models.RecordConfig{}'s`. See [The Cookbook](developer-info/cookbook.md) "Create a `models.RecordConfig`" for details.
+
 The function `GetDomainCorrections()` is a bit interesting. It returns a list of corrections to be made. These are in the form of functions that DNSControl can call to actually make the corrections.
+
+* The "create" function will probably need to convert an `models.RecordConfig` to the native API struct. Please name this function toNative()
+* There are helper functions for creating `models.RecordConfig{}'s`. See [The Cookbook](developer-info/cookbook.md) "Create a native record from `models.RecordConfig`" for details.
 
 **If you are implementing a DNS Registrar:**
 
@@ -188,7 +194,7 @@ cd integrationTest              # NOTE: Not needed if already there
 go test -v -args -verbose -profile ROUTE53
 ```
 
-Some useful `go test` flags:
+Some useful `go test` tips:
 
 * Flags before `-args` go to the `go test` program. Flags after `-args` go to the program being tested.
 * Run only certain tests using the `-start` and `-end` flags.
