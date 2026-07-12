@@ -3,6 +3,7 @@ package bind
 import (
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/soautil"
 )
@@ -20,11 +21,10 @@ func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {
 		soaMail = soautil.RFC5322MailToBind(soaMail)
 	}
 
-	soaRec := models.RecordConfig{
-		Type: "SOA",
-		TTL:  firstNonZero(defaultSoaValues.TTL, models.DefaultTTL),
-	}
-	err := soaRec.SetTargetSOA(
+	soaRec, err := dc.NewRecordConfig(
+		"@",
+		firstNonZero(defaultSoaValues.TTL, models.DefaultTTL),
+		dnsv2.TypeSOA,
 		firstNonNull(defaultSoaValues.Ns, "default_not_set."),
 		soaMail,
 		firstNonZero(defaultSoaValues.Serial, 1),
@@ -36,10 +36,8 @@ func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {
 	if err != nil {
 		panic(err) // Should never happen.
 	}
-	soaRec.SetLabel("@", dc.Name)
-	soaRec.FixRD(dc.Name)
 
-	dc.Records = append(dc.Records, &soaRec)
+	dc.AddRecordConfig(soaRec)
 }
 
 func firstNonNull(items ...string) string {
