@@ -7,28 +7,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
 )
 
-// MustNewRecordConfig is like models.NewRecordConfig but panics if initialization fails.
-// It is intended for use in variable initializations in unit tests.
-// Before using this, consider using models.AddTestRC() first.
-func (dc *DomainConfig) MustNewRecordConfig(name string, ttl uint32, typeAny any, args ...any) *RecordConfig {
-	rc, err := dc.NewRecordConfig(name, ttl, typeAny, args)
-	if err != nil {
-		panic(err)
-	}
-	return rc
-}
-
-// MustNewRecordConfigParse is like NewRecordConfigParse but panics if initialization fails.
-// It is intended for use in variable initializations in unit tests.
-// Before using this, consider using models.AddTestRCParse() first.
-func (dc *DomainConfig) MustNewRecordConfigParse(name string, ttl uint32, typeAny any, data string) *RecordConfig {
-	rc, err := dc.NewRecordConfigParse(name, ttl, typeAny, data)
-	if err != nil {
-		panic(err)
-	}
-	return rc
-}
-
 // AddTestRC is a convenience function that uses models.NewRecordConfig() to
 // create a models.RecordConfig and adds it to a models.DomainConfig. It is for
 // use in unit tests.
@@ -56,5 +34,27 @@ func (dc *DomainConfig) AddTestRCParse(label string, ttl uint32, typeNum uint16,
 		panic(fmt.Sprintf("dc.NewRecordConfigParse() returned %v", err))
 	}
 	dc.AddRecordConfig(rc)
+	return rc
+}
+
+// MustNewRecordConfig is like models.NewRecordConfig but panics if initialization fails.
+// It is intended for use in variable initializations in unit tests.
+// Before using this, consider using models.AddTestRC() first.
+func (dc *DomainConfig) MustNewRecordConfig(name string, ttl uint32, typeAny any, args ...any) *RecordConfig {
+	rc, err := dc.NewRecordConfig(name, ttl, typeAny, args)
+	if err != nil {
+		panic(err)
+	}
+	return rc
+}
+
+// MustNewRecordConfigParse is like NewRecordConfigParse but panics if initialization fails.
+// It is intended for use in variable initializations in unit tests.
+// Before using this, consider using models.AddTestRCParse() first.
+func (dc *DomainConfig) MustNewRecordConfigParse(name string, ttl uint32, typeAny any, data string) *RecordConfig {
+	rc, err := dc.NewRecordConfigParse(name, ttl, typeAny, data)
+	if err != nil {
+		panic(err)
+	}
 	return rc
 }
