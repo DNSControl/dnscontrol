@@ -712,7 +712,7 @@ func testgroup(desc string, items ...any) *TestGroup {
 }
 
 func tc(desc string, recs ...*models.RecordConfig) *TestCase {
-	var records []*models.RecordConfig
+	var records models.Records
 	var unmanagedItems []*models.UnmanagedConfig
 	for _, r := range recs {
 		if r == nil {

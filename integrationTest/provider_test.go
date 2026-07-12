@@ -50,7 +50,6 @@ func TestDualProviders(t *testing.T) {
 	t.Log("Clearing everything")
 	run()
 	// add bogus nameservers
-	dc.Records = []*models.RecordConfig{}
 	nsList, _ := models.ToNameservers([]string{"ns1.example.com", "ns2.example.com"})
 	dc.Nameservers = append(dc.Nameservers, nsList...)
 	nameservers.AddNSRecords(dc)

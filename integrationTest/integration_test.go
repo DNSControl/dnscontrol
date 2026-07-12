@@ -3,7 +3,6 @@ package main
 // Data-driven tests that exercize the DNS Provider APIs.
 
 import (
-	"runtime/debug"
 	"strings"
 	"testing"
 
@@ -13,7 +12,6 @@ import (
 )
 
 func TestDNSProviders(t *testing.T) {
-	debug.SetTraceback("all")
 	provider, domain, cfg := getProvider(t)
 	if provider == nil {
 		return
@@ -34,8 +32,6 @@ func TestMakeTests(t *testing.T) {
 	}
 	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
-
-	debug.SetTraceback("all")
 
 	_ = makeTests()
 }

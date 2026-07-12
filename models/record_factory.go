@@ -118,6 +118,9 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 		NameFQDN:    makeLabelNameFQDN(origin, name),
 		Metadata:    metadata,
 	}
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
 	rc.NameFQDNUnicode = makeNameFQDNUnicode(rc.NameFQDN)
 	rc.SetRDATA(rd)
 	return rc, nil

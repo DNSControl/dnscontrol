@@ -12,6 +12,7 @@ import (
 // use in unit tests.
 // It panics on error.
 // It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
+// If this is not a test, consider dc.AddRecordConfig().
 func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNum uint16, args ...any) *RecordConfig {
 	mustbe.ValidArgs(args)
 	rc, err := dc.NewRecordConfig(label, ttl, typeNum, args...)
@@ -28,6 +29,7 @@ func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNu
 // a models.DomainConfig. It is for use in unit tests.
 // It panics on error.
 // It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
+// If this is not a test, consider dc.AddRecordConfig().
 func (dc *DomainConfig) AddTestRCParse(label string, ttl uint32, typeNum uint16, contents string) *RecordConfig {
 	rc, err := dc.NewRecordConfigParse(label, ttl, typeNum, contents)
 	if err != nil {
@@ -41,7 +43,7 @@ func (dc *DomainConfig) AddTestRCParse(label string, ttl uint32, typeNum uint16,
 // It is intended for use in variable initializations in unit tests.
 // Before using this, consider using models.AddTestRC() first.
 func (dc *DomainConfig) MustNewRecordConfig(name string, ttl uint32, typeAny any, args ...any) *RecordConfig {
-	rc, err := dc.NewRecordConfig(name, ttl, typeAny, args)
+	rc, err := dc.NewRecordConfig(name, ttl, typeAny, args...)
 	if err != nil {
 		panic(err)
 	}

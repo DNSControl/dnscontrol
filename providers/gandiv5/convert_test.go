@@ -3,16 +3,15 @@ package gandiv5
 import (
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func TestRecordsToNative_1(t *testing.T) {
-	rcs := []*models.RecordConfig{{}}
-	rcs[0].SetLabelFromFQDN("foo.example.com", "example.com")
-	rcs[0].Type = "A"
-	rcs[0].MustSetTarget("1.2.3.4")
+	dc := models.MustNewDomainConfig("example.com")
+	dc.AddTestRC(t, dc.LabelFromShort("foo"), 0, dnsv2.TypeA, "1.2.3.4")
 
-	ns := recordsToNative(rcs, "example.com")
+	ns := recordsToNative(dc.Records, "example.com")
 
 	if len(ns) != 1 {
 		t.Errorf("len(ns) != 1; got=%v", len(ns))
@@ -23,15 +22,11 @@ func TestRecordsToNative_1(t *testing.T) {
 }
 
 func TestRecordsToNative_2(t *testing.T) {
-	rcs := []*models.RecordConfig{{}, {}}
-	rcs[0].SetLabelFromFQDN("foo.example.com", "example.com")
-	rcs[0].Type = "A"
-	rcs[0].MustSetTarget("1.2.3.4")
-	rcs[1].SetLabelFromFQDN("foo.example.com", "example.com")
-	rcs[1].Type = "A"
-	rcs[1].MustSetTarget("5.6.7.8")
+	dc := models.MustNewDomainConfig("example.com")
+	dc.AddTestRC(t, dc.LabelFromShort("foo"), 0, dnsv2.TypeA, "1.2.3.4")
+	dc.AddTestRC(t, dc.LabelFromShort("foo"), 0, dnsv2.TypeA, "5.6.7.8")
 
-	ns := recordsToNative(rcs, "example.com")
+	ns := recordsToNative(dc.Records, "example.com")
 
 	if len(ns) != 1 {
 		t.Errorf("len(ns) != 1; got=%v", len(ns))
