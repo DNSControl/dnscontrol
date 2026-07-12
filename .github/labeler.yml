@@ -148,6 +148,9 @@ provider-NS1:
 provider-OPENSRS:
   - changed-files:
       - any-glob-to-any-file: providers/opensrs/**
+provider-OPENWRT:
+  - changed-files:
+      - any-glob-to-any-file: providers/openwrt/**
 provider-ORACLE:
   - changed-files:
       - any-glob-to-any-file: providers/oracle/**
