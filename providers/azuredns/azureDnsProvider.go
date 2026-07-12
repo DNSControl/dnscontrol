@@ -261,8 +261,7 @@ func (a *azurednsProvider) getNameNonDefaultNameServers(domain string, nss []str
 
 		if recordsErr != nil {
 			err := recordsErr
-			var e *azcore.ResponseError
-			if errors.As(err, &e) {
+			if e, ok := errors.AsType[*azcore.ResponseError](err); ok {
 				if e.StatusCode == http.StatusTooManyRequests {
 					waitTime = waitTime * 2
 					if waitTime > 300 {
@@ -698,8 +697,7 @@ func (a *azurednsProvider) fetchRecordSets(zoneName string) ([]*adns.RecordSet, 
 
 		if recordsErr != nil {
 			err := recordsErr
-			var e *azcore.ResponseError
-			if errors.As(err, &e) {
+			if e, ok := errors.AsType[*azcore.ResponseError](err); ok {
 				if e.StatusCode == http.StatusTooManyRequests {
 					waitTime = waitTime * 2
 					if waitTime > 300 {

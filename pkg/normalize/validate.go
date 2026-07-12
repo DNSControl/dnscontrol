@@ -349,8 +349,8 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 
 // deleteImportTransformRecords deletes any IMPORT_TRANSFORM records from a domain.
 func deleteImportTransformRecords(domain *models.DomainConfig) {
-	for i := len(domain.Records) - 1; i >= 0; i-- {
-		rec := domain.Records[i]
+	for i, rec := range slices.Backward(domain.Records) {
+
 		if rec.Type == "IMPORT_TRANSFORM" {
 			domain.Records = append(domain.Records[:i], domain.Records[i+1:]...)
 		}

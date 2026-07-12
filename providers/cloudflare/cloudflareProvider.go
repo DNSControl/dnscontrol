@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/netip"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -573,8 +574,8 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 	// A and CNAMEs: Validate. If null, set to default.
 	// else: Make sure it wasn't set.  Set to default.
 	// iterate backwards so first defined page rules have highest priority
-	for i := len(dc.Records) - 1; i >= 0; i-- {
-		rec := dc.Records[i]
+	for _, rec := range slices.Backward(dc.Records) {
+
 		if rec.Metadata == nil {
 			rec.Metadata = map[string]string{}
 		}

@@ -346,8 +346,7 @@ func (c *cloudflareProvider) getUniversalSSL(domainID string) (bool, error) {
 func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id string) ([]*models.RecordConfig, error) {
 	rules, err := c.cfClient.GetEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(id), "http_request_dynamic_redirect")
 	if err != nil {
-		var e *cloudflare.NotFoundError
-		if errors.As(err, &e) {
+		if _, ok := errors.AsType[*cloudflare.NotFoundError](err); ok {
 			return []*models.RecordConfig{}, nil
 		}
 		return nil, fmt.Errorf("failed fetching redirect rule list cloudflare: %w (%T)", err, err)

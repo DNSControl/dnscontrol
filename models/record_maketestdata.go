@@ -29,9 +29,9 @@ func (dc *DomainConfig) MustNewRecordConfigParse(name string, ttl uint32, typeAn
 	return rc
 }
 
-// AddTestRC() is a convenience function that uses
-// models.NewRecordConfig() to create a models.RecordConfig and adds it to
-// a models.DomainConfig. It is for use in unit tests.
+// AddTestRC is a convenience function that uses models.NewRecordConfig() to
+// create a models.RecordConfig and adds it to a models.DomainConfig. It is for
+// use in unit tests.
 // It panics on error.
 // It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
 func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNum uint16, args ...any) *RecordConfig {
@@ -45,7 +45,7 @@ func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNu
 	return rc
 }
 
-// AddTestRCParse() is a convenience function that uses
+// AddTestRCParse is a convenience function that uses
 // models.NewRecordConfigParse() to create a models.RecordConfig and adds it to
 // a models.DomainConfig. It is for use in unit tests.
 // It panics on error.

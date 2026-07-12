@@ -675,8 +675,7 @@ func getTargetRecordPriority(rc *models.RecordConfig) int {
 // wrapError converts a DNSimple API ErrorResponse into a compiled error message,
 // or returns the original error if it is not an ErrorResponse.
 func wrapError(err error) error {
-	var errorResponse *dnsimpleapi.ErrorResponse
-	if errors.As(err, &errorResponse) {
+	if errorResponse, ok := errors.AsType[*dnsimpleapi.ErrorResponse](err); ok {
 		return compileAttributeErrors(errorResponse)
 	}
 	return err
