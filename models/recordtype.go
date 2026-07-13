@@ -15,15 +15,15 @@ import (
 // require extra steps.
 func (rc *RecordConfig) ChangeType(newType string, _ string) {
 
+	// Change the Type/TypeNum
 	rc.Type = newType
-
-	//
-	rc.rdata = nil
-	rc.ComparableV3 = ""
-
 	tn, err := dnsutilv2.StringToType(rc.Type)
 	if err != nil {
 		panic(fmt.Sprintf("BUG: ChangeType: Unknown type %s", rc.Type))
 	}
 	rc.TypeNum = tn
+
+	// Clear out anything that will need to be fixed.
+	rc.rdata = nil
+	rc.ComparableV3 = ""
 }
