@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 // DNS Made Easy does not allow the system name servers to be edited, and said records appear to always have a fixed TTL of 86400.
@@ -124,8 +125,15 @@ type recordRequestData struct {
 }
 
 func toRecordConfig(domain string, record *recordResponseDataEntry) *models.RecordConfig {
+	recordType := record.Type
+	if recordType == "ANAME" {
+		// ANAME is DNS Made Easy's name for ALIAS (inverse of the ALIAS->ANAME
+		// conversion in GetZoneRecordsCorrections).
+		recordType = "ALIAS"
+	}
+
 	rc := &models.RecordConfig{
-		Type:     record.Type,
+		Type:     recordType,
 		TTL:      uint32(record.TTL),
 		Original: record,
 	}
@@ -133,7 +141,7 @@ func toRecordConfig(domain string, record *recordResponseDataEntry) *models.Reco
 	rc.SetLabel(record.Name, domain)
 
 	var err error
-	switch record.Type {
+	switch recordType {
 	case "MX":
 		err = rc.SetTargetMX(uint16(record.MxLevel), record.Value)
 	case "SRV":
@@ -145,7 +153,7 @@ func toRecordConfig(domain string, record *recordResponseDataEntry) *models.Reco
 		}
 		err = rc.SetTargetCAA(uint8(record.IssuerCritical), record.CaaType, value)
 	default:
-		err = rc.PopulateFromString(record.Type, record.Value, domain)
+		err = rc.PopulateFromStringFunc(recordType, record.Value, domain, txtutil.ParseQuoted)
 	}
 
 	if err != nil {
@@ -161,12 +169,21 @@ func fromRecordConfig(rc *models.RecordConfig) *recordRequestData {
 		label = ""
 	}
 
+	recordType := rc.Type
+	if recordType == "ALIAS" {
+		// ALIAS is called ANAME on DNS Made Easy. Converting on write only
+		// keeps the diff comparing ALIAS against ALIAS.
+		recordType = "ANAME"
+	}
+
 	record := &recordRequestData{
-		Type:        rc.Type,
+		Type:        recordType,
 		TTL:         int(rc.TTL),
 		GtdLocation: "DEFAULT",
 		Name:        label,
-		Value:       rc.GetTargetCombined(),
+		// DNS Made Easy stores TXT as opaque text and mangles multi-chunk
+		// values, so send the whole value as one quoted string.
+		Value: rc.GetTargetCombinedFunc(txtutil.EncodeSingle),
 	}
 
 	switch record.Type {
