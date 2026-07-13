@@ -112,6 +112,7 @@ jobs:
       HUAWEICLOUD_DOMAIN: ${{ vars.HUAWEICLOUD_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
+      LUADNS_DOMAIN: ${{ vars.LUADNS_DOMAIN }}
       MIKROTIK_DOMAIN: ${{ vars.MIKROTIK_DOMAIN }}
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
@@ -206,6 +207,9 @@ jobs:
       JOKER_PASSWORD: ${{ secrets.JOKER_PASSWORD }}
       #
       LINODE_TOKEN: ${{ secrets.LINODE_TOKEN }}
+      #
+      LUADNS_EMAIL: ${{ secrets.LUADNS_EMAIL }}
+      LUADNS_APIKEY: ${{ secrets.LUADNS_APIKEY }}
       #
       MIKROTIK_HOST: ${{ secrets.MIKROTIK_HOST }}
       MIKROTIK_USERNAME: ${{ secrets.MIKROTIK_USERNAME }}
