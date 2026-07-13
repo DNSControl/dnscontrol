@@ -45,7 +45,7 @@ func init() {
 		DisplayName: "DNS Made Easy",
 		Kind:        providers.KindDNS,
 		DocsURL:     "https://docs.dnscontrol.org/provider/dnsmadeeasy",
-		PortalURL:   "https://dnsmadeeasy.com/account/info", // TODO: Verify
+		PortalURL:   "https://cp.dnsmadeeasy.com/",
 		Fields: []providers.CredsField{
 			{
 				Key:      "api_key",
