@@ -7,9 +7,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
 )
 
-// AddTestRC is a convenience function that uses models.NewRecordConfig() to
-// create a models.RecordConfig and adds it to a models.DomainConfig. It is for
-// use in unit tests.
+// AddTestRC is a convenience function that uses
+// models.NewRecordConfig() to create a models.RecordConfig and adds it to
+// a models.DomainConfig. It is for use in unit tests.
 // It panics on error.
 // It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
 // If this is not a test, consider dc.AddRecordConfig().
@@ -30,6 +30,7 @@ func (dc *DomainConfig) AddTestRC(t *testing.T, label string, ttl uint32, typeNu
 // It panics on error.
 // It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
 // If this is not a test, consider dc.AddRecordConfig().
+// It returns a pointer to the newly-created RecordConfig, and adds it to rc.Records.
 func (dc *DomainConfig) AddTestRCParse(label string, ttl uint32, typeNum uint16, contents string) *RecordConfig {
 	rc, err := dc.NewRecordConfigParse(label, ttl, typeNum, contents)
 	if err != nil {
