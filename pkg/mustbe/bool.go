@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Bool converts to a bool.
 func Bool(a any) bool {
 	switch v := a.(type) {
 	case bool:
@@ -22,6 +23,7 @@ func Bool(a any) bool {
 	panic(fmt.Sprintf("Bool: unhandled type: %T", a))
 }
 
+// Bool converts to a string that is either `true` or `false`.
 func BoolString(a any) string {
 	return fmt.Sprintf("%t", Bool(a))
 }

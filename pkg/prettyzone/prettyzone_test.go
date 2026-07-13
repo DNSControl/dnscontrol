@@ -47,7 +47,7 @@ func parseAndRegen(t *testing.T, buf *bytes.Buffer, expected string) {
 
 // rrstoRCs converts []dns.RR to []RecordConfigs.
 func rrstoRCs(rrs []dnsv2.RR, origin string) (models.Records, error) {
-	dc, _ := models.NewDomainConfig(origin)
+	dc := models.MustNewDomainConfig(origin)
 	rcs := make(models.Records, 0, len(rrs))
 	for _, r := range rrs {
 		rc, err := dnsrr.RRv2toRC(dc, r)
@@ -399,7 +399,7 @@ x                IN CNAME bosun.org.
 `
 
 func TestWriteZoneFileSynth(t *testing.T) {
-	dc, _ := models.NewDomainConfig("bosun.org")
+	dc := models.MustNewDomainConfig("bosun.org")
 	_ = dc
 
 	//t.FailNow()

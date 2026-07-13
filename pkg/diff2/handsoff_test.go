@@ -48,7 +48,7 @@ func showRecs(recs models.Records) string {
 
 func handsoffHelper(t *testing.T, existingZone, desiredJs string, noPurge bool, resultWanted string) {
 	t.Helper()
-	dc1, _ := models.NewDomainConfig("f.com")
+	dc1 := models.MustNewDomainConfig("f.com")
 
 	existing, err := parseZoneContents(existingZone, dc1, "no_file_name")
 	if err != nil {

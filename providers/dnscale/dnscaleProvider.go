@@ -53,6 +53,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "dnscale",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/dnscale",
+		PortalURL:   "https://dnscale.net/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "Your dnscale API key.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // dnscaleProvider represents the DNScale DNSServiceProvider.

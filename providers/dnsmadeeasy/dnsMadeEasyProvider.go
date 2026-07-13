@@ -41,6 +41,33 @@ func init() {
 
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "DNS Made Easy",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/dnsmadeeasy",
+		PortalURL:   "https://dnsmadeeasy.com/account/info", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "Your DNS Made Easy API key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "secret_key",
+				Label:    "Secret key",
+				Help:     "Your DNS Made Easy secret key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "sandbox",
+				Label: "Use sandbox (optional)",
+				Help:  "Set to any non-empty value to use the DNS Made Easy sandbox API instead of production.",
+			},
+		},
+	})
 }
 
 // New creates a new API handle.

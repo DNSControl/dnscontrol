@@ -15,12 +15,12 @@ func makeRC(label, domain, target string, rc models.RecordConfig) *models.Record
 func TestImportTransform(t *testing.T) {
 	const transformDouble = "0.0.0.0~1.1.1.1~~9.0.0.0,10.0.0.0"
 	const transformSingle = "0.0.0.0~1.1.1.1~~8.0.0.0"
-	src, _ := models.NewDomainConfig("stackexchange.com")
+	src := models.MustNewDomainConfig("stackexchange.com")
 	src.Records = []*models.RecordConfig{
 		makeRC("*", "stackexchange.com", "0.0.2.2", models.RecordConfig{Type: "A"}),
 		makeRC("www", "stackexchange.com", "0.0.1.1", models.RecordConfig{Type: "A"}),
 	}
-	dst, _ := models.NewDomainConfig("internal")
+	dst := models.MustNewDomainConfig("internal")
 	dst.Records = []*models.RecordConfig{
 		makeRC("*.stackexchange.com", "*.stackexchange.com.internal", "0.0.3.3", models.RecordConfig{Type: "A", Metadata: map[string]string{"transform_table": transformSingle}}),
 		makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM", Metadata: map[string]string{"transform_table": transformDouble}}),

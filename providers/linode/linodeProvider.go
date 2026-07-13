@@ -111,6 +111,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Linode",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/linode",
+		PortalURL:   "https://cloud.linode.com/profile/tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "token",
+				Label:    "API token",
+				Help:     "Your Linode Personal Access Token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
