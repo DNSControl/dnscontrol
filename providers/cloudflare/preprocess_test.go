@@ -5,18 +5,16 @@ import (
 	"strings"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 )
 
 func makeRCmeta(meta map[string]string) *models.RecordConfig {
-	rc := models.RecordConfig{
-		Type:     "A",
-		Metadata: meta,
-	}
-	rc.SetLabel("foo", "example.tld")
-	rc.MustSetTarget("1.2.3.4")
-	return &rc
+	dc := models.MustNewDomainConfig("example.tld")
+	rc := dc.MustNewRecordConfig(dc.LabelFromShort("foo"), 0, dnsv2.TypeA, "1.2.3.4")
+	rc.Metadata = meta
+	return rc
 }
 
 func TestPreprocess_BoolValidation(t *testing.T) {
@@ -43,9 +41,11 @@ func TestPreprocess_BoolValidation(t *testing.T) {
 
 func TestPreprocess_BoolValidation_Fails(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := models.MustNewDomainConfig("test.com")
-	domain.Records = append(domain.Records, &models.RecordConfig{Metadata: map[string]string{metaProxy: "true"}})
-	err := cf.preprocessConfig(domain)
+	dc := models.MustNewDomainConfig("test.com")
+	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
+	rc.Metadata = map[string]string{metaProxy: "true"}
+	dc.AddRecordConfig(rc)
+	err := cf.preprocessConfig(dc)
 	if err == nil {
 		t.Fatal("Expected validation error, but got none")
 	}
@@ -82,15 +82,11 @@ func TestPreprocess_DefaultProxy_Validation(t *testing.T) {
 
 func TestPreprocess_CNAMEFlattenProxyMutualExclusion(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := models.MustNewDomainConfig("test.com")
-	rec := &models.RecordConfig{
-		Type:     "CNAME",
-		Metadata: map[string]string{metaCNAMEFlatten: "on", metaProxy: "on"},
-	}
-	rec.SetLabel("foo", "test.com")
-	rec.MustSetTarget("example.com.")
-	domain.Records = append(domain.Records, rec)
-	err := cf.preprocessConfig(domain)
+	dc := models.MustNewDomainConfig("test.com")
+	rc := dc.MustNewRecordConfig(dc.LabelFromShort("foo"), 0, dnsv2.TypeCNAME, "example.com.")
+	rc.Metadata = map[string]string{metaCNAMEFlatten: "on", metaProxy: "on"}
+	dc.AddRecordConfig(rc)
+	err := cf.preprocessConfig(dc)
 	if err == nil {
 		t.Fatal("Expected validation error for CNAME with both flatten and proxy, but got none")
 	}
@@ -282,7 +278,7 @@ func TestIpRewriting(t *testing.T) {
 		{"1.2.3.4", "255.255.255.4", "full"},
 	}
 	cf := &cloudflareProvider{}
-	domain := models.MustNewDomainConfig("test.com")
+	dc := models.MustNewDomainConfig("test.com")
 	cf.ipConversions = []transform.IPConversion{{
 		Low:      netip.MustParseAddr("1.2.3.0"),
 		High:     netip.MustParseAddr("1.2.3.40"),
@@ -290,16 +286,16 @@ func TestIpRewriting(t *testing.T) {
 		NewIPs:   nil,
 	}}
 	for _, tst := range tests {
-		rec := &models.RecordConfig{Type: "A", Metadata: map[string]string{metaProxy: tst.Proxy}}
-		rec.MustSetTarget(tst.Given)
-		domain.Records = append(domain.Records, rec)
+		rec := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, tst.Given)
+		rec.Metadata = map[string]string{metaProxy: tst.Proxy}
+		dc.AddRecordConfig(rec)
 	}
-	err := cf.preprocessConfig(domain)
+	err := cf.preprocessConfig(dc)
 	if err != nil {
 		t.Fatal(err)
 	}
 	for i, tst := range tests {
-		rec := domain.Records[i]
+		rec := dc.Records[i]
 		if rec.GetTargetField() != tst.Expected {
 			t.Fatalf("At index %d, expected target of %s, but found %s.", i, tst.Expected, rec.GetTargetField())
 		}

@@ -53,6 +53,9 @@ types:
       - name: ""
         values:
           Target: example.com.
+      - name: "a"
+        values:
+          Target: example
 
   - name: Azure_Alias
     codepoint: 65286

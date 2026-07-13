@@ -37,14 +37,14 @@ func (c *cloudflareProvider) fetchAllZones() (map[string]cloudflare.Zone, error)
 }
 
 // get all records for a domain.
-func (c *cloudflareProvider) getRecordsForDomain(id string, domain string) ([]*models.RecordConfig, error) {
-	records := []*models.RecordConfig{}
+func (c *cloudflareProvider) getRecordsForDomain(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+	var records models.Records
 	rrs, _, err := c.cfClient.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListDNSRecordsParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed fetching record list from cloudflare(%q): %w", c.cfClient.APIEmail, err)
 	}
 	for _, rec := range rrs {
-		rt, err := c.nativeToRecord(domain, rec)
+		rt, err := c.nativeToRecord(dc, rec)
 		if err != nil {
 			return nil, err
 		}
@@ -347,12 +347,12 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 	rules, err := c.cfClient.GetEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(id), "http_request_dynamic_redirect")
 	if err != nil {
 		if _, ok := errors.AsType[*cloudflare.NotFoundError](err); ok {
-			return []*models.RecordConfig{}, nil
+			return nil, nil
 		}
 		return nil, fmt.Errorf("failed fetching redirect rule list cloudflare: %w (%T)", err, err)
 	}
 
-	recs := []*models.RecordConfig{}
+	var recs models.Records
 	for _, pr := range rules.Rules {
 		thisPr := pr
 
@@ -445,27 +445,28 @@ func (c *cloudflareProvider) updateSingleRedirect(domainID string, oldrec, newre
 	return c.createSingleRedirect(domainID, newrec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT))
 }
 
-func (c *cloudflareProvider) getWorkerRoutes(id string, domain string) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
 	res, err := c.cfClient.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListWorkerRoutesParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed fetching worker route list cloudflare: %w", err)
 	}
 
-	recs := []*models.RecordConfig{}
+	// 	err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
+	// 		pr.Pattern,
+	// 		pr.ScriptName))
+
+	var recs models.Records
 	for _, pr := range res.Routes {
 		thisPr := pr
-		r := &models.RecordConfig{
-			Type:     "CF_WORKER_ROUTE",
-			Original: thisPr,
-			TTL:      1,
-		}
-		r.SetLabel("@", domain)
-		err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
-			pr.Pattern,
-			pr.ScriptName))
+
+		r, err := dc.NewRecordConfig("@", 1, privatetypes.TypeCFWORKERROUTE, pr.Pattern, pr.ScriptName)
 		if err != nil {
 			return nil, err
 		}
+		r.Original = thisPr
+		// 	err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
+		// 		pr.Pattern,
+		// 		pr.ScriptName))
 
 		recs = append(recs, r)
 	}

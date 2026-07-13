@@ -1,5 +1,11 @@
 package models
 
+import (
+	"fmt"
+
+	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+)
+
 // ChangeType converts rc to an rc of type newType.  This is only needed when
 // converting from one type to another. Do not use this when initializing a new
 // record.
@@ -11,4 +17,13 @@ func (rc *RecordConfig) ChangeType(newType string, _ string) {
 
 	rc.Type = newType
 
+	//
+	rc.rdata = nil
+	rc.ComparableV3 = ""
+
+	tn, err := dnsutilv2.StringToType(rc.Type)
+	if err != nil {
+		panic(fmt.Sprintf("BUG: ChangeType: Unknown type %s", rc.Type))
+	}
+	rc.TypeNum = tn
 }
