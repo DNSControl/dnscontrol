@@ -36,7 +36,7 @@ func (rr *AKAMAICDN) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *AKAMAICDN) Data() dnsv2.RDATA {
-	return &privatetypesrdata.AKAMAICDN{Target: rr.Target}
+	return privatetypesrdata.AKAMAICDN{Target: rr.Target}
 }
 func (rr *AKAMAICDN) Clone() dnsv2.RR {
 	return &AKAMAICDN{

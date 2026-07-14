@@ -37,7 +37,7 @@ func (rr *AZUREALIAS) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *AZUREALIAS) Data() dnsv2.RDATA {
-	return &privatetypesrdata.AZUREALIAS{AliasType: rr.AliasType, Target: rr.Target}
+	return privatetypesrdata.AZUREALIAS{AliasType: rr.AliasType, Target: rr.Target}
 }
 func (rr *AZUREALIAS) Clone() dnsv2.RR {
 	return &AZUREALIAS{

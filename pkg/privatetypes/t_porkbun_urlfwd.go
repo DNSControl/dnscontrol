@@ -36,7 +36,7 @@ func (rr *PORKBUNURLFWD) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *PORKBUNURLFWD) Data() dnsv2.RDATA {
-	return &privatetypesrdata.PORKBUNURLFWD{Location: rr.Location}
+	return privatetypesrdata.PORKBUNURLFWD{Location: rr.Location}
 }
 func (rr *PORKBUNURLFWD) Clone() dnsv2.RR {
 	return &PORKBUNURLFWD{

@@ -314,7 +314,7 @@ func generateTypeFile(t *TypeDef) error {
 	if len(t.Fields) == 0 && len(t.RuntimeFields) == 0 {
 		fmt.Fprintf(&buf, "\treturn nil\n")
 	} else {
-		fmt.Fprintf(&buf, "\treturn &privatetypesrdata.%s{", typeName)
+		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{", typeName)
 		for i, f := range append(t.Fields, t.RuntimeFields...) {
 			if i > 0 {
 				buf.WriteString(", ")

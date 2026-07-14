@@ -36,7 +36,7 @@ func (rr *MIKROTIKFWD) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *MIKROTIKFWD) Data() dnsv2.RDATA {
-	return &privatetypesrdata.MIKROTIKFWD{ForwardTo: rr.ForwardTo}
+	return privatetypesrdata.MIKROTIKFWD{ForwardTo: rr.ForwardTo}
 }
 func (rr *MIKROTIKFWD) Clone() dnsv2.RR {
 	return &MIKROTIKFWD{

@@ -36,7 +36,7 @@ func (rr *CLOUDNSWR) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *CLOUDNSWR) Data() dnsv2.RDATA {
-	return &privatetypesrdata.CLOUDNSWR{Target: rr.Target}
+	return privatetypesrdata.CLOUDNSWR{Target: rr.Target}
 }
 func (rr *CLOUDNSWR) Clone() dnsv2.RR {
 	return &CLOUDNSWR{

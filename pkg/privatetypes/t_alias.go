@@ -36,7 +36,7 @@ func (rr *ALIAS) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *ALIAS) Data() dnsv2.RDATA {
-	return &privatetypesrdata.ALIAS{Target: rr.Target}
+	return privatetypesrdata.ALIAS{Target: rr.Target}
 }
 func (rr *ALIAS) Clone() dnsv2.RR {
 	return &ALIAS{

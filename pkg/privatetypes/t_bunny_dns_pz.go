@@ -36,7 +36,7 @@ func (rr *BUNNYDNSPZ) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *BUNNYDNSPZ) Data() dnsv2.RDATA {
-	return &privatetypesrdata.BUNNYDNSPZ{PullZoneID: rr.PullZoneID}
+	return privatetypesrdata.BUNNYDNSPZ{PullZoneID: rr.PullZoneID}
 }
 func (rr *BUNNYDNSPZ) Clone() dnsv2.RR {
 	return &BUNNYDNSPZ{

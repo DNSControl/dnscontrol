@@ -37,7 +37,7 @@ func (rr *CFWORKERROUTE) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *CFWORKERROUTE) Data() dnsv2.RDATA {
-	return &privatetypesrdata.CFWORKERROUTE{When: rr.When, Then: rr.Then}
+	return privatetypesrdata.CFWORKERROUTE{When: rr.When, Then: rr.Then}
 }
 func (rr *CFWORKERROUTE) Clone() dnsv2.RR {
 	return &CFWORKERROUTE{

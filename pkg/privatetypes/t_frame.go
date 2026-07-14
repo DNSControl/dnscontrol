@@ -36,7 +36,7 @@ func (rr *FRAME) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *FRAME) Data() dnsv2.RDATA {
-	return &privatetypesrdata.FRAME{Target: rr.Target}
+	return privatetypesrdata.FRAME{Target: rr.Target}
 }
 func (rr *FRAME) Clone() dnsv2.RR {
 	return &FRAME{

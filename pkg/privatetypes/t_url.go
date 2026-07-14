@@ -36,7 +36,7 @@ func (rr *URL) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *URL) Data() dnsv2.RDATA {
-	return &privatetypesrdata.URL{Location: rr.Location}
+	return privatetypesrdata.URL{Location: rr.Location}
 }
 func (rr *URL) Clone() dnsv2.RR {
 	return &URL{

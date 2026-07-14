@@ -39,7 +39,7 @@ func (rr *R53ALIAS) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *R53ALIAS) Data() dnsv2.RDATA {
-	return &privatetypesrdata.R53ALIAS{AliasType: rr.AliasType, Target: rr.Target}
+	return privatetypesrdata.R53ALIAS{AliasType: rr.AliasType, Target: rr.Target}
 }
 func (rr *R53ALIAS) Clone() dnsv2.RR {
 	return &R53ALIAS{
