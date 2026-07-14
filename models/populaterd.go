@@ -27,7 +27,7 @@ func (rc *RecordConfig) RecomputeV3Fields(origin string) {
 // FixRD populates the "V3 Fields": .TypeNum, .RDATA and .ComparableV3. It is non-destructive for .RDATA and .ComparableV3 if those are non-nil.
 func (rc *RecordConfig) FixRD(origin string) {
 
-	fmt.Printf("DEBUG: FixRD: %s\n", rc.String())
+	// fmt.Printf("DEBUG: FixRD: %s\n", rc.String())
 	rc.fixTypeNum()
 
 	// Populate .RDATA if needed:
@@ -46,7 +46,7 @@ func (rc *RecordConfig) fixTypeNum() {
 	if rc.Type != "IGNORE" {
 		fmt.Printf("here\n")
 	}
-	fmt.Printf("DEBUG: fixTypeNum(%q)\n", rc.Type)
+	// fmt.Printf("DEBUG: fixTypeNum(%q)\n", rc.Type)
 	switch rc.Type {
 	case "IGNORE":
 		return
@@ -60,7 +60,7 @@ func (rc *RecordConfig) fixTypeNum() {
 		}
 		rc.TypeNum = tn
 	}
-	fmt.Printf("DEBUG: fixTypeNum(%q) = %d\n", rc.Type, rc.TypeNum)
+	// fmt.Printf("DEBUG: fixTypeNum(%q) = %d\n", rc.Type, rc.TypeNum)
 }
 
 // RegenerateComparableV3 generates or regenerates the .ComparableV3 field from the current .RDATA. It does not modify .RDATA.

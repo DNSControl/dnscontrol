@@ -6,6 +6,12 @@ func ToChunks(s string) []string {
 }
 
 func splitChunks(buf string, lim int) []string {
+	if len(buf) == 0 {
+		return []string{}
+	}
+	if len(buf) < lim {
+		return []string{buf}
+	}
 	var chunk string
 	chunks := make([]string, 0, len(buf)/lim+1)
 	for len(buf) >= lim {
