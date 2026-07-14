@@ -42,8 +42,6 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 			if err != nil {
 				return nil, fmt.Errorf("unparsable TXT received from gandi: %w", err)
 			}
-			fmt.Printf("DEBUG: OTXT=%s\n", value)
-			fmt.Printf("DEBUG: NTXT=%s\n", decoded)
 			rc, err = dc.NewRecordConfig(dc.LabelFromShort(n.RrsetName), uint32(n.RrsetTTL), dnsv2.TypeTXT, decoded)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi (txt): %w", err)

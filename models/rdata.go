@@ -59,10 +59,6 @@ func (rc *RecordConfig) validateRDATA() {
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
-	// if privatetypes.IsPrivateType(typeNum) {
-	// 	panic()
-	// }
-
 	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
 		return nil, err
