@@ -99,7 +99,7 @@ If a domain does not exist in your DNScale account, DNSControl will automaticall
 
 For more information about the DNScale API, see the [DNScale API documentation](https://dnscale.eu/api/overview).
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

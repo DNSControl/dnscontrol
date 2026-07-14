@@ -40,7 +40,7 @@ The default TTL is not automatically fetched, as the API does not provide such a
 
 The RWTH deploys zones every 15 minutes, so it might take some time for changes to take effect.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

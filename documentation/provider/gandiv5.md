@@ -104,7 +104,7 @@ Set `GANDI_V5_DEBUG` environment variable to a [boolean-compatible](https://pkg.
 ### Testing
 Set `apiurl` key to the endpoint url for the sandbox (https://api.sandbox.gandi.net/), along with corresponding `token` (or (deprecated) `apikey`) created in this sandbox environment (Cf https://api.sandbox.gandi.net/docs/sandbox/) to make all API calls against Gandi sandbox environment.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

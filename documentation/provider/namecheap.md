@@ -70,7 +70,7 @@ D("example.com", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
 ## Activation
 In order to activate API functionality on your Namecheap account, you must enable it for your account and wait for their review process. More information on enabling API access is [located here](https://www.namecheap.com/support/api/intro.aspx).
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

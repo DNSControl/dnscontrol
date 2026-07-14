@@ -18,7 +18,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_OPENSRS),
 ```
 {% endcode %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

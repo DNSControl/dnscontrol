@@ -155,7 +155,7 @@ Invalid base64 string: [input] (key: ech)
 
 The detail of Vercel's validation process is unknown, thus we can not support static validation for `dnscontrol check` or `dnscontrol preview`. You should use `ech=` with caution.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -102,7 +102,7 @@ D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
 **NOTE**: The legacy `PORKBUN_URLFWD` record type is deprecated. Please use `URL` or `URL301` instead.
 {% endhint %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -55,7 +55,7 @@ You will see an error message behind displayed, such as below, but it can be saf
 WARNING: Oracle Cloud forces TTL=86400 for NS records. Ignoring configured TTL of 300 for ns1.p201.dns.oraclecloud.net.
 ```
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

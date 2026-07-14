@@ -346,7 +346,7 @@ Created zone: example_3.com
   GroupId: NNNNN
 ```
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

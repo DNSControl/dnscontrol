@@ -37,7 +37,7 @@ Netcup does not allow any TTLs to be set for individual records. Thus in
 the diff/preview it will always show a TTL of 0. `NS` records are also
 not currently supported.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

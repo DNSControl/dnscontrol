@@ -95,7 +95,7 @@ When running integration tests, this error means you included the `https://` in 
 
 In production, the `apiurl` setting in `creds.json` needs to be adjusted. You can simply leave this option out and use the default, which is correct. If you are using the EO&T system, leave the protocol (`http://`) off the URL.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

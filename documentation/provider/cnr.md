@@ -111,7 +111,7 @@ If a dnszone does not exist in your CNR account, DNSControl will *not* automatic
 
 As shown in the configuration examples above, this can be activated on demand and it can be used to check the API commands send to our system. In general this is thought for our purpose to have an easy way to dive into issues. But if you're interested what's going on, feel free to activate it.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

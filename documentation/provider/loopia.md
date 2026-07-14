@@ -188,7 +188,7 @@ If a dnszone does not exist in your LOOPIA account, DNSControl will *not* automa
 
 As shown in the configuration examples above, this can be activated on demand and it can be used to check the API commands sent to Loopia.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

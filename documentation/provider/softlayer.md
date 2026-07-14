@@ -58,7 +58,7 @@ D("example.com", REG_NONE, DnsProvider(SOFTLAYER),
 ```
 {% endcode %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

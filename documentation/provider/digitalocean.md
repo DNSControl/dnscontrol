@@ -73,7 +73,7 @@ Since `SOA` record support is so limited we do not provide the option to update 
 - While Digitalocean DNS supports TXT records with multiple strings,
   their length is limited by the max API request of 512 octets.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

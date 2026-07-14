@@ -125,7 +125,7 @@ DNSControl will audit and reject records that violate these constraints.
 
 If a domain does not exist in your Alibaba Cloud account, you must create it manually through the Alibaba Cloud console. DNSControl does not automatically create new domains for this provider.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

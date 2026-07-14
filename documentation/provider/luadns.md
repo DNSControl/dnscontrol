@@ -43,7 +43,7 @@ This is not the case if you are using vanity nameservers.
 - This provider does not currently support the "FORWARD" and "REDIRECT" record types.
 - The API is available on the LuaDNS free plan, but due to the limit of 30 records, some tests will fail when doing integration tests.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

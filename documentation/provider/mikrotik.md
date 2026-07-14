@@ -167,7 +167,7 @@ This provider uses the RouterOS REST API endpoints:
 
 Records are compared using `diff2.ByRecord()` with custom comparison functions that include metadata fields (`match_subdomain`, `regexp`, `address_list`, `comment`) so that metadata-only changes are properly detected.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

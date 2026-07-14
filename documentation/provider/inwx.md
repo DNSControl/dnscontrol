@@ -114,7 +114,7 @@ D("example.com", REG_INWX, DnsProvider(DSP_CF),
 
 INWX enforces the [RFC 7505](https://www.rfc-editor.org/rfc/rfc7505.html#section-3) MUST NOT guidance regarding publishing both null MX and regular MX records. If a push would result in mixed null MX and regular MX records in the zone, the API responds with `FAILURE! (2308) Data management policy violation` and the record will not be persisted.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

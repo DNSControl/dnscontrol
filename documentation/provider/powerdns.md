@@ -129,7 +129,7 @@ instance. Note that you might want to have different SOAs for different
 zones, for example a very low `ttl` for Kubernetes (K8s) managed zones, this can
 be handled with an `if`-statement in the for loop. 
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

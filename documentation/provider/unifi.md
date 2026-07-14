@@ -187,7 +187,7 @@ If your UniFi controller uses a self-signed certificate, set `skip_tls_verify` t
 
 The provider does not support concurrent API operations. Changes are applied sequentially to ensure reliability.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -58,7 +58,7 @@ registrar's delegation (i.e. the `Name Server:` field in whois). In theory
 these are the same thing but there may be situations where they are not.
 {% endhint %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

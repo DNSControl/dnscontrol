@@ -75,7 +75,7 @@ The `HOSTINGDE` provider **ignores the default nameserver set** defined in your 
 Instead, it uses hosting.de's nameservers (`ns1.hosting.de.`, `ns2.hosting.de.`, and `ns3.hosting.de.`) by default, regardless of your account settings.
 Using the `default_ns` metadata, the default nameserver set can be overwritten.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

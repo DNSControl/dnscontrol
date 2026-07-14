@@ -47,7 +47,7 @@ D("example.com", REG_RTR, DnsProvider(DSP_RTR),
 ```
 {% endcode %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -40,7 +40,7 @@ D("example.com", REG_INTERNETBS,
 
 Pay attention, you need to define white list of IP for API. But you always can change it on `My Profile > Reseller Settings`
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

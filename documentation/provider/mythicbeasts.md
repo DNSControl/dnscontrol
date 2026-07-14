@@ -38,7 +38,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_MYTHIC),
 ```
 {% endcode %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

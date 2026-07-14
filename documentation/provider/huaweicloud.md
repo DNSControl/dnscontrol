@@ -105,7 +105,7 @@ If that doesn't work, log into Huaweicloud's website and open the [API Explorer]
 ## New domains
 If a domain does not exist in your Huawei Cloud account, DNSControl will automatically add it with the `push` command.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -40,7 +40,7 @@ DOMAIN_ELSEWHERE("example.com", REG_DYNADOT, [
 
 You must [enable the Dynadot API](https://www.dynadot.com/account/domain/setting/api.html) for your account and whitelist the IP address of the machine that will run DNSControl.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -37,7 +37,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_INFOMANIAK),
 ## Activation
 DNSControl depends on a Infomaniak account personal access token.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

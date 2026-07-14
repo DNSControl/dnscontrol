@@ -44,7 +44,7 @@ integration test suite can not be run in a single session. See
 
 Upon domain creation, the DNSKEY and DS records needed for DNSSEC setup are printed in the command output. If you need these values later, get them from the deSEC web interface or query deSEC nameservers for the CDS records. For example: `dig +short @ns1.desec.io example.com CDS` will return the published CDS records which can be used to insert the required DS records into the parent zone.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -43,7 +43,7 @@ D("example.com", REG_EASYNAME,
 
 You must enable API-Access for your account.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

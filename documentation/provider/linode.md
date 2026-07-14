@@ -59,7 +59,7 @@ seconds, but 300 seconds would stay 300 seconds.
 
 Linode requires [`SRV`](../language-reference/domain-modifiers/SRV.md) records to have a non-zero priority.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

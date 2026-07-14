@@ -60,7 +60,7 @@ Set `DNSMADEEASY_DEBUG_HTTP` environment variable to dump all API calls made by 
 ### Testing
 Set `sandbox` key to any non-empty value in credentials JSON alongside `api_key` and `secret_key` to make all API calls against DNS Made Easy sandbox environment.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

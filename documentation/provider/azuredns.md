@@ -214,7 +214,7 @@ If a domain does not exist in your Azure account, DNSControl will *not* automati
 
 The ResourceGroup is case sensitive.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

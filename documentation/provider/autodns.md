@@ -54,7 +54,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_AUTODNS),
 ```
 {% endcode %}
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

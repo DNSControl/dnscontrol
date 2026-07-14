@@ -91,7 +91,7 @@ END);
 - SVCB
 - TLSA
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

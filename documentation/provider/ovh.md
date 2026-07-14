@@ -143,7 +143,7 @@ OVH now allows to host DNS zone for a domain that is not registered in their reg
 * There may be a slight delay (1-10 minutes) before your modifications appear in the OVH Control Panel. However it seems that it's only cosmetic - the changes are indeed available at the DNS servers. You can confirm that the changes are taken into account by OVH by choosing "Change in text format", and see in the BIND compatible format that your changes are indeed there. And you can confirm by directly asking the DNS servers (e.g. with `dig`).
 * OVH enforces the [Restrictions on valid hostnames](https://en.wikipedia.org/wiki/Hostname#Syntax). A hostname with an underscore ("_") will cause the following error `FAILURE! OVHcloud API error (status code 400): Client::BadRequest: "Invalid domain name, underscore not allowed"`
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

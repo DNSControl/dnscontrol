@@ -132,7 +132,7 @@ This provider uses the FortiGate REST API (`/api/v2/cmdb/system/dns-database`) t
 
 Debug logging of HTTP traffic can be enabled with the `debug_http` flag.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

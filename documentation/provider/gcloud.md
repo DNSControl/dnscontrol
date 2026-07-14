@@ -163,7 +163,7 @@ You can test your `creds.json` entry with the command: `dnscontrol check-creds f
 * `Response: {"error":"invalid_grant","error_description":"Invalid grant: account not found"}`
   * Hint: `client_email` may be invalid.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -38,7 +38,7 @@ D("example.com", REG_DNSIMPLE, DnsProvider(DSP_VULTR),
 
 Vultr depends on a Vultr personal access token.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

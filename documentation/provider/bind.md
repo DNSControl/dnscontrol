@@ -129,7 +129,7 @@ dnscontrol get-zones --format=nameonly - BIND all
 
 If `filenameformat` is defined, `dnscontrol` makes a guess at which filenames are zones by reversing the logic of the format string. It doesn't try very hard to get this right, as getting it right in all situations is mathematically impossible.  Feel free to file an issue if find a situation where it doesn't work. I love a challenge!
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

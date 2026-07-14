@@ -61,7 +61,7 @@ See https://support.dnsimple.com/articles/txt-record/
 
 Set `DNSIMPLE_DEBUG_HTTP` environment variable to `1` to dump all API calls made by this provider.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

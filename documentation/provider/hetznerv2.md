@@ -48,7 +48,7 @@ Removing the Hetzner provided NS records at the root is not possible.
 
 Hetzner DNS API does not allow changing the SOA record via their API. There is an alternative method using an import of a full BIND file, but this approach does not play nice with incremental changes or ignored records. At this time you cannot update SOA records via DNSControl.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

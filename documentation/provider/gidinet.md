@@ -183,7 +183,7 @@ The provider supports listing all zones in your account via `dnscontrol get-zone
 
 The provider does not support concurrent API operations. Changes are applied sequentially to ensure reliability.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

@@ -41,7 +41,7 @@ DNSControl depends on a Netlify account personal access token.
 ## Caveats
 Empty MX records are not supported.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

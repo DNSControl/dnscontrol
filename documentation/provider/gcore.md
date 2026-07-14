@@ -155,7 +155,7 @@ DNSControl depends on a Gcore account API token.
 
 You can obtain your API token on this page: <https://accounts.gcore.com/profile/api-tokens>
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

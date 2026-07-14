@@ -315,7 +315,7 @@ IncompleteSignature: 'ABCDEFGHIJKLMNOPQRST/20200118/us-east-1/route53/aws4_reque
 
 This means a space is present in one or more of the credential values.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

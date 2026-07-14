@@ -86,7 +86,7 @@ The limitations not described in that manual are:
     * example
     * exampleN, where N is a numerical character
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type

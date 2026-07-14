@@ -45,7 +45,7 @@ D("example.com", REG_CSCGLOBAL, DnsProvider(DSP_BIND),
 ## Activation
 To get access to the [CSC Global API](https://www.cscglobal.com/cscglobal/docs/dbs/domainmanager/api-v2/) contact your account manager.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type
