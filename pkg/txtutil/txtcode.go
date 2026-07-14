@@ -1,5 +1,3 @@
-//go:generate go tool stringer -type=State
-
 package txtutil
 
 import (
