@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"strings"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
@@ -124,10 +123,6 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 		}
 
 		// the remaining line
-		if rr.Type == "TXT" && hasback(rr) {
-			fmt.Printf("DEBUG: Combinedt   =%s\n", rr.GetTargetCombinedFunc(txtutil.EncodeQuoted))
-			fmt.Printf("DEBUG: Combinedtnil=%s\n", rr.GetTargetCombinedFunc(nil))
-		}
 		target := rr.GetTargetCombinedFunc(txtutil.EncodeQuoted)
 
 		// comment
@@ -156,13 +151,6 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 			FormatLine([]int{10, 5, 2, 5, 0}, []string{nameShort, ttl, "IN", typeStr, target}), comment)
 	}
 	return nil
-}
-
-func hasback(rc *models.RecordConfig) bool {
-	rd := rc.GetRDATA()
-	rdtxt := rd.(dnsrdatav2.TXT)
-	t := strings.Join(rdtxt.Txt, "")
-	return strings.Contains(t, "back")
 }
 
 // FormatLine formats a zonefile line.

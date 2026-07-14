@@ -43,10 +43,6 @@ func (rc *RecordConfig) FixRD(origin string) {
 
 // fixTypeNum reads rc.Type (a string) and converts it to a number, which is stored in rc.TypeNum.
 func (rc *RecordConfig) fixTypeNum() {
-	if rc.Type != "IGNORE" {
-		fmt.Printf("here\n")
-	}
-	// fmt.Printf("DEBUG: fixTypeNum(%q)\n", rc.Type)
 	switch rc.Type {
 	case "IGNORE":
 		return
