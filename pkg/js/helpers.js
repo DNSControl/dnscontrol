@@ -333,57 +333,45 @@ function DnsProvider(name, nsCount) {
     };
 }
 
-// // A(name,ip, recordModifiers...)
-// var A = recordBuilder('A');
-
-// // AAAA(name,ip, recordModifiers...)
-// var AAAA = recordBuilder('AAAA');
-
-// AKAMAICDN(name, target, recordModifiers...)
-var AKAMAICDN = recordBuilder('AKAMAICDN');
-
-// AKAMAITLC(name, answer_type, target, recordModifiers...)
-var AKAMAITLC = recordBuilder('AKAMAITLC', {
-    args: [
-        ['name', _.isString],
-        [
-            'answer_type',
-            function (value) {
-                return (
-                    _.isString(value) &&
-                    ['DUAL', 'A', 'AAAA'].indexOf(value) !== -1
-                );
-            },
-        ],
-        ['target', _.isString],
-    ],
-    transform: function (record, args, modifier) {
-        record.name = args.name;
-        record.answer_type = args.answer_type;
-        record.target = args.target;
-    },
-});
-
-// ALIAS(name,target, recordModifiers...)
-var ALIAS = recordBuilder('ALIAS');
+// // AKAMAITLC(name, answer_type, target, recordModifiers...)
+// var AKAMAITLC = recordBuilder('AKAMAITLC', {
+//     args: [
+//         ['name', _.isString],
+//         [
+//             'answer_type',
+//             function (value) {
+//                 return (
+//                     _.isString(value) &&
+//                     ['DUAL', 'A', 'AAAA'].indexOf(value) !== -1
+//                 );
+//             },
+//         ],
+//         ['target', _.isString],
+//     ],
+//     transform: function (record, args, modifier) {
+//         record.name = args.name;
+//         record.answer_type = args.answer_type;
+//         record.target = args.target;
+//     },
+// });
 
 // AZURE_ALIAS(name, type, target, recordModifiers...)
-var AZURE_ALIAS = recordBuilder('AZURE_ALIAS', {
-    args: [
-        ['name', _.isString],
-        ['type', validateAzureAliasType],
-        ['target', _.isString],
-    ],
-    transform: function (record, args, modifier) {
-        record.name = args.name;
-        record.target = args.target;
-        if (_.isObject(record.azure_alias)) {
-            record.azure_alias['type'] = args.type;
-        } else {
-            record.azure_alias = { type: args.type };
-        }
-    },
-});
+// var AZURE_ALIAS = recordBuilder('AZURE_ALIAS', {
+//     args: [
+//         ['name', _.isString],
+//         ['type', validateAzureAliasType],
+//         ['target', _.isString],
+//     ],
+//     transform: function (record, args, modifier) {
+//         record.name = args.name;
+//         record.target = args.target;
+//         if (_.isObject(record.azure_alias)) {
+//             record.azure_alias['type'] = args.type;
+//         } else {
+//             record.azure_alias = { type: args.type };
+//         }
+//     },
+// });
 
 function validateAzureAliasType(value) {
     if (!_.isString(value)) {
@@ -493,23 +481,6 @@ function isStringOrArray(x) {
 
 // AUTOSPLIT is deprecated. It is now a no-op.
 var AUTOSPLIT = {};
-
-// // TXT(name,target, recordModifiers...)
-// var TXT = recordBuilder('TXT', {
-//     args: [
-//         ['name', _.isString],
-//         ['target', isStringOrArray],
-//     ],
-//     transform: function (record, args, modifiers) {
-//         record.name = args.name;
-//         // Store the strings from the user verbatim.
-//         if (_.isString(args.target)) {
-//             record.target = args.target;
-//         } else {
-//             record.target = args.target.join('');
-//         }
-//     },
-// });
 
 var LUA = recordBuilder('LUA', {
     args: [
@@ -747,31 +718,6 @@ function locDMSBuilder(record, args) {
     m_e = args.vp;
     record.locvertpre = getENotationInt(args.vp);
 }
-
-// // LOC(name,d1,m1,s1,ns,d2,m2,s2,ew,alt,siz,hp,vp, recordModifiers...)
-// var LOC = recordBuilder('LOC', {
-//     args: [
-//         ['name', _.isString], //i.e. subdomain
-//         ['d1', _.isNumber], // N/S degrees
-//         ['m1', _.isNumber], // N/S minutes
-//         ['s1', _.isNumber], // N/S seconds
-//         ['ns', _.isString], // N/S
-//         ['d2', _.isNumber], // E/W degrees
-//         ['m2', _.isNumber], // E/W minutes
-//         ['s2', _.isNumber], // E/W seconds
-//         ['ew', _.isString], // E/W
-//         ['alt', _.isNumber], // altitude
-//         ['siz', _.isNumber], // size/precision
-//         ['hp', _.isNumber], // horizontal precision
-//         ['vp', _.isNumber], // vertical precision
-//     ],
-//     transform: function (record, args, modifiers) {
-//         validateIntegers(args);
-
-//         record = locStringBuilder(record, args);
-//         record = locDMSBuilder(record, args);
-//     },
-// });
 
 // Post-validation function for LOC that checks if degrees and minutes are integers
 function validateIntegers(args) {
@@ -2421,6 +2367,10 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 var A = rawrecordBuilder('A');
 var AAAA = rawrecordBuilder('AAAA');
+var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
+var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
+var ALIAS = rawrecordBuilder('ALIAS');
+var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
 var CAA = rawrecordBuilder('CAA');
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
 var CF_SINGLE_REDIRECT = rawrecordBuilder(

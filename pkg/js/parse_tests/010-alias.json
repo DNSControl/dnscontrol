@@ -6,11 +6,17 @@
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:2:5]",
           "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "ALIAS"
+          "type": "ALIAS",
+          "typenum": 65285
         }
       ],
       "registrar": "none",
