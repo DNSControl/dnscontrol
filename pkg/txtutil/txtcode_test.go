@@ -53,11 +53,13 @@ func TestTxtDecode(t *testing.T) {
 		{"\"blah`blah\"", []string{"blah`blah"}},
 		{"\"quo\\\"te\"", []string{`quo"te`}},
 		{"\"q\\\"uo\\\"te\"", []string{`q"uo"te`}},
-		/// Backslashes are meaningless in unquoted strings. Unquoted strings run until they hit a space.
-		{`1backs\lash`, []string{`1backs\lash`}},
-		{`2backs\\lash`, []string{`2backs\\lash`}},
-		{`3backs\\\lash`, []string{`3backs\\\lash`}},
-		{`4backs\\\\lash`, []string{`4backs\\\\lash`}},
+		/// A backslash escapes the next byte, whether the string is quoted or
+		/// not (standard RFC1035 zonefile parsing). Unquoted strings run until
+		/// they hit an unescaped space.
+		{`1backs\lash`, []string{`1backslash`}},
+		{`2backs\\lash`, []string{`2backs\lash`}},
+		{`3backs\\\lash`, []string{`3backs\lash`}},
+		{`4backs\\\\lash`, []string{`4backs\\lash`}},
 		/// Inside quotes, a backlash means take the next byte literally.
 		{`"q1backs\lash"`, []string{`q1backslash`}},
 		{`"q2backs\\lash"`, []string{`q2backs\lash`}},
