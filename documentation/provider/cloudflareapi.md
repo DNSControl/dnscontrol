@@ -618,7 +618,7 @@ In summary:
 
 Some of this is documented on the Cloudflare website's [Time to Live (TTL)](https://developers.cloudflare.com/dns/manage-dns-records/reference/ttl/) page.
 
-## Feature Flags
+## Feature Summary
 
 <!-- provider-features-start -->
 - Provider Type
