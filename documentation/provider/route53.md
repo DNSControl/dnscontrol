@@ -332,7 +332,7 @@ This means a space is present in one or more of the credential values.
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
-  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ✅
 - Service discovery
   - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
   - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
