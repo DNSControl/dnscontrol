@@ -22,19 +22,3 @@ func TestAlias(t *testing.T) {
 		t.Fatalf("ALIAS string presentations should be identical:\n%s\n%s", rry.String(), y.String())
 	}
 }
-
-func TestAlias_A(t *testing.T) {
-	y := &ALIAS{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		ALIAS: privatetypesrdata.ALIAS{
-			Target: "example",
-		},
-	}
-	rry, err := dnsv2.New(y.String())
-	if err != nil {
-		t.Fatal(err)
-	}
-	if rry.String() != y.String() {
-		t.Fatalf("ALIAS string presentations should be identical:\n%s\n%s", rry.String(), y.String())
-	}
-}

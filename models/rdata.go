@@ -7,7 +7,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
@@ -60,9 +59,9 @@ func (rc *RecordConfig) validateRDATA() {
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
-	if privatetypes.IsPrivateType(typeNum) {
-		panic()
-	}
+	// if privatetypes.IsPrivateType(typeNum) {
+	// 	panic()
+	// }
 
 	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
