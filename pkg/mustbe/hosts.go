@@ -8,19 +8,33 @@ import (
 )
 
 // TargetHost returns a FQDN (or @) suitable as a target for CNAME and other records.
-// * origin must be a FQDN without a trailing dot OR "". If "", no attempt is made to turn the string into a FQDN.
-// * arg may be a string or it will be converted to a string.
-// * Unicode is converted to PunyCode.
-// * The result always ends with a "." unless it is "@".
-// * It does not try to turn a FQDN into a shortname, but it will replace the origin with "@". The reason for not shortening it is that "preview" output is unclear when the user sees a shortname. Explicit is better than implicit.
-// * This does not handle "*" (wildcards) since they are not valid in targets. That's why this is called TargetHost and not Host.
-// Examples: (assume $origin = "domain.com")
-// * `@` -> `@`
-// * `foo.$origin.` -> `foo.$origin.`
-// * `short` -> `short.$origin`
-// * `other.com.` -> `other.com.`
-// * NOT: `$origin.` -> `@`  (We no longer do this for the same reason we don't product shortnames any more.)
+// What is a target?
+// * A "target" is a hostname used in fields of a DNS record. For example, in "foo IN MX 10 bar.example.com.", "bar" is the target.
+// * A target is stored as a FQDN+"." with all Unicode converted to ASCII (PunyCode).
+// * It is never stored as "@" or a shortname.
+// * If you require a shortname, use dc.TargetAsShort(target) or dc.TargetAsShortOrAt(target).
+//
+// * origin must be a FQDN without a trailing dot. Violations cause a panic so that this is caught before code is shipped.
+// * if origin is "", a special mode is activated that disables most action.
+//   - This is for legacy situations where the origin is unknown.
+//   - This will eventually be an error.
+//   - In this mode, Either the original string is returned, or if that string is "", "UNKNOWNORIGIN." is returned. This is the only situation where this function might return "@".
+//
+// * Normal operation:
+//   - arg may be a string or it will be converted to a string using fmt.Printf("%v").
+//   - Unicode is converted to PunyCode.
+//   - The result always ends with a "."
+//   - The reason for not storing the short or "@" version is that "preview" output becomes ambiguous. Explicit is better than implicit.
+//   - Wildcards ("@") are rejected since they are not valid in targets. That's why this is called TargetHost and not Host.
+//
+// * Examples: (assume $origin = "domain.com")
+//   - `@` -> $origin
+//   - `foo.$origin.` -> `foo.$origin.`
+//   - `$origin.` -> `$origin.`
+//   - `other.com.` -> `other.com.`
+//   - `short` -> `short.$origin`
 func TargetHost(origin string, arg any) string {
+	// Check for programmer error.
 	if strings.HasSuffix(origin, ".") {
 		panic("mustbe.Host must NOT be called with an origin ending with .")
 	}
@@ -35,34 +49,48 @@ func TargetHost(origin string, arg any) string {
 		name = fmt.Sprintf("%v", arg)
 	}
 
+	// Special mode for legacy situations.
+	if origin == "" {
+		if name == "" {
+			return "UNKNOWNORIGIN."
+		}
+		return name
+	}
+
 	// Special symbols:
 	switch name {
-	case "@":
-		return name
-	case "":
+	case "@", "":
 		return origin + "."
 	}
 
 	// Normalize it
 	name = domaintags.EfficientToASCII(name)
 
-	// // shorten origin to "@".
-	// if origin != "" && name == origin+"." {
-	//	return "@"
-	//}
-
 	// Is this already a FQDN? Return it.
 	if strings.HasSuffix(name, ".") {
 		return name
 	}
 
-	// origin not specified. Leave things as-is.
-	if origin == "" {
-		// TODO(tlim): Shouldn't this be "return name"?
-		return name + "."
-
-	}
-
 	// This must be a shortname without a dot. Add origin and dot.
 	return name + "." + origin + "."
+}
+
+// TargetHostSRV is like TargetHost with the exception that "." and "" have special meaning and are left alone.
+func TargetHostSRV(origin string, arg any) string {
+
+	var name string
+	switch v := arg.(type) {
+	case string:
+		name = v
+	case int:
+		name = fmt.Sprintf("%d", arg)
+	default:
+		name = fmt.Sprintf("%v", arg)
+	}
+
+	if name == "" || name == "." {
+		return name
+	}
+
+	return TargetHost(origin, name)
 }
