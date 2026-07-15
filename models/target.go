@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/netip"
 	"strings"
@@ -49,8 +50,6 @@ func (rc *RecordConfig) GetTargetCombinedFunc(encodeFn func(s string) string) st
 
 // GetTargetCombined returns a string with the various fields combined.
 // For example, an MX record might output `10 mx10.example.tld`.
-// WARNING: How TXT records are handled is buggy but we can't change it because
-// code depends on the bugs. Use Get GetTargetCombinedFunc() instead.
 func (rc *RecordConfig) GetTargetCombined() string {
 	// TXT presentation must split the value into quoted, 255-octet
 	// character-strings (this is the form providers send to their APIs, e.g.
@@ -148,6 +147,9 @@ func (rc *RecordConfig) GetTargetRFC1035Quoted() string {
 
 // GetTargetDebug returns a string with the various fields spelled out.
 func (rc *RecordConfig) GetTargetDebug() string {
+	if rc.Type == "TXT" {
+		return rc.GetRDATA().String()
+	}
 
 	// TODO(tlim): If possible, use .String().
 
@@ -210,7 +212,14 @@ func (rc *RecordConfig) GetTargetDebug() string {
 //
 //	We should extract the common logic into a function they can both use.
 func (rc *RecordConfig) GetTargetJS() string {
-	if rc.Type == "TXT" || rc.Type == "LUA" {
+	if rc.Type == "TXT" {
+		encoded, err := json.Marshal(rc.GetTargetTXTSegmented())
+		if err != nil {
+			panic(err) // strings are always JSON-marshalable
+		}
+		return string(encoded)
+	}
+	if rc.Type == "LUA" {
 		return fmt.Sprintf("%q", rc.GetTargetField())
 	}
 	switch rc.Type {

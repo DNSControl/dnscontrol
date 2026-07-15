@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"os"
 	"runtime/debug"
 	"strings"
 
@@ -14,8 +15,13 @@ import (
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
+	if txt, ok := rd.(dnsrdatav2.TXT); ok {
+		txt.Txt = TXTSegmented(txt)
+		rd = txt
+	}
 	rc.rdata = rd
 	rc.validateRDATA()
+	rd = normalizeRDATA(rd)
 	rc.RegenerateComparableV3()
 	if err := rc.copyRDtoLegacyFields(); err != nil {
 		panic(err) // Should not happen.
@@ -24,6 +30,11 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 
 // GetRDATA is a getter for RecordConfig.rdata.
 func (rc *RecordConfig) GetRDATA() (rd dnsv2.RDATA) {
+	if rd, ok := rc.rdata.(dnsrdatav2.TXT); ok {
+		if !txtProperlySegmented(rd.Txt) {
+			fmt.Fprintf(os.Stderr, "WARNING: GetRDATA: TXT record not properly segmented. Someone is not using SetRDATA? txt=%+v\n", rd.Txt)
+		}
+	}
 	return rc.rdata
 }
 
@@ -31,6 +42,14 @@ func (rc *RecordConfig) GetRDATA() (rd dnsv2.RDATA) {
 func (rc *RecordConfig) ClearRDATA() {
 	rc.rdata = nil
 	rc.ComparableV3 = ""
+}
+
+func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
+	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
+	if err != nil {
+		return nil, err
+	}
+	return normalizeRDATA(rd2), nil
 }
 
 // validateRDATA is used to verify that .rdata didn't accidentally get set to
@@ -55,20 +74,14 @@ func (rc *RecordConfig) validateRDATA() {
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
-
 }
 
-func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
-	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
-	if err != nil {
-		return nil, err
-	}
-
+func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
-	// sadly those functions aren't called by dnsv2.NewData(). It is
-	// unclear what would be better. Maybe privatetypes.RegisterMaker() can
-	// also register a function that does this cleanup, and this
-	// function would call privatetypes.PostParseCleanup(rd)?
+	// sadly those functions aren't called by dnsv2.NewData().
+	// Fixing this would be difficult since we can't add methods to the
+	// dnsv2.RDATA interface.  We could allow types to register a "normalize"
+	// function for their type, which would be called by normalizeRDATA().
 
 	switch v := rd2.(type) {
 
@@ -85,18 +98,11 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		rd2 = v
 
 	case dnsrdatav2.TXT:
-		// DNSControl stores TXT data as a single string (see models/t_txt.go); the
-		// provider is responsible for splitting it into 255-octet segments on the
-		// wire. The presentation-format parser, however, yields one Txt element per
-		// segment, so a >255-octet TXT round-trips as multiple strings and its
-		// RDATA.String() (used for ComparableV3) would differ from the same value
-		// built via MakeTXT, causing a spurious diff. Rejoin into a single string.
-		if len(v.Txt) > 1 {
-			v.Txt = []string{strings.Join(v.Txt, "")}
-			rd2 = v
-		}
+		// DNSControl stores TXT data segments, with all-but-the-last segment being exactly 255 octets.
+		v.Txt = TXTSegmented(v)
+		rd2 = v
 
 	}
 
-	return rd2, nil
+	return rd2
 }

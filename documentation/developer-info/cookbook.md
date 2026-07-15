@@ -9,6 +9,8 @@ This document provides "cookbook" recipes for doing common tasks.
   - [Create `models.RecordConfig` literals for testdata](#create-modelsrecordconfig-literals-for-testdata)
   - [How to create a "builder"](#how-to-create-a-builder)
   - [How to manipulate domain/zone names](#how-to-manipulate-domainzone-names)
+  - [What you should know about TXT records](#what-you-should-know-about-txt-records)
+    - [TXT functions](#txt-functions)
   - [How to label imports](#how-to-label-imports)
 
 ## Create a `models.DomainConfig`
@@ -39,7 +41,7 @@ dc := &models.DomainConfig{Name: origin}
 Recommended:
 
 ```go
-rc1, err := dc.NewRecordConfig(LABEL, TTL, TYPE_STR_OR_NUM, ARGS)
+rc1, err := dc.NewRecordConfig(LABEL, TTL, TYPE_STR_OR_NUM, ARGS...)
 rc2, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
 ```
 
@@ -210,6 +212,59 @@ How to add a domain to a shortname?
 ```go
 txtutil.Extend()
 ```
+
+## What you should know about TXT records
+
+The DNS protocol stores a TXT record as a series of segements:
+* Each segment can be a maximum of 255-octets (octets == bytes).
+* It's possible to have no segments.
+* It's possible to zero-length segments.
+* In a DNS Zone File, TXT records are presented as quoted strings (each segment quoted individually), with \DDD (3-digit) escapes for non-printing chars and \x (1-char escapes) for literals (typically `\\` to represent a backslach and `\"` to represent a double-quote inside a quoted string).
+
+DNSControl stores TXT records as segments. However...
+* We "re-segment" strings so that all but the last one is 255-octets.
+* Zero-length segments are removed.
+* Records with no segments are "improved" to have a single 0-length segment. This eliminates an edge case to deal with.
+
+To manage this, we have getters and setters that assure the above rules happen transparently.
+
+### TXT functions
+
+Creating TXT records:
+
+```go
+rc1, err := dc.NewRecordConfig(LABEL, TTL, dnsv2.TypeTXT, "raw bytes")
+rc2, err := dc.NewRecordConfigParse(LABEL, TTL, dnsv2.TypeTXT, `"quoted" "like" "from" "zonefile"`)
+* `SetRDATA()`: Will re-segment and clean up if needed.
+```
+
+Reading TXT data:
+
+```go
+rd := rc.GetRDATA()             // Get the record's fields.  Prints warning to stderr if Txt is not segmented properly.
+rdtxt := rd.(dnsrdatav2.TXT)    // Cast it as a TXT record.
+q := rdtxt.String()             // Like a zonefile: "quoted" "like" "from" "zonefile"
+q := models.TXTJoined(rdtxt)    // One big string
+q := models.TXTSegmented(rdtxt) // The segments
+```
+Legacy functions that work, but will be replaced over time. New code should not use these.
+
+Getters:
+* `rc.GetTargetTXTJoined()`: Returns one big string
+* `rc.GetTargetTXTSegmented()`: Returns an array of 255-octet segments (the last segment will hold the remainder)
+
+Setters:
+* `SetTargetTXT(string)`:  Setter. Takes a string. Will segment into 255-octet segments.
+* `SetTargetTXTs([]string)`: Setter. Takes a []string.  Will re-segment and clean up if needed.
+
+If you call the wrong getter, we'll fix things up for you:
+* `rc.GetTargetField()`: For TXT records, same as `GetTargetTXTJoined()`
+* `rc.GetTargetIP()`: For TXT records, panics.
+* `rc.GetTargetCombinedFunc()`: For TXT records, calls encodeFn otherwise is the same as `GetTargetTXTJoined()`
+* `rc.GetTargetCombined()`: For TXT records, returns txt encoded via `txtutil.EncodeQuoted()`
+* `rc.GetTargetRFC1035Quoted()`: Same as `rd.String()`
+* `rc.GetTargetDebug()`: For TXT records, same as rd.String()
+* `rc.GetTargetJS()`: Uses the JSON tags on the structs to output JSON of the fields.
 
 ## How to label imports
 
