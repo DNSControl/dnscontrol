@@ -119,6 +119,7 @@ jobs:
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
+      OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
       ROUTE53_DOMAIN: ${{ vars.ROUTE53_DOMAIN }}
       SAKURACLOUD_DOMAIN: ${{ vars.SAKURACLOUD_DOMAIN }}
@@ -228,6 +229,10 @@ jobs:
       NETNOD_APIURL: ${{ secrets.NETNOD_APIURL }}
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
+      #
+      OPENWRT_USERNAME: ${{ secrets.OPENWRT_USERNAME }}
+      OPENWRT_PASSWORD: ${{ secrets.OPENWRT_PASSWORD }}
+      OPENWRT_HOST: ${{ secrets.OPENWRT_HOST }}
       #
       POWERDNS_APIKEY: ${{ secrets.POWERDNS_APIKEY }}
       POWERDNS_APIURL: ${{ secrets.POWERDNS_APIURL }}
