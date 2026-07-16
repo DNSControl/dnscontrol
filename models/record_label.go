@@ -57,7 +57,10 @@ var ipv4LabelRe = regexp.MustCompile(`^\d+\.\d+\.\d+\.\d+$`)
 // name is assumed to be ASCII, not Unicode (which is what most APIs return).
 // If name == "", "@" is returned.
 func (dc *DomainConfig) LabelFromShort(name string) string {
-	// TODO(tlim): Maybe add a debug mode that panics if name ends with "."?
+	if strings.HasSuffix(name, ".") {
+		fmt.Printf("DEBUG: LabelFromShort(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
+	}
+
 	if name == "" {
 		return "@"
 	}
@@ -71,6 +74,9 @@ func (dc *DomainConfig) LabelFromShort(name string) string {
 func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	if name == "" {
 		return "@"
+	}
+	if strings.HasSuffix(name, ".") {
+		fmt.Printf("DEBUG: LabelFromFQDNNoDot(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
 	}
 
 	newName := strings.ToLower(name)
@@ -97,6 +103,9 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 	if name == "" {
 		return "IMPOSSIBLE"
+	}
+	if !strings.HasSuffix(name, ".") {
+		fmt.Printf("DEBUG: LabelFromFQDNWithDot(%v) called WRONG. Maybe you want LabelFromFQDNNoDot?\n", name)
 	}
 
 	newName := strings.ToLower(name)
