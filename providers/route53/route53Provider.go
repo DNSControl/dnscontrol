@@ -681,11 +681,7 @@ func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.
 }
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
-	//target := r.GetTargetField()
 	target := r.GetRDATA().(privatetypesrdata.R53ALIAS).Target
-	// if target != r.GetRDATA().(privatetypesrdata.R53ALIAS).Target {
-	// 	panic("well that didn't work!")
-	// }
 	zoneID := getZoneID(zone, r)
 	evalTargetHealth, err := strconv.ParseBool(r.R53Alias["evaluate_target_health"])
 	if err != nil {
