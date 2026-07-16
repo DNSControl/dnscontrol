@@ -113,3 +113,31 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 
 	return rd2
 }
+
+/*
+
+FUTURE():
+
+Add this interface. normalizeRDATA() will call the interface (if it exists for
+the RDATA).  The type-specific code currently in normalizeRDATA will move to
+files such as t_ds.go, t_sshfp.go, t_tlsa.go, t_txt.go.
+
+type Normalizer interface {
+	Normalize(*RecordConfig)
+}
+
+*/
+
+/*
+
+TODO():
+
+Add this interface. Update pkg/normalize/validate.go to call the interface (if it exists for the RDATA).  The type-specific code currently
+in pkg/normalize/validate.go files such as t_ds.go, t_sshfp.go, t_tlsa.go, t_txt.go (all in `models/`).
+The functions rejectifTargetEqualsLabel and rejectifInvalidR53Weight providers/route53/auditrecords.go will move to models/t_r53alias.go
+
+type Validater interface {
+	Validate(*RecordConfig)
+}
+
+*/
