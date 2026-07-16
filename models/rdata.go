@@ -72,7 +72,7 @@ func (rc *RecordConfig) validateRDATA() {
 	// if ts := fmt.Sprintf("%T", rd); ts[0] != '*' {}
 
 	// On the other hand, we use %T for the error path, which is rarely taken and can be slow.
-	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%T", rc.TypeNum, rc.Type, "%T", rd)
+	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%T", rc.TypeNum, rc.Type, rd)
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
