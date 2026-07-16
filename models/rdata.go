@@ -86,21 +86,24 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 	switch v := rd2.(type) {
 
 	case dnsrdatav2.DS:
+		// Uppercase to make comparisons case-insensitive.
 		v.Digest = strings.ToUpper(v.Digest)
-		rd2 = v
+		return v
 
 	case dnsrdatav2.SSHFP:
+		// Uppercase to make comparisons case-insensitive.
 		v.FingerPrint = strings.ToUpper(v.FingerPrint)
-		rd2 = v
+		return v
 
 	case dnsrdatav2.TLSA:
+		// Uppercase to make comparisons case-insensitive.
 		v.Certificate = strings.ToUpper(v.Certificate)
-		rd2 = v
+		return v
 
 	case dnsrdatav2.TXT:
 		// DNSControl stores TXT data segments, with all-but-the-last segment being exactly 255 octets.
 		v.Txt = TXTSegmented(v)
-		rd2 = v
+		return v
 
 	}
 
