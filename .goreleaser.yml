@@ -37,7 +37,7 @@ changelog:
       regexp: "(?i)^.*(major|new provider|feature)[(\\w)]*:+.*$"
       order: 1
     - title: 'Provider-specific changes:'
-      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|ns1|opensrs|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|scaleway|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
+      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|ns1|opensrs|openwrt|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
       order: 2
     - title: 'Documentation:'
       regexp: "(?i)^.*(docs)[(\\w)]*:+.*$"
