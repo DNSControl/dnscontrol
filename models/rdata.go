@@ -21,7 +21,7 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 	}
 	rc.rdata = rd
 	rc.validateRDATA()
-	rd = normalizeRDATA(rd)
+	rc.normalizeRDATA()
 	rc.RegenerateComparableV3()
 	if err := rc.copyRDtoLegacyFields(); err != nil {
 		panic(err) // Should not happen.
@@ -74,6 +74,12 @@ func (rc *RecordConfig) validateRDATA() {
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
+}
+
+func (rc *RecordConfig) normalizeRDATA() {
+	rd := rc.GetRDATA()
+	rd = normalizeRDATA(rd)
+	rc.SetRDATA(rd)
 }
 
 func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
