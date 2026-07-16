@@ -50,10 +50,15 @@ func NewNetbird(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 		return nil, errors.New("no NetBird token provided")
 	}
 
+	apiUrl := m["apiurl"]
+	if apiUrl == "" {
+		apiUrl = netbirdAPIURL
+	}
+
 	api := &netbirdProvider{
 		token:   m["token"],
 		client:  &http.Client{},
-		apiURL:  netbirdAPIURL,
+		apiURL:  apiUrl,
 		zoneMap: make(map[string]*zoneInfo),
 	}
 
@@ -109,6 +114,7 @@ func init() {
 		PortalURL:   "https://app.netbird.io/settings",
 		Fields: []providers.CredsField{
 			{Key: "token", Label: "API Token", Required: true, Secret: true},
+			{Key: "apiurl", Label: "API Url", Default: netbirdAPIURL},
 		},
 	})
 }
