@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"runtime/debug"
 	"strings"
 
@@ -19,9 +20,9 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 		txt.Txt = TXTSegmented(txt)
 		rd = txt
 	}
+	rd = normalizeRDATA(rd)
 	rc.rdata = rd
 	rc.validateRDATA()
-	rc.normalizeRDATA()
 	rc.RegenerateComparableV3()
 	if err := rc.copyRDtoLegacyFields(); err != nil {
 		panic(err) // Should not happen.
@@ -65,21 +66,18 @@ func (rc *RecordConfig) validateRDATA() {
 	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	ts := fmt.Sprintf("%T", rd)
-	if ts[0] != '*' {
+	if reflect.TypeOf(rd).Kind() != reflect.Pointer {
 		return
 	}
+	// I try to avoid using reflection but this code is faster than
+	// ts := fmt.Sprintf("%T", rd)
+	// if ts[0] != '*' {
 
+	ts := fmt.Sprintf("%T", rd)
 	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%s", rc.TypeNum, rc.Type, ts)
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
-}
-
-func (rc *RecordConfig) normalizeRDATA() {
-	rd := rc.GetRDATA()
-	rd = normalizeRDATA(rd)
-	rc.SetRDATA(rd)
 }
 
 func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
