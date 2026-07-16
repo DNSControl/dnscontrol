@@ -384,9 +384,9 @@
   "SCALEWAY": {
     "TYPE": "SCALEWAY",
     "access_key": "$SCALEWAY_ACCESS_KEY",
-    "secret_key": "$SCALEWAY_SECRET_KEY",
+    "domain": "$SCALEWAY_DOMAIN",
     "project_id": "$SCALEWAY_PROJECT_ID",
-    "domain": "$SCALEWAY_DOMAIN"
+    "secret_key": "$SCALEWAY_SECRET_KEY"
   },
   "SOFTLAYER": {
     "TYPE": "SOFTLAYER",
