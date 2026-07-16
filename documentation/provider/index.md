@@ -20,8 +20,8 @@ Jump to a table:
 
 ### Provider Type <!--(table 1/6)-->
 
-| Provider name | Official Support | DNS Provider | Registrar |
-| ------------- | ---------------- | ------------ | --------- |
+| Provider name | [Official Support](../provider/index.md#providers-with-official-support) | DNS Provider | Registrar |
+| ------------- | ------------------------------------------------------------------------ | ------------ | --------- |
 | [`ADGUARDHOME`](adguardhome.md) | ❌ | ✅ | ❌ |
 | [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❌ | ✅ | ❌ |
 | [`ALIDNS`](alidns.md) | ❌ | ✅ | ❌ |
@@ -83,6 +83,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ✅ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❌ | ✅ | ❌ |
 | [`SAKURACLOUD`](sakuracloud.md) | ❌ | ✅ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ❌ | ✅ | ❌ |
 | [`SOFTLAYER`](softlayer.md) | ❌ | ✅ | ❌ |
 | [`TENCENTDNS`](tencentdns.md) | ❌ | ✅ | ✅ |
 | [`TRANSIP`](transip.md) | ❌ | ✅ | ❌ |
@@ -94,8 +95,8 @@ Jump to a table:
 
 ### Provider API <!--(table 2/6)-->
 
-| Provider name | [Concurrency Verified](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | get-zones |
-| ------------- | -------------------------------------------------------------------- | ---------------------------------------------- | -------------- | --------- |
+| Provider name | [Concurrency Verified](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | [get-zones](../commands/get-zones.md) |
+| ------------- | -------------------------------------------------------------------- | ---------------------------------------------- | -------------- | ------------------------------------- |
 | [`ADGUARDHOME`](adguardhome.md) | ❔ | ❔ | ❌ | ❌ |
 | [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❔ | ✅ | ✅ | ✅ |
 | [`ALIDNS`](alidns.md) | ✅ | ✅ | ❌ | ✅ |
@@ -156,6 +157,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ✅ | ✅ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❔ | ❌ | ❌ | ✅ |
 | [`SAKURACLOUD`](sakuracloud.md) | ❔ | ❌ | ✅ | ✅ |
+| [`SCALEWAY`](scaleway.md) | ❔ | ❌ | ❌ | ✅ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ❌ | ❔ |
 | [`TENCENTDNS`](tencentdns.md) | ❔ | ✅ | ✅ | ✅ |
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ✅ |
@@ -224,6 +226,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ❌ | ❔ | ❌ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
 | [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ❌ | ❔ | ❔ |
 | [`TENCENTDNS`](tencentdns.md) | ✅ | ❔ | ❔ | ✅ | ❔ |
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
@@ -291,6 +294,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ❔ | ❔ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❔ | ❌ | ✅ | ❔ |
 | [`SAKURACLOUD`](sakuracloud.md) | ❌ | ❌ | ✅ | ✅ |
+| [`SCALEWAY`](scaleway.md) | ❌ | ✅ | ✅ | ✅ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ✅ | ❔ |
 | [`TENCENTDNS`](tencentdns.md) | ❔ | ❔ | ✅ | ❔ |
 | [`TRANSIP`](transip.md) | ❌ | ✅ | ✅ | ❌ |
@@ -355,6 +359,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ✅ | ❔ | ❔ | ✅ | ❌ |
 | [`SAKURACLOUD`](sakuracloud.md) | ✅ | ✅ | ❔ | ❌ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`TENCENTDNS`](tencentdns.md) | ✅ | ❔ | ❔ | ❔ | ❔ |
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❔ | ❌ | ❌ |
@@ -404,6 +409,7 @@ Jump to a table:
 | [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ |
 | [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❔ | ❌ |
 | [`SAKURACLOUD`](sakuracloud.md) | ❌ | ❌ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ❌ | ❔ | ❌ |
 | [`TRANSIP`](transip.md) | ❌ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❌ | ❌ | ❌ |
 | [`WEBSUPPORT`](websupport.md) | ❔ | ❔ | ❌ |
@@ -497,6 +503,7 @@ Providers in this category and their maintainers are:
 |[`ROUTE53`](route53.md)|@tresni|
 |[`RWTH`](rwth.md)|@MisterErwin|
 | [`SAKURACLOUD`](sakuracloud.md) | @ttkzw |
+| [`SCALEWAY`](scaleway.md) | @alessiopcc |
 | [`SOFTLAYER`](softlayer.md) | @jamielennox |
 | [`TENCENTDNS`](tencentdns.md) | @cylonchau |
 | [`TRANSIP`](transip.md) | @blackshadev |
@@ -525,7 +532,6 @@ We have received requests for the following providers. If you would like to cont
 * [Rackspace Cloud DNS](https://github.com/DNSControl/dnscontrol/issues/2980) (#2980)
 * [RcodeZero](https://github.com/DNSControl/dnscontrol/issues/884) (#884)
 * [Sav.com](https://github.com/DNSControl/dnscontrol/issues/3633) (#3633)
-* [Scaleway](https://github.com/DNSControl/dnscontrol/issues/3606) (#3606)
 * [Spaceship](https://github.com/DNSControl/dnscontrol/issues/3452) (#3452)
 * [SynergyWholesale](https://github.com/DNSControl/dnscontrol/issues/1605) (#1605)
 * [UltraDNS by Neustar / CSCGlobal](https://github.com/DNSControl/dnscontrol/issues/1533) (#1533)

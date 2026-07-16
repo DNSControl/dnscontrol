@@ -64,6 +64,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/route53"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/rwth"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/sakuracloud"
+	_ "github.com/DNSControl/dnscontrol/v4/providers/scaleway"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/softlayer"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/tencentdns"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/transip"
