@@ -108,7 +108,9 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case privatetypes.TypeAKAMAICDN:
 		// no-op
 	case privatetypes.TypeAKAMAITLC:
-		// no-op
+		rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, rc.AnswerType, rc.GetTargetField())
+		errorChk(err)
+		rc.SetRDATA(rd)
 	case privatetypes.TypeBUNNYDNSPZ:
 		// no-op
 	case privatetypes.TypeBUNNYDNSRDR:

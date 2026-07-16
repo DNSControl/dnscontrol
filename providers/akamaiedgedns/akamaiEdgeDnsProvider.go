@@ -224,11 +224,21 @@ func (a *edgeDNSProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
 			}
 		} else if okExisting && okDesired {
-			// In the existing map and in the desired map: Replace
+			filteredTargets := make(map[string]bool, len(existing))
+			for _, r := range existing {
+				if recordMatchesAnyIgnoreRule(dc, r) {
+					continue
+				}
+				if raw, ok := r.Metadata["akamai_raw_rdata"]; ok {
+					filteredTargets[raw] = true
+				} else {
+					filteredTargets[r.GetTargetCombined()] = true
+				}
+			}
 			lastCorrections = append(lastCorrections, &models.Correction{
 				Msg: strings.Join(msg, "\n   "),
 				F: func() error {
-					return a.replaceRecordset(ctx, desired, dc.Name)
+					return a.replaceRecordset(ctx, desired, filteredTargets, dc.Name)
 				},
 			})
 			printer.Debugf("replaceRecordset: %s %s\n", key.NameFQDN, key.Type)
@@ -304,6 +314,28 @@ func (a *edgeDNSProvider) ListZones() ([]string, error) {
 	return zones, nil
 }
 
+// recordMatchesAnyIgnoreRule returns true if rec is covered by any IGNORE() rule in dc.
+func recordMatchesAnyIgnoreRule(dc *models.DomainConfig, rec *models.RecordConfig) bool {
+	for _, uc := range dc.Unmanaged {
+		labelMatch := uc.LabelGlob == nil || uc.LabelGlob.Match(rec.GetLabel())
+		if !labelMatch {
+			continue
+		}
+		typeMatch := len(uc.RTypeMap) == 0
+		if !typeMatch {
+			_, typeMatch = uc.RTypeMap[rec.Type]
+		}
+		if !typeMatch {
+			continue
+		}
+		targetMatch := uc.TargetGlob == nil || uc.TargetGlob.Match(rec.GetTargetField())
+		if targetMatch {
+			return true
+		}
+	}
+	return false
+}
+
 func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 	for _, rec := range dc.Records {
 		// Convert ALIAS records to the Akamai equivalents. AKAMAITLC is only valid
@@ -312,6 +344,7 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 			if rec.Name == "@" {
 				rec.ChangeType("AKAMAITLC", dc.Name)
 				rec.AnswerType = "DUAL"
+				rec.RecomputeV3Fields(dc.Name)
 			} else {
 				rec.ChangeType("CNAME", dc.Name)
 			}

@@ -24,6 +24,11 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(rd.Target)
 	case privatetypesrdata.ADGUARDHOMEAAAAPASSTHROUGH:
 		rc.SetTarget(rd.Target)
+	case privatetypesrdata.AKAMAICDN:
+		rc.SetTarget(rd.Target)
+	case privatetypesrdata.AKAMAITLC:
+		rc.AnswerType = rd.AnswerType
+		rc.SetTarget(rd.Target)
 	case privatetypesrdata.ALIAS:
 		rc.SetTarget(rd.Target)
 	case privatetypesrdata.AZUREALIAS:
