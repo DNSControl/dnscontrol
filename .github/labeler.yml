@@ -175,6 +175,9 @@ provider-RWTH:
 provider-SAKURACLOUD:
   - changed-files:
       - any-glob-to-any-file: providers/sakuracloud/**
+provider-SCALEWAY:
+  - changed-files:
+      - any-glob-to-any-file: providers/scaleway/**
 provider-SOFTLAYER:
   - changed-files:
       - any-glob-to-any-file: providers/softlayer/**

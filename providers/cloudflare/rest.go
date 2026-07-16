@@ -451,10 +451,6 @@ func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig)
 		return nil, fmt.Errorf("failed fetching worker route list cloudflare: %w", err)
 	}
 
-	// 	err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
-	// 		pr.Pattern,
-	// 		pr.ScriptName))
-
 	var recs models.Records
 	for _, pr := range res.Routes {
 		thisPr := pr
@@ -464,9 +460,6 @@ func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig)
 			return nil, err
 		}
 		r.Original = thisPr
-		// 	err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
-		// 		pr.Pattern,
-		// 		pr.ScriptName))
 
 		recs = append(recs, r)
 	}

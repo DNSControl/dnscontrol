@@ -692,10 +692,18 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		if err != nil {
 			return err
 		}
-		rec.Metadata[metaOriginalIP] = rec.GetTargetField()
-		if err := rec.SetTarget(newIP.String()); err != nil {
+
+		// rec.Metadata[metaOriginalIP] = rec.GetTargetField()
+		// if err := rec.SetTarget(newIP.String()); err != nil {
+		// 	return err
+		// }
+		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
+		rd, err := models.MakeA(dc.Name, rec.Metadata, newIP)
+		if err != nil {
 			return err
 		}
+		rec.SetRDATA(rd)
+
 	}
 
 	return nil

@@ -57,6 +57,7 @@ providers/realtimeregister @PJEilers
 providers/route53 @tresni
 providers/rwth @mistererwin
 providers/sakuracloud @ttkzw
+providers/scaleway @alessiopcc
 # providers/softlayer NEEDS VOLUNTEER
 providers/tencentdns @cylonchau
 providers/transip @blackshadev
