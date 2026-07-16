@@ -48,6 +48,7 @@ providers/netlify @SphericalKat
 providers/netnod @Netnod
 providers/ns1 @costasd
 # providers/opensrs NEEDS VOLUNTEER
+providers/openwrt @huskyistaken
 providers/oracle @kallsyms
 providers/ovh @masterzen
 providers/packetframe @hamptonmoore

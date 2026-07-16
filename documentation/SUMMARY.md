@@ -172,6 +172,7 @@
 * [Netlify](provider/netlify.md)
 * [Netnod](provider/netnod.md)
 * [NS1](provider/ns1.md)
+* [OpenWrt](provider/openwrt.md)
 * [OpenSRS](provider/opensrs.md)
 * [Oracle Cloud](provider/oracle.md)
 * [OVH](provider/ovh.md)
