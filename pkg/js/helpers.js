@@ -2370,7 +2370,10 @@ var ALIAS = rawrecordBuilder('ALIAS');
 var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
 var CAA = rawrecordBuilder('CAA');
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
-var CF_SINGLE_REDIRECT = rawrecordBuilder( 'CLOUDFLAREAPI_SINGLE_REDIRECT', true);
+var CF_SINGLE_REDIRECT = rawrecordBuilder(
+    'CLOUDFLAREAPI_SINGLE_REDIRECT',
+    true
+);
 var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var CNAME = rawrecordBuilder('CNAME');
 var DHCID = rawrecordBuilder('DHCID');
