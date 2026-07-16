@@ -99,7 +99,7 @@ dockers_v2:
       - "ghcr.io/dnscontrol/{{.ProjectName}}"
     tags:
       - "{{ .Version }}"
-      - "{{ if not .IsSnapshot }}latest{{ end }}"
+      - "{{ if and (not .IsSnapshot) (not .Prerelease) }}latest{{ end }}"
     platforms:
       - linux/amd64
       - linux/arm64
@@ -137,6 +137,7 @@ homebrew_casks:
     directory: Casks
     homepage: "https://docs.dnscontrol.org/"
     description: "DNSControl: Infrastructure as Code for DNS Zones"
+    skip_upload: auto
     license: "MIT"
     repository:
       owner: DNSControl

@@ -175,3 +175,41 @@ go get module/path
 
 go mod tidy
 ```
+
+## Tip: How to test GoReleaser
+
+(These are random notes)
+
+```
+git tag -a v4.42.3-rc1 -m "Release candidate 4.42.3-rc1"
+or
+git tag -a v4.42.3 -m "Release candidate 4.42.3"
+```
+
+DO NOT PUSH THIS TAG. It should stay local. If you push it, GHA will build a release!
+
+When done, delete the tag with:
+
+```
+git tag -d v4.42.3-rc1
+or
+git tag -d v4.42.3
+```
+
+```
+touch /tmp/empty-notes.md
+unset GITHUB_TOKEN
+goreleaser release --clean --skip=publish,validate,announce --release-notes=/tmp/empty-notes.md --verbose
+ls dist*
+```
+
+```
+GITHUB_TOKEN=dummy goreleaser release --clean --skip=publish,announce --verbose 2>&1 | tee /tmp/goreleaser.log
+```
+
+Review output for homebrew/docker logs:
+
+```
+grep -i -A2 "homebrew\|cask" /tmp/goreleaser.log
+grep -i -A2 "docker" /tmp/goreleaser.log
+```
