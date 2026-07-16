@@ -69,12 +69,11 @@ func (rc *RecordConfig) validateRDATA() {
 	if reflect.TypeOf(rd).Kind() != reflect.Pointer {
 		return
 	}
-	// I try to avoid using reflection but this code is faster than
-	// ts := fmt.Sprintf("%T", rd)
-	// if ts[0] != '*' {
+	// The common path uses reflection for speed. The old code looked like:
+	// if ts := fmt.Sprintf("%T", rd); ts[0] != '*' {}
 
-	ts := fmt.Sprintf("%T", rd)
-	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%s", rc.TypeNum, rc.Type, ts)
+	// On the other hand, we use %T for the error path, which is rarely taken and can be slow.
+	l := fmt.Sprintf("\nERROR: validateRDATA: typeNum=%d type=%q type=%T", rc.TypeNum, rc.Type, "%T", rd)
 	fmt.Println(l)
 	fmt.Println(string(debug.Stack()))
 	panic(l)
@@ -84,8 +83,7 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
 	// sadly those functions aren't called by dnsv2.NewData().
 	// Fixing this would be difficult since we can't add methods to the
-	// dnsv2.RDATA interface.  We could allow types to register a "normalize"
-	// function for their type, which would be called by normalizeRDATA().
+	// dnsv2.RDATA interface.  We could use interfaces that only get called when they exist.
 
 	switch v := rd2.(type) {
 
@@ -105,7 +103,7 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 		return v
 
 	case dnsrdatav2.TXT:
-		// DNSControl stores TXT data segments, with all-but-the-last segment being exactly 255 octets.
+		// Store TXT data segments with all-but-the-last segment being exactly 255 octets.
 		v.Txt = TXTSegmented(v)
 		return v
 

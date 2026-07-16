@@ -235,7 +235,7 @@ Creating TXT records:
 ```go
 rc1, err := dc.NewRecordConfig(LABEL, TTL, dnsv2.TypeTXT, "raw bytes")
 rc2, err := dc.NewRecordConfigParse(LABEL, TTL, dnsv2.TypeTXT, `"quoted" "like" "from" "zonefile"`)
-* `SetRDATA()`: Will re-segment and clean up if needed.
+# NOTE: dc.NewRecordConfig*() will will re-segment if needed.
 ```
 
 Reading TXT data:
@@ -244,9 +244,16 @@ Reading TXT data:
 rd := rc.GetRDATA()             // Get the record's fields.  Prints warning to stderr if Txt is not segmented properly.
 rdtxt := rd.(dnsrdatav2.TXT)    // Cast it as a TXT record.
 q := rdtxt.String()             // Like a zonefile: "quoted" "like" "from" "zonefile"
-q := models.TXTJoined(rdtxt)    // One big string
-q := models.TXTSegmented(rdtxt) // The segments
+j := models.TXTJoined(rdtxt)    // One big string
+s := models.TXTSegmented(rdtxt) // The segments
+
+# FYI: If you know this is a TXT record, you can take shortcuts:
+rdtxt := rc.GetRDATA().(dnsrdatav2.TXT)    
+q := rc.GetRDATA().(dnsrdatav2.TXT).String()
+j := models.TXTJoined(rc.GetRDATA().(dnsrdatav2.TXT).Txt)
+s := models.TXTSegmented(rc.GetRDATA().(dnsrdatav2.TXT).Txt)
 ```
+
 Legacy functions that work, but will be replaced over time. New code should not use these.
 
 Getters:
@@ -257,14 +264,14 @@ Setters:
 * `SetTargetTXT(string)`:  Setter. Takes a string. Will segment into 255-octet segments.
 * `SetTargetTXTs([]string)`: Setter. Takes a []string.  Will re-segment and clean up if needed.
 
-If you call the wrong getter, we'll fix things up for you:
+If you call the wrong getter, usually the right thing happens:
 * `rc.GetTargetField()`: For TXT records, same as `GetTargetTXTJoined()`
-* `rc.GetTargetIP()`: For TXT records, panics.
 * `rc.GetTargetCombinedFunc()`: For TXT records, calls encodeFn otherwise is the same as `GetTargetTXTJoined()`
 * `rc.GetTargetCombined()`: For TXT records, returns txt encoded via `txtutil.EncodeQuoted()`
 * `rc.GetTargetRFC1035Quoted()`: Same as `rd.String()`
 * `rc.GetTargetDebug()`: For TXT records, same as rd.String()
 * `rc.GetTargetJS()`: Uses the JSON tags on the structs to output JSON of the fields.
+* `rc.GetTargetIP()`: For TXT records, panics.
 
 ## How to label imports
 
