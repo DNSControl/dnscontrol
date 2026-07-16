@@ -50,15 +50,15 @@ func NewNetbird(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 		return nil, errors.New("no NetBird token provided")
 	}
 
-	apiUrl := m["apiurl"]
-	if apiUrl == "" {
-		apiUrl = netbirdAPIURL
+	apiURL := m["apiurl"]
+	if apiURL == "" {
+		apiURL = netbirdAPIURL
 	}
 
 	api := &netbirdProvider{
 		token:   m["token"],
 		client:  &http.Client{},
-		apiURL:  apiUrl,
+		apiURL:  apiURL,
 		zoneMap: make(map[string]*zoneInfo),
 	}
 
