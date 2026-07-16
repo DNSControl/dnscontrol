@@ -374,6 +374,13 @@
     "access_token_secret": "$SAKURACLOUD_ACCESS_TOKEN_SECRET",
     "domain": "$SAKURACLOUD_DOMAIN"
   },
+  "SCALEWAY": {
+    "TYPE": "SCALEWAY",
+    "access_key": "$SCALEWAY_ACCESS_KEY",
+    "secret_key": "$SCALEWAY_SECRET_KEY",
+    "project_id": "$SCALEWAY_PROJECT_ID",
+    "domain": "$SCALEWAY_DOMAIN"
+  },
   "SOFTLAYER": {
     "TYPE": "SOFTLAYER",
     "api_key": "$SL_API_KEY",

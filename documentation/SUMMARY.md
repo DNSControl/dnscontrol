@@ -181,6 +181,7 @@
 * [Realtime Register](provider/realtimeregister.md)
 * [RWTH DNS-Admin](provider/rwth.md)
 * [Sakura Cloud](provider/sakuracloud.md)
+* [Scaleway](provider/scaleway.md)
 * [SoftLayer DNS](provider/softlayer.md)
 * [TransIP](provider/transip.md)
 * [UniFi Network](provider/unifi.md)

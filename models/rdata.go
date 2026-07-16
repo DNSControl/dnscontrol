@@ -9,7 +9,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
 )
@@ -103,7 +102,7 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 		return v
 
 	case dnsrdatav2.TXT:
-		// Store TXT data segments with all-but-the-last segment being exactly 255 octets.
+		// Store TXT data segments with each segment being 255 octets, the remainder in the final segment.
 		v.Txt = TXTSegmented(v)
 		return v
 

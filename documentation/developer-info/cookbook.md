@@ -235,8 +235,9 @@ Creating TXT records:
 ```go
 rc1, err := dc.NewRecordConfig(LABEL, TTL, dnsv2.TypeTXT, "raw bytes")
 rc2, err := dc.NewRecordConfigParse(LABEL, TTL, dnsv2.TypeTXT, `"quoted" "like" "from" "zonefile"`)
-# NOTE: dc.NewRecordConfig*() will will re-segment if needed.
 ```
+
+FYI: dc.NewRecordConfig*() will will re-segment if needed.
 
 Reading TXT data:
 
@@ -257,21 +258,24 @@ s := models.TXTSegmented(rc.GetRDATA().(dnsrdatav2.TXT).Txt)
 Legacy functions that work, but will be replaced over time. New code should not use these.
 
 Getters:
+
 * `rc.GetTargetTXTJoined()`: Returns one big string
 * `rc.GetTargetTXTSegmented()`: Returns an array of 255-octet segments (the last segment will hold the remainder)
 
 Setters:
+
 * `SetTargetTXT(string)`:  Setter. Takes a string. Will segment into 255-octet segments.
 * `SetTargetTXTs([]string)`: Setter. Takes a []string.  Will re-segment and clean up if needed.
 
 If you call the wrong getter, usually the right thing happens:
+
 * `rc.GetTargetField()`: For TXT records, same as `GetTargetTXTJoined()`
 * `rc.GetTargetCombinedFunc()`: For TXT records, calls encodeFn otherwise is the same as `GetTargetTXTJoined()`
 * `rc.GetTargetCombined()`: For TXT records, returns txt encoded via `txtutil.EncodeQuoted()`
 * `rc.GetTargetRFC1035Quoted()`: Same as `rd.String()`
 * `rc.GetTargetDebug()`: For TXT records, same as rd.String()
 * `rc.GetTargetJS()`: Uses the JSON tags on the structs to output JSON of the fields.
-* `rc.GetTargetIP()`: For TXT records, panics.
+* `rc.GetTargetIP()`: Panics if called on a TXT record.
 
 ## How to label imports
 

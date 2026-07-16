@@ -10,10 +10,12 @@ To use this provider, add an entry to `creds.json` with `TYPE` set to `AXFRDDNS`
 
 Zone transfers and DDNS updates default to TCP when using this provider.
 
-The following two parameters in `creds.json` allow switching to TCP or TCP over TLS.
+The following two parameters in `creds.json` allow switching to TCP, TCP over TLS, or Unix domain sockets.
 
-* `update-mode`: May contain `tcp` (the default), `udp`, or `tcp-tls`.
-* `transfer-mode`: May contain `tcp` (the default), or `tcp-tls`.
+* `update-mode`: May contain `tcp` (the default), `udp`, `tcp-tls`, or `unix`.
+* `transfer-mode`: May contain `tcp` (the default), `tcp-tls`, or `unix`.
+
+When using `unix` mode, `master` and/or `transfer-server` should be set to the path of the Unix domain socket.
 
 ### Authentication
 

@@ -113,7 +113,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["update-mode"] != "" {
 		switch config["update-mode"] {
-		case "tcp", "tcp-tls":
+		case "tcp", "tcp-tls", "unix":
 			api.updateMode = config["update-mode"]
 		case "udp":
 			api.updateMode = ""
@@ -125,7 +125,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["transfer-mode"] != "" {
 		switch config["transfer-mode"] {
-		case "tcp", "tcp-tls":
+		case "tcp", "tcp-tls", "unix":
 			api.transferMode = config["transfer-mode"]
 		default:
 			printer.Printf("[Warning] AXFRDDNS: Unknown transfer-mode in `creds.json` (%s)\n", config["transfer-mode"])
@@ -135,7 +135,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["master"] != "" {
 		api.master = config["master"]
-		if !strings.Contains(api.master, ":") {
+		if api.updateMode != "unix" && !strings.Contains(api.master, ":") {
 			api.master = api.master + ":53"
 		}
 	} else if len(api.nameservers) != 0 {
@@ -145,7 +145,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["transfer-server"] != "" {
 		api.transferServer = config["transfer-server"]
-		if !strings.Contains(api.transferServer, ":") {
+		if api.transferMode != "unix" && !strings.Contains(api.transferServer, ":") {
 			api.transferServer = api.transferServer + ":53"
 		}
 	} else {
@@ -247,10 +247,13 @@ func (c *axfrddnsProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 func (c *axfrddnsProvider) getAxfrConnection() (*dnsv1.Transfer, error) {
 	var con net.Conn
 	var err error
-	if c.transferMode == "tcp-tls" {
+	switch c.transferMode {
+	case "tcp-tls":
 		// RFC 9103 "DNS Zone Transfer over TLS" section 7.1 requires "dot"
 		con, err = tls.Dial("tcp", c.transferServer, &tls.Config{NextProtos: []string{"dot"}})
-	} else {
+	case "unix":
+		con, err = net.Dial("unix", c.transferServer)
+	default:
 		con, err = net.Dial("tcp", c.transferServer)
 	}
 	if err != nil {
