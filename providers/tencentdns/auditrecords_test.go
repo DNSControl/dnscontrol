@@ -31,3 +31,39 @@ func TestAuditRecords(t *testing.T) {
 	assert.Contains(t, errs[2].Error(), "srv has empty target")
 	assert.Contains(t, errs[3].Error(), "srv has empty target")
 }
+
+func TestAuditRecordsValidatesWeight(t *testing.T) {
+	tests := []struct {
+		name      string
+		weight    string
+		wantError bool
+	}{
+		{name: "unset"},
+		{name: "minimum", weight: "0"},
+		{name: "maximum", weight: "100"},
+		{name: "negative", weight: "-1", wantError: true},
+		{name: "too large", weight: "101", wantError: true},
+		{name: "not an integer", weight: "heavy", wantError: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			rc := &models.RecordConfig{
+				Type: "A",
+				Metadata: map[string]string{
+					metaRecordWeight: tc.weight,
+				},
+			}
+			rc.SetTarget("1.2.3.4")
+
+			errs := AuditRecords(models.Records{rc})
+			if tc.wantError {
+				if assert.Len(t, errs, 1) {
+					assert.Contains(t, errs[0].Error(), metaRecordWeight)
+				}
+				return
+			}
+			assert.Empty(t, errs)
+		})
+	}
+}
