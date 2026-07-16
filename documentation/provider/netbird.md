@@ -15,6 +15,22 @@ Example:
 ```
 {% endcode %}
 
+If you use a self-hosted instance you need to set `apiurl` in the credentials configuration.
+
+Example:
+
+{% code title="creds.json" %}
+```json
+{
+  "netbird": {
+    "TYPE": "NETBIRD",
+    "token": "your-netbird-api-token",
+    "apiurl": "https://your-netbird-host/api"
+  }
+}
+```
+{% endcode %}
+
 ## Metadata
 
 This provider recognizes the following metadata fields:
