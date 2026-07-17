@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd "${1:-.}"
+
 echo '========== RecordConfig{'
 grep --include='*.go' -r -F 'RecordConfig{' *
 echo '========== PopulateFromString{'
