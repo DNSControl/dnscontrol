@@ -5,8 +5,8 @@ cloud.google.com/go/auth/oauth2adapt v0.2.8 h1:keo8NaayQZ6wimpNSmW5OPc283g65QNIi
 cloud.google.com/go/auth/oauth2adapt v0.2.8/go.mod h1:XQ9y31RkqZCcwJWNSx2Xvric3RrU88hAYYbjDWYDL+c=
 cloud.google.com/go/compute/metadata v0.9.0 h1:pDUj4QMoPejqq20dK0Pg2N4yG9zIkYGdBtwLoEkH9Zs=
 cloud.google.com/go/compute/metadata v0.9.0/go.mod h1:E0bWwX5wTnLPedCKqk3pJmVgCBSM6qQI1yTBdEb3C10=
-codeberg.org/TomOnTime/dns v0.5.4-0.20260714140309-b8fa0c6fb1a3 h1:X8vvcz9asaBdAC/XAzvwkRqKq//DFt9SGRFtwFVuSuE=
-codeberg.org/TomOnTime/dns v0.5.4-0.20260714140309-b8fa0c6fb1a3/go.mod h1:LDhg8XBEFyNBMdY0cHY+tiABkomc4+sFnVL2FRJhvqg=
+codeberg.org/TomOnTime/dns v0.5.4-0.20260717191154-bb5b74e13feb h1:jHVWIhJf+ffGFsUmMiw0Z2q4x4ozk2GsuVMqzM6QNC8=
+codeberg.org/TomOnTime/dns v0.5.4-0.20260717191154-bb5b74e13feb/go.mod h1:LDhg8XBEFyNBMdY0cHY+tiABkomc4+sFnVL2FRJhvqg=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/AlecAivazis/survey/v2 v2.3.7 h1:6I/u8FvytdGsgonrYsVn2t8t4QiRnh6QSTqkkhIiSjQ=
 github.com/AlecAivazis/survey/v2 v2.3.7/go.mod h1:xUTIdE4KCOIjsBAE1JYsUPoCqYdZ1reCfTwbto0Fduo=
