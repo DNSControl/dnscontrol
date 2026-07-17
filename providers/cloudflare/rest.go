@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
@@ -471,22 +472,18 @@ func (c *cloudflareProvider) deleteWorkerRoute(recordID, domainID string) error 
 	return err
 }
 
-func (c *cloudflareProvider) updateWorkerRoute(recordID, domainID string, target string) error {
+func (c *cloudflareProvider) updateWorkerRoute(recordID, domainID string, rd dnsv2.RDATA) error {
 	if err := c.deleteWorkerRoute(recordID, domainID); err != nil {
 		return err
 	}
-	return c.createWorkerRoute(domainID, target)
+	return c.createWorkerRoute(domainID, rd)
 }
 
-func (c *cloudflareProvider) createWorkerRoute(domainID string, target string) error {
-	// $PATTERN,$SCRIPT
-	parts := strings.Split(target, ",")
-	if len(parts) != 2 {
-		return fmt.Errorf("unexpected target: '%s' (expected: 'PATTERN,SCRIPT')", target)
-	}
+func (c *cloudflareProvider) createWorkerRoute(domainID string, rd dnsv2.RDATA) error {
+	rdwr := rd.(privatetypesrdata.CFWORKERROUTE)
 	wr := cloudflare.CreateWorkerRouteParams{
-		Pattern: parts[0],
-		Script:  parts[1],
+		Pattern: rdwr.When,
+		Script:  rdwr.Then,
 	}
 
 	_, err := c.cfClient.CreateWorkerRoute(context.Background(), cloudflare.ZoneIdentifier(domainID), wr)

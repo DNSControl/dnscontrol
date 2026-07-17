@@ -1,12 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 cd "${1:-.}"
+if [[ $? -ne 0 ]] ; then
+    exit 1
+fi
 
 echo '========== RecordConfig{'
-grep --include='*.go' -r -F 'RecordConfig{' *
+grep --color --include='*.go' -r -F 'RecordConfig{' *
 echo '========== PopulateFromString{'
-grep --include='*.go' -r -F 'PopulateFromString' *
+grep --color --include='*.go' -r -F 'PopulateFromString' *
 echo '========== SetTarget'
-grep --include='*.go' -r -F 'SetTarget' *
+grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\('
 echo '========== GetTarget'
-grep --include='*.go' -r -F 'GetTarget' *
+grep --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|SetTargetCAAString\(|SetTargetDNSKEYString\(|SetTargetDSString\(|SetTargetLOCString\(|SetTargetMX\(|SetTargetMXString\(|SetTargetNAPTR\(|SetTargetNAPTRString\(|SetTargetSMIMEA\(|SetTargetSOA\(|SetTargetSRV\(|SetTargetSRVPriorityString\(|SetTargetSRVString\(|SetTargetSSHFP\(|SetTargetSSHFPStrings\(|SetTargetSSHFPString\(|SetTargetSVCBString\(|SetTargetTLSA\(|SetTargetTLSAString\('
+

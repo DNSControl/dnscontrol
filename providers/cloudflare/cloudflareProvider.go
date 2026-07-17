@@ -385,7 +385,9 @@ func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, dom
 	case "CF_WORKER_ROUTE":
 		return []*models.Correction{{
 			Msg: msg,
-			F:   func() error { return c.createWorkerRoute(domainID, newrec.GetTargetField()) },
+			F: func() error {
+				return c.createWorkerRoute(domainID, newrec.GetRDATA())
+			},
 		}}
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
 		return []*models.Correction{{
@@ -424,7 +426,7 @@ func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordCon
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
-				return c.updateWorkerRoute(idTxt, domainID, newrec.GetTargetField())
+				return c.updateWorkerRoute(idTxt, domainID, newrec.GetRDATA())
 			},
 		}}
 	default:
@@ -693,10 +695,6 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 			return err
 		}
 
-		// rec.Metadata[metaOriginalIP] = rec.GetTargetField()
-		// if err := rec.SetTarget(newIP.String()); err != nil {
-		// 	return err
-		// }
 		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
 		rd, err := models.MakeA(dc.Name, rec.Metadata, newIP)
 		if err != nil {
