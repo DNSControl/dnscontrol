@@ -10,13 +10,14 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	aauth "github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns"
-
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
@@ -290,9 +291,7 @@ func (a *azurednsProvider) getNameNonDefaultNameServers(domain string, nss []str
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (a *azurednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	existingRecords, _, _, err := a.getExistingRecords(domain)
+	existingRecords, _, _, err := a.getExistingRecords(dc)
 	if err != nil {
 		return nil, err
 	}
@@ -300,7 +299,8 @@ func (a *azurednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return existingRecords, nil
 }
 
-func (a *azurednsProvider) getExistingRecords(domain string) (models.Records, []*adns.RecordSet, string, error) {
+func (a *azurednsProvider) getExistingRecords(dc *models.DomainConfig) (models.Records, []*adns.RecordSet, string, error) {
+	domain := dc.Name
 	zone, ok := a.zones[domain]
 	if !ok {
 		return nil, nil, "", errNoExist{domain}
@@ -313,7 +313,7 @@ func (a *azurednsProvider) getExistingRecords(domain string) (models.Records, []
 
 	var existingRecords models.Records
 	for _, set := range rawRecords {
-		existingRecords = append(existingRecords, nativeToRecords(set, zoneName)...)
+		existingRecords = append(existingRecords, nativeToRecords(set, dc)...)
 	}
 
 	return existingRecords, rawRecords, zoneName, nil
@@ -486,77 +486,50 @@ func safeTarget(t *string) string {
 	return *t
 }
 
-func nativeToRecords(set *adns.RecordSet, origin string) []*models.RecordConfig {
+func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) []*models.RecordConfig {
+	origin := dc.Name
 	var results []*models.RecordConfig
+	label := dc.LabelFromFQDNWithDot(*set.Properties.Fqdn)
+	ttl := uint32(*set.Properties.TTL)
 	switch rtype := *set.Type; rtype {
 	case "Microsoft.Network/dnszones/A":
 		if set.Properties.ARecords != nil {
 			// This is an A recordset. Process all the targets there.
 			for _, rec := range set.Properties.ARecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "A"
-				_ = rc.SetTarget(*rec.IPv4Address)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeA, *rec.IPv4Address)
+				rc.Original = set
 				results = append(results, rc)
 			}
 		} else {
 			// This is an AZURE_ALIAS of an "A" record.
-			rc := &models.RecordConfig{
-				Type: "AZURE_ALIAS",
-				TTL:  uint32(*set.Properties.TTL),
-				AzureAlias: map[string]string{
-					"type": "A",
-				},
-				Original: set,
-			}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			_ = rc.SetTarget(safeTarget(set.Properties.TargetResource.ID))
+			rc, _ := dc.NewRecordConfig(label, ttl, privatetypes.TypeAZUREALIAS, "A", safeTarget(set.Properties.TargetResource.ID))
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/AAAA":
 		if set.Properties.AaaaRecords != nil {
 			// This is an AAAA recordset. Process all the targets there.
 			for _, rec := range set.Properties.AaaaRecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "AAAA"
-				_ = rc.SetTarget(*rec.IPv6Address)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, *rec.IPv6Address)
+				rc.Original = set
 				results = append(results, rc)
 			}
 		} else {
 			// This is an AZURE_ALIAS of an "AAAA" record.
-			rc := &models.RecordConfig{
-				Type: "AZURE_ALIAS",
-				TTL:  uint32(*set.Properties.TTL),
-				AzureAlias: map[string]string{
-					"type": "AAAA",
-				},
-				Original: set,
-			}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			_ = rc.SetTarget(safeTarget(set.Properties.TargetResource.ID))
+			rc, _ := dc.NewRecordConfig(label, ttl, privatetypes.TypeAZUREALIAS, "AAAA", safeTarget(set.Properties.TargetResource.ID))
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/CNAME":
 		if set.Properties.CnameRecord != nil {
 			// This is a CNAME recordset. Process the targets. (there can only be one)
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "CNAME"
-			_ = rc.SetTarget(*set.Properties.CnameRecord.Cname)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, *set.Properties.CnameRecord.Cname)
+			rc.Original = set
 			results = append(results, rc)
 		} else {
 			// This is an AZURE_ALIAS of a "CNAME" record.
-			rc := &models.RecordConfig{
-				Type: "AZURE_ALIAS",
-				TTL:  uint32(*set.Properties.TTL),
-				AzureAlias: map[string]string{
-					"type": "CNAME",
-				},
-				Original: set,
-			}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			_ = rc.SetTarget(safeTarget(set.Properties.TargetResource.ID))
+			rc, _ := dc.NewRecordConfig(label, ttl, privatetypes.TypeAZUREALIAS, "CNAME", safeTarget(set.Properties.TargetResource.ID))
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/NS":

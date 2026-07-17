@@ -53,6 +53,12 @@ rc2, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
   - `models.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
   - `models.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
   - `models.LabelFromFQDNWithDot()`: Use this if your provider always give syou the FQDN+"." (`foo.example.com.`)
+- Which to use?
+  - Unsurer? Try LabelFromFQDNWithDot() and watch for errors.
+  - Errors like `DEBUG: LabelFromFQDNWithDot(quux.a.dnscontrol-azure.com) called WRONG.'
+  - In this case, the hostname (`quux.a.dnscontrol-azure.com`) indicates `LabelFromFQDNNoDot` is more appropriate.
+  - If you see a shortname, use `LabelFromShort`
+  - If the integration tests for IGNORE() fail, you've probably picked the wrong function.
 - Why 3 functions? Can't NewRecordConfig figure it out?
   - There are ambiguous cases that make it impossible to guess.
   - It is faster and more accurate to simply have multiple functions, one for each situation.
@@ -132,10 +138,10 @@ fmt.Printf("Like in a zonefile: %s\n", rdmx.String()) // Same as rd.String()
 To alter fields call `GetRDATA()`, change the fields, then call `SetRDATA()` to save it back.  `GetRDATA()` returns a copy of the RDATA, therefore mutating it without saving it back is fruitless.
 
 ```go
-rd := rc.GetRDATA()     // The generic RDATA
-rdmx := rd.(dnsv2.MX)   // Cast to the MX record
-rdmx.Preference = 999   // Change a field.
-rc.SetRDATA(rdmx)       // Update the record.
+rd := rc.GetRDATA()     // Get the generic RDATA
+rdmx := rd.(dnsv2.MX)   // Cast to the MX struct
+rdmx.Preference = 999   // Alter a field.
+rc.SetRDATA(rdmx)       // Save it back.
 ```
 
 ## Create `models.RecordConfig` literals for testdata
