@@ -261,7 +261,6 @@ func (a *edgeDNSProvider) ListZones() ([]string, error) {
 	return zones, nil
 }
 
-
 func managedTTL(dc *models.DomainConfig, fqdn, rtype string) uint32 {
 	for _, r := range dc.Records {
 		if r.NameFQDN == fqdn && r.Type == rtype {
