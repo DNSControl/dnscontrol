@@ -250,28 +250,12 @@ func (a *edgeDNSProvider) createRecordset(ctx context.Context, records []*models
 }
 
 // replaceRecordset replaces an existing AkamaiEdgeDNS recordset in the zone.
-func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records []*models.RecordConfig, filteredExistingTargets map[string]bool, zonename string) error {
+func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records []*models.RecordConfig, ttl uint32, zonename string) error {
 	akaRecord, err := a.rcToRs(records)
 	if err != nil {
 		return err
 	}
-
-	existingRecord, getErr := a.client.GetRecord(ctx, dns.GetRecordRequest{
-		Zone:       zonename,
-		Name:       akaRecord.Name,
-		RecordType: akaRecord.RecordType,
-	})
-	if getErr == nil && existingRecord != nil {
-		desired := make(map[string]bool, len(akaRecord.Target))
-		for _, t := range akaRecord.Target {
-			desired[t] = true
-		}
-		for _, t := range existingRecord.Target {
-			if !desired[t] && !filteredExistingTargets[t] {
-				akaRecord.Target = append(akaRecord.Target, t)
-			}
-		}
-	}
+	akaRecord.TTL = int(ttl)
 
 	err = a.client.UpdateRecord(ctx, dns.UpdateRecordRequest{
 		Zone:   zonename,

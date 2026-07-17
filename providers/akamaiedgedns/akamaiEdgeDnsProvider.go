@@ -13,10 +13,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
@@ -28,7 +27,6 @@ var features = providers.DocumentationNotes{
 	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
 	providers.CanUseAKAMAICDN:        providers.Can(),
 	providers.CanUseAKAMAITLC:        providers.Can(),
 	providers.CanUseAlias:            providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
@@ -172,84 +170,41 @@ func (a *edgeDNSProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		return nil, 0, err
 	}
 
-	keysToUpdate, toReport, actualChangeCount, err := diff.NewCompat(dc).ChangedGroups(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecordSet(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	existingRecordsMap := make(map[models.RecordKey][]*models.RecordConfig)
-	for _, r := range existingRecords {
-		key := models.RecordKey{NameFQDN: r.NameFQDN, Type: r.Type}
-		existingRecordsMap[key] = append(existingRecordsMap[key], r)
-	}
+	var corrections []*models.Correction
 
-	desiredRecordsMap := dc.Records.GroupedByKey()
-
-	// Deletes must occur first. For example, if replacing a existing CNAME with an A of the same name:
-	//    DELETE CNAME foo.example.net
-	// must occur before
-	//    CREATE A foo.example.net
-	// because both an A and a CNAME for the same name is not allowed.
-
-	lastCorrections := []*models.Correction{} // creates and replaces last
-
-	for key, msg := range keysToUpdate {
-		existing, okExisting := existingRecordsMap[key]
-		desired, okDesired := desiredRecordsMap[key]
-
-		if okExisting && !okDesired {
-			// In the existing map but not in the desired map: Delete
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+		case diff2.CREATE:
 			corrections = append(corrections, &models.Correction{
-				Msg: strings.Join(msg, "\n   "),
-				F: func() error {
-					return a.deleteRecordset(ctx, existing, dc.Name)
-				},
+				Msg: change.MsgsJoined,
+				F:   func() error { return a.createRecordset(ctx, change.New, dc.Name) },
 			})
-			printer.Debugf("deleteRecordset: %s %s\n", key.NameFQDN, key.Type)
-			for _, rdata := range existing {
-				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
-			}
-		} else if !okExisting && okDesired {
-			// Not in the existing map but in the desired map: Create
-			lastCorrections = append(lastCorrections, &models.Correction{
-				Msg: strings.Join(msg, "\n   "),
-				F: func() error {
-					return a.createRecordset(ctx, desired, dc.Name)
-				},
-			})
-			printer.Debugf("createRecordset: %s %s\n", key.NameFQDN, key.Type)
-			for _, rdata := range desired {
-				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
-			}
-		} else if okExisting && okDesired {
-			filteredTargets := make(map[string]bool, len(existing))
-			for _, r := range existing {
-				if recordMatchesAnyIgnoreRule(dc, r) {
-					continue
-				}
-				if raw, ok := r.Metadata["akamai_raw_rdata"]; ok {
-					filteredTargets[raw] = true
-				} else {
-					filteredTargets[r.GetTargetCombined()] = true
+		case diff2.CHANGE:
+			ttl := managedTTL(dc, change.New[0].NameFQDN, change.New[0].Type)
+			for _, r := range change.New {
+				if r.TTL != ttl {
+					printer.Warnf("TTL mismatch in %s %s: using %d (managed), ignoring %d\n", change.New[0].NameFQDN, change.New[0].Type, ttl, r.TTL)
+					break
 				}
 			}
-			lastCorrections = append(lastCorrections, &models.Correction{
-				Msg: strings.Join(msg, "\n   "),
-				F: func() error {
-					return a.replaceRecordset(ctx, desired, filteredTargets, dc.Name)
-				},
+			corrections = append(corrections, &models.Correction{
+				Msg: change.MsgsJoined,
+				F:   func() error { return a.replaceRecordset(ctx, change.New, ttl, dc.Name) },
 			})
-			printer.Debugf("replaceRecordset: %s %s\n", key.NameFQDN, key.Type)
-			for _, rdata := range desired {
-				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
-			}
+		case diff2.DELETE:
+			corrections = append(corrections, &models.Correction{
+				Msg: change.MsgsJoined,
+				F:   func() error { return a.deleteRecordset(ctx, change.Old, dc.Name) },
+			})
 		}
 	}
-
-	// Deletes first, then creates and replaces
-	corrections = append(corrections, lastCorrections...)
 
 	// AutoDnsSec correction
 	existingAutoDNSSecEnabled, err := a.isAutoDNSSecEnabled(ctx, dc.Name)
@@ -260,23 +215,15 @@ func (a *edgeDNSProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	desiredAutoDNSSecEnabled := dc.AutoDNSSEC == "on"
 
 	if !existingAutoDNSSecEnabled && desiredAutoDNSSecEnabled {
-		// Existing false (disabled), Desired true (enabled)
 		corrections = append(corrections, &models.Correction{
 			Msg: "Enable AutoDnsSec\n",
-			F: func() error {
-				return a.autoDNSSecEnable(ctx, true, dc.Name)
-			},
+			F:   func() error { return a.autoDNSSecEnable(ctx, true, dc.Name) },
 		})
-		printer.Debugf("autoDNSSecEnable: Enable AutoDnsSec for zone %s\n", dc.Name)
 	} else if existingAutoDNSSecEnabled && !desiredAutoDNSSecEnabled {
-		// Existing true (enabled), Desired false (disabled)
 		corrections = append(corrections, &models.Correction{
 			Msg: "Disable AutoDnsSec\n",
-			F: func() error {
-				return a.autoDNSSecEnable(ctx, false, dc.Name)
-			},
+			F:   func() error { return a.autoDNSSecEnable(ctx, false, dc.Name) },
 		})
-		printer.Debugf("autoDNSSecEnable: Disable AutoDnsSec for zone %s\n", dc.Name)
 	}
 
 	return corrections, actualChangeCount, nil
@@ -314,26 +261,14 @@ func (a *edgeDNSProvider) ListZones() ([]string, error) {
 	return zones, nil
 }
 
-// recordMatchesAnyIgnoreRule returns true if rec is covered by any IGNORE() rule in dc.
-func recordMatchesAnyIgnoreRule(dc *models.DomainConfig, rec *models.RecordConfig) bool {
-	for _, uc := range dc.Unmanaged {
-		labelMatch := uc.LabelGlob == nil || uc.LabelGlob.Match(rec.GetLabel())
-		if !labelMatch {
-			continue
-		}
-		typeMatch := len(uc.RTypeMap) == 0
-		if !typeMatch {
-			_, typeMatch = uc.RTypeMap[rec.Type]
-		}
-		if !typeMatch {
-			continue
-		}
-		targetMatch := uc.TargetGlob == nil || uc.TargetGlob.Match(rec.GetTargetField())
-		if targetMatch {
-			return true
+
+func managedTTL(dc *models.DomainConfig, fqdn, rtype string) uint32 {
+	for _, r := range dc.Records {
+		if r.NameFQDN == fqdn && r.Type == rtype {
+			return r.TTL
 		}
 	}
-	return false
+	return 0
 }
 
 func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
