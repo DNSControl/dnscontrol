@@ -1281,6 +1281,71 @@ func makeTests() []*TestGroup {
 			),
 		),
 
+		// Tencent Cloud DNSPod resolution lines and weighted routing.
+		testgroup("TENCENTDNS_LINE_WEIGHT",
+			only("TENCENTDNS"),
+			tc("create records on the default and telecom lines",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "1.2.3.4"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("change the telecom record value",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("change the record line",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "联通",
+				}),
+			),
+			tc("delete line metadata",
+				a("tencent-line", "1.2.3.4"),
+				a("tencent-line", "5.6.7.8"),
+			),
+			tc("restore line metadata",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("delete only the line-specific record",
+				a("tencent-line", "1.2.3.4"),
+			),
+			tcEmptyZone(),
+			tc("create weighted records",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "80",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "20",
+				}),
+			),
+			tc("change weights",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "50",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "50",
+				}),
+			),
+			tc("delete weight metadata",
+				a("tencent-weight", "1.2.3.4"),
+				a("tencent-weight", "5.6.7.8"),
+			),
+			tc("explicit zero weights are equivalent to omitted weights",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "0",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "0",
+				}),
+			).ExpectNoChanges(),
+		),
+
 		// R53_WEIGHT_HEALTH_CHECK: Not included as an integration test because
 		// health checks are external AWS resources that must be pre-provisioned.
 		// The R53_HEALTH_CHECK_ID modifier is tested implicitly through the

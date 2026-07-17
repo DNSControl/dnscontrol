@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/stretchr/testify/assert"
 	intldomain "github.com/tencentcloud/tencentcloud-sdk-go-intl-en/tencentcloud/domain/v20180808"
@@ -138,6 +139,194 @@ func TestPrepDesiredRecordsAllowsPaidDomainTTL(t *testing.T) {
 	prepDesiredRecords(dc, 1)
 
 	assert.Equal(t, uint32(300), dc.Records[0].TTL)
+}
+
+func TestRecordLineComparableMatchesLineNameAndID(t *testing.T) {
+	domain := "example.com"
+	existingDefault := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLine:   defaultRecordLine,
+		metaRecordLineID: "0",
+	})
+	existingTelecom := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLine:   "电信",
+		metaRecordLineID: "10=1",
+	})
+	compare := recordMetadataComparable(models.Records{existingDefault, existingTelecom})
+
+	desiredDefault := makeLineRecord(domain, "1.2.3.4", nil)
+	desiredTelecomByName := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLine: "电信",
+	})
+	desiredTelecomByID := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLineID: "10=1",
+	})
+
+	assert.Equal(t, compare(existingDefault), compare(desiredDefault))
+	assert.Equal(t, compare(existingTelecom), compare(desiredTelecomByName))
+	assert.Equal(t, compare(existingTelecom), compare(desiredTelecomByID))
+}
+
+func TestRecordMetadataComparableDoesNotGuessAmbiguousLineID(t *testing.T) {
+	domain := "example.com"
+	first := makeLineRecord(domain, "192.0.2.1", map[string]string{
+		metaRecordLine:   "custom",
+		metaRecordLineID: "10=1",
+	})
+	second := makeLineRecord(domain, "192.0.2.1", map[string]string{
+		metaRecordLine:   "custom",
+		metaRecordLineID: "10=2",
+	})
+	desiredByName := makeLineRecord(domain, "192.0.2.1", map[string]string{
+		metaRecordLine: "custom",
+	})
+	compare := recordMetadataComparable(models.Records{first, second})
+
+	assert.NotEqual(t, compare(first), compare(desiredByName))
+	assert.NotEqual(t, compare(second), compare(desiredByName))
+}
+
+func TestRecordMetadataComparableKeepsDefaultLineMapping(t *testing.T) {
+	domain := "example.com"
+	existingDefault := makeLineRecord(domain, "192.0.2.1", map[string]string{
+		metaRecordLine: defaultRecordLine,
+	})
+	conflictingDefault := makeLineRecord(domain, "192.0.2.1", map[string]string{
+		metaRecordLine:   defaultRecordLine,
+		metaRecordLineID: "unexpected",
+	})
+	desiredDefault := makeLineRecord(domain, "192.0.2.1", nil)
+	compare := recordMetadataComparable(models.Records{existingDefault, conflictingDefault})
+
+	assert.Equal(t, compare(existingDefault), compare(desiredDefault))
+	assert.NotEqual(t, compare(conflictingDefault), compare(desiredDefault))
+}
+
+func TestRecordLineParticipatesInDiff(t *testing.T) {
+	domain := "example.com"
+	existing := models.Records{
+		makeLineRecord(domain, "1.2.3.4", map[string]string{
+			metaRecordLine:   defaultRecordLine,
+			metaRecordLineID: "0",
+		}),
+		makeLineRecord(domain, "1.2.3.4", map[string]string{
+			metaRecordLine:   "电信",
+			metaRecordLineID: "10=1",
+		}),
+	}
+	dc := models.MustNewDomainConfig(domain)
+	dc.Records = models.Records{
+		makeLineRecord(domain, "1.2.3.4", nil),
+		makeLineRecord(domain, "1.2.3.4", map[string]string{
+			metaRecordLineID: "10=1",
+		}),
+	}
+
+	changes, count, err := diff2.ByRecord(existing, dc, recordMetadataComparable(existing))
+
+	assert.NoError(t, err)
+	assert.Zero(t, count)
+	assert.Empty(t, changes)
+}
+
+func TestRecordLineDiffKeepsDefaultDomesticAndForeignRecords(t *testing.T) {
+	domain := "example.com"
+	existing := models.Records{
+		makeLineRecord(domain, "192.0.2.1", map[string]string{
+			metaRecordLine:   defaultRecordLine,
+			metaRecordLineID: "0",
+		}),
+		makeLineRecord(domain, "192.0.2.1", map[string]string{
+			metaRecordLine:   "境内",
+			metaRecordLineID: "3=0",
+		}),
+		makeLineRecord(domain, "192.0.2.2", map[string]string{
+			metaRecordLine:   "境外",
+			metaRecordLineID: "3=1",
+		}),
+	}
+	dc := models.MustNewDomainConfig(domain)
+	dc.Records = models.Records{
+		makeLineRecord(domain, "192.0.2.1", nil),
+		makeLineRecord(domain, "192.0.2.1", map[string]string{metaRecordLine: "境内"}),
+		makeLineRecord(domain, "192.0.2.2", map[string]string{metaRecordLine: "境外"}),
+	}
+
+	changes, count, err := diff2.ByRecord(existing, dc, recordMetadataComparable(existing))
+
+	assert.NoError(t, err)
+	assert.Zero(t, count)
+	assert.Empty(t, changes)
+}
+
+func TestRecordLineDiffDeletesOnlyExtraLine(t *testing.T) {
+	domain := "example.com"
+	existingDefault := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLine:   defaultRecordLine,
+		metaRecordLineID: "0",
+	})
+	existingTelecom := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordLine:   "电信",
+		metaRecordLineID: "10=1",
+	})
+	existing := models.Records{existingDefault, existingTelecom}
+	dc := models.MustNewDomainConfig(domain)
+	dc.Records = models.Records{makeLineRecord(domain, "1.2.3.4", nil)}
+
+	changes, count, err := diff2.ByRecord(existing, dc, recordMetadataComparable(existing))
+
+	if assert.NoError(t, err) && assert.Len(t, changes, 1) {
+		assert.Equal(t, diff2.DELETE, changes[0].Type)
+		assert.Same(t, existingTelecom, changes[0].Old[0])
+	}
+	assert.Equal(t, 1, count)
+}
+
+func TestRecordWeightParticipatesInDiff(t *testing.T) {
+	domain := "example.com"
+	existing := models.Records{makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordWeight: "80",
+	})}
+	dc := models.MustNewDomainConfig(domain)
+	dc.Records = models.Records{makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordWeight: "20",
+	})}
+
+	changes, count, err := diff2.ByRecord(existing, dc, recordMetadataComparable(existing))
+
+	if assert.NoError(t, err) && assert.Len(t, changes, 1) {
+		assert.Equal(t, diff2.CHANGE, changes[0].Type)
+	}
+	assert.Equal(t, 1, count)
+}
+
+func TestRecordWeightComparisonNormalizesValues(t *testing.T) {
+	domain := "example.com"
+	existing := models.Records{makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordWeight: "80",
+	})}
+	compare := recordMetadataComparable(existing)
+
+	desiredWithLeadingZero := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordWeight: "080",
+	})
+	desiredDisabled := makeLineRecord(domain, "1.2.3.4", map[string]string{
+		metaRecordWeight: "0",
+	})
+	desiredUnset := makeLineRecord(domain, "1.2.3.4", nil)
+
+	assert.Equal(t, compare(existing[0]), compare(desiredWithLeadingZero))
+	assert.Equal(t, compare(desiredUnset), compare(desiredDisabled))
+}
+
+func makeLineRecord(domain, target string, metadata map[string]string) *models.RecordConfig {
+	rc := &models.RecordConfig{
+		Type:     "A",
+		TTL:      600,
+		Metadata: metadata,
+	}
+	rc.SetLabel("www", domain)
+	rc.SetTarget(target)
+	return rc
 }
 
 func TestMinTTLForGrade(t *testing.T) {
