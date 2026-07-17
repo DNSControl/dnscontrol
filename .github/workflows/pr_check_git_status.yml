@@ -37,7 +37,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v7
         with:
-          node-version: lts/*
+          node-version: latest
       - run: npm install
       - run: node_modules/.bin/prettier --write pkg/js/helpers.js
       - run: git checkout -- package-lock.json
