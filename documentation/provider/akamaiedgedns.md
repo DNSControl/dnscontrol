@@ -51,6 +51,21 @@ The AKAMAITLC record can only be used once per zone.
 #### ALIAS
 Akamai Edge DNS does directly support `ALIAS` records. This provider will convert `ALIAS` records used at the zone apex (`@`) to `AKAMAITLC` records, and any other names to `CNAME` records.
 
+#### IGNORE
+
+`IGNORE()` is supported. Records matched by an `IGNORE()` rule will be left as-is on Akamai Edge DNS and not deleted.
+
+#### TTL with IGNORE
+
+Akamai Edge DNS stores a single TTL for all records that share the same name and type (a "recordset"). If you manage some records in a recordset while ignoring others, the TTL you set on the managed records will be applied to the whole recordset — including the ignored ones.
+
+If the ignored records currently have a different TTL than what you've set, DNSControl will print a warning during both `preview` and `push`:
+
+```
+WARNING: TTL mismatch in app.example.com A: using 900 (managed), ignoring 300
+```
+
+
 ### Secondary zones
 
 This provider only supports creating primary zones in Akamai. If a secondary zone has been manually created, only `AKAMAICDN` and `AKAMAITLC` records can be managed, as all other records are read-only.
