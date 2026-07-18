@@ -42,7 +42,7 @@ func (dsp *netnodProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		}
 		// loop over single records of this group and create records
 		for _, record := range rrset.Records {
-			r, err := toRecordConfig(domain, record, ttl, rrset.Name, rrset.Type)
+			r, err := toRecordConfig(dc, record, ttl, rrset.Name, rrset.Type)
 			if err != nil {
 				return nil, err
 			}

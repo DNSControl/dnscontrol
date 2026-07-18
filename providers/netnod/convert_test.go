@@ -5,15 +5,17 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
 	netnodPrimaryDNS "github.com/netnod/netnod-primary-dns-client"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestToRecordConfig(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
 	record := netnodPrimaryDNS.Record{
 		Content: "simple",
 	}
-	recordConfig, err := toRecordConfig("example.com", record, 120, "test", "TXT")
+	recordConfig, err := toRecordConfig(dc, record, 120, "test", "TXT")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "test.example.com", recordConfig.NameFQDN)
@@ -25,7 +27,7 @@ func TestToRecordConfig(t *testing.T) {
 	largeRecord := netnodPrimaryDNS.Record{
 		Content: largeContent,
 	}
-	recordConfig, err = toRecordConfig("example.com", largeRecord, 5, "large", "TXT")
+	recordConfig, err = toRecordConfig(dc, largeRecord, 5, "large", "TXT")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "large.example.com", recordConfig.NameFQDN)
@@ -37,14 +39,14 @@ func TestToRecordConfig(t *testing.T) {
 	luaRecord := netnodPrimaryDNS.Record{
 		Content: "TXT \"return 'Hello, world!'\"",
 	}
-	recordConfig, err = toRecordConfig("example.com", luaRecord, 3600, "script", "LUA")
+	recordConfig, err = toRecordConfig(dc, luaRecord, 3600, "script", "LUA")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "script.example.com", recordConfig.NameFQDN)
 	assert.Equal(t, "LUA", recordConfig.Type)
 	assert.Equal(t, "TXT", recordConfig.LuaRType)
 	assert.Equal(t, "return 'Hello, world!'", recordConfig.GetTargetTXTJoined())
-	assert.Equal(t, "TXT \"return 'Hello, world!'\"", recordConfig.GetTargetCombined())
+	assert.Equal(t, "TXT \"return 'Hello, world!'\"", recordConfig.GetRDATA().String())
 	assert.Equal(t, uint32(3600), recordConfig.TTL)
 }
 
