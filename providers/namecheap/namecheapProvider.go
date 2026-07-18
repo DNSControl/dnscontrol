@@ -213,6 +213,10 @@ func (n *namecheapProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
+	if srvRecords == nil {
+		return recordModels, nil
+	}
+
 	srvRecordModels, err := toSRVRecords(srvRecords, domain)
 
 	if err != nil {
