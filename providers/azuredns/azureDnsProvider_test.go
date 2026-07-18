@@ -13,10 +13,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
-func ptr[T any](v T) *T {
-	return &v
-}
-
 func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	tests := []struct {
@@ -29,7 +25,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "NS",
 			azureType: "Microsoft.Network/dnszones/NS",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{NsRecords: []*adns.NsRecord{{Nsdname: ptr("ns1.example.net.")}}}
+				return &adns.RecordSetProperties{NsRecords: []*adns.NsRecord{{Nsdname: new("ns1.example.net.")}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypeNS, "ns1.example.net."),
 		},
@@ -37,7 +33,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "PTR",
 			azureType: "Microsoft.Network/dnszones/PTR",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{PtrRecords: []*adns.PtrRecord{{Ptrdname: ptr("host.example.net.")}}}
+				return &adns.RecordSetProperties{PtrRecords: []*adns.PtrRecord{{Ptrdname: new("host.example.net.")}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypePTR, "host.example.net."),
 		},
@@ -53,7 +49,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "segmented TXT",
 			azureType: "Microsoft.Network/dnszones/TXT",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{TxtRecords: []*adns.TxtRecord{{Value: []*string{ptr("first"), ptr("second")}}}}
+				return &adns.RecordSetProperties{TxtRecords: []*adns.TxtRecord{{Value: []*string{new("first"), new("second")}}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypeTXT, "firstsecond"),
 		},
@@ -61,7 +57,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "MX",
 			azureType: "Microsoft.Network/dnszones/MX",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{MxRecords: []*adns.MxRecord{{Preference: ptr(int32(10)), Exchange: ptr("mail.example.net.")}}}
+				return &adns.RecordSetProperties{MxRecords: []*adns.MxRecord{{Preference: new(int32(10)), Exchange: new("mail.example.net.")}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypeMX, uint16(10), "mail.example.net."),
 		},
@@ -69,7 +65,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "SRV",
 			azureType: "Microsoft.Network/dnszones/SRV",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{SrvRecords: []*adns.SrvRecord{{Priority: ptr(int32(1)), Weight: ptr(int32(2)), Port: ptr(int32(443)), Target: ptr("service.example.net.")}}}
+				return &adns.RecordSetProperties{SrvRecords: []*adns.SrvRecord{{Priority: new(int32(1)), Weight: new(int32(2)), Port: new(int32(443)), Target: new("service.example.net.")}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypeSRV, uint16(1), uint16(2), uint16(443), "service.example.net."),
 		},
@@ -77,7 +73,7 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 			name:      "CAA",
 			azureType: "Microsoft.Network/dnszones/CAA",
 			properties: func() *adns.RecordSetProperties {
-				return &adns.RecordSetProperties{CaaRecords: []*adns.CaaRecord{{Flags: ptr(int32(0)), Tag: ptr("issue"), Value: ptr("letsencrypt.org")}}}
+				return &adns.RecordSetProperties{CaaRecords: []*adns.CaaRecord{{Flags: new(int32(0)), Tag: new("issue"), Value: new("letsencrypt.org")}}}
 			},
 			want: dc.MustNewRecordConfig("www", 300, dnsv2.TypeCAA, uint8(0), "issue", "letsencrypt.org"),
 		},
@@ -86,9 +82,9 @@ func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			properties := tt.properties()
-			properties.Fqdn = ptr("www.example.com.")
-			properties.TTL = ptr(int64(300))
-			set := &adns.RecordSet{Type: ptr(tt.azureType), Properties: properties}
+			properties.Fqdn = new("www.example.com.")
+			properties.TTL = new(int64(300))
+			set := &adns.RecordSet{Type: new(tt.azureType), Properties: properties}
 
 			got := nativeToRecords(set, dc)
 			if len(got) != 1 {
