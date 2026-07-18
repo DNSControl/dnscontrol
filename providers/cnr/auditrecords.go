@@ -15,11 +15,9 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2021-10-01
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-07-18
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-30
-
-	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2020-12-28
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-18
 
 	a.Add("DNAME", dnameHasWildcardLabel)               // Last verified 2026-02-10
 	a.Add("SVCB", func(rc *models.RecordConfig) error { // Last verified 2026-06-29
