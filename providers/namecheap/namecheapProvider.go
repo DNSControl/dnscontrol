@@ -348,7 +348,7 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 				Protocol: recProtocol,
 				Priority: int(r.SrvPriority),
 				Port:     int(r.SrvPort),
-				Target:   value,
+				Target:   r.GetTargetField(),
 				Weight:   int(r.SrvWeight),
 			}
 
