@@ -487,7 +487,6 @@ func safeTarget(t *string) string {
 }
 
 func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) []*models.RecordConfig {
-	origin := dc.Name
 	var results []*models.RecordConfig
 	label := dc.LabelFromFQDNWithDot(*set.Properties.Fqdn)
 	ttl := uint32(*set.Properties.TTL)
@@ -534,64 +533,50 @@ func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) []*models.Rec
 		}
 	case "Microsoft.Network/dnszones/NS":
 		for _, rec := range set.Properties.NsRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "NS"
-			_ = rc.SetTarget(*rec.Nsdname)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, *rec.Nsdname)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/PTR":
 		for _, rec := range set.Properties.PtrRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "PTR"
-			_ = rc.SetTarget(*rec.Ptrdname)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypePTR, *rec.Ptrdname)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/TXT":
 		if len(set.Properties.TxtRecords) == 0 { // Empty String Record Parsing
 			// This is a null TXT record.
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "TXT"
-			_ = rc.SetTargetTXT("")
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, "")
+			rc.Original = set
 			results = append(results, rc)
 		} else {
 			// This is a normal TXT record. Collect all its segments.
 			for _, rec := range set.Properties.TxtRecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "TXT"
 				var txts []string
 				for _, txt := range rec.Value {
 					txts = append(txts, *txt)
 				}
-				_ = rc.SetTargetTXTs(txts)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, strings.Join(txts, ""))
+				rc.Original = set
 				results = append(results, rc)
 			}
 		}
 	case "Microsoft.Network/dnszones/MX":
 		for _, rec := range set.Properties.MxRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "MX"
-			_ = rc.SetTargetMX(uint16(*rec.Preference), *rec.Exchange)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(*rec.Preference), *rec.Exchange)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/SRV":
 		for _, rec := range set.Properties.SrvRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "SRV"
-			_ = rc.SetTargetSRV(uint16(*rec.Priority), uint16(*rec.Weight), uint16(*rec.Port), *rec.Target)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(*rec.Priority), uint16(*rec.Weight), uint16(*rec.Port), *rec.Target)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/CAA":
 		for _, rec := range set.Properties.CaaRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "CAA"
-			_ = rc.SetTargetCAA(uint8(*rec.Flags), *rec.Tag, *rec.Value)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(*rec.Flags), *rec.Tag, *rec.Value)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/dnszones/SOA":

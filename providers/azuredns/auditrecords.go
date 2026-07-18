@@ -10,10 +10,5 @@ import (
 // supported, an empty list is returned.
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
-
-	a.Add("MX", rejectif.MxNull) // Last verified 2020-12-28
-
-	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2023-11-11
-
 	return a.Audit(records)
 }
