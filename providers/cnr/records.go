@@ -45,15 +45,13 @@ type Record struct {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
 	records, err := n.getRecords(dc)
 	if err != nil {
 		return nil, err
 	}
 	actual := make([]*models.RecordConfig, len(records))
 	for i, r := range records {
-		actual[i] = toRecord(r, domain)
+		actual[i] = toRecord(r, dc)
 	}
 
 	return actual, nil
@@ -213,44 +211,31 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	return corrections, actualChangeCount, nil
 }
 
-func toRecord(r *Record, origin string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      r.TTL,
-		Original: r,
-	}
-	fqdn := r.Fqdn[:len(r.Fqdn)-1]
-	rc.SetLabelFromFQDN(fqdn, origin)
-
+func toRecord(r *Record, dc *models.DomainConfig) *models.RecordConfig {
+	label := dc.LabelFromFQDNWithDot(r.Fqdn)
+	var rc *models.RecordConfig
+	var err error
 	switch r.Type {
 	case "MX", "SRV":
 		if r.Priority > 65535 {
 			panic(fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority))
 		}
 		if r.Type == "MX" {
-			if err := rc.SetTargetMX(uint16(r.Priority), r.Answer); err != nil {
-				panic(fmt.Errorf("unparsable MX record received from centralnic reseller API: %w", err))
-			}
+			rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Answer))
 		} else {
 			// _service._proto.name. TTL Type Priority Weight Port Target.
 			// e.g. _sip._tcp.phone.example.org. 86400 IN SRV 5 6 7 sip.example.org.
 			// r.Anser covers the format "Priority Weight Port Target" and we've to remove the priority from the string
 			r.Answer = strings.TrimPrefix(r.Answer, fmt.Sprintf("%d ", r.Priority))
-			if err := rc.SetTargetSRVPriorityString(uint16(r.Priority), r.Answer); err != nil {
-				panic(fmt.Errorf("unparsable SRV record received from centralnic reseller API: %w", err))
-			}
-		}
-	case "LOC", "SVCB":
-		// SetTargetLOCString and SetTargetSVCBString internally format as "%s. TYPE %s",
-		// so we strip the trailing dot from r.Fqdn to avoid a double dot.
-		if err := rc.PopulateFromStringFunc(r.Type, r.Answer, strings.TrimSuffix(r.Fqdn, "."), txtutil.ParseQuoted); err != nil {
-			panic(fmt.Errorf("unparsable %s record received from centralnic reseller API: %w", r.Type, err))
+			rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Answer))
 		}
 	default: // "A", "AAAA", "ANAME", "ALIAS", "CNAME", "NS", "TXT", "CAA", "TLSA", "SMIMEA", "PTR"
-		if err := rc.PopulateFromStringFunc(r.Type, r.Answer, fqdn, txtutil.ParseQuoted); err != nil {
-			panic(fmt.Errorf("unparsable record received from centralnic reseller API: %w", err))
-		}
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, r.Answer)
 	}
+	if err != nil {
+		panic(fmt.Errorf("unparsable %s record received from centralnic reseller API: %w", r.Type, err))
+	}
+	rc.Original = r
 	return rc
 }
 
@@ -369,9 +354,9 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 	case "A", "AAAA", "ANAME", "ALIAS", "CNAME", "DHCID", "DNAME", "MX", "NS", "PTR":
 		answer = rc.GetTargetField()
 	case "LOC":
-		// Use GetTargetCombined() which returns the properly formatted LOC string
+		// Use RDATA.String() to get the properly formatted LOC string
 		// via the dns library (e.g. "52 14 5.000 N 000 08 50.000 E 10.00m 0.00m 0.00m 0.00m")
-		parts := strings.Fields(rc.GetTargetCombined())
+		parts := strings.Fields(rc.GetRDATA().String())
 		altitude, _ := strconv.ParseFloat(strings.TrimSuffix(parts[8], "m"), 64)
 		size, _ := strconv.ParseFloat(strings.TrimSuffix(parts[9], "m"), 64)
 		hp, _ := strconv.ParseFloat(strings.TrimSuffix(parts[10], "m"), 64)
