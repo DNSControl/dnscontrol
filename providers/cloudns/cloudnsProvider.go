@@ -9,14 +9,14 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/fatih/color"
-
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/fatih/color"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -382,54 +382,43 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 // parses the ClouDNS format into our standard RecordConfig.
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
 	domain := dc.Name
-	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
-	priority, _ := strconv.ParseUint(r.Priority, 10, 16)
-	weight, _ := strconv.ParseUint(r.Weight, 10, 16)
-	port, _ := strconv.ParseUint(r.Port, 10, 16)
-
+	ttl_, err := strconv.ParseUint(r.TTL, 10, 32)
+	if err != nil {
+		return nil, err
+	}
+	ttl := uint32(ttl_)
 	label := dc.LabelFromShort(r.Host)
+
 	var rc *models.RecordConfig
-	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 	case "CNAME", "DNAME", "NS", "ALIAS", "PTR":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), r.Type, dnsutilv1.AddOrigin(r.Target+".", domain))
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, dnsutilv1.AddOrigin(r.Target+".", domain))
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeMX, uint16(priority), dnsutilv1.AddOrigin(r.Target+".", domain))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dnsutilv1.AddOrigin(r.Target+".", domain))
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSRV, uint16(priority), uint16(weight), uint16(port), dnsutilv1.AddOrigin(r.Target+".", domain))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dnsutilv1.AddOrigin(r.Target+".", domain))
 	case "CAA":
-		caaFlag, _ := strconv.ParseUint(r.CaaFlag, 10, 8)
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeCAA, uint8(caaFlag), r.CaaTag, r.CaaValue)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue)
 	case "TLSA":
-		tlsaUsage, _ := strconv.ParseUint(r.TlsaUsage, 10, 8)
-		tlsaSelector, _ := strconv.ParseUint(r.TlsaSelector, 10, 8)
-		tlsaMatchingType, _ := strconv.ParseUint(r.TlsaMatchingType, 10, 8)
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTLSA, uint8(tlsaUsage), uint8(tlsaSelector), uint8(tlsaMatchingType), r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target)
 	case "SSHFP":
-		sshfpAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8)
-		sshfpFingerprint, _ := strconv.ParseUint(r.SshfpFingerprint, 10, 8)
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSSHFP, uint8(sshfpAlgorithm), uint8(sshfpFingerprint), r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target)
 	case "DS":
-		dsKeyTag, _ := strconv.ParseUint(r.DsKeyTag, 10, 16)
-		dsAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8) // SshFpAlgorithm and DsAlgorithm both use json field "algorithm"
-		dsDigestType, _ := strconv.ParseUint(r.DsDigestType, 10, 8)
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeDS, uint16(dsKeyTag), uint8(dsAlgorithm), uint8(dsDigestType), r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target)
 	case "CLOUD_WR":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), privatetypes.TypeCLOUDNSWR, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeCLOUDNSWR, r.Target)
 	case "LOC":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeLOC,
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
 			r.LocLatDeg, r.LocLatMin, r.LocLatSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, r.LocLongSec, r.LocLongDir,
 			r.LocAltitude, r.LocSize, r.LocHPrecision, r.LocVPrecision)
 	case "NAPTR":
-		naptrOrder, _ := strconv.ParseUint(r.NaptrOrder, 10, 16)
-		naptrPreference, _ := strconv.ParseUint(r.NaptrPreference, 10, 16)
 		target := dnsutilv1.AddOrigin(r.NaptrReplacement+".", domain)
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeNAPTR, uint16(naptrOrder), uint16(naptrPreference), r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
 	default:
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), r.Type, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Target)
 	}
 	if err != nil {
 		return nil, err
@@ -477,33 +466,39 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["geodns-code"] = geodnsCodeFromMetadataValue
 	}
 
+	rd := rc.GetRDATA()
 	switch rc.Type { // #rtype_variations
 	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "ALIAS", "CNAME", "DNAME":
 		// Nothing special.
 	case "CLOUDNS_WR":
 		req["record-type"] = "WR"
 	case "MX":
-		req["priority"] = strconv.Itoa(int(rc.MxPreference))
+		req["priority"] = strconv.Itoa(int(rd.(dnsrdatav2.MX).Preference))
 	case "SRV":
-		req["priority"] = strconv.Itoa(int(rc.SrvPriority))
-		req["weight"] = strconv.Itoa(int(rc.SrvWeight))
-		req["port"] = strconv.Itoa(int(rc.SrvPort))
+		rdsrv := rd.(dnsrdatav2.SRV)
+		req["priority"] = strconv.Itoa(int(rdsrv.Priority))
+		req["weight"] = strconv.Itoa(int(rdsrv.Weight))
+		req["port"] = strconv.Itoa(int(rdsrv.Port))
 	case "CAA":
-		req["caa_flag"] = strconv.Itoa(int(rc.CaaFlag))
-		req["caa_type"] = rc.CaaTag
-		req["caa_value"] = rc.GetTargetField()
+		rdcaa := rd.(dnsrdatav2.CAA)
+		req["caa_flag"] = strconv.Itoa(int(rdcaa.Flag))
+		req["caa_type"] = rdcaa.Tag
+		req["caa_value"] = rdcaa.Value
 	case "TLSA":
-		req["tlsa_usage"] = strconv.Itoa(int(rc.TlsaUsage))
-		req["tlsa_selector"] = strconv.Itoa(int(rc.TlsaSelector))
-		req["tlsa_matching_type"] = strconv.Itoa(int(rc.TlsaMatchingType))
+		rdtlsa := rd.(dnsrdatav2.TLSA)
+		req["tlsa_usage"] = strconv.Itoa(int(rdtlsa.Usage))
+		req["tlsa_selector"] = strconv.Itoa(int(rdtlsa.Selector))
+		req["tlsa_matching_type"] = strconv.Itoa(int(rdtlsa.MatchingType))
 	case "SSHFP":
-		req["algorithm"] = strconv.Itoa(int(rc.SshfpAlgorithm))
-		req["fptype"] = strconv.Itoa(int(rc.SshfpFingerprint))
+		rdsshfp := rd.(dnsrdatav2.SSHFP)
+		req["algorithm"] = strconv.Itoa(int(rdsshfp.Algorithm))
+		req["fptype"] = strconv.Itoa(int(rdsshfp.Type))
 	case "DS":
-		req["key-tag"] = strconv.Itoa(int(rc.DsKeyTag))
-		req["algorithm"] = strconv.Itoa(int(rc.DsAlgorithm))
-		req["digest-type"] = strconv.Itoa(int(rc.DsDigestType))
-		req["record"] = rc.DsDigest
+		rdds := rd.(dnsrdatav2.DS)
+		req["key-tag"] = strconv.Itoa(int(rdds.KeyTag))
+		req["algorithm"] = strconv.Itoa(int(rdds.Algorithm))
+		req["digest-type"] = strconv.Itoa(int(rdds.DigestType))
+		req["record"] = rdds.Digest
 	case "LOC":
 		parts := strings.Fields(rc.GetRDATA().String())
 		req["lat-deg"] = parts[0]
@@ -519,12 +514,13 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["h-precision"] = formatLocParam(parts[10])
 		req["v-precision"] = formatLocParam(parts[11])
 	case "NAPTR":
-		req["order"] = strconv.Itoa(int(rc.NaptrOrder))
-		req["pref"] = strconv.Itoa(int(rc.NaptrPreference))
-		req["flag"] = rc.NaptrFlags
-		req["params"] = rc.NaptrService
-		req["regexp"] = rc.NaptrRegexp
-		req["replace"] = rc.GetTargetField()
+		rdnaptr := rd.(dnsrdatav2.NAPTR)
+		req["order"] = strconv.Itoa(int(rdnaptr.Order))
+		req["pref"] = strconv.Itoa(int(rdnaptr.Preference))
+		req["flag"] = rdnaptr.Flags
+		req["params"] = strconv.Itoa(int(rdnaptr.Preference))
+		req["regexp"] = rdnaptr.Regexp
+		req["replace"] = rdnaptr.Replacement
 	default:
 		return nil, fmt.Errorf("ClouDNS.toReq rtype %q unimplemented", rc.Type)
 	}
