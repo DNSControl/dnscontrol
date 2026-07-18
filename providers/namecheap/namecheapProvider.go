@@ -308,11 +308,13 @@ func toRecords(result *nc.DomainDNSGetHostsResult, origin string) ([]*models.Rec
 
 func toSRVRecords(result *nc.DomainSRVGetRecordsResult, origin string) ([]*models.RecordConfig, error) {
 	var records []*models.RecordConfig
-	for _, srvRecord := range result.Result {
+	for _, srvRecord := range result.Records {
 		record := models.RecordConfig{
-			Type: "srv",
+			Type: "SRV",
 			Name: srvRecord.Service + srvRecord.Protocol,
 		}
+
+		record.SetLabel(srvRecord.Service + srvRecord.Protocol, origin)
 
 		err := record.SetTargetSRVStrings(
 			strconv.Itoa(srvRecord.Priority),
