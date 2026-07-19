@@ -24,9 +24,10 @@ func (rc *RecordConfig) RecomputeV3Fields(origin string) {
 	rc.RegenerateComparableV3()
 }
 
-// FixRD populates the "V3 Fields": .TypeNum, .RDATA and .ComparableV3.
+// FixRD populates the "V3 Fields": .TypeNum, .RDATA and .ComparableV3. It is non-destructive for .RDATA and .ComparableV3 if those are non-nil.
 func (rc *RecordConfig) FixRD(origin string) {
 
+	// fmt.Printf("DEBUG: FixRD: %s\n", rc.String())
 	rc.fixTypeNum()
 
 	// Populate .RDATA if needed:
@@ -40,6 +41,7 @@ func (rc *RecordConfig) FixRD(origin string) {
 	}
 }
 
+// fixTypeNum reads rc.Type (a string) and converts it to a number, which is stored in rc.TypeNum.
 func (rc *RecordConfig) fixTypeNum() {
 	switch rc.Type {
 	case "IGNORE":
@@ -54,6 +56,7 @@ func (rc *RecordConfig) fixTypeNum() {
 		}
 		rc.TypeNum = tn
 	}
+	// fmt.Printf("DEBUG: fixTypeNum(%q) = %d\n", rc.Type, rc.TypeNum)
 }
 
 // RegenerateComparableV3 generates or regenerates the .ComparableV3 field from the current .RDATA. It does not modify .RDATA.
@@ -79,6 +82,12 @@ func (rc *RecordConfig) RegenerateComparableV3() {
 	}
 }
 
+// copyLegacyFieldsToRD uses the legacy fields to generate the RDATA for the
+// record. It is used to protect backwards compatibility for providers that
+// have not yet been converted to RecordConfig V3.
+// Always call the appropriate `Make*()` function to generate `rd`.
+// This will go away when the migration to RecordConfig V3 is complete.
+// For newer record types, this function will be a no-op as they have no legacy fields.
 func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 
 	rc.fixTypeNum()
@@ -99,7 +108,9 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case privatetypes.TypeAKAMAICDN:
 		// no-op
 	case privatetypes.TypeAKAMAITLC:
-		// no-op
+		rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, rc.AnswerType, rc.GetTargetField())
+		errorChk(err)
+		rc.SetRDATA(rd)
 	case privatetypes.TypeBUNNYDNSPZ:
 		// no-op
 	case privatetypes.TypeBUNNYDNSRDR:

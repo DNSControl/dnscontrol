@@ -2,6 +2,7 @@ package tencentdns
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
@@ -12,6 +13,16 @@ func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.Record
 	rc := &models.RecordConfig{
 		TTL:      uint32(*r.TTL),
 		Original: r,
+		Metadata: map[string]string{},
+	}
+	if r.Line != nil && *r.Line != "" {
+		rc.Metadata[metaRecordLine] = *r.Line
+	}
+	if r.LineId != nil && *r.LineId != "" {
+		rc.Metadata[metaRecordLineID] = *r.LineId
+	}
+	if r.Weight != nil {
+		rc.Metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
 	}
 	rc.SetLabel(*r.Name, domainName)
 
@@ -42,6 +53,38 @@ func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.Record
 	return rc, nil
 }
 
+func recordLineMetadata(rc *models.RecordConfig) (line, lineID string) {
+	line = defaultRecordLine
+	if rc.Metadata == nil {
+		return line, ""
+	}
+	if configuredLine := rc.Metadata[metaRecordLine]; configuredLine != "" {
+		line = configuredLine
+	}
+	return line, rc.Metadata[metaRecordLineID]
+}
+
+func recordWeightMetadata(rc *models.RecordConfig) (uint64, bool) {
+	if rc == nil || rc.Metadata == nil || rc.Metadata[metaRecordWeight] == "" {
+		return 0, false
+	}
+	weight, err := strconv.ParseUint(rc.Metadata[metaRecordWeight], 10, 64)
+	if err != nil || weight > 100 {
+		return 0, false
+	}
+	return weight, true
+}
+
+// comparableRecordWeight treats an omitted weight and weight 0 as equivalent,
+// because DNSPod defines 0 as disabling weighted routing.
+func comparableRecordWeight(rc *models.RecordConfig) string {
+	weight, ok := recordWeightMetadata(rc)
+	if !ok || weight == 0 {
+		return ""
+	}
+	return strconv.FormatUint(weight, 10)
+}
+
 func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest {
 	req := dnspod.NewCreateRecordRequest()
 	req.SubDomain = new(rc.GetLabel())
@@ -49,7 +92,14 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	if rc.Type == "ALIAS" {
 		req.RecordType = new("CNAME")
 	}
-	req.RecordLine = new("默认")
+	line, lineID := recordLineMetadata(rc)
+	req.RecordLine = new(line)
+	if lineID != "" {
+		req.RecordLineId = new(lineID)
+	}
+	if weight, ok := recordWeightMetadata(rc); ok {
+		req.Weight = new(weight)
+	}
 
 	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
 	if rc.Type == "MX" {
@@ -62,7 +112,7 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	return req
 }
 
-func recordToModifyRequest(rc *models.RecordConfig, recordID uint64) *dnspod.ModifyRecordRequest {
+func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *models.RecordConfig) *dnspod.ModifyRecordRequest {
 	req := dnspod.NewModifyRecordRequest()
 	req.RecordId = new(recordID)
 	req.SubDomain = new(rc.GetLabel())
@@ -70,7 +120,17 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64) *dnspod.Mod
 	if rc.Type == "ALIAS" {
 		req.RecordType = new("CNAME")
 	}
-	req.RecordLine = new("默认")
+	line, lineID := recordLineMetadata(rc)
+	req.RecordLine = new(line)
+	if lineID != "" {
+		req.RecordLineId = new(lineID)
+	}
+	if weight, ok := recordWeightMetadata(rc); ok {
+		req.Weight = new(weight)
+	} else if comparableRecordWeight(previous) != "" {
+		// DNSPod requires weight 0 to explicitly disable weighted routing.
+		req.Weight = new(uint64(0))
+	}
 
 	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
 	if rc.Type == "MX" {

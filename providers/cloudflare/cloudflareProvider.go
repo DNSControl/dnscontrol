@@ -7,13 +7,11 @@ import (
 	"fmt"
 	"net/netip"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/fatih/color"
-	"golang.org/x/net/idna"
-
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
@@ -22,6 +20,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/fatih/color"
+	"golang.org/x/net/idna"
 )
 
 /*
@@ -157,9 +158,7 @@ func (c *cloudflareProvider) ListZones() ([]string, error) {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	domainID, err := c.getDomainID(domain)
+	domainID, err := c.getDomainID(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +175,7 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	// Fetch DNS records concurrently
 	go func() {
-		recs, err := c.getRecordsForDomain(domainID, domain)
+		recs, err := c.getRecordsForDomain(domainID, dc)
 		mainCh <- result{records: recs, err: err}
 	}()
 
@@ -193,7 +192,7 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	// Fetch Worker Routes concurrently if enabled
 	if c.manageWorkers {
 		go func() {
-			wrs, err := c.getWorkerRoutes(domainID, domain)
+			wrs, err := c.getWorkerRoutes(domainID, dc)
 			workerCh <- result{records: wrs, err: err}
 		}()
 	} else {
@@ -386,7 +385,9 @@ func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, dom
 	case "CF_WORKER_ROUTE":
 		return []*models.Correction{{
 			Msg: msg,
-			F:   func() error { return c.createWorkerRoute(domainID, newrec.GetTargetField()) },
+			F: func() error {
+				return c.createWorkerRoute(domainID, newrec.GetRDATA())
+			},
 		}}
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
 		return []*models.Correction{{
@@ -425,7 +426,7 @@ func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordCon
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
-				return c.updateWorkerRoute(idTxt, domainID, newrec.GetTargetField())
+				return c.updateWorkerRoute(idTxt, domainID, newrec.GetRDATA())
 			},
 		}}
 	default:
@@ -573,8 +574,8 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 	// A and CNAMEs: Validate. If null, set to default.
 	// else: Make sure it wasn't set.  Set to default.
 	// iterate backwards so first defined page rules have highest priority
-	for i := len(dc.Records) - 1; i >= 0; i-- {
-		rec := dc.Records[i]
+	for _, rec := range slices.Backward(dc.Records) {
+
 		if rec.Metadata == nil {
 			rec.Metadata = map[string]string{}
 		}
@@ -693,10 +694,14 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		if err != nil {
 			return err
 		}
-		rec.Metadata[metaOriginalIP] = rec.GetTargetField()
-		if err := rec.SetTarget(newIP.String()); err != nil {
+
+		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
+		rd, err := models.MakeA(dc.Name, rec.Metadata, newIP)
+		if err != nil {
 			return err
 		}
+		rec.SetRDATA(rd)
+
 	}
 
 	return nil
@@ -915,7 +920,7 @@ func stringDefault(value any, def string) string {
 	return def
 }
 
-func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSRecord) (*models.RecordConfig, error) {
+func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudflare.DNSRecord) (*models.RecordConfig, error) {
 	// Check for read_only metadata
 	// https://github.com/DNSControl/dnscontrol/issues/3850
 	if cr.Meta != nil {
@@ -943,12 +948,39 @@ func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSReco
 		}
 	}
 
-	rc := &models.RecordConfig{
-		TTL:      uint32(cr.TTL),
-		Original: cr,
-		Metadata: map[string]string{},
+	var rc *models.RecordConfig
+	var err error
+	label := dc.LabelFromFQDNNoDot(cr.Name)
+	ttl := uint32(cr.TTL)
+	switch rType := cr.Type; rType { // #rtype_variations
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content)
+		if err != nil {
+			return nil, fmt.Errorf("unparsable MX record received from cloudflare: %w", err)
+		}
+	case "SRV":
+		data := cr.Data.(map[string]any)
+
+		target := stringDefault(data["target"], "MISSING.TARGET")
+		if target != "." {
+			target += "."
+		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target)
+	case "TXT":
+		s, serr := parseCfTxtContent(cr.Content)
+		if serr != nil {
+			return rc, err
+		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, s)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
 	}
-	rc.SetLabelFromFQDN(cr.Name, domain)
+	if err != nil {
+		return nil, fmt.Errorf("unparsable %q record received from cloudflare: %w", cr.Type, err)
+	}
+
+	// Save a pointer to the original cr so that "push" can refer to it for IDs, etc.
+	rc.Original = cr
 
 	if cr.Type == "A" || cr.Type == "AAAA" || cr.Type == "CNAME" {
 		if cr.Proxied != nil {
@@ -975,35 +1007,6 @@ func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSReco
 	}
 	if len(cr.Tags) > 0 {
 		rc.Metadata[metaTags] = strings.Join(cr.Tags, ",")
-	}
-
-	switch rType := cr.Type; rType { // #rtype_variations
-	case "MX":
-		if err := rc.SetTargetMX(*cr.Priority, cr.Content); err != nil {
-			return nil, fmt.Errorf("unparsable MX record received from cloudflare: %w", err)
-		}
-	case "SRV":
-		data := cr.Data.(map[string]any)
-
-		target := stringDefault(data["target"], "MISSING.TARGET")
-		if target != "." {
-			target += "."
-		}
-		if err := rc.SetTargetSRV(uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]),
-			target); err != nil {
-			return nil, fmt.Errorf("unparsable SRV record received from cloudflare: %w", err)
-		}
-	case "TXT":
-		s, err := parseCfTxtContent(cr.Content)
-		if err != nil {
-			return rc, err
-		}
-		err = rc.SetTargetTXT(s)
-		return rc, err
-	default:
-		if err := rc.PopulateFromString(rType, cr.Content, domain); err != nil {
-			return nil, fmt.Errorf("unparsable record received from cloudflare: %w", err)
-		}
 	}
 
 	return rc, nil

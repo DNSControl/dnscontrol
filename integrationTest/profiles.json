@@ -316,6 +316,13 @@
     "api_token": "$NS1_TOKEN",
     "domain": "$NS1_DOMAIN"
   },
+  "OPENWRT": {
+    "TYPE": "OPENWRT",
+    "domain": "$OPENWRT_DOMAIN",
+    "host": "$OPENWRT_HOST",
+    "password": "$OPENWRT_PASSWORD",
+    "username": "$OPENWRT_USERNAME"
+  },
   "ORACLE": {
     "TYPE": "ORACLE",
     "compartment": "$ORACLE_COMPARTMENT",
@@ -373,6 +380,13 @@
     "access_token": "$SAKURACLOUD_ACCESS_TOKEN",
     "access_token_secret": "$SAKURACLOUD_ACCESS_TOKEN_SECRET",
     "domain": "$SAKURACLOUD_DOMAIN"
+  },
+  "SCALEWAY": {
+    "TYPE": "SCALEWAY",
+    "access_key": "$SCALEWAY_ACCESS_KEY",
+    "domain": "$SCALEWAY_DOMAIN",
+    "project_id": "$SCALEWAY_PROJECT_ID",
+    "secret_key": "$SCALEWAY_SECRET_KEY"
   },
   "SOFTLAYER": {
     "TYPE": "SOFTLAYER",

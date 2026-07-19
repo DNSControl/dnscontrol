@@ -9,40 +9,61 @@
           "azure_alias": {
             "type": "AAAA"
           },
+          "comparablev3": "AAAA foo.com.",
           "filepos": "[line:3:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "aaaatest",
+          "name_unicode": "aaaatest",
+          "rdata": {
+            "AliasType": "AAAA",
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
           "azure_alias": {
             "type": "A"
           },
+          "comparablev3": "A foo.com.",
           "filepos": "[line:2:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "atest",
+          "name_unicode": "atest",
+          "rdata": {
+            "AliasType": "A",
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
           "azure_alias": {
             "type": "CNAME"
           },
+          "comparablev3": "CNAME foo.com.",
           "filepos": "[line:4:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "cnametest",
+          "name_unicode": "cnametest",
+          "rdata": {
+            "AliasType": "CNAME",
+            "Target": "foo.com."
+          },
           "target": "foo.com.",
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         }
       ],
       "registrar": "none",

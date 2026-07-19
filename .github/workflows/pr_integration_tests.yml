@@ -112,12 +112,14 @@ jobs:
       HUAWEICLOUD_DOMAIN: ${{ vars.HUAWEICLOUD_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
+      LUADNS_DOMAIN: ${{ vars.LUADNS_DOMAIN }}
       MIKROTIK_DOMAIN: ${{ vars.MIKROTIK_DOMAIN }}
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
+      OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
       ROUTE53_DOMAIN: ${{ vars.ROUTE53_DOMAIN }}
       SAKURACLOUD_DOMAIN: ${{ vars.SAKURACLOUD_DOMAIN }}
@@ -207,6 +209,9 @@ jobs:
       #
       LINODE_TOKEN: ${{ secrets.LINODE_TOKEN }}
       #
+      LUADNS_EMAIL: ${{ secrets.LUADNS_EMAIL }}
+      LUADNS_APIKEY: ${{ secrets.LUADNS_APIKEY }}
+      #
       MIKROTIK_HOST: ${{ secrets.MIKROTIK_HOST }}
       MIKROTIK_USERNAME: ${{ secrets.MIKROTIK_USERNAME }}
       MIKROTIK_PASSWORD: ${{ secrets.MIKROTIK_PASSWORD }}
@@ -224,6 +229,10 @@ jobs:
       NETNOD_APIURL: ${{ secrets.NETNOD_APIURL }}
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
+      #
+      OPENWRT_USERNAME: ${{ secrets.OPENWRT_USERNAME }}
+      OPENWRT_PASSWORD: ${{ secrets.OPENWRT_PASSWORD }}
+      OPENWRT_HOST: ${{ secrets.OPENWRT_HOST }}
       #
       POWERDNS_APIKEY: ${{ secrets.POWERDNS_APIKEY }}
       POWERDNS_APIURL: ${{ secrets.POWERDNS_APIURL }}

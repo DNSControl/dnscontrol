@@ -50,6 +50,11 @@ func TestDualProviders(t *testing.T) {
 	t.Log("Clearing everything")
 	run()
 	// add bogus nameservers
+	// Clear dc.Records first: getDomainConfigWithNameservers() already called
+	// AddNSRecords() to populate the provider's own NS records. Without this
+	// reset, the AddNSRecords() below appends a second copy of them, producing
+	// duplicate NS records that ByRecordSet providers (ROUTE53, GCLOUD, ...)
+	// reject ("Duplicate Resource Record" / "already exists").
 	dc.Records = []*models.RecordConfig{}
 	nsList, _ := models.ToNameservers([]string{"ns1.example.com", "ns2.example.com"})
 	dc.Nameservers = append(dc.Nameservers, nsList...)

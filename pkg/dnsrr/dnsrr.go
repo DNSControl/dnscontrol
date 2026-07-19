@@ -15,10 +15,10 @@ func RRtoRC(rr dnsv1.RR, origin string) (models.RecordConfig, error) {
 	return helperRRtoRC(rr, origin, false)
 }
 
-// RRtoRCTxtBug converts dns.RR to models.RecordConfig. Compensates for the backslash bug in github.com/miekg/dns/issues/1384.
-func RRtoRCTxtBug(rr dnsv1.RR, origin string) (models.RecordConfig, error) {
-	return helperRRtoRC(rr, origin, true)
-}
+//// RRtoRCTxtBug converts dns.RR to models.RecordConfig. Compensates for the backslash bug in github.com/miekg/dns/issues/1384.
+//func RRtoRCTxtBug(rr dnsv1.RR, origin string) (models.RecordConfig, error) {
+//	return helperRRtoRC(rr, origin, true)
+//}
 
 // helperRRtoRC converts dns.RR to models.RecordConfig. If fixBug is true, replaces `\\` to `\` in TXT records to compensate for github.com/miekg/dns/issues/1384.
 func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig, error) {
@@ -187,8 +187,11 @@ func RRv2toRC(dc *models.DomainConfig, rr dnsv2.RR) (*models.RecordConfig, error
 	var err error
 	switch v := rd.(type) {
 	case dnsrdatav2.TXT:
-		// TXT is special case because we need to work around the backslack.
-		rd = dnsrdatav2.TXT{Txt: []string{fixRRv2TXT(v)}}
+		// DNSControl stores a TXT value as a single string, so join the
+		// parser's 255-octet chunks. The patched dns library (codeberg.org/miekg/dns)
+		// unescapes backslashes correctly, so no further fix-up is needed
+		// (previously we compensated for github.com/miekg/dns/issues/1384 here).
+		rd = dnsrdatav2.TXT{Txt: []string{strings.Join(v.Txt, "")}}
 	case dnsrdatav2.TLSA:
 		// TLSA is a special case because we need to normalize the certificate data to uppercase.
 		rd, err = models.MakeTLSA(dc.Name, nil, v.Usage, v.Selector, v.MatchingType, v.Certificate)
@@ -202,10 +205,4 @@ func RRv2toRC(dc *models.DomainConfig, rr dnsv2.RR) (*models.RecordConfig, error
 		return nil, fmt.Errorf("error creating record config: %w", err)
 	}
 	return rec, nil
-}
-
-func fixRRv2TXT(rd dnsrdatav2.TXT) string {
-	j := strings.Join(rd.Txt, "")
-	j = strings.ReplaceAll(j, `\\`, `\`)
-	return j
 }

@@ -79,6 +79,43 @@ func TestNativeToRecord(t *testing.T) {
 	}
 }
 
+func TestNativeToRecordPreservesProviderMetadata(t *testing.T) {
+	domain := "example.com"
+	input := &dnspod.RecordListItem{
+		Name:   new("www"),
+		Type:   new("A"),
+		Value:  new("1.2.3.4"),
+		TTL:    new(uint64(600)),
+		Line:   new("电信"),
+		LineId: new("10=1"),
+		Weight: new(uint64(80)),
+	}
+
+	rc, err := nativeToRecord(input, domain)
+	if err != nil {
+		t.Fatalf("nativeToRecord failed: %v", err)
+	}
+
+	assert.Equal(t, "电信", rc.Metadata[metaRecordLine])
+	assert.Equal(t, "10=1", rc.Metadata[metaRecordLineID])
+	assert.Equal(t, "80", rc.Metadata[metaRecordWeight])
+}
+
+func TestNativeToRecordPreservesDisabledWeight(t *testing.T) {
+	input := &dnspod.RecordListItem{
+		Name:   new("www"),
+		Type:   new("A"),
+		Value:  new("1.2.3.4"),
+		TTL:    new(uint64(600)),
+		Weight: new(uint64(0)),
+	}
+
+	rc, err := nativeToRecord(input, "example.com")
+	if assert.NoError(t, err) {
+		assert.Equal(t, "0", rc.Metadata[metaRecordWeight])
+	}
+}
+
 func TestRecordToCreateRequest(t *testing.T) {
 	domain := "example.com"
 	rc := &models.RecordConfig{
@@ -91,8 +128,102 @@ func TestRecordToCreateRequest(t *testing.T) {
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, "test", *req.SubDomain)
 	assert.Equal(t, "A", *req.RecordType)
+	assert.Equal(t, defaultRecordLine, *req.RecordLine)
+	assert.Nil(t, req.RecordLineId)
+	assert.Nil(t, req.Weight)
 	assert.Equal(t, "1.1.1.1", *req.Value)
 	assert.Equal(t, uint64(600), *req.TTL)
+}
+
+func TestRecordToCreateRequestWithWeight(t *testing.T) {
+	domain := "example.com"
+	rc := &models.RecordConfig{
+		Type: "A",
+		TTL:  600,
+		Metadata: map[string]string{
+			metaRecordWeight: "80",
+		},
+	}
+	rc.SetLabel("test", domain)
+	rc.SetTarget("1.1.1.1")
+
+	req := recordToCreateRequest(rc)
+	assert.Equal(t, uint64(80), *req.Weight)
+}
+
+func TestRecordToCreateRequestWithLine(t *testing.T) {
+	domain := "example.com"
+	rc := &models.RecordConfig{
+		Type: "A",
+		TTL:  600,
+		Metadata: map[string]string{
+			metaRecordLine: "电信",
+		},
+	}
+	rc.SetLabel("test", domain)
+	rc.SetTarget("1.1.1.1")
+
+	req := recordToCreateRequest(rc)
+	assert.Equal(t, "电信", *req.RecordLine)
+	assert.Nil(t, req.RecordLineId)
+}
+
+func TestRecordToCreateRequestWithLineID(t *testing.T) {
+	domain := "example.com"
+	rc := &models.RecordConfig{
+		Type: "A",
+		TTL:  600,
+		Metadata: map[string]string{
+			metaRecordLineID: "10=1",
+		},
+	}
+	rc.SetLabel("test", domain)
+	rc.SetTarget("1.1.1.1")
+
+	req := recordToCreateRequest(rc)
+	assert.Equal(t, defaultRecordLine, *req.RecordLine)
+	assert.Equal(t, "10=1", *req.RecordLineId)
+}
+
+func TestRecordToModifyRequestWithLineLineIDAndWeight(t *testing.T) {
+	domain := "example.com"
+	rc := &models.RecordConfig{
+		Type: "A",
+		TTL:  600,
+		Metadata: map[string]string{
+			metaRecordLine:   "电信",
+			metaRecordLineID: "10=1",
+			metaRecordWeight: "25",
+		},
+	}
+	rc.SetLabel("test", domain)
+	rc.SetTarget("1.1.1.1")
+
+	req := recordToModifyRequest(rc, 42, nil)
+	assert.Equal(t, uint64(42), *req.RecordId)
+	assert.Equal(t, "电信", *req.RecordLine)
+	assert.Equal(t, "10=1", *req.RecordLineId)
+	assert.Equal(t, uint64(25), *req.Weight)
+}
+
+func TestRecordToModifyRequestClearsRemovedWeight(t *testing.T) {
+	domain := "example.com"
+	previous := &models.RecordConfig{
+		Type: "A",
+		TTL:  600,
+		Metadata: map[string]string{
+			metaRecordWeight: "80",
+		},
+	}
+	previous.SetLabel("test", domain)
+	previous.SetTarget("1.1.1.1")
+
+	desired := &models.RecordConfig{Type: "A", TTL: 600}
+	desired.SetLabel("test", domain)
+	desired.SetTarget("1.1.1.1")
+
+	req := recordToModifyRequest(desired, 42, previous)
+	assert.Equal(t, uint64(0), *req.Weight)
 }
 
 func TestRecordToCreateRequest_MX(t *testing.T) {

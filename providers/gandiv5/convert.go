@@ -20,7 +20,7 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 	// n.RrsetValues rather than having many livedns.DomainRecord's.
 	// We must split them out into individual records, one for each value.
 
-	origin := dc.Name
+	// origin := dc.Name
 
 	for _, value := range n.RrsetValues {
 		var rc *models.RecordConfig
@@ -42,29 +42,23 @@ func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*mo
 			if err != nil {
 				return nil, fmt.Errorf("unparsable TXT received from gandi: %w", err)
 			}
-			rc, err = dc.NewRecordConfig(n.RrsetName, uint32(n.RrsetTTL), dnsv2.TypeTXT, decoded)
+			rc, err = dc.NewRecordConfig(dc.LabelFromShort(n.RrsetName), uint32(n.RrsetTTL), dnsv2.TypeTXT, decoded)
 			if err != nil {
 				return nil, fmt.Errorf("unparsable record received from gandi (txt): %w", err)
 			}
-			rc.Original = n
-		default:
-			rc = &models.RecordConfig{
-				TTL:      uint32(n.RrsetTTL),
-				Original: n,
-			}
-			rc.SetLabel(n.RrsetName, origin)
-
-			switch rtype := n.RrsetType; rtype {
-			case "ALIAS":
-				rc.Type = "ALIAS"
-				err = rc.SetTarget(value)
-			default:
-				err = rc.PopulateFromStringFunc(rtype, value, origin, txtutil.ParseQuoted)
-			}
+		case "ALIAS":
+			rc, err = dc.NewRecordConfigParse(dc.LabelFromShort(n.RrsetName), uint32(n.RrsetTTL), rtype, value)
 			if err != nil {
-				return nil, fmt.Errorf("unparsable record received from gandi2: %w", err)
+				return nil, fmt.Errorf("unparsable record received from gandi (alias): %w", err)
+			}
+
+		default:
+			rc, err = dc.NewRecordConfigParse(dc.LabelFromShort(n.RrsetName), uint32(n.RrsetTTL), rtype, value)
+			if err != nil {
+				return nil, fmt.Errorf("unparsable record received from gandi (%s): %w", rtype, err)
 			}
 		}
+		rc.Original = n
 		rcs = append(rcs, rc)
 
 	}

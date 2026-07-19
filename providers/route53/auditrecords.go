@@ -26,6 +26,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 // rejectifTargetEqualsLabel rejects an ALIAS that would create a loop.
 func rejectifTargetEqualsLabel(rc *models.RecordConfig) error {
+	// TODO(tlim): auditrecords.go shouldn't be used to validate data. This kind of validation should be moved to pkg/normalize/validate.go.
 	if (rc.GetLabelFQDN() + ".") == rc.GetTargetField() {
 		return errors.New("alias target loop")
 	}
@@ -34,6 +35,7 @@ func rejectifTargetEqualsLabel(rc *models.RecordConfig) error {
 
 // rejectifInvalidR53Weight validates Route 53 weighted routing metadata.
 func rejectifInvalidR53Weight(rc *models.RecordConfig) error {
+	// TODO(tlim): auditrecords.go shouldn't be used to validate data. This kind of validation should be moved to pkg/normalize/validate.go.
 	weight := rc.Metadata["r53_weight"]
 	setID := rc.Metadata["r53_set_identifier"]
 

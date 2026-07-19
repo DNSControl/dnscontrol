@@ -51,6 +51,21 @@ The AKAMAITLC record can only be used once per zone.
 #### ALIAS
 Akamai Edge DNS does directly support `ALIAS` records. This provider will convert `ALIAS` records used at the zone apex (`@`) to `AKAMAITLC` records, and any other names to `CNAME` records.
 
+#### IGNORE
+
+`IGNORE()` is supported. Records matched by an `IGNORE()` rule will be left as-is on Akamai Edge DNS and not deleted.
+
+#### TTL with IGNORE
+
+Akamai Edge DNS stores a single TTL for all records that share the same name and type (a "recordset"). If you manage some records in a recordset while ignoring others, the TTL you set on the managed records will be applied to the whole recordset — including the ignored ones.
+
+If the ignored records currently have a different TTL than what you've set, DNSControl will print a warning during both `preview` and `push`:
+
+```
+WARNING: TTL mismatch in app.example.com A: using 900 (managed), ignoring 300
+```
+
+
 ### Secondary zones
 
 This provider only supports creating primary zones in Akamai. If a secondary zone has been manually created, only `AKAMAICDN` and `AKAMAITLC` records can be managed, as all other records are read-only.
@@ -346,3 +361,37 @@ Created zone: example_3.com
   GroupId: NNNNN
 ```
 
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ❌
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ✅
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
+<!-- provider-features-end -->

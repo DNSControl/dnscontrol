@@ -3,7 +3,6 @@ package main
 // Data-driven tests that exercize the DNS Provider APIs.
 
 import (
-	"runtime/debug"
 	"strings"
 	"testing"
 
@@ -13,7 +12,6 @@ import (
 )
 
 func TestDNSProviders(t *testing.T) {
-	debug.SetTraceback("all")
 	provider, domain, cfg := getProvider(t)
 	if provider == nil {
 		return
@@ -34,8 +32,6 @@ func TestMakeTests(t *testing.T) {
 	}
 	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
-
-	debug.SetTraceback("all")
 
 	_ = makeTests()
 }
@@ -244,14 +240,16 @@ func makeTests() []*TestGroup {
 		// weirdest edge-case we've ever seen.
 
 		testgroup("Attl",
-			not("LINODE"), // Linode does not support arbitrary TTLs: both are rounded up to 3600.
+			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
+			not("OPENWRT"), // OpenWRT does not support per record TTL
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
 			tc("Change TTL", ttl(a("testa", "1.1.1.1"), 999)),
 		),
 
 		testgroup("TTL",
-			not("NETCUP"), // NETCUP does not support TTLs.
-			not("LINODE"), // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
+			not("NETCUP"),  // NETCUP does not support TTLs.
+			not("LINODE"),  // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
+			not("OPENWRT"), // OpenWRT does not support per record TTL
 			tc("Start", ttl(a("@", "8.8.8.8"), 666), a("www", "1.2.3.4"), a("www", "5.6.7.8")),
 			tc("Change a ttl", ttl(a("@", "8.8.8.8"), 1000), a("www", "1.2.3.4"), a("www", "5.6.7.8")),
 			tc("Change single target from set", ttl(a("@", "8.8.8.8"), 1000), a("www", "2.2.2.2"), a("www", "5.6.7.8")),
@@ -894,7 +892,8 @@ func makeTests() []*TestGroup {
 		// https://github.com/DNSControl/dnscontrol/issues/2066
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
-			not("UNIFI"), // UniFi has no per-record TTL for SRV records.
+			not("UNIFI"),   // UniFi has no per-record TTL for SRV records.
+			not("OPENWRT"), // OpenWRT does not support per record TTL
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
 			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
 		),
@@ -1045,6 +1044,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("ALIAS to nonfqdn",
 			requires(providers.CanUseAlias),
+			not("DNSMADEEASY"), // DME validates ANAME target resolvability at create time; an unpublished in-zone target can't resolve
 			tc("ALIAS at root",
 				a("foo", "1.2.3.4"),
 				alias("@", "foo"),
@@ -1279,6 +1279,71 @@ func makeTests() []*TestGroup {
 			),
 		),
 
+		// Tencent Cloud DNSPod resolution lines and weighted routing.
+		testgroup("TENCENTDNS_LINE_WEIGHT",
+			only("TENCENTDNS"),
+			tc("create records on the default and telecom lines",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "1.2.3.4"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("change the telecom record value",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("change the record line",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "联通",
+				}),
+			),
+			tc("delete line metadata",
+				a("tencent-line", "1.2.3.4"),
+				a("tencent-line", "5.6.7.8"),
+			),
+			tc("restore line metadata",
+				a("tencent-line", "1.2.3.4"),
+				withMeta(a("tencent-line", "5.6.7.8"), map[string]string{
+					"tencentdns_line": "电信",
+				}),
+			),
+			tc("delete only the line-specific record",
+				a("tencent-line", "1.2.3.4"),
+			),
+			tcEmptyZone(),
+			tc("create weighted records",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "80",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "20",
+				}),
+			),
+			tc("change weights",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "50",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "50",
+				}),
+			),
+			tc("delete weight metadata",
+				a("tencent-weight", "1.2.3.4"),
+				a("tencent-weight", "5.6.7.8"),
+			),
+			tc("explicit zero weights are equivalent to omitted weights",
+				withMeta(a("tencent-weight", "1.2.3.4"), map[string]string{
+					"tencentdns_weight": "0",
+				}),
+				withMeta(a("tencent-weight", "5.6.7.8"), map[string]string{
+					"tencentdns_weight": "0",
+				}),
+			).ExpectNoChanges(),
+		),
+
 		// R53_WEIGHT_HEALTH_CHECK: Not included as an integration test because
 		// health checks are external AWS resources that must be pre-provisioned.
 		// The R53_HEALTH_CHECK_ID modifier is tested implicitly through the
@@ -1506,6 +1571,7 @@ func makeTests() []*TestGroup {
 			not("VERCEL"),
 
 			not("NETBIRD"), // MX/TXT records not supported
+			not("OPENWRT"), // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
@@ -1654,6 +1720,7 @@ func makeTests() []*TestGroup {
 			not("VERCEL"),
 
 			not("NETBIRD"), // MX/TXT records not supported
+			not("OPENWRT"), // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
@@ -1835,6 +1902,7 @@ func makeTests() []*TestGroup {
 			not("VERCEL"),
 
 			not("NETBIRD"), // MX/TXT records not supported
+			not("OPENWRT"), // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),

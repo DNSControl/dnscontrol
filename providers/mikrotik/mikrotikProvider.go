@@ -65,6 +65,33 @@ func init() {
 	providers.RegisterCustomRecordType("MIKROTIK_FORWARDER", providerName, "")
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "MikroTik RouterOS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/mikrotik",
+		PortalURL:   "", // No portal; managed on-device
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "Host URL",
+				Help:     "The MikroTik RouterOS REST API endpoint (for example http://192.168.88.1:8080).",
+				Required: true,
+			},
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "RouterOS API username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "RouterOS API password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func newMikrotikProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {

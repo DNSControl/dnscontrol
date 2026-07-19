@@ -20,7 +20,8 @@ func ValidArgs(args []any) {
 		if inner, ok := args[0].([]any); ok {
 			panic(fmt.Sprintf(
 				"mustbe.ValidArgs: variadic args were not spread (missing `...`); "+
-					"got a single []any of length %d: %+v",
+					"got a single (%T) []any of length %d: %+v",
+				inner,
 				len(inner), inner))
 		}
 	}

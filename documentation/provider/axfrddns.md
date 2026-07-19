@@ -10,10 +10,12 @@ To use this provider, add an entry to `creds.json` with `TYPE` set to `AXFRDDNS`
 
 Zone transfers and DDNS updates default to TCP when using this provider.
 
-The following two parameters in `creds.json` allow switching to TCP or TCP over TLS.
+The following two parameters in `creds.json` allow switching to TCP, TCP over TLS, or Unix domain sockets.
 
-* `update-mode`: May contain `tcp` (the default), `udp`, or `tcp-tls`.
-* `transfer-mode`: May contain `tcp` (the default), or `tcp-tls`.
+* `update-mode`: May contain `tcp` (the default), `udp`, `tcp-tls`, or `unix`.
+* `transfer-mode`: May contain `tcp` (the default), `tcp-tls`, or `unix`.
+
+When using `unix` mode, `master` and/or `transfer-server` should be set to the path of the Unix domain socket.
 
 ### Authentication
 
@@ -243,3 +245,38 @@ When AutoDNSSEC is not enabled or disabled, no checking is done.
 ## FYI: MD5 Support
 
 By default the used DNS Go package by miekg has deprecated support for the (insecure) MD5 algorithm [https://github.com/miekg/dns/commit/93945c284489394b77653323d11d5de83a2a6fb5](https://github.com/miekg/dns/commit/93945c284489394b77653323d11d5de83a2a6fb5). Some providers like the Leibniz Supercomputing Centre (LRZ) located in Munich still use this algorithm to authenticate internal dynamic DNS updates. To compensate for the lack of MD5, a custom MD5 TSIG Provider was added into DNSControl.
+
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ❌
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
+  - [dual host](../advanced-features/dual-host.md): ❌
+  - create-domains: ❌
+  - [get-zones](../commands/get-zones.md): ❌
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ✅
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ✅
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ✅
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ✅
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ✅
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ✅
+<!-- provider-features-end -->

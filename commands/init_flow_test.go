@@ -89,7 +89,37 @@ func stubFetchNoRecords(t *testing.T) {
 	t.Cleanup(func() { fetchZoneRecordsFunc = origFetch })
 }
 
+// captureInitOutput keeps successful init-flow output from leaking into an
+// unrelated test failure. If an init test fails, its captured output is logged.
+func captureInitOutput(t *testing.T) {
+	t.Helper()
+
+	output, err := os.CreateTemp(t.TempDir(), "init-output-*.txt")
+	if err != nil {
+		t.Fatalf("create init output capture: %v", err)
+	}
+	origStdout, origStderr := os.Stdout, os.Stderr
+	os.Stdout, os.Stderr = output, output
+	t.Cleanup(func() {
+		os.Stdout, os.Stderr = origStdout, origStderr
+		if err := output.Close(); err != nil {
+			t.Errorf("close init output capture: %v", err)
+			return
+		}
+		if !t.Failed() {
+			return
+		}
+		captured, err := os.ReadFile(output.Name())
+		if err != nil {
+			t.Errorf("read init output capture: %v", err)
+			return
+		}
+		t.Logf("init output:\n%s", captured)
+	})
+}
+
 func TestRunInit_VerifyDNSProviderCredsWithZones(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -152,6 +182,7 @@ func TestRunInit_VerifyDNSProviderCredsWithZones(t *testing.T) {
 }
 
 func TestRunInit_VerifyDNSProviderCredsRetry(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	attempt := 0
@@ -209,6 +240,7 @@ func TestRunInit_VerifyDNSProviderCredsRetry(t *testing.T) {
 }
 
 func TestRunInit_VerifyDNSProviderCredsAbort(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -249,6 +281,7 @@ func TestRunInit_VerifyDNSProviderCredsAbort(t *testing.T) {
 // in providers (NONE registrar + BIND DNS). It asserts the generated
 // creds.json and dnsconfig.js parse cleanly.
 func TestRunInit_NoneBindFlow(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -318,6 +351,7 @@ func TestRunInit_NoneBindFlow(t *testing.T) {
 }
 
 func TestRunInit_ImportRecords(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -398,6 +432,7 @@ func TestRunInit_ImportRecords(t *testing.T) {
 }
 
 func TestRunInit_ImportFallback(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{

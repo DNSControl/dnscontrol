@@ -39,13 +39,13 @@ func Register(codepoint uint16, typeName string, newFn func() dnsv2.RR, makeFn M
 	*/
 
 	// typenum -> func() RR  i.e. a function that creates a new RR struct for the given code point.
-	if dnsv2.TypeToRR[codepoint] != nil {
+	if _, ok := dnsv2.TypeToRR[codepoint]; ok {
 		panic(fmt.Sprintf("TypeToRR[%d] already in use (check for duplicate codepoint assignments)", codepoint))
 	}
 	dnsv2.TypeToRR[codepoint] = newFn
 
 	// typenum -> typename
-	if dnsv2.TypeToString[codepoint] != "" {
+	if _, ok := dnsv2.TypeToString[codepoint]; ok {
 		panic(fmt.Sprintf("TypeToString[%d] already in use by %s", codepoint, dnsv2.TypeToString[codepoint]))
 	}
 	dnsv2.TypeToString[codepoint] = typeName
@@ -69,4 +69,15 @@ func RegisterMaker(codepoint uint16, makeFn MakerRn) {
 		panic(fmt.Sprintf("TypeToMakeRDATA[%d] a.k.a. %s already in use by %T", codepoint, typeName, s))
 	}
 	TypeToMakeRDATA[codepoint] = makeFn
+}
+
+// IsPrivateType returns true if the codepoint is for a private type.
+func IsPrivateType(codepoint uint16) bool {
+	if codepoint > 65280 {
+		_, ok := dnsv2.TypeToString[codepoint]
+		if ok {
+			return true
+		}
+	}
+	return false
 }

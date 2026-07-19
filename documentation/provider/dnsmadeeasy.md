@@ -6,6 +6,7 @@ along with your `api_key` and `secret_key`. More info about authentication can b
 Example:
 
 {% code title="creds.json" %}
+
 ```json
 {
   "dnsmadeeasy": {
@@ -15,6 +16,7 @@ Example:
   }
 }
 ```
+
 {% endcode %}
 
 ## Records
@@ -26,23 +28,26 @@ This provider does not support HTTPRED records.
 SPF records are ignored by this provider. Use TXT records instead.
 
 ## Metadata
+
 This provider does not recognize any special metadata fields unique to DNS Made Easy.
 
 ## Usage
+
 An example configuration:
 
 {% code title="dnsconfig.js" %}
-```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_DNSMADEEASY = NewDnsProvider("dnsmadeeasy");
 
-D("example.com", REG_NONE, DnsProvider(DSP_DNSMADEEASY),
-    A("test", "1.2.3.4"),
-);
+```javascript
+var REG_NONE = NewRegistrar('none');
+var DSP_DNSMADEEASY = NewDnsProvider('dnsmadeeasy');
+
+D('example.com', REG_NONE, DnsProvider(DSP_DNSMADEEASY), A('test', '1.2.3.4'));
 ```
+
 {% endcode %}
 
 ## Activation
+
 You can generate your `api_key` and `secret_key` in [Control Panel](https://cp.dnsmadeeasy.com/) in Account Information in Config menu.
 
 API is only available for Business plan and higher plans.
@@ -50,12 +55,72 @@ API is only available for Business plan and higher plans.
 ## Caveats
 
 ### Global Traffic Director
+
 Global Traffic Director feature is not supported.
 
 ## Development
 
-### Debugging
-Set `DNSMADEEASY_DEBUG_HTTP` environment variable to dump all API calls made by this provider.
+### DNS Made Easy sandbox environment
 
-### Testing
-Set `sandbox` key to any non-empty value in credentials JSON alongside `api_key` and `secret_key` to make all API calls against DNS Made Easy sandbox environment.
+Sandbox control panel is available at [https://sandbox.dnsmadeeasy.com/](sandbox.dnsmadeeasy.com). To generate sandbox API credentials, sign up for a free trial and go to [Account Information](https://sandbox.dnsmadeeasy.com/account/info) in Config menu.
+
+Set `sandbox` key to a non-empty value in credentials JSON alongside `TYPE`, `api_key` and `secret_key` to make all API calls against DNS Made Easy sandbox environment. Details in [DNS Made Easy API documentation](https://api-docs.dnsmadeeasy.com/).
+
+### Debugging
+
+Set `DNSMADEEASY_DEBUG_HTTP` environment variable to `1` to dump all API calls made by this provider.
+
+```bash
+export DNSMADEEASY_DEBUG_HTTP=1
+```
+
+### Integration testing
+
+For integration testing sandbox environment is used automatically. See `DNSMADEEASY` in `integrationTest/profiles.json`.
+
+Run integration tests against DNS Made Easy sandbox environment. Increased test timeout is needed due to DNS Made Easy rate limits. Example:
+
+```bash
+export DNSMADEEASY_DOMAIN=dnscontroltest.com
+export DNSMADEEASY_API_KEY=4aede38d-f8b4-41d7-9712-374336624046
+export DNSMADEEASY_SECRET_KEY=fcf5d4f8-765e-4c90-a79e-0369d332a890
+
+cd integrationTest
+go test -v -test.timeout 2h -args -verbose -profile DNSMADEEASY
+```
+
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ❌
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ✅
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❌
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❌
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
+<!-- provider-features-end -->
+

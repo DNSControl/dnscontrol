@@ -316,7 +316,7 @@ func MakeSRV(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, erro
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeSRV expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.SRV{Priority: mustbe.Uint16(args[0]), Weight: mustbe.Uint16(args[1]), Port: mustbe.Uint16(args[2]), Target: mustbe.TargetHost(origin, args[3])}, nil
+	return dnsrdatav2.SRV{Priority: mustbe.Uint16(args[0]), Weight: mustbe.Uint16(args[1]), Port: mustbe.Uint16(args[2]), Target: mustbe.TargetHostSRV(origin, args[3])}, nil
 }
 
 func MakeSSHFP(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {

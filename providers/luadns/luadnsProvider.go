@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
+	"slices"
 
 	api "github.com/luadns/luadns-go"
 	"golang.org/x/time/rate"
@@ -148,7 +148,7 @@ func (l *luadnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	checkNS(dc)
+	l.checkNS(dc)
 
 	zone, err := l.getZone(dc.Name)
 	if err != nil {
@@ -270,6 +270,15 @@ func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
 	return newRecords, nil
 }
 
+func (l *luadnsProvider) checkNS(dc *models.DomainConfig) {
+	for _, rec := range dc.Records {
+		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
+		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetTargetCombined()) && rec.TTL != 86400 {
+			rec.TTL = 86400
+		}
+	}
+}
+
 func nativeToRecord(domain string, r *api.Record) (*models.RecordConfig, error) {
 	rc := &models.RecordConfig{
 		Type:     r.Type,
@@ -310,16 +319,4 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 		rrs = append(rrs, r)
 	}
 	return rrs
-}
-
-func checkNS(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
-	for _, rec := range dc.Records {
-		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
-		if rec.Type == "NS" && strings.HasSuffix(rec.GetTargetField(), ".luadns.net.") && rec.TTL != 86400 {
-			rec.TTL = 86400
-		}
-		newList = append(newList, rec)
-	}
-	dc.Records = newList
 }

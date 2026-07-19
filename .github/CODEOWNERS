@@ -48,6 +48,7 @@ providers/netlify @SphericalKat
 providers/netnod @Netnod
 providers/ns1 @costasd
 # providers/opensrs NEEDS VOLUNTEER
+providers/openwrt @huskyistaken
 providers/oracle @kallsyms
 providers/ovh @masterzen
 providers/packetframe @hamptonmoore
@@ -57,6 +58,7 @@ providers/realtimeregister @PJEilers
 providers/route53 @tresni
 providers/rwth @mistererwin
 providers/sakuracloud @ttkzw
+providers/scaleway @alessiopcc
 # providers/softlayer NEEDS VOLUNTEER
 providers/tencentdns @cylonchau
 providers/transip @blackshadev

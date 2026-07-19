@@ -205,6 +205,15 @@ func (cc *CompareConfig) addRecords(recs models.Records, storeInExisting bool) {
 	z := prettyzone.PrettySort(recs, cc.origin, 0, nil)
 
 	for _, rec := range z.Records {
+		// A record whose type was changed after construction (e.g. a provider
+		// converting ALIAS->CNAME via RecordConfig.ChangeType()
+		// has its cached V3 fields (.rdata/.ComparableV3)
+		// cleared. We rebuild the V3 fields here.
+		// When we get rid of FixRD(), we'll have to move the fix to ChangeType().
+		if rec.ComparableV3 == "" {
+			rec.FixRD(cc.origin)
+		}
+
 		key := rec.Key()
 		label := key.NameFQDN
 		rtype := key.Type
