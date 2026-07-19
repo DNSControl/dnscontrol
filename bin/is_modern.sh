@@ -17,6 +17,9 @@ grep --color --include='*.go' -r -F 'PopulateFromString' *
 echo '========== AddOrigin('
 grep --color --include='*.go' -r -F 'AddOrigin(' *
 
+echo '========== TrimDomainName('
+grep --color --include='*.go' -r -F 'TrimDomainName(' *
+
 echo '========== SetTarget'
 grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\('
 

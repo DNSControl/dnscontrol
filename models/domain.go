@@ -72,6 +72,13 @@ func NewDomainConfig(name string) (*DomainConfig, error) {
 	return dc, nil
 }
 
+// ToShort trims the dc.Name from name. If name is not below dc.Name, name is returned unchanged.
+// If the name was shortened, it does not end with a ".". If the name was untouched, it ends with a ".".
+// Similar to name.ToShort() but less typing.
+func (dc *DomainConfig) ToShort(name string) string {
+	return name.ToShort(name, dc.Name)
+}
+
 // MustNewDomainConfig is like NewDomainConfig but panics if initialization
 // fails.  It is intended for use in variable initializations in unit tests.
 func MustNewDomainConfig(name string) *DomainConfig {
