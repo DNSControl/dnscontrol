@@ -229,7 +229,8 @@ func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, e
 
 	switch rtype {
 	case "TXT":
-		tx, err := txtutil.ParseQuoted(r.Target)
+		var tx string
+		tx, err = txtutil.ParseQuoted(r.Target)
 		if err != nil {
 			return nil, err
 		}
