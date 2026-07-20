@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	dnsv1 "github.com/miekg/dns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"github.com/qdm12/reprint"
 )
 
@@ -297,7 +297,7 @@ func (rc *RecordConfig) SetLabel(short, origin string) {
 		rc.NameFQDN = origin
 	} else {
 		rc.Name = short
-		rc.NameFQDN = dnsutilv1.AddOrigin(short, origin)
+		rc.NameFQDN = nameutil.ToFqdnNoDot(short, origin)
 	}
 }
 
@@ -624,15 +624,15 @@ func CanonicalizeTargets(recs []*RecordConfig, origin string) {
 		switch r.Type { // #rtype_variations
 		case "ALIAS", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "PTR", "SRV":
 			// Target is a hostname that might be a shortname. Turn it into a FQDN.
-			r.target = dnsutilv1.AddOrigin(r.target, originFQDN)
+			r.target = nameutil.ToFqdnWithDot(r.target, originFQDN)
 		case "A", "AKAMAICDN", "AKAMAITLC", "CAA", "DHCID", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "HTTPS", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
 			// Do nothing.
 		case "SOA":
 			if r.target != "default_not_set." {
-				r.target = dnsutilv1.AddOrigin(r.target, originFQDN) // .target stores the Ns
+				r.target = nameutil.ToFqdnWithDot(r.target, originFQDN) // .target stores the Ns
 			}
 			if r.SoaMbox != "default_not_set." {
-				r.SoaMbox = dnsutilv1.AddOrigin(r.SoaMbox, originFQDN)
+				r.SoaMbox = nameutil.ToFqdnWithDot(r.SoaMbox, originFQDN)
 			}
 		default:
 			// TODO: we'd like to panic here, but custom record types complicate things.

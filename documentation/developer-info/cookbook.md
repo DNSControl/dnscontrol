@@ -214,7 +214,8 @@ examples.
 Turn a short name (`foo`) into a FQDN (`foo.example.com.`) (with trailing dot).
 
 ```go
-f := name.ToFqdnWithDot("foo", "example.com")
+f1 := nameutil.ToFqdnWithDot("foo", "example.com")
+f2 := dc.ToFqdnWithDot("foo")         // Assume dc.Name = "example.com"
 # result: foo.example.com.
 # The result will always end in ".".
 ```
@@ -222,15 +223,17 @@ f := name.ToFqdnWithDot("foo", "example.com")
 Turn a short name (`foo`) into a FQDN (`foo.example.com`) (no trailing dot).
 
 ```go
-f := name.ToFqdnNoDot("foo", "example.com")
+f1 := nameutil.ToFqdnNoDot("foo", "example.com")
+f2 := dc.ToFqdnNoDot("foo")           // Assume dc.Name = "example.com"
 # result: foo.example.com
-# The result will never end in ".".
+# The result will never end in "." (even if the origin did).
 ```
 
 Turn a name (FQDN end with a ".") into a shortname:
 ```go
-short1 := name.ToShort("foo.example.com.", "example.com")
-short2 := dc.ToShort("foo.example.com.")
+short1 := nameutil.ToShort("foo.example.com.", "example.com")
+short2 := dc.ToShort("foo.example.com.")    // Assume dc.Name = "example.com"
+# result: foo
 # The result ends in "." if it is a FQDN (even if the origin didn't.)
 ```
 

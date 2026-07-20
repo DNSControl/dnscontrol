@@ -151,7 +151,7 @@ func handsoff(
 	if len(conflicts) != 0 {
 		msgs = append(msgs, fmt.Sprintf("%d records that are both IGNORE*()'d and not ignored:", len(conflicts)))
 		for _, r := range conflicts {
-			msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetTargetCombined()))
+			msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetRDATA().String()))
 		}
 		if !unmanagedSafely {
 			return nil, nil, errors.New(strings.Join(msgs, "\n") +
@@ -166,7 +166,7 @@ func handsoff(
 		if len(externalDNSConflicts) != 0 {
 			msgs = append(msgs, fmt.Sprintf("WARNING: %d records are defined in your config but also managed by external-dns:", len(externalDNSConflicts)))
 			for _, r := range externalDNSConflicts {
-				msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetTargetCombined()))
+				msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetRDATA().String()))
 			}
 			msgs = append(msgs, "Consider removing these from your config or from external-dns to avoid conflicts.")
 		}

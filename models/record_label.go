@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"golang.org/x/net/idna"
 )
 
@@ -40,7 +40,7 @@ func (rc *RecordConfig) SetLabelFromFQDN(fqdn, origin string) {
 
 	fqdn = strings.ToLower(fqdn)
 	origin = strings.ToLower(origin)
-	rc.Name = dnsutilv1.TrimDomainName(fqdn, origin)
+	rc.Name = nameutil.ToShort(fqdn, origin)
 	rc.NameFQDN = fqdn
 }
 

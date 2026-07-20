@@ -40,7 +40,7 @@ func showRecs(recs models.Records) string {
 		result.WriteString(" ")
 		result.WriteString(rec.Type)
 		result.WriteString(" ")
-		result.WriteString(rec.GetTargetCombined())
+		result.WriteString(rec.GetRDATA().String())
 		result.WriteString("\n")
 	}
 	return result.String()

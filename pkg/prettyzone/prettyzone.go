@@ -123,7 +123,8 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 		}
 
 		// the remaining line
-		target := rr.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+		//target := rr.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+		target := rr.GetRDATA().String()
 
 		// comment
 		comment := ""

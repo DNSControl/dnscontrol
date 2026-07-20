@@ -10,10 +10,10 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	dnsv1 "github.com/miekg/dns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Returns false if target does not validate.
@@ -209,8 +209,8 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		if label == "@" {
 			check(errors.New("cannot create CNAME record for bare domain"))
 		}
-		labelFQDN := dnsutilv1.AddOrigin(label, domain)
-		targetFQDN := dnsutilv1.AddOrigin(target, domain)
+		labelFQDN := nameutil.ToFqdnNoDot(label, domain)
+		targetFQDN := nameutil.ToFqdnNoDot(target, domain)
 		if labelFQDN == targetFQDN {
 			check(errors.New("CNAME loop (target points at itself)"))
 		}
@@ -268,7 +268,7 @@ func transformCNAME(target, oldDomain, newDomain, suffixstrip string) string {
 	if strings.HasSuffix(target, ".") {
 		return target + nd + "."
 	}
-	return dnsutilv1.AddOrigin(target, oldDomain) + "." + nd + "."
+	return nameutil.ToFqdnWithDot(target, oldDomain) + nd + "."
 }
 
 func newRec(rec *models.RecordConfig, ttl uint32) *models.RecordConfig {
@@ -397,7 +397,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				errs = append(errs, err)
 			}
 			// Unlike any other FQDN in this system, it is stored as a FQDN without the trailing dot.
-			n := dnsutilv1.AddOrigin(ns.Name, domain.Name+".")
+			n := nameutil.ToFqdnWithDot(ns.Name, domain.Name)
 			ns.Name = strings.TrimSuffix(n, ".")
 		}
 
@@ -455,7 +455,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					origin = rec.SubDomain + "." + origin
 				}
 				before := rec.GetTargetField()
-				after := dnsutilv1.AddOrigin(before, origin)
+				after := domain.ToFqdnWithDot(before)
 				if err := rec.SetTarget(after); err != nil {
 					errs = append(errs, err)
 				} else if after != before {

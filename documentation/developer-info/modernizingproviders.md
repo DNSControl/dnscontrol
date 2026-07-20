@@ -149,7 +149,8 @@ n := dnsutilv1.AddOrigin(ns.Name, domain.Name+".")
 
 NEW:
 
-n := name.AddOrigin(ns.Name, domain.Name+".")
+n1 := nameutil.ToFqdnWithDot(ns.Name, domain.Name) // result always ends with "."
+n2 := nameutil.ToFqdnNoDot(ns.Name, domain.Name)   // result never ends with "."
 
 ## Step 5. Replace TrimDomainName()
 
@@ -162,7 +163,7 @@ shortname := dnsutilv1.TrimDomainName(label, origin)
 NEW:
 
 ```go
-shortname := name.ToShort(label, origin)
+shortname := nameutil.ToShort(label, origin)
 or
 shortname := dc.ToShort(label)
 ```
