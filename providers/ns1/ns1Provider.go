@@ -45,6 +45,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, docNotes)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "NS1",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/ns1",
+		PortalURL:   "https://my.nsone.net/#/account/settings/keys",
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_token",
+				Label:    "API token",
+				Help:     "Your NS1 API token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 type nsone struct {
