@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"golang.org/x/net/idna"
 )
 
@@ -40,7 +40,7 @@ func (rc *RecordConfig) SetLabelFromFQDN(fqdn, origin string) {
 
 	fqdn = strings.ToLower(fqdn)
 	origin = strings.ToLower(origin)
-	rc.Name = dnsutilv1.TrimDomainName(fqdn, origin)
+	rc.Name = nameutil.ToShort(fqdn, origin)
 	rc.NameFQDN = fqdn
 }
 
@@ -58,7 +58,7 @@ var ipv4LabelRe = regexp.MustCompile(`^\d+\.\d+\.\d+\.\d+$`)
 // If name == "", "@" is returned.
 func (dc *DomainConfig) LabelFromShort(name string) string {
 	if strings.HasSuffix(name, ".") {
-		fmt.Printf("DEBUG: LabelFromShort(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
+		fmt.Printf("ERROR: LabelFromShort(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
 	}
 
 	if name == "" {
@@ -76,7 +76,7 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 		return "@"
 	}
 	if strings.HasSuffix(name, ".") {
-		fmt.Printf("DEBUG: LabelFromFQDNNoDot(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
+		fmt.Printf("ERROR: LabelFromFQDNNoDot(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
 	}
 
 	newName := strings.ToLower(name)
@@ -89,7 +89,7 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	}
 
 	// These other possibilities all indicate the function was called wrong.
-	fmt.Printf("DEBUG: LabelFromFQDNNoDot(%v) called WRONG\n", name)
+	fmt.Printf("ERROR: LabelFromFQDNNoDot(%v) called WRONG\n", name)
 	if newName == "" {
 		return "@"
 	}
@@ -105,7 +105,7 @@ func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 		return "IMPOSSIBLE"
 	}
 	if !strings.HasSuffix(name, ".") {
-		fmt.Printf("DEBUG: LabelFromFQDNWithDot(%v) called WRONG. Maybe you want LabelFromFQDNNoDot?\n", name)
+		fmt.Printf("ERROR: LabelFromFQDNWithDot(%v) called WRONG. Maybe you want LabelFromFQDNNoDot?\n", name)
 	}
 
 	newName := strings.ToLower(name)
@@ -118,7 +118,7 @@ func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 	}
 
 	// These other possibilities all indicate the function was called wrong.
-	fmt.Printf("DEBUG: LabelFromFQDNWithDot(%v) called WRONG\n", name)
+	fmt.Printf("ERROR: LabelFromFQDNWithDot(%v) called WRONG\n", name)
 	if newName == "" {
 		return "@"
 	}

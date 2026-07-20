@@ -17,10 +17,10 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 var (
@@ -369,7 +369,7 @@ func (tc *TestCase) UnsafeIgnore() *TestCase {
 
 func SetLabel(r *models.RecordConfig, label, domain string) {
 	r.Name = label
-	r.NameFQDN = dnsutilv1.AddOrigin(label, "**current-domain**.")
+	r.NameFQDN = nameutil.ToFqdnWithDot(label, "**current-domain**.")
 }
 
 func withMeta(record *models.RecordConfig, metadata map[string]string) *models.RecordConfig {

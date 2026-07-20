@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
@@ -390,13 +391,11 @@ func TestRunInit_ImportRecords(t *testing.T) {
 
 	origFetch := fetchZoneRecordsFunc
 	fetchZoneRecordsFunc = func(_ InitCredsEntry, zone string) (models.Records, error) {
-		aRecord := &models.RecordConfig{Type: "A", Name: "www", TTL: 300}
-		aRecord.SetTarget("192.0.2.1")
-		mxRecord := &models.RecordConfig{Type: "MX", Name: "@", TTL: 300, MxPreference: 10}
-		mxRecord.SetTarget("mx.example.com.")
-		soaRecord := &models.RecordConfig{Type: "SOA", Name: "@"}
-		nsRecord := &models.RecordConfig{Type: "NS", Name: "@"}
-		nsRecord.SetTarget("ns1.example.com.")
+		dc := models.MustNewDomainConfig("example.com")
+		aRecord := dc.MustNewRecordConfig(dc.LabelFromShort("www"), 300, dnsv2.TypeA, "192.0.2.1")
+		mxRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeMX, 10, "mx.example.com.")
+		soaRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeSOA, "foo.example.com", "tal@example.com", 1, 2, 3, 4, 5)
+		nsRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeNS, "ns.example.com.")
 		return models.Records{aRecord, mxRecord, soaRecord, nsRecord}, nil
 	}
 	t.Cleanup(func() { fetchZoneRecordsFunc = origFetch })

@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
 	"github.com/qdm12/reprint"
 	"golang.org/x/net/idna"
 )
@@ -80,6 +81,34 @@ func MustNewDomainConfig(name string) *DomainConfig {
 		panic(err)
 	}
 	return dc
+}
+
+// ToFqdnWithDot converts a shortname to a FQDN+".".
+// (Assume dc.Name == "bar.com")
+// ToFqdnWithDot("foo")      = "foo.bar.com."   // Typical use.
+// ToFqdnWithDot("@")        = "bar.com."       // Apex returns the apex.
+// ToFqdnWithDot("")         = "bar.com."       // Apex returns the apex.
+// ToFqdnWithDot("foo.com.") = "foo.com."       // FQDNs are unmodified.
+// ToFqdnWithDot("foo"")     = "foo.bar.com."   // If origin ends with a ".", DTRT.
+// Replaces dnsutilv1.AddOrigin().
+// Similar to nameutil.ToFqdnWithDot() but uses the domain name from dc.
+func (dc *DomainConfig) ToFqdnWithDot(s string) string {
+	return nameutil.ToFqdnWithDot(s, dc.Name)
+}
+
+// ToFqdnNoDot is the same as ToFqdnWithDot but the result does not include a trailing ".".
+// Replaces dnsutilv1.AddOrigin().
+// Similar to DomainConfig.ToFqdnNoDot() but it takes origin from dc.Name.
+func (dc *DomainConfig) ToFqdnNoDot(s string) string {
+	return nameutil.ToFqdnNoDot(s, dc.Name)
+}
+
+// ToShort returns the shortname by stripping the domain's name from "name". If name is not below dc.Name, name is returned unchanged.
+// If the name was shortened, it does not end with a ".". If the name was untouched, it ends with a ".".
+// Calling ToShort on a string that is already a shortname is unsupported. Names that do not end with "." are assumed to be FQDNs without a trailing ".".
+// Similar to name.ToShort() but uses the domain name from dc.
+func (dc *DomainConfig) ToShort(name string) string {
+	return nameutil.ToShort(name, dc.Name)
 }
 
 func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {

@@ -30,7 +30,6 @@ import (
 	"github.com/go-gandi/go-gandi"
 	"github.com/go-gandi/go-gandi/config"
 	"github.com/go-gandi/go-gandi/livedns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Section 1: Register this provider in the system.
@@ -269,7 +268,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 				label := inst.Key.NameFQDN
 				rtype := n.RrsetType
 				domain := dc.Name
-				shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+				shortname := dc.ToShort(label)
 				ttl := n.RrsetTTL
 				values := n.RrsetValues
 				key := models.RecordKey{NameFQDN: label, Type: rtype}
@@ -320,7 +319,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 			msgs := strings.Join(inst.Msgs, "\n")
 			domain := dc.Name
 			label := inst.Key.NameFQDN
-			shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+			shortname := dc.ToShort(label)
 			corrections = append(corrections,
 				&models.Correction{
 					Msg: msgs,

@@ -362,8 +362,15 @@ func GetZone(args GetZoneArgs) error {
 				if rec.Type == "UNKNOWN" {
 					ty = rec.UnknownTypeName
 				}
+
+				var content string
+				if rec.HasFormatIdenticalToTXT() {
+					content = rec.GetTargetTXTJoined()
+				} else {
+					content = rec.GetTargetCombinedFunc(nil)
+				}
 				fmt.Fprintf(w, "%s\t%s\t%d\tIN\t%s\t%s%s\n",
-					rec.NameFQDN, rec.Name, rec.TTL, ty, rec.GetTargetCombinedFunc(nil), providerMeta)
+					rec.NameFQDN, rec.Name, rec.TTL, ty, content, providerMeta)
 			}
 
 		default:
@@ -384,7 +391,7 @@ func jsonQuoted(i string) string {
 }
 
 func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
-	target := rec.GetTargetCombined()
+	target := rec.GetRDATA().String()
 
 	ttl := uint32(0)
 	ttlop := ""
