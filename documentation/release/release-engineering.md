@@ -31,15 +31,71 @@ git commit -am "CHORE: generate-all.sh"
 ## Step 2. Tag the commit in main that you want to release
 
 ```shell
+# Set the version we are going to release
+
+export VERSION=v4.43.2
+
+# Create an empty PR for the release
+
+git fetch origin main
 git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
 git pull --rebase --ff-only --prune
-git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | tail
-export VERSION=v4.x.0
+git reset --hard origin/main
+git checkout -b "release_$VERSION"
+git commit --allow-empty -m "Release $VERSION"
+git push
+gh pr create --base main --title "Release $VERSION" --body ""
+```
+
+Wait to tests to complete and merge.
+
+```
+gh run list -b "release_$VERSION"
+gh run watch
+```
+
+WAIT for the GHA to complete. If there are errors, stop and fix them.
+
+Merge it either manually or with this command:
+
+```
+gh pr merge --squash --delete-branch  $PR
+```
+
+Create the release
+
+```
+git fetch origin main
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
 git tag -m "Release $VERSION" -a $VERSION
 git push origin HEAD --tags
 ```
 
 Soon after GitHub will start an [Action](https://github.com/DNSControl/dnscontrol/actions) Workflow called "draft release" which will build all release binaries and write the draft release notes.
+
+Wait to tests to complete and merge.
+
+```
+gh run list -b "$VERSION"
+gh run watch
+```
+
+WAIT for the GHA to complete. If there are errors, stop and fix them.
+
+# Release it to the public
+
+Find the release
+        https://github.com/DNSControl/dnscontrol/releases
+and edit the notes.
+
+When you submit it: 
+
+* "Pre-Release" for rc releases, "Latest" for real releases.
+* Create a discussion for this release
+```
 
 ## Step 3. Create the release notes
 
