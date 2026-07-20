@@ -53,6 +53,42 @@ jobs:
         run: |
           go install golang.org/x/tools/cmd/stringer@latest
 
+      # Compute the changelog's "previous tag" ourselves.
+      #
+      # GoReleaser's default picks the previous tag by commit ancestry, which
+      # (a) breaks when a release and its release-candidate share a commit (it
+      # walks past both to an older release), and (b) makes a final release's
+      # notes span only back to its own -rc tag. Instead we default
+      # GORELEASER_PREVIOUS_TAG to the most recent NON-rc release older than the
+      # current version, so release notes always cover the full range since the
+      # last stable release. This requires no manual step per release.
+      #
+      # Skipped automatically for the very first release (no prior stable tag),
+      # or if GORELEASER_PREVIOUS_TAG was already provided.
+      - name: Compute previous non-RC tag for changelog
+        run: |
+          set -eu
+          if [ -n "${GORELEASER_PREVIOUS_TAG:-}" ]; then
+            echo "GORELEASER_PREVIOUS_TAG already set to '${GORELEASER_PREVIOUS_TAG}'; leaving as-is."
+            exit 0
+          fi
+          cur="${GITHUB_REF_NAME}"
+          base="${cur%%-*}"   # strip any -rc/prerelease suffix (v4.43.1-rc1 -> v4.43.1)
+          # List stable (non-prerelease) release tags plus `base`, version-sort
+          # ascending, then print the tag immediately before `base`.
+          prev="$(
+            { git tag --list 'v[0-9]*.[0-9]*.[0-9]*'; echo "$base"; } \
+              | awk '!/-/' \
+              | sort -V -u \
+              | awk -v base="$base" '$0==base{print prev; exit} {prev=$0}'
+          )"
+          if [ -n "$prev" ]; then
+            echo "GORELEASER_PREVIOUS_TAG=$prev" >> "$GITHUB_ENV"
+            echo "current=$cur previous=$prev (most recent non-rc release)"
+          else
+            echo "No prior non-rc release found for $cur; letting GoReleaser auto-detect."
+          fi
+
       # use GoReleaser to build for all platforms.
       - id: release
         name: Goreleaser release
