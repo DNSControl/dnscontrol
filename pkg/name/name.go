@@ -10,7 +10,7 @@ import (
 // ToFqdnWithDot("", "bar.com")        = "bar.com."       // Apex returns the apex.
 // ToFqdnWithDot("foo.com. "bar.com")  = "foo.com."       // FQDNs are unmodified.
 // ToFqdnWithDot("foo", "bar.com.")    = "foo.bar.com."   // If origin ends with a ".", DTRT.
-// Replaces dnsutilv1.AddOrigin()
+// Replaces dnsutilv1.AddOrigin().
 func ToFqdnWithDot(s, origin string) string {
 	if s == "" || s == "@" {
 		return dnsutilv2.Join(origin, ".")
@@ -22,7 +22,7 @@ func ToFqdnWithDot(s, origin string) string {
 }
 
 // ToFqdnNoDot is the same as ToFqdnWithDot but the trailing "." is removed.
-// Replaces dnsutilv1.AddOrigin()
+// Replaces dnsutilv1.AddOrigin().
 func ToFqdnNoDot(s, origin string) string {
 	t := ToFqdnWithDot(s, origin)
 	return t[0 : len(t)-1]

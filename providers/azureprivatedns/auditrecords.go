@@ -11,7 +11,5 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("MX", rejectif.MxNull) // Last verified 2020-12-28
-
 	return a.Audit(records)
 }
