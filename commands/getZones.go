@@ -362,8 +362,15 @@ func GetZone(args GetZoneArgs) error {
 				if rec.Type == "UNKNOWN" {
 					ty = rec.UnknownTypeName
 				}
+
+				var content string
+				if rec.HasFormatIdenticalToTXT() {
+					content = rec.GetTargetTXTJoined()
+				} else {
+					content = rec.GetTargetCombinedFunc(nil)
+				}
 				fmt.Fprintf(w, "%s\t%s\t%d\tIN\t%s\t%s%s\n",
-					rec.NameFQDN, rec.Name, rec.TTL, ty, rec.GetRDATA().String(), providerMeta)
+					rec.NameFQDN, rec.Name, rec.TTL, ty, content, providerMeta)
 			}
 
 		default:

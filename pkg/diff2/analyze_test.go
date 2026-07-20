@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/fatih/color"
@@ -61,9 +60,6 @@ func (cl ChangeList) String() string {
 func makeRec(label, rtype, content string) *models.RecordConfig {
 	dc := models.MustNewDomainConfig("f.com")
 	typeNum, err := dnsutilv2.StringToType(rtype)
-	if typeNum == dnsv2.TypeMX {
-		fmt.Printf("HERE\n")
-	}
 	if err != nil {
 		panic(fmt.Sprintf("BUG: makeRec does not support %q", rtype))
 	}

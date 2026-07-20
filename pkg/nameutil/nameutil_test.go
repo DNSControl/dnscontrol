@@ -19,6 +19,7 @@ func TestToFqdn(t *testing.T) {
 		{name: "empty label", label: "", origin: "bar.com", wantDot: "bar.com.", wantND: "bar.com"},
 		{name: "absolute name", label: "foo.com.", origin: "bar.com", wantDot: "foo.com.", wantND: "foo.com"},
 		{name: "trailing dot", label: "foo", origin: "bar.com.", wantDot: "foo.bar.com.", wantND: "foo.bar.com"},
+		{name: "current domain", label: "foo", origin: "**current-domain**.", wantDot: "foo.**current-domain**.", wantND: "foo.**current-domain**"},
 	}
 
 	for _, tt := range tests {
