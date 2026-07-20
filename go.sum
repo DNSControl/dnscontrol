@@ -95,8 +95,6 @@ github.com/benbjohnson/clock v1.3.5 h1:VvXlSJBzZpA/zum6Sj74hxwYI2DIxRWuNIoXAzHZz
 github.com/benbjohnson/clock v1.3.5/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
-github.com/billputer/go-namecheap v0.0.0-20210108011502-994a912fb7f9 h1:2vQTbEJvFsyd1VefzZ34GUkUD6TkJleYYJh9/25WBE4=
-github.com/billputer/go-namecheap v0.0.0-20210108011502-994a912fb7f9/go.mod h1:bqqNsI2akL+lLWyApkYY0cxquWPKwEBU0Wd3chi3TEg=
 github.com/bits-and-blooms/bitset v1.24.4 h1:95H15Og1clikBrKr/DuzMXkQzECs1M6hhoGXLwLQOZE=
 github.com/bits-and-blooms/bitset v1.24.4/go.mod h1:7hO7Gc7Pp1vODcmWvKMRA9BNmbv6a/7QIWpPxHddWR8=
 github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
@@ -443,6 +441,8 @@ github.com/vercel/terraform-provider-vercel v1.14.1 h1:ghAjFkMMzka4XuoBYdu1OXM/K
 github.com/vercel/terraform-provider-vercel v1.14.1/go.mod h1:AdFCiUD0XP8XOi6tnhaCh7I0vyq2TAPmI+GcIp3+7SI=
 github.com/vultr/govultr/v2 v2.17.2 h1:gej/rwr91Puc/tgh+j33p/BLR16UrIPnSr+AIwYWZQs=
 github.com/vultr/govultr/v2 v2.17.2/go.mod h1:ZFOKGWmgjytfyjeyAdhQlSWwTjh2ig+X49cAp50dzXI=
+github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c h1:crbR1KcJIrVWMm1rNmKwrTFO8LwcC/O9J3ZSQK0Fwm0=
+github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c/go.mod h1:geRAHdcGE14UKJ835LVWlIC6X9c7Ft+c+UCXQ571Mig=
 github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419 h1:PT5KYEimicg1GRkBtBxCLcHWvMcBRGljOLwG/y4+T5c=
 github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419/go.mod h1:BxZUa1xZ189Ww28wRT0LjHcmHgQmPh27hqfHIwET0ok=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=

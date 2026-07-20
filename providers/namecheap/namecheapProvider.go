@@ -18,7 +18,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	nc "github.com/billputer/go-namecheap"
+	nc "github.com/willpower232/go-namecheap"
 	"golang.org/x/net/publicsuffix"
 )
 
