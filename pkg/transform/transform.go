@@ -212,6 +212,7 @@ func decodeHexOrBase64(s string) ([]byte, error) {
 	}
 }
 
+// OPENPGPKEY decoded an OPENPGP key.
 func OPENPGPKEY(encodedKey string) (string, error) {
 	// Decode the key, which can be either hex or base64.
 	decodedKey, err := decodeHexOrBase64(encodedKey)

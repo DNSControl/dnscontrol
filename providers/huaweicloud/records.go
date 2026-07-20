@@ -5,13 +5,15 @@ import (
 	"net/url"
 	"slices"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/model"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *huaweicloudProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *huaweicloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	if err := c.getZones(); err != nil {
 		return nil, err
 	}
@@ -70,9 +72,7 @@ func (c *huaweicloudProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 		switch change.Type {
 		case diff2.REPORT:
 			reports = append(reports, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			fallthrough
-		case diff2.CHANGE:
+		case diff2.CREATE, diff2.CHANGE:
 			newRecordsColl := collectRecordsByLineAndWeightAndKey(change.New)
 			oldRecordsColl := collectRecordsByLineAndWeightAndKey(change.Old)
 			corrections = append(corrections, &models.Correction{
@@ -131,9 +131,15 @@ func (c *huaweicloudProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 		}
 	}
 
+	dnssecCorrections, dnssecChangeCount, err := c.getDNSSECCorrections(dc)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	result := append(reports, deletions...)
 	result = append(result, corrections...)
-	return result, actualChangeCount, nil
+	result = append(result, dnssecCorrections...)
+	return result, actualChangeCount + dnssecChangeCount, nil
 }
 
 func collectRecordsByLineAndWeightAndKey(records models.Records) map[string]models.Records {
@@ -217,10 +223,7 @@ func (c *huaweicloudProvider) createRRSet(zoneID string, rc *model.ShowRecordSet
 		_, err = c.client.CreateRecordSetWithLine(createPayload)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (c *huaweicloudProvider) updateRRSet(zoneID, rrsetID string, rc *model.ShowRecordSetByZoneResp) error {
@@ -241,10 +244,7 @@ func (c *huaweicloudProvider) updateRRSet(zoneID, rrsetID string, rc *model.Show
 		_, err = c.client.UpdateRecordSets(updatePayload)
 		return err
 	})
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func parseMarkerFromURL(link string) (string, error) {

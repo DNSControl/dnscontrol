@@ -3,8 +3,8 @@ package commands
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 )
 
 func Test_whichZonesToProcess(t *testing.T) {

@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -110,6 +110,39 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Porkbun",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/porkbun",
+		PortalURL:   "https://porkbun.com/account/api",
+		Notes:       "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "The API Key generated from Porkbun API Access.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "secret_key",
+				Label:    "Secret key",
+				Help:     "The Secret Key shown when creating the Porkbun API key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "max_attempts",
+				Label: "Max attempts (optional)",
+				Help:  "Override retry attempts. Leave blank to use the default of 5.",
+			},
+			{
+				Key:   "max_duration",
+				Label: "Max duration (optional)",
+				Help:  "Retry duration limit, such as 5m. Leave blank for no limit.",
+			},
+		},
+	})
 	providers.RegisterCustomRecordType("PORKBUN_URLFWD", providerName, "")
 	providers.RegisterCustomRecordType("URL", providerName, "")
 	providers.RegisterCustomRecordType("URL301", providerName, "")
@@ -132,6 +165,47 @@ func genComparable(rec *models.RecordConfig) string {
 	return ""
 }
 
+func porkbunURLForwardingMetadata(recordType string, metadata map[string]string) (string, string, string) {
+	t := metadata[metaType]
+	if t == "" {
+		if recordType == "URL301" {
+			t = "permanent"
+		} else {
+			t = "temporary"
+		}
+	}
+	includePath := metadata[metaIncludePath]
+	if includePath == "" {
+		includePath = "no"
+	}
+	wildcard := metadata[metaWildcard]
+	if wildcard == "" {
+		wildcard = "yes"
+	}
+	return t, includePath, wildcard
+}
+
+func normalizeURLForwardingRecord(record *models.RecordConfig, origin string) {
+	if !isURLForwardingType(record.Type) {
+		return
+	}
+	record.TTL = 0
+	if record.Metadata == nil {
+		record.Metadata = make(map[string]string)
+	}
+	t, includePath, wildcard := porkbunURLForwardingMetadata(record.Type, record.Metadata)
+	record.Metadata[metaType] = t
+	record.Metadata[metaIncludePath] = includePath
+	record.Metadata[metaWildcard] = wildcard
+	if record.Type == "PORKBUN_URLFWD" {
+		if record.Metadata[metaType] == "permanent" {
+			record.Type = "URL301"
+		} else {
+			record.Type = "URL"
+		}
+	}
+}
+
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
@@ -142,35 +216,7 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	// Make sure TTL larger than the minimum TTL
 	for _, record := range dc.Records {
 		record.TTL = fixTTL(record.TTL)
-		if isURLForwardingType(record.Type) {
-			record.TTL = 0
-			if record.Metadata == nil {
-				record.Metadata = make(map[string]string)
-			}
-			// Set metadata type based on record type
-			if record.Metadata[metaType] == "" {
-				if record.Type == "URL301" {
-					record.Metadata[metaType] = "permanent"
-				} else {
-					// Default for URL and PORKBUN_URLFWD
-					record.Metadata[metaType] = "temporary"
-				}
-			}
-			if record.Metadata[metaIncludePath] == "" {
-				record.Metadata[metaIncludePath] = "no"
-			}
-			if record.Metadata[metaWildcard] == "" {
-				record.Metadata[metaWildcard] = "yes"
-			}
-			if record.Type == "PORKBUN_URLFWD" {
-				printer.Warnf("`PORKBUN_URLFWD` is deprecated. Please use `URL` or `URL301` instead.\n")
-				if record.Metadata[metaType] == "permanent" {
-					record.Type = "URL301"
-				} else {
-					record.Type = "URL"
-				}
-			}
-		}
+		normalizeURLForwardingRecord(record, dc.Name)
 	}
 
 	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, genComparable)
@@ -232,7 +278,9 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *porkbunProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := c.getRecords(domain)
 	if err != nil {
 		return nil, err
@@ -457,11 +505,12 @@ func (c *porkbunProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*m
 	}
 	foundNameservers := strings.Join(nss, ",")
 
-	expected := []string{}
+	expected := make([]string, 0, len(dc.Nameservers))
 	for _, ns := range dc.Nameservers {
-		expected = append(expected, ns.Name)
+		expected = append(expected, strings.ToLower(strings.TrimRight(ns.Name, ".")))
 	}
-	sort.Strings(expected)
+	slices.Sort(expected)
+	expected = slices.Compact(expected)
 	expectedNameservers := strings.Join(expected, ",")
 
 	if foundNameservers == expectedNameservers {

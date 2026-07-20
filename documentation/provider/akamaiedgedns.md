@@ -1,17 +1,12 @@
-"Akamai Edge DNS Provider" configures Akamai's
-[Edge DNS](https://www.akamai.com/products/edge-dns) service.
+"Akamai Edge DNS Provider" configures Akamai's [Edge DNS](https://www.akamai.com/products/edge-dns) service.
 
-This provider interacts with Edge DNS via the
-[Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api).
+This provider interacts with Edge DNS via the [Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api).
 
-Before you can use this provider, you need to create an "API Client" with authorization to use the
-[Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api).
+Before you can use this provider, you need to create an "API Client" with authorization to use the [Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api).
 
-See the "Get Started" section of [Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api),
-which says, "To enable this API, choose the API service named DNS—Zone Record Management, and set the access level to READ-WRITE."
+See the "Get Started" section of [Edge DNS Zone Management API](https://techdocs.akamai.com/edge-dns/reference/edge-dns-api), which says, "To enable this API, choose the API service named DNS—Zone Record Management, and set the access level to READ-WRITE."
 
-Follow directions at [Authenticate With EdgeGrid](https://www.akamai.com/developer) to generate
-the required credentials.
+Follow directions at [Authenticate With EdgeGrid](https://www.akamai.com/developer) to generate the required credentials.
 
 ## Configuration
 
@@ -54,8 +49,7 @@ The AKAMAITLC record can only be used at the zone apex (`@`).
 The AKAMAITLC record can only be used once per zone.
 
 #### ALIAS
-Akamai Edge DNS does directly support `ALIAS` records. This provider will convert `ALIAS` records used at the
-zone apex (`@`) to `AKAMAITLC` records, and any other names to `CNAME` records.
+Akamai Edge DNS does directly support `ALIAS` records. This provider will convert `ALIAS` records used at the zone apex (`@`) to `AKAMAITLC` records, and any other names to `CNAME` records.
 
 ### Secondary zones
 
@@ -64,8 +58,7 @@ This provider only supports creating primary zones in Akamai. If a secondary zon
 ## Usage
 Store your zone configuration details in a dnsconfig.js file in the same folder where the creds.json file is present.
 
-Akamai assigns a unique set of authoritative nameservers for each contract.  These authorities should be
-used as the NS records on all zones belonging to this contract.
+Akamai assigns a unique set of authoritative nameservers for each contract.  These authorities should be used as the NS records on all zones belonging to this contract.
 
 The NS records for these authorities have a TTL of 86400.
 
@@ -99,8 +92,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_AKAMAIEDGEDNS),
 
 **Note:** TTL for AKAMAICDN record must always be set to 20.
 
-AKAMAICDN is a proprietary record type that is used to configure [Zone Apex Mapping](https://www.akamai.com/blog/security/edge-dns--zone-apex-mapping---dnssec).
-The AKAMAICDN target must be preconfigured in the Akamai network.
+AKAMAICDN is a proprietary record type that is used to configure [Zone Apex Mapping](https://www.akamai.com/blog/security/edge-dns--zone-apex-mapping---dnssec). The AKAMAICDN target must be preconfigured in the Akamai network.
 
 ### dnscontrol check command
 ```shell
@@ -173,7 +165,6 @@ Command:
 dnscontrol preview --populate-on-preview
 ```
 
-
 Output:
 ```
 ******************** Domain: example.com
@@ -197,7 +188,6 @@ Serially Gathering: "example.com"
 #3: Enable AutoDnsSec
 ```
 In the above example since, the zone `example.com` did not exist, running `dnscontrol preview` with the `--populate-on-preview` flag created a zone named example.com with only the NS and SOA records and showed what changes will be applied by `dnscontrol push`.
-
 
 ### dnscontrol push command
 ```shell
@@ -356,4 +346,37 @@ Created zone: example_3.com
   GroupId: NNNNN
 ```
 
+## Feature Summary
 
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ❌
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ✅
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
+<!-- provider-features-end -->

@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
-func (b *bunnydnsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := b.findZoneByDomain(domain)
 	if err != nil {
 		return nil, err

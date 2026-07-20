@@ -1,8 +1,8 @@
 package autodns
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/providers/bind"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/providers/bind"
 )
 
 // ResourceRecord represents DNS records in API calls.
@@ -80,6 +80,7 @@ type NameServer struct {
 	IPAddresses []string `json:"ipAddresses,omitempty"`
 }
 
+// ListResponseMetaData represents a JSON reply to a list command.
 type ListResponseMetaData struct {
 	ObjectType string `json:"type"`
 	ItemCount  int    `json:"summary"`

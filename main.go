@@ -5,14 +5,14 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/StackExchange/dnscontrol/v4/commands"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/rtype"
-	"github.com/StackExchange/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v4/commands"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
+	"github.com/DNSControl/dnscontrol/v4/pkg/version"
 	"github.com/fatih/color"
 )
 
-//go:generate go run build/generate/generate.go build/generate/featureMatrix.go build/generate/functionTypes.go build/generate/dtsFile.go build/generate/ownersFile.go
+//go:generate go run build/generate/generate.go build/generate/featureMatrix.go build/generate/functionTypes.go build/generate/dtsFile.go build/generate/ownersFile.go build/generate/goreleaserFile.go build/generate/labelerFile.go
 
 func main() {
 	if os.Getenv("CI") == "true" {

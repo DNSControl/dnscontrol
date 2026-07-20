@@ -12,10 +12,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsrr"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsv1 "github.com/miekg/dns"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -58,6 +58,27 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Mythic Beasts",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/mythicbeasts",
+		PortalURL:   "https://www.mythic-beasts.com/customer/api-users", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "keyID",
+				Label:    "Key ID",
+				Help:     "Your Mythic Beasts API key ID.",
+				Required: true,
+			},
+			{
+				Key:      "secret",
+				Label:    "Secret",
+				Help:     "The secret paired with the key ID.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -91,7 +112,9 @@ func (n *mythicBeastsProvider) httpRequest(method, url string, body io.Reader) (
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n *mythicBeastsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (n *mythicBeastsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	resp, err := n.httpRequest("GET", "/zones/"+domain+"/records", nil)
 	if err != nil {
 		return nil, err

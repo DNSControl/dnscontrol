@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/rtype"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	"github.com/andreyvit/diff"
 )
 

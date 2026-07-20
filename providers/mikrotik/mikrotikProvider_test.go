@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // --- belongsToDomain ---
@@ -577,7 +577,8 @@ func TestGetZoneRecords_FiltersAndConverts(t *testing.T) {
 	})
 	defer srv.Close()
 
-	rcs, err := p.GetZoneRecords("example.com", nil)
+	dc := models.MustNewDomainConfig("example.com")
+	rcs, err := p.GetZoneRecords(dc)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -602,7 +603,9 @@ func TestGetZoneRecords_ForwarderZone(t *testing.T) {
 	})
 	defer srv.Close()
 
-	rcs, err := p.GetZoneRecords(ForwarderZone, nil)
+	dc := models.MustNewDomainConfig(ForwarderZone)
+	rcs, err := p.GetZoneRecords(dc)
+
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

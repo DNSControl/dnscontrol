@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*

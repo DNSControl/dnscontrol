@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/net/idna"
 )
@@ -71,6 +71,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "deSEC",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/desec",
+		PortalURL:   "https://desec.io/tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "auth-token",
+				Label:    "Auth token",
+				Help:     "Your deSEC API auth token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -79,7 +94,9 @@ func (c *desecProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *desecProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	punycodeDomain, err := idna.ToASCII(domain)
 	if err != nil {
 		return nil, err
@@ -101,7 +118,8 @@ func (c *desecProvider) GetZoneRecords(domain string, meta map[string]string) (m
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *desecProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *desecProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, ok, err := c.searchDomainIndex(domain)
 	if err != nil {
 		return err

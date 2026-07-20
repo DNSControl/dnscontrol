@@ -3,8 +3,8 @@ package bind
 import (
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/soautil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/soautil"
 )
 
 func makeSoa(origin string, defSoa *SoaDefaults, existing, desired *models.RecordConfig) (*models.RecordConfig, uint32) {

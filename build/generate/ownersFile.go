@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 func generateOwnersFile() error {
@@ -25,7 +25,13 @@ func generateOwnersFile() error {
 		ownersData.WriteString("\n")
 	}
 
-	file, err := os.Create("OWNERS")
+	// Overall maintainer
+	ownersData.WriteString("\n")
+	ownersData.WriteString("* @TomOnTime\n")
+	ownersData.WriteString(".goreleaser.yml @cafferata @TomOnTime\n")
+	ownersData.WriteString("documentation/ @cafferata @TomOnTime\n")
+
+	file, err := os.Create(".github/CODEOWNERS")
 	if err != nil {
 		return err
 	}

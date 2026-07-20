@@ -1,6 +1,6 @@
 package rtypeinfo
 
-import "github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
+import "github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 
 // IsModernType returns true if the given record type is implemented in the new
 // ("Modern") way. (i.e. uses the RecordConfig .F field to store the record's

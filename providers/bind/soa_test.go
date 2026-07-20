@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func mkRC(target string, rec *models.RecordConfig) *models.RecordConfig {

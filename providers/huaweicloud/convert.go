@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/model"
 )
 
@@ -17,11 +17,12 @@ func getRRSetIDFromRecords(rcs models.Records) []string {
 		if r.Original == nil {
 			continue
 		}
-		if r.Original.(*model.ShowRecordSetByZoneResp).Id == nil {
+		rrset := r.Original.(*model.ShowRecordSetByZoneResp)
+		if rrset.Id == nil {
 			printer.Warnf("RecordSet ID is nil for record %+v\n", r)
 			continue
 		}
-		ids = append(ids, *r.Original.(*model.ShowRecordSetByZoneResp).Id)
+		ids = append(ids, *rrset.Id)
 	}
 	slices.Sort(ids)
 	return slices.Compact(ids)

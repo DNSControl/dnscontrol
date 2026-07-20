@@ -3,7 +3,7 @@
 # Git itself
 .gitattributes eol=lf
 .gitignore eol=lf
-OWNERS eol=lf
+.github/CODEOWNERS eol=lf
 
 # dnscontrol files are unix line-endings:
 *.md text eol=lf

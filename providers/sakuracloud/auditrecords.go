@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 	dnsv1 "github.com/miekg/dns"
 )
 

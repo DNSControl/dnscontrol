@@ -175,7 +175,7 @@ func Test_makeSingleDirectRule(t *testing.T) {
 			wantErr:   false,
 		},
 
-		// https://github.com/StackExchange/dnscontrol/issues/2313#issuecomment-2197296025
+		// https://github.com/DNSControl/dnscontrol/issues/2313#issuecomment-2197296025
 		{
 			name:      "pro-sumer1",
 			pattern:   "domain.tld/.well-known*",

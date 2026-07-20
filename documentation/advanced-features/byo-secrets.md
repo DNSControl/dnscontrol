@@ -1,8 +1,6 @@
 # Bring-Your-Own-Secrets for automated testing
 
-Goal: Enable automated integration testing without accidentally
-leaking credentials (API keys and other secrets); at the same time permit everyone
-to automate their own tests without having to share their credentials.
+Goal: Enable automated integration testing without accidentally leaking credentials (API keys and other secrets); at the same time permit everyone to automate their own tests without having to share their credentials.
 
 The instructions in this document will enable automated tests to run in these situations:
 
@@ -15,38 +13,19 @@ The instructions in this document will enable automated tests to run in these si
 
 # Background: How GitHub Actions protects secrets
 
-GitHub Actions has a secure
-[secrets storage system](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets).
-Those secrets are available to GitHub Actions and are required for the
-integration tests to communicate with the various DNS providers that
-DNSControl supports.
+GitHub Actions has a secure [secrets storage system](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets). Those secrets are available to GitHub Actions and are required for the integration tests to communicate with the various DNS providers that DNSControl supports.
 
-For security reasons, those secrets are unavailable if the PR comes
-from outside the project (a forked repo).  This is a good thing.  If
-it didn't work that way, a third-party could write a PR that leaks the
-secrets without the owners of the project knowing.
+For security reasons, those secrets are unavailable if the PR comes from outside the project (a forked repo).  This is a good thing.  If it didn't work that way, a third-party could write a PR that leaks the secrets without the owners of the project knowing.
 
-The docs (and many blog posts) describe this as forked repos don't
-have access to secrets, and instead receive null strings. That's not
-actually what's happening.
+The docs (and many blog posts) describe this as forked repos don't have access to secrets, and instead receive null strings. That's not actually what's happening.
 
-Actually what happens is the secrets come from the forked repo.  Or,
-more precisely, the secrets offered to a PR come from the repo that the
-PR came from.  A PR from DNSControl's owners gets secrets from
-[github.com/StackExchange/dnscontrol's secret store](https://github.com/StackExchange/dnscontrol/settings/secrets/actions)
-but a PR from a fork, such as
-[https://github.com/TomOnTime/dnscontrol](https://github.com/TomOnTime/dnscontrol)
-gets its secrets from TomOnTime's secrets.
+Actually what happens is the secrets come from the forked repo.  Or, more precisely, the secrets offered to a PR come from the repo that the PR came from.  A PR from DNSControl's owners gets secrets from [github.com/DNSControl/dnscontrol's secret store](https://github.com/DNSControl/dnscontrol/settings/secrets/actions) but a PR from a fork, such as [https://github.com/TomOnTime/dnscontrol](https://github.com/TomOnTime/dnscontrol) gets its secrets from TomOnTime's secrets.
 
-Our automated integration tests leverages this info to have tests
-only run if they have access to the secrets they will need.
+Our automated integration tests leverages this info to have tests only run if they have access to the secrets they will need.
 
 # Which providers are selected for testing?
 
-Tests are executed if the env variable`*_DOMAIN` exists where `*` is the name of the provider.  If the value is empty or
-unset, the test is skipped.
-For example, if a provider is called `FANCYDNS`, there must
-be a variable called `FANCYDNS_DOMAIN`.
+Tests are executed if the env variable`*_DOMAIN` exists where `*` is the name of the provider.  If the value is empty or unset, the test is skipped. For example, if a provider is called `FANCYDNS`, there must be a variable called `FANCYDNS_DOMAIN`.
 
 # Bring your own secrets
 
@@ -64,22 +43,7 @@ Edits to `pr_integration_tests.yml` may have already been done for you.
 
 Edit `.github/workflows/pr_integration_tests.yml`
 
-1. Add the provider to the `PROVIDERS` list.
-
-* Add the name of the provider to the PROVIDERS list.
-* Please keep this list sorted alphabetically.
-
-The line looks something like:
-
-{% code title=".github/workflows/pr_integration_tests.yml" %}
-```yaml
-      env:
-        PROVIDERS: "['AZURE_DNS','BIND','BUNNY_DNS','CLOUDFLAREAPI','CLOUDNS','DIGITALOCEAN','GANDI_V5','GCLOUD','HEDNS','HUAWEICLOUD','INWX','NAMEDOTCOM','NS1','POWERDNS','ROUTE53','SAKURACLOUD','TRANSIP']"
-        ENV_CONTEXT: ${{ toJson(env) }}
-```
-{% endcode %}
-
-2. Add your providers `_DOMAIN` env variable:
+1. Add your providers `_DOMAIN` env variable:
 
 * Add it to the `env` section of `integration-tests`.
 * Please keep this list sorted alphabetically.
@@ -120,13 +84,13 @@ The `*_DOMAIN` variable is stored as a "variable" while the others are stored as
 2. On the "Variables" tab, add `*_DOMAIN` with the name of a test domain. This domain must already exist in the account. The DNS records of the domain will be deleted, so please use a test domain or other disposable domain.
 
 {% hint style="info" %}
-For the main project, **variables** are added here: [https://github.com/StackExchange/dnscontrol/settings/variables/actions](https://github.com/StackExchange/dnscontrol/settings/variables/actions)
+For the main project, **variables** are added here: [https://github.com/DNSControl/dnscontrol/settings/variables/actions](https://github.com/DNSControl/dnscontrol/settings/variables/actions)
 {% endhint %}
 
 3. On the "Secrets" tab, add the other env variables.
 
 {% hint style="info" %}
-For the main project, **secrets** are added here: [https://github.com/StackExchange/dnscontrol/settings/secrets/actions](https://github.com/StackExchange/dnscontrol/settings/secrets/actions)
+For the main project, **secrets** are added here: [https://github.com/DNSControl/dnscontrol/settings/secrets/actions](https://github.com/DNSControl/dnscontrol/settings/secrets/actions)
 {% endhint %}
 
 If you have forked the project, add these to the settings of that fork.
@@ -139,23 +103,13 @@ The tests will fail if a secret is wrong or missing.  It may take a few iteratio
 
 # Donate secrets to the project
 
-The DNSControl project would like to have all providers automatically tested.
-However, we can't fund purchasing domains or maintaining credentials at every
-provider. Instead we depend on volunteers to maintain (and pay for) such
-accounts.
+The DNSControl project would like to have all providers automatically tested. However, we can't fund purchasing domains or maintaining credentials at every provider. Instead we depend on volunteers to maintain (and pay for) such accounts.
 
-We recommend the domain be named `dnscontroltest-PROVIDER.com` (or similar)
-where PROVIDER is replaced by the name of your provider or an abbreviation. For
-example `dnscontroltest-r53.com` and `dnscontroltest-gcloud.com`.
+We recommend the domain be named `dnscontroltest-PROVIDER.com` (or similar) where PROVIDER is replaced by the name of your provider or an abbreviation. For example `dnscontroltest-r53.com` and `dnscontroltest-gcloud.com`.
 
-When possible, use an OTE or free domain. Don't spend money if you don't have
-to. This isn't just to be thrifty! It avoids renewals and other hassles too.
-You'd be surprised at how many providers (such as Google and Azure) permit DNS
-zones to be created in your account without registering them.
+When possible, use an OTE or free domain. Don't spend money if you don't have to. This isn't just to be thrifty! It avoids renewals and other hassles too. You'd be surprised at how many providers (such as Google and Azure) permit DNS zones to be created in your account without registering them.
 
-For actual DNS domains, please select the "private registration" option if it
-is available. Otherwise you will get spam phones calls and emails. The phone
-calls will make you wish you didn't own a phone.
+For actual DNS domains, please select the "private registration" option if it is available. Otherwise you will get spam phones calls and emails. The phone calls will make you wish you didn't own a phone.
 
 {% hint style="danger" %}
 Some rules:
@@ -167,10 +121,9 @@ Some rules:
 
 Now that we've covered all that...
 
-Create a new Github issue with a subject "Add PROVIDER to automated tests" where "PROVIDER" is the name of the provider. DO NOT SEND THE CREDENTIALS IN THE GITHUB ISSUE.  Write that you understand the above rules and would like to volunteer to maintain the credentials and account.
+Create a new Github issue with a subject "Add PROVIDER to automated tests" where "PROVIDER" is the name of the provider. DO NOT SEND THE CREDENTIALS IN THE GITHUB ISSUE.  In the body write, "I understand the rules listed in byo-secrets.md and would like to volunteer to maintain the credentials and account."
 
-To securely send the credentials to the project, use this link: [https://transfer.secretoverflow.com/u/tlimoncelli](https://transfer.secretoverflow.com/u/tlimoncelli)
-
-You'll hear back within a week.
+To securely send the credentials to the project, please create a [SendSafely](https://www.sendsafely.com/) account (there is a free tier)
+and use it to send them to tal at what exit dot org.  You'll hear back within a week.
 
 Thank you for contributing credentials. The more providers we can test automatically with each PR, the better. It "shifts left" finding bugs and API changes and makes less work for everyone.

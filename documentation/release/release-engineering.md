@@ -4,8 +4,7 @@ These are the instructions for producing a release.
 
 GitHub Actions (GHA) will do most of the work for you. You will need to edit the draft release notes and click a button to make the release public.
 
-Please change the version number as appropriate.  Substitute (for example)
-`v4.2.0` any place you see `$VERSION` in this doc.
+Please change the version number as appropriate.  Substitute (for example) `v4.2.0` any place you see `$VERSION` in this doc.
 
 ## Step 0. Update dependencies
 
@@ -40,16 +39,13 @@ git tag -m "Release $VERSION" -a $VERSION
 git push origin HEAD --tags
 ```
 
-Soon after
-GitHub will start an [Action](https://github.com/StackExchange/dnscontrol/actions) Workflow called "draft release" which will build all release binaries and write the draft release notes.
+Soon after GitHub will start an [Action](https://github.com/DNSControl/dnscontrol/actions) Workflow called "draft release" which will build all release binaries and write the draft release notes.
 
 ## Step 3. Create the release notes
 
 The draft release notes are created for you. In this step you'll edit them.
 
-The GHA workflow uses [GoReleaser](https://goreleaser.com/) which produces the [GitHub Release](https://github.com/StackExchange/dnscontrol/releases) with Release Notes derived from the commit history between now and the last tag.
-These notes are just a draft and needs considerable editing.
-These release notes are used elsewhere, in particular the email step.
+The GHA workflow uses [GoReleaser](https://goreleaser.com/) which produces the [GitHub Release](https://github.com/DNSControl/dnscontrol/releases) with Release Notes derived from the commit history between now and the last tag. These notes are just a draft and needs considerable editing. These release notes are used elsewhere, in particular the email step.
 
 Release notes style guide:
 
@@ -59,7 +55,7 @@ Release notes style guide:
 * Items related to a specific provider should begin with the all-caps name of the provider, such as "ROUTE53: Added support for sandwiches (#100)"
 * The `Deprecation warnings` section should just copy from `README.md`.  If you change one, change it in the README too (you can make that change in this PR).
 
-See [https://github.com/StackExchange/dnscontrol/releases](https://github.com/StackExchange/dnscontrol/releases) for examples for recent release notes and copy that style.
+See [https://github.com/DNSControl/dnscontrol/releases](https://github.com/DNSControl/dnscontrol/releases) for examples for recent release notes and copy that style.
 
 ## Step 4. Announce it via email
 
@@ -69,7 +65,7 @@ Email the release notes to the mailing list: (note the format of the Subject lin
 To: dnscontrol-discuss@googlegroups.com
 Subject: New release: dnscontrol v$VERSION
 
-https://github.com/StackExchange/dnscontrol/releases/tag/v$VERSION
+https://github.com/DNSControl/dnscontrol/releases/tag/v$VERSION
 
 [insert the release notes here]
 ```
@@ -79,23 +75,13 @@ https://github.com/StackExchange/dnscontrol/releases/tag/v$VERSION
 it.  [Click here to join](https://groups.google.com/g/dnscontrol-discuss).
 {% endhint %}
 
-## Step 5. Get credit
-
-Mention the fact that you did this release in your weekly accomplishments.
-
-If you are at Stack Overflow:
-
-* Add the release to your weekly snippets
-
 ## Tip: How to bump the major version
 
-If you bump the major version, you need to change all the source
-files.  The last time this was done (v3 -> v4) these two commands
-were used. They're included her for reference.
+If you bump the major version, you need to change all the source files.  The last time this was done (v3 -> v4) these two commands were used. They're included her for reference.
 
 ```shell
 #  Make all the changes:
-sed -i.bak -e 's@github.com.StackExchange.dnscontrol.v3@github.com/StackExchange/dnscontrol/v4@g' go.* $(fgrep -lri --include '*.go' github.com/StackExchange/dnscontrol/v3 *)
+sed -i.bak -e 's@github.com/DNSControl/dnscontrol.v3@github.com/DNSControl/dnscontrol/v4@g' go.* $(fgrep -lri --include '*.go' github.com/DNSControl/dnscontrol/v3 *)
 # Delete the backup files:
 find * -name \*.bak -delete
 ```
@@ -106,28 +92,26 @@ find * -name \*.bak -delete
 
 GHA is configured to run an integration test for any provider listed in the "provider" list. However the test is skipped if the `*_DOMAIN` variable is not set. For example, the Google Cloud provider integration test is only run if `GCLOUD_DOMAIN` is set.
 
-* Q: Where is the list of providers to run integration tests on?
-* A: In `.github/workflows/pr_test.yml`: (1) the "PROVIDERS" list, (2) the `integrtests-diff2` section.
+* Q: What labels control the integration tests?
+* A: A PR only runs a "smoke test" (the first few tests).  Add the label "fulltest" to run all tests. (The daily run of integration tests on the main branch always does all test.)
 
 * Q: Where are non-secret environment variables stored?
-* A: GHA calls them "Variables". Update them here: https://github.com/StackExchange/dnscontrol/settings/variables/actions
+* A: GHA calls them "Variables". Update them here: https://github.com/DNSControl/dnscontrol/settings/variables/actions
 
 * Q: Where are SECRET environment variables stored?
-* A: GHA calls them "Secrets". Update them here: https://github.com/StackExchange/dnscontrol/settings/secrets/actions
+* A: GHA calls them "Secrets". Update them here: https://github.com/DNSControl/dnscontrol/settings/secrets/actions
 
 ### How do I add a single new integration test?
 
-1. Edit `.github/workflows/pr_test.yml`
-2. Add the `FOO_DOMAIN` variable name of the provider to the "PROVIDERS" list.
-3. Set the `FOO_DOMAIN` variables in GHA via https://github.com/StackExchange/dnscontrol/settings/variables/actions
-4. All other variables should be stored as secrets (for consistency).  Add them to the `integration-tests` section.
-Set them in GHA via https://github.com/StackExchange/dnscontrol/settings/secrets/actions
+1. Ensure the provider has an entry in `integrationTest/profiles.json`.
+2. Set the `FOO_DOMAIN` variables in GHA via https://github.com/DNSControl/dnscontrol/settings/variables/actions
+3. All other variables should be stored as secrets (for consistency).  Add them to the `integration-tests` section of `.github/workflows/pr_integration_tests.yml`. Set them in GHA via https://github.com/DNSControl/dnscontrol/settings/secrets/actions
 
 ### How do I add a "bring your own keys" integration test?
 
 Overview: You will fork the repo and add any secrets to your fork.  For security reasons you won't have access to the secrets from the main repository.
 
-1. [Fork StackExchange/dnscontrol](https://github.com/StackExchange/dnscontrol/fork) in GitHub.
+1. [Fork DNSControl/dnscontrol](https://github.com/DNSControl/dnscontrol/fork) in GitHub.
 
     If you already have a fork, be sure to use the "sync fork" button on the main page to sync with the upstream.
 
@@ -136,7 +120,6 @@ Overview: You will fork the repo and add any secrets to your fork.  For security
 3. In your fork, set any secrets in GHA via Settings :: Secrets and variables :: Actions :: Secrets.
 
 5. Start a build
-
 
 ## Tip: How to rebuild flattener
 
@@ -191,4 +174,42 @@ go get module/path
 # Once the updates are complete, tidy up:
 
 go mod tidy
+```
+
+## Tip: How to test GoReleaser
+
+(These are random notes)
+
+```
+git tag -a v4.42.3-rc1 -m "Release candidate 4.42.3-rc1"
+or
+git tag -a v4.42.3 -m "Release candidate 4.42.3"
+```
+
+DO NOT PUSH THIS TAG. It should stay local. If you push it, GHA will build a release!
+
+When done, delete the tag with:
+
+```
+git tag -d v4.42.3-rc1
+or
+git tag -d v4.42.3
+```
+
+```
+touch /tmp/empty-notes.md
+unset GITHUB_TOKEN
+goreleaser release --clean --skip=publish,validate,announce --release-notes=/tmp/empty-notes.md --verbose
+ls dist*
+```
+
+```
+GITHUB_TOKEN=dummy goreleaser release --clean --skip=publish,announce --verbose 2>&1 | tee /tmp/goreleaser.log
+```
+
+Review output for homebrew/docker logs:
+
+```
+grep -i -A2 "homebrew\|cask" /tmp/goreleaser.log
+grep -i -A2 "docker" /tmp/goreleaser.log
 ```

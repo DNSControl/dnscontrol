@@ -1,6 +1,6 @@
 # Notifications
 
-DNSControl's "notifications" feature will log `push` changes to other services in real time. Typically this is used to automatically announce DNS changes in a team chatroom.  The functionality is implemented using the open source [Shoutrrr](https://github.com/nicholas-fedor/shoutrrr) library, which knows how to communicate to many different systems.  Some additional services are provided natively, see the [notifications package](https://github.com/StackExchange/dnscontrol/tree/main/pkg/notifications).
+DNSControl's "notifications" feature will log `push` changes to other services in real time. Typically this is used to automatically announce DNS changes in a team chatroom.  The functionality is implemented using the open source [Shoutrrr](https://github.com/nicholas-fedor/shoutrrr) library, which knows how to communicate to many different systems.  Some additional services are provided natively, see the [notifications package](https://github.com/DNSControl/dnscontrol/tree/main/pkg/notifications).
 
 ## Configuration
 

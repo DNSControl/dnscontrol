@@ -7,12 +7,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/credsfile"
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
-	"github.com/StackExchange/dnscontrol/v4/pkg/prettyzone"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 
 	"github.com/urfave/cli/v3"
 )
@@ -24,57 +24,52 @@ var _ = cmd(catUtils, func() *cli.Command {
 		Aliases: []string{"get-zone"},
 		Usage:   "gets a zone from a provider (stand-alone)",
 		Action: func(ctx context.Context, c *cli.Command) error {
-			if c.NArg() < 3 {
-				return cli.Exit("Arguments should be: credskey providername zone(s) (Ex: r53 ROUTE53 example.com)", 1)
+			if c.NArg() < 2 {
+				return cli.Exit("Arguments should be: credskey zone(s) (Ex: my_cloudflare example.com)", 1)
 			}
 			args.CredName = c.Args().Get(0)
-			arg1 := c.Args().Get(1)
-			args.ProviderName = arg1
-			// In v4.0, skip the first args.ZoneNames if it equals "-".
-			args.ZoneNames = c.Args().Slice()[2:]
-
-			if arg1 != "" && arg1 != "-" {
-				// NB(tlim): In v4.0 this "if" can be removed.
-				fmt.Fprintf(os.Stderr, "WARNING: To retain compatibility in future versions, please change %q to %q. See %q\n",
-					arg1, "-",
-					"https://docs.dnscontrol.org/commands/get-zones",
-				)
+			if c.NArg() == 2 || c.Args().Get(1) == "-" {
+				args.ProviderName = ""
+				if c.Args().Get(1) == "-" {
+					args.ZoneNames = c.Args().Slice()[2:]
+				} else {
+					args.ZoneNames = c.Args().Slice()[1:]
+				}
+			} else {
+				arg1 := c.Args().Get(1)
+				if _, ok := providers.DNSProviderTypes[arg1]; ok {
+					// Deprecated form: credkey provider zone [...]
+					args.ProviderName = arg1
+					args.ZoneNames = c.Args().Slice()[2:]
+					fmt.Fprintf(os.Stderr, "WARNING: The provider name argument is deprecated. Please use \"dnscontrol get-zones %s %s\" instead. See %q\n",
+						args.CredName, strings.Join(args.ZoneNames, " "),
+						"https://docs.dnscontrol.org/commands/get-zones",
+					)
+				} else {
+					// New form with multiple zones: credkey zone1 zone2 [...]
+					args.ProviderName = ""
+					args.ZoneNames = c.Args().Slice()[1:]
+				}
 			}
 
 			return exit(GetZone(args))
 		},
 		Flags:     args.flags(),
-		UsageText: "dnscontrol get-zones [command options] credkey provider zone [...]",
+		UsageText: "dnscontrol get-zones [command options] credkey zone [...]",
 		Description: `Download a zone from a provider.  This is a stand-alone utility.
 
 ARGUMENTS:
-   credkey:  The name used in creds.json (first parameter to NewDnsProvider() in dnsconfig.js)
-   provider: The name of the provider (second parameter to NewDnsProvider() in dnsconfig.js)
+   credkey:  The name used in creds.json
    zone:     One or more zones (domains) to download; or "all".
 
-FORMATS:
-   --format=js        dnsconfig.js format (not perfect, just a decent first draft)
-   --format=djs       js with disco commas (leading commas)
-   --format=zone      BIND zonefile format
-   --format=tsv       TAB separated value (useful for AWK)
-   --format=nameonly  Just print the zone names
-
-The columns in --format=tsv are:
-   FQDN (the label with the domain)
-   ShortName (just the label, "@" if it is the naked domain)
-   TTL
-   Record Type (A, AAAA, CNAME, etc.)
-   Target and arguments (quoted like in a zonefile)
-   Either empty or a comma-separated list of properties like "cloudflare_proxy=true"
-
-The --ttl flag only applies to zone/js/djs formats.
-
 EXAMPLES:
-   dnscontrol get-zones myr53 ROUTE53 example.com
-   dnscontrol get-zones gmain GANDI_V5 example.com other.com
-   dnscontrol get-zones cfmain CLOUDFLAREAPI all
-   dnscontrol get-zones --format=tsv bind BIND example.com
-   dnscontrol get-zones --format=djs --out=draft.js gcloud GCLOUD example.com`,
+   dnscontrol get-zones my_route53 example.com
+   dnscontrol get-zones my_gandi example.com other.com
+   dnscontrol get-zones my_cloudflare all
+   dnscontrol get-zones --format=tsv my_bind example.com
+   dnscontrol get-zones --format=djs --out=draft.js my_gcloud example.com
+
+Documentation: https://docs.dnscontrol.org/commands/get-zones`,
 	}
 }())
 
@@ -120,7 +115,9 @@ ARGUMENTS:
 EXAMPLES:
    dnscontrol check-creds myr53 ROUTE53      # Pre v3.16, or pre-v4.0 for backwards-compatibility
    dnscontrol check-creds myr53
-   dnscontrol check-creds --out=/dev/null myr53 && echo Success`,
+   dnscontrol check-creds --out=/dev/null myr53 && echo Success
+
+Documentation: https://docs.dnscontrol.org/commands/check-creds`,
 	}
 }())
 
@@ -211,14 +208,14 @@ func GetZone(args GetZoneArgs) error {
 	zoneRecs := make([]models.Records, len(zones))
 	for i, zone := range zones {
 		ff := domaintags.MakeDomainNameVarieties(zone)
-		recs, err := provider.GetZoneRecords(ff.NameASCII,
-			// Populate the map "manually" so that BIND's GetZoneRecords() has
-			// the information it needs to construct filenames.  If this code
-			// changes, you probably need to change that code too.
-			map[string]string{
-				models.DomainUniqueName:  ff.UniqueName,
-				models.DomainNameRaw:     ff.NameRaw,
-				models.DomainNameUnicode: ff.NameUnicode,
+		recs, err := provider.GetZoneRecords(
+			&models.DomainConfig{
+				Name: ff.NameASCII,
+				Metadata: map[string]string{
+					models.DomainUniqueName:  ff.UniqueName,
+					models.DomainNameRaw:     ff.NameRaw,
+					models.DomainNameUnicode: ff.NameUnicode,
+				},
 			})
 		if err != nil {
 			return fmt.Errorf("failed GetZone gzr: %w", err)

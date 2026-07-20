@@ -4,33 +4,24 @@
 
 <https://google.github.io/styleguide/go/>
 
-
 # Always favor simplicity
 
-This is a community project. The code you write today will be maintained by
-someone in the future that may not be a professional developer or one that is
-as experienced as you.
+This is a community project. The code you write today will be maintained by someone in the future that may not be a professional developer or one that is as experienced as you.
 
 Remember what Brian Kernighan wrote:
 
 > "Debugging is twice as hard as writing the
-code in the first place. Therefore, if you write the code as cleverly as
-possible, you are, by definition, not smart enough to debug it." — _Brian Kernighan_
+code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it." — _Brian Kernighan_
 
 Remember the [John Woods](http://wiki.c2.com/?CodeForTheMaintainer) quote:
 
 > "Always code as if the guy who ends up maintaining your code will be a violent
 psychopath who knows where you live." — _[John Woods](http://wiki.c2.com/?CodeForTheMaintainer)_
 
-Don't code for today-you.  Write code for six-months-from-now-you.  Have you
-met six-months-from-now-you? Oh, you should. Fine individual. They are
-quite smart. They have 6 months more experience than today-you, but sadly
-has had 6 months to forget what today-you knows.  The job of today-you is to
-write code that six-months-from-now-you can understand.
+Don't code for today-you.  Write code for six-months-from-now-you.  Have you met six-months-from-now-you? Oh, you should. Fine individual. They are quite smart. They have 6 months more experience than today-you, but sadly has had 6 months to forget what today-you knows.  The job of today-you is to write code that six-months-from-now-you can understand.
 
 * Avoid building a complex framework to be perfectly DRY when a little bit of repetition will result in easier to understand code.
 * Break things into well-defined functions that can be individually read, understood, and tested.
-
 
 # Filenames
 
@@ -50,14 +41,11 @@ These are the filenames to use:
 
 # JavaScript annotations
 
-Functions in `pkg/js/helpers.js` should be annotated using the
-[JSDoc](https://jsdoc.app/tags-param.html) `@` notation. These are used to
-generate autocomplete instructions for your IDE.
+Functions in `pkg/js/helpers.js` should be annotated using the [JSDoc](https://jsdoc.app/tags-param.html) `@` notation. These are used to generate autocomplete instructions for your IDE.
 
 * Add `@param {type} foo` for a parameter named `foo` that is of type `type`.
   * Example: `@param {string} foo Description of the parameter`
 * Add `@deprecated` if the function is deprecated.
-
 
 # Don't conditionally add/remove trailing dots
 
@@ -95,9 +83,6 @@ Let's suppose the API no longer adds a "." when it previously did. Was the chang
 
 ### What should we do instead?
 
-Option 1: Write code that assumes it won't change.  If you need to add a dot,
-it is safe to just `s = s + "."`   The code will be readable by any Go
-developer; and less cognitive load than using a function.
+Option 1: Write code that assumes it won't change.  If you need to add a dot, it is safe to just `s = s + "."`   The code will be readable by any Go developer; and less cognitive load than using a function.
 
-Option 2: Panic if you see something unexpected.  If you are stripping a dot,
-panic if the dot doesn't exist.
+Option 2: Panic if you see something unexpected.  If you are stripping a dot, panic if the dot doesn't exist.

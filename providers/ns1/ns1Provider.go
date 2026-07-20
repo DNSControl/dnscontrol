@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 )
 

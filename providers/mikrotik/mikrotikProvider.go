@@ -8,10 +8,10 @@ import (
 
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -65,6 +65,33 @@ func init() {
 	providers.RegisterCustomRecordType("MIKROTIK_FORWARDER", providerName, "")
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "MikroTik RouterOS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/mikrotik",
+		PortalURL:   "", // No portal; managed on-device
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "Host URL",
+				Help:     "The MikroTik RouterOS REST API endpoint (for example http://192.168.88.1:8080).",
+				Required: true,
+			},
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "RouterOS API username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "RouterOS API password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 func newMikrotikProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -162,13 +189,15 @@ func (p *mikrotikProvider) GetNameservers(_ string) ([]*models.Nameserver, error
 
 // EnsureZoneExists is a no-op for RouterOS. Zones are virtual constructs
 // derived from record names — the zone will "exist" once records are pushed.
-func (p *mikrotikProvider) EnsureZoneExists(_ string, _ map[string]string) error {
+func (p *mikrotikProvider) EnsureZoneExists(_ *models.DomainConfig) error {
 	return nil
 }
 
 // GetZoneRecords fetches all static DNS records from RouterOS and filters by domain.
 // For the special zone "_forwarders.mikrotik", it returns DNS forwarder entries instead.
-func (p *mikrotikProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	if domain == ForwarderZone {
 		return p.getForwarderRecords()
 	}

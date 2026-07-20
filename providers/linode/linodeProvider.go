@@ -10,9 +10,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
@@ -111,6 +111,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Linode",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/linode",
+		PortalURL:   "https://cloud.linode.com/profile/tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "token",
+				Label:    "API token",
+				Help:     "Your Linode Personal Access Token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -119,7 +134,9 @@ func (api *linodeProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *linodeProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *linodeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	if api.domainIndex == nil {
 		if err := api.fetchDomainList(); err != nil {
 			return nil, err

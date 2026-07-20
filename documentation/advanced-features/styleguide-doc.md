@@ -2,18 +2,18 @@
 
 ## Where are the docs?
 
-TL;DR version: [`docs`](https://github.com/StackExchange/dnscontrol/tree/main/docs) is the [marketing website](https://dnscontrol.org). [`documentation`](https://github.com/StackExchange/dnscontrol/tree/main/documentation) is the [docs.dnscontrol.org](https://docs.dnscontrol.org/) website. (Yes, the names are backwards!)
+TL;DR version: [`docs`](https://github.com/DNSControl/dnscontrol/tree/main/docs) is the [marketing website](https://dnscontrol.org). [`documentation`](https://github.com/DNSControl/dnscontrol/tree/main/documentation) is the [docs.dnscontrol.org](https://docs.dnscontrol.org/) website. (Yes, the names are backwards!)
 
 **The two websites**
 
 1. <https://dnscontrol.org/>
    * The main website
-   * Source code: [`docs`](https://github.com/StackExchange/dnscontrol/tree/main/docs)
+   * Source code: [`docs`](https://github.com/DNSControl/dnscontrol/tree/main/docs)
    * Mostly "marketing" for the project.
    * Rarely changes.  Updated via GitHub "pages" feature.
 2. <https://docs.dnscontrol.org/>
    * Project documentation
-   * Source code: [`documentation`](https://github.com/StackExchange/dnscontrol/tree/main/documentation)
+   * Source code: [`documentation`](https://github.com/DNSControl/dnscontrol/tree/main/documentation)
    * Users and developer documentation
    * Changes frequently.  Updated via [GitBook](https://www.gitbook.com/)
 
@@ -21,10 +21,10 @@ TL;DR version: [`docs`](https://github.com/StackExchange/dnscontrol/tree/main/do
 
 Within the git repo, docs are grouped:
 
-* [`documentation/`](https://github.com/StackExchange/dnscontrol/tree/main/documentation): general docs
-* [`documentation/provider/`](https://github.com/StackExchange/dnscontrol/tree/main/documentation/provider/): One file per provider
-* [`documentation/language-reference/`](https://github.com/StackExchange/dnscontrol/tree/main/documentation/language-reference/): One file per `dnsconfig.js` language feature
-* [`documentation/assets/FOO/`](https://github.com/StackExchange/dnscontrol/tree/main/documentation/assets/): Images for page FOO(PNGs only, please!)
+* [`documentation/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation): general docs
+* [`documentation/provider/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/provider/): One file per provider
+* [`documentation/language-reference/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/language-reference/): One file per `dnsconfig.js` language feature
+* [`documentation/assets/FOO/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/assets/): Images for page FOO(PNGs only, please!)
 
 ## How to add a new page?
 
@@ -33,8 +33,7 @@ Within the git repo, docs are grouped:
 
 ## Top-of-Document parameters
 
-Files in the `documentation/language-reference/{record,domain,global}` subdirectories
-have a header at the top that is used to populate other systems.
+Files in the `documentation/language-reference/{record,domain,global}` subdirectories have a header at the top that is used to populate other systems.
 
 Here's an example from [`A`](../language-reference/domain-modifiers/A.md)
 
@@ -82,8 +81,7 @@ Include a blank line between paragraphs.
 
 Leave exactly one blank line before and after a heading.
 
-JavaScript code should use double quotes (`"`) for strings, not single quotes
-(`'`).  They are equivalent but consistency is good.
+JavaScript code should use double quotes (`"`) for strings, not single quotes (`'`).  They are equivalent but consistency is good.
 
 ### Headings
 
@@ -187,10 +185,7 @@ This is a second <mark style="color:white;background-color:green;">line</mark>
 
 #### Mentioning language features
 
-Not every mention to A, CNAME, or function
-needs to be a link to the manual for that record type.
-However, the first mention on a page should always
-be a link.  Others are at the authors digression.
+Not every mention to A, CNAME, or function needs to be a link to the manual for that record type. However, the first mention on a page should always be a link.  Others are at the authors digression.
 
 ```markdown
 The [`PTR`](../language-reference/domain-modifiers/PTR.md) feature is helpful in LANs.
@@ -239,7 +234,4 @@ Please capitalize these terms as you see them here:
 
 Please spellcheck documents before submitting a PR.
 
-Don't be surprised if Tom rewrites your text.  He often does that to keep the
-documentation consistent and make it more approachable by new users.  It's not
-[because he has a big ego](https://www.amazon.com/stores/author/B004J0QIVM).
-Well, not usually.
+Don't be surprised if Tom rewrites your text.  He often does that to keep the documentation consistent and make it more approachable by new users.  It's not [because he has a big ego](https://www.amazon.com/stores/author/B004J0QIVM). Well, not usually.

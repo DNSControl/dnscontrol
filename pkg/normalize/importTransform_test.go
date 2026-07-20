@@ -3,7 +3,7 @@ package normalize
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func makeRC(label, domain, target string, rc models.RecordConfig) *models.RecordConfig {

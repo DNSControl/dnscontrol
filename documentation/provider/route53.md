@@ -1,7 +1,6 @@
 ## Configuration
 
-To use this provider, add an entry to `creds.json` with `TYPE` set to `ROUTE53`
-along with API credentials.
+To use this provider, add an entry to `creds.json` with `TYPE` set to `ROUTE53` along with API credentials.
 
 Example:
 
@@ -11,6 +10,7 @@ Example:
   "r53_main": {
     "TYPE": "ROUTE53",
     "DelegationSet": "optional-delegation-set-id",
+    "Region": "optional-aws-region-id",
     "KeyId": "your-aws-key",
     "SecretKey": "your-aws-secret-key",
     "Token": "optional-sts-token"
@@ -59,6 +59,21 @@ Example:
 ```
 {% endcode %}
 
+You can also select a named profile on a per-provider basis using the `Profile` field. This reads from `~/.aws/config` and supports AWS IAM Identity Center (SSO) profiles — run `aws sso login` first so a valid SSO session is cached. `Profile` is mutually exclusive with `KeyId`/`SecretKey` (setting both will return an error), but composes with `RoleArn`: the profile provides the source credentials and `RoleArn` is then assumed on top. This lets a single `dnscontrol push` target multiple AWS accounts in one run.
+
+Example:
+
+{% code title="creds.json" %}
+```json
+{
+  "r53_main": {
+    "TYPE": "ROUTE53",
+    "Profile": "my-aws-profile"
+  }
+}
+```
+{% endcode %}
+
 Alternatively, this provider also supports `RoleArn` with an optional `ExternalId`
 
 Example:
@@ -77,8 +92,19 @@ Example:
 
 You can find some other ways to authenticate to Route53 in the [go sdk configuration](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html).
 
+## AWS European Sovereign Cloud (aws.eu)
+
+You can use AWS European Sovereign Cloud API endpoints by setting the `Region` variable to `eusc-de-east-1` in `creds.json`. By default global AWS uses region "us-east-1" if not set explicitly.
+
+Notice that AWS ESC doesn't support domain registration endpoints. Currently you'll need to use global AWS to register domains with Route 53.
+
 ## Metadata
-This provider does not recognize any special metadata fields unique to route 53.
+
+This provider supports the following record-level metadata, typically set via the [`R53_WEIGHT()`](../language-reference/record-modifiers/R53_WEIGHT.md) and [`R53_HEALTH_CHECK_ID()`](../language-reference/record-modifiers/R53_HEALTH_CHECK_ID.md) record modifiers:
+
+- `r53_weight` (0-255): Route 53 weighted routing weight. Must be used with `r53_set_identifier`.
+- `r53_set_identifier` (string): Unique identifier for a weighted routing record set. Required when using `r53_weight`.
+- `r53_health_check_id` (string): Route 53 health check ID to associate with the record.
 
 ## Usage
 An example configuration:
@@ -98,8 +124,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_R53),
 
 This provider supports split horizons using the [`R53_ZONE()`](../language-reference/record-modifiers/R53_ZONE.md) domain function.
 
-In this example the domain `testzone.net` appears in the same account twice,
-each with different zone IDs specified using [`R53_ZONE()`](../language-reference/record-modifiers/R53_ZONE.md).
+In this example the domain `testzone.net` appears in the same account twice, each with different zone IDs specified using [`R53_ZONE()`](../language-reference/record-modifiers/R53_ZONE.md).
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -116,6 +141,38 @@ D("testzone.net!public", REG_NONE,
     DnsProvider(DSP_R53),
     R53_ZONE("Z222222222INNG98SHJQ2"),
     TXT("me", "public testzone.net"),
+);
+```
+{% endcode %}
+
+## Weighted routing
+
+Route 53 [weighted routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-weighted.html) distributes traffic across multiple endpoints based on weights you assign. Use the [`R53_WEIGHT()`](../language-reference/record-modifiers/R53_WEIGHT.md) record modifier to configure weighted routing.
+
+{% code title="dnsconfig.js" %}
+```javascript
+var REG_NONE = NewRegistrar("none");
+var DSP_R53 = NewDnsProvider("r53_main");
+
+D("example.com", REG_NONE, DnsProvider(DSP_R53),
+  A("www", "1.2.3.4", R53_WEIGHT(70, "web-east")),
+  A("www", "5.6.7.8", R53_WEIGHT(30, "web-west")),
+);
+```
+{% endcode %}
+
+## Health checks
+
+Use the [`R53_HEALTH_CHECK_ID()`](../language-reference/record-modifiers/R53_HEALTH_CHECK_ID.md) record modifier to associate a [Route 53 health check](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating.html) with a record. Health checks must be created separately (e.g. via the AWS Console, CLI, or Terraform). DNSControl only manages the association.
+
+{% code title="dnsconfig.js" %}
+```javascript
+var REG_NONE = NewRegistrar("none");
+var DSP_R53 = NewDnsProvider("r53_main");
+
+D("example.com", REG_NONE, DnsProvider(DSP_R53),
+  A("api", "10.0.1.1", R53_WEIGHT(50, "api-primary"), R53_HEALTH_CHECK_ID("12345678-1234-1234-1234-123456789012")),
+  A("api", "10.0.2.1", R53_WEIGHT(50, "api-secondary"), R53_HEALTH_CHECK_ID("87654321-4321-4321-4321-210987654321")),
 );
 ```
 {% endcode %}
@@ -170,8 +227,7 @@ aws route53 create-reusable-delegation-set --caller-reference "foo"
 }
 ```
 
-You can then reference the DelegationSet.Id in your `r53_main` block (with your other credentials) to have all created domains placed in that
-delegation set.  Note that you you only want the portion of the `Id` after the `/delegationset/` (the `12312312123` in the example above).
+You can then reference the DelegationSet.Id in your `r53_main` block (with your other credentials) to have all created domains placed in that delegation set.  Note that you you only want the portion of the `Id` after the `/delegationset/` (the `12312312123` in the example above).
 
 > Delegation sets only apply during `create-domains` at the moment. Further work needs to be done to have them apply during `push`.
 
@@ -179,12 +235,9 @@ delegation set.  Note that you you only want the portion of the `Id` after the `
 
 ### Route53 errors if it is not the DnsProvider
 
-This code may not function properly if a domain has R53 as a Registrar
-but not as a DnsProvider.  The situation is described in
-[PR#155](https://github.com/StackExchange/dnscontrol/pull/155).
+This code may not function properly if a domain has R53 as a Registrar but not as a DnsProvider.  The situation is described in [PR#155](https://github.com/DNSControl/dnscontrol/pull/155).
 
 In this situation you will see a message like: (This output assumes the `--full` flag)
-
 
 ```text
 ----- Registrar: r53_main
@@ -202,12 +255,7 @@ You will see some weirdness if:
 1.  A CNAME was created using the web UI
 2.  The CNAME's target does NOT end with a dot.
 
-What you will see: When DNSControl tries to update such records, R53
-only updates the first one.  For example if DNSControl is updating 3
-such records, you will need to run `dnscontrol push` three times for
-all three records to update.  Each time DNSControl is sending three
-modify requests but only the first is executed.  After all such
-records are modified by DNSControl, everything works as expected.
+What you will see: When DNSControl tries to update such records, R53 only updates the first one.  For example if DNSControl is updating 3 such records, you will need to run `dnscontrol push` three times for all three records to update.  Each time DNSControl is sending three modify requests but only the first is executed.  After all such records are modified by DNSControl, everything works as expected.
 
 We believe this is a bug with R53.
 
@@ -223,8 +271,7 @@ executes and the others do not.  Once all such records are replaced
 this problem disappears.
 {% endhint %}
 
-More info is available in [#891](https://github.com/StackExchange/dnscontrol/issues/891).
-
+More info is available in [#891](https://github.com/DNSControl/dnscontrol/issues/891).
 
 ## Error messages
 
@@ -236,8 +283,7 @@ Creating r53 dns provider: NoCredentialProviders: no valid providers in chain. D
     For verbose messaging see aws.Config.CredentialsChainVerboseErrors
 ```
 
-This means that the `creds.json` entry isn't found. Either there is no entry, or the entry name doesn't match the first parameter in the `NewDnsProvider()` call. In the above example, note
-that the string `r53_main` is specified in `NewDnsProvider("r53_main")` and that is the exact key used in the creds file above.
+This means that the `creds.json` entry isn't found. Either there is no entry, or the entry name doesn't match the first parameter in the `NewDnsProvider()` call. In the above example, note that the string `r53_main` is specified in `NewDnsProvider("r53_main")` and that is the exact key used in the creds file above.
 
 ### Invalid KeyId
 
@@ -268,3 +314,38 @@ IncompleteSignature: 'ABCDEFGHIJKLMNOPQRST/20200118/us-east-1/route53/aws4_reque
 ```
 
 This means a space is present in one or more of the credential values.
+
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ✅
+  - DNS Provider: ✅
+  - Registrar: ✅
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ✅
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ✅
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ✅
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ✅
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+<!-- provider-features-end -->

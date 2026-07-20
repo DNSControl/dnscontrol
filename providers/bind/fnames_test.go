@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 )
 
 func Test_makeFileName(t *testing.T) {

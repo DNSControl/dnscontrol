@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/spflib"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/spflib"
 )
 
 func sortedKeys[K cmp.Ordered, V any](m map[K]V) []K {

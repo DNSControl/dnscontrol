@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/version"
 	cnrcl "github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5/apiclient"
 )
 
@@ -24,7 +24,7 @@ var features = providers.DocumentationNotes{
 	// See providers/capabilities.go for the entire list of capabilities.
 	// The default for unlisted capabilities is 'Cannot'.
 	// --- Supported Features ---
-	providers.CanAutoDNSSEC:          providers.Unimplemented("Ask for this feature."),
+	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanConcur:              providers.Can(),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanOnlyDiff1Features:   providers.Can(),
@@ -33,7 +33,7 @@ var features = providers.DocumentationNotes{
 	providers.DocOfficiallySupported: providers.Cannot("Actively maintained provider module."),
 	// --- Supported record types ---
 	// providers.CanUseAKAMAICDN: 	      providers.Cannot(), // can only be supported by Akamai EdgeDns provider
-	providers.CanUseAlias: providers.Can(),
+	providers.CanUseAlias: providers.Can("ALIAS records require an unsigned zone served through RCodeZero and cannot be used with DNSSEC-signed zones."),
 	// providers.CanUseAzureAlias:		  providers.Cannot(), // can only be supported by Azure provider
 	providers.CanUseCAA:           providers.Can(),
 	providers.CanUseDHCID:         providers.Can(),
@@ -46,11 +46,12 @@ var features = providers.DocumentationNotes{
 	providers.CanUseNAPTR:         providers.Can(),
 	providers.CanUsePTR:           providers.Can(),
 	// providers.CanUseRoute53Alias:	  providers.Cannot(), // can only be supported by AWS Route53 provider
-	providers.CanUseSOA:   providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."), // supported by bind, honstingde
-	providers.CanUseSRV:   providers.Can("SRV records with empty targets are not supported"),
-	providers.CanUseSSHFP: providers.Can(),
-	providers.CanUseSVCB:  providers.Can(),
-	providers.CanUseTLSA:  providers.Can(),
+	providers.CanUseSMIMEA: providers.Can(),
+	providers.CanUseSOA:    providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."), // supported by bind, honstingde
+	providers.CanUseSRV:    providers.Can("SRV records with empty targets are not supported"),
+	providers.CanUseSSHFP:  providers.Can(),
+	providers.CanUseSVCB:   providers.Can(),
+	providers.CanUseTLSA:   providers.Can(),
 }
 
 func newProvider(conf map[string]string) (*Client, error) {
@@ -86,7 +87,7 @@ func newDsp(conf map[string]string, meta json.RawMessage) (providers.DNSServiceP
 
 func init() {
 	const providerName = "CNR"
-	const providerMaintainer = "@KaiSchwarz-cnic"
+	const providerMaintainer = "@AsifNawaz-cnic"
 	fns := providers.DspFuncs{
 		Initializer:   newDsp,
 		RecordAuditor: AuditRecords,
@@ -94,4 +95,37 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newReg)
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "CentralNic Reseller",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/cnr",
+		PortalURL:   "https://www.rrpproxy.net/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "apilogin",
+				Label:    "API login",
+				Help:     "Your CNR API login username.",
+				Required: true,
+			},
+			{
+				Key:      "apipassword",
+				Label:    "API password",
+				Help:     "Your CNR API password.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "apientity",
+				Label:    "API entity",
+				Help:     "Use \"OTE\" for the test (OT&E) system or \"LIVE\" for the production system.",
+				Choices:  []string{"OTE", "LIVE"},
+				Required: true,
+			},
+			{
+				Key:   "debugmode",
+				Label: "Debug mode (optional)",
+				Help:  "Set to \"2\" to enable verbose API debug logging. Leave blank to disable.",
+			},
+		},
+	})
 }

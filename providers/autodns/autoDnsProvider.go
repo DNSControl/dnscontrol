@@ -12,10 +12,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/providers/bind"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/providers/bind"
 )
 
 var features = providers.DocumentationNotes{
@@ -36,8 +36,9 @@ var features = providers.DocumentationNotes{
 }
 
 type autoDNSProvider struct {
-	baseURL        url.URL
-	defaultHeaders http.Header
+	baseURL         url.URL
+	defaultHeaders  http.Header
+	includeChildren bool
 }
 
 func init() {
@@ -54,6 +55,38 @@ func init() {
 	}, features)
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "AutoDNS",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/autodns",
+		PortalURL:   "https://login.autodns.com/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "AutoDNS / Domainrobot username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "AutoDNS / Domainrobot password.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "context",
+				Label:    "Context",
+				Help:     "Value for the X-Domainrobot-Context header.",
+				Required: true,
+			},
+			{
+				Key:   "children",
+				Label: "Include sub-user zones",
+				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
+			},
+		},
+	})
 }
 
 func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {
@@ -74,6 +107,10 @@ func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {
 		"Content-Type":          []string{"application/json; charset=UTF-8"},
 		"X-Domainrobot-Context": []string{settings["context"]},
 	}
+
+	// AutoDNS hides zones owned by sub-users unless "children" is requested
+	// (the same optional toggle the web UI offers). Opt-in via creds.json.
+	api.includeChildren = settings["children"] == "true"
 
 	return api
 }
@@ -180,7 +217,9 @@ func (api *autoDNSProvider) GetNameservers(domain string) ([]*models.Nameserver,
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *autoDNSProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := api.getZone(domain)
 	if err != nil {
 		return nil, err
@@ -250,7 +289,9 @@ func (api *autoDNSProvider) GetZoneRecords(domain string, meta map[string]string
 	return existingRecords, nil
 }
 
-func (api *autoDNSProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *autoDNSProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	// try to get zone
 	_, err := api.getZone(domain)
 

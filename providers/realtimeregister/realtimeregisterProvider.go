@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -93,7 +93,9 @@ func (api *realtimeregisterAPI) GetNameservers(domain string) ([]*models.Nameser
 	return []*models.Nameserver{}, nil
 }
 
-func (api *realtimeregisterAPI) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *realtimeregisterAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	response, err := api.getZone(domain)
 	if err != nil {
 		return nil, err
@@ -314,7 +316,9 @@ func parsePriority(priority int) int {
 	return priority
 }
 
-func (api *realtimeregisterAPI) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *realtimeregisterAPI) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+
 	exists, err := api.zoneExists(domain)
 	if err != nil {
 		return err

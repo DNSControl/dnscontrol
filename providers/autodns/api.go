@@ -12,7 +12,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // ZoneListFilter describes a JSON list filter.
@@ -30,6 +30,7 @@ type ZoneListRequest struct {
 	View   *ZoneListView     `json:"view,omitempty"`
 }
 
+// ZoneListView describes a JSON zone list reply.
 type ZoneListView struct {
 	Limit    int  `json:"limit"`
 	Offset   int  `json:"offset"`
@@ -96,6 +97,12 @@ func (api *autoDNSProvider) request(method string, requestPath string, data any)
 
 func (api *autoDNSProvider) findZoneSystemNameServer(domain string) (*models.Nameserver, error) {
 	request := &ZoneListRequest{}
+
+	// When opted in, request child zones so master/admin users can locate
+	// zones owned by sub-users (the optional "include subusers" UI toggle).
+	if api.includeChildren {
+		request.View = &ZoneListView{Limit: 1, Offset: 0, Children: true}
+	}
 
 	request.Filter = append(request.Filter, &ZoneListFilter{
 		Key:      "name",
@@ -185,7 +192,7 @@ func (api *autoDNSProvider) getZones() ([]string, error) {
 		View: &ZoneListView{
 			Limit:    0,
 			Offset:   0,
-			Children: false,
+			Children: api.includeChildren,
 		},
 	}
 
@@ -205,7 +212,7 @@ func (api *autoDNSProvider) getZones() ([]string, error) {
 			View: &ZoneListView{
 				Limit:    100,
 				Offset:   i * 100,
-				Children: false,
+				Children: api.includeChildren,
 			},
 		}
 

@@ -20,7 +20,7 @@ builds:
         goarch: "386"
     ldflags:
       - -linkmode=internal -s -w
-      - -X github.com/StackExchange/dnscontrol/v4/pkg/version.version={{ .Version }}
+      - -X github.com/DNSControl/dnscontrol/v4/pkg/version.version={{ .Version }}
 before:
   hooks:
     - go fmt ./...
@@ -37,7 +37,7 @@ changelog:
       regexp: "(?i)^.*(major|new provider|feature)[(\\w)]*:+.*$"
       order: 1
     - title: 'Provider-specific changes:'
-      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|bind|bunny_dns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|domainnameshop|dynadot|easyname|exoscale|fortigate|gandi_v5|gcloud|gcore|gidinet|hedns|hetzner|hetzner_v2|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netcup|netlify|ns1|opensrs|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|softlayer|transip|unifi|vercel|vultr).*:)+.*"
+      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|ns1|opensrs|openwrt|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|scaleway|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
       order: 2
     - title: 'Documentation:'
       regexp: "(?i)^.*(docs)[(\\w)]*:+.*$"
@@ -77,7 +77,7 @@ nfpms:
       {{- else }}{{ .Arch }}{{ end }}
     homepage:  https://docs.dnscontrol.org/
     description: "DNSControl: Infrastructure as Code for DNS Zones"
-    maintainer: 'Tom Limoncelli <tlimoncelli@stackoverflow.com>'
+    maintainer: 'Tom Limoncelli <tal@whatexit.org>'
     license: MIT
     formats:
     - rpm
@@ -89,17 +89,17 @@ nfpms:
       {{- else }}{{ .Arch }}{{ end }}
     homepage:  https://docs.dnscontrol.org/
     description: "DNSControl: Infrastructure as Code for DNS Zones"
-    maintainer: 'Tom Limoncelli <tlimoncelli@stackoverflow.com>'
+    maintainer: 'Tom Limoncelli <tal@whatexit.org>'
     license: MIT
     formats:
     - deb
 dockers_v2:
   - images:
-      - "stackexchange/{{.ProjectName}}"
-      - "ghcr.io/stackexchange/{{.ProjectName}}"
+      - "dnscontrol/{{.ProjectName}}"
+      - "ghcr.io/dnscontrol/{{.ProjectName}}"
     tags:
       - "{{ .Version }}"
-      - "{{ if not .IsSnapshot }}latest{{ end }}"
+      - "{{ if and (not .IsSnapshot) (not .Prerelease) }}latest{{ end }}"
     platforms:
       - linux/amd64
       - linux/arm64
@@ -129,7 +129,7 @@ homebrew_casks:
   -
     name: dnscontrol
     url:
-      template: "https://github.com/StackExchange/dnscontrol/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+      template: "https://github.com/DNSControl/dnscontrol/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     commit_author:
       name: goreleaserbot
       email: bot@goreleaser.com
@@ -137,9 +137,10 @@ homebrew_casks:
     directory: Casks
     homepage: "https://docs.dnscontrol.org/"
     description: "DNSControl: Infrastructure as Code for DNS Zones"
+    skip_upload: auto
     license: "MIT"
     repository:
-      owner: StackExchange
+      owner: DNSControl
       name: homebrew-tap
       branch: main
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
@@ -159,7 +160,7 @@ release:
     ## Monthly video call!
 
     Everyone is invited to the __Monthly DNSControl Community Video Conference Call__ on the 2nd Tuesday of each  month. Join whether you are a new user with questions or an experienced developer that wants to discuss DNSControl internals... or anything in between! Meeting details on
-    [GitHub Discussions](https://github.com/StackExchange/dnscontrol/discussions?discussions_q=label%3AAnnouncement%3Afuture_vc).
+    [GitHub Discussions](https://github.com/DNSControl/dnscontrol/discussions?discussions_q=label%3AAnnouncement%3Afuture_vc).
 
   footer: |
     ## Deprecation warnings
@@ -175,15 +176,16 @@ release:
     ##### Install with [Homebrew](https://brew.sh) (recommended)
 
     ```shell
-    brew install StackExchange/tap/dnscontrol
+    brew trust --formula dnscontrol/tap/dnscontrol
+    brew install DNSControl/tap/dnscontrol
     ```
 
     ##### Using with [Docker](https://www.docker.com)
 
-    You can use the Docker image from [Docker hub](https://hub.docker.com/r/stackexchange/dnscontrol/) or [GitHub Container Registry](https://github.com/stackexchange/dnscontrol/pkgs/container/dnscontrol).
+    You can use the Docker image from [Docker hub](https://hub.docker.com/r/dnscontrol/dnscontrol/) or [GitHub Container Registry](https://github.com/dnscontrol/dnscontrol/pkgs/container/dnscontrol).
 
     ```shell
-    docker run --rm -it -v "$(pwd):/dns" ghcr.io/stackexchange/dnscontrol preview
+    docker run --rm -it -v "$(pwd):/dns" ghcr.io/dnscontrol/dnscontrol preview
     ```
 
     #### Anywhere else
@@ -193,7 +195,7 @@ release:
     Or, if you have Go installed, you can install the latest version of DNSControl with the following command:
 
     ```shell
-    go install github.com/StackExchange/dnscontrol/v4@main
+    go install github.com/DNSControl/dnscontrol/v4@main
     ```
 
     ## Update
@@ -203,7 +205,7 @@ release:
     #### Update with [Homebrew](https://brew.sh)
 
     ```shell
-    brew upgrade StackExchange/tap/dnscontrol
+    brew upgrade DNSControl/tap/dnscontrol
     ```
 
     Alternatively, you can grab the latest binary (or the apt/rpm/deb package) from this page.

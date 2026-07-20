@@ -11,11 +11,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
 	"golang.org/x/oauth2"
 )
@@ -53,14 +53,34 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "DNSimple",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/dnsimple",
+		PortalURL:   "https://dnsimple.com/user",
+		Fields: []providers.CredsField{
+			{
+				Key:      "token",
+				Label:    "Account access token",
+				Help:     "DNSimple account access token (must be an account token, not a user token).",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "baseurl",
+				Label: "Base URL (optional)",
+				Help:  "Override the API base URL (for example, the sandbox URL https://api.sandbox.dnsimple.com). Leave blank to use the production endpoint.",
+			},
+		},
+	})
 }
 
 const stateRegistered = "registered"
 
 var defaultNameServerNames = []string{
-	"ns1.dnsimple.com",
+	"ns1.dnsimple-edge.com",
 	"ns2.dnsimple-edge.net",
-	"ns3.dnsimple.com",
+	"ns3.dnsimple-edge.io",
 	"ns4.dnsimple-edge.org",
 }
 
@@ -93,7 +113,9 @@ func (c *dnsimpleProvider) GetNameservers(_ string) ([]*models.Nameserver, error
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *dnsimpleProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := c.getRecords(domain)
 	if err != nil {
 		return nil, err
@@ -464,7 +486,7 @@ func (c *dnsimpleProvider) recordCreate(rc *models.RecordConfig, domainName stri
 	}
 
 	record := dnsimpleapi.ZoneRecordAttributes{
-		Name:     dnsimpleapi.String(rc.GetLabel()),
+		Name:     new(rc.GetLabel()),
 		Type:     rc.Type,
 		Content:  getTargetRecordContent(rc),
 		TTL:      int(rc.TTL),
@@ -510,7 +532,7 @@ func (c *dnsimpleProvider) recordUpdate(old *dnsimpleapi.ZoneRecord, rc *models.
 	}
 
 	record := dnsimpleapi.ZoneRecordAttributes{
-		Name:     dnsimpleapi.String(rc.GetLabel()),
+		Name:     new(rc.GetLabel()),
 		Type:     rc.Type,
 		Content:  getTargetRecordContent(rc),
 		TTL:      int(rc.TTL),

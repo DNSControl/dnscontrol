@@ -2,27 +2,39 @@
 
 ## Homebrew Tap
 
-GoReleaser automatically publishes a Homebrew Cask to [StackExchange/homebrew-tap](https://github.com/StackExchange/homebrew-tap) on every release. This requires two components: a GitHub PAT for tap updates and macOS code signing + notarization.
+GoReleaser automatically publishes a Homebrew Cask to [DNSControl/homebrew-tap](https://github.com/DNSControl/homebrew-tap) on every release. This requires two components: a GitHub PAT for tap updates and macOS code signing + notarization.
 
 ### Homebrew TAP GitHub PAT
 
-GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formula to the `StackExchange/homebrew-tap` repository.
+GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formula to the `DNSControl/homebrew-tap` repository. This is a fine-grained PAT scoped to the `DNSControl` organization with minimal permissions.
 
 | Item | Value |
 |------|-------|
-| **Secret name** | `HOMEBREW_TAP_GITHUB_TOKEN` (repository secret) |
-| **Scope** | `repo` access on `StackExchange` org |
+| **Secret name** | `HOMEBREW_TAP_TOKEN` (repository secret) |
+| **Token type** | Fine-grained PAT |
+| **Resource owner** | `DNSControl` (organization) |
+| **Repository access** | `DNSControl/homebrew-tap` only |
+| **Permissions** | Contents: Read and write |
 | **Expires** | February 6, 2027 |
 | **Action needed before** | ~January 18, 2027 |
 
 **Links:**
-- [GitHub Issue (tracking): Rotate Homebrew TAP GitHub PAT before Feb 6, 2027](https://github.com/StackExchange/dnscontrol/issues/4071)
-- [Secret setting](https://github.com/StackExchange/dnscontrol/settings/secrets/actions/HOMEBREW_TAP_GITHUB_TOKEN)
+- [GitHub Issue (tracking): Rotate Homebrew TAP GitHub PAT before Feb 6, 2027](https://github.com/DNSControl/dnscontrol/issues/4071)
+- [Secret setting](https://github.com/DNSControl/dnscontrol/settings/secrets/actions/HOMEBREW_TAP_TOKEN)
 
 #### Rotation procedure
 
-1. Generate a new PAT with the same scopes (`repo` on `StackExchange` org)
-2. Update the repository secret [`HOMEBREW_TAP_GITHUB_TOKEN`](https://github.com/StackExchange/dnscontrol/settings/secrets/actions/HOMEBREW_TAP_GITHUB_TOKEN)
+1. Generate a new fine-grained PAT at [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new):
+   - **Resource owner**: `DNSControl`
+   - **Repository access**: Only select repositories > `DNSControl/homebrew-tap`
+   - **Permissions**: Contents > Read and write
+   - **Expiration**: 1 year
+2. Update the repository secret:
+   ```bash
+   gh secret set HOMEBREW_TAP_TOKEN \
+     --repo DNSControl/dnscontrol \
+     --body "<the-new-token>"
+   ```
 3. Verify that the next GoReleaser release successfully updates the Homebrew tap
 4. Create a new tracking issue for the next rotation cycle
 

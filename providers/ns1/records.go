@@ -7,16 +7,18 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/dns"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/filter"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n *nsone) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (n *nsone) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	z, _, err := n.Zones.Get(domain, true)
 	if err != nil && errors.Is(err, rest.ErrZoneMissing) {
 		// if we get here, zone wasn't created, but we ended up continuing regardless.

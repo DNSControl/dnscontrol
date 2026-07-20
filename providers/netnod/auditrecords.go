@@ -1,8 +1,8 @@
-package hetzner
+package netnod
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -11,7 +11,8 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2023-04-01
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-05-19
+	a.Add("TXT", rejectif.TxtHasBackslash)    // Last verified 2026-05-19
 
 	return a.Audit(records)
 }

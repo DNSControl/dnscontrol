@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 // DetermineNameservers will find all nameservers we should use for a domain. It follows the following rules:
@@ -36,7 +36,7 @@ func DetermineNameserversForProviders(dc *models.DomainConfig, providers []*mode
 			return nil, fmt.Errorf("error while getting Nameservers for zone=%q with provider=%q: %w", dc.Name, dnsProvider.Name, err)
 		}
 		// Clean up the nameservers due to
-		// https://github.com/StackExchange/dnscontrol/issues/491
+		// https://github.com/DNSControl/dnscontrol/issues/491
 		// In the far future, this warning will become a fatal error.
 		for i := range nss {
 			if strings.HasSuffix(nss[i].Name, ".") {

@@ -8,12 +8,12 @@ import (
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"golang.org/x/net/idna"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
-	"github.com/StackExchange/dnscontrol/v4/pkg/version"
-	"github.com/StackExchange/dnscontrol/v4/pkg/zonecache"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
 )
 
 var features = providers.DocumentationNotes{
@@ -50,6 +50,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Hetzner DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/hetzner_v2",
+		PortalURL:   "https://dns.hetzner.com/settings/api-token", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_token",
+				Label:    "API token",
+				Help:     "Your Hetzner Cloud API token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // New creates a new API handle.
@@ -88,7 +103,8 @@ func (h *hetznerv2Provider) fetchAllZones() (map[string]*hcloud.Zone, error) {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (h *hetznerv2Provider) EnsureZoneExists(domain string, _ map[string]string) error {
+func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	encoded, err := idna.ToASCII(domain)
 	if err != nil {
 		return err
@@ -215,7 +231,9 @@ func (h *hetznerv2Provider) GetNameservers(domain string) ([]*models.Nameserver,
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (h *hetznerv2Provider) GetZoneRecords(domain string, _ map[string]string) (models.Records, error) {
+func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	encoded, err := idna.ToASCII(domain)
 	if err != nil {
 		return nil, err

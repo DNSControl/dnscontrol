@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 // Provider metadata.
@@ -96,7 +96,9 @@ func (p *unifiProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (p *unifiProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	// Fetch all records from UniFi using the appropriate API
 	allRecords, isNewAPI, err := p.client.getRecords()
 	if err != nil {

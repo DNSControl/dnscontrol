@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/bindserial"
+	"github.com/DNSControl/dnscontrol/v4/pkg/bindserial"
 )
 
 var nowFunc = time.Now
@@ -21,7 +21,7 @@ func generateSerial(oldSerial uint32) uint32 {
 	// At no time will a serial number == 0 be returned.
 
 	if bindserial.ForcedValue != 0 {
-		// https://github.com/StackExchange/dnscontrol/issues/1859
+		// https://github.com/DNSControl/dnscontrol/issues/1859
 		// User needs to have reproducible builds and BIND generates
 		return uint32(bindserial.ForcedValue & 0xFFFF)
 	}

@@ -6,9 +6,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -116,7 +116,9 @@ func (c *ovhProvider) ListZones() (zones []string, err error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *ovhProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *ovhProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	if !c.zones[domain] {
 		return nil, errNoExist{domain}
 	}

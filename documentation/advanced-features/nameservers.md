@@ -1,8 +1,6 @@
 # Nameservers and Delegations
 
-DNSControl can handle a variety of provider scenarios. The registrar and DNS
-provider can be the same company, different company, they can even be unknown!
-The document shows examples of many common and uncommon configurations.
+DNSControl can handle a variety of provider scenarios. The registrar and DNS provider can be the same company, different company, they can even be unknown! The document shows examples of many common and uncommon configurations.
 
 # Constants
 
@@ -30,16 +28,13 @@ var DNS_BIND = NewDnsProvider("bind");
 ```
 {% endcode %}
 
-
 # Typical Delegations
 
 ## Same provider for REG and DNS
 
-Purpose:
-Use the same provider as a registrar and DNS service.
+Purpose: Use the same provider as a registrar and DNS service.
 
-Why?
-Simplicity.
+Why? Simplicity.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -50,15 +45,11 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Different provider for REG and DNS
 
-Purpose:
-Use one provider as registrar, a different for DNS service.
+Purpose: Use one provider as registrar, a different for DNS service.
 
-Why?
-Some registrars do not provide DNS server, or their service is sub-standard and
-you want to use a high-performance DNS server.
+Why? Some registrars do not provide DNS server, or their service is sub-standard and you want to use a high-performance DNS server.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -71,14 +62,9 @@ D("example.com", REG_NAMECOM,
 
 ## Registrar is elsewhere
 
-Purpose:
-This is a "DNS only" configuration.  Use it when you don't control the
-registrar but you do control the DNS records.
+Purpose: This is a "DNS only" configuration.  Use it when you don't control the registrar but you do control the DNS records.
 
-Why?
-You don't have access to the registrar, or the registrar is not
-supported by DNSControl. However you do have API access for
-updating the zone's records (most likely at a different provider).
+Why? You don't have access to the registrar, or the registrar is not supported by DNSControl. However you do have API access for updating the zone's records (most likely at a different provider).
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -92,10 +78,7 @@ D("example.com", REG_NONE,
 
 ## Domain is "nowhere"
 
-Suppose you don't want to manage a domain, but you want to list the zone in
-your `dnsconfig.js` file for inventory purposes. For example, suppose there are
-domains that some other part of your company maintains, but you want to list it
-in your `dnsconfig.js` because it is authoritative for the company.
+Suppose you don't want to manage a domain, but you want to list the zone in your `dnsconfig.js` file for inventory purposes. For example, suppose there are domains that some other part of your company maintains, but you want to list it in your `dnsconfig.js` because it is authoritative for the company.
 
 ```javascript
 var REG_NONE = NewRegistrar("none");
@@ -117,13 +100,9 @@ dnscontrol print-ir | jq -r '.domains[].name'
 
 ## Zone is elsewhere
 
-Purpose:
-This is a "Registrar only" configuration.  Use it when you control the registrar but want to delegate the zone to someone else.
+Purpose: This is a "Registrar only" configuration.  Use it when you control the registrar but want to delegate the zone to someone else.
 
-Why?
-We are delegating the domain to someone else. In this example we're
-pointing the domain to the nsone.net DNS service, which someone else is
-controlling.
+Why? We are delegating the domain to someone else. In this example we're pointing the domain to the nsone.net DNS service, which someone else is controlling.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -136,17 +115,11 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Override nameservers
 
-Purpose:
-Ignore the provider's default nameservers and substitute our own.
+Purpose: Ignore the provider's default nameservers and substitute our own.
 
-Why?
-Rarely used unless the DNS provider's API does not support querying what the
-nameservers are, or the API is returning invalid data, or if the API returns no
-information.  Sometimes APIs return no (useful) information when the domain
-is new; this is a good temporary work-around until the API starts working.
+Why? Rarely used unless the DNS provider's API does not support querying what the nameservers are, or the API is returning invalid data, or if the API returns no information.  Sometimes APIs return no (useful) information when the domain is new; this is a good temporary work-around until the API starts working.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -159,14 +132,11 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Add nameservers
 
-Purpose:
-Use the default nameservers from the registrar but add additional ones.
+Purpose: Use the default nameservers from the registrar but add additional ones.
 
-Why?
-Usually only to correct a bug or misconfiguration elsewhere.
+Why? Usually only to correct a bug or misconfiguration elsewhere.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -178,14 +148,11 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Shadow nameservers
 
-Purpose:
-Secretly publish your DNS zone records to another server.
+Purpose: Secretly publish your DNS zone records to another server.
 
-Why?
-There are many reasons to do this:
+Why? There are many reasons to do this:
 
 * You are preparing to move to a different DNS provider and want to test it before you cut over.
 * You want your DNS records stored somewhere else in case you have to switch over in an emergency.
@@ -202,21 +169,13 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Dual DNS Providers
 
-Purpose:
-Use two different DNS services:
+Purpose: Use two different DNS services:
 
-Why?
-Diversity. If one DNS provider goes down, the other will be used.
+Why? Diversity. If one DNS provider goes down, the other will be used.
 
-Little known fact: Most DNS recursive resolvers monitor which DNS
-servers are performing the best and automatically start avoiding
-servers that are slow or down. This means that if you use this technique
-and one DNS provider goes down, after a
-while your users won't be affected.  Not all software does this properly.
-More info: https://www.dns-oarc.net/files/workshop-201203/OARC-workshop-London-2012-NS-selection.pdf
+Little known fact: Most DNS recursive resolvers monitor which DNS servers are performing the best and automatically start avoiding servers that are slow or down. This means that if you use this technique and one DNS provider goes down, after a while your users won't be affected.  Not all software does this properly. More info: https://www.dns-oarc.net/files/workshop-201203/OARC-workshop-London-2012-NS-selection.pdf
 
 {% hint style="info" %}
 **NOTE**: This is overkill unless you have millions of users and strict up-time requirements.
@@ -232,20 +191,13 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 # Other uses
 
 ## Make zonefile backups
 
-Purpose:
-Make backups of DNS records in a zone.  This generates a zonefile listing all
-the records in the zone.
+Purpose: Make backups of DNS records in a zone.  This generates a zonefile listing all the records in the zone.
 
-Why?
-You want to write out a BIND-style zonefile for debugging, historical, or
-auditing purposes. Some sites do backups of these zonefiles to create a history
-of changes. This is different than keeping a history of `dnsconfig.js` because
-this is the output of DNSControl, not the input.
+Why? You want to write out a BIND-style zonefile for debugging, historical, or auditing purposes. Some sites do backups of these zonefiles to create a history of changes. This is different than keeping a history of `dnsconfig.js` because this is the output of DNSControl, not the input.
 
 {% hint style="danger" %}
 **NOTE**: This won't work if you use pseudo rtypes that BIND doesn't support.
@@ -261,16 +213,11 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-
 ## Monitor delegation
 
-Purpose:
-You don't control the registrar but want to detect if the delegation changes.
-You can specify the existing nameservers in `dnsconfig.js` and you will get
-a notification if the delegation diverges.
+Purpose: You don't control the registrar but want to detect if the delegation changes. You can specify the existing nameservers in `dnsconfig.js` and you will get a notification if the delegation diverges.
 
-Why?
-Sometimes you just want to know if something changes!
+Why? Sometimes you just want to know if something changes!
 
 See the [DNS-over-HTTPS Provider](../provider/dnsoverhttps.md) documentation for more info.
 
@@ -284,7 +231,6 @@ D("example.com", REG_MONITOR,
 );
 ```
 {% endcode %}
-
 
 {% hint style="info" %}
 **NOTE**: This checks the NS records via a DNS query.  It does not check the
@@ -310,13 +256,11 @@ DOMAIN_ELSEWHERE("example.com", REG_NAMECOM, [
 ```
 {% endcode %}
 
-
 ## `DOMAIN_ELSEWHERE_AUTO`
 
 Easily delegate a domain to a nameserver via an API query.
 
-This is similar to `DOMAIN_ELSEWHERE` but the list
-of nameservers is queried from the API of a single DNS provider.
+This is similar to `DOMAIN_ELSEWHERE` but the list of nameservers is queried from the API of a single DNS provider.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -324,7 +268,6 @@ DOMAIN_ELSEWHERE_AUTO("example.com", REG_NAMECOM, DNS_AWS);
 DOMAIN_ELSEWHERE_AUTO("example2.com", REG_NAMECOM, DNS_GOOGLE);
 ```
 {% endcode %}
-
 
 # Limits
 

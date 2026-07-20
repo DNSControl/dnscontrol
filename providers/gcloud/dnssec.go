@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	gdns "google.golang.org/api/dns/v1"
 )
 

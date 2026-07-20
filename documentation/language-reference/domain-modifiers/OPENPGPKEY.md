@@ -10,15 +10,11 @@ parameter_types:
   "modifiers...": RecordModifier[]
 ---
 
-`OPENPGPKEY` adds an [OpenPGP public key
-record](https://datatracker.ietf.org/doc/html/rfc7929) to the domain.
+`OPENPGPKEY` adds an [OpenPGP public key record](https://datatracker.ietf.org/doc/html/rfc7929) to the domain.
 
-So far, no transformation is applied to the parameters. The data will be
-passed to the DNS server as-is. DNSControl supports both hex-encoded and
-base64-encoded input for the public key portion of the record.
+So far, no transformation is applied to the parameters. The data will be passed to the DNS server as-is. DNSControl supports both hex-encoded and base64-encoded input for the public key portion of the record.
 
-There are multiple ways to generate the appropriately-formatted record
-values:
+There are multiple ways to generate the appropriately-formatted record values:
 
 1.  By using `gpg --export-options=export-dane`:
 
@@ -92,9 +88,7 @@ values:
     ```
     {% endcode %}
 
-3.  By using the [`hash-slinger`
-    package](https://github.com/letoams/hash-slinger/) (which is
-    available in most Linux distro package repositories):
+3.  By using the [`hash-slinger` package](https://github.com/letoams/hash-slinger/) (which is available in most Linux distro package repositories):
 
     {% code title="Shell Transcript" %}
     ```shell-session

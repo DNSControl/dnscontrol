@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // AuditRecords performs basic validation and returns warnings for known limitations.

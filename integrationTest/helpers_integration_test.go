@@ -13,13 +13,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
-	"github.com/StackExchange/dnscontrol/v4/pkg/nameservers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/StackExchange/dnscontrol/v4/pkg/transform"
-	"github.com/StackExchange/dnscontrol/v4/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -29,6 +29,10 @@ var (
 	verbose      = flag.Bool("verbose", false, "Print corrections as you run them")
 	printElapsed = flag.Bool("elapsed", false, "Print elapsed time for each testgroup")
 )
+
+// Global variable to hold the current DomainConfig for use in NewRecordConfig calls.
+// This is an ugly, ugly, hack. We have to find something better.
+var globalDC *models.DomainConfig
 
 // Global variable to hold the current DomainConfig	for use in FromRaw calls.
 var globalDCN *domaintags.DomainNameVarieties
@@ -93,9 +97,7 @@ func CfFlattenOn() *TestCase {
 }
 
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
-	dc := &models.DomainConfig{
-		Name: domainName,
-	}
+	dc := models.MustNewDomainConfig(domainName)
 	dc.PostProcess()
 	rtypecontrol.FixLegacyDC(dc)
 
@@ -228,7 +230,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 				}
 				t.FailNow()
 			}
-		} else if (len(corrections) == 0 && expectChanges) && (tst.Desc != "Empty") {
+		} else if (len(corrections) == 0 && expectChanges) && (tst.Desc != "Empty") && !tst.ChangesOptional {
 			t.Fatalf("Expected changes, but got none")
 		}
 		for _, c := range corrections {
@@ -265,6 +267,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 
 func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string, origConfig map[string]string) {
 	dc := getDomainConfigWithNameservers(t, prv, domainName)
+	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
 
 	testGroups := makeTests()
@@ -289,8 +292,9 @@ func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string,
 		// Abide by filter
 		// fmt.Printf("DEBUG testPermitted: prov=%q profile=%q\n", *providerFlag, *profileFlag)
 		if err := testPermitted(*profileFlag, *group); err != nil {
-			// t.Logf("%s: ***SKIPPED(%v)***", group.Desc, err)
-			makeChanges(t, prv, dc, tc("Empty"), fmt.Sprintf("%02d:%s ***SKIPPED(%v)***", gIdx, group.Desc, err), false, origConfig, nil)
+			t.Run(fmt.Sprintf("%02d:%s ***SKIPPED(%v)***:Empty", gIdx, group.Desc, err), func(t *testing.T) {
+				t.SkipNow()
+			})
 			continue
 		}
 
@@ -304,7 +308,7 @@ func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string,
 			// TODO(tlim): This is the old version. It skipped the remaining tc() statements if one failed.
 			// The new code continues to test the remaining tc() statements.  Keeping this as a comment
 			// in case we ever want to do something similar.
-			// https://github.com/StackExchange/dnscontrol/pull/2252#issuecomment-1492204409
+			// https://github.com/DNSControl/dnscontrol/pull/2252#issuecomment-1492204409
 			//      makeChanges(t, prv, dc, tst, fmt.Sprintf("%02d:%s", gIdx, group.Desc), true, origConfig)
 			//      if t.Failed() {
 			//        break
@@ -337,11 +341,18 @@ type TestCase struct {
 	Unmanaged       []*models.UnmanagedConfig
 	UnmanagedUnsafe bool // DISABLE_IGNORE_SAFETY_CHECK
 	Changeless      bool // set to true if any changes would be an error
+	ChangesOptional bool // set to true if either changes or no changes are acceptable
 }
 
 // ExpectNoChanges indicates that no changes is not an error, it is a requirement.
 func (tc *TestCase) ExpectNoChanges() *TestCase {
 	tc.Changeless = true
+	return tc
+}
+
+// AllowNoChanges indicates that an already-converged first run is acceptable.
+func (tc *TestCase) AllowNoChanges() *TestCase {
+	tc.ChangesOptional = true
 	return tc
 }
 
@@ -447,27 +458,27 @@ func bunnyPullZone(name, pullZoneID string) *models.RecordConfig {
 	return makeRec(name, pullZoneID, "BUNNY_DNS_PZ")
 }
 
-func cfRedir(pattern, target string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "CF_REDIRECT",
-		TTL:  1,
-		Args: []any{pattern, target},
-		DCN:  globalDCN,
-	})
-	panicOnErr(err)
-	return rec
-}
+// func cfRedir(pattern, target string) *models.RecordConfig {
+// 	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+// 		Type: "CF_REDIRECT",
+// 		TTL:  1,
+// 		Args: []any{pattern, target},
+// 		DCN:  globalDCN,
+// 	})
+// 	panicOnErr(err)
+// 	return rec
+// }
 
-func cfRedirTemp(pattern, target string) *models.RecordConfig {
-	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
-		Type: "CF_TEMP_REDIRECT",
-		TTL:  1,
-		Args: []any{pattern, target},
-		DCN:  globalDCN,
-	})
-	panicOnErr(err)
-	return rec
-}
+// func cfRedirTemp(pattern, target string) *models.RecordConfig {
+// 	rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+// 		Type: "CF_TEMP_REDIRECT",
+// 		TTL:  1,
+// 		Args: []any{pattern, target},
+// 		DCN:  globalDCN,
+// 	})
+// 	panicOnErr(err)
+// 	return rec
+// }
 
 func aghAPassthrough(pattern, target string) *models.RecordConfig {
 	r := makeRec(pattern, target, "ADGUARDHOME_A_PASSTHROUGH")
@@ -600,6 +611,15 @@ func r53alias(name, aliasType, target, evalTargetHealth string) *models.RecordCo
 	r.R53Alias = map[string]string{
 		"type":                   aliasType,
 		"evaluate_target_health": evalTargetHealth,
+	}
+	return r
+}
+
+func r53weighted(name, target, rtype string, weight int, setID string) *models.RecordConfig {
+	r := makeRec(name, target, rtype)
+	r.Metadata = map[string]string{
+		"r53_weight":         fmt.Sprintf("%d", weight),
+		"r53_set_identifier": setID,
 	}
 	return r
 }

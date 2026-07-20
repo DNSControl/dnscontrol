@@ -56435,7 +56435,7 @@ $packages["net"] = (function() {
 	$pkg.$init = $init;
 	return $pkg;
 })();
-$packages["github.com/StackExchange/dnscontrol/v4/pkg/spflib"] = (function() {
+$packages["github.com/DNSControl/dnscontrol/v4/pkg/spflib"] = (function() {
 	var $pkg = {}, $init, json, errors, fmt, net, os, strings, SPFRecord, SPFPart, sliceType, sliceType$2, ptrType$2, ptrType$3, sliceType$4, sliceType$5, mapType$1, qualifiers, Parse, Chunks, matchesFlatSpec;
 	json = $packages["encoding/json"];
 	errors = $packages["errors"];
@@ -56443,7 +56443,7 @@ $packages["github.com/StackExchange/dnscontrol/v4/pkg/spflib"] = (function() {
 	net = $packages["net"];
 	os = $packages["os"];
 	strings = $packages["strings"];
-	SPFRecord = $pkg.SPFRecord = $newType(0, $kindStruct, "spflib.SPFRecord", true, "github.com/StackExchange/dnscontrol/v4/pkg/spflib", true, function(Parts_) {
+	SPFRecord = $pkg.SPFRecord = $newType(0, $kindStruct, "spflib.SPFRecord", true, "github.com/DNSControl/dnscontrol/v4/pkg/spflib", true, function(Parts_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Parts = sliceType$4.nil;
@@ -56451,7 +56451,7 @@ $packages["github.com/StackExchange/dnscontrol/v4/pkg/spflib"] = (function() {
 		}
 		this.Parts = Parts_;
 	});
-	SPFPart = $pkg.SPFPart = $newType(0, $kindStruct, "spflib.SPFPart", true, "github.com/StackExchange/dnscontrol/v4/pkg/spflib", true, function(Text_, IsLookup_, IncludeRecord_, IncludeDomain_) {
+	SPFPart = $pkg.SPFPart = $newType(0, $kindStruct, "spflib.SPFPart", true, "github.com/DNSControl/dnscontrol/v4/pkg/spflib", true, function(Text_, IsLookup_, IncludeRecord_, IncludeDomain_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Text = "";
@@ -56724,7 +56724,7 @@ $packages["github.com/StackExchange/dnscontrol/v4/pkg/spflib"] = (function() {
 		}
 		return false;
 	};
-	ptrType$2.methods = [{prop: "Lookups", name: "Lookups", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "TXT", name: "TXT", pkg: "", typ: $funcType([], [$String], false)}, {prop: "TXTSplit", name: "TXTSplit", pkg: "", typ: $funcType([$String, $Int, $Int], [mapType$1], false)}, {prop: "split", name: "split", pkg: "github.com/StackExchange/dnscontrol/v4/pkg/spflib", typ: $funcType([$String, $String, $Int, mapType$1, $Int, $Int], [], false)}, {prop: "Flatten", name: "Flatten", pkg: "", typ: $funcType([$String], [ptrType$2], false)}];
+	ptrType$2.methods = [{prop: "Lookups", name: "Lookups", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "TXT", name: "TXT", pkg: "", typ: $funcType([], [$String], false)}, {prop: "TXTSplit", name: "TXTSplit", pkg: "", typ: $funcType([$String, $Int, $Int], [mapType$1], false)}, {prop: "split", name: "split", pkg: "github.com/DNSControl/dnscontrol/v4/pkg/spflib", typ: $funcType([$String, $String, $Int, mapType$1, $Int, $Int], [], false)}, {prop: "Flatten", name: "Flatten", pkg: "", typ: $funcType([$String], [ptrType$2], false)}];
 	SPFRecord.init("", [{prop: "Parts", name: "Parts", embedded: false, exported: true, typ: sliceType$4, tag: ""}]);
 	SPFPart.init("", [{prop: "Text", name: "Text", embedded: false, exported: true, typ: $String, tag: ""}, {prop: "IsLookup", name: "IsLookup", embedded: false, exported: true, typ: $Bool, tag: ""}, {prop: "IncludeRecord", name: "IncludeRecord", embedded: false, exported: true, typ: ptrType$2, tag: ""}, {prop: "IncludeDomain", name: "IncludeDomain", embedded: false, exported: true, typ: $String, tag: ""}]);
 	$init = function() {
@@ -142740,21 +142740,21 @@ $packages["net/http"] = (function() {
 	$pkg.$init = $init;
 	return $pkg;
 })();
-$packages["github.com/StackExchange/dnscontrol/v4/docs/flattener"] = (function() {
+$packages["github.com/DNSControl/dnscontrol/v4/docs/flattener"] = (function() {
 	var $pkg = {}, $init, json, fmt, spflib, jquery, http, strings, gResolver, gResp, ptrType, structType, sliceType, sliceType$1, funcType, funcType$1, sliceType$2, jq, parsed, domain, resolver, main, updateDisabledChecks, renderResults, buildHTML, genRoot, genPart;
 	json = $packages["encoding/json"];
 	fmt = $packages["fmt"];
-	spflib = $packages["github.com/StackExchange/dnscontrol/v4/pkg/spflib"];
+	spflib = $packages["github.com/DNSControl/dnscontrol/v4/pkg/spflib"];
 	jquery = $packages["github.com/gopherjs/jquery"];
 	http = $packages["net/http"];
 	strings = $packages["strings"];
-	gResolver = $pkg.gResolver = $newType(0, $kindStruct, "main.gResolver", true, "github.com/StackExchange/dnscontrol/v4/docs/flattener", false, function() {
+	gResolver = $pkg.gResolver = $newType(0, $kindStruct, "main.gResolver", true, "github.com/DNSControl/dnscontrol/v4/docs/flattener", false, function() {
 		this.$val = this;
 		if (arguments.length === 0) {
 			return;
 		}
 	});
-	gResp = $pkg.gResp = $newType(0, $kindStruct, "main.gResp", true, "github.com/StackExchange/dnscontrol/v4/docs/flattener", false, function(Status_, Answer_) {
+	gResp = $pkg.gResp = $newType(0, $kindStruct, "main.gResp", true, "github.com/DNSControl/dnscontrol/v4/docs/flattener", false, function(Status_, Answer_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Status = 0;
@@ -143086,7 +143086,7 @@ $packages["github.com/StackExchange/dnscontrol/v4/docs/flattener"] = (function()
 })();
 $synthesizeMethods();
 $initAllLinknames();
-var $mainPkg = $packages["github.com/StackExchange/dnscontrol/v4/docs/flattener"];
+var $mainPkg = $packages["github.com/DNSControl/dnscontrol/v4/docs/flattener"];
 $packages["runtime"].$init();
 $go($mainPkg.$init, []);
 $flushConsole();

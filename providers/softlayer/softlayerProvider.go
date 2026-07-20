@@ -7,10 +7,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/softlayer/softlayer-go/datatypes"
 	"github.com/softlayer/softlayer-go/filter"
 	"github.com/softlayer/softlayer-go/services"
@@ -44,7 +44,7 @@ func init() {
 }
 
 func newReg(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	printer.Warnf("The SOFTLAYER provider is unmaintained: https://github.com/StackExchange/dnscontrol/issues/1079")
+	printer.Warnf("The SOFTLAYER provider is unmaintained: https://github.com/DNSControl/dnscontrol/issues/1079")
 	s := session.New(conf["username"], conf["api_key"], conf["endpoint_url"], conf["timeout"])
 
 	if len(s.UserName) == 0 || len(s.APIKey) == 0 {
@@ -68,7 +68,9 @@ func (s *softlayerProvider) GetNameservers(domain string) ([]*models.Nameserver,
 
 // GetZoneRecords gets all the records for domainName and converts
 // them to model.RecordConfig.
-func (s *softlayerProvider) GetZoneRecords(domainName string, meta map[string]string) (models.Records, error) {
+func (s *softlayerProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domainName := dc.Name
+
 	domain, err := s.getDomain(&domainName)
 	if err != nil {
 		return nil, err

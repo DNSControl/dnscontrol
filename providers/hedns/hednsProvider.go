@@ -11,17 +11,20 @@ import (
 	"net/url"
 	"os"
 	"path"
-	"slices"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
 	"github.com/pquerna/otp/totp"
 )
 
@@ -49,15 +52,21 @@ var features = providers.DocumentationNotes{
 	// See providers/capabilities.go for the entire list of capabilities.
 	providers.CanAutoDNSSEC:          providers.Cannot(),
 	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
+	providers.CanConcur:              providers.Can(),
 	providers.CanUseAlias:            providers.Can(),
 	providers.CanUseCAA:              providers.Can(),
+	providers.CanUseDHCID:            providers.Cannot(),
+	providers.CanUseDNAME:            providers.Cannot(),
+	providers.CanUseDNSKEY:           providers.Cannot(),
 	providers.CanUseDS:               providers.Cannot(),
 	providers.CanUseDSForChildren:    providers.Cannot(),
 	providers.CanUseHTTPS:            providers.Can(),
 	providers.CanUseLOC:              providers.Can(),
 	providers.CanUseNAPTR:            providers.Can(),
+	providers.CanUseOPENPGPKEY:       providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
+	providers.CanUseRP:               providers.Can(),
+	providers.CanUseSMIMEA:           providers.Cannot(),
 	providers.CanUseSOA:              providers.Cannot(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
@@ -77,6 +86,39 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Hurricane Electric DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/hedns",
+		PortalURL:   "https://dns.he.net/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "Your Hurricane Electric account username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "Password",
+				Help:     "Your Hurricane Electric account password.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:    "totp-key",
+				Label:  "TOTP shared secret (optional)",
+				Help:   "Shared TOTP secret used to generate a valid TOTP code. Leave blank if you do not use TOTP.",
+				Secret: true,
+			},
+			{
+				Key:     "session-file-path",
+				Label:   "Session file path (optional)",
+				Help:    "Path to a directory where the .hedns-session file is stored to reuse the authenticated session. Leave blank to log in each run.",
+				Default: ".",
+			},
+		},
+	})
 }
 
 var defaultNameservers = []string{
@@ -113,16 +155,20 @@ type hednsProvider struct {
 	SessionFilePath string
 
 	httpClient http.Client
+	zoneCache  zonecache.ZoneCache[uint64]
 }
 
 // Record stores the HEDNS specific zone and record IDs.
 type Record struct {
-	RecordName string
-	RecordID   uint64
-	ZoneName   string
-	ZoneID     uint64
-	Dynamic    bool   // Whether this record has Dynamic DNS enabled
-	DDNSKey    string // The DDNS key/token for this record (populated on demand)
+	ZoneID      uint64
+	ZoneName    string
+	ID          uint64
+	Type        string
+	Name        string
+	Data        string
+	TTL         uint32
+	Priority    uint16
+	DDNSEnabled bool
 }
 
 func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -140,7 +186,6 @@ func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSSe
 		return nil, errors.New("totp and totp-key must not be specified at the same time")
 	}
 
-	// Perform the initial login
 	client := &hednsProvider{
 		Username:        username,
 		Password:        password,
@@ -149,43 +194,39 @@ func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSSe
 		SessionFilePath: sessionFilePath,
 	}
 
-	// Create storage for the cookies
+	// Create storage for the cookies.
 	cookieJar, _ := cookiejar.New(nil)
 	client.httpClient = http.Client{Jar: cookieJar}
+	client.zoneCache = zonecache.New(client.listDomains)
 
-	err := client.authenticate()
-	return client, err
+	// Reuse cached session file if one is set.
+	if client.SessionFilePath != "" {
+		_ = client.loadSessionFile()
+	}
+
+	return client, nil
 }
 
 // ListZones list all zones on this provider.
 func (c *hednsProvider) ListZones() ([]string, error) {
-	domainsMap, err := c.listDomains()
+	domains, err := c.zoneCache.GetZoneNames()
 	if err != nil {
 		return nil, err
 	}
-
-	domains := make([]string, 0, len(domainsMap))
-	for domain := range domainsMap {
-		domains = append(domains, domain)
-	}
-
-	// Ensure the order is deterministic
 	sort.Strings(domains)
-
-	return domains, err
+	return domains, nil
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *hednsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
-	domains, err := c.ListZones()
+func (c *hednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
+	ok, err := c.zoneCache.HasZone(domain)
 	if err != nil {
 		return err
 	}
-
-	if slices.Contains(domains, domain) {
+	if ok {
 		return nil
 	}
-
 	return c.createDomain(domain)
 }
 
@@ -228,13 +269,9 @@ func (c *hednsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, recor
 		return nil, 0, err
 	}
 
-	// Get the SOA record to get the ZoneID, then remove it from the list.
-	zoneID := uint64(0)
-	var prunedRecords models.Records
+	prunedRecords := make(models.Records, 0, len(records))
 	for _, r := range records {
-		if r.Type == "SOA" {
-			zoneID = r.Original.(Record).ZoneID
-		} else {
+		if r.Type != "SOA" {
 			prunedRecords = append(prunedRecords, r)
 		}
 	}
@@ -263,7 +300,7 @@ func (c *hednsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, recor
 		}
 	}
 
-	return c.getDiff2DomainCorrections(dc, zoneID, prunedRecords)
+	return c.getDiff2DomainCorrections(dc, prunedRecords)
 }
 
 // resolveDynamic determines the desired dynamic flag for a record.
@@ -279,12 +316,17 @@ func resolveDynamic(newRec *models.RecordConfig, oldRec *Record) bool {
 	}
 	// Not explicitly set – inherit from old record if present.
 	if oldRec != nil {
-		return oldRec.Dynamic
+		return oldRec.DDNSEnabled
 	}
 	return false
 }
 
-func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, zoneID uint64, records models.Records) ([]*models.Correction, int, error) {
+func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
+	zoneID, err := c.zoneCache.GetZone(dc.Name)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	// DDNS keys are write-only: HE DNS does not expose them for reading.
 	// Strip hedns_ddns_key from desired metadata before the diff so that it
 	// does not cause perpetual spurious changes, but save the intents so we
@@ -342,17 +384,17 @@ func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, zoneI
 			corrections = append(corrections, &models.Correction{
 				Msg: change.MsgsJoined,
 				F: func() error {
-					if err := c.changeZoneRecord(zoneID, oldRecord.RecordID, record, &oldRecord); err != nil {
+					if err := c.changeZoneRecord(zoneID, oldRecord.ID, record, &oldRecord); err != nil {
 						return err
 					}
 					if ddnsKey != "" {
-						return c.setRecordDDNSKey(zoneID, oldRecord.RecordName, ddnsKey)
+						return c.setRecordDDNSKey(zoneID, oldRecord.Name, ddnsKey)
 					}
 					return nil
 				},
 			})
 		case diff2.DELETE:
-			recordID := change.Old[0].Original.(Record).RecordID
+			recordID := change.Old[0].Original.(Record).ID
 			corrections = append(corrections, &models.Correction{
 				Msg: change.MsgsJoined,
 				F: func() error {
@@ -368,23 +410,23 @@ func (c *hednsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, zoneI
 }
 
 // setDDNSKeyForNewRecord sets the DDNS key on a newly created record.
-func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, domain string, record *models.RecordConfig, key string) error {
+func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, _ string, record *models.RecordConfig, key string) error {
 	return c.setRecordDDNSKey(zoneID, record.GetLabelFQDN(), key)
 }
 
 // GetZoneRecords returns all the records for the given domain.
-func (c *hednsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	var zoneRecords []*models.RecordConfig
 
 	// Get Domain ID
-	domains, err := c.listDomains()
+	domainID, err := c.zoneCache.GetZone(domain)
 	if err != nil {
+		if errors.Is(err, zonecache.ErrZoneNotFound) {
+			return nil, fmt.Errorf("domain %s does not exist", domain)
+		}
 		return nil, err
-	}
-
-	domainID, domainExists := domains[domain]
-	if !domainExists {
-		return nil, fmt.Errorf("domain %s does not exist", domain)
 	}
 
 	queryURL, _ := url.Parse(apiEndpoint)
@@ -414,64 +456,74 @@ func (c *hednsProvider) GetZoneRecords(domain string, meta map[string]string) (m
 	// Load all the domain records
 	recordSelector := "tr.dns_tr, tr.dns_tr_dynamic, tr.dns_tr_locked"
 	document.Find(recordSelector).EachWithBreak(func(index int, element *goquery.Selection) bool {
+		// HEDNS renders each record as a table row with the following columns:
+		//  1. Zone ID
+		//  2. Record ID
+		//  3. Name (.dns_view)
+		//  4. Type (.rrlabel)
+		//  5. TTL
+		//  6. Priority
+		//  7. Data
+		//  8+. Hidden/UI Controls
 		parser := elementParser{}
-		isDynamic := element.HasClass("dns_tr_dynamic")
-
-		rc := &models.RecordConfig{
-			Type: parser.parseStringAttr(element.Find("td > .rrlabel"), "data"),
-			TTL:  parser.parseIntElementUint32(element.Find("td:nth-child(5)")),
-			Original: Record{
-				ZoneName:   domain,
-				ZoneID:     domainID,
-				RecordName: parser.parseStringElement(element.Find(".dns_view")),
-				RecordID:   parser.parseIntAttr(element, "id"),
-				Dynamic:    isDynamic,
-			},
+		rec := Record{
+			ZoneID:      domainID,
+			ZoneName:    domain,
+			ID:          parser.parseIntAttr(element, "id"),
+			Type:        parser.parseStringAttr(element.Find(".rrlabel"), "data"),
+			Name:        parser.parseStringElement(element.Find(".dns_view")),
+			Data:        parser.parseStringAttr(element.Find("td:nth-child(7)"), "data"),
+			TTL:         parser.parseIntElementUint32(element.Find("td:nth-child(5)")),
+			Priority:    parser.parseIntElementUint16(element.Find("td:nth-child(6)")),
+			DDNSEnabled: element.HasClass("dns_tr_dynamic"),
 		}
-		data := parser.parseStringAttr(element.Find("td:nth-child(7)"), "data")
-		if err != nil {
-			return false
-		}
-
-		priority := parser.parseIntElementUint16(element.Find("td:nth-child(6)"))
 		if parser.err != nil {
 			err = parser.err
 			return false
 		}
 
 		// Ignore record types that dnscontrol does not support
-		if rc.Type == "HINFO" || rc.Type == "AFSDB" || rc.Type == "RP" {
+		if rec.Type == "HINFO" || rec.Type == "AFSDB" {
 			return true
 		}
 
-		// Populate metadata so the diff engine can see the "dynamic" state.
-		rc.Metadata = map[string]string{}
-		if isDynamic {
-			rc.Metadata[metaDynamic] = "on"
+		var rc *models.RecordConfig
+		if rtypeinfo.IsModernType(rec.Type) {
+			// FQDNs for NewRecordConfigFromString require trailing "."
+			rc, err = rtypecontrol.NewRecordConfigFromString(
+				rec.Name+".", rec.TTL, rec.Type, rec.Data,
+				domaintags.MakeDomainNameVarieties(domain),
+			)
 		} else {
-			rc.Metadata[metaDynamic] = "off"
+			rc = &models.RecordConfig{Type: rec.Type, TTL: rec.TTL}
+			rc.SetLabelFromFQDN(rec.Name, domain)
+			switch rec.Type {
+			case "ALIAS":
+				err = rc.SetTarget(rec.Data)
+			case "MX":
+				// HEDNS omits the trailing "." on the hostnames for MX records
+				err = rc.SetTargetMX(rec.Priority, rec.Data+".")
+			case "SRV":
+				err = rc.SetTargetSRVPriorityString(rec.Priority, rec.Data)
+			case "SPF":
+				// Convert to TXT record as SPF is deprecated
+				rc.ChangeType("TXT", domain)
+				fallthrough
+			default:
+				err = rc.PopulateFromStringFunc(rec.Type, rec.Data, domain, txtutil.ParseQuoted)
+			}
 		}
-
-		rc.SetLabelFromFQDN(rc.Original.(Record).RecordName, domain)
-
-		switch rc.Type {
-		case "ALIAS":
-			err = rc.SetTarget(data)
-		case "MX":
-			// dns.he.net omits the trailing "." on the hostnames for MX records
-			err = rc.SetTargetMX(priority, data+".")
-		case "SRV":
-			err = rc.SetTargetSRVPriorityString(priority, data)
-		case "SPF":
-			// Convert to TXT record as SPF is deprecated
-			rc.ChangeType("TXT", domain)
-			fallthrough
-		default:
-			err = rc.PopulateFromStringFunc(rc.Type, data, domain, txtutil.ParseQuoted)
-		}
-
 		if err != nil {
 			return false
+		}
+
+		rc.Original = rec
+		rc.Metadata = map[string]string{
+			metaDynamic: "off",
+		}
+
+		if rec.DDNSEnabled {
+			rc.Metadata[metaDynamic] = "on"
 		}
 
 		zoneRecords = append(zoneRecords, rc)
@@ -481,30 +533,7 @@ func (c *hednsProvider) GetZoneRecords(domain string, meta map[string]string) (m
 	return zoneRecords, err
 }
 
-func (c *hednsProvider) authResumeSession() (authenticated bool, requiresTfa bool, err error) {
-	response, err := c.httpClient.Get(apiEndpoint)
-	if err != nil {
-		return false, false, err
-	}
-	defer response.Body.Close()
-
-	document, err := c.parseResponseForDocumentAndErrors(response)
-	if err != nil {
-		// Deal with the edge case where we have attempted to use the same authentication token more than two times
-		if err.Error() == errorTotpTokenRequired {
-			return false, true, nil
-		}
-		return false, false, err
-	}
-
-	// Look for the presence of the login button or the TFA input
-	authenticated = document.Find("#_tlogout").Size() > 0
-	requiresTfa = document.Find("input#tfacode").Size() > 0
-
-	return authenticated, requiresTfa, err
-}
-
-func (c *hednsProvider) authUsernameAndPassword() (authenticated bool, requiresTfa bool, err error) {
+func (c *hednsProvider) authUsernameAndPassword() (document *goquery.Document, requiresTfa bool, err error) {
 	// Login with username and password
 	response, err := c.httpClient.PostForm(apiEndpoint, url.Values{
 		"email":  {c.Username},
@@ -512,38 +541,34 @@ func (c *hednsProvider) authUsernameAndPassword() (authenticated bool, requiresT
 		"submit": {"Login!"},
 	})
 	if err != nil {
-		return false, false, err
+		return nil, false, err
 	}
 	defer response.Body.Close()
 
-	document, err := c.parseResponseForDocumentAndErrors(response)
+	document, err = c.parseResponseForDocumentAndErrors(response)
 	if err != nil {
 		if err.Error() == errorInvalidCredentials {
 			err = errors.New("authentication failed with incorrect username or password")
 		}
 		if err.Error() == errorTotpTokenRequired {
-			return false, true, nil
+			return nil, true, nil
 		}
-		return false, false, err
+		return nil, false, err
 	}
 
-	authenticated = document.Find("#_tlogout").Size() > 0
 	requiresTfa = document.Find("input#tfacode").Size() > 0
-
-	// Completed and 2FA is not required
-	return authenticated, requiresTfa, err
+	return document, requiresTfa, nil
 }
 
-func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
+func (c *hednsProvider) auth2FA() (document *goquery.Document, err error) {
 	if c.TfaValue == "" && c.TfaSecret == "" {
-		return false, errors.New("account requires two-factor authentication but neither totp or totp-key were provided")
+		return nil, errors.New("account requires two-factor authentication but neither totp or totp-key were provided")
 	}
 
 	if c.TfaValue == "" && c.TfaSecret != "" {
-		var err error
 		c.TfaValue, err = totp.GenerateCode(c.TfaSecret, time.Now())
 		if err != nil {
-			return false, err
+			return nil, err
 		}
 	}
 
@@ -552,11 +577,11 @@ func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
 		"submit":  {"Submit"},
 	})
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	defer response.Body.Close()
 
-	document, err := c.parseResponseForDocumentAndErrors(response)
+	document, err = c.parseResponseForDocumentAndErrors(response)
 	if err != nil {
 		switch err.Error() {
 		case errorInvalidTotpToken:
@@ -564,65 +589,84 @@ func (c *hednsProvider) auth2FA() (authenticated bool, err error) {
 		case errorTotpTokenReused:
 			err = errors.New("TOTP token was reused within its period (30 seconds)")
 		}
-		return false, err
+		return nil, err
 	}
-	authenticated = document.Find("#_tlogout").Size() > 0
 
-	return authenticated, err
+	return document, nil
 }
 
-func (c *hednsProvider) authenticate() error {
-	if c.SessionFilePath != "" {
-		_ = c.loadSessionFile()
-	}
-
-	authenticated, requiresTfa, err := c.authResumeSession()
-	if err != nil {
-		return err
-	}
-
-	if !authenticated {
-		// Only perform username and password login if two-factor authentication is not required at this stage
-		if !requiresTfa {
-			authenticated, requiresTfa, err = c.authUsernameAndPassword()
-			if err != nil {
-				return err
-			}
-		}
-
-		// Only perform two-factor authentication if required
-		if requiresTfa {
-			authenticated, err = c.auth2FA()
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	if !authenticated {
-		err = errors.New("unknown authentication failure")
-	} else {
-		if c.SessionFilePath != "" {
-			err = c.saveSessionFile()
-		}
-	}
-
-	return err
-}
-
-func (c *hednsProvider) listDomains() (map[string]uint64, error) {
+func (c *hednsProvider) authResumeSession() (document *goquery.Document, err error) {
 	response, err := c.httpClient.Get(apiEndpoint)
 	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	document, err := goquery.NewDocumentFromReader(response.Body)
+	document, err = goquery.NewDocumentFromReader(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	return document, nil
+}
+
+func (c *hednsProvider) authenticate() (*goquery.Document, error) {
+	// #_tlogout is only present once the session is authenticated.
+	isLoggedIn := func(document *goquery.Document) bool {
+		return document.Find("#_tlogout").Size() > 0
+	}
+
+	if c.hasSession() {
+		document, err := c.authResumeSession()
+		if err != nil {
+			return nil, err
+		}
+
+		if isLoggedIn(document) {
+			return document, nil
+		}
+	}
+
+	document, requiresTfa, err := c.authUsernameAndPassword()
 	if err != nil {
 		return nil, err
 	}
 
-	// Check there are any domains in this account
+	if requiresTfa {
+		if document, err = c.auth2FA(); err != nil {
+			return nil, err
+		}
+	}
+
+	if !isLoggedIn(document) {
+		return nil, errors.New("unknown authentication failure")
+	}
+
+	if c.SessionFilePath != "" {
+		if err := c.saveSessionFile(); err != nil {
+			return nil, err
+		}
+	}
+
+	return document, nil
+}
+
+func (c *hednsProvider) listDomains() (map[string]uint64, error) {
+	document, err := c.authenticate()
+	if err != nil {
+		return nil, err
+	}
+	return parseDomainsTable(document)
+}
+
+func (c *hednsProvider) hasSession() bool {
+	u, err := url.Parse(apiEndpoint)
+	if err != nil {
+		return false
+	}
+	return len(c.httpClient.Jar.Cookies(u)) > 0
+}
+
+func parseDomainsTable(document *goquery.Document) (map[string]uint64, error) {
 	domains := make(map[string]uint64)
 	if document.Find("#domains_table").Size() == 0 {
 		return domains, nil
@@ -634,6 +678,7 @@ func (c *hednsProvider) listDomains() (map[string]uint64, error) {
 		"#tabs-advanced .generic_table > tbody > tr > td:last-child > img", // Reverse records
 	}, ", ")
 
+	var err error
 	document.Find(recordsSelector).EachWithBreak(func(index int, element *goquery.Selection) bool {
 		domainID, idExists := element.Attr("value")
 		domainName, nameExists := element.Attr("name")
@@ -661,8 +706,18 @@ func (c *hednsProvider) createDomain(domain string) error {
 	}
 	defer response.Body.Close()
 
-	_, err = c.parseResponseForDocumentAndErrors(response)
-	return err
+	document, err := c.parseResponseForDocumentAndErrors(response)
+	if err != nil {
+		return err
+	}
+	domains, err := parseDomainsTable(document)
+	if err != nil {
+		return err
+	}
+	if id, ok := domains[domain]; ok {
+		c.zoneCache.SetZone(domain, id)
+	}
+	return nil
 }
 
 func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *models.RecordConfig, create bool, dynamic bool) error {

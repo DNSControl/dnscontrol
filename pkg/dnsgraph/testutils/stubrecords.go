@@ -1,6 +1,6 @@
 package testutils
 
-import "github.com/StackExchange/dnscontrol/v4/pkg/dnsgraph"
+import "github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
 
 // StubRecord stub.
 type StubRecord struct {

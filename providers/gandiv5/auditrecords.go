@@ -1,7 +1,7 @@
 package gandiv5
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // AuditRecords returns a list of errors corresponding to the records

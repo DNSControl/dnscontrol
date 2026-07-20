@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records

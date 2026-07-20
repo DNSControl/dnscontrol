@@ -8,9 +8,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"golang.org/x/exp/slices"
+	"slices"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 const (

@@ -1,6 +1,6 @@
 package joker
 
-import "github.com/StackExchange/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v4/models"
 
 // GetNameservers returns the nameservers for a domain.
 func (api *jokerProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {

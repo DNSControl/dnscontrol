@@ -7,9 +7,9 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 // Feature Declaration
@@ -33,6 +33,43 @@ func init() {
 		RecordAuditor: AuditRecords,
 	}, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "FortiGate",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/fortigate",
+		PortalURL:   "https://docs.fortinet.com/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "FortiGate host",
+				Help:     "Hostname or IP of the FortiGate appliance (with or without https://).",
+				Required: true,
+			},
+			{
+				Key:      "vdom",
+				Label:    "VDOM",
+				Help:     "FortiGate virtual domain (vdom) name.",
+				Required: true,
+			},
+			{
+				Key:      "apiKey",
+				Label:    "API key",
+				Help:     "FortiGate REST API key.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:   "insecure_tls",
+				Label: "Skip TLS verification (optional)",
+				Help:  "Set to \"true\" to skip TLS certificate verification when connecting to the FortiGate.",
+			},
+			{
+				Key:   "debug_http",
+				Label: "Debug HTTP (optional)",
+				Help:  "Set to \"true\" to log HTTP requests and responses for debugging.",
+			},
+		},
+	})
 }
 
 // Provider Struct
@@ -78,7 +115,9 @@ func NewFortiGate(m map[string]string, _ json.RawMessage) (providers.DNSServiceP
 
 // Record Fetching
 
-func (p *fortigateProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (p *fortigateProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records := models.Records{}
 
 	// Request the zone object from FortiGate
@@ -156,7 +195,7 @@ func (p *fortigateProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 				Msg: msg,
 				F: func() error {
 
-					if err := p.EnsureZoneExists(dc.Name, dc.Metadata); err != nil {
+					if err := p.EnsureZoneExists(dc); err != nil {
 						return err
 					}
 
@@ -169,7 +208,8 @@ func (p *fortigateProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 }
 
 // Zone Existence Check & Creation.
-func (p *fortigateProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (p *fortigateProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	var probe struct{ Results []any }
 
 	err := p.client.do("GET", "system/dns-database/"+domain, nil, nil, &probe)

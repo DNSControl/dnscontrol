@@ -1,16 +1,8 @@
 # Creating new DNS Resource Types (rtypes) (v4.28 and later)
 
-Everyone is familiar with A, AAAA, CNAME, NS and other Rtypes.
-However there are new record types being added all the time.
-Each new record type requires special handling by
-DNSControl.
+Everyone is familiar with A, AAAA, CNAME, NS and other Rtypes. However there are new record types being added all the time. Each new record type requires special handling by DNSControl.
 
-Version v4.28.0 greatly simplified how to add new record types. As
-a demonstration of this new method it added the "RP" type and
-ported the existing "CLOUDFLAREAPI_SINGLE_REDIRECT" type.  All
-other records still use the old method. The old and new
-methods co-exist, though eventually we hope to migrate
-everything to the new method.
+Version v4.28.0 greatly simplified how to add new record types. As a demonstration of this new method it added the "RP" type and ported the existing "CLOUDFLAREAPI_SINGLE_REDIRECT" type.  All other records still use the old method. The old and new methods co-exist, though eventually we hope to migrate everything to the new method.
 
 # What's new?
 
@@ -32,8 +24,7 @@ everything to the new method.
 
 # Overview
 
-There are two parts to adding a new Record Type (rtype). First we activate it in the parser for dnsconfig.js. Then we update
-any provider to be aware of the rtype.
+There are two parts to adding a new Record Type (rtype). First we activate it in the parser for dnsconfig.js. Then we update any provider to be aware of the rtype.
 
 Activate it in dnsconfig.js:
 
@@ -44,7 +35,6 @@ Update providers to be aware of the rtype:
 
 1. Update the toRC() function (whatever it may be called).
 1. Update the toNative() and any create/delete/change functions.
-
 
 # Updating the parser
 
@@ -58,9 +48,7 @@ At the end of the file, add a single line named after the record type.
 var RP = rawrecordBuilder('RP');
 ```
 
-In this example, the first `RP` is the name of the function that users will
-type in dnsconfig.js.  For example, `A("label", "10.2.3.4"),` (though the "A"
-record type hasn't been ported to the new system yet).
+In this example, the first `RP` is the name of the function that users will type in dnsconfig.js.  For example, `A("label", "10.2.3.4"),` (though the "A" record type hasn't been ported to the new system yet).
 
 Step 2: Create the parser
 
@@ -103,8 +91,7 @@ type THING struct {
 
 Step 2c: Create Name()
 
-Create a function `Name()` that outputs the
-name of the type.
+Create a function `Name()` that outputs the name of the type.
 
 ```
 func (handle *THING) Name() string {
@@ -114,14 +101,12 @@ func (handle *THING) Name() string {
 
 Step 2d: Create FromArgs
 
-The "FromArgs" function receives an array of `any` which can contain any type.  The "PaveArgs" function
-will convert them to the types you need. For example, it will convert numbers to strings, or strings to numbers.
+The "FromArgs" function receives an array of `any` which can contain any type.  The "PaveArgs" function will convert them to the types you need. For example, it will convert numbers to strings, or strings to numbers.
 
 * "s": Convert to string
 * "i": Convert to int16
 
-`args[0]` is the label. You can skip it as that is already processed for you.  (If you want
-to modify the label, see cfsingle.go as an example of how to do that.)
+`args[0]` is the label. You can skip it as that is already processed for you.  (If you want to modify the label, see cfsingle.go as an example of how to do that.)
 
 If THING takes 4 parameters (2 ints and 2 strings), you might pave the arguments as follows:
 
@@ -158,24 +143,17 @@ FromStruct does many things:
 
 Create the CopyToLegacyFields function
 
-This updates any of the legacy fields. The most important is the .target field, which we
-usually store a copy of the .ZonefilePartial.
+This updates any of the legacy fields. The most important is the .target field, which we usually store a copy of the .ZonefilePartial.
 
-When we migrate other rtypes this will populate the legacy RecordConfig fields. For example, when
-we migrate `SRV`, this function will populate the `Srv*` fields.  Then, eventually, we'll remove
-those legacy fields.
-
+When we migrate other rtypes this will populate the legacy RecordConfig fields. For example, when we migrate `SRV`, this function will populate the `Srv*` fields.  Then, eventually, we'll remove those legacy fields.
 
 TODO: `js/parse_test`
 
 ## Add a capability for the record type
 
-You'll need to mark which providers support this record type. The
-initial PR should implement this record for the `BIND` provider at
-a minimum.  `BIND` outputs non-standard rtypes as a comment.
+You'll need to mark which providers support this record type. The initial PR should implement this record for the `BIND` provider at a minimum.  `BIND` outputs non-standard rtypes as a comment.
 
--   Add the capability to the file `dnscontrol/providers/capabilities.go` (look for `CanUseAlias` and add
-    it to the end of the list.)
+-   Add the capability to the file `dnscontrol/providers/capabilities.go` (look for `CanUseAlias` and add it to the end of the list.)
 -   Run stringer to auto-update the file `dnscontrol/providers/capability_string.go`
 
 ```shell
@@ -229,11 +207,7 @@ popd
     ```
     {% endcode %}
 
--   Add the capability to the list of features that zones are validated
-    against (i.e. if you want DNSControl to report an error if this
-    feature is used with a DNS provider that doesn't support it). That's
-    in the `checkProviderCapabilities` function in
-    `pkg/normalize/validate.go`. It should look like this:
+-   Add the capability to the list of features that zones are validated against (i.e. if you want DNSControl to report an error if this feature is used with a DNS provider that doesn't support it). That's in the `checkProviderCapabilities` function in `pkg/normalize/validate.go`. It should look like this:
 
     {% code title="pkg/normalize/validate.go" %}
     ```diff
@@ -246,20 +220,12 @@ popd
 
 -   Mark the `bind` provider as supporting this record type by updating `dnscontrol/providers/bind/bindProvider.go` (look for `providers.CanUse` and you'll see what to do).
 
-DNSControl will warn/error if this new record is used with a
-provider that does not support the capability.
+DNSControl will warn/error if this new record is used with a provider that does not support the capability.
 
--   Add the capability to the validations in `pkg/normalize/validate.go`
-    by adding it to `providerCapabilityChecks`
--   Some capabilities can't be tested for. If
-    such testing can't be done, add it to the whitelist in function
-    `TestCapabilitiesAreFiltered` in
-    `pkg/normalize/capabilities_test.go`
+-   Add the capability to the validations in `pkg/normalize/validate.go` by adding it to `providerCapabilityChecks`
+-   Some capabilities can't be tested for. If such testing can't be done, add it to the whitelist in function `TestCapabilitiesAreFiltered` in `pkg/normalize/capabilities_test.go`
 
-If the capabilities testing is not configured correctly, `go test ./...`
-will report something like the `MISSING` message below. In this
-example we removed `providers.CanUseCAA` from the
-`providerCapabilityChecks` list.
+If the capabilities testing is not configured correctly, `go test ./...` will report something like the `MISSING` message below. In this example we removed `providers.CanUseCAA` from the `providerCapabilityChecks` list.
 
 ```text
 --- FAIL: TestCapabilitiesAreFiltered (0.00s)
@@ -282,11 +248,7 @@ Add a new Markdown file to `documentation/language-reference/domain-modifiers`. 
 
 The rest of the file is the documentation. You can use Markdown syntax to format the text.
 
-Add the new file `FOO.md` to the documentation table of contents
-`documentation/SUMMARY.md` > `Domain Modifiers`, and/or to the `Service
-Provider specific` section if you made a record specific to a provider, and to
-the `Record Modifiers` section if you created any `*_BUILDER` or `*_HELPER` or
-similar functions for the new record type:
+Add the new file `FOO.md` to the documentation table of contents `documentation/SUMMARY.md` > `Domain Modifiers`, and/or to the `Service Provider specific` section if you made a record specific to a provider, and to the `Record Modifiers` section if you created any `*_BUILDER` or `*_HELPER` or similar functions for the new record type:
 
 {% code title="documentation/SUMMARY.md" %}
 ```diff
@@ -329,7 +291,6 @@ go generate ./...
 
 This will regenerate things like the table of which providers have which features and the `dnscontrol.d.ts` file.
 
-
 # Update providers
 
 When a provider needs to create a THING, they have two choices
@@ -346,8 +307,7 @@ If you have the fields in variables that are strings that need to be converted, 
 rec, err := rtypecontrol.NewRecordConfigFromRaw("CF_REDIRECT", ttl, []any{pattern, target}, dc)
 ```
 
-There's a good chance you know the zoneName but don't have a complete models.DomainConfig(). That's ok.
-As long as you know the zone name, we can fake it: (this is a hack we'll figure out how to eliminate eventually).
+There's a good chance you know the zoneName but don't have a complete models.DomainConfig(). That's ok. As long as you know the zone name, we can fake it: (this is a hack we'll figure out how to eliminate eventually).
 
 ```
 dc := models.MakeFakeDomainConfig(zoneName)

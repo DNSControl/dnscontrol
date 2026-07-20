@@ -24,7 +24,6 @@ CLI_DEFAULTS({
 ```
 {% endcode %}
 
-
 You need to define this defaults just once in your `dnsconfig.js`. It should be defined **before** using it.
 
 _Please keep in mind that accessing an undefined variable is an error. If it is not set on the command line nor in `CLI_DEFAULTS`, accessing the variable will fail._
@@ -65,11 +64,9 @@ D("example.com", REG_NAMECOM, DnsProvider(DNS_NAMECOM), DnsProvider(DNS_BIND),
 ```
 {% endcode %}
 
-
 ## Example 2: Different DNS records
 
-In this example different code is run when `emergency=true`.  Normally
-`server12` is an A record but in an emergency it is a CNAME.
+In this example different code is run when `emergency=true`.  Normally `server12` is an A record but in an emergency it is a CNAME.
 
 In this configuration:
 
@@ -111,31 +108,15 @@ if (emergency) {
 ```
 {% endcode %}
 
-
 ### ProTips
 
-The cli variables functionality permits you to create very complex and
-sophisticated configurations, but you shouldn't. Be nice to the next person
-that edits the file, who may not be as expert as yourself.
+The cli variables functionality permits you to create very complex and sophisticated configurations, but you shouldn't. Be nice to the next person that edits the file, who may not be as expert as yourself.
 
-While there is no limit to the number of variables that can be set on the
-command line, doing so is annoying to the person using the tool.  It is better
-to set one variables which specifies a "mode".  This mode is then used to
-automatically set other variables. This way the user can determine the mode and
-the code can determine what to do in that mode. This is less error-prone and
-more testable.
+While there is no limit to the number of variables that can be set on the command line, doing so is annoying to the person using the tool.  It is better to set one variables which specifies a "mode".  This mode is then used to automatically set other variables. This way the user can determine the mode and the code can determine what to do in that mode. This is less error-prone and more testable.
 
-In the first example, you'll see that one variable is used to set a mode which
-then determines many other variables.  This is done in one place, at the top of
-the file. Everything related to this is isolated to one place, thus easier to
-maintain. The rest of the file simply uses those variables.
+In the first example, you'll see that one variable is used to set a mode which then determines many other variables.  This is done in one place, at the top of the file. Everything related to this is isolated to one place, thus easier to maintain. The rest of the file simply uses those variables.
 
-In the second example, you'll see a boolean variable is set which selects which
-code will run different code. While the conditional code is not isolated to the
-top of the file, the conditional code is placed immediately after the domain.
+In the second example, you'll see a boolean variable is set which selects which code will run different code. While the conditional code is not isolated to the top of the file, the conditional code is placed immediately after the domain.
 
-In both examples, not setting any variables on the command line does something
-reasonable. If someone accidentally runs `dnscontrol push` without any
-variables, the behavior is correct (assuming we're not in emergency mode, which
-is unlikely).
+In both examples, not setting any variables on the command line does something reasonable. If someone accidentally runs `dnscontrol push` without any variables, the behavior is correct (assuming we're not in emergency mode, which is unlikely).
 

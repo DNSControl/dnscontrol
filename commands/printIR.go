@@ -9,10 +9,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/js"
-	"github.com/StackExchange/dnscontrol/v4/pkg/normalize"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/js"
+	"github.com/DNSControl/dnscontrol/v4/pkg/normalize"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
 	"github.com/urfave/cli/v3"
 )
 

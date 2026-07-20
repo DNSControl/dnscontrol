@@ -5,9 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"slices"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
-	"golang.org/x/exp/slices"
 )
 
 var fqdnTypes = []recordType{recordTypeCNAME, recordTypeHTTPS, recordTypeMX, recordTypeNS, recordTypePTR, recordTypeSRV, recordTypeSVCB}

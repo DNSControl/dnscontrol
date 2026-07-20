@@ -5,8 +5,8 @@ package desec
 import (
 	"fmt"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 

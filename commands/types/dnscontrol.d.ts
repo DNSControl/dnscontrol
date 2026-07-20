@@ -27,7 +27,8 @@ type DomainModifier =
 
 type RecordModifier =
     | ((record: DNSRecord) => void)
-    | Partial<DNSRecord['meta']>;
+    | Partial<DNSRecord['meta']>
+    | RecordModifier[];
 
 type Duration =
     | `${number}${'s' | 'm' | 'h' | 'd' | 'w' | 'n' | 'y' | ''}`
@@ -126,7 +127,7 @@ declare const CAA_CRITICAL: RecordModifier;
  * 1. Two owners toggling a record between two settings.
  * 2. The other owner wiping all records at this label, which won't
  * be noticed until the next time dnscontrol is run.
- * See https://github.com/StackExchange/dnscontrol/issues/1106
+ * See https://github.com/DNSControl/dnscontrol/issues/1106
  */
 declare const IGNORE_NAME_DISABLE_SAFETY_CHECK: RecordModifier;
 
@@ -344,13 +345,9 @@ declare const AUTODNSSEC_OFF: DomainModifier;
  *
  * [`AUTODNSSEC_OFF`](AUTODNSSEC_OFF.md) tells the provider to **disable** AutoDNSSEC.
  *
- * AutoDNSSEC is a feature where a DNS provider can automatically manage
- * DNSSEC for a domain. Not all providers support this.
+ * AutoDNSSEC is a feature where a DNS provider can automatically manage DNSSEC for a domain. Not all providers support this.
  *
- * At this time, `AUTODNSSEC_ON` takes no parameters.  There is no ability
- * to tune what the DNS provider sets, no algorithm choice.  We simply
- * ask that they follow their defaults when enabling a no-fuss DNSSEC
- * data model.
+ * At this time, `AUTODNSSEC_ON` takes no parameters.  There is no ability to tune what the DNS provider sets, no algorithm choice.  We simply ask that they follow their defaults when enabling a no-fuss DNSSEC data model.
  *
  * NOTE: No parenthesis should follow these keywords.  That is, the
  * correct syntax is `AUTODNSSEC_ON` not `AUTODNSSEC_ON()`
@@ -367,8 +364,7 @@ declare const AUTODNSSEC_OFF: DomainModifier;
  * );
  * ```
  *
- * If neither `AUTODNSSEC_ON` or `AUTODNSSEC_OFF` is specified for a
- * domain no changes will be requested.
+ * If neither `AUTODNSSEC_ON` or `AUTODNSSEC_OFF` is specified for a domain no changes will be requested.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/autodnssec_on
  */
@@ -546,21 +542,21 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * ### Parameters
  *
  * * `label:` The label of the CAA record. (Optional. Default: `"@"`)
- * * `iodef:` Report all violation to configured mail address.
+ * * `iodef:` Report all violation to configured mail address. (Optional. Default: `""`)
  * * `iodef_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issue:` An array of CAs which are allowed to issue certificates. (Use `"none"` to refuse all CAs)
+ * * `issue:` An array of CAs which are allowed to issue certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issue_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuewild:` An array of CAs which are allowed to issue wildcard certificates. (Can be simply `"none"` to refuse issuing wildcard certificates for all CAs)
+ * * `issuewild:` An array of CAs which are allowed to issue wildcard certificates. (Optional. Default: `[]`. Can be simply `"none"` to refuse issuing wildcard certificates for all CAs)
  * * `issuewild_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuevmc:` An array of CAs which are allowed to issue VMC certificates. (Use `"none"` to refuse all CAs)
+ * * `issuevmc:` An array of CAs which are allowed to issue VMC certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issuevmc_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
- * * `issuemail:` An array of CAs which are allowed to issue email certificates. (Use `"none"` to refuse all CAs)
+ * * `issuemail:` An array of CAs which are allowed to issue email certificates. (Optional. Default: `[]`. Use `"none"` to refuse all CAs)
  * * `issuemail_critical:` This can be `true` or `false`. If enabled and CA does not support this record, then certificate issue will be refused. (Optional. Default: `false`)
  * * `ttl:` Input for `TTL` method (optional)
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/caa_builder
  */
-declare function CAA_BUILDER(opts: { label?: string; iodef: string; iodef_critical?: boolean; issue: string[]|string; issue_critical?: boolean; issuewild: string[]|string; issuewild_critical?: boolean; issuevmc: string[]|string; issuevmc_critical?: boolean; issuemail: string[]|string; issuemail_critical?: boolean; ttl?: Duration }): DomainModifier;
+declare function CAA_BUILDER(opts: { label?: string; iodef?: string; iodef_critical?: boolean; issue?: string[]|'none'; issue_critical?: boolean; issuewild?: string[]|'none'; issuewild_critical?: boolean; issuevmc?: string[]|'none'; issuevmc_critical?: boolean; issuemail?: string[]|'none'; issuemail_critical?: boolean; ttl?: Duration }): DomainModifier;
 
 /**
  * **WARNING:** Cloudflare is removing this feature and replacing it with a new
@@ -568,12 +564,9 @@ declare function CAA_BUILDER(opts: { label?: string; iodef: string; iodef_critic
  * generate "Dynamic Single Redirects" for a limited number of use cases. See
  * [`CLOUDFLAREAPI`](../../provider/cloudflareapi.md) for details.
  *
- * `CF_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page
- * Rules) to generate a HTTP 301 permanent redirect.
+ * `CF_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page Rules) to generate a HTTP 301 permanent redirect.
  *
- * If _any_ `CF_REDIRECT` or [`CF_TEMP_REDIRECT`](CF_TEMP_REDIRECT.md) functions are used then
- * `dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain.
- * Page Rule types other than "Forwarding URL" will be left alone.
+ * If _any_ `CF_REDIRECT` or [`CF_TEMP_REDIRECT`](CF_TEMP_REDIRECT.md) functions are used then `dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain. Page Rule types other than "Forwarding URL" will be left alone.
  *
  * WARNING: Cloudflare does not currently fully document the Page Rules API and
  * this interface is not extensively tested. Take precautions such as making
@@ -581,10 +574,7 @@ declare function CAA_BUILDER(opts: { label?: string; iodef: string; iodef_critic
  * `dnscontrol push`. This is especially true when mixing Page Rules that are
  * managed by DNSControl and those that aren't.
  *
- * HTTP 301 redirects are cached by browsers forever, usually ignoring any TTLs or
- * other cache invalidation techniques. It should be used with great care. We
- * suggest using a `CF_TEMP_REDIRECT` initially, then changing to a `CF_REDIRECT`
- * only after sufficient time has elapsed to prove this is what you really want.
+ * HTTP 301 redirects are cached by browsers forever, usually ignoring any TTLs or other cache invalidation techniques. It should be used with great care. We suggest using a `CF_TEMP_REDIRECT` initially, then changing to a `CF_REDIRECT` only after sufficient time has elapsed to prove this is what you really want.
  *
  * This example redirects the bare (aka apex, or naked) domain to www:
  *
@@ -599,11 +589,9 @@ declare function CAA_BUILDER(opts: { label?: string; iodef: string; iodef_critic
 declare function CF_REDIRECT(source: string, destination: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `CF_SINGLE_REDIRECT` is a [Cloudflare](../../provider/cloudflareapi.md)-specific feature for creating HTTP redirects.  301, 302, 303, 307, 308 are supported.
- * Typically one uses 302 (temporary) or 301 (permanent).
+ * `CF_SINGLE_REDIRECT` is a [Cloudflare](../../provider/cloudflareapi.md)-specific feature for creating HTTP redirects.  301, 302, 303, 307, 308 are supported. Typically one uses 302 (temporary) or 301 (permanent).
  *
- * This feature manages dynamic "Single Redirects". (Single Redirects can be
- * static or dynamic but DNSControl only maintains dynamic redirects).
+ * This feature manages dynamic "Single Redirects". (Single Redirects can be static or dynamic but DNSControl only maintains dynamic redirects).
  *
  * DNSControl will delete any "single redirects" it doesn't recognize (i.e. ones created via the web UI) so please be careful.
  *
@@ -624,19 +612,11 @@ declare function CF_REDIRECT(source: string, destination: string, ...modifiers: 
  * * when: What Cloudflare sometimes calls the "rule expression".
  * * then: The replacement expression.
  *
- * DNSControl does not currently choose the order of the rules.  New rules are
- * added to the end of the list. Use Cloudflare's dashboard to re-order the rule,
- * DNSControl should not change them.  (In the future we hope to add a feature
- * where the order the rules appear in dnsconfig.js is maintained in the
- * dashboard.)
+ * DNSControl does not currently choose the order of the rules.  New rules are added to the end of the list. Use Cloudflare's dashboard to re-order the rule, DNSControl should not change them.  (In the future we hope to add a feature where the order the rules appear in dnsconfig.js is maintained in the dashboard.)
  *
  * ## `CF_REDIRECT` and `CF_TEMP_REDIRECT`
  *
- * `CF_REDIRECT` and `CF_TEMP_REDIRECT` used to manage Cloudflare Page Rules.
- * However that feature is going away.  To help with the migration, DNSControl now
- * translates those commands into CF_SINGLE_REDIRECT equivalents.  The conversion
- * process is a transpiler that only understands certain formats. Please submit
- * a Github issue if you find something it can't handle.
+ * `CF_REDIRECT` and `CF_TEMP_REDIRECT` used to manage Cloudflare Page Rules. However that feature is going away.  To help with the migration, DNSControl now translates those commands into CF_SINGLE_REDIRECT equivalents.  The conversion process is a transpiler that only understands certain formats. Please submit a Github issue if you find something it can't handle.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/cloudflare-dns/cf_single_redirect
  */
@@ -648,12 +628,9 @@ declare function CF_SINGLE_REDIRECT(name: string, code: number, when: string, th
  * generate "Dynamic Single Redirects" for a limited number of use cases. See
  * [`CLOUDFLAREAPI`](../../provider/cloudflareapi.md) for details.
  *
- * `CF_TEMP_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page
- * Rules) to generate a HTTP 302 temporary redirect.
+ * `CF_TEMP_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page Rules) to generate a HTTP 302 temporary redirect.
  *
- * If _any_ [`CF_REDIRECT`](CF_REDIRECT.md) or `CF_TEMP_REDIRECT functions are used then
- * `dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain.
- * Page Rule types other than "Forwarding URL" will be left alone.
+ * If _any_ [`CF_REDIRECT`](CF_REDIRECT.md) or `CF_TEMP_REDIRECT functions are used then `dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain. Page Rule types other than "Forwarding URL" will be left alone.
  *
  * WARNING: Cloudflare does not currently fully document the Page Rules API and
  * this interface is not extensively tested. Take precautions such as making
@@ -675,13 +652,9 @@ declare function CF_SINGLE_REDIRECT(name: string, code: number, when: string, th
 declare function CF_TEMP_REDIRECT(source: string, destination: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `CF_WORKER_ROUTE` uses the [Cloudflare Workers](https://developers.cloudflare.com/workers/)
- * API to manage [worker routes](https://developers.cloudflare.com/workers/platform/routes)
- * for a given domain.
+ * `CF_WORKER_ROUTE` uses the [Cloudflare Workers](https://developers.cloudflare.com/workers/) API to manage [worker routes](https://developers.cloudflare.com/workers/platform/routes) for a given domain.
  *
- * If _any_ `CF_WORKER_ROUTE` function is used then `dnscontrol` will manage _all_
- * Worker Routes for the domain. To be clear: this means it will delete existing routes that
- * were created outside of DNSControl.
+ * If _any_ `CF_WORKER_ROUTE` function is used then `dnscontrol` will manage _all_ Worker Routes for the domain. To be clear: this means it will delete existing routes that were created outside of DNSControl.
  *
  * WARNING: This interface is not extensively tested. Take precautions such as making
  * backups and manually verifying `dnscontrol preview` output before running
@@ -726,16 +699,13 @@ declare function CLOUDNS_WR(name: string, target: string, ...modifiers: RecordMo
 declare function CNAME(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `D` adds a new Domain for DNSControl to manage. The first two arguments are required: the domain name (fully qualified `example.com` without a trailing dot), and the
- * name of the registrar (as previously declared with [NewRegistrar](NewRegistrar.md)). Any number of additional arguments may be included to add DNS Providers with [DNSProvider](NewDnsProvider.md),
- * add records with [A](../domain-modifiers/A.md), [CNAME](../domain-modifiers/CNAME.md), and so forth, or add metadata.
+ * `D` adds a new Domain for DNSControl to manage. The first two arguments are required: the domain name (fully qualified `example.com` without a trailing dot), and the name of the registrar (as previously declared with [NewRegistrar](NewRegistrar.md)). Any number of additional arguments may be included to add DNS Providers with [DNSProvider](NewDnsProvider.md), add records with [A](../domain-modifiers/A.md), [CNAME](../domain-modifiers/CNAME.md), and so forth, or add metadata.
  *
  * Modifier arguments are processed according to type as follows:
  *
  * - A function argument will be called with the domain object as it's only argument. Most of the [built-in modifier functions](https://docs.dnscontrol.org/language-reference/domain-modifiers) return such functions.
  * - An object argument will be merged into the domain's metadata collection.
- * - An array argument will have all of it's members evaluated recursively. This allows you to combine multiple common records or modifiers into a variable that can
- *    be used like a macro in multiple domains.
+ * - An array argument will have all of it's members evaluated recursively. This allows you to combine multiple common records or modifiers into a variable that can be used like a macro in multiple domains.
  *
  * ```javascript
  * // simple domain
@@ -768,14 +738,9 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * # `no_ns`
  *
- * To prevent DNSControl from accidentally deleting your nameservers (at the
- * parent domain), registrar updates are disabled if the list of nameservers for a
- * zone (as computed from `dnsconfig.js`) is empty.
+ * To prevent DNSControl from accidentally deleting your nameservers (at the parent domain), registrar updates are disabled if the list of nameservers for a zone (as computed from `dnsconfig.js`) is empty.
  *
- * This can happen when a provider doesn't give any control over the apex NS
- * records, there are no default nameservers, there are no `NAMESERVER()`
- * statements, and the provider returns an empty list of nameservers (such as
- * Gandi and Vercel).
+ * This can happen when a provider doesn't give any control over the apex NS records, there are no default nameservers, there are no `NAMESERVER()` statements, and the provider returns an empty list of nameservers (such as Gandi and Vercel).
  *
  * In this situation, you will see an error message such as:
  *
@@ -797,13 +762,9 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * # Split Horizon DNS
  *
- * DNSControl supports Split Horizon DNS. Simply
- * define the domain two or more times, each with
- * their own unique parameters.
+ * DNSControl supports Split Horizon DNS. Simply define the domain two or more times, each with their own unique parameters.
  *
- * To differentiate the different domains, specify the domains as
- * `domain.tld!tag`, such as `example.com!inside` and
- * `example.com!outside`.
+ * To differentiate the different domains, specify the domains as `domain.tld!tag`, such as `example.com!inside` and `example.com!outside`.
  *
  * ```javascript
  * var REG_NONE = NewRegistrar("none");
@@ -823,17 +784,9 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  * );
  * ```
  *
- * A domain name without a `!` is assigned a tag that is the empty
- * string. For example, `example.com` and `example.com!` are equivalent.
- * However, we strongly recommend against using the empty tag, as it
- * risks creating confusion.  In other words, if you have `domain.tld`
- * and `domain.tld!external` you now require humans to remember that
- * `domain.tld` is the external one.  I mean... the internal one.  You
- * may have noticed this mistake, but will your coworkers?  Will you in
- * six months? You get the idea.
+ * A domain name without a `!` is assigned a tag that is the empty string. For example, `example.com` and `example.com!` are equivalent. However, we strongly recommend against using the empty tag, as it risks creating confusion.  In other words, if you have `domain.tld` and `domain.tld!external` you now require humans to remember that `domain.tld` is the external one.  I mean... the internal one.  You may have noticed this mistake, but will your coworkers?  Will you in six months? You get the idea.
  *
- * DNSControl command line flag `--domains` matches the full name (with the "!").  If you
- * define domains `example.com!john`, `example.com!paul`, and `example.com!george` then:
+ * DNSControl command line flag `--domains` matches the full name (with the "!").  If you define domains `example.com!john`, `example.com!paul`, and `example.com!george` then:
  *
  * * `--domains=example.com` will not match any of the three.
  * * `--domains='example.com!george'` will only match george.
@@ -900,12 +853,9 @@ declare function DEFAULTS(...modifiers: DomainModifier[]): void;
 declare function DHCID(name: string, digest: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `DISABLE_IGNORE_SAFETY_CHECK` disables the safety check. Normally it is an
- * error to insert records that match an `IGNORE` pattern. This disables that
- * safety check for the entire domain.
+ * `DISABLE_IGNORE_SAFETY_CHECK` disables the safety check. Normally it is an error to insert records that match an `IGNORE` pattern. This disables that safety check for the entire domain.
  *
- * It replaces the per-record `IGNORE_NAME_DISABLE_SAFETY_CHECK` which is
- * deprecated as of DNSControl v4.0.0.0.
+ * It replaces the per-record `IGNORE_NAME_DISABLE_SAFETY_CHECK` which is deprecated as of DNSControl v4.0.0.0.
  *
  * See [`IGNORE`](../domain-modifiers/IGNORE.md) for more information.
  *
@@ -1138,16 +1088,9 @@ declare function DNAME(name: string, target: string, ...modifiers: RecordModifie
 declare function DNSKEY(name: string, flags: number, protocol: number, algorithm: number, publicKey: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `DOMAIN_ELSEWHERE()` is a helper macro that lets you easily indicate that
- * a domain's zones are managed elsewhere. That is, it permits you easily delegate
- * a domain to a hard-coded list of DNS servers.
+ * `DOMAIN_ELSEWHERE()` is a helper macro that lets you easily indicate that a domain's zones are managed elsewhere. That is, it permits you easily delegate a domain to a hard-coded list of DNS servers.
  *
- * `DOMAIN_ELSEWHERE` is useful when you control a domain's registrar but not the
- * DNS servers. For example, suppose you own a domain but the DNS servers are run
- * by someone else, perhaps a SaaS product you've subscribed to or a DNS server
- * that is run by your brother-in-law who doesn't trust you with the API keys that
- * would let you maintain the domain using DNSControl. You need an easy way to
- * point (delegate) the domain at a specific list of DNS servers.
+ * `DOMAIN_ELSEWHERE` is useful when you control a domain's registrar but not the DNS servers. For example, suppose you own a domain but the DNS servers are run by someone else, perhaps a SaaS product you've subscribed to or a DNS server that is run by your brother-in-law who doesn't trust you with the API keys that would let you maintain the domain using DNSControl. You need an easy way to point (delegate) the domain at a specific list of DNS servers.
  *
  * For example these two statements are equivalent:
  *
@@ -1171,19 +1114,11 @@ declare function DNSKEY(name: string, flags: number, protocol: number, algorithm
 declare function DOMAIN_ELSEWHERE(name: string, registrar: string, nameserver_names: string[]): void;
 
 /**
- * `DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of
- * a hardcoded list of nameservers, a DnsProvider() is queried.
+ * `DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of a hardcoded list of nameservers, a DnsProvider() is queried.
  *
- * `DOMAIN_ELSEWHERE_AUTO` is useful when you control a domain's registrar but the
- * DNS zones are managed by another system. Luckily you have enough access to that
- * other system that you can query it to determine the zone's nameservers.
+ * `DOMAIN_ELSEWHERE_AUTO` is useful when you control a domain's registrar but the DNS zones are managed by another system. Luckily you have enough access to that other system that you can query it to determine the zone's nameservers.
  *
- * For example, suppose you own a domain but the DNS servers for it are in Azure.
- * Further suppose that something in Azure maintains the zones (automatic or
- * human). Azure picks the nameservers for the domains automatically, and that
- * list may change occasionally.  `DOMAIN_ELSEWHERE_AUTO` allows you to easily
- * query Azure to determine the domain's delegations so that you do not need to
- * hard-code them in your dnsconfig.js file.
+ * For example, suppose you own a domain but the DNS servers for it are in Azure. Further suppose that something in Azure maintains the zones (automatic or human). Azure picks the nameservers for the domains automatically, and that list may change occasionally.  `DOMAIN_ELSEWHERE_AUTO` allows you to easily query Azure to determine the domain's delegations so that you do not need to hard-code them in your dnsconfig.js file.
  *
  * For example these two statements are equivalent:
  *
@@ -1226,30 +1161,15 @@ declare function DOMAIN_ELSEWHERE_AUTO(name: string, domain: string, registrar: 
 declare function DS(name: string, keytag: number, algorithm: number, digesttype: number, digest: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `D_EXTEND` adds records (and metadata) to a domain previously defined
- * by [`D()`](D.md). It can also be used to add subdomain records (and metadata)
- * to a previously defined domain.
+ * `D_EXTEND` adds records (and metadata) to a domain previously defined by [`D()`](D.md). It can also be used to add subdomain records (and metadata) to a previously defined domain.
  *
- * The first argument is a domain name. If it exactly matches a
- * previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md),
- * simply adding records as if they had been specified in the original
- * [`D()`](D.md).
+ * The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md), simply adding records as if they had been specified in the original [`D()`](D.md).
  *
- * If the domain name does not match an existing domain, but could be a
- * (non-delegated) subdomain of an existing domain, the new records (and
- * metadata) are added with the subdomain part appended to all record
- * names (labels), and targets (as appropriate). See the examples below.
+ * If the domain name does not match an existing domain, but could be a (non-delegated) subdomain of an existing domain, the new records (and metadata) are added with the subdomain part appended to all record names (labels), and targets (as appropriate). See the examples below.
  *
- * Matching the domain name to previously-defined domains is done using a
- * `longest match` algorithm.  If `domain.tld` and `sub.domain.tld` are
- * defined as separate domains via separate [`D()`](D.md) statements, then
- * `D_EXTEND("sub.sub.domain.tld", ...)` would match `sub.domain.tld`,
- * not `domain.tld`.
+ * Matching the domain name to previously-defined domains is done using a `longest match` algorithm. If `domain.tld` and `sub.domain.tld` are defined as separate domains via separate [`D()`](D.md) statements, then `D_EXTEND("sub.sub.domain.tld", ...)` would match `sub.domain.tld`, not `domain.tld`.
  *
- * Some operators only act on an apex domain (e.g.
- * [`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md),
- * [`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them
- * in a `D_EXTEND` subdomain may not be what you expect.
+ * Some operators only act on an apex domain (e.g. [`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md), [`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them in a `D_EXTEND` subdomain may not be what you expect.
  *
  * ```javascript
  * D("domain.tld", REG_MY_PROVIDER, DnsProvider(DNS),
@@ -1296,14 +1216,7 @@ declare function DS(name: string, keytag: number, algorithm: number, digesttype:
  * #12: CREATE CNAME i.sub.domain.tld j.sub.domain.tld.
  * ```
  *
- * ProTips: `D_EXTEND()` permits you to create very complex and
- * sophisticated configurations, but you shouldn't. Be nice to the next
- * person that edits the file, who may not be as expert as yourself.
- * Enhance readability by putting any `D_EXTEND()` statements immediately
- * after the original [`D()`](D.md), like in above example.  Avoid the temptation
- * to obscure the addition of records to existing domains with randomly
- * placed `D_EXTEND()` statements. Don't build up a domain using loops of
- * `D_EXTEND()` statements. You'll be glad you didn't.
+ * ProTips: `D_EXTEND()` permits you to create very complex and sophisticated configurations, but you shouldn't. Be nice to the next person that edits the file, who may not be as expert as yourself. Enhance readability by putting any `D_EXTEND()` statements immediately after the original [`D()`](D.md), like in above example. Avoid the temptation to obscure the addition of records to existing domains with randomly placed `D_EXTEND()` statements. Don't build up a domain using loops of `D_EXTEND()` statements. You'll be glad you didn't.
  *
  * @see https://docs.dnscontrol.org/language-reference/top-level-functions/d_extend
  */
@@ -1331,8 +1244,7 @@ declare function D_EXTEND(name: string, ...modifiers: DomainModifier[]): void;
 declare function DefaultTTL(ttl: Duration): DomainModifier;
 
 /**
- * DnsProvider indicates that the specified provider should be used to manage
- * records for this domain. The name must match the name used with [NewDnsProvider](../top-level-functions/NewDnsProvider.md).
+ * DnsProvider indicates that the specified provider should be used to manage records for this domain. The name must match the name used with [NewDnsProvider](../top-level-functions/NewDnsProvider.md).
  *
  * The nsCount parameter determines how the nameservers will be managed from this provider.
  *
@@ -1340,15 +1252,11 @@ declare function DefaultTTL(ttl: Duration): DomainModifier;
  *
  * Using `0` for nsCount means "do not fetch nameservers from this domain, or give them to the registrar".
  *
- * Using a different number, ie: `DnsProvider("name",2)`, means "fetch all nameservers from this provider,
- * but limit it to this many.
+ * Using a different number, ie: `DnsProvider("name",2)`, means "fetch all nameservers from this provider, but limit it to this many.
  *
  * See [this page](../../advanced-features/nameservers.md) for a detailed explanation of how DNSControl handles nameservers and NS records.
  *
- * If a domain (`D()`) does not include any `DnsProvider()` functions,
- * the DNS records will not be modified. In fact, if you want to control
- * the Registrar for a domain but not the DNS records themselves, simply
- * do not include a `DnsProvider()` function for that `D()`.
+ * If a domain (`D()`) does not include any `DnsProvider()` functions, the DNS records will not be modified. In fact, if you want to control the Registrar for a domain but not the DNS records themselves, simply do not include a `DnsProvider()` function for that `D()`.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/dnsprovider
  */
@@ -1470,27 +1378,15 @@ declare const HEDNS_DYNAMIC_ON: RecordModifier;
 declare function HTTPS(name: string, priority: number, target: string, params: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `IGNORE()` makes it possible for DNSControl to share management of a domain
- * with an external system.  The parameters of `IGNORE()` indicate which records
- * are managed elsewhere and should not be modified or deleted.
+ * `IGNORE()` makes it possible for DNSControl to share management of a domain with an external system.  The parameters of `IGNORE()` indicate which records are managed elsewhere and should not be modified or deleted.
  *
- * Use case: Suppose a domain is managed by both DNSControl and a third-party
- * system. This creates a problem because DNSControl will try to delete records
- * inserted by the other system.  The other system may get confused and re-insert
- * those records.  The two systems will get into an endless update cycle where
- * each will revert changes made by the other in an endless loop.
+ * Use case: Suppose a domain is managed by both DNSControl and a third-party system. This creates a problem because DNSControl will try to delete records inserted by the other system.  The other system may get confused and re-insert those records.  The two systems will get into an endless update cycle where each will revert changes made by the other in an endless loop.
  *
- * To solve this problem simply include `IGNORE()` statements that identify which
- * records are managed elsewhere.  DNSControl will not modify or delete those
- * records.
+ * To solve this problem simply include `IGNORE()` statements that identify which records are managed elsewhere.  DNSControl will not modify or delete those records.
  *
- * Technically `IGNORE_NAME` is a promise that DNSControl will not modify or
- * delete existing records that match particular patterns. It is like
- * [`NO_PURGE`](../domain-modifiers/NO_PURGE.md) that matches only specific records.
+ * Technically `IGNORE_NAME` is a promise that DNSControl will not modify or delete existing records that match particular patterns. It is like [`NO_PURGE`](../domain-modifiers/NO_PURGE.md) that matches only specific records.
  *
- * Including a record that is ignored is considered an error and may have
- * undefined behavior. This safety check can be disabled using the
- * [`DISABLE_IGNORE_SAFETY_CHECK`](../domain-modifiers/DISABLE_IGNORE_SAFETY_CHECK.md) feature.
+ * Including a record that is ignored is considered an error and may have undefined behavior. This safety check can be disabled using the [`DISABLE_IGNORE_SAFETY_CHECK`](../domain-modifiers/DISABLE_IGNORE_SAFETY_CHECK.md) feature.
  *
  * ## Syntax
  *
@@ -1512,9 +1408,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ## Globs
  *
- * The `labelSpec` and `targetSpec` parameters supports glob patterns in the style
- * of the [gobwas/glob](https://github.com/gobwas/glob) library.  All of the
- * following patterns will work:
+ * The `labelSpec` and `targetSpec` parameters supports glob patterns in the style of the [gobwas/glob](https://github.com/gobwas/glob) library.  All of the following patterns will work:
  *
  * * `IGNORE("*.foo")` will ignore all records in the style of `bar.foo`, but will not ignore records using a double subdomain, such as `foo.bar.foo`.
  * * `IGNORE("**.foo")` will ignore all subdomains of `foo`, including double subdomains.
@@ -1576,9 +1470,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * Here are some examples that illustrate how matching works.
  *
- * All the examples assume the following DNS records are the "existing" records
- * that a third-party is maintaining. (Don't be confused by the fact that we're
- * using DNSControl notation for the records. Pretend some other system inserted them.)
+ * All the examples assume the following DNS records are the "existing" records that a third-party is maintaining. (Don't be confused by the fact that we're using DNSControl notation for the records. Pretend some other system inserted them.)
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
@@ -1729,8 +1621,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ## Conflict handling
  *
- * It is considered as an error for a `dnsconfig.js` to both ignore and insert the
- * same record in a domain. This is done as a safety mechanism.
+ * It is considered as an error for a `dnsconfig.js` to both ignore and insert the same record in a domain. This is done as a safety mechanism.
  *
  * This will generate an error:
  *
@@ -1742,8 +1633,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *     ...
  * ```
  *
- * To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement
- * to the `D()`.
+ * To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement to the `D()`.
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
@@ -1757,9 +1647,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * FYI: Previously DNSControl permitted disabling this check on
  * a per-record basis using `IGNORE_NAME_DISABLE_SAFETY_CHECK`:
  *
- * The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2
- * world and its use will result in a validation error. Use the above example
- * instead.
+ * The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2 world and its use will result in a validation error. Use the above example instead.
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
@@ -1783,26 +1671,19 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
 declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: string): DomainModifier;
 
 /**
- * `IGNORE_EXTERNAL_DNS` makes DNSControl automatically detect and ignore DNS records
- * managed by Kubernetes external-dns.
+ * `IGNORE_EXTERNAL_DNS` makes DNSControl automatically detect and ignore DNS records managed by Kubernetes external-dns.
  *
  * ## Background
  *
- * [External-dns](https://github.com/kubernetes-sigs/external-dns) is a popular
- * Kubernetes controller that synchronizes exposed Kubernetes Services and Ingresses
- * with DNS providers. It creates DNS records automatically based on annotations on
- * your Kubernetes resources.
+ * [External-dns](https://github.com/kubernetes-sigs/external-dns) is a popular Kubernetes controller that synchronizes exposed Kubernetes Services and Ingresses with DNS providers. It creates DNS records automatically based on annotations on your Kubernetes resources.
  *
- * External-dns uses TXT records to track ownership of the DNS records it manages.
- * These TXT records contain metadata in this format:
+ * External-dns uses TXT records to track ownership of the DNS records it manages. These TXT records contain metadata in this format:
  *
  * ```
  * "heritage=external-dns,external-dns/owner=<owner-id>,external-dns/resource=<resource>"
  * ```
  *
- * When you have both DNSControl and external-dns managing the same DNS zone, conflicts
- * can occur. DNSControl will try to delete records created by external-dns, and
- * external-dns will recreate them, leading to an endless update cycle.
+ * When you have both DNSControl and external-dns managing the same DNS zone, conflicts can occur. DNSControl will try to delete records created by external-dns, and external-dns will recreate them, leading to an endless update cycle.
  *
  * ## How it works
  *
@@ -1821,8 +1702,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  * - `srv-<name>` for SRV records
  * - `txt-<name>` for TXT records (when external-dns manages TXT records)
  *
- * For example, if external-dns creates an A record at `myapp.example.com`, it will
- * also create a TXT record at `a-myapp.example.com` containing the heritage information.
+ * For example, if external-dns creates an A record at `myapp.example.com`, it will also create a TXT record at `a-myapp.example.com` containing the heritage information.
  *
  * ## Usage
  *
@@ -1841,9 +1721,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * ## Custom Prefix Support
  *
- * If your external-dns is configured with a custom `--txt-prefix` (as documented in the
- * [external-dns TXT registry docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#prefixes-and-suffixes)),
- * pass that prefix to `IGNORE_EXTERNAL_DNS()`:
+ * If your external-dns is configured with a custom `--txt-prefix` (as documented in the [external-dns TXT registry docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#prefixes-and-suffixes)), pass that prefix to `IGNORE_EXTERNAL_DNS()`:
  *
  * ```javascript
  * // If external-dns is configured with --txt-prefix="extdns-"
@@ -1886,27 +1764,21 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * ### One per domain
  *
- * Only one `IGNORE_EXTERNAL_DNS()` should be used per domain. If you call it multiple
- * times, the last prefix wins. If you have multiple external-dns instances with
- * different prefixes managing the same zone, use `IGNORE()` patterns for additional
- * prefixes.
+ * Only one `IGNORE_EXTERNAL_DNS()` should be used per domain. If you call it multiple times, the last prefix wins. If you have multiple external-dns instances with different prefixes managing the same zone, use `IGNORE()` patterns for additional prefixes.
  *
  * ### TXT Registry Format
  *
- * This feature relies on external-dns's [TXT registry](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md),
- * which is the default registry type. The TXT record content format is well-documented:
+ * This feature relies on external-dns's [TXT registry](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md), which is the default registry type. The TXT record content format is well-documented:
  *
  * ```
  * "heritage=external-dns,external-dns/owner=<owner-id>,external-dns/resource=<resource>"
  * ```
  *
- * This feature detects the `heritage=external-dns` marker in TXT records to identify
- * external-dns managed records.
+ * This feature detects the `heritage=external-dns` marker in TXT records to identify external-dns managed records.
  *
  * ### Custom Prefix Support
  *
- * This feature supports custom prefixes configured via external-dns's `--txt-prefix` flag.
- * If you're using a custom prefix, pass it to `IGNORE_EXTERNAL_DNS()`:
+ * This feature supports custom prefixes configured via external-dns's `--txt-prefix` flag. If you're using a custom prefix, pass it to `IGNORE_EXTERNAL_DNS()`:
  *
  * ```javascript
  * // If external-dns uses --txt-prefix="extdns-"
@@ -1926,8 +1798,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * #### Period Format for Apex Domains
  *
- * If you need external-dns to manage apex (root) domain records, the external-dns
- * documentation recommends using a prefix with `%{record_type}` followed by a period:
+ * If you need external-dns to manage apex (root) domain records, the external-dns documentation recommends using a prefix with `%{record_type}` followed by a period:
  *
  * ```yaml
  * # external-dns deployment args
@@ -1935,8 +1806,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *   - --txt-prefix=extdns-%{record_type}.
  * ```
  *
- * This creates TXT records like `extdns-a.www` for the `www` A record, and `extdns-a`
- * for the apex A record. DNSControl's `IGNORE_EXTERNAL_DNS` supports both formats:
+ * This creates TXT records like `extdns-a.www` for the `www` A record, and `extdns-a` for the apex A record. DNSControl's `IGNORE_EXTERNAL_DNS` supports both formats:
  *
  * - Hyphen format: `extdns-a-www` (from `--txt-prefix=extdns-` with default `%{record_type}-`)
  * - Period format: `extdns-a.www` (from `--txt-prefix=extdns-%{record_type}.`)
@@ -1957,10 +1827,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * ### Legacy TXT Format
  *
- * External-dns versions prior to v0.16 created TXT records without the record type
- * prefix (e.g., `myapp.example.com` instead of `a-myapp.example.com`). This legacy
- * format is supported but may match more records than intended since the record type
- * cannot be determined.
+ * External-dns versions prior to v0.16 created TXT records without the record type prefix (e.g., `myapp.example.com` instead of `a-myapp.example.com`). This legacy format is supported but may match more records than intended since the record type cannot be determined.
  *
  * ## See also
  *
@@ -2068,10 +1935,7 @@ declare function IP(ip: string): number;
  * A use case for LOC is suggested in the RFC:
  *
  * > Some uses for the LOC RR have already been suggested, including the
- *    USENET backbone flow maps, a "visual traceroute" application showing
- *    the geographical path of an IP packet, and network management
- *    applications that could use LOC RRs to generate a map of hosts and
- *    routers being managed.
+ *    USENET backbone flow maps, a "visual traceroute" application showing the geographical path of an IP packet, and network management applications that could use LOC RRs to generate a map of hosts and routers being managed.
  *
  * There is the UK based [https://find.me.uk](https://find.me.uk/) whereby you can do:
  *
@@ -2082,15 +1946,9 @@ declare function IP(ip: string): number;
  * There are some behaviours that you should be aware of, however:
  *
  * > If omitted, minutes and seconds default to zero, size defaults to 1m,
- *    horizontal precision defaults to 10000m, and vertical precision
- *    defaults to 10m.  These defaults are chosen to represent typical
- *    ZIP/postal code area sizes, since it is often easy to find
- *    approximate geographical location by ZIP/postal code.
+ *    horizontal precision defaults to 10000m, and vertical precision defaults to 10m.  These defaults are chosen to represent typical ZIP/postal code area sizes, since it is often easy to find approximate geographical location by ZIP/postal code.
  *
- * Alas, the world does not revolve around US ZIP codes, but here we are. Internally,
- * the LOC record type will supply defaults where values were absent on DNS import.
- * One must supply the `LOC()` js helper all parameters. If that seems like too
- * much work, see also helper functions:
+ * Alas, the world does not revolve around US ZIP codes, but here we are. Internally, the LOC record type will supply defaults where values were absent on DNS import. One must supply the `LOC()` js helper all parameters. If that seems like too much work, see also helper functions:
  *
  *  * [`LOC_BUILDER_DD({})`](LOC_BUILDER_DD.md) - build a `LOC` by supplying only **d**ecimal **d**egrees.
  *  * [`LOC_BUILDER_DMS_STR({})`](LOC_BUILDER_DMS_STR.md) - accepts DMS 33°51′31″S 151°12′51″E
@@ -2103,9 +1961,7 @@ declare function IP(ip: string): number;
  *
  * `degrees,minutes,seconds,[NnSs],deg,min,sec,[EeWw],altitude,size,horizontal_precision,vertical_precision`
  *
- * where:
- *  altitude: [-100000.00 .. 42849672.95] BY .01 (altitude in meters)
- *  size, horizontal_precision, vertical_precision: [0 .. 90000000.00] (size/precision in meters)
+ * where: altitude: [-100000.00 .. 42849672.95] BY .01 (altitude in meters) size, horizontal_precision, vertical_precision: [0 .. 90000000.00] (size/precision in meters)
  *
  * values outside of the above ranges are gated to within the ranges.
  *
@@ -2583,15 +2439,11 @@ declare function MIKROTIK_NXDOMAIN(name: string, ...modifiers: RecordModifier[])
 declare function MX(name: string, priority: number, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `NAMESERVER()` instructs DNSControl to inform the domain's registrar where to find this zone.
- * For some registrars this will also add NS records to the zone itself.
+ * `NAMESERVER()` instructs DNSControl to inform the domain's registrar where to find this zone. For some registrars this will also add NS records to the zone itself.
  *
- * This takes exactly one argument: the name of the nameserver. It must end with
- * a "." if it is a FQDN, just like all targets.
+ * This takes exactly one argument: the name of the nameserver. It must end with a "." if it is a FQDN, just like all targets.
  *
- * This is different than the [`NS()`](NS.md) function, which inserts NS records
- * in the current zone and accepts a label. [`NS()`](NS.md) is for downward
- * delegations. `NAMESERVER()` is for informing upstream delegations.
+ * This is different than the [`NS()`](NS.md) function, which inserts NS records in the current zone and accepts a label. [`NS()`](NS.md) is for downward delegations. `NAMESERVER()` is for informing upstream delegations.
  *
  * For more information, refer to [this page](../../advanced-features/nameservers.md).
  *
@@ -2613,43 +2465,25 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  *
  * # The difference between NS() and NAMESERVER()
  *
- * Nameservers are one of the least
- * understood parts of DNS, so a little extra explanation is required.
+ * Nameservers are one of the least understood parts of DNS, so a little extra explanation is required.
  *
- * * [`NS()`](NS.md) adds an NS record to a zone, just like [`A()`](A.md) adds an A
- *   record to the zone. This is generally used to delegate a subzone.
+ * * [`NS()`](NS.md) adds an NS record to a zone, just like [`A()`](A.md) adds an A record to the zone. This is generally used to delegate a subzone.
  *
  * * The `NAMESERVER()` directive speaks to the Registrar about how the parent should delegate the zone.
  *
- * Since the parent zone could be completely unrelated to the current
- * zone, changes made by `NAMESERVER()` have to be done by an API call to
- * the registrar, who then figures out what to do. For example, if I
- * use `NAMESERVER()` in the zone `stackoverflow.com`, DNSControl talks to
- * the registrar who does the hard work of talking to the people that
- * control `.com`.  If the domain was `gmeet.io`, the registrar does
- * the right thing to talk to the people that control `.io`.
+ * Since the parent zone could be completely unrelated to the current zone, changes made by `NAMESERVER()` have to be done by an API call to the registrar, who then figures out what to do. For example, if I use `NAMESERVER()` in the zone `stackoverflow.com`, DNSControl talks to the registrar who does the hard work of talking to the people that control `.com`. If the domain was `gmeet.io`, the registrar does the right thing to talk to the people that control `.io`.
  *
- * (A better name might have been `PARENTNAMESERVER()` but we didn't
- * think of that at the time.)
+ * (A better name might have been `PARENTNAMESERVER()` but we didn't think of that at the time.)
  *
- * Each registrar handles delegations differently.  Most use
- * the `NAMESERVER()` targets to update the delegation, adding
- * `NS` records to the parent zone as required.
- * Some providers restrict the names to hosts they control.
- * Others may require you to add the `NS` records to the parent domain
- * manually.
+ * Each registrar handles delegations differently. Most use the `NAMESERVER()` targets to update the delegation, adding `NS` records to the parent zone as required. Some providers restrict the names to hosts they control. Others may require you to add the `NS` records to the parent domain manually.
  *
  * # How to prevent changing the parent NS records?
  *
- * If dnsconfig.js has zero `NAMESERVER()` commands for a domain, it will
- * use the API to remove all non-default nameservers.
+ * If dnsconfig.js has zero `NAMESERVER()` commands for a domain, it will use the API to remove all non-default nameservers.
  *
- * If `dnsconfig.js` has 1 or more `NAMESERVER()` commands for a domain, it
- * will use the API to add those nameservers (unless, of course,
- * they already exist).
+ * If `dnsconfig.js` has 1 or more `NAMESERVER()` commands for a domain, it will use the API to add those nameservers (unless, of course, they already exist).
  *
- * So how do you tell DNSControl not to make any changes at all?  Use the
- * special Registrar called "NONE". It makes no changes.
+ * So how do you tell DNSControl not to make any changes at all? Use the special Registrar called "NONE". It makes no changes.
  *
  * It looks like this:
  *
@@ -2888,28 +2722,17 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
 declare function NAPTR(subdomain: string, order: number, preference: number, terminalflag: string, service: string, regexp: string, target: string): DomainModifier;
 
 /**
- * `NO_PURGE` indicates that existing records should not be deleted from a domain.
- * Records will be added and updated, but not removed.
+ * `NO_PURGE` indicates that existing records should not be deleted from a domain. Records will be added and updated, but not removed.
  *
- * Suppose a domain is managed by both DNSControl and a third-party system. This
- * creates a problem because DNSControl will try to delete records inserted by the
- * other system.
+ * Suppose a domain is managed by both DNSControl and a third-party system. This creates a problem because DNSControl will try to delete records inserted by the other system.
  *
- * By setting `NO_PURGE` on a domain, this tells DNSControl not to delete the
- * records found in the domain.
+ * By setting `NO_PURGE` on a domain, this tells DNSControl not to delete the records found in the domain.
  *
  * It is similar to [`IGNORE`](IGNORE.md) but more general.
  *
- * The original reason for `NO_PURGE` was that a legacy system was adopting
- * DNSControl. Previously the domain was managed via Microsoft DNS Server's GUI.
- * ActiveDirectory was in use, so various records were being inserted behind the
- * scenes.  It was decided to use DNSControl to simply insert a few records.  The
- * `NO_PURGE` setting instructed DNSControl not to delete the existing records.
+ * The original reason for `NO_PURGE` was that a legacy system was adopting DNSControl. Previously the domain was managed via Microsoft DNS Server's GUI. ActiveDirectory was in use, so various records were being inserted behind the scenes. It was decided to use DNSControl to simply insert a few records. The `NO_PURGE` setting instructed DNSControl not to delete the existing records.
  *
- * In this example DNSControl will insert "foo.example.com" into the zone, but
- * otherwise leave the zone alone.  Changes to "foo"'s IP address will update the
- * record. Removing the A("foo", ...) record from DNSControl will leave the record
- * in place.
+ * In this example DNSControl will insert "foo.example.com" into the zone, but otherwise leave the zone alone. Changes to "foo"'s IP address will update the record. Removing the A("foo", ...) record from DNSControl will leave the record in place.
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER), NO_PURGE,
@@ -2917,20 +2740,13 @@ declare function NAPTR(subdomain: string, order: number, preference: number, ter
  * );
  * ```
  *
- * The main caveat of `NO_PURGE` is that intentionally deleting records becomes
- * more difficult. Suppose a `NO_PURGE` zone has an record such as A("ken",
- * "1.2.3.4"). Removing the record from `dnsconfig.js` will not delete "ken" from
- * the domain. DNSControl has no way of knowing the record was deleted from the
- * file  The DNS record must be removed manually.  Users of `NO_PURGE` are prone
- * to finding themselves with an accumulation of orphaned DNS records. That's easy
- * to fix for a small zone but can be a big mess for large zones.
+ * The main caveat of `NO_PURGE` is that intentionally deleting records becomes more difficult. Suppose a `NO_PURGE` zone has an record such as A("ken", "1.2.3.4"). Removing the record from `dnsconfig.js` will not delete "ken" from the domain. DNSControl has no way of knowing the record was deleted from the file The DNS record must be removed manually. Users of `NO_PURGE` are prone to finding themselves with an accumulation of orphaned DNS records. That's easy to fix for a small zone but can be a big mess for large zones.
  *
  * ## Support
  *
  * Prior to DNSControl v4.0.0, not all providers supported `NO_PURGE`.
  *
- * With introduction of `diff2` algorithm (enabled by default in v4.0.0),
- * `NO_PURGE` works with all providers.
+ * With introduction of `diff2` algorithm (enabled by default in v4.0.0), `NO_PURGE` works with all providers.
  *
  * ## See also
  *
@@ -2968,25 +2784,10 @@ declare function NS(name: string, target: string, ...modifiers: RecordModifier[]
  * answers on port 53 to queries related to the zone).
  *
  * * `name` must match the name of an entry in `creds.json`.
- * * `type` specifies a valid DNS provider type identifier listed on the [provider page](../../provider/index.md).
- *   * Starting with [v3.16](../../release/v316.md), the type is optional. If it is absent, the `TYPE` field in `creds.json` is used instead. You can leave it out. (Thanks to JavaScript magic, you can leave it out even when there are more fields).
- *   * Starting with v4.0, specifying the type may be an error. Please add the `TYPE` field to `creds.json` and remove this parameter from `dnsconfig.js` to prepare.
+ * * `type` is deprecated. The provider type is read from the `TYPE` field in `creds.json`.
  * * `meta` is a way to send additional parameters to the provider.  It is optional and only certain providers use it.  See the [individual provider docs](../../provider/index.md) for details.
  *
  * This function will return an opaque string that should be assigned to a variable name for use in [D](D.md) directives.
- *
- * Prior to [v3.16](../../release/v316.md):
- *
- * ```javascript
- * var REG_MYNDC = NewRegistrar("mynamedotcom", "NAMEDOTCOM");
- * var DNS_MYAWS = NewDnsProvider("myaws", "ROUTE53");
- *
- * D("example.com", REG_MYNDC, DnsProvider(DNS_MYAWS),
- *   A("@","1.2.3.4"),
- * );
- * ```
- *
- * In [v3.16](../../release/v316.md) and later:
  *
  * ```javascript
  * var REG_MYNDC = NewRegistrar("mynamedotcom");
@@ -3007,25 +2808,10 @@ declare function NewDnsProvider(name: string, meta?: object): string;
  * nameservers for the domain).  DNSControl only manages the delegation.
  *
  * * `name` must match the name of an entry in `creds.json`.
- * * `type` specifies a valid DNS provider type identifier listed on the [provider page](../../provider/index.md).
- *   * Starting with [v3.16](../../release/v316.md), the type is optional. If it is absent, the `TYPE` field in `creds.json` is used instead. You can leave it out. (Thanks to JavaScript magic, you can leave it out even when there are more fields).
- *   * Starting with v4.0, specifying the type may be an error. Please add the `TYPE` field to `creds.json` and remove this parameter from `dnsconfig.js` to prepare.
+ * * `type` is deprecated. The provider type is read from the `TYPE` field in `creds.json`.
  * * `meta` is a way to send additional parameters to the provider.  It is optional and only certain providers use it.  See the [individual provider docs](../../provider/index.md) for details.
  *
  * This function will return an opaque string that should be assigned to a variable name for use in [D](D.md) directives.
- *
- * Prior to [v3.16](../../release/v316.md):
- *
- * ```javascript
- * var REG_MYNDC = NewRegistrar("mynamedotcom", "NAMEDOTCOM");
- * var DNS_MYAWS = NewDnsProvider("myaws", "ROUTE53");
- *
- * D("example.com", REG_MYNDC, DnsProvider(DNS_MYAWS),
- *   A("@","1.2.3.4"),
- * );
- * ```
- *
- * In [v3.16](../../release/v316.md) and later:
  *
  * ```javascript
  * var REG_MYNDC = NewRegistrar("mynamedotcom");
@@ -3041,15 +2827,11 @@ declare function NewDnsProvider(name: string, meta?: object): string;
 declare function NewRegistrar(name: string, type?: string, meta?: object): string;
 
 /**
- * `OPENPGPKEY` adds an [OpenPGP public key
- * record](https://datatracker.ietf.org/doc/html/rfc7929) to the domain.
+ * `OPENPGPKEY` adds an [OpenPGP public key record](https://datatracker.ietf.org/doc/html/rfc7929) to the domain.
  *
- * So far, no transformation is applied to the parameters. The data will be
- * passed to the DNS server as-is. DNSControl supports both hex-encoded and
- * base64-encoded input for the public key portion of the record.
+ * So far, no transformation is applied to the parameters. The data will be passed to the DNS server as-is. DNSControl supports both hex-encoded and base64-encoded input for the public key portion of the record.
  *
- * There are multiple ways to generate the appropriately-formatted record
- * values:
+ * There are multiple ways to generate the appropriately-formatted record values:
  *
  * 1.  By using `gpg --export-options=export-dane`:
  *
@@ -3123,9 +2905,7 @@ declare function NewRegistrar(name: string, type?: string, meta?: object): strin
  *     ```
  *     {% endcode %}
  *
- * 3.  By using the [`hash-slinger`
- *     package](https://github.com/letoams/hash-slinger/) (which is
- *     available in most Linux distro package repositories):
+ * 3.  By using the [`hash-slinger` package](https://github.com/letoams/hash-slinger/) (which is available in most Linux distro package repositories):
  *
  *     {% code title="Shell Transcript" %}
  *     ```shell-session
@@ -3194,53 +2974,25 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
 /**
  * `PTR` adds a [PTR Resource record](https://www.rfc-editor.org/rfc/rfc1035) to the domain.
  *
- * The name is normally a relative label for the domain, or a FQDN that ends with `.`.  If magic mode is enabled (see below) it can also be an IP address, which will be replaced by the proper string automatically, thus
- * saving the user from having to reverse the IP address manually.
+ * The name is normally a relative label for the domain, or a FQDN that ends with `.`.  If magic mode is enabled (see below) it can also be an IP address, which will be replaced by the proper string automatically, thus saving the user from having to reverse the IP address manually.
  *
  * Target should be a string representing the FQDN of a host.  Like all FQDNs in DNSControl, it must end with a `.`.
  *
  * # Magic Mode
  *
- * PTR records are complex and typos are common. Therefore DNSControl
- * enables features to save labor and
- * prevent typos.  This magic is only
- * enabled when the domain ends with `in-addr.arpa.` or `ipv6.arpa.`.
+ * PTR records are complex and typos are common. Therefore DNSControl enables features to save labor and prevent typos.  This magic is only enabled when the domain ends with `in-addr.arpa.` or `ipv6.arpa.`.
  *
- * *Automatic IP-to-reverse:* If the name is a valid IP address, DNSControl will replace it with
- * a string that is appropriate for the domain. That is, if the domain
- * ends with `in-addr.arpa` (no `.`) and name is a valid IPv4 address, the name
- * will be replaced with the correct string to make a reverse lookup for that address.
- * IPv6 is properly handled too.
+ * *Automatic IP-to-reverse:* If the name is a valid IP address, DNSControl will replace it with a string that is appropriate for the domain. That is, if the domain ends with `in-addr.arpa` (no `.`) and name is a valid IPv4 address, the name will be replaced with the correct string to make a reverse lookup for that address. IPv6 is properly handled too.
  *
- * *Extra Validation:* DNSControl considers it an error to include a name that
- * is inappropriate for the domain.  For example
- * `PTR("1.2.3.4", "f.co.")` is valid for the domain `D("3.2.1.in-addr.arpa",`
- *  but DNSControl will generate an error if the domain is `D("9.9.9.in-addr.arpa",`.
- * This is because `1.2.3.4` is contained in `1.2.3.0/24` but not `9.9.9.0/24`.
- * This validation works for IPv6, IPv4, and
- * RFC2317 "Classless in-addr.arpa delegation" domains.
+ * *Extra Validation:* DNSControl considers it an error to include a name that is inappropriate for the domain.  For example `PTR("1.2.3.4", "f.co.")` is valid for the domain `D("3.2.1.in-addr.arpa",` but DNSControl will generate an error if the domain is `D("9.9.9.in-addr.arpa",`. This is because `1.2.3.4` is contained in `1.2.3.0/24` but not `9.9.9.0/24`. This validation works for IPv6, IPv4, and RFC2317 "Classless in-addr.arpa delegation" domains.
  *
- * *Automatic truncation:* DNSControl will automatically truncate FQDNs
- * as needed.
- * If the name is a FQDN ending with `.`, DNSControl will verify that the
- * name is contained within the CIDR block implied by domain.  For example
- * if name is `4.3.2.1.in-addr.arpa.` (note the trailing `.`)
- * and the domain is `2.1.in-addr.arpa` (no trailing `.`)
- * then the name will be replaced with `4.3`.  Note that the output
- * of `REV("1.2.3.4")` is `4.3.2.1.in-addr.arpa.`, which means the following
- * are all equivalent:
+ * *Automatic truncation:* DNSControl will automatically truncate FQDNs as needed. If the name is a FQDN ending with `.`, DNSControl will verify that the name is contained within the CIDR block implied by domain.  For example if name is `4.3.2.1.in-addr.arpa.` (note the trailing `.`) and the domain is `2.1.in-addr.arpa` (no trailing `.`) then the name will be replaced with `4.3`.  Note that the output of `REV("1.2.3.4")` is `4.3.2.1.in-addr.arpa.`, which means the following are all equivalent:
  *
  * * `PTR(REV("1.2.3.4", ...`
  * * `PTR("4.3.2.1.in-addr.arpa.", ...`
  * * `PTR("4.3", ...`    // Assuming the domain is `2.1.in-addr.arpa`
  *
- * All magic is RFC2317-aware. We use the first format listed in the
- * RFC for both [`REV()`](../top-level-functions/REV.md) and `PTR()`. The format is
- * `FIRST/MASK.C.B.A.in-addr.arpa` where `FIRST` is the first IP address
- * of the zone, `MASK` is the netmask of the zone (25-31 inclusive),
- * and A, B, C are the first 3 octets of the IP address. For example
- * `172.20.18.130/27` is located in a zone named
- * `128/27.18.20.172.in-addr.arpa`
+ * All magic is RFC2317-aware. We use the first format listed in the RFC for both [`REV()`](../top-level-functions/REV.md) and `PTR()`. The format is `FIRST/MASK.C.B.A.in-addr.arpa` where `FIRST` is the first IP address of the zone, `MASK` is the netmask of the zone (25-31 inclusive), and A, B, C are the first 3 octets of the IP address. For example `172.20.18.130/27` is located in a zone named `128/27.18.20.172.in-addr.arpa`
  *
  * ```javascript
  * D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
@@ -3269,10 +3021,7 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  *
  * # Automatic forward and reverse lookups
  *
- * DNSControl does not automatically generate forward and reverse lookups. However
- * it is possible to write a macro that does this by using the
- * [`D_EXTEND()`](../top-level-functions/D_EXTEND.md)
- * function to insert `A` and `PTR` records into previously-defined domains.
+ * DNSControl does not automatically generate forward and reverse lookups. However it is possible to write a macro that does this by using the [`D_EXTEND()`](../top-level-functions/D_EXTEND.md) function to insert `A` and `PTR` records into previously-defined domains.
  *
  * ```javascript
  * function FORWARD_AND_REVERSE(ipaddr, fqdn) {
@@ -3300,11 +3049,9 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
 declare function PTR(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `PURGE` is the default setting for all domains.  Therefore `PURGE` is
- * a no-op. It is included for completeness only.
+ * `PURGE` is the default setting for all domains.  Therefore `PURGE` is a no-op. It is included for completeness only.
  *
- * A domain with a mixture of `NO_PURGE` and `PURGE` parameters will abide
- * by the last one.
+ * A domain with a mixture of `NO_PURGE` and `PURGE` parameters will abide by the last one.
  *
  * These three examples all are equivalent.
  *
@@ -3380,7 +3127,7 @@ declare const PURGE: DomainModifier;
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/amazon-route-53/r53_alias
  */
-declare function R53_ALIAS(name: string, target: string, zone_idModifier: DomainModifier & RecordModifier, evaluatetargethealthModifier: RecordModifier): DomainModifier;
+declare function R53_ALIAS(name: string, type: "SOA" | "A" | "TXT" | "CNAME" | "MX" | "NAPTR" | "PTR" | "SRV" | "SPF" | "AAAA" | "CAA" | "DS" | "TLSA" | "SSHFP" | "SVCB" | "HTTPS", target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * `R53_EVALUATE_TARGET_HEALTH` lets you enable target health evaluation for a [`R53_ALIAS()`](../domain-modifiers/R53_ALIAS.md) record. Omitting `R53_EVALUATE_TARGET_HEALTH()` from `R53_ALIAS()` set the behavior to false.
@@ -3388,6 +3135,55 @@ declare function R53_ALIAS(name: string, target: string, zone_idModifier: Domain
  * @see https://docs.dnscontrol.org/language-reference/record-modifiers/service-provider-specific/amazon-route-53/r53_evaluate_target_health
  */
 declare function R53_EVALUATE_TARGET_HEALTH(enabled: boolean): RecordModifier;
+
+/**
+ * `R53_HEALTH_CHECK_ID` associates a [Route 53 health check](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating.html) with a record. This is typically used with [`R53_WEIGHT()`](R53_WEIGHT.md) so that Route 53 stops routing traffic to unhealthy endpoints.
+ *
+ * The `health_check_id` is the ID of a Route 53 health check that you create separately (e.g. via the AWS Console, CLI, or Terraform). DNSControl does not manage the health checks themselves, only their association with DNS records.
+ *
+ * ```javascript
+ * D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+ *   A("www", "1.2.3.4", R53_WEIGHT(70, "primary"), R53_HEALTH_CHECK_ID("12345678-1234-1234-1234-123456789012")),
+ *   A("www", "5.6.7.8", R53_WEIGHT(30, "secondary"), R53_HEALTH_CHECK_ID("87654321-4321-4321-4321-210987654321")),
+ * );
+ * ```
+ *
+ * @see https://docs.dnscontrol.org/language-reference/record-modifiers/service-provider-specific/amazon-route-53/r53_health_check_id
+ */
+declare function R53_HEALTH_CHECK_ID(health_check_id: string): RecordModifier;
+
+/**
+ * `R53_WEIGHT` configures [Route 53 weighted routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-weighted.html) for a record. It distributes traffic across multiple resources based on the weights you assign.
+ *
+ * `weight` is an integer between 0 and 255. Route 53 distributes traffic proportionally based on the weights assigned to each record with the same name and type. A weight of 0 means no traffic is routed to that resource unless all other records also have weight 0.
+ *
+ * `set_identifier` is a unique string that differentiates this record from other weighted records with the same name and type.
+ *
+ * You can optionally associate a health check using [`R53_HEALTH_CHECK_ID()`](R53_HEALTH_CHECK_ID.md) to remove unhealthy endpoints from the rotation.
+ *
+ * ```javascript
+ * D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+ *   // 70% of traffic to east, 30% to west
+ *   A("www", "1.2.3.4", R53_WEIGHT(70, "web-east")),
+ *   A("www", "5.6.7.8", R53_WEIGHT(30, "web-west")),
+ *
+ *   // Weighted CNAME records
+ *   CNAME("cdn", "east.cdn.example.com.", R53_WEIGHT(70, "cdn-east")),
+ *   CNAME("cdn", "west.cdn.example.com.", R53_WEIGHT(30, "cdn-west")),
+ *
+ *   // Weighted R53_ALIAS records
+ *   R53_ALIAS("api", "A", "alb-east.us-east-1.elb.amazonaws.com.", R53_ZONE("Z35SXDOTRQ7X7K"), R53_WEIGHT(60, "api-east")),
+ *   R53_ALIAS("api", "A", "alb-west.us-west-2.elb.amazonaws.com.", R53_ZONE("Z1H1FL5HABSF5"), R53_WEIGHT(40, "api-west")),
+ *
+ *   // With health checks
+ *   A("api", "10.0.1.1", R53_WEIGHT(50, "api-primary"), R53_HEALTH_CHECK_ID("12345678-1234-1234-1234-123456789012")),
+ *   A("api", "10.0.2.1", R53_WEIGHT(50, "api-secondary"), R53_HEALTH_CHECK_ID("87654321-4321-4321-4321-210987654321")),
+ * );
+ * ```
+ *
+ * @see https://docs.dnscontrol.org/language-reference/record-modifiers/service-provider-specific/amazon-route-53/r53_weight
+ */
+declare function R53_WEIGHT(weight: number, set_identifier: string): RecordModifier;
 
 /**
  * `R53_ZONE` lets you specify the AWS Zone ID for an entire domain ([`D()`](../top-level-functions/D.md)) or a specific [`R53_ALIAS()`](../domain-modifiers/R53_ALIAS.md) record.
@@ -3401,9 +3197,7 @@ declare function R53_EVALUATE_TARGET_HEALTH(enabled: boolean): RecordModifier;
 declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
 
 /**
- * `REV` returns the reverse lookup domain for an IP network. For
- * example `REV("1.2.3.0/24")` returns `3.2.1.in-addr.arpa.` and
- * `REV("2001:db8:302::/48")` returns `2.0.3.0.8.b.d.0.1.0.0.2.ip6.arpa.`.
+ * `REV` returns the reverse lookup domain for an IP network. For example `REV("1.2.3.0/24")` returns `3.2.1.in-addr.arpa.` and `REV("2001:db8:302::/48")` returns `2.0.3.0.8.b.d.0.1.0.0.2.ip6.arpa.`.
  *
  * `REV()` is commonly used with the [`D()`](D.md) functions to create reverse DNS lookup zones.
  *
@@ -3419,26 +3213,19 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
  *
  * The latter is easier to type and less error-prone.
  *
- * If the address does not include a "/" then `REV()` assumes /32 for IPv4 addresses
- * and /128 for IPv6 addresses.
+ * If the address does not include a "/" then `REV()` assumes /32 for IPv4 addresses and /128 for IPv6 addresses.
  *
  * # RFC compliance
  *
- * `REV()` implements both RFC 2317 and the newer RFC 4183. The `REVCOMPAT()`
- * function selects which mode is used. If `REVCOMPAT()` is not called, a default
- * is selected for you.  The default will change to RFC 4183 in DNSControl v5.0.
+ * `REV()` implements both RFC 2317 and the newer RFC 4183. The `REVCOMPAT()` function selects which mode is used. If `REVCOMPAT()` is not called, a default is selected for you.  The default will change to RFC 4183 in DNSControl v5.0.
  *
  * See [`REVCOMPAT()`](REVCOMPAT.md) for details.
  *
  * # Host bits
  *
- * v4.x:
- * The host bits (the ones outside the netmask) must be zeros. They are not zeroed
- * out automatically. Thus, `REV("1.2.3.4/24")` is an error.
+ * v4.x: The host bits (the ones outside the netmask) must be zeros. They are not zeroed out automatically. Thus, `REV("1.2.3.4/24")` is an error.
  *
- * v5.0 and later:
- * The host bits (the ones outside the netmask) are ignored.  Thus
- * `REV("1.2.3.4/24")` and `REV("1.2.3.0/24")` are equivalent.
+ * v5.0 and later: The host bits (the ones outside the netmask) are ignored.  Thus `REV("1.2.3.4/24")` and `REV("1.2.3.0/24")` are equivalent.
  *
  * # Examples
  *
@@ -3463,9 +3250,7 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
  *
  * # Automatic forward and reverse record generation
  *
- * DNSControl does not automatically generate forward and reverse lookups. However
- * it is possible to write a macro that does this.  See
- * [`PTR()`](../domain-modifiers/PTR.md)   for an example.
+ * DNSControl does not automatically generate forward and reverse lookups. However it is possible to write a macro that does this.  See [`PTR()`](../domain-modifiers/PTR.md)   for an example.
  *
  * @see https://docs.dnscontrol.org/language-reference/top-level-functions/rev
  */
@@ -3481,20 +3266,15 @@ declare function REV(address: string): string;
  * REVCOMPAT("rfc4183");  // RFC 4183: Adopt the newer standard.
  * ```
  *
- * `REVCOMPAT()` is global for all of `dnsconfig.js`. It must appear before any
- * use of `REV()`; If not, behavior is undefined.
+ * `REVCOMPAT()` is global for all of `dnsconfig.js`. It must appear before any use of `REV()`; If not, behavior is undefined.
  *
  * # RFC 4183 vs RFC 2317
  *
- * RFC 2317 and RFC 4183 are two different ways to implement reverse lookups for
- * CIDR blocks that are not on 8-bit boundaries (/24, /16, /8).
+ * RFC 2317 and RFC 4183 are two different ways to implement reverse lookups for CIDR blocks that are not on 8-bit boundaries (/24, /16, /8).
  *
- * Originally DNSControl implemented the older standard, which only specifies what
- * to do for /8, /16, /24 - /32.  Using `REV()` for /9-17 and /17-23 CIDRs was an
- * error.
+ * Originally DNSControl implemented the older standard, which only specifies what to do for /8, /16, /24 - /32.  Using `REV()` for /9-17 and /17-23 CIDRs was an error.
  *
- * v4 defaults to RFC 2317.  In v5.0 the default will change to RFC 4183.
- * `REVCOMPAT()` is provided for those that wish to retain the old behavior.
+ * v4 defaults to RFC 2317.  In v5.0 the default will change to RFC 4183. `REVCOMPAT()` is provided for those that wish to retain the old behavior.
  *
  * For more information, see [Opinion #9](../../advanced-features/opinions.md#opinion-9-rfc-4183-is-better-than-rfc-2317).
  *
@@ -3583,9 +3363,7 @@ declare function SMIMEA(name: string, usage: number, selector: number, type: num
 declare function SOA(name: string, ns: string, mbox: string, refresh: number, retry: number, expire: number, minttl: number, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * DNSControl can optimize the SPF settings on a domain by flattening
- * (inlining) includes and removing duplicates. DNSControl also makes
- * it easier to document your SPF configuration.
+ * DNSControl can optimize the SPF settings on a domain by flattening (inlining) includes and removing duplicates. DNSControl also makes it easier to document your SPF configuration.
  *
  * WARNING: Flattening SPF includes is risky.  Only flatten an SPF
  * setting if it is absolutely needed to bring the number of "lookups"
@@ -3648,8 +3426,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *
  * ## Syntax
  *
- * When you want to specify SPF settings for a domain, use the
- * `SPF_BUILDER()` function.
+ * When you want to specify SPF settings for a domain, use the `SPF_BUILDER()` function.
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
@@ -3686,8 +3463,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * * `parts:` The individual parts of the SPF settings.
  * * `flatten:` Which includes should be inlined. For safety purposes the flattening is done on an opt-in basis. If `"*"` is listed, all includes will be flattened... this might create more problems than is solves due to length limitations.
  *
- * [multi-string]: https://tools.ietf.org/html/rfc4408#section-3.1.3
- * [record-size]: https://tools.ietf.org/html/rfc4408#section-3.1.4
+ * [multi-string]: https://tools.ietf.org/html/rfc4408#section-3.1.3 [record-size]: https://tools.ietf.org/html/rfc4408#section-3.1.4
  *
  * `SPF_BUILDER()` returns multiple `TXT()` records:
  *
@@ -3698,32 +3474,21 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *   * `TXT("_rawspf", "v=spf1 .... ~all")`
  *     * This is the unaltered SPF configuration. This is purely for debugging purposes and is not used by any email or anti-spam system.  It is only generated if flattening is requested.
  *
- * We recommend first using this without any flattening. Make sure
- * `dnscontrol preview` works as expected. Once that is done, add the
- * flattening required to reduce the number of lookups to 10 or less.
+ * We recommend first using this without any flattening. Make sure `dnscontrol preview` works as expected. Once that is done, add the flattening required to reduce the number of lookups to 10 or less.
  *
- * To count the number of lookups, you can use our interactive SPF
- * debugger at [https://stackexchange.github.io/dnscontrol/flattener/index.html](https://stackexchange.github.io/dnscontrol/flattener/index.html)
+ * To count the number of lookups, you can use our interactive SPF debugger at [https://dnscontrol.github.io/dnscontrol/flattener/index.html](https://dnscontrol.github.io/dnscontrol/flattener/index.html)
  *
  * # The first in a chain is special
  *
- * When generating the chain of SPF
- * records, each one is max length 255.  For the first item in
- * the chain, the max is 255 - "overhead1".  Setting this to 255 or
- * higher has undefined behavior.
+ * When generating the chain of SPF records, each one is max length 255.  For the first item in the chain, the max is 255 - "overhead1".  Setting this to 255 or higher has undefined behavior.
  *
  * Why is this useful?
  *
- * Some sites desire having all DNS queries fit in a single packet so
- * that UDP, not TCP, can be used to satisfy all requests. That means all
- * responses have to be relatively small.
+ * Some sites desire having all DNS queries fit in a single packet so that UDP, not TCP, can be used to satisfy all requests. That means all responses have to be relatively small.
  *
- * When an SPF system does a "TXT" lookup, it gets SPF and non-SPF
- * records.  This makes the first link in the chain extra large.
+ * When an SPF system does a "TXT" lookup, it gets SPF and non-SPF records.  This makes the first link in the chain extra large.
  *
- * The bottom line is that if you want the TXT records to fit in a UDP
- * packet, keep increasing the value of `overhead1` until the packet
- * is no longer truncated.
+ * The bottom line is that if you want the TXT records to fit in a UDP packet, keep increasing the value of `overhead1` until the packet is no longer truncated.
  *
  * Example:
  *
@@ -3739,30 +3504,17 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *      582
  * ```
  *
- * Since 582 is bigger than 255, it might not be possible to achieve the
- * goal.  Any value larger than 255 will disable all flattening.  Try
- * 170, then 180, 190 until you get the desired results.
+ * Since 582 is bigger than 255, it might not be possible to achieve the goal.  Any value larger than 255 will disable all flattening.  Try 170, then 180, 190 until you get the desired results.
  *
- * A validator such as
- * [https://www.kitterman.com/spf/validate.html](https://www.kitterman.com/spf/validate.html)
- * will tell you if the queries are being truncated and TCP was required
- * to get the entire record. (Sadly it caches heavily.)
+ * A validator such as [https://www.kitterman.com/spf/validate.html](https://www.kitterman.com/spf/validate.html) will tell you if the queries are being truncated and TCP was required to get the entire record. (Sadly it caches heavily.)
  *
  * ## Notes about the `spfcache.json`
  *
- * DNSControl will optionally keep a cache of the DNS lookups performed during
- * optimization.  In the event that a DNS server is down, the cache will be used.
- * This makes it possible to do `dnscontrol
- * push` even if your or third-party DNS servers are down.
+ * DNSControl will optionally keep a cache of the DNS lookups performed during optimization.  In the event that a DNS server is down, the cache will be used. This makes it possible to do `dnscontrol push` even if your or third-party DNS servers are down.
  *
- * To enable this feature, create an (empty) file called `spfcache.json` in the
- * current directory.  To disable this feature, delete the file. There are no
- * command-line flags related to this feature.
+ * To enable this feature, create an (empty) file called `spfcache.json` in the current directory.  To disable this feature, delete the file. There are no command-line flags related to this feature.
  *
- * The `spfcache.json` stored the cached DNS lookups. If it needs
- * to be updated, the new file contents will be written to a file called
- * `spfcache.updated.json` and instructions such as the ones below
- * will be output telling you exactly what to do:
+ * The `spfcache.json` stored the cached DNS lookups. If it needs to be updated, the new file contents will be written to a file called `spfcache.updated.json` and instructions such as the ones below will be output telling you exactly what to do:
  *
  * ```shell
  * dnscontrol preview
@@ -3773,70 +3525,41 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *     $ git commit spfcache.json
  * ```
  *
- * In this case, you are being asked to replace `spfcache.json` with
- * the newly generated data in `spfcache.updated.json`.
+ * In this case, you are being asked to replace `spfcache.json` with the newly generated data in `spfcache.updated.json`.
  *
- * The instructions are hardcoded strings. The filenames will
- * not change.
- * The instructions assume you use git. If you use something
- * else, please do the appropriate equivalent command.
+ * The instructions are hardcoded strings. The filenames will not change. The instructions assume you use git. If you use something else, please do the appropriate equivalent command.
  *
  * ## Caveats
  *
- * 1. DNSControl 'gives up' if it sees SPF records it can't understand.
- * This includes: syntax errors, features that our spflib doesn't know
- * about, overly complex SPF settings, and anything else that we we
- * didn't feel like implementing.
+ * 1. DNSControl 'gives up' if it sees SPF records it can't understand. This includes: syntax errors, features that our spflib doesn't know about, overly complex SPF settings, and anything else that we we didn't feel like implementing.
  *
- * 2. The TXT record that is generated may exceed DNS limits.  dnscontrol
- * will not generate a single TXT record that exceeds DNS limits, but
- * it ignores the fact that there may be other TXT records on the same
- * label.  For example, suppose it generates a TXT record on the bare
- * domain (stackoverflow.com) that is 250 bytes long. That's fine and
- * doesn't require a continuation record.  However if there is another
- * TXT record (not an SPF record, perhaps a TXT record used to verify
- * domain ownership), the total packet size of all the TXT records
- * could exceed 512 bytes, and will require EDNS or a TCP request.
+ * 2. The TXT record that is generated may exceed DNS limits.  dnscontrol will not generate a single TXT record that exceeds DNS limits, but it ignores the fact that there may be other TXT records on the same label.  For example, suppose it generates a TXT record on the bare domain (stackoverflow.com) that is 250 bytes long. That's fine and doesn't require a continuation record.  However if there is another TXT record (not an SPF record, perhaps a TXT record used to verify domain ownership), the total packet size of all the TXT records could exceed 512 bytes, and will require EDNS or a TCP request.
  *
- * 3. DNSControl does not warn if the number of lookups exceeds 10.
- * We hope to implement this some day.
+ * 3. DNSControl does not warn if the number of lookups exceeds 10. We hope to implement this some day.
  *
- * 4. The `redirect=` directive is only partially implemented.  We only
- * handle the case where redirect is the last item in the SPF record.
- * In which case, it is equivalent to `include:`.
+ * 4. The `redirect=` directive is only partially implemented.  We only handle the case where redirect is the last item in the SPF record. In which case, it is equivalent to `include:`.
  *
  * ## Advanced Technique: Interactive SPF Debugger
  *
- * DNSControl includes an experimental system for viewing
- * SPF settings:
+ * DNSControl includes an experimental system for viewing SPF settings:
  *
- * [https://stackexchange.github.io/dnscontrol/flattener/index.html](https://stackexchange.github.io/dnscontrol/flattener/index.html)
+ * [https://dnscontrol.github.io/dnscontrol/flattener/index.html](https://dnscontrol.github.io/dnscontrol/flattener/index.html)
  *
- * You can also run this locally (it is self-contained) by opening
- * `dnscontrol/docs/flattener/index.html` in your browser.
+ * You can also run this locally (it is self-contained) by opening `dnscontrol/docs/flattener/index.html` in your browser.
  *
- * You can use this to determine the minimal number of domains you
- * need to flatten to have fewer than 10 lookups.
+ * You can use this to determine the minimal number of domains you need to flatten to have fewer than 10 lookups.
  *
  * The output is as follows:
  *
- * 1. The top part lists the domain as it current is configured, how
- * many lookups it requires, and includes a checkbox for each item
- * that could be flattened.
+ * 1. The top part lists the domain as it current is configured, how many lookups it requires, and includes a checkbox for each item that could be flattened.
  *
- * 2. Fully flattened: This section shows the SPF configuration if you
- * fully flatten it. i.e. This is what it would look like if all the
- * checkboxes were checked. Note that this result is likely to be
- * longer than 255 bytes, the limit for a single TXT string.
+ * 2. Fully flattened: This section shows the SPF configuration if you fully flatten it. i.e. This is what it would look like if all the checkboxes were checked. Note that this result is likely to be longer than 255 bytes, the limit for a single TXT string.
  *
- * 3. Fully flattened split: This takes the "fully flattened" result
- * and splits it into multiple DNS records.  To continue to the next
- * record an include is added.
+ * 3. Fully flattened split: This takes the "fully flattened" result and splits it into multiple DNS records.  To continue to the next record an include is added.
  *
  * ## Advanced Technique: Define once, use many
  *
- * In some situations we define an SPF setting once and want to reuse
- * it on many domains. Here's how to do this:
+ * In some situations we define an SPF setting once and want to reuse it on many domains. Here's how to do this:
  *
  * ```javascript
  * var SPF_MYSETTINGS = SPF_BUILDER({
@@ -3988,15 +3711,11 @@ declare function TLSA(name: string, usage: number, selector: number, type: numbe
 declare function TTL(ttl: Duration): RecordModifier;
 
 /**
- * `TXT` adds a [Text record](https://www.rfc-editor.org/rfc/rfc1035) to a domain. The name should be the relative
- * label for the record. Use `@` for the domain apex.
+ * `TXT` adds a [Text record](https://www.rfc-editor.org/rfc/rfc1035) to a domain. The name should be the relative label for the record. Use `@` for the domain apex.
  *
- * The contents is either a single or multiple strings.  To
- * specify multiple strings, specify them as an array.
+ * The contents is either a single or multiple strings. To specify multiple strings, specify them as an array.
  *
- * Each string is a JavaScript string (quoted using single or double
- * quotes).  The (somewhat complex) quoting rules of the DNS protocol
- * will be done for you.
+ * Each string is a JavaScript string (quoted using single or double quotes). The (somewhat complex) quoting rules of the DNS protocol will be done for you.
  *
  * Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/language-reference/record-modifiers) or JSON objects, which will be merged into the record's metadata.
  *
@@ -4016,78 +3735,41 @@ declare function TTL(ttl: Duration): RecordModifier;
  *
  * ### Long strings
  *
- * Strings that are longer than 255 octets (bytes) will be quietly
- * split into 255-octets chunks or the provider may report an error
- * if it does not handle multiple strings.
+ * Strings that are longer than 255 octets (bytes) will be quietly split into 255-octets chunks or the provider may report an error if it does not handle multiple strings.
  *
  * ### TXT record edge cases
  *
- * Most providers do not support the full possibilities of what a `TXT`
- * record can store.  DNSControl can not handle all the edge cases
- * and incompatibles that providers have introduced.  Instead, it
- * stores the string(s) that you provide and passes them to the provider
- * verbatim. The provider may opt to accept the data, fix it, or
- * reject it. This happens early in the processing, long before
- * the DNSControl talks to the provider's API.
+ * Most providers do not support the full possibilities of what a `TXT` record can store. DNSControl can not handle all the edge cases and incompatibles that providers have introduced. Instead, it stores the string(s) that you provide and passes them to the provider verbatim. The provider may opt to accept the data, fix it, or reject it. This happens early in the processing, long before the DNSControl talks to the provider's API.
  *
- * The RFCs specify that a `TXT` record stores one or more strings,
- * each is up to 255 octets (bytes) long. We call these individual
- * strings *chunks*.  Each chunk may be zero to 255 octets long.
- * There is no limit to the number of chunks in a `TXT` record,
- * other than IP packet length restrictions.  The contents of each chunk
- * may be octets of value from 0x00 to 0xff.
+ * The RFCs specify that a `TXT` record stores one or more strings, each is up to 255 octets (bytes) long. We call these individual strings *chunks*. Each chunk may be zero to 255 octets long. There is no limit to the number of chunks in a `TXT` record, other than IP packet length restrictions. The contents of each chunk may be octets of value from 0x00 to 0xff.
  *
- * In reality DNS Service Providers (DSPs) place many restrictions on `TXT`
- * records.
+ * In reality DNS Service Providers (DSPs) place many restrictions on `TXT` records.
  *
- * Some DSPs only support a single string of 255 octets or fewer.
- * Multiple strings, or any one string being longer than 255 octets will
- * result in an error. One provider limits the string to 254 octets,
- * which makes me think they're code has an off-by-one error.
+ * Some DSPs only support a single string of 255 octets or fewer. Multiple strings, or any one string being longer than 255 octets will result in an error. One provider limits the string to 254 octets, which makes me think they're code has an off-by-one error.
  *
- * Some DSPs only support one string, but it may be of any length.
- * Behind the scenes the provider splits it into 255-octet chunks
- * (except the last one, of course).
+ * Some DSPs only support one string, but it may be of any length. Behind the scenes the provider splits it into 255-octet chunks (except the last one, of course).
  *
- * Some DSPs support multiple strings, but API requests must be 512-bytes
- * or fewer, and with quoting, escaping, and other encoding mishegoss
- * you can't be sure what will be permitted until you actually try it.
+ * Some DSPs support multiple strings, but API requests must be 512-bytes or fewer, and with quoting, escaping, and other encoding mishegoss you can't be sure what will be permitted until you actually try it.
  *
- * Regardless of the quantity and length of strings, some providers ban
- * double quotes, back-ticks, or other chars.
+ * Regardless of the quantity and length of strings, some providers ban double quotes, back-ticks, or other chars.
  *
  * ### Testing the support of a provider
  *
  * #### How can you tell if a provider will support a particular `TXT()` record?
  *
- * Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along
- * with the `DnsProvider()` for that provider.  Run `dnscontrol check` to
- * see if any errors are produced.  The check command does not talk to
- * the provider's API, thus permitting you to do this without having an
- * account at that provider.
+ * Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along with the `DnsProvider()` for that provider. Run `dnscontrol check` to see if any errors are produced. The check command does not talk to the provider's API, thus permitting you to do this without having an account at that provider.
  *
  * #### What if the provider rejects a string that is supported?
  *
- * Suppose I can create the TXT record using the DSP's web portal but
- * DNSControl rejects the string?
+ * Suppose I can create the TXT record using the DSP's web portal but DNSControl rejects the string?
  *
- * It is possible that the provider code in DNSControl rejects strings
- * that the DSP accepts.  This is because the test is done in code, not
- * by querying the provider's API.  It is possible that the code was
- * written to work around a bug (such as rejecting a string with a
- * back-tick) but now that bug has been fixed.
+ * It is possible that the provider code in DNSControl rejects strings that the DSP accepts. This is because the test is done in code, not by querying the provider's API. It is possible that the code was written to work around a bug (such as rejecting a string with a back-tick) but now that bug has been fixed.
  *
- * All such checks are in `providers/${providername}/auditrecords.go`.
- * You can try removing the check that you feel is in error and see if
- * the provider's API accepts the record.  You can do this by running the
- * integration tests, or by simply adding that record to an existing
- * `dnsconfig.js` and seeing if `dnscontrol push` is able to push that
- * record into production. (Be careful if you are testing this on a
- * domain used in production.)
+ * All such checks are in `providers/${providername}/auditrecords.go`. You can try removing the check that you feel is in error and see if the provider's API accepts the record. You can do this by running the integration tests, or by simply adding that record to an existing `dnsconfig.js` and seeing if `dnscontrol push` is able to push that record into production. (Be careful if you are testing this on a domain used in production.)
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/txt
  */
-declare function TXT(name: string, contents: string, ...modifiers: RecordModifier[]): DomainModifier;
+declare function TXT(name: string, contents: string | string[], ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * This is provider specific type of record and not a DNS standard. It may behave differently for each provider that handles it.

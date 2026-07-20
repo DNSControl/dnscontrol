@@ -3,8 +3,8 @@ package digitalocean
 import (
 	"errors"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -32,7 +32,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 func MaxLengthDO(rc *models.RecordConfig) error {
 	// The total length of all strings can't be longer than 512; and in
 	// reality must be shorter due to sloppy validation checks.
-	// https://github.com/StackExchange/dnscontrol/issues/370
+	// https://github.com/DNSControl/dnscontrol/issues/370
 
 	// DigitalOcean's TXT record implementation checks size limits
 	// wrong.  RFC 1035 Section 3.3.14 states that each substring can be

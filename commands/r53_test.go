@@ -3,9 +3,9 @@ package commands
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/rtype"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 )
 
 func TestR53Test_1(t *testing.T) {

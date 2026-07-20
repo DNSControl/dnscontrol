@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -53,6 +53,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "dnscale",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/dnscale",
+		PortalURL:   "https://dnscale.net/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api_key",
+				Label:    "API key",
+				Help:     "Your dnscale API key.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // dnscaleProvider represents the DNScale DNSServiceProvider.
@@ -131,7 +146,9 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (p *dnscaleProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (p *dnscaleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := p.getZoneByName(domain)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get zone %s: %w", domain, err)
@@ -144,9 +161,13 @@ func (p *dnscaleProvider) GetZoneRecords(domain string, meta map[string]string) 
 
 	curRecords := make(models.Records, 0, len(records))
 	for _, rec := range records {
-		// Skip NS records at apex - these are managed by DNScale
+		// Skip DNScale's own NS records at apex - these are system-managed.
+		// Third-party NS records at apex are kept for multi-provider DNS setups.
 		if rec.Type == "NS" && (rec.Name == domain+"." || rec.Name == "@") {
-			continue
+			content := strings.TrimSuffix(rec.Content, ".")
+			if strings.HasSuffix(content, ".dnscale.eu") || strings.HasSuffix(content, ".dnscale.com") {
+				continue
+			}
 		}
 		// Skip SOA records
 		if rec.Type == "SOA" {
@@ -215,15 +236,27 @@ func (p *dnscaleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 	return corrections, actualChangeCount, nil
 }
 
-// GetNameservers returns an empty array.
-// DNScale manages apex NS records automatically - they cannot be modified via API.
-// Returning empty prevents DNSControl from trying to create NS records at apex.
+// GetNameservers returns an empty array because DNScale assigns nameservers
+// server-side when a zone is created. Returning empty means dnscontrol won't
+// auto-generate NS records for DNScale at the apex.
+//
+// For multi-provider DNS setups, you must explicitly declare DNScale's
+// nameservers so they are included in registrar delegation:
+//
+//	D("example.com", REG_NAMECHEAP,
+//	  DnsProvider(DSP_DNSCALE),
+//	  DnsProvider(DSP_CLOUDFLARE),
+//	  NAMESERVER("ns1.dnscale.eu"),
+//	  NAMESERVER("ns2.dnscale.eu"),
+//	  // ...
+//	)
 func (p *dnscaleProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
 	return []*models.Nameserver{}, nil
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (p *dnscaleProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (p *dnscaleProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := p.getZoneByName(domain)
 	if err == nil {
 		return nil // Zone exists

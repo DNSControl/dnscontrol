@@ -35,7 +35,7 @@ D("example.com", REG_NONE, DnsProvider(DNS_BIND),
 
 The re-ordering feature can be disabled using the `--disableordering` global flag (it goes before `preview` or `push`). While the code has been extensively tested, it is new and you may still find a bug.  This flag leaves the updates unordered and may require multiple `push` runs to complete the update.
 
-If you encounter any issues with the reordering please [open an issue](https://github.com/StackExchange/dnscontrol/issues).
+If you encounter any issues with the reordering please [open an issue](https://github.com/DNSControl/dnscontrol/issues).
 
 ## Internals
 

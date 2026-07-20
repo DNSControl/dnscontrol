@@ -1,0 +1,7 @@
+{
+  "cloudflare": {
+    "TYPE": "CLOUDFLAREAPI",
+    "accountid": "acc-123",
+    "apitoken": "tok-abc"
+  }
+}

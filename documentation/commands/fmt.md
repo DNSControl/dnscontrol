@@ -27,12 +27,9 @@ which will have different formatting style.
 
 The `fmt` subcommand formats and prettifies a dnsconfig.js file.
 
-By default `dnsconfig.js` is read, reformatted, and (if there are no changes)
-rewritten. It is not rewritten if there are no changes to preserve the file's
-timestamp.
+By default `dnsconfig.js` is read, reformatted, and (if there are no changes) rewritten. It is not rewritten if there are no changes to preserve the file's timestamp.
 
-By default the command is silent if no changes were made. Add `-v` to always
-output the filename. (Prior to v2.28.3 the filename was always output.)
+By default the command is silent if no changes were made. Add `-v` to always output the filename. (Prior to v2.28.3 the filename was always output.)
 
 Changes:
 
@@ -59,9 +56,7 @@ $
 
 # Using `fmt` as a filter
 
-`fmt` can also work as a filter by setting the input or output to `""` in which
-case stdin or stdout is used, respectively.  When the output is stdout, the
-filename is never output.
+`fmt` can also work as a filter by setting the input or output to `""` in which case stdin or stdout is used, respectively.  When the output is stdout, the filename is never output.
 
 ```shell
 $ dnscontrol fmt -o "" >new-dnsconfig.js

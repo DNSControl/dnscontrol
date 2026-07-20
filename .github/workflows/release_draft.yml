@@ -10,6 +10,7 @@ jobs:
   draft_release:
     name: draft release
     runs-on: ubuntu-latest
+    if: github.repository == 'DNSControl/dnscontrol'
     permissions:
       packages: write
       contents: write
@@ -22,7 +23,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       # Why "fetch-depth: 0"?  To generate the release notes, we need the

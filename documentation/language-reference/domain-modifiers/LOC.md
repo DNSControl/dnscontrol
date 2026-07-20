@@ -45,7 +45,6 @@ horizontal_precision: float32
 vertical_precision: float32
 ```
 
-
 ## Description ##
 
 Strictly follows [RFC 1876](https://datatracker.ietf.org/doc/html/rfc1876).
@@ -62,10 +61,7 @@ On the wire, it is in a binary format.
 A use case for LOC is suggested in the RFC:
 
 > Some uses for the LOC RR have already been suggested, including the
-   USENET backbone flow maps, a "visual traceroute" application showing
-   the geographical path of an IP packet, and network management
-   applications that could use LOC RRs to generate a map of hosts and
-   routers being managed.
+   USENET backbone flow maps, a "visual traceroute" application showing the geographical path of an IP packet, and network management applications that could use LOC RRs to generate a map of hosts and routers being managed.
 
 There is the UK based [https://find.me.uk](https://find.me.uk/) whereby you can do:
 
@@ -73,20 +69,12 @@ There is the UK based [https://find.me.uk](https://find.me.uk/) whereby you can 
 dig loc <uk-postcode>.find.me.uk
 ```
 
-
 There are some behaviours that you should be aware of, however:
 
 > If omitted, minutes and seconds default to zero, size defaults to 1m,
-   horizontal precision defaults to 10000m, and vertical precision
-   defaults to 10m.  These defaults are chosen to represent typical
-   ZIP/postal code area sizes, since it is often easy to find
-   approximate geographical location by ZIP/postal code.
+   horizontal precision defaults to 10000m, and vertical precision defaults to 10m.  These defaults are chosen to represent typical ZIP/postal code area sizes, since it is often easy to find approximate geographical location by ZIP/postal code.
 
-
-Alas, the world does not revolve around US ZIP codes, but here we are. Internally,
-the LOC record type will supply defaults where values were absent on DNS import.
-One must supply the `LOC()` js helper all parameters. If that seems like too
-much work, see also helper functions:
+Alas, the world does not revolve around US ZIP codes, but here we are. Internally, the LOC record type will supply defaults where values were absent on DNS import. One must supply the `LOC()` js helper all parameters. If that seems like too much work, see also helper functions:
 
  * [`LOC_BUILDER_DD({})`](LOC_BUILDER_DD.md) - build a `LOC` by supplying only **d**ecimal **d**egrees.
  * [`LOC_BUILDER_DMS_STR({})`](LOC_BUILDER_DMS_STR.md) - accepts DMS 33°51′31″S 151°12′51″E
@@ -99,9 +87,7 @@ The coordinate format for `LOC()` is:
 
 `degrees,minutes,seconds,[NnSs],deg,min,sec,[EeWw],altitude,size,horizontal_precision,vertical_precision`
 
-where:
- altitude: [-100000.00 .. 42849672.95] BY .01 (altitude in meters)
- size, horizontal_precision, vertical_precision: [0 .. 90000000.00] (size/precision in meters)
+where: altitude: [-100000.00 .. 42849672.95] BY .01 (altitude in meters) size, horizontal_precision, vertical_precision: [0 .. 90000000.00] (size/precision in meters)
 
 values outside of the above ranges are gated to within the ranges.
 

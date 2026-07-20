@@ -41,7 +41,7 @@ title: DNSControl
         <p>Join our
          <strong><a href="https://groups.google.com/forum/#!forum/dnscontrol-discuss">mailing list</a></strong>.
          We make it easy to contribute by using
-         <strong><a href="https://github.com/StackExchange/dnscontrol">GitHub</a></strong>,
+         <strong><a href="https://github.com/DNSControl/dnscontrol">GitHub</a></strong>,
          you can make code changes with confidence thanks to extensive integration tests.
          The project is
          <strong><a href="https://everythingsysadmin.com/2017/08/go-get-up-to-speed.html">newbie-friendly</a></strong>
@@ -183,7 +183,7 @@ title: DNSControl
             </p>
             <ul>
                 <li>
-                    GitHub <a href="https://github.com/StackExchange/dnscontrol">StackExchange/dnscontrol</a>: Get the source!
+                    GitHub <a href="https://github.com/DNSControl/dnscontrol">DNSControl/dnscontrol</a>: Get the source!
                 </li>
                 <li>
                     Mailing list: <a href="https://groups.google.com/forum/#!forum/dnscontrol-discuss">dnscontrol-discuss</a>: The friendly best place to ask questions and propose new features

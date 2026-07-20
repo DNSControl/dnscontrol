@@ -23,11 +23,11 @@ import (
 	r53dTypes "github.com/aws/aws-sdk-go-v2/service/route53domains/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 type route53Provider struct {
@@ -40,7 +40,13 @@ type route53Provider struct {
 }
 
 func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
-	return newRoute53(conf, nil)
+	// AWS European Sovereign Cloud (aws.eu) does not support registering domains, at least not yet.
+	// Let us assume only the global AWS is capable of registering domains currently.
+	if conf["Region"] != "" && conf["Region"] != "us-east-1" {
+		return nil, errors.New("Error! Domain register endpoint is only supported on the global AWS region us-east-1")
+	} else {
+		return newRoute53(conf, nil)
+	}
 }
 
 func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -48,17 +54,30 @@ func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.
 }
 
 func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error) {
-	optFns := []func(*config.LoadOptions) error{
+	optFns := []func(*config.LoadOptions) error{}
+
+	if m["Region"] != "" {
+		// AWS European Sovereign Cloud (aws.eu) region eusc-de-east-1 uses a separate Route 53 API endpoint from the global AWS
+		optFns = append(optFns, config.WithRegion(m["Region"]))
+	} else {
 		// Route53 uses a global endpoint and route53domains
 		// currently only has a single regional endpoint in us-east-1
 		// https://docs.aws.amazon.com/general/latest/gr/rande.html#r53_region
-		config.WithRegion("us-east-1"),
+		optFns = append(optFns, config.WithRegion("us-east-1"))
 	}
 
 	keyID, secretKey, tokenID, roleArn, externalID := m["KeyId"], m["SecretKey"], m["Token"], m["RoleArn"], m["ExternalId"]
 	// Token is optional and left empty unless required
 	if keyID != "" || secretKey != "" {
 		optFns = append(optFns, config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(keyID, secretKey, tokenID)))
+	}
+
+	profile := m["Profile"]
+	if profile != "" && (keyID != "" || secretKey != "") {
+		return nil, fmt.Errorf("route53: cannot set both Profile and KeyId/SecretKey")
+	}
+	if profile != "" {
+		optFns = append(optFns, config.WithSharedConfigProfile(profile))
 	}
 
 	config, err := config.LoadDefaultConfig(context.Background(), optFns...)
@@ -110,6 +129,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseRoute53Alias:     providers.Can(),
+	providers.CanUseSOA:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
 	providers.CanUseSVCB:             providers.Can(),
@@ -130,6 +150,76 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newRoute53Reg)
 	providers.RegisterCustomRecordType("R53_ALIAS", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Amazon Route 53",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/route53",
+		PortalURL:   "https://console.aws.amazon.com/route53/",
+		Notes:       "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
+		Fields: []providers.CredsField{
+			{
+				Key:    "Region",
+				Label:  "AWS Region to use for Route 53 control plane (optional)",
+				Help:   "Leave blank to use default global Route 53 in us-east-1. Type \"eusc-de-east-1\" for AWS European Sovereign Cloud.",
+				EnvVar: "AWS_DEFAULT_REGION",
+			},
+			{
+				Key:      "_authMethod",
+				Label:    "Which authentication method do you want to use?",
+				Help:     "Named profile reads ~/.aws/config and supports SSO. Static access key uses KeyId/SecretKey. Default credential chain relies on the AWS SDK to discover credentials from the environment or instance role.",
+				Choices:  []string{"Named profile (~/.aws/config, including SSO)", "Static access key", "Default credential chain"},
+				Required: true,
+				Internal: true,
+			},
+			{
+				Key:      "Profile",
+				Label:    "AWS profile name",
+				Help:     "Name of the profile in ~/.aws/config to use. For SSO profiles, run `aws sso login` before invoking dnscontrol.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "Named profile (~/.aws/config, including SSO)"},
+			},
+			{
+				Key:      "KeyId",
+				Label:    "AWS access key ID",
+				Help:     "The AWS_ACCESS_KEY_ID for an IAM user or role with Route 53 permissions.",
+				EnvVar:   "AWS_ACCESS_KEY_ID",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "Static access key"},
+			},
+			{
+				Key:      "SecretKey",
+				Label:    "AWS secret access key",
+				Help:     "The AWS_SECRET_ACCESS_KEY paired with the access key ID.",
+				EnvVar:   "AWS_SECRET_ACCESS_KEY",
+				Secret:   true,
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "Static access key"},
+			},
+			{
+				Key:    "Token",
+				Label:  "AWS session token (optional)",
+				Help:   "STS session token. Leave blank unless you are using temporary credentials.",
+				EnvVar: "AWS_SESSION_TOKEN",
+				Secret: true,
+				ShowIf: map[string]string{"_authMethod": "Static access key"},
+			},
+			{
+				Key:   "RoleArn",
+				Label: "Role ARN to assume (optional)",
+				Help:  "If set, dnscontrol will call sts:AssumeRole on this ARN using the source credentials selected above. Leave blank to use the source credentials directly.",
+			},
+			{
+				Key:   "ExternalId",
+				Label: "External ID for AssumeRole (optional)",
+				Help:  "External ID required by some trust policies. Only relevant when RoleArn is set.",
+			},
+			{
+				Key:   "DelegationSet",
+				Label: "Reusable delegation set ID (optional)",
+				Help:  "Existing Route 53 reusable delegation set ID (the value after /delegationset/). Only applied when creating new domains.",
+			},
+		},
+	})
 }
 
 func withRetry(f func() error) {
@@ -255,7 +345,10 @@ func (r *route53Provider) GetNameservers(domain string) ([]*models.Nameserver, e
 	return models.ToNameservers(nss)
 }
 
-func (r *route53Provider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (r *route53Provider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+	meta := dc.Metadata
+
 	// If the zone_id is specified in meta, use it.
 	if zoneID, ok := meta["zone_id"]; ok {
 		zone, found := r.getZoneByID(zoneID)
@@ -332,7 +425,7 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 	// Amazon Route53 is a "ByRecordSet" API.
 	// At each label:rtype pair, we either delete all records or UPSERT the desired records.
-	instructions, actualChangeCount, err := diff2.ByRecordSet(existingRecords, dc, nil)
+	instructions, actualChangeCount, err := diff2.ByRecordSet(existingRecords, dc, r53ComparableFunc)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -342,6 +435,14 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	for _, inst := range instructions {
 		instNameFQDN := inst.Key.NameFQDN
 		instType := inst.Key.Type
+
+		// Strip set identifier suffix added by Key() for weighted routing.
+		setIdentifier := ""
+		if idx := strings.Index(instType, "!"); idx != -1 {
+			setIdentifier = instType[idx+1:]
+			instType = instType[:idx]
+		}
+
 		var chg r53Types.Change
 
 		switch inst.Type {
@@ -383,12 +484,24 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 					rrset.TTL = &i
 				}
 			}
+
+			// Apply weighted routing policy fields from record metadata.
+			if setIdentifier != "" {
+				rrset.SetIdentifier = aws.String(setIdentifier)
+				applyR53RoutingFieldsToRRSet(rrset, inst.New[0])
+			}
+
 			chg = r53Types.Change{
 				Action:            r53Types.ChangeActionUpsert,
 				ResourceRecordSet: rrset,
 			}
 
 		case diff2.DELETE:
+			// SOA record can not be deleted, only updated
+			if instType == "SOA" {
+				actualChangeCount--
+				continue
+			}
 			rrset := inst.Old[0].Original.(r53Types.ResourceRecordSet) // The native record as downloaded via the API
 			chg = r53Types.Change{
 				Action:            r53Types.ChangeActionDelete,
@@ -453,6 +566,7 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 		if err := rc.SetTarget(aws.ToString(set.AliasTarget.DNSName)); err != nil {
 			return nil, err
 		}
+		applyR53RoutingMeta(rc, set)
 		// rc.Original stores a pointer to the original set for use by
 		// r53Types.ChangeActionDelete and anything else that needs the
 		// native record verbatim.
@@ -463,8 +577,6 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 	} else {
 		for _, rec := range set.ResourceRecords {
 			switch rtype := set.Type; rtype {
-			case r53Types.RRTypeSoa:
-				continue
 			case r53Types.RRTypeSpf:
 				// route53 uses a custom record type for SPF
 				rtype = "TXT"
@@ -504,12 +616,58 @@ func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.R
 				if err := rc.PopulateFromStringFunc(rtypeString, val, origin, txtutil.ParseQuoted); err != nil {
 					return nil, fmt.Errorf("unparsable record type=%q received from ROUTE53: %w", rtypeString, err)
 				}
+				applyR53RoutingMeta(rc, set)
 
 				results = append(results, rc)
 			}
 		}
 	}
 	return results, nil
+}
+
+// applyR53RoutingMeta populates RecordConfig metadata from native Route 53
+// routing-policy fields (SetIdentifier, Weight, HealthCheckId).
+func applyR53RoutingMeta(rc *models.RecordConfig, set r53Types.ResourceRecordSet) {
+	if set.SetIdentifier == nil {
+		return
+	}
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
+	rc.Metadata["r53_set_identifier"] = aws.ToString(set.SetIdentifier)
+	if set.Weight != nil {
+		rc.Metadata["r53_weight"] = strconv.FormatInt(*set.Weight, 10)
+	}
+	if set.HealthCheckId != nil {
+		rc.Metadata["r53_health_check_id"] = aws.ToString(set.HealthCheckId)
+	}
+}
+
+// r53ComparableFunc includes Route 53 routing-policy metadata in record
+// comparison so that changes to weight or health check are detected by the diff.
+func r53ComparableFunc(rc *models.RecordConfig) string {
+	var parts []string
+	if w, ok := rc.Metadata["r53_weight"]; ok && w != "" {
+		parts = append(parts, "r53_weight="+w)
+	}
+	if hc, ok := rc.Metadata["r53_health_check_id"]; ok && hc != "" {
+		parts = append(parts, "r53_health_check_id="+hc)
+	}
+	return strings.Join(parts, ",")
+}
+
+// applyR53RoutingFieldsToRRSet sets the Route 53 weighted routing fields on a
+// ResourceRecordSet based on the RecordConfig metadata.
+func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.RecordConfig) {
+	if w, ok := rc.Metadata["r53_weight"]; ok && w != "" {
+		weight, err := strconv.ParseInt(w, 10, 64)
+		if err == nil {
+			rrset.Weight = &weight
+		}
+	}
+	if hc, ok := rc.Metadata["r53_health_check_id"]; ok && hc != "" {
+		rrset.HealthCheckId = aws.String(hc)
+	}
 }
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
@@ -620,13 +778,15 @@ func (r *route53Provider) fetchRecordSets(zoneID *string) ([]r53Types.ResourceRe
 	}
 	var next *string
 	var nextType r53Types.RRType
+	var nextIdentifier *string
 	var records []r53Types.ResourceRecordSet
 	for {
 		listInput := &r53.ListResourceRecordSetsInput{
-			HostedZoneId:    zoneID,
-			StartRecordName: next,
-			StartRecordType: nextType,
-			MaxItems:        aws.Int32(100),
+			HostedZoneId:          zoneID,
+			StartRecordName:       next,
+			StartRecordType:       nextType,
+			StartRecordIdentifier: nextIdentifier,
+			MaxItems:              aws.Int32(100),
 		}
 		var list *r53.ListResourceRecordSetsOutput
 		var err error
@@ -642,6 +802,7 @@ func (r *route53Provider) fetchRecordSets(zoneID *string) ([]r53Types.ResourceRe
 		if list.NextRecordName != nil {
 			next = list.NextRecordName
 			nextType = list.NextRecordType
+			nextIdentifier = list.NextRecordIdentifier
 		} else {
 			break
 		}
@@ -659,7 +820,8 @@ func unescape(s *string) string {
 	return name
 }
 
-func (r *route53Provider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (r *route53Provider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok := r.getZoneByDomain(domain); ok {
 		return nil
 	}

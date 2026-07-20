@@ -1,7 +1,7 @@
 package sakuracloud
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 const defaultTTL = uint32(3600)

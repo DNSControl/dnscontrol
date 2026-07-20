@@ -3,9 +3,9 @@ package dnssort_test
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsgraph"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsgraph/testutils"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnssort"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph/testutils"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnssort"
 )
 
 func Test_graphsort(t *testing.T) {

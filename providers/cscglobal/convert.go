@@ -5,7 +5,7 @@ package cscglobal
 import (
 	"net/netip"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // nativeToRecordA takes an A record from DNS and returns a native RecordConfig struct.

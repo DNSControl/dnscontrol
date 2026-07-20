@@ -3,7 +3,7 @@ package diff2
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func makeTestRecord(name, rtype, target, domain string) *models.RecordConfig {

@@ -41,13 +41,13 @@ phpstorm documentation/provider/index.md
 Scroll to the **Requested providers** section and append the following line:
 
 ```markdown
-* [Sav.com](https://github.com/StackExchange/dnscontrol/issues/3633) (#3633)
+* [Sav.com](https://github.com/DNSControl/dnscontrol/issues/3633) (#3633)
 ```
 
 To generate this automatically, run:
 
 ```shell
-echo "* [${PROVIDER_NAME}](https://github.com/StackExchange/dnscontrol/issues/${GITHUB_ISSUE_NUMBER}) (#${GITHUB_ISSUE_NUMBER})"
+echo "* [${PROVIDER_NAME}](https://github.com/DNSControl/dnscontrol/issues/${GITHUB_ISSUE_NUMBER}) (#${GITHUB_ISSUE_NUMBER})"
 ```
 
 Make sure to insert the new line in alphabetical order if applicable.

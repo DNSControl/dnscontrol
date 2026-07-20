@@ -23,11 +23,11 @@ import (
 	"time"
 
 	"codeberg.org/miekg/dns/dnsutil"
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsrr"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsv1 "github.com/miekg/dns"
 )
 
@@ -113,7 +113,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["update-mode"] != "" {
 		switch config["update-mode"] {
-		case "tcp", "tcp-tls":
+		case "tcp", "tcp-tls", "unix":
 			api.updateMode = config["update-mode"]
 		case "udp":
 			api.updateMode = ""
@@ -125,7 +125,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["transfer-mode"] != "" {
 		switch config["transfer-mode"] {
-		case "tcp", "tcp-tls":
+		case "tcp", "tcp-tls", "unix":
 			api.transferMode = config["transfer-mode"]
 		default:
 			printer.Printf("[Warning] AXFRDDNS: Unknown transfer-mode in `creds.json` (%s)\n", config["transfer-mode"])
@@ -135,7 +135,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["master"] != "" {
 		api.master = config["master"]
-		if !strings.Contains(api.master, ":") {
+		if api.updateMode != "unix" && !strings.Contains(api.master, ":") {
 			api.master = api.master + ":53"
 		}
 	} else if len(api.nameservers) != 0 {
@@ -145,7 +145,7 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	}
 	if config["transfer-server"] != "" {
 		api.transferServer = config["transfer-server"]
-		if !strings.Contains(api.transferServer, ":") {
+		if api.transferMode != "unix" && !strings.Contains(api.transferServer, ":") {
 			api.transferServer = api.transferServer + ":53"
 		}
 	} else {
@@ -247,9 +247,13 @@ func (c *axfrddnsProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 func (c *axfrddnsProvider) getAxfrConnection() (*dnsv1.Transfer, error) {
 	var con net.Conn
 	var err error
-	if c.transferMode == "tcp-tls" {
-		con, err = tls.Dial("tcp", c.transferServer, &tls.Config{})
-	} else {
+	switch c.transferMode {
+	case "tcp-tls":
+		// RFC 9103 "DNS Zone Transfer over TLS" section 7.1 requires "dot"
+		con, err = tls.Dial("tcp", c.transferServer, &tls.Config{NextProtos: []string{"dot"}})
+	case "unix":
+		con, err = net.Dial("unix", c.transferServer)
+	default:
 		con, err = net.Dial("tcp", c.transferServer)
 	}
 	if err != nil {
@@ -301,7 +305,9 @@ func (c *axfrddnsProvider) FetchZoneRecords(domain string) ([]dnsv1.RR, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *axfrddnsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	rawRecords, err := c.FetchZoneRecords(domain)
 	if err != nil {
 		return nil, err
@@ -319,9 +325,11 @@ func (c *axfrddnsProvider) GetZoneRecords(domain string, meta map[string]string)
 			dnsv1.TypeNSEC3,
 			dnsv1.TypeNSEC3PARAM,
 			dnsv1.TypeZONEMD,
+			65281,
 			65534:
 			// Ignoring DNSSec RRs, but replacing it with a single
 			// "TXT" placeholder
+			// Ignoring TYPE65281 Technitium Conditional Forwarder Zone Record
 			// Also ignoring spurious TYPE65534, see:
 			// https://bind9-users.isc.narkive.com/zX29ay0j/rndc-signing-list-not-working#post2
 			if foundDNSSecRecords == nil {

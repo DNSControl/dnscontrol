@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 const (

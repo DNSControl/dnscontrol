@@ -23,10 +23,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -43,6 +43,27 @@ func init() {
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterRegistrarType(providerName, newReg)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Loopia",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/loopia",
+		PortalURL:   "https://support.loopia.com/wiki/loopiaapi/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "API username",
+				Help:     "Your Loopia API username.",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "API password",
+				Help:     "Your Loopia API password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // features declares which features and options are available.
@@ -167,7 +188,9 @@ func (c *APIClient) ListZones() ([]string, error) {
 
 // GetZoneRecords gathers the DNS records and converts them to
 // dnscontrol's format.
-func (c *APIClient) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *APIClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	// Two approaches. One: get all SubDomains, and get their respective records
 	// simultaneously, or first get subdomains then fill each subdomain with its
 	// respective records on a subsequent pass.

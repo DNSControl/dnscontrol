@@ -15,7 +15,7 @@ declare const CAA_CRITICAL: RecordModifier;
  * 1. Two owners toggling a record between two settings.
  * 2. The other owner wiping all records at this label, which won't
  * be noticed until the next time dnscontrol is run.
- * See https://github.com/StackExchange/dnscontrol/issues/1106
+ * See https://github.com/DNSControl/dnscontrol/issues/1106
  */
 declare const IGNORE_NAME_DISABLE_SAFETY_CHECK: RecordModifier;
 

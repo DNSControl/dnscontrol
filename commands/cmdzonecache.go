@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/StackExchange/dnscontrol/v4/pkg/providers"
+import "github.com/DNSControl/dnscontrol/v4/pkg/providers"
 
 // FYI(tlim): This file was originally called zonecache.go. To remove any
 // confusion between it and pkg/zonecache, we've renamed it. We've also added

@@ -6,13 +6,9 @@ name: AUTODNSSEC_ON
 
 [`AUTODNSSEC_OFF`](AUTODNSSEC_OFF.md) tells the provider to **disable** AutoDNSSEC.
 
-AutoDNSSEC is a feature where a DNS provider can automatically manage
-DNSSEC for a domain. Not all providers support this.
+AutoDNSSEC is a feature where a DNS provider can automatically manage DNSSEC for a domain. Not all providers support this.
 
-At this time, `AUTODNSSEC_ON` takes no parameters.  There is no ability
-to tune what the DNS provider sets, no algorithm choice.  We simply
-ask that they follow their defaults when enabling a no-fuss DNSSEC
-data model.
+At this time, `AUTODNSSEC_ON` takes no parameters.  There is no ability to tune what the DNS provider sets, no algorithm choice.  We simply ask that they follow their defaults when enabling a no-fuss DNSSEC data model.
 
 {% hint style="info" %}
 **NOTE**: No parenthesis should follow these keywords.  That is, the
@@ -33,5 +29,4 @@ D("insecure.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 ```
 {% endcode %}
 
-If neither `AUTODNSSEC_ON` or `AUTODNSSEC_OFF` is specified for a
-domain no changes will be requested.
+If neither `AUTODNSSEC_ON` or `AUTODNSSEC_OFF` is specified for a domain no changes will be requested.

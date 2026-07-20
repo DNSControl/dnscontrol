@@ -119,7 +119,7 @@ func TestParseRedirectOnly(t *testing.T) {
 
 func TestParseQualifiedMechanisms(t *testing.T) {
 	// Regression test: SPF mechanisms with qualifiers (+mx, -all, ~all, ?mx)
-	// should be parsed correctly. See https://github.com/StackExchange/dnscontrol/issues/4042
+	// should be parsed correctly. See https://github.com/DNSControl/dnscontrol/issues/4042
 	dnsres, err := NewCache("testdata-dns1.json")
 	if err != nil {
 		t.Fatal(err)

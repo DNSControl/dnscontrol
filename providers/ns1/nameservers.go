@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 )
 

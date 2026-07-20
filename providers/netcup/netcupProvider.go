@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -52,7 +52,9 @@ func New(settings map[string]string, _ json.RawMessage) (providers.DNSServicePro
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *netcupProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *netcupProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := api.getRecords(domain)
 	if err != nil {
 		return nil, err

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 func TestSoaLabelAndTarget(t *testing.T) {
@@ -74,6 +74,42 @@ func TestCheckSoa(t *testing.T) {
 			checkError(t, err, test.isError, experiment)
 		})
 	}
+}
+
+func TestCheckMultipleSOAs(t *testing.T) {
+	dcSingleSoa := &models.DomainConfig{
+		Name:          "foo.com",
+		RegistrarName: "BIND",
+		Records: []*models.RecordConfig{
+			makeRC("@", "foo.com", "ns1.foo.com.", models.RecordConfig{
+				Type:      "SOA",
+				SoaExpire: 1, SoaMinttl: 1, SoaRefresh: 1, SoaRetry: 1, SoaSerial: 1, SoaMbox: "bar.foo.com",
+			}),
+		},
+	}
+
+	t.Run("single_SOA", func(t *testing.T) {
+		errs := checkMultipleSOAs(dcSingleSoa)
+		if errs != nil {
+			t.Error("checkMultipleSOAs function failed with single SOA record")
+		}
+	})
+
+	dcTwoSoas := dcSingleSoa
+	// Add another SOA record to DC
+	dcTwoSoas.Records = append(dcTwoSoas.Records,
+		makeRC("@", "foo.com", "ns2.foo.com.", models.RecordConfig{
+			Type:      "SOA",
+			SoaExpire: 1, SoaMinttl: 1, SoaRefresh: 1, SoaRetry: 1, SoaSerial: 1, SoaMbox: "bar.foo.com",
+		}),
+	)
+
+	t.Run("two_SOAs", func(t *testing.T) {
+		errs := checkMultipleSOAs(dcTwoSoas)
+		if len(errs) < 1 {
+			t.Error("checkMultipleSOAs function failed to catch two SOAs")
+		}
+	})
 }
 
 func TestCheckLabel(t *testing.T) {
@@ -342,6 +378,40 @@ func TestCNAMEMutex(t *testing.T) {
 	}
 }
 
+func TestCNAMECloudflareProxied(t *testing.T) {
+	// A proxied (flattened) CNAME should be allowed alongside other record types.
+	recCNAME := &models.RecordConfig{
+		Type:     "CNAME",
+		Metadata: map[string]string{"cloudflare_proxy": "on"},
+	}
+	recCNAME.SetLabel("mail", "mail.example.com")
+	recCNAME.MustSetTarget("example.com.")
+	recMX := &models.RecordConfig{Type: "MX"}
+	recMX.SetLabel("mail", "mail.example.com")
+	recMX.MustSetTarget("smtp.example.com.")
+	dc := &models.DomainConfig{
+		Name:    "example.com",
+		Records: []*models.RecordConfig{recCNAME, recMX},
+	}
+	errs := checkCNAMEs(dc)
+	if len(errs) != 0 {
+		t.Errorf("Expected no errors for proxied CNAME + MX, got: %v", errs)
+	}
+
+	// A non-proxied CNAME should still fail.
+	recCNAME2 := &models.RecordConfig{Type: "CNAME"}
+	recCNAME2.SetLabel("mail", "mail.example.com")
+	recCNAME2.MustSetTarget("example.com.")
+	dc2 := &models.DomainConfig{
+		Name:    "example.com",
+		Records: []*models.RecordConfig{recCNAME2, recMX},
+	}
+	errs2 := checkCNAMEs(dc2)
+	if len(errs2) == 0 {
+		t.Error("Expected error for non-proxied CNAME + MX, got none")
+	}
+}
+
 func TestCAAValidation(t *testing.T) {
 	config := &models.DNSConfig{
 		Domains: []*models.DomainConfig{
@@ -579,6 +649,102 @@ func Test_DSChecks(t *testing.T) {
 			}
 		})
 	})
+}
+
+func TestCheckR53WeightedGroupConsistency_noerr_consistent(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"},
+		}),
+		makeRC("@", "example.com", "2.3.4.5", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"},
+		}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 0 {
+		t.Errorf("Expected 0 errors but got %d: %v", len(errs), errs)
+	}
+}
+
+func TestCheckR53WeightedGroupConsistency_noerr_different_set_ids(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary"},
+		}),
+		makeRC("@", "example.com", "5.6.7.8", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "30", "r53_set_identifier": "secondary"},
+		}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 0 {
+		t.Errorf("Expected 0 errors but got %d: %v", len(errs), errs)
+	}
+}
+
+func TestCheckR53WeightedGroupConsistency_noerr_no_metadata(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{Type: "A"}),
+		makeRC("@", "example.com", "5.6.7.8", models.RecordConfig{Type: "A"}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 0 {
+		t.Errorf("Expected 0 errors but got %d: %v", len(errs), errs)
+	}
+}
+
+func TestCheckR53WeightedGroupConsistency_err_different_weights(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary"},
+		}),
+		makeRC("@", "example.com", "2.3.4.5", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "50", "r53_set_identifier": "primary"},
+		}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 1 {
+		t.Errorf("Expected 1 error for inconsistent weights but got %d: %v", len(errs), errs)
+	}
+}
+
+func TestCheckR53WeightedGroupConsistency_err_different_health_checks(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"},
+		}),
+		makeRC("@", "example.com", "2.3.4.5", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-2"},
+		}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 1 {
+		t.Errorf("Expected 1 error for inconsistent health checks but got %d: %v", len(errs), errs)
+	}
+}
+
+func TestCheckR53WeightedGroupConsistency_err_both_inconsistent(t *testing.T) {
+	records := []*models.RecordConfig{
+		makeRC("@", "example.com", "1.2.3.4", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"},
+		}),
+		makeRC("@", "example.com", "2.3.4.5", models.RecordConfig{
+			Type:     "A",
+			Metadata: map[string]string{"r53_weight": "50", "r53_set_identifier": "primary", "r53_health_check_id": "hc-2"},
+		}),
+	}
+	errs := checkR53WeightedGroupConsistency(records)
+	if len(errs) != 2 {
+		t.Errorf("Expected 2 errors (weight + health check) but got %d: %v", len(errs), errs)
+	}
 }
 
 func Test_errorRepeat(t *testing.T) {

@@ -21,18 +21,22 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/bindserial"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsrr"
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
-	"github.com/StackExchange/dnscontrol/v4/pkg/prettyzone"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypeinfo"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/bindserial"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
 	dnsv1 "github.com/miekg/dns"
 )
+
+// defaultZonesDir is used when the BIND credentials do not specify a
+// directory.
+const defaultZonesDir = "zones"
 
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
@@ -101,13 +105,40 @@ func initBind(config map[string]string, providermeta json.RawMessage) (providers
 
 func init() {
 	const providerName = "BIND"
-	const providerMaintainer = "@tlimoncelli"
+	const providerMaintainer = "@TomOnTime"
 	fns := providers.DspFuncs{
 		Initializer:   initBind,
 		RecordAuditor: AuditRecords,
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "ISC BIND",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/bind",
+		Notes:       "BIND writes zone files to a local directory; no API credentials are needed.",
+		Fields: []providers.CredsField{
+			{
+				Key:     "directory",
+				Label:   "Zone files directory",
+				Help:    "Directory where BIND zone files are written. Defaults to zones.",
+				Default: defaultZonesDir,
+			},
+			{
+				Key:     "filenameformat",
+				Label:   "File name format",
+				Help:    "Format used for zone file names. Defaults to %c.zone.",
+				Default: "%c.zone",
+			},
+		},
+		PostWrite: func(fields map[string]string) error {
+			dir := fields["directory"]
+			if dir == "" {
+				dir = defaultZonesDir
+			}
+			return os.MkdirAll(dir, 0o755)
+		},
+	})
 }
 
 // SoaDefaults contains the parts of the default SOA settings.
@@ -166,7 +197,10 @@ func (c *bindProvider) ListZones() ([]string, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *bindProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *bindProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+	meta := dc.Metadata
+
 	var zonefile string
 
 	if _, err := os.Stat(c.directory); os.IsNotExist(err) {
@@ -243,7 +277,7 @@ func ParseZoneContents(content string, zoneName string, zonefileName string) (mo
 	return foundRecords, nil
 }
 
-func (c *bindProvider) EnsureZoneExists(_ string, _ map[string]string) error {
+func (c *bindProvider) EnsureZoneExists(_ *models.DomainConfig) error {
 	return nil
 }
 

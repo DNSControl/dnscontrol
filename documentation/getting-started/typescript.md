@@ -2,16 +2,11 @@
 
 ## What is this?
 
-Would you like your editor to support auto-completion and other advanced IDE
-features when editing `dnsconfig.js`? Yes you can!
+Would you like your editor to support auto-completion and other advanced IDE features when editing `dnsconfig.js`? Yes you can!
 
-While DNSControl does not support TypeScript syntax in `dnsconfig.js`, you can
-still use TypeScript’s features in editors which support it.
+While DNSControl does not support TypeScript syntax in `dnsconfig.js`, you can still use TypeScript’s features in editors which support it.
 
-If you’re using Visual Studio Code (or another editor that supports TypeScript), you
-should now be able to see the type information in your `dnsconfig.js` file as
-you type. Hover over record names to read their documentation without having to
-open the documentation website!
+If you’re using Visual Studio Code (or another editor that supports TypeScript), you should now be able to see the type information in your `dnsconfig.js` file as you type. Hover over record names to read their documentation without having to open the documentation website!
 
 ## How to activate auto-completion
 
@@ -33,8 +28,7 @@ for the version of DNSControl you are using.
 
 2. Tell your editor
 
-At this point some features (autocomplete) will work. However to get the full experience, including
-type checking (i.e. red squiggly underlines when you misuse APIs), there is one more step.
+At this point some features (autocomplete) will work. However to get the full experience, including type checking (i.e. red squiggly underlines when you misuse APIs), there is one more step.
 
 Add these comments to the top of your `dnsconfig.js` file:
 
@@ -45,15 +39,14 @@ Add these comments to the top of your `dnsconfig.js` file:
 ```
 {% endcode %}
 
-
 That should be all you need to do!
 
-If your editor requires extra steps, please [file a bug](https://github.com/StackExchange/dnscontrol/issues) and we'll update this page.
+If your editor requires extra steps, please [file a bug](https://github.com/DNSControl/dnscontrol/issues) and we'll update this page.
 
 ### Bugs?
 
 {% hint style="warning" %}
-**BUGS**: Not all features of DNSControl work perfectly at the moment. Please report bugs and feature requests on https://github.com/StackExchange/dnscontrol/issues
+**BUGS**: Not all features of DNSControl work perfectly at the moment. Please report bugs and feature requests on https://github.com/DNSControl/dnscontrol/issues
 {% endhint %}
 
 {% hint style="info" %}
@@ -125,7 +118,6 @@ Workaround: create a new `.d.ts` file in the same folder as your `dnsconfig.js` 
 declare const VARIABLE_NAME: string;
 ```
 {% endcode %}
-
 
 This will tell TypeScript that the variable exists, and that it’s a string.
 

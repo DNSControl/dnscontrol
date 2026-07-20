@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 // packetframeProvider is the handle for this provider.
@@ -82,7 +82,9 @@ func (api *packetframeProvider) getZone(domain string) (*zoneInfo, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *packetframeProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *packetframeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := api.getZone(domain)
 	if err != nil {
 		return nil, fmt.Errorf("no such zone %q in Packetframe account", domain)
@@ -95,12 +97,8 @@ func (api *packetframeProvider) GetZoneRecords(domain string, meta map[string]st
 
 	existingRecords := make([]*models.RecordConfig, len(records))
 
-	dc := models.DomainConfig{
-		Name: domain,
-	}
-
 	for i := range records {
-		existingRecords[i], err = toRc(&dc, &records[i])
+		existingRecords[i], err = toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}

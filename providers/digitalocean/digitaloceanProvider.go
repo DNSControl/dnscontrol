@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/digitalocean/godo"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
@@ -106,10 +106,26 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "DigitalOcean",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/digitalocean",
+		PortalURL:   "https://cloud.digitalocean.com/account/api/tokens",
+		Fields: []providers.CredsField{
+			{
+				Key:      "token",
+				Label:    "API token",
+				Help:     "Your DigitalOcean personal access token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (api *digitaloceanProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *digitaloceanProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 retry:
 	ctx := context.Background()
 	_, resp, err := api.client.Domains.Get(ctx, domain)
@@ -169,7 +185,9 @@ func (api *digitaloceanProvider) GetNameservers(domain string) ([]*models.Namese
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *digitaloceanProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := getRecords(api, domain)
 	if err != nil {
 		return nil, err

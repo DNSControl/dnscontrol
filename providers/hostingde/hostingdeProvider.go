@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 var defaultNameservers = []string{"ns1.hosting.de", "ns2.hosting.de", "ns3.hosting.de"}
@@ -48,6 +48,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "hosting.de",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/hostingde",
+		PortalURL:   "https://secure.hosting.de/",
+		Fields: []providers.CredsField{
+			{
+				Key:      "authToken",
+				Label:    "Auth token",
+				Help:     "Your hosting.de API auth token.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 type providerMeta struct {
@@ -100,7 +115,9 @@ func (hp *hostingdeProvider) GetNameservers(domain string) ([]*models.Nameserver
 	return models.ToNameservers(hp.nameservers)
 }
 
-func (hp *hostingdeProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (hp *hostingdeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := hp.getZone(domain)
 	if err != nil {
 		return nil, err
@@ -352,7 +369,8 @@ func (hp *hostingdeProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([
 	return nil, nil
 }
 
-func (hp *hostingdeProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (hp *hostingdeProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	_, err := hp.getZoneConfig(domain)
 	if errors.Is(err, errZoneNotFound) {
 		if err := hp.createZone(domain); err != nil {

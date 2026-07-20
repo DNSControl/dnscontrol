@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	dnsv1 "github.com/miekg/dns"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
@@ -172,8 +172,8 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		LocSize            uint8             `json:"locsize,omitempty"`
 		LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
 		LocVertPre         uint8             `json:"locvertpre,omitempty"`
-		LocLatitude        int               `json:"loclatitude,omitempty"`
-		LocLongitude       int               `json:"loclongitude,omitempty"`
+		LocLatitude        uint32            `json:"loclatitude,omitempty"`
+		LocLongitude       uint32            `json:"loclongitude,omitempty"`
 		LocAltitude        uint32            `json:"localtitude,omitempty"`
 		LuaRType           string            `json:"luartype,omitempty"`
 		NaptrOrder         uint16            `json:"naptrorder,omitempty"`
@@ -349,13 +349,15 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 		// SoaSerial is not included because it isn't used in comparisons.
 	case "TXT":
 		// fmt.Fprintf(os.Stdout, "DEBUG: ToComNoTTL raw txts=%s q=%q\n", rc.target, rc.target)
-		r := txtutil.EncodeQuoted(rc.target)
+		r := txtutil.EncodeSingle(rc.target)
 		// fmt.Fprintf(os.Stdout, "DEBUG: ToComNoTTL cmp txts=%s q=%q\n", r, r)
 		return r
 	case "LUA":
 		return rc.luaCombined()
 	case "UNKNOWN":
 		return fmt.Sprintf("rtype=%s rdata=%s", rc.UnknownTypeName, rc.target)
+	case "HTTPS", "SVCB":
+		return rc.targetCombinedSVCBRaw()
 	}
 	return rc.GetTargetCombined()
 }
@@ -396,12 +398,14 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 	switch rdtype { // #rtype_variations
 	case dnsv1.TypeA:
 		addr := rc.GetTargetIP()
-		s := addr.AsSlice()
-		rr.(*dnsv1.A).A = s[0:4]
+		if s := addr.AsSlice(); len(s) == 4 {
+			rr.(*dnsv1.A).A = s
+		}
 	case dnsv1.TypeAAAA:
 		addr := rc.GetTargetIP()
-		s := addr.AsSlice()
-		rr.(*dnsv1.AAAA).AAAA = s[0:16]
+		if s := addr.AsSlice(); len(s) == 16 {
+			rr.(*dnsv1.AAAA).AAAA = s
+		}
 	case dnsv1.TypeCAA:
 		rr.(*dnsv1.CAA).Flag = rc.CaaFlag
 		rr.(*dnsv1.CAA).Tag = rc.CaaTag
@@ -531,6 +535,12 @@ func (rc *RecordConfig) Key() RecordKey {
 			// label with different alias types are considered separate.
 			t = fmt.Sprintf("%s_%s", t, v)
 		}
+	}
+	// Route 53 weighted/failover routing: records with different
+	// SetIdentifiers are separate ResourceRecordSets in the R53 API,
+	// so they must have distinct keys for the diff engine.
+	if sid, ok := rc.Metadata["r53_set_identifier"]; ok && sid != "" {
+		t = fmt.Sprintf("%s!%s", t, sid)
 	}
 	return RecordKey{rc.NameFQDN, t}
 }

@@ -3,7 +3,7 @@ package rejectif
 import (
 	"errors"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // Keep these in alphabetical order.

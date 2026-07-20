@@ -69,6 +69,27 @@ type dnsRecordUpdate struct {
 	TTL    int64  `json:"ttl,omitempty"`
 }
 
+func apiError(action, zone string, res *http.Response, result string, apiErr errorRecord) error {
+	if result == "error" {
+		if apiErr.Code != "" && apiErr.Description != "" {
+			return fmt.Errorf("failed to %s for zone %s: %s (%s)", action, zone, apiErr.Description, apiErr.Code)
+		}
+		if apiErr.Description != "" {
+			return fmt.Errorf("failed to %s for zone %s: %s", action, zone, apiErr.Description)
+		}
+		if apiErr.Code != "" {
+			return fmt.Errorf("failed to %s for zone %s: %s", action, zone, apiErr.Code)
+		}
+		return fmt.Errorf("failed to %s for zone %s: unknown API error (HTTP %s)", action, zone, res.Status)
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusMultipleChoices {
+		return fmt.Errorf("failed to %s for zone %s: unexpected HTTP status %s", action, zone, res.Status)
+	}
+
+	return nil
+}
+
 // Get zone information
 // See https://developer.infomaniak.com/docs/api/get/2/zones/%7Bzone%7D
 func (p *infomaniakProvider) getDNSZone(zone string) (*dnsZone, error) {
@@ -90,6 +111,10 @@ func (p *infomaniakProvider) getDNSZone(zone string) (*dnsZone, error) {
 	response := &dnsZoneResponse{}
 	err = json.NewDecoder(res.Body).Decode(response)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := apiError("retrieve zone details", zone, res, response.Result, response.Error); err != nil {
 		return nil, err
 	}
 
@@ -120,6 +145,10 @@ func (p *infomaniakProvider) getDNSRecords(zone string) ([]dnsRecord, error) {
 		return nil, err
 	}
 
+	if err := apiError("retrieve DNS records", zone, res, response.Result, response.Error); err != nil {
+		return nil, err
+	}
+
 	return response.Data, nil
 }
 
@@ -147,8 +176,8 @@ func (p *infomaniakProvider) deleteDNSRecord(zone string, recordID string) error
 		return err
 	}
 
-	if response.Result == "error" {
-		return fmt.Errorf("failed to delete record %s in zone %s: %s", recordID, zone, response.Error.Description)
+	if err := apiError("delete record "+recordID, zone, res, response.Result, response.Error); err != nil {
+		return err
 	}
 
 	return nil
@@ -183,8 +212,8 @@ func (p *infomaniakProvider) createDNSRecord(zone string, rec *dnsRecordCreate) 
 		return nil, err
 	}
 
-	if response.Result == "error" {
-		return nil, fmt.Errorf("failed to create %s record in zone %s: %s", rec.Type, zone, response.Error.Description)
+	if err := apiError("create "+rec.Type+" record", zone, res, response.Result, response.Error); err != nil {
+		return nil, err
 	}
 
 	return &response.Data, nil
@@ -219,8 +248,8 @@ func (p *infomaniakProvider) updateDNSRecord(zone string, recordID string, rec *
 		return nil, err
 	}
 
-	if response.Result == "error" {
-		return nil, fmt.Errorf("failed to update record %s in zone %s: %s", recordID, zone, response.Error.Description)
+	if err := apiError("update record "+recordID, zone, res, response.Result, response.Error); err != nil {
+		return nil, err
 	}
 
 	return &response.Data, nil

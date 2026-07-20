@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	vercelClient "github.com/vercel/terraform-provider-vercel/client"
 )
 
@@ -34,7 +34,7 @@ func (cr *clientRequest) toHTTPRequest() (*http.Request, error) {
 		return nil, err
 	}
 	// Use a custom user agent for dnscontrol
-	r.Header.Set("User-Agent", "dnscontrol https://github.com/StackExchange/dnscontrol/pull/3542")
+	r.Header.Set("User-Agent", "dnscontrol https://github.com/DNSControl/dnscontrol/pull/3542")
 	if cr.body != "" {
 		r.Header.Set("Content-Type", "application/json")
 	}

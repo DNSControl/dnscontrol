@@ -8,30 +8,15 @@ parameter_types:
   "modifiers...": DomainModifier[]
 ---
 
-`D_EXTEND` adds records (and metadata) to a domain previously defined
-by [`D()`](D.md). It can also be used to add subdomain records (and metadata)
-to a previously defined domain.
+`D_EXTEND` adds records (and metadata) to a domain previously defined by [`D()`](D.md). It can also be used to add subdomain records (and metadata) to a previously defined domain.
 
-The first argument is a domain name. If it exactly matches a
-previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md),
-simply adding records as if they had been specified in the original
-[`D()`](D.md).
+The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md), simply adding records as if they had been specified in the original [`D()`](D.md).
 
-If the domain name does not match an existing domain, but could be a
-(non-delegated) subdomain of an existing domain, the new records (and
-metadata) are added with the subdomain part appended to all record
-names (labels), and targets (as appropriate). See the examples below.
+If the domain name does not match an existing domain, but could be a (non-delegated) subdomain of an existing domain, the new records (and metadata) are added with the subdomain part appended to all record names (labels), and targets (as appropriate). See the examples below.
 
-Matching the domain name to previously-defined domains is done using a
-`longest match` algorithm.  If `domain.tld` and `sub.domain.tld` are
-defined as separate domains via separate [`D()`](D.md) statements, then
-`D_EXTEND("sub.sub.domain.tld", ...)` would match `sub.domain.tld`,
-not `domain.tld`.
+Matching the domain name to previously-defined domains is done using a `longest match` algorithm. If `domain.tld` and `sub.domain.tld` are defined as separate domains via separate [`D()`](D.md) statements, then `D_EXTEND("sub.sub.domain.tld", ...)` would match `sub.domain.tld`, not `domain.tld`.
 
-Some operators only act on an apex domain (e.g.
-[`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md),
-[`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them
-in a `D_EXTEND` subdomain may not be what you expect.
+Some operators only act on an apex domain (e.g. [`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md), [`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them in a `D_EXTEND` subdomain may not be what you expect.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -80,11 +65,4 @@ This will end up in the following modifications: (This output assumes the `--ful
 #12: CREATE CNAME i.sub.domain.tld j.sub.domain.tld.
 ```
 
-ProTips: `D_EXTEND()` permits you to create very complex and
-sophisticated configurations, but you shouldn't. Be nice to the next
-person that edits the file, who may not be as expert as yourself.
-Enhance readability by putting any `D_EXTEND()` statements immediately
-after the original [`D()`](D.md), like in above example.  Avoid the temptation
-to obscure the addition of records to existing domains with randomly
-placed `D_EXTEND()` statements. Don't build up a domain using loops of
-`D_EXTEND()` statements. You'll be glad you didn't.
+ProTips: `D_EXTEND()` permits you to create very complex and sophisticated configurations, but you shouldn't. Be nice to the next person that edits the file, who may not be as expert as yourself. Enhance readability by putting any `D_EXTEND()` statements immediately after the original [`D()`](D.md), like in above example. Avoid the temptation to obscure the addition of records to existing domains with randomly placed `D_EXTEND()` statements. Don't build up a domain using loops of `D_EXTEND()` statements. You'll be glad you didn't.

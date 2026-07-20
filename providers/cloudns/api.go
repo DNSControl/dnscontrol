@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 // cloudnsProvider is the handle for the ClouDNS API.

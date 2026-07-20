@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // legacyDNSRecord represents a DNS record in the OLD UniFi API format (v2/api/site/{site}/static-dns).
@@ -40,14 +40,14 @@ type dnsPolicyMetadata struct {
 // This API is available in UniFi Network 10.1+.
 // The record is polymorphic - different fields are used depending on the type.
 type dnsPolicyRecord struct {
-	Type     string            `json:"type"`         // A_RECORD, AAAA_RECORD, CNAME_RECORD, MX_RECORD, TXT_RECORD, SRV_RECORD
-	ID       string            `json:"id,omitempty"` // UUID
-	Enabled  bool              `json:"enabled"`      // Whether the record is enabled
-	Metadata dnsPolicyMetadata `json:"metadata"`     // Metadata (origin)
-	Domain   string            `json:"domain"`       // FQDN (e.g., "test.example.com")
+	Type     string             `json:"type"`               // A_RECORD, AAAA_RECORD, CNAME_RECORD, MX_RECORD, TXT_RECORD, SRV_RECORD
+	ID       string             `json:"id,omitempty"`       // UUID
+	Enabled  bool               `json:"enabled"`            // Whether the record is enabled
+	Metadata *dnsPolicyMetadata `json:"metadata,omitempty"` // Metadata (origin, read-only in API responses)
+	Domain   string             `json:"domain"`             // FQDN (e.g., "test.example.com")
 
-	// TTL (optional, 0 = default)
-	TTLSeconds int `json:"ttlSeconds,omitempty"`
+	// TTL in seconds (required by the API, always sent)
+	TTLSeconds int `json:"ttlSeconds"`
 
 	// Type-specific fields
 	IPv4Address      string `json:"ipv4Address,omitempty"`      // A record
@@ -289,14 +289,13 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 	r := &dnsPolicyRecord{
 		Enabled: true,
 		Domain:  rc.NameFQDN,
-		Metadata: dnsPolicyMetadata{
-			Origin: "USER_DEFINED",
-		},
 	}
 
-	// Set TTL if non-default
-	if rc.TTL > 0 && rc.TTL != 300 {
+	// Always send TTL; the API requires ttlSeconds to be non-null.
+	if rc.TTL > 0 {
 		r.TTLSeconds = int(rc.TTL)
+	} else {
+		r.TTLSeconds = 300
 	}
 
 	switch rc.Type {

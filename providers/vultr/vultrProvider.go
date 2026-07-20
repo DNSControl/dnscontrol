@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/vultr/govultr/v2"
 	"golang.org/x/net/idna"
 	"golang.org/x/oauth2"
@@ -80,7 +80,9 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *vultrProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	listOptions := &govultr.ListOptions{}
 	records, recordsMeta, err := api.client.DomainRecord.List(context.Background(), domain, listOptions)
 	curRecords := make(models.Records, recordsMeta.Total)
@@ -181,7 +183,8 @@ func (api *vultrProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (api *vultrProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (api *vultrProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if ok, err := api.isDomainInAccount(domain); err != nil {
 		return err
 	} else if ok {

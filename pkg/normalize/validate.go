@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	dnsv1 "github.com/miekg/dns"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
@@ -141,7 +141,7 @@ func checkLabel(label string, rType string, domain string, meta map[string]strin
 		return nil
 	}
 	// Don't warn for records that start with _
-	// See https://github.com/StackExchange/dnscontrol/issues/829
+	// See https://github.com/DNSControl/dnscontrol/issues/829
 	if strings.HasPrefix(label, "_") || strings.Contains(label, "._") || strings.HasPrefix(label, "sql-") {
 		return nil
 	}
@@ -558,6 +558,8 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	for _, d := range config.Domains {
 		// Check that CNAMES don't have to co-exist with any other records
 		errs = append(errs, checkCNAMEs(d)...)
+		// Check that only one SOA record exist for a zone
+		errs = append(errs, checkMultipleSOAs(d)...)
 		// Check that if any advanced record types are used in a domain, every provider for that domain supports them
 		err := checkProviderCapabilities(d)
 		if err != nil {
@@ -567,6 +569,8 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		errs = append(errs, checkDuplicates(d.Records)...)
 		// Check for different TTLs under the same label
 		errs = append(errs, checkRecordSetHasMultipleTTLs(d.Records)...)
+		// Check for inconsistent R53 weighted routing metadata within a group
+		errs = append(errs, checkR53WeightedGroupConsistency(d.Records)...)
 		// Validate FQDN consistency
 		for _, r := range d.Records {
 			if r.NameFQDN == "" || !strings.HasSuffix(r.NameFQDN, d.Name) {
@@ -636,12 +640,16 @@ func checkAutoDNSSEC(dc *models.DomainConfig) (errs []error) {
 
 func checkCNAMEs(dc *models.DomainConfig) (errs []error) {
 	cnames := map[string]bool{}
+	proxiedCnames := map[string]bool{}
 	for _, r := range dc.Records {
 		if r.Type == "CNAME" {
 			if cnames[r.GetLabel()] {
 				errs = append(errs, fmt.Errorf("%s: cannot have multiple CNAMEs with same name: %s", r.FilePos, r.GetLabelFQDN()))
 			}
 			cnames[r.GetLabel()] = true
+			if p, ok := r.Metadata["cloudflare_proxy"]; ok && (p == "on" || p == "full") {
+				proxiedCnames[r.GetLabel()] = true
+			}
 		}
 	}
 	for _, r := range dc.Records {
@@ -650,7 +658,26 @@ func checkCNAMEs(dc *models.DomainConfig) (errs []error) {
 			if r.Type == "AKAMAICDN" {
 				continue
 			}
+			// Cloudflare proxied (flattened) CNAMEs are resolved internally
+			// and never served as actual CNAME records, so the RFC 1034 §3.6.2
+			// restriction does not apply.
+			if proxiedCnames[r.GetLabel()] {
+				continue
+			}
 			errs = append(errs, fmt.Errorf("%s: cannot have CNAME and %s record with same name: %s", r.FilePos, r.Type, r.GetLabelFQDN()))
+		}
+	}
+	return
+}
+
+func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
+	soas := map[string]bool{}
+	for _, r := range dc.Records {
+		if r.Type == "SOA" {
+			if soas[r.GetLabel()] {
+				errs = append(errs, fmt.Errorf("%s: cannot have multiple SOAs with same name: %s", r.FilePos, r.GetLabelFQDN()))
+			}
+			soas[r.GetLabel()] = true
 		}
 	}
 	return
@@ -753,6 +780,39 @@ func commaSepInts(list []int) string {
 		slist[i] = strconv.Itoa(v)
 	}
 	return strings.Join(slist, ",")
+}
+
+// checkR53WeightedGroupConsistency validates that all records sharing the same
+// label+type+set_identifier have identical weight and health_check_id, since
+// they map to a single Route 53 ResourceRecordSet.
+func checkR53WeightedGroupConsistency(records []*models.RecordConfig) (errs []error) {
+	type groupMeta struct {
+		weight      string
+		healthCheck string
+	}
+	groups := map[string]groupMeta{}
+
+	for _, rc := range records {
+		sid := rc.Metadata["r53_set_identifier"]
+		if sid == "" {
+			continue
+		}
+		key := rc.GetLabelFQDN() + ":" + rc.Type + "!" + sid
+		w := rc.Metadata["r53_weight"]
+		hc := rc.Metadata["r53_health_check_id"]
+
+		if existing, ok := groups[key]; ok {
+			if existing.weight != w {
+				errs = append(errs, fmt.Errorf("R53 weighted group %q at %s %s has inconsistent weights (%s vs %s)", sid, rc.Type, rc.GetLabelFQDN(), existing.weight, w))
+			}
+			if existing.healthCheck != hc {
+				errs = append(errs, fmt.Errorf("R53 weighted group %q at %s %s has inconsistent health check IDs (%s vs %s)", sid, rc.Type, rc.GetLabelFQDN(), existing.healthCheck, hc))
+			}
+		} else {
+			groups[key] = groupMeta{weight: w, healthCheck: hc}
+		}
+	}
+	return errs
 }
 
 // We pull this out of checkProviderCapabilities() so that it's visible within

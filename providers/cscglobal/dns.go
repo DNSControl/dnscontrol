@@ -3,12 +3,14 @@ package cscglobal
 import (
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (client *providerClient) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (client *providerClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := client.getZoneRecordsAll(domain)
 	if err != nil {
 		return nil, err

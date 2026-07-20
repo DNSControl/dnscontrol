@@ -14,14 +14,14 @@ import (
 	"github.com/fatih/color"
 	"golang.org/x/net/idna"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/transform"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
-	"github.com/StackExchange/dnscontrol/v4/pkg/zonecache"
-	"github.com/StackExchange/dnscontrol/v4/providers/cloudflare/rtypes/cfsingleredirect"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	"github.com/DNSControl/dnscontrol/v4/providers/cloudflare/rtypes/cfsingleredirect"
 )
 
 /*
@@ -76,6 +76,51 @@ func init() {
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterCustomRecordType("CF_WORKER_ROUTE", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Cloudflare",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/cloudflareapi",
+		PortalURL:   "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
+		Notes:       "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "_authMethod",
+				Label:    "Which authentication method do you want to use?",
+				Help:     "API token is scoped and recommended; the global API key requires the account email.",
+				Choices:  []string{"API token", "Global API key + email"},
+				Required: true,
+				Internal: true,
+			},
+			{
+				Key:      "apitoken",
+				Label:    "API token",
+				Help:     "Cloudflare API token with the required permissions.",
+				Secret:   true,
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "API token"},
+			},
+			{
+				Key:      "apiuser",
+				Label:    "API user (email)",
+				Help:     "Account email used with the global API key.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "Global API key + email"},
+			},
+			{
+				Key:      "apikey",
+				Label:    "API key",
+				Help:     "Cloudflare global API key.",
+				Secret:   true,
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "Global API key + email"},
+			},
+			{
+				Key:   "accountid",
+				Label: "Account ID (optional)",
+				Help:  "Cloudflare account ID. Required to manage zones in a specific account when the credentials have access to more than one.",
+			},
+		},
+	})
 }
 
 // cloudflareProvider is the handle for API calls.
@@ -111,7 +156,9 @@ func (c *cloudflareProvider) ListZones() ([]string, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *cloudflareProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	domainID, err := c.getDomainID(domain)
 	if err != nil {
 		return nil, err
@@ -869,7 +916,7 @@ func stringDefault(value any, def string) string {
 
 func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSRecord) (*models.RecordConfig, error) {
 	// Check for read_only metadata
-	// https://github.com/StackExchange/dnscontrol/issues/3850
+	// https://github.com/DNSControl/dnscontrol/issues/3850
 	if cr.Meta != nil {
 		if metaMap, ok := cr.Meta.(map[string]any); ok {
 			if readOnly, ok := metaMap["read_only"].(bool); ok && readOnly {
@@ -883,7 +930,7 @@ func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSReco
 		cr.Type = "CNAME"
 	}
 
-	// workaround for https://github.com/StackExchange/dnscontrol/issues/446
+	// workaround for https://github.com/DNSControl/dnscontrol/issues/446
 	if cr.Type == "SPF" {
 		cr.Type = "TXT"
 	}
@@ -1026,7 +1073,8 @@ func getProxyMetadata(r *models.RecordConfig) map[string]string {
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *cloudflareProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *cloudflareProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if ok, err := c.zoneCache.HasZone(domain); err != nil || ok {
 		return err
 	}

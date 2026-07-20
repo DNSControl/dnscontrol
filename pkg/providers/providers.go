@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // Registrar is an interface for a domain registrar. It can return a list of needed corrections to be applied in the future. Implement this only if the provider is a "registrar" (i.e. can update the NS records of the parent to a domain).
@@ -22,7 +22,7 @@ type DNSServiceProvider interface {
 // ZoneCreator should be implemented by providers that have the ability to create zones
 // (used for automatically creating zones if they don't exist).
 type ZoneCreator interface {
-	EnsureZoneExists(domain string, metadata map[string]string) error
+	EnsureZoneExists(dc *models.DomainConfig) error
 }
 
 // ZoneLister should be implemented by providers that have the
@@ -184,7 +184,7 @@ func (n None) GetNameservers(string) ([]*models.Nameserver, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n None) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (n None) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	return nil, nil
 }
 
@@ -203,6 +203,11 @@ func init() {
 	RegisterRegistrarType("NONE", func(map[string]string) (Registrar, error) {
 		return None{}, nil
 	}, featuresNone)
+	RegisterCredsMetadata("NONE", CredsMetadata{
+		DisplayName: "No registrar",
+		Kind:        KindRegistrar,
+		Notes:       "Use NONE when you do not want DNSControl to manage nameserver delegation (that is, the nameservers for this domain will be managed manually).",
+	})
 }
 
 // CustomRType stores an rtype that is only valid for this DSP.

@@ -15,10 +15,10 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
 )
 
@@ -64,6 +64,52 @@ func init() {
 	providers.RegisterCustomRecordType("AKAMAICDN", providerName, "")
 	providers.RegisterCustomRecordType("AKAMAITLC", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Akamai Edge DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/akamaiedgedns",
+		PortalURL:   "https://control.akamai.com/apps/identity-management/", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "host",
+				Label:    "EdgeGrid host",
+				Help:     "EdgeGrid API host, e.g. akaa-xxxx.xxxx.akamaiapis.net.",
+				Required: true,
+			},
+			{
+				Key:      "client_token",
+				Label:    "Client token",
+				Help:     "EdgeGrid client_token from your API client credentials.",
+				Required: true,
+			},
+			{
+				Key:      "client_secret",
+				Label:    "Client secret",
+				Help:     "EdgeGrid client_secret from your API client credentials.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "access_token",
+				Label:    "Access token",
+				Help:     "EdgeGrid access_token from your API client credentials.",
+				Secret:   true,
+				Required: true,
+			},
+			{
+				Key:      "contract_id",
+				Label:    "Contract ID",
+				Help:     "Akamai contract ID used when creating zones (e.g. X-XXXX).",
+				Required: true,
+			},
+			{
+				Key:      "group_id",
+				Label:    "Group ID",
+				Help:     "Akamai group ID used when creating zones (numeric).",
+				Required: true,
+			},
+		},
+	})
 }
 
 // DnsServiceProvider.
@@ -108,7 +154,8 @@ func newEdgeDNSDSP(config map[string]string, metadata json.RawMessage) (provider
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (a *edgeDNSProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (a *edgeDNSProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	ctx := context.Background()
 	if a.zoneDoesExist(ctx, domain) {
 		printer.Debugf("Zone %s already exists\n", domain)
@@ -236,7 +283,9 @@ func (a *edgeDNSProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 }
 
 // GetZoneRecords returns an array of RecordConfig structs for a zone.
-func (a *edgeDNSProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (a *edgeDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	ctx := context.Background()
 	records, err := a.getRecords(ctx, domain)
 	if err != nil {

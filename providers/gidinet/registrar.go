@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // GetRegistrarCorrections returns corrections to update domain nameserver delegation.

@@ -7,6 +7,13 @@ import (
 	dnsv1 "github.com/miekg/dns"
 )
 
+func (rc *RecordConfig) targetCombinedSVCBRaw() string {
+	if rc.SvcParams == "" {
+		return fmt.Sprintf("%d %s", rc.SvcPriority, rc.target)
+	}
+	return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.target, rc.SvcParams)
+}
+
 // SetTargetSVCB sets the SVCB fields.
 func (rc *RecordConfig) SetTargetSVCB(priority uint16, target string, params []dnsv1.SVCBKeyValue) error {
 	rc.SvcPriority = priority

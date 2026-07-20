@@ -14,7 +14,7 @@ jobs:
     name: "Check: go fmt"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -25,30 +25,32 @@ jobs:
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false
 
   prettier:
     name: "Check: prettier"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: lts/*
+          node-version: latest
       - run: npm install
       - run: node_modules/.bin/prettier --write pkg/js/helpers.js
       - run: git checkout -- package-lock.json
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false
 
   fmtjson:
     name: "Check: fmtjson"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -60,12 +62,13 @@ jobs:
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false
 
   go-mod-tidy:
     name: "Check: go mod tidy"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -76,12 +79,13 @@ jobs:
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false
 
   go-generate:
     name: "Check: go generate"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -93,12 +97,13 @@ jobs:
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false
 
   go-fix:
     name: "Check: go fix"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -109,3 +114,4 @@ jobs:
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
+          request-changes-if-not-clean: false

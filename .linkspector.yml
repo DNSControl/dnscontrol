@@ -11,6 +11,6 @@ ignorePatterns:
   - pattern: '^https://cloud.digitalocean.com/account/api/tokens'
   - pattern: '^https://cloud.digitalocean.com/settings/applications'
   - pattern: '^https://dns.hetzner.com/settings/api-token'
-  - pattern: '^https://github.com/StackExchange/dnscontrol/settings/.*$'
+  - pattern: '^https://github.com/DNSControl/dnscontrol/settings/.*$'
   - pattern: '^https://gitlab.com/cafferata/dnscontrol/-/pipelines/new.*$'
   - pattern: '^https://my.easyname.com/en/account/api'

@@ -58,6 +58,15 @@
     "TenantID": "$AZURE_DNS_TENANT_ID",
     "domain": "$AZURE_DNS_DOMAIN"
   },
+  "AZURE_PRIVATE_DNS": {
+    "ClientID": "$AZURE_PRIVATE_DNS_CLIENT_ID",
+    "ClientSecret": "$AZURE_PRIVATE_DNS_CLIENT_SECRET",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "TYPE": "AZURE_PRIVATE_DNS",
+    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
+    "domain": "$AZURE_PRIVATE_DNS_DOMAIN"
+  },
   "BIND": {
     "TYPE": "BIND",
     "domain": "$BIND_DOMAIN"
@@ -138,6 +147,11 @@
     "secret": "$DOMAINNAMESHOP_SECRET",
     "token": "$DOMAINNAMESHOP_TOKEN"
   },
+  "DYNU": {
+    "TYPE": "DYNU",
+    "api_key": "$DYNU_API_KEY",
+    "domain": "$DYNU_DOMAIN"
+  },
   "EXOSCALE": {
     "TYPE": "EXOSCALE",
     "apikey": "$EXOSCALE_API_KEY",
@@ -158,6 +172,7 @@
   "GANDI_V5": {
     "TYPE": "GANDI_V5",
     "apikey": "$GANDI_V5_APIKEY",
+    "apiurl": "$GANDI_V5_APIURL",
     "domain": "$GANDI_V5_DOMAIN",
     "token": "$GANDI_V5_TOKEN"
   },
@@ -180,6 +195,11 @@
     "password": "$GIDINET_PASSWORD",
     "username": "$GIDINET_USERNAME"
   },
+  "GIGAHOST": {
+    "TYPE": "GIGAHOST",
+    "apikey": "$GIGAHOST_APIKEY",
+    "domain": "$GIGAHOST_DOMAIN"
+  },
   "HEDNS": {
     "TYPE": "HEDNS",
     "domain": "$HEDNS_DOMAIN",
@@ -187,11 +207,6 @@
     "session-file-path": ".",
     "totp-key": "$HEDNS_TOTP_SECRET",
     "username": "$HEDNS_USERNAME"
-  },
-  "HETZNER": {
-    "TYPE": "HETZNER",
-    "api_key": "$HETZNER_API_KEY",
-    "domain": "$HETZNER_DOMAIN"
   },
   "HETZNER_V2": {
     "TYPE": "HETZNER_V2",
@@ -272,6 +287,11 @@
     "apiuser": "$NAMEDOTCOM_USER",
     "domain": "$NAMEDOTCOM_DOMAIN"
   },
+  "NETBIRD": {
+    "TYPE": "NETBIRD",
+    "domain": "$NETBIRD_DOMAIN",
+    "token": "$NETBIRD_TOKEN"
+  },
   "NETCUP": {
     "TYPE": "NETCUP",
     "api-key": "$NETCUP_KEY",
@@ -285,10 +305,23 @@
     "slug": "$NETLIFY_ACCOUNT_SLUG",
     "token": "$NETLIFY_TOKEN"
   },
+  "NETNOD": {
+    "TYPE": "NETNOD",
+    "apiKey": "$NETNOD_APIKEY",
+    "apiUrl": "$NETNOD_APIURL",
+    "domain": "$NETNOD_DOMAIN"
+  },
   "NS1": {
     "TYPE": "NS1",
     "api_token": "$NS1_TOKEN",
     "domain": "$NS1_DOMAIN"
+  },
+  "OPENWRT": {
+    "TYPE": "OPENWRT",
+    "domain": "$OPENWRT_DOMAIN",
+    "host": "$OPENWRT_HOST",
+    "password": "$OPENWRT_PASSWORD",
+    "username": "$OPENWRT_USERNAME"
   },
   "ORACLE": {
     "TYPE": "ORACLE",
@@ -337,6 +370,7 @@
   },
   "ROUTE53": {
     "KeyId": "$ROUTE53_KEY_ID",
+    "Region": "$ROUTE53_REGION",
     "SecretKey": "$ROUTE53_KEY",
     "TYPE": "ROUTE53",
     "domain": "$ROUTE53_DOMAIN"
@@ -347,11 +381,25 @@
     "access_token_secret": "$SAKURACLOUD_ACCESS_TOKEN_SECRET",
     "domain": "$SAKURACLOUD_DOMAIN"
   },
+  "SCALEWAY": {
+    "TYPE": "SCALEWAY",
+    "access_key": "$SCALEWAY_ACCESS_KEY",
+    "domain": "$SCALEWAY_DOMAIN",
+    "project_id": "$SCALEWAY_PROJECT_ID",
+    "secret_key": "$SCALEWAY_SECRET_KEY"
+  },
   "SOFTLAYER": {
     "TYPE": "SOFTLAYER",
     "api_key": "$SL_API_KEY",
     "domain": "$SL_DOMAIN",
     "username": "$SL_USERNAME"
+  },
+  "TENCENTDNS": {
+    "TYPE": "TENCENTDNS",
+    "domain": "$TENCENTDNS_DOMAIN",
+    "secret_id": "$TENCENTDNS_SECRET_ID",
+    "secret_key": "$TENCENTDNS_SECRET_KEY",
+    "site": "$TENCENTDNS_SITE"
   },
   "TRANSIP": {
     "AccessToken": "$TRANSIP_ACCESS_TOKEN",
@@ -379,5 +427,11 @@
     "TYPE": "VULTR",
     "domain": "$VULTR_DOMAIN",
     "token": "$VULTR_TOKEN"
+  },
+  "WEBSUPPORT": {
+    "TYPE": "WEBSUPPORT",
+    "api_key": "$WEBSUPPORT_API_KEY",
+    "domain": "$WEBSUPPORT_DOMAIN",
+    "secret": "$WEBSUPPORT_SECRET"
   }
 }

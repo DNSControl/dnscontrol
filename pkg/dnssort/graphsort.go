@@ -1,6 +1,6 @@
 package dnssort
 
-import "github.com/StackExchange/dnscontrol/v4/pkg/dnsgraph"
+import "github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
 
 // SortUsingGraph sorts changes based on their dependencies using a directed graph.
 // Most changes have dependencies on other changes.

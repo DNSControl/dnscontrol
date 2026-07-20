@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 /*

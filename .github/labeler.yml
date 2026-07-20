@@ -1,0 +1,204 @@
+provider-ADGUARDHOME:
+  - changed-files:
+      - any-glob-to-any-file: providers/adguardhome/**
+provider-AKAMAIEDGEDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/akamaiedgedns/**
+provider-ALIDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/alidns/**
+provider-AUTODNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/autodns/**
+provider-AXFRDDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/axfrddns/**
+provider-AZURE_DNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/azuredns/**
+provider-AZURE_PRIVATE_DNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/azureprivatedns/**
+provider-BIND:
+  - changed-files:
+      - any-glob-to-any-file: providers/bind/**
+provider-BUNNY_DNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/bunnydns/**
+provider-CLOUDFLAREAPI:
+  - changed-files:
+      - any-glob-to-any-file: providers/cloudflare/**
+provider-CLOUDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/cloudns/**
+provider-CNR:
+  - changed-files:
+      - any-glob-to-any-file: providers/cnr/**
+provider-CSCGLOBAL:
+  - changed-files:
+      - any-glob-to-any-file: providers/cscglobal/**
+provider-DESEC:
+  - changed-files:
+      - any-glob-to-any-file: providers/desec/**
+provider-DIGITALOCEAN:
+  - changed-files:
+      - any-glob-to-any-file: providers/digitalocean/**
+provider-DNSCALE:
+  - changed-files:
+      - any-glob-to-any-file: providers/dnscale/**
+provider-DNSIMPLE:
+  - changed-files:
+      - any-glob-to-any-file: providers/dnsimple/**
+provider-DNSMADEEASY:
+  - changed-files:
+      - any-glob-to-any-file: providers/dnsmadeeasy/**
+provider-DNSOVERHTTPS:
+  - changed-files:
+      - any-glob-to-any-file: providers/doh/**
+provider-DOMAINNAMESHOP:
+  - changed-files:
+      - any-glob-to-any-file: providers/domainnameshop/**
+provider-DYNADOT:
+  - changed-files:
+      - any-glob-to-any-file: providers/dynadot/**
+provider-EASYNAME:
+  - changed-files:
+      - any-glob-to-any-file: providers/easyname/**
+provider-EXOSCALE:
+  - changed-files:
+      - any-glob-to-any-file: providers/exoscale/**
+provider-FORTIGATE:
+  - changed-files:
+      - any-glob-to-any-file: providers/fortigate/**
+provider-GANDI_V5:
+  - changed-files:
+      - any-glob-to-any-file: providers/gandiv5/**
+provider-GCLOUD:
+  - changed-files:
+      - any-glob-to-any-file: providers/gcloud/**
+provider-GCORE:
+  - changed-files:
+      - any-glob-to-any-file: providers/gcore/**
+provider-GIDINET:
+  - changed-files:
+      - any-glob-to-any-file: providers/gidinet/**
+provider-GIGAHOST:
+  - changed-files:
+      - any-glob-to-any-file: providers/gigahost/**
+provider-HEDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/hedns/**
+provider-HETZNER_V2:
+  - changed-files:
+      - any-glob-to-any-file: providers/hetznerv2/**
+provider-HOSTINGDE:
+  - changed-files:
+      - any-glob-to-any-file: providers/hostingde/**
+provider-HUAWEICLOUD:
+  - changed-files:
+      - any-glob-to-any-file: providers/huaweicloud/**
+provider-INFOMANIAK:
+  - changed-files:
+      - any-glob-to-any-file: providers/infomaniak/**
+provider-INTERNETBS:
+  - changed-files:
+      - any-glob-to-any-file: providers/internetbs/**
+provider-INWX:
+  - changed-files:
+      - any-glob-to-any-file: providers/inwx/**
+provider-JOKER:
+  - changed-files:
+      - any-glob-to-any-file: providers/joker/**
+provider-LINODE:
+  - changed-files:
+      - any-glob-to-any-file: providers/linode/**
+provider-LOOPIA:
+  - changed-files:
+      - any-glob-to-any-file: providers/loopia/**
+provider-LUADNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/luadns/**
+provider-MIKROTIK:
+  - changed-files:
+      - any-glob-to-any-file: providers/mikrotik/**
+provider-MYTHICBEASTS:
+  - changed-files:
+      - any-glob-to-any-file: providers/mythicbeasts/**
+provider-NAMECHEAP:
+  - changed-files:
+      - any-glob-to-any-file: providers/namecheap/**
+provider-NAMEDOTCOM:
+  - changed-files:
+      - any-glob-to-any-file: providers/namedotcom/**
+provider-NETBIRD:
+  - changed-files:
+      - any-glob-to-any-file: providers/netbird/**
+provider-NETCUP:
+  - changed-files:
+      - any-glob-to-any-file: providers/netcup/**
+provider-NETLIFY:
+  - changed-files:
+      - any-glob-to-any-file: providers/netlify/**
+provider-NETNOD:
+  - changed-files:
+      - any-glob-to-any-file: providers/netnod/**
+provider-NS1:
+  - changed-files:
+      - any-glob-to-any-file: providers/ns1/**
+provider-OPENSRS:
+  - changed-files:
+      - any-glob-to-any-file: providers/opensrs/**
+provider-OPENWRT:
+  - changed-files:
+      - any-glob-to-any-file: providers/openwrt/**
+provider-ORACLE:
+  - changed-files:
+      - any-glob-to-any-file: providers/oracle/**
+provider-OVH:
+  - changed-files:
+      - any-glob-to-any-file: providers/ovh/**
+provider-PACKETFRAME:
+  - changed-files:
+      - any-glob-to-any-file: providers/packetframe/**
+provider-PORKBUN:
+  - changed-files:
+      - any-glob-to-any-file: providers/porkbun/**
+provider-POWERDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/powerdns/**
+provider-REALTIMEREGISTER:
+  - changed-files:
+      - any-glob-to-any-file: providers/realtimeregister/**
+provider-ROUTE53:
+  - changed-files:
+      - any-glob-to-any-file: providers/route53/**
+provider-RWTH:
+  - changed-files:
+      - any-glob-to-any-file: providers/rwth/**
+provider-SAKURACLOUD:
+  - changed-files:
+      - any-glob-to-any-file: providers/sakuracloud/**
+provider-SCALEWAY:
+  - changed-files:
+      - any-glob-to-any-file: providers/scaleway/**
+provider-SOFTLAYER:
+  - changed-files:
+      - any-glob-to-any-file: providers/softlayer/**
+provider-TENCENTDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/tencentdns/**
+provider-TRANSIP:
+  - changed-files:
+      - any-glob-to-any-file: providers/transip/**
+provider-UNIFI:
+  - changed-files:
+      - any-glob-to-any-file: providers/unifi/**
+provider-VERCEL:
+  - changed-files:
+      - any-glob-to-any-file: providers/vercel/**
+provider-VULTR:
+  - changed-files:
+      - any-glob-to-any-file: providers/vultr/**
+provider-WEBSUPPORT:
+  - changed-files:
+      - any-glob-to-any-file: providers/websupport/**

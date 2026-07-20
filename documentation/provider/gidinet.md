@@ -75,7 +75,8 @@ When used as a registrar, Gidinet will manage the nameserver delegation at the r
 ## Activation
 
 1. Log in to the [Gidinet Control Panel](https://www.gidinet.com/)
-2. Your account credentials (username and password) are the same ones you use to log in to the control panel
+2. Generate an **API password** at [https://www.gidinet.com/modules/private/account_password/](https://www.gidinet.com/modules/private/account_password/)
+3. In `creds.json`, use your account **username** together with that **API password** -- the API password is distinct from your normal login password
 
 ## Supported record types
 
@@ -123,13 +124,20 @@ Allowed TTL values (in seconds):
 
 ### Nameservers
 
-Gidinet's default nameservers are:
+Gidinet offers two DNS tiers with different nameserver sets.
+
+**Free tier (default):**
 - `dnsl1.gidinet.com`
 - `dnsl2.gidinet.com`
 
-**Apex NS records are automatically filtered** by the DNS provider with a warning message. Gidinet does not support modifying NS records at the zone apex via the DNS API - they are managed by the registrar.
+**Premium DNS:**
+- `dns1.gidinet.com`
+- `dns2.gidinet.com`
+- `dns3.gidinet.com`
+- `dns4.gidinet.com`
+- `dns5.gidinet.com`
 
-To manage nameserver delegation, use Gidinet as a **registrar** with the `NAMESERVER()` function:
+The DNS provider returns the free-tier nameservers via `GetNameservers`, so free-tier zones need no explicit `NAMESERVER(...)` — DNSControl will suggest the correct delegation to the registrar automatically:
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -137,14 +145,31 @@ var REG_GIDINET = NewRegistrar("gidinet");
 var DSP_GIDINET = NewDnsProvider("gidinet");
 
 D("example.com", REG_GIDINET, DnsProvider(DSP_GIDINET),
-    NAMESERVER("dnsl1.gidinet.com."),
-    NAMESERVER("dnsl2.gidinet.com."),
     A("test", "1.2.3.4"),
 );
 ```
 {% endcode %}
 
-This uses the Core API's `domainNameServersChange` method to update the nameservers at the registry level.
+For zones on the **premium DNS** tier, opt out of the free-tier defaults with `DnsProvider(DSP_GIDINET, 0)` and use the `GIDINET_PREMIUM_NS()` helper to emit the five premium `NAMESERVER()` records:
+
+{% code title="dnsconfig.js" %}
+```javascript
+var REG_GIDINET = NewRegistrar("gidinet");
+var DSP_GIDINET = NewDnsProvider("gidinet");
+
+D("premium.example", REG_GIDINET,
+    DnsProvider(DSP_GIDINET, 0),
+    GIDINET_PREMIUM_NS(),
+    A("test", "1.2.3.4"),
+);
+```
+{% endcode %}
+
+The `0` passed to `DnsProvider()` tells DNSControl to skip the provider's auto-injected nameservers for that zone, so only the explicit `NAMESERVER()` records drive the delegation.
+
+When used as a registrar, Gidinet updates the nameservers at the registry level via the Core API's `domainNameServersChange` method.
+
+**Apex NS records are automatically filtered** by the DNS provider with a warning message. Gidinet does not support modifying NS records at the zone apex via the DNS API — they are managed by the registrar. If you use a DNS provider other than Gidinet, declare `NAMESERVER(...)` records (or rely on the other provider's `GetNameservers`) so `REG_GIDINET` can drive the delegation.
 
 ### Zone creation
 
@@ -157,3 +182,38 @@ The provider supports listing all zones in your account via `dnscontrol get-zone
 ### Concurrent operations
 
 The provider does not support concurrent API operations. Changes are applied sequentially to ensure reliability.
+
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ✅
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ❌
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❌
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❌
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❌
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ❌
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❌
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❌
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❌
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
+<!-- provider-features-end -->

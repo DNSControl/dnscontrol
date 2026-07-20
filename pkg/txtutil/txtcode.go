@@ -36,6 +36,13 @@ func EncodeQuoted(t string) string {
 	return txtEncode(ToChunks(t))
 }
 
+// EncodeSingle encodes a string as a single quoted value without splitting
+// into 255-octet chunks. This is intended for user-facing display (e.g., diff
+// preview) where the chunked representation is confusing.
+func EncodeSingle(t string) string {
+	return txtEncode([]string{t})
+}
+
 // State denotes the parser state.
 type State int
 
@@ -127,9 +134,16 @@ func txtDecode(s string) (string, error) {
 			state = StateQuoted
 
 		case StateWantSpace:
-			if c == ' ' {
+			switch c {
+			case ' ':
 				state = StateStart
-			} else {
+			case '"':
+				// Tolerate adjacent quoted character-strings without a
+				// separating space (e.g. `"foo""bar"`). Route 53 has been
+				// observed to return long TXT records in this form.
+				// Whether or not this is valid is questionable but we'll accept it because... Amazon.
+				state = StateQuoted
+			default:
 				return "", fmt.Errorf("txtDecode expected whitespace after close quote q(%q)", s)
 			}
 		}

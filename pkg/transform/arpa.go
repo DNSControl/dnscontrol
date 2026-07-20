@@ -5,7 +5,7 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
 )
 
 // ReverseDomainName turns a CIDR block into a reversed (in-addr) name.

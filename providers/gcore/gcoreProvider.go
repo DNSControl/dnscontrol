@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnssdk "github.com/G-Core/gcore-dns-sdk-go"
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -77,6 +77,21 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "G-Core Labs",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gcore",
+		PortalURL:   "https://accounts.gcore.com/profile/api-tokens", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "api-key",
+				Label:    "API key",
+				Help:     "G-Core Labs permanent API key.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -85,7 +100,9 @@ func (c *gcoreProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *gcoreProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *gcoreProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := c.provider.Zone(c.ctx, domain)
 	if err != nil {
 		return nil, err
@@ -113,7 +130,8 @@ func (c *gcoreProvider) GetZoneRecords(domain string, meta map[string]string) (m
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *gcoreProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *gcoreProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	zones, err := c.provider.Zones(c.ctx)
 	if err != nil {
 		return err

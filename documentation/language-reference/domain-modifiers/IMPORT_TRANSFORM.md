@@ -12,8 +12,7 @@ ts_ignore: true
 Don't use this feature. It was added for a very specific situation at Stack Overflow.
 {% endhint %}
 
-`IMPORT_TRANSFORM` adds to the domain the records from another
-domain, after making certain transformations and resetting the TTL.
+`IMPORT_TRANSFORM` adds to the domain the records from another domain, after making certain transformations and resetting the TTL.
 
 Not all records are copied and transformed:
 * The record must be record type A or CNAME.
@@ -22,15 +21,9 @@ Not all records are copied and transformed:
 
 Example:
 
-Suppose foo.com is a regular domain.  bar.com is a regular domain,
-but certain records should be the same as foo.com with these
-exceptions: "bar.com" is added to the name, the TTL is changed to
-300, if the IP address is between 1.2.3.10 and 1.2.3.20 then rewrite
-the IP address to be based on 123.123.123.100 (i.e. .113 or .114).
+Suppose foo.com is a regular domain.  bar.com is a regular domain, but certain records should be the same as foo.com with these exceptions: "bar.com" is added to the name, the TTL is changed to 300, if the IP address is between 1.2.3.10 and 1.2.3.20 then rewrite the IP address to be based on 123.123.123.100 (i.e. .113 or .114).
 
-You wouldn't want to maintain bar.com manually, would you?  It would
-be very error prone. Therefore instead you maintain foo.com and
-let `IMPORT_TRANSFORM` automatically generate bar.com.
+You wouldn't want to maintain bar.com manually, would you?  It would be very error prone. Therefore instead you maintain foo.com and let `IMPORT_TRANSFORM` automatically generate bar.com.
 
 ```text
 foo.com:

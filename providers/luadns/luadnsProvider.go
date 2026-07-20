@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
+	"slices"
 
 	api "github.com/luadns/luadns-go"
 	"golang.org/x/time/rate"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -33,6 +33,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseCAA:              providers.Can(),
 	providers.CanUseHTTPS:            providers.Can(),
 	providers.CanUseLOC:              providers.Cannot(),
+	providers.CanUseOPENPGPKEY:       providers.Can(),
 	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.CanUseSSHFP:            providers.Can(),
@@ -51,6 +52,27 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "LuaDNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/luadns",
+		PortalURL:   "https://app.luadns.com/users/api_keys",
+		Fields: []providers.CredsField{
+			{
+				Key:      "email",
+				Label:    "Email",
+				Help:     "Your LuaDNS E-mail address.",
+				Required: true,
+			},
+			{
+				Key:      "apikey",
+				Label:    "API key",
+				Help:     "Specify the API key you created.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 type luadnsProvider struct {
@@ -100,7 +122,9 @@ func (l *luadnsProvider) ListZones() ([]string, error) {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (l *luadnsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (l *luadnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	zone, err := l.getZone(domain)
 	if err != nil {
 		return nil, err
@@ -124,93 +148,68 @@ func (l *luadnsProvider) GetZoneRecords(domain string, meta map[string]string) (
 func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	checkNS(dc)
+	l.checkNS(dc)
 
 	zone, err := l.getZone(dc.Name)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	var corrs []*models.Correction
-
-	changes, actualChangeCount, err := diff2.ByRecord(records, dc, nil)
+	changes, actualChangeCount, err := diff2.ByRecordSet(records, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
 
 	for _, change := range changes {
-		msg := change.Msgs[0]
 		switch change.Type {
 		case diff2.REPORT:
-			corrs = []*models.Correction{{Msg: change.MsgsJoined}}
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 		case diff2.CREATE:
-			corrs = l.makeCreateCorrection(change.New[0], zone, msg)
+			req := recordsToNative(change.New)
+			corrections = append(corrections, &models.Correction{
+				F: func() error {
+					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+						return err
+					}
+					_, err := l.provider.CreateManyRecords(l.ctx, zone, req)
+					return err
+				},
+				Msg: change.MsgsJoined,
+			})
 		case diff2.CHANGE:
-			corrs = l.makeChangeCorrection(change.Old[0], change.New[0], zone, msg)
+			req := recordsToNative(change.New)
+			corrections = append(corrections, &models.Correction{
+				F: func() error {
+					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+						return err
+					}
+					_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
+					return err
+				},
+				Msg: change.MsgsJoined,
+			})
 		case diff2.DELETE:
-			corrs = l.makeDeleteCorrection(change.Old[0], zone, msg)
+			req := recordsToNative(change.Old)
+			corrections = append(corrections, &models.Correction{
+				F: func() error {
+					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+						return err
+					}
+					_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
+					return err
+				},
+				Msg: change.MsgsJoined,
+			})
 		default:
 			panic(fmt.Sprintf("unhandled inst.Type %s", change.Type))
 		}
-		corrections = append(corrections, corrs...)
 	}
 	return corrections, actualChangeCount, nil
 }
 
-func (l *luadnsProvider) makeCreateCorrection(newrec *models.RecordConfig, zone *api.Zone, msg string) []*models.Correction {
-	req := recordsToNative(newrec)
-	return []*models.Correction{{
-		Msg: msg,
-		F: func() error {
-			if err := l.rateLimiter.Wait(l.ctx); err != nil {
-				return err
-			}
-			_, err := l.provider.CreateRecord(l.ctx, zone, req)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-	}}
-}
-
-func (l *luadnsProvider) makeChangeCorrection(oldrec *models.RecordConfig, newrec *models.RecordConfig, zone *api.Zone, msg string) []*models.Correction {
-	recordID := oldrec.Original.(*api.Record).ID
-	req := recordsToNative(newrec)
-	return []*models.Correction{{
-		Msg: fmt.Sprintf("%s, LuaDNS ID: %d", msg, recordID),
-		F: func() error {
-			if err := l.rateLimiter.Wait(l.ctx); err != nil {
-				return err
-			}
-			_, err := l.provider.UpdateRecord(l.ctx, zone, recordID, req)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-	}}
-}
-
-func (l *luadnsProvider) makeDeleteCorrection(deleterec *models.RecordConfig, zone *api.Zone, msg string) []*models.Correction {
-	recordID := deleterec.Original.(*api.Record).ID
-	return []*models.Correction{{
-		Msg: fmt.Sprintf("%s, LuaDNS ID: %d", msg, recordID),
-		F: func() error {
-			if err := l.rateLimiter.Wait(l.ctx); err != nil {
-				return err
-			}
-			_, err := l.provider.DeleteRecord(l.ctx, zone, recordID)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-	}}
-}
-
 // EnsureZoneExists creates a zone if it does not exist.
-func (l *luadnsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (l *luadnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if l.zones == nil {
 		if err := l.fetchDomainList(); err != nil {
 			return err
@@ -271,6 +270,15 @@ func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
 	return newRecords, nil
 }
 
+func (l *luadnsProvider) checkNS(dc *models.DomainConfig) {
+	for _, rec := range dc.Records {
+		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
+		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetTargetCombined()) && rec.TTL != 86400 {
+			rec.TTL = 86400
+		}
+	}
+}
+
 func nativeToRecord(domain string, r *api.Record) (*models.RecordConfig, error) {
 	rc := &models.RecordConfig{
 		Type:     r.Type,
@@ -288,35 +296,27 @@ func nativeToRecord(domain string, r *api.Record) (*models.RecordConfig, error) 
 	return rc, err
 }
 
-func recordsToNative(rc *models.RecordConfig) *api.Record {
-	r := &api.Record{
-		Name: rc.GetLabelFQDN() + ".",
-		Type: rc.Type,
-		TTL:  rc.TTL,
-	}
-	switch rtype := rc.Type; rtype {
-	case "TXT":
-		r.Content = rc.GetTargetTXTJoined()
-	case "HTTPS":
-		content := fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
-		if rc.SvcParams == "" {
-			content = content[:len(content)-1]
+func recordsToNative(rc []*models.RecordConfig) []*api.RR {
+	var rrs []*api.RR
+	for _, rec := range rc {
+		r := &api.RR{
+			Name: rec.GetLabelFQDN() + ".",
+			Type: rec.Type,
+			TTL:  rec.TTL,
 		}
-		r.Content = content
-	default:
-		r.Content = rc.GetTargetCombined()
-	}
-	return r
-}
-
-func checkNS(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
-	for _, rec := range dc.Records {
-		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
-		if rec.Type == "NS" && strings.HasSuffix(rec.GetTargetField(), ".luadns.net.") && rec.TTL != 86400 {
-			rec.TTL = 86400
+		switch rtype := rec.Type; rtype {
+		case "TXT":
+			r.Content = rec.GetTargetTXTJoined()
+		case "HTTPS":
+			content := fmt.Sprintf("%d %s %s", rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
+			if rec.SvcParams == "" {
+				content = content[:len(content)-1]
+			}
+			r.Content = content
+		default:
+			r.Content = rec.GetTargetCombined()
 		}
-		newList = append(newList, rec)
+		rrs = append(rrs, r)
 	}
-	dc.Records = newList
+	return rrs
 }

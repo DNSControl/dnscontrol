@@ -1,0 +1,10 @@
+{
+  "bind": {
+    "TYPE": "BIND",
+    "directory": "zones"
+  },
+  "cloudflare": {
+    "TYPE": "CLOUDFLAREAPI",
+    "apitoken": "tok-abc"
+  }
+}

@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 )
 
 // makeFileName uses format to generate a zone's filename.  See the.

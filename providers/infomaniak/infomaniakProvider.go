@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/miekg/dns/dnsutil"
 )
 
@@ -276,7 +276,9 @@ func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	}
 }
 
-func (p *infomaniakProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (p *infomaniakProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := p.getDNSRecords(domain)
 	if err != nil {
 		return nil, err

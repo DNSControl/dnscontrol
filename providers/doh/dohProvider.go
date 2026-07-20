@@ -2,11 +2,11 @@ package doh
 
 import (
 	"fmt"
-	"sort"
+	"slices"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -48,16 +48,18 @@ func (c *dohProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*model
 	}
 	foundNameservers := strings.Join(nss, ",")
 
-	expected := []string{}
+	expected := make([]string, 0, len(dc.Nameservers))
 	for _, ns := range dc.Nameservers {
-		expected = append(expected, ns.Name)
+		expected = append(expected, strings.ToLower(strings.TrimRight(ns.Name, ".")))
 	}
-	sort.Strings(expected)
+	slices.Sort(expected)
+	expected = slices.Compact(expected)
 	expectedNameservers := strings.Join(expected, ",")
 
 	if foundNameservers == expectedNameservers {
 		return nil, nil
 	}
+
 	return []*models.Correction{
 		{
 			Msg: fmt.Sprintf("Update nameservers %s -> %s", foundNameservers, expectedNameservers),

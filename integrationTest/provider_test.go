@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/nameservers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
 )
 
 // TestDualProviders verifies that providers labeled DocDualHost support having
@@ -90,7 +90,7 @@ func TestDualProviders(t *testing.T) {
 
 // TestNameserverDots verifies a provider returns properly-formed nameservers.
 func TestNameserverDots(t *testing.T) {
-	// Issue https://github.com/StackExchange/dnscontrol/issues/491
+	// Issue https://github.com/DNSControl/dnscontrol/issues/491
 	// If this fails, the provider's GetNameservers() function uses
 	// models.ToNameserversStripTD() instead of models.ToNameservers()
 	// or vise-versa.
@@ -121,7 +121,7 @@ func TestNameserverDots(t *testing.T) {
 
 // TestDuplicateNameservers verifies that a provider de-dupes nameservers if existing nameservers are added.
 func TestDuplicateNameservers(t *testing.T) {
-	// Issue: https://github.com/StackExchange/dnscontrol/issues/3088
+	// Issue: https://github.com/DNSControl/dnscontrol/issues/3088
 	// Only configuring for Azure DNS
 
 	// Setup:

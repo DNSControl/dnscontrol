@@ -1,6 +1,6 @@
 package rtypecontrol
 
-import "github.com/StackExchange/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v4/models"
 
 // FixLegacyDC populates .F to compenstate for providers that have not been
 // updated to support RecordConfigV2 when creating RecordConfig.

@@ -7,9 +7,7 @@ parameter_types:
 ts_return: string
 ---
 
-`REV` returns the reverse lookup domain for an IP network. For
-example `REV("1.2.3.0/24")` returns `3.2.1.in-addr.arpa.` and
-`REV("2001:db8:302::/48")` returns `2.0.3.0.8.b.d.0.1.0.0.2.ip6.arpa.`.
+`REV` returns the reverse lookup domain for an IP network. For example `REV("1.2.3.0/24")` returns `3.2.1.in-addr.arpa.` and `REV("2001:db8:302::/48")` returns `2.0.3.0.8.b.d.0.1.0.0.2.ip6.arpa.`.
 
 `REV()` is commonly used with the [`D()`](D.md) functions to create reverse DNS lookup zones.
 
@@ -29,27 +27,19 @@ D(REV("1.2.3.0/24", ...
 
 The latter is easier to type and less error-prone.
 
-If the address does not include a "/" then `REV()` assumes /32 for IPv4 addresses
-and /128 for IPv6 addresses.
+If the address does not include a "/" then `REV()` assumes /32 for IPv4 addresses and /128 for IPv6 addresses.
 
 # RFC compliance
 
-`REV()` implements both RFC 2317 and the newer RFC 4183. The `REVCOMPAT()`
-function selects which mode is used. If `REVCOMPAT()` is not called, a default
-is selected for you.  The default will change to RFC 4183 in DNSControl v5.0.
+`REV()` implements both RFC 2317 and the newer RFC 4183. The `REVCOMPAT()` function selects which mode is used. If `REVCOMPAT()` is not called, a default is selected for you.  The default will change to RFC 4183 in DNSControl v5.0.
 
 See [`REVCOMPAT()`](REVCOMPAT.md) for details.
 
-
 # Host bits
 
-v4.x:
-The host bits (the ones outside the netmask) must be zeros. They are not zeroed
-out automatically. Thus, `REV("1.2.3.4/24")` is an error.
+v4.x: The host bits (the ones outside the netmask) must be zeros. They are not zeroed out automatically. Thus, `REV("1.2.3.4/24")` is an error.
 
-v5.0 and later:
-The host bits (the ones outside the netmask) are ignored.  Thus
-`REV("1.2.3.4/24")` and `REV("1.2.3.0/24")` are equivalent.
+v5.0 and later: The host bits (the ones outside the netmask) are ignored.  Thus `REV("1.2.3.4/24")` and `REV("1.2.3.0/24")` are equivalent.
 
 # Examples
 
@@ -76,6 +66,4 @@ D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
 
 # Automatic forward and reverse record generation
 
-DNSControl does not automatically generate forward and reverse lookups. However
-it is possible to write a macro that does this.  See
-[`PTR()`](../domain-modifiers/PTR.md)   for an example.
+DNSControl does not automatically generate forward and reverse lookups. However it is possible to write a macro that does this.  See [`PTR()`](../domain-modifiers/PTR.md)   for an example.

@@ -7,15 +7,15 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v4/pkg/version"
 )
 
 var goos = flag.String("os", "", "OS to build (linux, windows, or darwin) Defaults to all.")
 
 func main() {
 	flag.Parse()
-	flags := fmt.Sprintf(`-s -w -X "github.com/StackExchange/dnscontrol/v4/pkg/version.version=%s"`, version.Version())
-	pkg := "github.com/StackExchange/dnscontrol/v4"
+	flags := fmt.Sprintf(`-s -w -X "github.com/DNSControl/dnscontrol/v4/pkg/version.version=%s"`, version.Version())
+	pkg := "github.com/DNSControl/dnscontrol/v4"
 
 	build := func(out, goos string) {
 		log.Printf("Building %s", out)

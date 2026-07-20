@@ -1,6 +1,6 @@
 package bunnydns
 
-import "github.com/StackExchange/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v4/models"
 
 func (b *bunnydnsProvider) getDNSSECCorrections(dc *models.DomainConfig, zone *zone) ([]*models.Correction, error) {
 	if zone.HasDNSSEC && dc.AutoDNSSEC == "off" {

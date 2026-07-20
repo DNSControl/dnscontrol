@@ -18,12 +18,9 @@ generate "Dynamic Single Redirects" for a limited number of use cases. See
 [`CLOUDFLAREAPI`](../../provider/cloudflareapi.md) for details.
 {% endhint %}
 
-`CF_TEMP_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page
-Rules) to generate a HTTP 302 temporary redirect.
+`CF_TEMP_REDIRECT` uses [Cloudflare](../../provider/cloudflareapi.md)-specific features ("Forwarding URL" Page Rules) to generate a HTTP 302 temporary redirect.
 
-If _any_ [`CF_REDIRECT`](CF_REDIRECT.md) or `CF_TEMP_REDIRECT functions are used then
-`dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain.
-Page Rule types other than "Forwarding URL" will be left alone.
+If _any_ [`CF_REDIRECT`](CF_REDIRECT.md) or `CF_TEMP_REDIRECT functions are used then `dnscontrol` will manage _all_ "Forwarding URL" type Page Rules for the domain. Page Rule types other than "Forwarding URL" will be left alone.
 
 {% hint style="warning" %}
 **WARNING**: Cloudflare does not currently fully document the Page Rules API and

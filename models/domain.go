@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/qdm12/reprint"
 	"golang.org/x/net/idna"
 )
@@ -24,6 +25,7 @@ const (
 )
 
 // DomainConfig describes a DNS domain (technically a DNS zone).
+// Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
 	NameRaw     string `json:"-"`    // name as entered by user in dnsconfig.js
 	Name        string `json:"name"` // NO trailing "."   Converted to IDN (punycode) early in the pipeline.
@@ -83,6 +85,39 @@ type AdminConfig struct {
 	Glue             []string       `json:"glue,omitempty"`
 }
 
+// NewDomainConfig creates and initializes a *models.DomainConfig.
+func NewDomainConfig(name string) (*DomainConfig, error) {
+	if strings.HasSuffix(name, ".") {
+		return nil, fmt.Errorf("do not call NewDomainName with trailing dot: %q", name)
+	}
+	dc := &DomainConfig{
+		Metadata: map[string]string{}, // Initialize so that nil checking is not required later.
+	}
+	dc.PopulateNamesFromRaw(name)
+
+	return dc, nil
+}
+
+// MustNewDomainConfig is like NewDomainConfig but panics if initialization
+// fails.  It is intended for use in variable initializations in unit tests.
+func MustNewDomainConfig(name string) *DomainConfig {
+	dc, err := NewDomainConfig(name)
+	if err != nil {
+		panic(err)
+	}
+	return dc
+}
+
+func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
+	dcn := domaintags.MakeDomainNameVarieties(rawname)
+	dc.Name = dcn.NameASCII
+	dc.Tag = dcn.Tag
+	dc.NameRaw = dcn.NameRaw
+	dc.NameUnicode = dcn.NameUnicode
+	dc.DisplayName = dcn.DisplayName
+	dc.UniqueName = dcn.UniqueName
+}
+
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
@@ -140,6 +175,7 @@ func (dc *DomainConfig) Filter(f func(r *RecordConfig) bool) {
 // - Name
 // - NameFQDN
 // - Target (CNAME and MX only).
+// NOTE: This will go away when RCv3 is adopted.
 func (dc *DomainConfig) Punycode() error {
 	for _, rec := range dc.Records {
 		if rec.IsModernType() {

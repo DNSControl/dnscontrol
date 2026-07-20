@@ -1,6 +1,6 @@
 package recorddb
 
-import "github.com/StackExchange/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v4/models"
 
 // Functions that make it easier to deal with
 // a group of records.

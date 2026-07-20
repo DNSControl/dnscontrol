@@ -9,13 +9,9 @@ parameter_types:
 provider: CLOUDFLAREAPI
 ---
 
-`CF_WORKER_ROUTE` uses the [Cloudflare Workers](https://developers.cloudflare.com/workers/)
-API to manage [worker routes](https://developers.cloudflare.com/workers/platform/routes)
-for a given domain.
+`CF_WORKER_ROUTE` uses the [Cloudflare Workers](https://developers.cloudflare.com/workers/) API to manage [worker routes](https://developers.cloudflare.com/workers/platform/routes) for a given domain.
 
-If _any_ `CF_WORKER_ROUTE` function is used then `dnscontrol` will manage _all_
-Worker Routes for the domain. To be clear: this means it will delete existing routes that
-were created outside of DNSControl.
+If _any_ `CF_WORKER_ROUTE` function is used then `dnscontrol` will manage _all_ Worker Routes for the domain. To be clear: this means it will delete existing routes that were created outside of DNSControl.
 
 {% hint style="warning" %}
 **WARNING**: This interface is not extensively tested. Take precautions such as making

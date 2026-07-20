@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // Keep these in alphabetical order.
@@ -19,7 +19,7 @@ func CaaFlagIsNonZero(rc *models.RecordConfig) error {
 
 // CaaTargetContainsWhitespace identifies CAA records that have
 // whitespace in the target.
-// See https://github.com/StackExchange/dnscontrol/issues/1374
+// See https://github.com/DNSControl/dnscontrol/issues/1374
 func CaaTargetContainsWhitespace(rc *models.RecordConfig) error {
 	if strings.ContainsAny(rc.GetTargetField(), " \t\r\n") {
 		return errors.New("caa target contains whitespace")

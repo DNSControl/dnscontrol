@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsrr"
-	"github.com/StackExchange/dnscontrol/v4/pkg/js"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/js"
 	dnsv1 "github.com/miekg/dns"
 	testifyrequire "github.com/stretchr/testify/require"
 )

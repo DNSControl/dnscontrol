@@ -6,12 +6,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (api *jokerProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (api *jokerProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	params := url.Values{}
 	params.Set("domain", domain)
 

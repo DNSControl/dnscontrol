@@ -10,27 +10,15 @@ parameter_types:
     targetSpec: string?
 ---
 
-`IGNORE()` makes it possible for DNSControl to share management of a domain
-with an external system.  The parameters of `IGNORE()` indicate which records
-are managed elsewhere and should not be modified or deleted.
+`IGNORE()` makes it possible for DNSControl to share management of a domain with an external system.  The parameters of `IGNORE()` indicate which records are managed elsewhere and should not be modified or deleted.
 
-Use case: Suppose a domain is managed by both DNSControl and a third-party
-system. This creates a problem because DNSControl will try to delete records
-inserted by the other system.  The other system may get confused and re-insert
-those records.  The two systems will get into an endless update cycle where
-each will revert changes made by the other in an endless loop.
+Use case: Suppose a domain is managed by both DNSControl and a third-party system. This creates a problem because DNSControl will try to delete records inserted by the other system.  The other system may get confused and re-insert those records.  The two systems will get into an endless update cycle where each will revert changes made by the other in an endless loop.
 
-To solve this problem simply include `IGNORE()` statements that identify which
-records are managed elsewhere.  DNSControl will not modify or delete those
-records.
+To solve this problem simply include `IGNORE()` statements that identify which records are managed elsewhere.  DNSControl will not modify or delete those records.
 
-Technically `IGNORE_NAME` is a promise that DNSControl will not modify or
-delete existing records that match particular patterns. It is like
-[`NO_PURGE`](../domain-modifiers/NO_PURGE.md) that matches only specific records.
+Technically `IGNORE_NAME` is a promise that DNSControl will not modify or delete existing records that match particular patterns. It is like [`NO_PURGE`](../domain-modifiers/NO_PURGE.md) that matches only specific records.
 
-Including a record that is ignored is considered an error and may have
-undefined behavior. This safety check can be disabled using the
-[`DISABLE_IGNORE_SAFETY_CHECK`](../domain-modifiers/DISABLE_IGNORE_SAFETY_CHECK.md) feature.
+Including a record that is ignored is considered an error and may have undefined behavior. This safety check can be disabled using the [`DISABLE_IGNORE_SAFETY_CHECK`](../domain-modifiers/DISABLE_IGNORE_SAFETY_CHECK.md) feature.
 
 ## Syntax
 
@@ -54,9 +42,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 ## Globs
 
-The `labelSpec` and `targetSpec` parameters supports glob patterns in the style
-of the [gobwas/glob](https://github.com/gobwas/glob) library.  All of the
-following patterns will work:
+The `labelSpec` and `targetSpec` parameters supports glob patterns in the style of the [gobwas/glob](https://github.com/gobwas/glob) library.  All of the following patterns will work:
 
 * `IGNORE("*.foo")` will ignore all records in the style of `bar.foo`, but will not ignore records using a double subdomain, such as `foo.bar.foo`.
 * `IGNORE("**.foo")` will ignore all subdomains of `foo`, including double subdomains.
@@ -124,9 +110,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 Here are some examples that illustrate how matching works.
 
-All the examples assume the following DNS records are the "existing" records
-that a third-party is maintaining. (Don't be confused by the fact that we're
-using DNSControl notation for the records. Pretend some other system inserted them.)
+All the examples assume the following DNS records are the "existing" records that a third-party is maintaining. (Don't be confused by the fact that we're using DNSControl notation for the records. Pretend some other system inserted them.)
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -303,8 +287,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 ## Conflict handling
 
-It is considered as an error for a `dnsconfig.js` to both ignore and insert the
-same record in a domain. This is done as a safety mechanism.
+It is considered as an error for a `dnsconfig.js` to both ignore and insert the same record in a domain. This is done as a safety mechanism.
 
 This will generate an error:
 
@@ -318,8 +301,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 ```
 {% endcode %}
 
-To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement
-to the `D()`.
+To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement to the `D()`.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -337,9 +319,7 @@ FYI: Previously DNSControl permitted disabling this check on
 a per-record basis using `IGNORE_NAME_DISABLE_SAFETY_CHECK`:
 {% endhint %}
 
-The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2
-world and its use will result in a validation error. Use the above example
-instead.
+The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2 world and its use will result in a validation error. Use the above example instead.
 
 {% code %}
 ```javascript

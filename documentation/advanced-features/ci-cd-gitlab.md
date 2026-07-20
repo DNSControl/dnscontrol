@@ -73,7 +73,7 @@ Now it's time to apply the power of DNSControl within GitLab CI merge requests. 
 dnscontrol-preview:
   stage: 'test'
   image:
-    name: 'stackexchange/dnscontrol'
+    name: 'dnscontrol/dnscontrol'
     entrypoint: ['']
   script:
     - '/usr/local/bin/dnscontrol version'
@@ -87,8 +87,8 @@ dnscontrol-preview:
 
 What does this YAML configuration mean?
 
-- The `dnscontrol preview` is run within the GitLab CI [predefined stage](https://docs.gitlab.com/ee/ci/yaml/#stages) `test` using the Docker image [stackexchange/dnscontrol](https://hub.docker.com/r/stackexchange/dnscontrol).
-  - A conscious decision has been made to always use the latest version so that no maintenance is required. Of course you can choose to include a Docker image version. You do this by choosing from the [available versions](https://hub.docker.com/r/stackexchange/dnscontrol/tags), and including it in `image:` for example: `name: 'stackexchange/dnscontrol:v3.20.0'`
+- The `dnscontrol preview` is run within the GitLab CI [predefined stage](https://docs.gitlab.com/ee/ci/yaml/#stages) `test` using the Docker image [dnscontrol/dnscontrol](https://hub.docker.com/r/dnscontrol/dnscontrol).
+  - A conscious decision has been made to always use the latest version so that no maintenance is required. Of course you can choose to include a Docker image version. You do this by choosing from the [available versions](https://hub.docker.com/r/dnscontrol/dnscontrol/tags), and including it in `image:` for example: `name: 'dnscontrol/dnscontrol:v3.20.0'`
 - Because the choice was made not to adopt a version, it's nice to know from the GitLab CI jobs which version DNSControl is running.
   We check and validate the DNSControl set-up `dnsconfig.js`.
 - Then we ask TransIP which DNS diff there is.
@@ -148,7 +148,7 @@ It will probably not surprise you that the basis of this GitLab YAML configurati
 dnscontrol-push:
   stage: 'deploy'
   image:
-    name: 'stackexchange/dnscontrol'
+    name: 'dnscontrol/dnscontrol'
     entrypoint: ['']
   script:
     - '/usr/local/bin/dnscontrol version'
@@ -196,7 +196,7 @@ This eventually brings us to the following GitLab CI setup.
 ```yaml
 .dnscontrol:
   image:
-    name: 'stackexchange/dnscontrol'
+    name: 'dnscontrol/dnscontrol'
     entrypoint: ['']
   before_script:
     - '/usr/local/bin/dnscontrol version'
@@ -221,4 +221,4 @@ dnscontrol-push:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "web"'
 ```
 
-If you are unexpectedly unable to set up this setup, feel free to [ask questions](https://github.com/StackExchange/dnscontrol/issues/new) about it.
+If you are unexpectedly unable to set up this setup, feel free to [ask questions](https://github.com/DNSControl/dnscontrol/issues/new) about it.

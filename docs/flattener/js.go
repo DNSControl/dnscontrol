@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/spflib"
+	"github.com/DNSControl/dnscontrol/v4/pkg/spflib"
 	"github.com/gopherjs/jquery"
 )
 

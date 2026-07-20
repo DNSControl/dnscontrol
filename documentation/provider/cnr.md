@@ -6,8 +6,7 @@ This is based on API documents found at [https://kb.centralnicreseller.com/api/a
 
 ## Configuration
 
-To use this provider, add an entry to `creds.json` with `TYPE` set to `CNR`
-along with your CentralNic Reseller login data.
+To use this provider, add an entry to `creds.json` with `TYPE` set to `CNR` along with your CentralNic Reseller login data.
 
 Example:
 
@@ -49,8 +48,7 @@ Here a working example for our OT&E System:
 **NOTE**: The above credentials are known to the public.
 {% endhint %}
 
-With the above CentralNic Reseller entry in `creds.json`, you can run the
-integration tests or by specifying the data per environment vars as follows:
+With the above CentralNic Reseller entry in `creds.json`, you can run the integration tests or by specifying the data per environment vars as follows:
 
 ```shell
 # Review the output.  Pick one domain and set CNR_DOMAIN.
@@ -60,7 +58,7 @@ export CNR_UID=test.user
 export CNR_PW=test.passw0rd
 export CNR_DEBUGMODE=2
 cd integrationTest              # NOTE: Not needed if already in that subdirectory
-go test -v -verbose -profile CNR
+go test -v -args -verbose -profile CNR
 ```
 
 ## Usage
@@ -71,9 +69,7 @@ Fetch a list of all DNSZones:
 dnscontrol get-zones --format=nameonly cnr CNR all
 ```
 
-Here's an example DNS Configuration `dnsconfig.js` using our provider module.
-Even though it shows how you use us as Domain Registrar AND DNS Provider, we don't force you to do that.
-You are free to decide if you want to use both of our provider technology or just one of them.
+Here's an example DNS Configuration `dnsconfig.js` using our provider module. Even though it shows how you use us as Domain Registrar AND DNS Provider, we don't force you to do that. You are free to decide if you want to use both of our provider technology or just one of them.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -83,7 +79,7 @@ var DSP_CNR = NewDnsProvider("CNR");
 // Set Default TTL for all RR to reflect our Backend API Default
 // If you use additional DNS Providers, configure a default TTL
 // per domain using the domain modifier DefaultTTL instead.
-// also check this issue for [NAMESERVER TTL](https://github.com/StackExchange/dnscontrol/issues/176).
+// also check this issue for [NAMESERVER TTL](https://github.com/DNSControl/dnscontrol/issues/176).
 DEFAULTS(
     {"ns_ttl":"3600"},
     DefaultTTL(3600)
@@ -105,15 +101,47 @@ This provider does not recognize any special metadata fields unique to CentralNi
 
 ## get-zones
 
-`dnscontrol get-zones` is implemented for this provider. The list
-includes both basic and premier zones.
+`dnscontrol get-zones` is implemented for this provider. The list includes both basic and premier zones.
 
 ## New domains
 
-If a dnszone does not exist in your CNR account, DNSControl will *not* automatically add it with the `dnscontrol push` or `dnscontrol preview` command. You'll need to do that via the control panel manually or using the command `dnscontrol create-domains`.
-This is because it could lead to unwanted costs on customer-side that we want to avoid.
+If a dnszone does not exist in your CNR account, DNSControl will *not* automatically add it with the `dnscontrol push` or `dnscontrol preview` command. You'll need to do that via the control panel manually or using the command `dnscontrol create-domains`. This is because it could lead to unwanted costs on customer-side that we want to avoid.
 
 ## Debug Mode
 
-As shown in the configuration examples above, this can be activated on demand and it can be used to check the API commands send to our system.
-In general this is thought for our purpose to have an easy way to dive into issues. But if you're interested what's going on, feel free to activate it.
+As shown in the configuration examples above, this can be activated on demand and it can be used to check the API commands send to our system. In general this is thought for our purpose to have an easy way to dive into issues. But if you're interested what's going on, feel free to activate it.
+
+## Feature Summary
+
+<!-- provider-features-start -->
+- Provider Type
+  - [Official Support](../provider/index.md#providers-with-official-support): ❌
+  - DNS Provider: ✅
+  - Registrar: ✅
+- Provider API
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
+  - [dual host](../advanced-features/dual-host.md): ✅
+  - create-domains: ✅
+  - [get-zones](../commands/get-zones.md): ✅
+- DNS extensions
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ✅
+  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
+- Service discovery
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ✅
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ✅
+- Security
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❌
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ✅
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+- DNSSEC
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+<!-- provider-features-end -->

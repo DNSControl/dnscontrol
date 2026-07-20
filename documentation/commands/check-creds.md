@@ -8,38 +8,21 @@ successful, a list of zones will be output (which may be an empty list). If the 
 ```text
 Syntax:
 
-   dnscontrol check-creds [command options] credkey provider
+   dnscontrol check-creds [command options] credkey
 
    --creds value   Provider credentials JSON file (default: "creds.json")
    --out value     Instead of stdout, write to this file
 
 ARGUMENTS:
-   credkey:  The name used in creds.json (first parameter to NewDnsProvider() in dnsconfig.js)
-   provider: The name of the provider (second parameter to NewDnsProvider() in dnsconfig.js)
+   credkey:  The name used in creds.json
 ```
 
-Starting in [v3.16](../release/v316.md), "provider" is optional.  If it is omitted (or the placeholder value `-` is used), the `TYPE` specified in `creds.json` will be used instead. A warning will be displayed with advice on how to remain compatible with v4.0.
-
-Starting in v4.0, the "provider" argument is expected to go away.
+The provider type is read from the `TYPE` field in `creds.json`.
 
 ## Examples
 
 ```shell
-dnscontrol check-creds myr53 ROUTE53
-```
-
-Starting in [v3.16](../release/v316.md):
-
-```shell
-dnscontrol check-creds myr53
-dnscontrol check-creds myr53 -
-dnscontrol check-creds myr53 ROUTE53
-```
-
-Starting in v4.0:
-
-```shell
-dnscontrol check-creds myr53
+dnscontrol check-creds my_route53
 ```
 
 This command is the same as `get-zones` with `--format=nameonly`

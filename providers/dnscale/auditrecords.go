@@ -1,8 +1,8 @@
 package dnscale
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -10,9 +10,6 @@ import (
 // supported, an empty list is returned.
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
-
-	// DNScale automatically manages apex NS records - they cannot be modified via API
-	a.Add("NS", rejectif.NsAtApex)
 
 	a.Add("MX", rejectif.MxNull) // MX records must have a target
 

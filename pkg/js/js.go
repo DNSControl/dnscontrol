@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rfc4183"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/StackExchange/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	"github.com/robertkrimen/otto"              // load underscore js into vm by default
 	_ "github.com/robertkrimen/otto/underscore" // required by otto
 	"github.com/xddxdd/ottoext/fetch"

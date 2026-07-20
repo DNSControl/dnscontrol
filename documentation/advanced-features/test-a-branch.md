@@ -4,7 +4,7 @@ Instructions for testing DNSControl at a particular PR or branch.
 
 Assumptions:
 * `/THE/PATH` -- Change this to the full path to where your dnsconfig.js and other files are located.
-* `INSERT_BRANCH_HERE` -- The branch you want to test.  The branch associated with a PR is listed on [https://github.com/StackExchange/dnscontrol/branches](https://github.com/StackExchange/dnscontrol/branches).
+* `INSERT_BRANCH_HERE` -- The branch you want to test.  The branch associated with a PR is listed on [https://github.com/DNSControl/dnscontrol/branches](https://github.com/DNSControl/dnscontrol/branches).
 
 ## Using Docker
 
@@ -12,7 +12,7 @@ Using Docker assures you're using the latest version of Go and doesn't require y
 
 ```shell
 docker run -it -v /THE/PATH:/dns golang
-git clone -b INSERT_BRANCH_HERE --single-branch https://github.com/StackExchange/dnscontrol.git
+git clone -b INSERT_BRANCH_HERE --single-branch https://github.com/DNSControl/dnscontrol.git
 cd dnscontrol
 go install
 ```
@@ -28,7 +28,7 @@ as usual. The directory to be in is `/go/dnscontrol/integrationTest`.
 
 ```shell
 cd /go/dnscontrol/integrationTest
-go test -v -verbose -profile INSERT_PROVIDER_NAME -start 1 -end 3
+go test -v -args -verbose -profile INSERT_PROVIDER_NAME -start 1 -end 3
 ```
 
 Change `INSERT_PROVIDER_NAME` to the name of your provider (`BIND`, `ROUTE53`, `GCLOUD`, etc.)
@@ -42,7 +42,7 @@ Step 1: Install Go
 Step 2: Check out the software
 
 ```shell
-git clone -b INSERT_BRANCH_HERE --single-branch https://github.com/StackExchange/dnscontrol.git
+git clone -b INSERT_BRANCH_HERE --single-branch https://github.com/DNSControl/dnscontrol.git
 cd dnscontrol
 go install
 ```

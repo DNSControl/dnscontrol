@@ -13,8 +13,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/edgegrid"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/session"

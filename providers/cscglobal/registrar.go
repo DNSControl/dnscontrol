@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // GetRegistrarCorrections gathers corrections that would bring n to match dc.

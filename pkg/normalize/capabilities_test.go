@@ -1,12 +1,13 @@
 package normalize
 
 import (
-	"go/ast"
-	"go/parser"
-	"go/token"
+	"go/constant"
+	"go/types"
 	"sort"
 	"strings"
 	"testing"
+
+	"golang.org/x/tools/go/packages"
 )
 
 const (
@@ -20,38 +21,42 @@ func TestCapabilitiesAreFiltered(t *testing.T) {
 	skipCheckCapabilities := make(map[string]struct{})
 	// skipCheckCapabilities["CanUseBlahBlahBlah"] = struct{}{}
 
-	fset := token.NewFileSet()
-	pkgs, err := parser.ParseDir(fset, providersImportDir, nil, 0) //nolint:staticcheck
-	/* FIXME(tlim):
-	pkg/normalize/capabilities_test.go:24:15: SA1019: parser.ParseDir has been deprecated since Go 1.25 and an alternative has been available since Go 1.11: ParseDir does not consider build tags when associating files with packages. For precise information about the relationship between packages and files, use golang.org/x/tools/go/packages, which can also optionally parse and type-check the files too. (staticcheck)
-	pkgs, err := parser.ParseDir(fset, providersImportDir, nil, 0)
-	*/
-	if err != nil {
-		t.Fatalf("unable to load Go code from providers: %s", err)
+	cfg := &packages.Config{
+		Mode: packages.NeedName | packages.NeedTypes | packages.NeedTypesInfo,
+		Dir:  providersImportDir,
 	}
-	providers, ok := pkgs[providersPackageName]
-	if !ok {
+	pkgs, err := packages.Load(cfg, ".")
+	if err != nil || len(pkgs) == 0 {
+		t.Fatalf("unable to load Go code from providers: %v", err)
+	}
+	var providers *packages.Package
+	for _, pkg := range pkgs {
+		if pkg.Name == providersPackageName {
+			providers = pkg
+			break
+		}
+	}
+	if providers == nil {
 		t.Fatalf("did not find package %q in %q", providersPackageName, providersImportDir)
 	}
 
 	constantNames := make([]string, 0, 50)
 	capabilityInts := make(map[string]int, 50)
 
-	// providers.Scope was nil in my testing
-	for fileName := range providers.Files {
-		scope := providers.Files[fileName].Scope
-		for itemName, obj := range scope.Objects {
-			if obj.Kind != ast.Con {
-				continue
-			}
-			// In practice, the object.Type is nil here so we can't filter for
-			// capabilities so easily.
-			if !strings.HasPrefix(itemName, "CanUse") {
-				continue
-			}
-			constantNames = append(constantNames, itemName)
-			capabilityInts[itemName] = obj.Data.(int)
+	for ident, obj := range providers.TypesInfo.Defs {
+		if !strings.HasPrefix(ident.Name, "CanUse") {
+			continue
 		}
+		c, ok := obj.(*types.Const)
+		if !ok {
+			continue
+		}
+		val, exact := constant.Int64Val(c.Val())
+		if !exact {
+			t.Fatalf("unable to get int value for %s", ident.Name)
+		}
+		constantNames = append(constantNames, ident.Name)
+		capabilityInts[ident.Name] = int(val)
 	}
 	sort.Strings(constantNames)
 

@@ -2,15 +2,11 @@
 
 DNSControl can generate a machine-parseable report of changes.
 
-The report is JSON-formatted and contains the zonename, the provider or
-registrar name, the number of changes (corrections), and the correction details.
-All values are in text, values may contain `<`,`>` and `&` escape as needed.
+The report is JSON-formatted and contains the zonename, the provider or registrar name, the number of changes (corrections), and the correction details. All values are in text, values may contain `<`,`>` and `&` escape as needed.
 
-To generate the report, add the `--report <filename>` option to a `preview` or
-`push` command.
+To generate the report, add the `--report <filename>` option to a `preview` or `push` command.
 
-The report lists the changes that would be (preview) or are (push) attempted,
-whether they are successful or not.
+The report lists the changes that would be (preview) or are (push) attempted, whether they are successful or not.
 
 If a fatal error happens during the run, no report is generated.
 

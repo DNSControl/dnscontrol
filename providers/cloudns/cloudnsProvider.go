@@ -10,11 +10,11 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
@@ -84,6 +84,44 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newReg)
 	providers.RegisterCustomRecordType("CLOUDNS_WR", providerName, "")
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "ClouDNS",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/cloudns",
+		PortalURL:   "https://www.cloudns.net/api-settings/",
+		Notes:       "ClouDNS supports two auth methods: a main API user (auth-id) or a sub-user API account (sub-auth-id). Both use the same auth-password.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "_authMethod",
+				Label:    "Which authentication method do you want to use?",
+				Help:     "Choose whether to authenticate with your main API auth-id or with a sub-user sub-auth-id.",
+				Choices:  []string{"auth-id", "sub-auth-id"},
+				Required: true,
+				Internal: true,
+			},
+			{
+				Key:      "auth-id",
+				Label:    "Auth ID",
+				Help:     "Your ClouDNS API auth-id.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "auth-id"},
+			},
+			{
+				Key:      "sub-auth-id",
+				Label:    "Sub-auth ID",
+				Help:     "Your ClouDNS sub-user API sub-auth-id.",
+				Required: true,
+				ShowIf:   map[string]string{"_authMethod": "sub-auth-id"},
+			},
+			{
+				Key:      "auth-password",
+				Label:    "Auth password",
+				Help:     "The API password associated with the chosen auth-id or sub-auth-id.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -299,7 +337,9 @@ func (c *cloudnsProvider) getDNSSECCorrections(dc *models.DomainConfig) ([]*mode
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *cloudnsProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := c.getRecords(domain)
 	if err != nil {
 		return nil, err
@@ -315,7 +355,8 @@ func (c *cloudnsProvider) GetZoneRecords(domain string, meta map[string]string) 
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
-func (c *cloudnsProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (c *cloudnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	if _, ok, err := c.idForDomain(domain); err != nil {
 		return err
 	} else if ok { // zone already exists
@@ -404,7 +445,7 @@ func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
 		rc.DsDigest = r.Target
 		err = rc.SetTarget(r.Target)
 	case "CLOUD_WR":
-		rc.Type = "WR"
+		rc.Type = "CLOUDNS_WR"
 		err = rc.SetTarget(r.Target)
 	case "LOC":
 		loc := fmt.Sprintf("%s %s %s %s %s %s %s %s %s %s %s %s",
@@ -457,7 +498,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	}
 
 	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "ALIAS", "CNAME", "WR", "DNAME":
+	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "ALIAS", "CNAME", "DNAME":
 		// Nothing special.
 	case "CLOUDNS_WR":
 		req["record-type"] = "WR"

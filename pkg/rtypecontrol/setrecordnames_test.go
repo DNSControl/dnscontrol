@@ -3,8 +3,8 @@ package rtypecontrol
 import (
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 )
 
 func TestSetRecordNames(t *testing.T) {

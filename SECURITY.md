@@ -10,6 +10,6 @@ When a major version is incremented, we'll support the previous major version fo
 
 ## Reporting a Vulnerability
 
-To report a vulnerability please [create a new GitHub "issue"](https://github.com/StackExchange/dnscontrol/issues/new/choose).
+To report a vulnerability please [create a new GitHub "issue"](https://github.com/DNSControl/dnscontrol/issues/new/choose).
 
 We will respond in a best-effort manner, usually within 1 week. We will communicate via the GitHub issue unless we need to communicate privately, in which case we'll arrange a way to communicate directly.

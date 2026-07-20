@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/miekg/dns/dnsutil"
 )
 
@@ -71,6 +71,28 @@ func init() {
 	providers.RegisterRegistrarType(providerName, newRegistrar)
 
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Gidinet",
+		Kind:        providers.KindDNS | providers.KindRegistrar,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gidinet",
+		PortalURL:   "https://www.gidinet.com/modules/private/account_password/",
+		Notes:       "The username is your usual Gidinet account username, but the password must be the dedicated \"API password\" generated in the Gidinet control panel — not your normal login password.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "username",
+				Label:    "Username",
+				Help:     "Your Gidinet account username (same as the control-panel login).",
+				Required: true,
+			},
+			{
+				Key:      "password",
+				Label:    "API password",
+				Help:     "The \"API password\" generated at https://www.gidinet.com/modules/private/account_password/ — not your normal login password.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 }
 
 // newRegistrar creates a new Gidinet registrar instance.
@@ -97,15 +119,21 @@ func NewGidinet(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 	return api, nil
 }
 
-// GetNameservers returns the nameservers for a domain.
-// Returns empty because apex NS records cannot be managed via the DNS API -
-// they are managed by the registrar. Use REG_GIDINET with NAMESERVER() instead.
+// GetNameservers returns the static Gidinet DNS nameservers used by every
+// zone hosted on the platform. Returning them here lets dnscontrol suggest
+// the correct delegation to the registrar without requiring an explicit
+// NAMESERVER() in the zone file.
 func (c *gidinetProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	return nil, nil
+	return models.ToNameservers([]string{
+		"dnsl1.gidinet.com",
+		"dnsl2.gidinet.com",
+	})
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (c *gidinetProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (c *gidinetProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	records, err := c.recordGetList(domain)
 	if err != nil {
 		return nil, err
@@ -333,12 +361,24 @@ func toGidinetRecord(domain string, rc *models.RecordConfig) *DNSRecord {
 
 // filterApexNS removes NS records at the apex from dc.Records.
 // Gidinet does not support modifying apex NS records via the DNS API - they are
-// managed by the registrar. Use REG_GIDINET with NAMESERVER() to manage them.
+// managed by the registrar. Apex NS records synthesized from dc.Nameservers
+// (auto-injected by GetNameservers or declared via NAMESERVER()) are dropped
+// silently since they are handled by the registrar side. Any other apex NS
+// record is dropped with a warning because it cannot be honored by the
+// Gidinet DNS API.
 func filterApexNS(dc *models.DomainConfig) {
+	expected := make(map[string]bool, len(dc.Nameservers))
+	for _, ns := range dc.Nameservers {
+		expected[strings.TrimSuffix(ns.Name, ".")] = true
+	}
+
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
-			printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added. Use REG_GIDINET with NAMESERVER() instead.\n", rec.GetTargetField())
+			target := strings.TrimSuffix(rec.GetTargetField(), ".")
+			if !expected[target] {
+				printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added.\n", rec.GetTargetField())
+			}
 			continue
 		}
 		newList = append(newList, rec)

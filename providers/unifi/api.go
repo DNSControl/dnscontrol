@@ -245,26 +245,40 @@ func (c *unifiClient) getSiteID() (string, error) {
 	return "", fmt.Errorf("site '%s' not found", c.site)
 }
 
-// getRecordsNew fetches all DNS policy records using the NEW API.
+// dnsPoliciesPageLimit is the number of records to request per page when listing DNS policies.
+const dnsPoliciesPageLimit = 200
+
+// getRecordsNew fetches all DNS policy records using the NEW API, paginating as needed.
 func (c *unifiClient) getRecordsNew() ([]dnsPolicyRecord, error) {
 	siteID, err := c.getSiteID()
 	if err != nil {
 		return nil, err
 	}
 
-	path := fmt.Sprintf("/integration/v1/sites/%s/dns/policies", siteID)
+	var allRecords []dnsPolicyRecord
+	offset := 0
+	for {
+		path := fmt.Sprintf("/integration/v1/sites/%s/dns/policies?offset=%d&limit=%d", siteID, offset, dnsPoliciesPageLimit)
 
-	respBytes, err := c.do("GET", path, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch records: %w", err)
+		respBytes, err := c.do("GET", path, nil)
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch records: %w", err)
+		}
+
+		var response dnsPolicyResponse
+		if err := json.Unmarshal(respBytes, &response); err != nil {
+			return nil, fmt.Errorf("failed to parse records: %w", err)
+		}
+
+		allRecords = append(allRecords, response.Data...)
+
+		if len(response.Data) < dnsPoliciesPageLimit {
+			break
+		}
+		offset += dnsPoliciesPageLimit
 	}
 
-	var response dnsPolicyResponse
-	if err := json.Unmarshal(respBytes, &response); err != nil {
-		return nil, fmt.Errorf("failed to parse records: %w", err)
-	}
-
-	return response.Data, nil
+	return allRecords, nil
 }
 
 // createRecordNew creates a new DNS record using the NEW API.
@@ -298,8 +312,8 @@ func (c *unifiClient) updateRecordNew(id string, r *dnsPolicyRecord) (*dnsPolicy
 
 	path := fmt.Sprintf("/integration/v1/sites/%s/dns/policies/%s", siteID, id)
 
-	// Ensure the ID is set in the record
-	r.ID = id
+	// The ID is in the URL path; the API rejects it if included in the request body.
+	r.ID = ""
 
 	respBytes, err := c.do("PUT", path, r)
 	if err != nil {
@@ -346,7 +360,7 @@ func (c *unifiClient) detectAPIAvailability() {
 	if _, err := c.getSiteID(); err == nil {
 		// Site ID fetched successfully, try to get records
 		siteID := c.siteID
-		path := fmt.Sprintf("/integration/v1/sites/%s/dns/policies", siteID)
+		path := fmt.Sprintf("/integration/v1/sites/%s/dns/policies?limit=1", siteID)
 		if _, err := c.do("GET", path, nil); err == nil {
 			newAvailable = true
 		}

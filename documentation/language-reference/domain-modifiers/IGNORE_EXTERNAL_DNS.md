@@ -6,26 +6,19 @@ parameter_types:
     prefix: string?
 ---
 
-`IGNORE_EXTERNAL_DNS` makes DNSControl automatically detect and ignore DNS records
-managed by Kubernetes external-dns.
+`IGNORE_EXTERNAL_DNS` makes DNSControl automatically detect and ignore DNS records managed by Kubernetes external-dns.
 
 ## Background
 
-[External-dns](https://github.com/kubernetes-sigs/external-dns) is a popular
-Kubernetes controller that synchronizes exposed Kubernetes Services and Ingresses
-with DNS providers. It creates DNS records automatically based on annotations on
-your Kubernetes resources.
+[External-dns](https://github.com/kubernetes-sigs/external-dns) is a popular Kubernetes controller that synchronizes exposed Kubernetes Services and Ingresses with DNS providers. It creates DNS records automatically based on annotations on your Kubernetes resources.
 
-External-dns uses TXT records to track ownership of the DNS records it manages.
-These TXT records contain metadata in this format:
+External-dns uses TXT records to track ownership of the DNS records it manages. These TXT records contain metadata in this format:
 
 ```
 "heritage=external-dns,external-dns/owner=<owner-id>,external-dns/resource=<resource>"
 ```
 
-When you have both DNSControl and external-dns managing the same DNS zone, conflicts
-can occur. DNSControl will try to delete records created by external-dns, and
-external-dns will recreate them, leading to an endless update cycle.
+When you have both DNSControl and external-dns managing the same DNS zone, conflicts can occur. DNSControl will try to delete records created by external-dns, and external-dns will recreate them, leading to an endless update cycle.
 
 ## How it works
 
@@ -37,15 +30,14 @@ When `IGNORE_EXTERNAL_DNS` is enabled, DNSControl will:
 
 External-dns creates TXT records with prefixes based on record type:
 - `a-<name>` for A records
-- `aaaa-<name>` for AAAA records  
+- `aaaa-<name>` for AAAA records
 - `cname-<name>` for CNAME records
 - `ns-<name>` for NS records
 - `mx-<name>` for MX records
 - `srv-<name>` for SRV records
 - `txt-<name>` for TXT records (when external-dns manages TXT records)
 
-For example, if external-dns creates an A record at `myapp.example.com`, it will
-also create a TXT record at `a-myapp.example.com` containing the heritage information.
+For example, if external-dns creates an A record at `myapp.example.com`, it will also create a TXT record at `a-myapp.example.com` containing the heritage information.
 
 ## Usage
 
@@ -66,9 +58,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 ## Custom Prefix Support
 
-If your external-dns is configured with a custom `--txt-prefix` (as documented in the
-[external-dns TXT registry docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#prefixes-and-suffixes)),
-pass that prefix to `IGNORE_EXTERNAL_DNS()`:
+If your external-dns is configured with a custom `--txt-prefix` (as documented in the [external-dns TXT registry docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#prefixes-and-suffixes)), pass that prefix to `IGNORE_EXTERNAL_DNS()`:
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -113,27 +103,21 @@ With `IGNORE_EXTERNAL_DNS` enabled, DNSControl will:
 
 ### One per domain
 
-Only one `IGNORE_EXTERNAL_DNS()` should be used per domain. If you call it multiple
-times, the last prefix wins. If you have multiple external-dns instances with
-different prefixes managing the same zone, use `IGNORE()` patterns for additional
-prefixes.
+Only one `IGNORE_EXTERNAL_DNS()` should be used per domain. If you call it multiple times, the last prefix wins. If you have multiple external-dns instances with different prefixes managing the same zone, use `IGNORE()` patterns for additional prefixes.
 
 ### TXT Registry Format
 
-This feature relies on external-dns's [TXT registry](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md),
-which is the default registry type. The TXT record content format is well-documented:
+This feature relies on external-dns's [TXT registry](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md), which is the default registry type. The TXT record content format is well-documented:
 
 ```
 "heritage=external-dns,external-dns/owner=<owner-id>,external-dns/resource=<resource>"
 ```
 
-This feature detects the `heritage=external-dns` marker in TXT records to identify
-external-dns managed records.
+This feature detects the `heritage=external-dns` marker in TXT records to identify external-dns managed records.
 
 ### Custom Prefix Support
 
-This feature supports custom prefixes configured via external-dns's `--txt-prefix` flag.
-If you're using a custom prefix, pass it to `IGNORE_EXTERNAL_DNS()`:
+This feature supports custom prefixes configured via external-dns's `--txt-prefix` flag. If you're using a custom prefix, pass it to `IGNORE_EXTERNAL_DNS()`:
 
 ```javascript
 // If external-dns uses --txt-prefix="extdns-"
@@ -153,8 +137,7 @@ Without a prefix argument, it detects:
 
 #### Period Format for Apex Domains
 
-If you need external-dns to manage apex (root) domain records, the external-dns
-documentation recommends using a prefix with `%{record_type}` followed by a period:
+If you need external-dns to manage apex (root) domain records, the external-dns documentation recommends using a prefix with `%{record_type}` followed by a period:
 
 ```yaml
 # external-dns deployment args
@@ -162,8 +145,7 @@ args:
   - --txt-prefix=extdns-%{record_type}.
 ```
 
-This creates TXT records like `extdns-a.www` for the `www` A record, and `extdns-a`
-for the apex A record. DNSControl's `IGNORE_EXTERNAL_DNS` supports both formats:
+This creates TXT records like `extdns-a.www` for the `www` A record, and `extdns-a` for the apex A record. DNSControl's `IGNORE_EXTERNAL_DNS` supports both formats:
 
 - Hyphen format: `extdns-a-www` (from `--txt-prefix=extdns-` with default `%{record_type}-`)
 - Period format: `extdns-a.www` (from `--txt-prefix=extdns-%{record_type}.`)
@@ -184,10 +166,7 @@ The following registries are **not supported**:
 
 ### Legacy TXT Format
 
-External-dns versions prior to v0.16 created TXT records without the record type
-prefix (e.g., `myapp.example.com` instead of `a-myapp.example.com`). This legacy
-format is supported but may match more records than intended since the record type
-cannot be determined.
+External-dns versions prior to v0.16 created TXT records without the record type prefix (e.g., `myapp.example.com` instead of `a-myapp.example.com`). This legacy format is supported but may match more records than intended since the record type cannot be determined.
 
 ## See also
 

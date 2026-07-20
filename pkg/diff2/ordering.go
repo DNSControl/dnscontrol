@@ -3,8 +3,8 @@ package diff2
 import (
 	"log"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsgraph"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnssort"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnssort"
 )
 
 func orderByDependencies(changes ChangeList) ChangeList {

@@ -8,11 +8,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
-	"github.com/StackExchange/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	gauth "golang.org/x/oauth2/google"
 	gdns "google.golang.org/api/dns/v1"
 	"google.golang.org/api/googleapi"
@@ -48,9 +48,10 @@ var (
 	networkNameCheck = regexp.MustCompile("^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$")
 )
 
-func sPtr(s string) *string {
-	return &s
-}
+// //go:fix inline
+// func sPtr(s string) *string {
+// 	return new(s)
+// }
 
 func init() {
 	const providerName = "GCLOUD"
@@ -61,6 +62,41 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Google Cloud DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/gcloud",
+		PortalURL:   "https://console.cloud.google.com/iam-admin/serviceaccounts", // TODO: Verify
+		Notes:       "These values come from a Google Cloud service account JSON key file.",
+		Fields: []providers.CredsField{
+			{
+				Key:      "project_id",
+				Label:    "Project ID",
+				Help:     "GCP project ID that owns the Cloud DNS zones.",
+				Required: true,
+			},
+			{
+				Key:      "client_email",
+				Label:    "Client email",
+				Help:     "Service account email from the JSON key.",
+				Required: true,
+			},
+			{
+				Key:       "private_key",
+				Label:     "Private key (opens $EDITOR)",
+				Help:      "Paste the full PEM block (including BEGIN/END lines) from the service account JSON, then save and close the editor.",
+				Multiline: true,
+				Required:  true,
+			},
+			{
+				Key:      "type",
+				Label:    "Credential type",
+				Help:     "Credential type from the service account JSON. Typically \"service_account\".",
+				Default:  "service_account",
+				Required: true,
+			},
+		},
+	})
 }
 
 type gcloudProvider struct {
@@ -110,7 +146,7 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 	var nss *string
 	if val, ok := cfg["name_server_set"]; ok {
 		printer.Printf("GCLOUD :name_server_set %s configured\n", val)
-		nss = sPtr(val)
+		nss = new(val)
 	}
 
 	g := &gcloudProvider{
@@ -212,7 +248,9 @@ func keyFor(r *gdns.ResourceRecordSet) key {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (g *gcloudProvider) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (g *gcloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	existingRecords, err := g.getZoneSets(domain)
 	return existingRecords, err
 }
@@ -457,7 +495,8 @@ func (g *gcloudProvider) getRecords(domain string) ([]*gdns.ResourceRecordSet, e
 	return sets, nil
 }
 
-func (g *gcloudProvider) EnsureZoneExists(domain string, metadata map[string]string) error {
+func (g *gcloudProvider) EnsureZoneExists(dc *models.DomainConfig) error {
+	domain := dc.Name
 	z, err := g.getZone(domain)
 	if err != nil {
 		if _, ok := err.(errNoExist); !ok {

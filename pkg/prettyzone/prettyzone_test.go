@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/dnsrr"
-	_ "github.com/StackExchange/dnscontrol/v4/pkg/rtype"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	dnsv1 "github.com/miekg/dns"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )

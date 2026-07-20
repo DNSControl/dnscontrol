@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 type rwthProvider struct {
@@ -19,7 +19,6 @@ var features = providers.DocumentationNotes{
 	providers.CanAutoDNSSEC:          providers.Unimplemented("Supported by RWTH but not implemented yet."),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
 	providers.CanUseAlias:            providers.Cannot(),
 	providers.CanUseCAA:              providers.Can(),
 	providers.CanUseDS:               providers.Unimplemented("DS records are only supported at the apex and require a different API call that hasn't been implemented yet."),

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/diff2"
-	"github.com/StackExchange/dnscontrol/v4/pkg/printer"
-	"github.com/StackExchange/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
@@ -39,6 +39,27 @@ func init() {
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
+		DisplayName: "Alibaba Cloud DNS",
+		Kind:        providers.KindDNS,
+		DocsURL:     "https://docs.dnscontrol.org/provider/alidns",
+		PortalURL:   "https://ram.console.aliyun.com/manage/ak", // TODO: Verify
+		Fields: []providers.CredsField{
+			{
+				Key:      "access_key_id",
+				Label:    "Access key ID",
+				Help:     "Alibaba Cloud RAM AccessKey ID.",
+				Required: true,
+			},
+			{
+				Key:      "access_key_secret",
+				Label:    "Access key secret",
+				Help:     "Alibaba Cloud RAM AccessKey secret.",
+				Secret:   true,
+				Required: true,
+			},
+		},
+	})
 	// Register default TTL of 600 seconds (10 minutes) for Alibaba Cloud DNS
 	// This is the minimum TTL for free/personal edition domains
 	providers.RegisterDefaultTTL(providerName, 600)
@@ -100,7 +121,9 @@ func (a *aliDNSDsp) GetNameservers(domain string) ([]*models.Nameserver, error) 
 }
 
 // GetZoneRecords returns an array of RecordConfig structs for a zone.
-func (a *aliDNSDsp) GetZoneRecords(domain string, meta map[string]string) (models.Records, error) {
+func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	// Fetch all pages of domain records.
 	records, err := a.describeDomainRecordsAll(domain)
 	if err != nil {

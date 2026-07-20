@@ -9,7 +9,7 @@ on:
   # Want to trigger all the tests without making a PR?
   # Run: git push origin main:tlim_testpr --force
   # This will trigger a full PR test on the main branch.
-  # See https://github.com/StackExchange/dnscontrol/actions/workflows/pr_build.yml?query=branch%3Atlim_testpr
+  # See https://github.com/DNSControl/dnscontrol/actions/workflows/pr_build.yml?query=branch%3Atlim_testpr
   push:
     branches:
       - 'tlim_testpr'
@@ -36,7 +36,7 @@ jobs:
     env:
       TEST_RESULTS: "/tmp/test-results"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         fetch-depth: 0
     - name: Set up Go
@@ -44,7 +44,7 @@ jobs:
       with:
         go-version: stable
     - name: restore_cache
-      uses: actions/cache@v5.0.3
+      uses: actions/cache@v6.1.0
       with:
         key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
         restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
@@ -56,7 +56,7 @@ jobs:
         gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
 #    - name: Enforce Go Formatted Code
 #      run: "[ `go fmt ./... | wc -l` -eq 0 ]"
-    - uses: actions/upload-artifact@v7.0.0
+    - uses: actions/upload-artifact@v7.0.1
       with:
         name: unit-tests
         path: ${{ env.TEST_RESULTS }}
@@ -83,4 +83,4 @@ jobs:
       if: github.ref_type != 'tag'
       uses: goreleaser/goreleaser-action@v7
       with:
-        args: build --snapshot
+        args: build --snapshot --single-target --skip=before

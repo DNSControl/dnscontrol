@@ -1,15 +1,15 @@
 package zonerecs
 
 import (
-	"github.com/StackExchange/dnscontrol/v4/models"
-	"github.com/StackExchange/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 )
 
 // CorrectZoneRecords calls both GetZoneRecords, does any
 // post-processing, and then calls GetZoneRecordsCorrections.  The
 // name sucks because all the good names were taken.
 func CorrectZoneRecords(driver models.DNSProvider, dc *models.DomainConfig) ([]*models.Correction, []*models.Correction, int, error) {
-	existingRecords, err := driver.GetZoneRecords(dc.Name, dc.Metadata)
+	existingRecords, err := driver.GetZoneRecords(dc)
 	if err != nil {
 		return nil, nil, 0, err
 	}

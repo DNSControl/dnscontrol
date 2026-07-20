@@ -3,7 +3,7 @@ package rejectif
 import (
 	"errors"
 
-	"github.com/StackExchange/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // Keep these in alphabetical order.
@@ -11,7 +11,7 @@ import (
 // SrvHasNullTarget detects SRV records that has a null target.
 func SrvHasNullTarget(rc *models.RecordConfig) error {
 	if rc.GetTargetField() == "." {
-		return errors.New("srv has null target")
+		return errors.New("srv has empty target") // Same msg as SrvHasEmptyTarget to make testing easier.
 	}
 	return nil
 }

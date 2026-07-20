@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/StackExchange/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v4/models"
 
 /*
 I proposed that Go add something like "len()" that returns the highest
