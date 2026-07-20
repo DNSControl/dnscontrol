@@ -53,7 +53,7 @@ require (
 	github.com/digitalocean/godo v1.199.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.0
-	github.com/exoscale/egoscale/v3 v3.1.42
+	github.com/exoscale/egoscale/v3 v3.1.43
 	github.com/go-gandi/go-gandi v0.7.0
 	github.com/gobwas/glob v0.2.4-0.20181002190808-e7a84e9525fe
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
@@ -92,12 +92,12 @@ require (
 	github.com/fbiville/markdown-table-formatter v0.3.0
 	github.com/google/go-cmp v0.7.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
-	github.com/hetznercloud/hcloud-go/v2 v2.44.0
+	github.com/hetznercloud/hcloud-go/v2 v2.45.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.207
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.23
-	github.com/netnod/netnod-primary-dns-client v1.1.0
+	github.com/netnod/netnod-primary-dns-client v1.1.1
 	github.com/nicholas-fedor/shoutrrr v0.16.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.121.0

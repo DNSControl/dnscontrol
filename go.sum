@@ -133,8 +133,8 @@ github.com/eclipse/paho.golang v0.23.0/go.mod h1:nQRhTkoZv8EAiNs5UU0/WdQIx2NrnWU
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
-github.com/exoscale/egoscale/v3 v3.1.42 h1:KlFDdm2ga1RdCdKuKlzJxLmgJjWVcDbJxF0t6FDswzw=
-github.com/exoscale/egoscale/v3 v3.1.42/go.mod h1:DUTgeubl5msPAo3SKFed04AxNhyTNOrCTJHZDRYLR10=
+github.com/exoscale/egoscale/v3 v3.1.43 h1:b036uxDZvCFVPKHI9RiZLjBcwMjGQTfJyJIzwqQkKO8=
+github.com/exoscale/egoscale/v3 v3.1.43/go.mod h1:DUTgeubl5msPAo3SKFed04AxNhyTNOrCTJHZDRYLR10=
 github.com/failsafe-go/failsafe-go v0.9.6 h1:vPSH2cry0Ee5cnR9wc9qshCDO6jdrMA9elBJNwyo4Uk=
 github.com/failsafe-go/failsafe-go v0.9.6/go.mod h1:IeRpglkcwzKagjDMh90ZhN2l4Ovt3+jemQBUbThag54=
 github.com/fatih/color v1.10.0/go.mod h1:ELkj/draVOlAH/xkhN6mQ50Qd0MPOk5AAr3maGEBuJM=
@@ -243,8 +243,8 @@ github.com/hashicorp/go-retryablehttp v0.7.7 h1:C8hUCYzor8PIfXHa4UrZkU4VvK8o9ISH
 github.com/hashicorp/go-retryablehttp v0.7.7/go.mod h1:pkQpWZeYWskR+D1tR2O5OcBFOxfA7DoAO6xtkuQnHTk=
 github.com/hashicorp/terraform-plugin-log v0.9.0 h1:i7hOA+vdAItN1/7UrfBqBwvYPQ9TFvymaRGZED3FCV0=
 github.com/hashicorp/terraform-plugin-log v0.9.0/go.mod h1:rKL8egZQ/eXSyDqzLUuwUYLVdlYeamldAHSxjUFADow=
-github.com/hetznercloud/hcloud-go/v2 v2.44.0 h1:1p9qwaZ/H55nLP9c7WfuwUA0LfsexS2YHOhD8+iBga8=
-github.com/hetznercloud/hcloud-go/v2 v2.44.0/go.mod h1:d0s2WLe7jSoStamv3eHoWgBSOxc/K17tYSXsqUkbse0=
+github.com/hetznercloud/hcloud-go/v2 v2.45.0 h1:0TnAwVUK/DJzEacOcY6IcbISJOIqldUjvaFpuVz8Mbk=
+github.com/hetznercloud/hcloud-go/v2 v2.45.0/go.mod h1:pdG7fFGlYsCAaJ9r0QOIF0O6wQcpbJxT2VT8aP6XlIc=
 github.com/hinshun/vt10x v0.0.0-20220119200601-820417d04eec h1:qv2VnGeEQHchGaZ/u7lxST/RaJw+cv273q79D81Xbog=
 github.com/hinshun/vt10x v0.0.0-20220119200601-820417d04eec/go.mod h1:Q48J4R4DvxnHolD5P8pOtXigYlRuPLGl6moFx3ulM68=
 github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.207 h1:lgMtpjpIWPw0gbCAko23dRKl66ZPUmeAOidjKFkub2E=
@@ -323,8 +323,8 @@ github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04 h1:o6uBwrhM5C8Ll3MAAxrQxRHEu7FkapwTuI2WmL1rw4g=
 github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04/go.mod h1:5sN+Lt1CaY4wsPvgQH/jsuJi4XO2ssZbdsIizr4CVC8=
-github.com/netnod/netnod-primary-dns-client v1.1.0 h1:t8cAKJZ39iHspMSQfCvPi1AR8Zw1PHsK6GTUsqRq+dk=
-github.com/netnod/netnod-primary-dns-client v1.1.0/go.mod h1:MLvJf4UhbAB8WQdypLqYv9rwtOGD+3cZlAVXMwgad3c=
+github.com/netnod/netnod-primary-dns-client v1.1.1 h1:hGZIMTNmsSLicgMOJ7yneLvbQiSmBDBMkko8ndE7i1Q=
+github.com/netnod/netnod-primary-dns-client v1.1.1/go.mod h1:MLvJf4UhbAB8WQdypLqYv9rwtOGD+3cZlAVXMwgad3c=
 github.com/nicholas-fedor/shoutrrr v0.16.1 h1:MOzl3U6zprA45lOTKaTbQW/9wzkR7SC36IFrTr5xfkU=
 github.com/nicholas-fedor/shoutrrr v0.16.1/go.mod h1:lii4gQKKSV2c32b+D93ysEdKpEzVla6HTbyOajpNDpo=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
