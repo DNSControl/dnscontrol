@@ -28,6 +28,9 @@ func ToFqdnNoDot(s, origin string) string {
 	return t[0 : len(t)-1]
 }
 
+// ToShort trims origin from name. If name is not below origin, name is returned unchanged.
+// If the name was shortened, it does not end with a ".". If the name was untouched, it ends with a ".".
+// Similar to DomainConfig.ToShort() but you can specify the origin.
 func ToShort(s, origin string) string {
 	if s == "" || s == "@" {
 		return "@"

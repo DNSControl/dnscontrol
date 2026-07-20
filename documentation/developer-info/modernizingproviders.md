@@ -139,8 +139,35 @@ default:
 }
 if err != nil { whatever }
 
+## Step 4. Replace dnsutilv1.AddOrigin()
 
-## Step 4. Remove obsolete setters
+OLD:
+
+```go
+n := dnsutilv1.AddOrigin(ns.Name, domain.Name+".")
+```
+
+NEW:
+
+n := name.AddOrigin(ns.Name, domain.Name+".")
+
+## Step 5. Replace TrimDomainName()
+
+OLD:
+
+```go
+shortname := dnsutilv1.TrimDomainName(label, origin)
+```
+
+NEW:
+
+```go
+shortname := name.ToShort(label, origin)
+or
+shortname := dc.ToShort(label)
+```
+
+## Step 6. Remove obsolete setters
 
 `rc.GetTargetCombined()` is now `rc.GetRDATA().String()`
 
@@ -159,8 +186,7 @@ default:
 }
 ```
 
-
-## Step 5. Remove obsolete getters
+## Step 6. Remove obsolete getters
 
 OLD:
 
@@ -197,4 +223,4 @@ rdmx.Preference = 999   // Alter a field.
 rc.SetRDATA(rdmx)       // Save it back.
 ```
 
-See the cookbook for more details.
+See the [cookbook](cookbook.md) for more details.
