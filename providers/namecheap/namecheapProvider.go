@@ -239,6 +239,17 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 		return true
 	})
 
+	// namecheap does not believe in TTLs for SRV records,
+	// zero off what was provided to avoid infinite push loop
+	recs := []*models.RecordConfig{}
+	for _, r := range dc.Records {
+		if r.Type == "SRV" {
+			r.TTL = 0
+		}
+		recs = append(recs, r)
+	}
+	dc.Records = recs
+
 	toReport, toCreate, toDelete, toModify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
 		return nil, 0, err
@@ -314,7 +325,7 @@ func toSRVRecords(result *nc.DomainSRVGetRecordsResult, origin string) ([]*model
 			Name: srvRecord.Service + srvRecord.Protocol,
 		}
 
-		record.SetLabel(srvRecord.Service + srvRecord.Protocol, origin)
+		record.SetLabel(srvRecord.Service+srvRecord.Protocol, origin)
 
 		err := record.SetTargetSRVStrings(
 			strconv.Itoa(srvRecord.Priority),
