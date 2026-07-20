@@ -897,7 +897,7 @@ func makeTests() []*TestGroup {
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
 			not(
-				"OPENWRT", // OpenWRT does not support per record TTL
+				"OPENWRT",   // OpenWRT does not support per record TTL
 				"NAMECHEAP", // Namecheap does not support per record TTL
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
