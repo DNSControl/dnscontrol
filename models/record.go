@@ -469,6 +469,39 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 	return rr
 }
 
+// ToRRv2 converts a RecordConfig to a dnsv2.RR.
+func (rc *RecordConfig) ToRRv2() dnsv2.RR {
+	// Function is only valid on defined types.
+	rdtype, ok := dnsv2.StringToType[rc.Type]
+	if !ok {
+		log.Fatalf("No such DNS type as (%#v)\n", rc.Type)
+	}
+	if rdtype != rc.TypeNum {
+		panic("should not happen: ToRRv2")
+	}
+
+	ttl := rc.TTL
+	if ttl == 0 {
+		ttl = DefaultTTL
+	}
+
+	// Magically create an RR of the correct type.
+	rr := dnsv2.TypeToRR[rdtype]()
+
+	// Make the header
+	hdr := dnsv2.Header{
+		Name:  rc.NameFQDN + ".",
+		TTL:   rc.TTL,
+		Class: dnsv2.ClassINET,
+	}
+
+	rd := rc.GetRDATA()
+
+	// use hdr and rd to create a dnsv2.RR
+
+	return rr
+}
+
 // GetDependencies returns the FQDNs on which this record dependents.
 func (rc *RecordConfig) GetDependencies() []string {
 	switch rc.Type {
