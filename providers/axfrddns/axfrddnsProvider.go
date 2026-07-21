@@ -509,7 +509,7 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 	i := 1
 	appendFinalUpdate := true
 
-	// NB(tlim): There is a .ToRRv2() function that should DTRT. It hasn't been tested extensively.
+	// NB(tlim): When moving to dnsv2, change .ToRR() to .ToRRv2().
 
 	for _, change := range changes {
 		switch change.Type {

@@ -485,19 +485,18 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 		ttl = DefaultTTL
 	}
 
-	// Magically create an RR of the correct type.
-	rr := dnsv2.TypeToRR[rdtype]()
-
 	// Make the header
 	hdr := dnsv2.Header{
 		Name:  rc.NameFQDN + ".",
-		TTL:   rc.TTL,
+		TTL:   ttl,
 		Class: dnsv2.ClassINET,
 	}
 
 	rd := rc.GetRDATA()
 
-	// use hdr and rd to create a dnsv2.RR
+	rr := dnsv2.TypeToRR[rdtype]()    // Magically create an RR of the correct type.
+	*rr.Header() = hdr                // Point the header at the header we created.
+	dnsv2.TypeToRDATA[rdtype](rr, rd) // Copy rd into the fields.
 
 	return rr
 }

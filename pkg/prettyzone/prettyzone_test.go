@@ -400,9 +400,7 @@ x                IN CNAME bosun.org.
 
 func TestWriteZoneFileSynth(t *testing.T) {
 	dc := models.MustNewDomainConfig("bosun.org")
-	_ = dc
 
-	//t.FailNow()
 	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.153")
 	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.154")
 	dc.AddTestRC(t, "www.bosun.org.", 300, dnsv2.TypeCNAME, "bosun.org.")
@@ -410,16 +408,6 @@ func TestWriteZoneFileSynth(t *testing.T) {
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo1", "A", "id123", "true")
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo2", "A", "id123", "true")
 	dc.AddTestRC(t, "zalias", 300, privatetypes.TypeR53ALIAS, "foo3", "A", "id123", "true")
-
-	// var recs []dnsv2.RR
-	// for i, rc := range dc.Records {
-	// 	recs = append(recs, rc.ToRRv2())
-	// }
-
-	// recs, err := rrstoRCs(dc.Records, "bosun.org")
-	// if err != nil {
-	// 	panic(err)
-	// }
 
 	buf := &bytes.Buffer{}
 	if err := WriteZoneFileRC(buf, dc.Records, "bosun.org", 0, []string{"c1", "c2", "c3\nc4"}); err != nil {
