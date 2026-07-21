@@ -78,12 +78,13 @@ The workflow then, in order:
 1. **preflight** — validates the version; refuses if the tag already exists.
 2. **verify** — runs the **entire** `longtest` integration suite as a gate. If
    anything fails, nothing is tagged or published.
-3. **release** — creates the empty `Release <version>` commit via an
-   auto-merged PR (labeled `longtest`), tags it, and runs GoReleaser to produce
-   the **draft** release.
+3. **release** — tags the tip of the selected branch and runs GoReleaser to
+   produce the **draft** release.
 
-The empty commit guarantees each release/RC lands on its own commit, so the
-changelog range is computed correctly.
+The release is tagged directly (not via an empty `Release <version>` commit):
+this org forbids GitHub Actions from opening pull requests and `main` is
+protected, so a PAT-free automated PR is not possible. The changelog range is
+still correct because it is computed by version, not by commit ancestry.
 
 ### Manual (escape hatch)
 

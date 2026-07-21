@@ -87,7 +87,7 @@ jobs:
       full: true
     secrets: inherit
 
-  # release: create the release commit + tag (dispatch only) and run GoReleaser.
+  # release: create the tag (dispatch only) and run GoReleaser.
   # Runs for a manual tag push (unchanged behavior) OR after a successful
   # dispatch+verify.
   release:
@@ -108,7 +108,6 @@ jobs:
     permissions:
       packages: write
       contents: write
-      pull-requests: write
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -137,37 +136,27 @@ jobs:
             echo "Release \`${{ inputs.version }}\` was cut with **skip_longtest=true** — the full integration suite did NOT run."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # DISPATCH ONLY: main is protected (PRs required, enforced for admins), so
-      # the empty "Release vX.Y.Z" commit is landed via an auto-merged PR (0
-      # required reviews/checks make this possible with GITHUB_TOKEN), then
-      # tagged. Pushing the tag with GITHUB_TOKEN intentionally does NOT
-      # re-trigger this workflow's tag-push path, so there is no double release.
-      - name: Create release commit and tag
+      # DISPATCH ONLY: tag the tip of the selected branch and push the tag.
+      #
+      # We deliberately do NOT land an empty "Release vX.Y.Z" commit on the
+      # branch: main is protected (PRs required, enforced for admins) and this
+      # org forbids GitHub Actions from creating pull requests, so an
+      # automated, PAT-free PR is impossible. Tagging is unaffected by branch
+      # protection (no tag protection rules), and the changelog is still correct
+      # because GORELEASER_PREVIOUS_TAG is computed by version below (it does
+      # not rely on the tag sitting on its own commit). The annotated tag itself
+      # carries the "Release vX.Y.Z" message.
+      #
+      # Pushing the tag with GITHUB_TOKEN intentionally does NOT re-trigger this
+      # workflow's tag-push path, so there is no double release.
+      - name: Create and push tag
         if: github.event_name == 'workflow_dispatch'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ inputs.version }}
-          BRANCH: ${{ github.ref_name }}
         run: |
           set -eu
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          work="release/${VERSION}"
-          git switch -c "$work"
-          git commit --allow-empty -m "Release ${VERSION}"
-          git push -u origin "$work"
-
-          gh pr create --base "$BRANCH" --head "$work" \
-            --title "Release ${VERSION}" \
-            --body "Automated empty commit marking release ${VERSION}."
-          gh pr edit "$work" --add-label longtest || echo "WARNING: could not add 'longtest' label (continuing)."
-          gh pr merge "$work" --squash --delete-branch
-
-          # Fast-forward the local checkout to the merged commit, then tag it.
-          git fetch origin "$BRANCH"
-          git checkout "$BRANCH"
-          git reset --hard "origin/${BRANCH}"
           git tag -a "$VERSION" -m "Release ${VERSION}"
           git push origin "refs/tags/${VERSION}"
 
