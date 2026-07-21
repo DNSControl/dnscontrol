@@ -17,7 +17,7 @@ updates:
     schedule:
       interval: "monthly"
     ignore:
-      - dependency-name: "github.com/billputer/go-namecheap"
+      - dependency-name: "github.com/willpower232/go-namecheap"
       - dependency-name: "github.com/dnsimple/dnsimple-go"
       - dependency-name: "github.com/exoscale/egoscale"
       - dependency-name: "github.com/ovh/go-ovh"

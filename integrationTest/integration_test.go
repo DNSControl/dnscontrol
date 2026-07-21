@@ -895,8 +895,10 @@ func makeTests() []*TestGroup {
 		// https://github.com/DNSControl/dnscontrol/issues/2066
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
-			not("UNIFI"),   // UniFi has no per-record TTL for SRV records.
-			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not(
+				"OPENWRT",   // OpenWRT does not support per record TTL
+				"NAMECHEAP", // Namecheap does not support per record TTL
+			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
 			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
 		),
