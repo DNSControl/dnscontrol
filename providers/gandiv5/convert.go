@@ -87,11 +87,11 @@ func recordsToNative(rcs []*models.RecordConfig, origin string) []livedns.Domain
 				RrsetType:   r.Type,
 				RrsetTTL:    int(r.TTL),
 				RrsetName:   label,
-				RrsetValues: []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)},
+				RrsetValues: []string{r.GetRDATA().String()},
 			}
 			keys[key] = &zr
 		} else {
-			zr.RrsetValues = append(zr.RrsetValues, r.GetTargetCombinedFunc(txtutil.EncodeQuoted))
+			zr.RrsetValues = append(zr.RrsetValues, r.GetRDATA().String())
 
 			if r.TTL != uint32(zr.RrsetTTL) {
 				printer.Warnf("All TTLs for a rrset (%v) must be the same. Using smaller of %v and %v.\n", key, r.TTL, zr.RrsetTTL)

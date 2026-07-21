@@ -208,9 +208,9 @@ retry:
 		return nil, err
 	}
 
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, entry := range entries {
-		rts, err := nativeToRecord(entry, domainName)
+		rts, err := nativeToRecord(entry, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -260,22 +260,19 @@ func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
 		Name:    config.Name,
 		Expire:  int(config.TTL),
 		Type:    config.Type,
-		Content: config.GetTargetCombinedFunc(nil),
+		Content: config.GetRDATA().String(),
 	}, nil
 }
 
-func nativeToRecord(entry domain.DNSEntry, origin string) (*models.RecordConfig, error) {
-
-	rc := &models.RecordConfig{
-		TTL:      uint32(entry.Expire),
-		Type:     entry.Type,
-		Original: entry,
-	}
-	rc.SetLabel(entry.Name, origin)
-	if err := rc.PopulateFromStringFunc(entry.Type, entry.Content, origin, nil); err != nil {
+func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(entry.Name)
+	var rc *models.RecordConfig
+	var err error
+	rc, err = dc.NewRecordConfigParse(label, uint32(entry.Expire), entry.Type, entry.Content)
+	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
 	}
-
+	rc.Original = entry
 	return rc, nil
 }
 

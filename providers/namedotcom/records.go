@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -21,7 +23,7 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	actual := make([]*models.RecordConfig, len(records))
 	for i, r := range records {
-		actual[i], err = toRecord(r, domain)
+		actual[i], err = toRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -33,12 +35,6 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *namedotcomProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
 	checkNSModifications(dc)
-
-	for _, rec := range dc.Records {
-		if rec.Type == "ALIAS" {
-			rec.ChangeType("ANAME", dc.Name)
-		}
-	}
 
 	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
@@ -84,32 +80,29 @@ func checkNSModifications(dc *models.DomainConfig) {
 	dc.Records = newList
 }
 
-func toRecord(r *namecom.Record, origin string) (*models.RecordConfig, error) {
-	heapr := r // NB(tlim): Unsure if this is actually needed.
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      r.TTL,
-		Original: heapr,
-	}
+func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	if !strings.HasSuffix(r.Fqdn, ".") {
 		panic(fmt.Errorf("namedotcom suddenly changed protocol. Bailing. (%v)", r.Fqdn))
 	}
-	fqdn := r.Fqdn[:len(r.Fqdn)-1]
-	rc.SetLabelFromFQDN(fqdn, origin)
+	label := dc.LabelFromFQDNWithDot(r.Fqdn)
+	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
+	case "ANAME":
+		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeALIAS, r.Answer)
 	case "TXT":
-		err = rc.SetTargetTXT(r.Answer)
+		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, r.Answer)
 	case "MX":
-		err = rc.SetTargetMX(uint16(r.Priority), r.Answer)
+		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, uint16(r.Priority), r.Answer)
 	case "SRV":
-		err = rc.SetTargetSRVPriorityString(uint16(r.Priority), r.Answer+".")
-	default: // "A", "AAAA", "ANAME", "CNAME", "NS"
-		err = rc.PopulateFromString(rtype, r.Answer, r.Fqdn)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s.", r.Priority, r.Answer))
+	default:
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)
 	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -153,8 +146,11 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		Priority:   uint32(rc.MxPreference),
 	}
 	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "ANAME", "CNAME", "MX", "NS":
-	// nothing
+	case "A", "AAAA", "CNAME", "MX", "NS":
+		// nothing
+	case "ALIAS":
+		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
+		record.Type = "ANAME"
 	case "TXT":
 		record.Answer = rc.GetTargetTXTJoined()
 	case "SRV":
