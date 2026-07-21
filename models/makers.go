@@ -12,10 +12,10 @@ import (
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	svcbv2 "codeberg.org/miekg/dns/svcb"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	dnsv1 "github.com/miekg/dns"
 )
 

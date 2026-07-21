@@ -3,8 +3,8 @@ package commands
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 )
 
 func TestR53Test_1(t *testing.T) {

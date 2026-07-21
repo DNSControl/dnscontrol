@@ -10,11 +10,11 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/normalize"
-	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/normalize"
+	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 	testifyrequire "github.com/stretchr/testify/require"
 )
 

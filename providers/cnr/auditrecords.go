@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -15,11 +15,9 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2021-10-01
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-07-20
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-30
-
-	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2020-12-28
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-20
 
 	a.Add("DNAME", dnameHasWildcardLabel)               // Last verified 2026-02-10
 	a.Add("SVCB", func(rc *models.RecordConfig) error { // Last verified 2026-06-29

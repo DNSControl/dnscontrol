@@ -277,7 +277,7 @@ Jump to a table:
 | [`LUADNS`](luadns.md) | ❔ | ❔ | ✅ | ❔ |
 | [`MIKROTIK`](mikrotik.md) | ❔ | ❌ | ✅ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ❔ | ❔ | ✅ | ❔ |
-| [`NAMECHEAP`](namecheap.md) | ❔ | ❔ | ❌ | ❔ |
+| [`NAMECHEAP`](namecheap.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NAMEDOTCOM`](namedotcom.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ | ❌ |
 | [`NETCUP`](netcup.md) | ❔ | ❔ | ✅ | ❔ |

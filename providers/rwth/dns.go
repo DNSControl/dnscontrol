@@ -1,8 +1,8 @@
 package rwth
 
 import (
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // RWTHDefaultNs is the default DNS NS for this provider.
