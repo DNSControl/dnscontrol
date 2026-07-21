@@ -101,7 +101,7 @@ require (
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.121.0
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.36
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1446+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1447+incompatible
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.138
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
