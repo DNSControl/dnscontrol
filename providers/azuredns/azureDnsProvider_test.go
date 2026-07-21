@@ -10,7 +10,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns"
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestNativeToRecordsUsesV3RecordConfig(t *testing.T) {

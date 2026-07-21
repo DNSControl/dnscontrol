@@ -11,10 +11,10 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnstestv2 "codeberg.org/miekg/dns/dnstest"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 func parseAndRegen(t *testing.T, buf *bytes.Buffer, expected string) {

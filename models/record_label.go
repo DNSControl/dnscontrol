@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"golang.org/x/net/idna"
 )
 

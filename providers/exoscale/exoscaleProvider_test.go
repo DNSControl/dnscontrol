@@ -5,7 +5,7 @@ import (
 
 	egoscale "github.com/exoscale/egoscale/v3"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func makeNativeRecord(rtype, name, content string, priority int64, ttl int64) *egoscale.DNSDomainRecord {

@@ -7,7 +7,7 @@ import (
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"golang.org/x/net/idna"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 // ImportRawRecords iterates over the dc.RawRecords from each domain,
