@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 )
@@ -44,19 +44,7 @@ type Record struct {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	records, err := n.getRecords(dc)
-	if err != nil {
-		return nil, err
-	}
-	actual := make([]*models.RecordConfig, len(records))
-	for i, r := range records {
-		actual[i], err = toRecord(r, dc)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return actual, nil
+	return n.getRecords(dc)
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -165,7 +153,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		changes = true
 		fmt.Fprintln(buf, d)
 		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := n.deleteRecordString(d.Existing.Original.(*Record))
+		oldRecordString := d.Existing.Original.(string)
 		params[key] = oldRecordString
 		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
 		delrridx++
@@ -175,7 +163,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		fmt.Fprintln(buf, chng)
 		// old record deletion
 		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := n.deleteRecordString(chng.Existing.Original.(*Record))
+		oldRecordString := chng.Existing.Original.(string)
 		params[key] = oldRecordString
 		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
 		delrridx++
@@ -213,39 +201,30 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	return corrections, actualChangeCount, nil
 }
 
-func toRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
-
-	label := dc.LabelFromFQDNWithDot(r.Fqdn)
-	ttl := uint32(r.TTL)
+func toRC(dc *models.DomainConfig, data map[string]string) (*models.RecordConfig, error) {
 	var rc *models.RecordConfig
 	var err error
 
-	switch r.Type {
-	case "MX":
-		if r.Priority > 65535 {
-			return nil, fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority)
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Answer)
-	case "SRV":
-		if r.Priority > 65535 {
-			return nil, fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority)
-		}
-		answer := r.Answer
-		f := strings.Fields(r.Answer)
-		switch len(f) {
-		case 3: // Not enough parameters
-			answer = fmt.Sprintf("%d %s", r.Priority, r.Answer)
-		case 5: // Too many. Priority was prepended when it wasn't needed.
-			answer = strings.Join(f[1:], " ")
-		}
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, answer)
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Answer)
-	}
+	label := dc.LabelFromShort(data["NAME"])
+
+	ttl, err := strconv.ParseUint(data["TTL"], 10, 32)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("invalid TTL value for domain %s: %s", dc.Name, data["TTL"])
 	}
-	rc.Original = r
+
+	// Add trailing dot to Answer for record types that require it
+	if dotSuffixTypes[data["TYPE"]] && !strings.HasSuffix(data["CONTENT"], ".") {
+		data["CONTENT"] += "."
+	}
+
+	switch data["TYPE"] {
+	default:
+		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), data["TYPE"], data["CONTENT"])
+		if err != nil {
+			return nil, fmt.Errorf("parse error: %w", err)
+		}
+	}
+	rc.Original = deleteRecordString(rc) // This is the code we'll need to delete the record.
 
 	return rc, nil
 }
@@ -266,8 +245,8 @@ func (n *Client) updateZoneBy(params map[string]any, domain string) error {
 }
 
 // getRecords queries the API for all resource records of a zone.
-func (n *Client) getRecords(dc *models.DomainConfig) ([]*Record, error) {
-	var records []*Record
+func (n *Client) getRecords(dc *models.DomainConfig) (models.Records, error) {
+	var records models.Records
 	domain := dc.Name
 
 	// Command to find out the total numbers of resource records for the zone
@@ -312,43 +291,10 @@ func (n *Client) getRecords(dc *models.DomainConfig) ([]*Record, error) {
 			continue
 		}
 
-		if data["TYPE"] == "MX" {
-			tmp := strings.Split(data["CONTENT"], " ")
-			data["PRIO"] = tmp[0]
-			data["CONTENT"] = tmp[1]
-		}
-
-		// Parse the TTL string to an unsigned integer
-		ttl, err := strconv.ParseUint(data["TTL"], 10, 32)
+		record, err := toRC(dc, data)
 		if err != nil {
-			return nil, fmt.Errorf("invalid TTL value for domain %s: %s", domain, data["TTL"])
+			return nil, fmt.Errorf("toRC error: %w", err)
 		}
-
-		// Parse the TTL string to an unsigned integer
-		priority, _ := strconv.ParseUint(data["PRIO"], 10, 32)
-
-		// Add trailing dot to Answer for record types that require it
-		if dotSuffixTypes[data["TYPE"]] && !strings.HasSuffix(data["CONTENT"], ".") {
-			data["CONTENT"] += "."
-		}
-
-		// Only append domain if it's not already a fully qualified domain name
-		fqdn := domain + "."
-		if data["NAME"] != "@" && !strings.HasSuffix(data["NAME"], domain+".") {
-			fqdn = fmt.Sprintf("%s.%s.", data["NAME"], domain)
-		}
-
-		// Initialize a new Record
-		record := &Record{
-			DomainName: domain,
-			Host:       data["NAME"],
-			Fqdn:       fqdn,
-			Type:       data["TYPE"],
-			Answer:     data["CONTENT"],
-			TTL:        uint32(ttl),
-			Priority:   uint32(priority),
-		}
-		// Append the record to the records slice
 		records = append(records, record)
 	}
 
@@ -406,24 +352,22 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 }
 
 // deleteRecordString constructs the record string based on the provided Record.
-func (n *Client) deleteRecordString(record *Record) string {
-
-	// Initialize values slice
-	values := []string{
-		record.Host,
-		strconv.FormatUint(uint64(record.TTL), 10),
-		"IN",
-		record.Type,
+func deleteRecordString(rc *models.RecordConfig) string {
+	switch rc.Type {
+	case "MX":
+		return fmt.Sprintf("%s %d IN MX %s", rc.GetLabel(), rc.TTL, rc.GetRDATA().(dnsrdatav2.MX).Mx)
+	case "NS":
+		return fmt.Sprintf("%s %d NS %s", rc.GetLabel(), rc.TTL, rc.GetRDATA().(dnsrdatav2.NS).Ns)
+	case "SVCB", "HTTPS":
+		d := rc.GetRDATA().String()
+		d = strings.ReplaceAll(d, `"`, ``)
+		return fmt.Sprintf("%s %d IN %s %s", rc.GetLabel(), rc.TTL, rc.Type, d)
+	case "TLSA":
+		d := rc.GetRDATA().String()
+		d = strings.ToLower(d)
+		return fmt.Sprintf("%s %d IN %s %s", rc.GetLabel(), rc.TTL, rc.Type, d)
 	}
-	values = append(values, record.Answer)
-
-	// Remove IN if the record type is "NS" TODO
-	if record.Type == "NS" {
-		values = append(values[:2], values[3:]...) // Skip over the "IN"
-	}
-
-	// Return the final string by joining the elements with spaces
-	return strings.Join(values, " ")
+	return fmt.Sprintf("%s %d IN %s %s", rc.GetLabel(), rc.TTL, rc.Type, rc.GetRDATA().String())
 }
 
 // Function to check the no-populate argument.
