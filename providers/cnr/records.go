@@ -233,15 +233,10 @@ func toRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) 
 		answer := r.Answer
 		f := strings.Fields(r.Answer)
 		switch len(f) {
-		case 3:
+		case 3: // Not enough parameters
 			answer = fmt.Sprintf("%d %s", r.Priority, r.Answer)
-		case 4:
-		case 5:
+		case 5: // Too many. Priority was prepended when it wasn't needed.
 			answer = strings.Join(f[1:], " ")
-		}
-		fmt.Printf("DEBUG: answer=%q\n", answer)
-		if answer == "5 5 6 7 foo.com." {
-			fmt.Printf("HERE\n")
 		}
 		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, answer)
 	default:
@@ -254,13 +249,6 @@ func toRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) 
 
 	return rc, nil
 }
-
-// // ovhParseTXT decodes a TXT target as received from the OVH API.
-// // We must join the strings ourselves. OVH is "smart" and joins with spaces for DMARC/DKIM/SPF,
-// // and joins with "" (null string) for TXT records. We don't want it to be so smart, so we do the join ourselves.
-// func ovhParseTXT(s string) (string, error) {
-// 	return strings.Join(models.ParseQuotedTxt(s), ""), nil
-// }
 
 // updateZoneBy updates the zone with the provided changes.
 func (n *Client) updateZoneBy(params map[string]any, domain string) error {
@@ -405,16 +393,6 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 		answer = fmt.Sprintf(`%v %v %v %s`, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
 	case "CAA":
 		answer = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
-	case "TXT":
-		answer = rc.GetRDATA().String()
-	case "SRV":
-		// target := rc.GetTargetField()
-		// if target == "" {
-		// 	target = "."
-		// }
-		// answer = fmt.Sprintf("%d %d %d %v", uint32(rc.SrvPriority), rc.SrvWeight, rc.SrvPort, target)
-		answer = rc.GetRDATA().String()
-		fmt.Printf("DEBUG: createRecordString a=%q\n", answer)
 	default:
 		answer = rc.GetRDATA().String()
 	}
