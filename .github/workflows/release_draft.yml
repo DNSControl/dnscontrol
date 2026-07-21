@@ -31,6 +31,11 @@ on:
         required: false
         default: ""
         type: string
+      skip_longtest:
+        description: "DANGER: skip the full longtest integration gate (use only when tests are known-broken or for an emergency release)"
+        required: false
+        default: false
+        type: boolean
     # NOTE: the branch to release from is chosen via the "Use workflow from"
     # dropdown (github.ref) — that is how "release from any branch" works.
 
@@ -72,9 +77,10 @@ jobs:
 
   # verify: run the FULL longtest integration suite as a release gate. Uses
   # workflow_call, which GITHUB_TOKEN is allowed to trigger (no PAT needed).
+  # Skipped when the operator opts out via skip_longtest=true.
   verify:
     name: verify (full longtest)
-    if: github.repository == 'DNSControl/dnscontrol' && github.event_name == 'workflow_dispatch'
+    if: github.repository == 'DNSControl/dnscontrol' && github.event_name == 'workflow_dispatch' && !inputs.skip_longtest
     needs: preflight
     uses: ./.github/workflows/pr_integration_tests.yml
     with:
@@ -87,11 +93,17 @@ jobs:
   release:
     name: draft release
     needs: [preflight, verify]
+    # Runs for: a manual tag push (unchanged), OR a dispatch where preflight
+    # passed AND (the longtest gate passed OR the operator opted out via
+    # skip_longtest). preflight must always pass, so an invalid version or an
+    # existing tag still blocks even when skip_longtest is set.
     if: >-
       always() &&
       github.repository == 'DNSControl/dnscontrol' &&
       ( github.event_name == 'push' ||
-        (github.event_name == 'workflow_dispatch' && needs.verify.result == 'success') )
+        ( github.event_name == 'workflow_dispatch' &&
+          needs.preflight.result == 'success' &&
+          ( needs.verify.result == 'success' || inputs.skip_longtest ) ) )
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -113,6 +125,17 @@ jobs:
       # Why "fetch-depth: 0"?  To generate the release notes, we need the
       # full git history.  A shallow checkout would make release notes going
       # back one commit.
+
+      # Make an opted-out longtest gate impossible to miss (annotation + summary).
+      - name: Warn if longtest gate was skipped
+        if: github.event_name == 'workflow_dispatch' && inputs.skip_longtest
+        run: |
+          echo "::warning title=longtest skipped::The full longtest integration gate was SKIPPED for ${{ inputs.version }} (skip_longtest=true)."
+          {
+            echo "## ⚠️ longtest integration gate SKIPPED"
+            echo ""
+            echo "Release \`${{ inputs.version }}\` was cut with **skip_longtest=true** — the full integration suite did NOT run."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       # DISPATCH ONLY: main is protected (PRs required, enforced for admins), so
       # the empty "Release vX.Y.Z" commit is landed via an auto-merged PR (0

@@ -6,7 +6,23 @@ GitHub Actions (GHA) will do most of the work for you. You will need to edit the
 
 Please change the version number as appropriate.  Substitute (for example) `v4.2.0` any place you see `$VERSION` in this doc.
 
-## Step 0. Update dependencies
+## Step 1. Verify everything is up to date
+
+### Automated (recommended)
+
+This script will run `bin/generate-all.sh` and prompt to upgrade depenencies.
+It must be run from branch `main` or `prep_release`.
+
+```shell
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
+bin/prep_release.sh
+```
+
+### Manual
+
+Dependencies:
 
 ```shell
 git checkout main
@@ -17,7 +33,7 @@ go mod tidy
 git commit -m "CHORE: Update dependencies" go.sum go.mod
 ```
 
-## Step 1. Rebuild generated files
+Generated files, linting, etc:
 
 ```shell
 git fetch origin main
@@ -29,6 +45,12 @@ git commit -am "CHORE: generate-all.sh"
 ```
 
 ## Step 2. Cut the release
+
+Pick the next release number:
+
+```shell
+git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | tail
+```
 
 ### Automated (recommended)
 
@@ -44,6 +66,11 @@ a single GitHub Actions run — no local CLI needed:
    * **previous_tag** (optional): the tag the changelog compares against. Leave
      blank to auto-detect the most recent non-RC release (almost always what you
      want; set it only when releasing from an unusual branch).
+   * **skip_longtest** (optional, default off): **danger** — skips the full
+     `longtest` integration gate. Use only for an emergency release or when the
+     suite is known-broken. When set, the run is loudly annotated and the job
+     summary records that tests were skipped. (`preflight` still runs, so an
+     invalid version or an existing tag still blocks the release.)
 4. Click **Run workflow**.
 
 The workflow then, in order:
