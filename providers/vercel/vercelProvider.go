@@ -16,7 +16,7 @@ import (
 	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"codeberg.org/miekg/dns/dnsutil"
+	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -60,25 +60,6 @@ type vercelProvider struct {
 	updateLimiter *rateLimiter
 	deleteLimiter *rateLimiter
 	listLimiter   *rateLimiter
-}
-
-// uint16Zero converts value to uint16 or returns 0, use wisely
-//
-// Vercel's Go SDK implies int64 for almost everything, but since Vercel doesn't actually
-// implement their own NS and instead uses NS1 / Constellix (previously), we'd assume if
-// TTL and Priority are int64, they are in fact uint16 and otherwise be rejected by upstream
-// providers. Under this assumption, we'd convert int64 to uint16 as wells.
-func uint16Zero(value any) uint16 {
-	switch v := value.(type) {
-	case float64:
-		return uint16(v)
-	case uint16:
-		return v
-	case int64:
-		return uint16(v)
-	case nil:
-	}
-	return 0
 }
 
 func init() {
@@ -167,23 +148,29 @@ func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfi
 	original := r
 	label := dc.LabelFromShort(r.Name)
 	if r.Type == "CNAME" || r.Type == "MX" {
-		r.Value = dnsutil.Canonical(r.Value)
+		r.Value = dnsutilv2.Canonical(r.Value)
 	}
+
+	ttl := uint32(r.TTL)
 
 	rtype := r.RecordType
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
+	// NB(tlim): *Parse() with the fmt.Sprintf() is required for SRV, HTTPS, SVCB
+	// because v.Value includes all the fields except the priority.
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeMX, uint16Zero(r.MXPriority), r.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.MXPriority, r.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, uint32(r.TTL), dnsv2.TypeSRV, fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", r.Priority, r.Value))
 	case "HTTPS":
-		rc, err = dc.NewRecordConfigParse(label, uint32(r.TTL), dnsv2.TypeHTTPS, fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeHTTPS, fmt.Sprintf("%d %s", r.Priority, r.Value))
+	case "SVCB":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSVCB, fmt.Sprintf("%d %s", r.Priority, r.Value))
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeTXT, r.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, uint32(r.TTL), rtype, r.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable %s record received from vercel: %w", rtype, err)
