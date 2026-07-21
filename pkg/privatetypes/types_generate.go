@@ -261,9 +261,9 @@ func generateTypeFile(t *TypeDef) error {
 		`dnsutilv2 "codeberg.org/miekg/dns/dnsutil"`,
 	}
 	if len(t.Fields) > 0 {
-		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`)
+		third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"`)
 	}
-	third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
+	third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"`)
 	writeImports(&buf, std, third)
 
 	fmt.Fprintf(&buf, "// %s\n\n", displayName)
@@ -402,7 +402,7 @@ func generateTestFile(t *TypeDef) error {
 	}
 	third := []string{`dnsv2 "codeberg.org/miekg/dns"`}
 	if len(t.Fields) > 0 {
-		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
+		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"`)
 	}
 	writeImports(&buf, std, third)
 
@@ -498,10 +498,10 @@ func generateRdataFile(t *TypeDef) error {
 	}
 	third := []string{
 		`dnsv2 "codeberg.org/miekg/dns"`,
-		`"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`,
+		`"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"`,
 	}
 	if needsTxtutil(t.Fields) || needsTxtutil(t.RuntimeFields) {
-		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"`)
+		third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"`)
 	}
 	writeImports(&buf, std, third)
 

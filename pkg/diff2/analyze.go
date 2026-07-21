@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/fatih/color"
 )
 
@@ -261,7 +261,7 @@ func diffTargets(existing, desired []targetConfig) ChangeList {
 	existing, desired = removeCommon(existing, desired)
 
 	// At this point the exact matches are removed. However there may be
-	// records that have the same GetTargetCombined() but different
+	// records that have the same .String() but different
 	// TTLs.
 
 	existing, desired, newChanges := findTTLChanges(existing, desired)

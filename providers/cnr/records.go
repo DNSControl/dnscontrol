@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 )
 
 // dotSuffixTypes lists record types whose content requires a trailing dot

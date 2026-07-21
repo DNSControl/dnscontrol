@@ -16,11 +16,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pquerna/otp/totp"
 )

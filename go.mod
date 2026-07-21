@@ -1,8 +1,8 @@
-module github.com/DNSControl/dnscontrol/v4
+module github.com/DNSControl/dnscontrol/v5
 
 go 1.26
 
-retract v4.8.0
+retract v5.8.0
 
 require (
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.31 // indirect
@@ -52,7 +52,7 @@ require (
 	github.com/digitalocean/godo v1.199.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.0
-	github.com/exoscale/egoscale/v3 v3.1.42
+	github.com/exoscale/egoscale/v3 v3.1.43
 	github.com/go-gandi/go-gandi v0.7.0
 	github.com/gobwas/glob v0.2.4-0.20181002190808-e7a84e9525fe
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
@@ -91,18 +91,18 @@ require (
 	github.com/fbiville/markdown-table-formatter v0.3.0
 	github.com/google/go-cmp v0.7.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
-	github.com/hetznercloud/hcloud-go/v2 v2.44.0
+	github.com/hetznercloud/hcloud-go/v2 v2.45.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.207
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.23
-	github.com/netnod/netnod-primary-dns-client v1.1.0
+	github.com/netnod/netnod-primary-dns-client v1.1.1
 	github.com/nicholas-fedor/shoutrrr v0.16.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.121.0
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.36
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1444+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.135
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1446+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.138
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/urfave/cli/v3 v3.10.1

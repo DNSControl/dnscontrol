@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.

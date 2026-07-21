@@ -1,6 +1,6 @@
 package cnr
 
-import "github.com/DNSControl/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v5/models"
 
 // EnsureZoneExists returns an error
 // * if access to dnszone is not allowed (not authorized) or

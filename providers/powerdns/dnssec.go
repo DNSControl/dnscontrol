@@ -3,7 +3,7 @@ package powerdns
 import (
 	"context"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/mittwald/go-powerdns/apis/cryptokeys"
 	"github.com/mittwald/go-powerdns/pdnshttp"
 )
