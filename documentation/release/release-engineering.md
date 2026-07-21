@@ -28,7 +28,40 @@ git status
 git commit -am "CHORE: generate-all.sh"
 ```
 
-## Step 2. Tag the commit in main that you want to release
+## Step 2. Cut the release
+
+### Automated (recommended)
+
+The manual dance below (empty PR → wait for tests → merge → tag) is now done by
+a single GitHub Actions run — no local CLI needed:
+
+1. Go to **Actions → "RELEASE: Make release candidate" → Run workflow**.
+2. In the **"Use workflow from"** dropdown, choose the branch to release from
+   (usually `main`; any branch is supported).
+3. Fill in the inputs:
+   * **version** (required): e.g. `v4.44.0` or `v4.44.0-rc1`. The run **fails
+     fast if that tag already exists**.
+   * **previous_tag** (optional): the tag the changelog compares against. Leave
+     blank to auto-detect the most recent non-RC release (almost always what you
+     want; set it only when releasing from an unusual branch).
+4. Click **Run workflow**.
+
+The workflow then, in order:
+
+1. **preflight** — validates the version; refuses if the tag already exists.
+2. **verify** — runs the **entire** `longtest` integration suite as a gate. If
+   anything fails, nothing is tagged or published.
+3. **release** — creates the empty `Release <version>` commit via an
+   auto-merged PR (labeled `longtest`), tags it, and runs GoReleaser to produce
+   the **draft** release.
+
+The empty commit guarantees each release/RC lands on its own commit, so the
+changelog range is computed correctly.
+
+### Manual (escape hatch)
+
+You can still do it by hand. Pushing a tag runs GoReleaser directly, but it
+**skips** the integration-test gate — so run/verify tests yourself first.
 
 ```shell
 # Set the version we are going to release
