@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 func TestToRecordUsesV3RecordConfig(t *testing.T) {
@@ -18,12 +18,15 @@ func TestToRecordUsesV3RecordConfig(t *testing.T) {
 	}{
 		{"A", Record{Fqdn: "www.example.com.", Type: "A", Answer: "192.0.2.1", TTL: 300}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeA, "192.0.2.1")},
 		{"MX", Record{Fqdn: "www.example.com.", Type: "MX", Answer: "mail.example.net.", TTL: 300, Priority: 10}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeMX, uint16(10), "mail.example.net.")},
-		{"SRV", Record{Fqdn: "www.example.com.", Type: "SRV", Answer: "1 2 443 service.example.net.", TTL: 300, Priority: 1}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeSRV, uint16(1), uint16(2), uint16(443), "service.example.net.")},
+		{"SRV", Record{Fqdn: "www.example.com.", Type: "SRV", Answer: "2 443 service.example.net.", TTL: 300, Priority: 1}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeSRV, uint16(1), uint16(2), uint16(443), "service.example.net.")},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := toRecord(&tt.in, dc)
+			got, err := toRecord(&tt.in, dc)
+			if err != nil {
+				t.Fatalf("toRecord() failed: %v", err)
+			}
 			if got.NameFQDN != tt.want.NameFQDN || got.TTL != tt.want.TTL || got.TypeNum != tt.want.TypeNum || got.GetRDATA().String() != tt.want.GetRDATA().String() {
 				t.Errorf("toRecord() = %s %d IN %s %s, want %s %d IN %s %s", got.NameFQDN, got.TTL, got.Type, got.GetRDATA(), tt.want.NameFQDN, tt.want.TTL, tt.want.Type, tt.want.GetRDATA())
 			}
@@ -51,7 +54,7 @@ func TestCreateRecordString(t *testing.T) {
 		{name: "MX", typeAny: dnsv2.TypeMX, data: "10 mail.example.net.", want: "www 300 IN MX 10 mail.example.net."},
 		{name: "NS", typeAny: dnsv2.TypeNS, data: "ns1.example.net.", want: "www 300 NS ns1.example.net."},
 		{name: "PTR", typeAny: dnsv2.TypePTR, data: "192.0.2.1.", want: "www 300 IN PTR 192.0.2.1."},
-		{name: "LOC_", typeAny: dnsv2.TypeLOC, data: "52 14 5.000 N 000 08 50.000 E 10.00m 0.00m 0.00m 0.00m", want: "www 300 IN LOC 52 14 5.000 N 00 08 50.000 E 10m 0.00m 0.00m 0.00m"},
+		{name: "LOC_", typeAny: dnsv2.TypeLOC, data: "52 14 5.000 N 000 08 50.000 E 10.00m 0.00m 0.00m 0.00m", want: "www 300 IN LOC 52 14 5.000 N 00 08 50.000 E 10.00m 0.00m 0.00m 0.00m"},
 		{name: "SSHFP", typeAny: dnsv2.TypeSSHFP, data: "1 2 deadbeef", want: "www 300 IN SSHFP 1 2 DEADBEEF"},
 		{name: "NAPTR", typeAny: dnsv2.TypeNAPTR, data: `10 20 "U" "E2U+sip" "!^.*$!sip:customer@example.com!" example.com.`, want: "www 300 IN NAPTR 10 20 \"U\" \"E2U+sip\" \"!^.*$!sip:customer@example.com!\" example.com."},
 		{name: "TLSA", typeAny: dnsv2.TypeTLSA, data: "3 1 1 target", want: "www 300 IN TLSA 3 1 1 TARGET"},

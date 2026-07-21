@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 )
@@ -49,7 +50,10 @@ func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error)
 	}
 	actual := make([]*models.RecordConfig, len(records))
 	for i, r := range records {
-		actual[i] = toRecord(r, dc)
+		actual[i], err = toRecord(r, dc)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return actual, nil
@@ -57,26 +61,26 @@ func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error)
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
-	// for _, rc := range actual {
-	// 	if rc.Type == "SVCB" {
-	// 		rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
-	// 	}
-	// }
-	// for _, rc := range dc.Records {
-	// 	if rc.Type != "SVCB" {
-	// 		continue
-	// 	}
-	// 	fields := strings.Fields(rc.SvcParams)
-	// 	params := make([]string, 0, len(fields))
-	// 	for _, field := range fields {
-	// 		key, value, _ := strings.Cut(field, "=")
-	// 		if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
-	// 			continue
-	// 		}
-	// 		params = append(params, field)
-	// 	}
-	// 	rc.SvcParams = strings.Join(params, " ")
-	// }
+	for _, rc := range actual {
+		if rc.Type == "SVCB" {
+			rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
+		}
+	}
+	for _, rc := range dc.Records {
+		if rc.Type != "SVCB" {
+			continue
+		}
+		fields := strings.Fields(rc.SvcParams)
+		params := make([]string, 0, len(fields))
+		for _, field := range fields {
+			key, value, _ := strings.Cut(field, "=")
+			if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
+				continue
+			}
+			params = append(params, field)
+		}
+		rc.SvcParams = strings.Join(params, " ")
+	}
 
 	var aliasSkip *models.Correction
 	hasAlias := false
@@ -209,33 +213,54 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	return corrections, actualChangeCount, nil
 }
 
-func toRecord(r *Record, dc *models.DomainConfig) *models.RecordConfig {
+func toRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
+
 	label := dc.LabelFromFQDNWithDot(r.Fqdn)
+	ttl := uint32(r.TTL)
 	var rc *models.RecordConfig
 	var err error
+
 	switch r.Type {
-	case "MX", "SRV":
+	case "MX":
 		if r.Priority > 65535 {
-			panic(fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority))
+			return nil, fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority)
 		}
-		if r.Type == "MX" {
-			rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Answer))
-		} else {
-			// _service._proto.name. TTL Type Priority Weight Port Target.
-			// e.g. _sip._tcp.phone.example.org. 86400 IN SRV 5 6 7 sip.example.org.
-			// r.Anser covers the format "Priority Weight Port Target" and we've to remove the priority from the string
-			r.Answer = strings.TrimPrefix(r.Answer, fmt.Sprintf("%d ", r.Priority))
-			rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Answer))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Answer)
+	case "SRV":
+		if r.Priority > 65535 {
+			return nil, fmt.Errorf("priority value out of range for %s record: %d", r.Type, r.Priority)
 		}
-	default: // "A", "AAAA", "ANAME", "ALIAS", "CNAME", "NS", "TXT", "CAA", "TLSA", "SMIMEA", "PTR"
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, r.Answer)
+		answer := r.Answer
+		f := strings.Fields(r.Answer)
+		switch len(f) {
+		case 3:
+			answer = fmt.Sprintf("%d %s", r.Priority, r.Answer)
+		case 4:
+		case 5:
+			answer = strings.Join(f[1:], " ")
+		}
+		fmt.Printf("DEBUG: answer=%q\n", answer)
+		if answer == "5 5 6 7 foo.com." {
+			fmt.Printf("HERE\n")
+		}
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, answer)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Answer)
 	}
 	if err != nil {
-		panic(fmt.Errorf("unparsable %s record received from centralnic reseller API: %w", r.Type, err))
+		return nil, err
 	}
 	rc.Original = r
-	return rc
+
+	return rc, nil
 }
+
+// // ovhParseTXT decodes a TXT target as received from the OVH API.
+// // We must join the strings ourselves. OVH is "smart" and joins with spaces for DMARC/DKIM/SPF,
+// // and joins with "" (null string) for TXT records. We don't want it to be so smart, so we do the join ourselves.
+// func ovhParseTXT(s string) (string, error) {
+// 	return strings.Join(models.ParseQuotedTxt(s), ""), nil
+// }
 
 // updateZoneBy updates the zone with the provided changes.
 func (n *Client) updateZoneBy(params map[string]any, domain string) error {
@@ -347,18 +372,29 @@ func (n *Client) getRecords(dc *models.DomainConfig) ([]*Record, error) {
 func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (string, error) {
 
 	host := rc.GetLabel()
-	if domain == host {
-		// The apex is represented by domain+"." while all others have no trailing dot.
-		host = domain + "."
+	// Apex records are represented by domain+".".
+	if host == domain {
+		host += "."
 	}
 
 	var answer string
-	switch rc.Type {
-	case "HTTPS", "SVCB":
+
+	switch rc.Type { // #rtype_variations
+	case "LOC":
+		// Use .String() returns the properly formatted LOC string
+		// via the dns library (e.g. "52 14 5.000 N 000 08 50.000 E 10.00m 0.00m 0.00m 0.00m")
+		parts := strings.Fields(rc.GetRDATA().String())
+		altitude, _ := strconv.ParseFloat(strings.TrimSuffix(parts[8], "m"), 64)
+		size, _ := strconv.ParseFloat(strings.TrimSuffix(parts[9], "m"), 64)
+		hp, _ := strconv.ParseFloat(strings.TrimSuffix(parts[10], "m"), 64)
+		vp, _ := strconv.ParseFloat(strings.TrimSuffix(parts[11], "m"), 64)
+		answer = fmt.Sprintf("%s %s %s %s %s %s %s %s %.2fm %.2fm %.2fm %.2fm",
+			parts[0], parts[1], parts[2], parts[3],
+			parts[4], parts[5], parts[6], parts[7],
+			altitude, size, hp, vp)
+	case "SVCB", "HTTPS":
 		answer = rc.GetRDATA().String()
-		answer = strings.ReplaceAll(answer, `"`, ``) // CNR's parser rejects quoted parameter values.
-	case "ANAME":
-		answer = rc.GetTargetField()
+		answer = strings.ReplaceAll(answer, `"`, ``)
 	case "SSHFP":
 		answer = fmt.Sprintf(`%v %v %s`, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 	case "NAPTR":
@@ -369,15 +405,26 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 		answer = fmt.Sprintf(`%v %v %v %s`, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
 	case "CAA":
 		answer = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+	case "TXT":
+		answer = rc.GetRDATA().String()
+	case "SRV":
+		// target := rc.GetTargetField()
+		// if target == "" {
+		// 	target = "."
+		// }
+		// answer = fmt.Sprintf("%d %d %d %v", uint32(rc.SrvPriority), rc.SrvWeight, rc.SrvPort, target)
+		answer = rc.GetRDATA().String()
+		fmt.Printf("DEBUG: createRecordString a=%q\n", answer)
 	default:
 		answer = rc.GetRDATA().String()
 	}
 
-	addIN := ""
+	var ifIn string
 	if rc.Type != "NS" {
-		addIN = "IN "
+		ifIn = " IN"
 	}
-	return fmt.Sprintf("%s %d %s%s %s", host, rc.TTL, addIN, rc.Type, answer), nil
+
+	return fmt.Sprintf("%s %d%s %s %s", host, rc.TTL, ifIn, rc.Type, answer), nil
 }
 
 // deleteRecordString constructs the record string based on the provided Record.
@@ -388,9 +435,6 @@ func (n *Client) deleteRecordString(record *Record) string {
 		strconv.FormatUint(uint64(record.TTL), 10),
 		"IN",
 		record.Type,
-	}
-	if record.Type == "SRV" {
-		values = append(values, strconv.FormatUint(uint64(record.Priority), 10))
 	}
 	values = append(values, record.Answer)
 
