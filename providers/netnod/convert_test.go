@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	netnodPrimaryDNS "github.com/netnod/netnod-primary-dns-client"
 	"github.com/stretchr/testify/assert"
 )
