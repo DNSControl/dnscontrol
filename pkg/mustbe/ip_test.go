@@ -4,7 +4,7 @@ import (
 	"net/netip"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 )
 
 func TestIPv4_RoundTrip(t *testing.T) {

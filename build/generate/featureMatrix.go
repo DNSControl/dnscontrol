@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 	"github.com/fbiville/markdown-table-formatter/pkg/markdown"
 )
 

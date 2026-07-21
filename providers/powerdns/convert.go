@@ -7,8 +7,8 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	svcbv2 "codeberg.org/miekg/dns/svcb"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/mittwald/go-powerdns/apis/zones"
 )
 

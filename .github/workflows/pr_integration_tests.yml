@@ -19,6 +19,16 @@ on:
     - cron: "0 4 * * *"
 
   workflow_dispatch:
+
+  # Called by the release workflow (release_draft.yml) as a pre-release gate.
+  # `full: true` forces the entire suite instead of the smoke test.
+  workflow_call:
+    inputs:
+      full:
+        description: "Run the full integration suite instead of just the smoke test"
+        type: boolean
+        default: false
+
   # Want to trigger all the tests without making a PR?
   # Run: git push origin main:tlim_testpr --force
   # This will trigger a full PR test on the main branch.
@@ -77,7 +87,10 @@ jobs:
   # integration-tests: Run the integration tests on any provider listed
   # in needs.integration-test-providers.outputs.integration_test_providers.
   integration-tests:
-    if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
+    # Normally skipped on master/main (tests run on PRs / tlim_testpr). But when
+    # invoked as a release gate (workflow_call with full=true) it must run
+    # regardless of the branch it was called from.
+    if: ${{ inputs.full || (github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main') }}
     runs-on: ubuntu-latest
     container:
       image: golang:1.26
@@ -284,8 +297,13 @@ jobs:
           END=3
           echo "END: Default set to $END"
 
+          # Release gate: release_draft.yml calls this via workflow_call with
+          # full=true, which forces the entire suite (not just the smoke test).
+          if [[ "${{ inputs.full }}" == "true" ]]; then
+            END=999
+            echo "END: full input set (release gate). END=$END"
           # Only for PRs
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Check for 'longtest' label
             #if [[ "${{ github.event.pull_request.labels.*.name }}" =~ "longtest" ]]; then
             if [[ " $LABELS " =~ " longtest " ]]; then

@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/js"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v5/pkg/js"
 	testifyrequire "github.com/stretchr/testify/require"
 )
 
@@ -40,7 +40,7 @@ func showRecs(recs models.Records) string {
 		result.WriteString(" ")
 		result.WriteString(rec.Type)
 		result.WriteString(" ")
-		result.WriteString(rec.GetTargetCombined())
+		result.WriteString(rec.GetRDATA().String())
 		result.WriteString("\n")
 	}
 	return result.String()

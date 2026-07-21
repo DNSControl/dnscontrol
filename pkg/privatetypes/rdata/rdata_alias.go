@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 )
 
 type ALIAS struct {

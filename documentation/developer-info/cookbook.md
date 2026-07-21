@@ -207,16 +207,34 @@ All builders must have unit tests.
 
 ## How to manipulate domain/zone names
 
-How to remove a domain from a name?
+Rather than use strings.Trim() or other functions, use these functions. They
+handle "@", apex domains, and other edge cases properly. See the unit tests for
+examples.
+
+Turn a short name (`foo`) into a FQDN (`foo.example.com.`) (with trailing dot).
 
 ```go
-txtutil.StripZone()
+f1 := nameutil.ToFqdnWithDot("foo", "example.com")
+f2 := dc.ToFqdnWithDot("foo")         // Assume dc.Name = "example.com"
+# result: foo.example.com.
+# The result will always end in ".".
 ```
 
-How to add a domain to a shortname?
+Turn a short name (`foo`) into a FQDN (`foo.example.com`) (no trailing dot).
 
 ```go
-txtutil.Extend()
+f1 := nameutil.ToFqdnNoDot("foo", "example.com")
+f2 := dc.ToFqdnNoDot("foo")           // Assume dc.Name = "example.com"
+# result: foo.example.com
+# The result will never end in "." (even if the origin did).
+```
+
+Turn a name (FQDN end with a ".") into a shortname:
+```go
+short1 := nameutil.ToShort("foo.example.com.", "example.com")
+short2 := dc.ToShort("foo.example.com.")    // Assume dc.Name = "example.com"
+# result: foo
+# The result ends in "." if it is a FQDN (even if the origin didn't.)
 ```
 
 ## What you should know about TXT records
