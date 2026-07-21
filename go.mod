@@ -20,6 +20,7 @@ require (
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
+	github.com/smartystreets/assertions v1.2.0 // indirect
 	github.com/sony/gobreaker/v2 v2.4.0 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
@@ -172,7 +173,6 @@ require (
 	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.20.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/smartystreets/assertions v1.2.0 // indirect
 	github.com/softlayer/xmlrpc v0.0.0-20200409220501-5f089df7cb7e // indirect
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
