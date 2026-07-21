@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/digitalocean/godo"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
 
@@ -195,12 +195,12 @@ func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models
 
 	var existingRecords []*models.RecordConfig
 	for i := range records {
-		r, err := toRc(domain, &records[i])
+		if records[i].Type == "SOA" {
+			continue
+		}
+		r, err := toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
-		}
-		if r.Type == "SOA" {
-			continue
 		}
 		existingRecords = append(existingRecords, r)
 	}
@@ -307,10 +307,8 @@ retry:
 	return records, nil
 }
 
-func toRc(domain string, r *godo.DomainRecord) (*models.RecordConfig, error) {
-	// This handles "@" etc.
-	name := dnsutilv1.AddOrigin(r.Name, domain)
-
+func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, error) {
+	domain := dc.Name
 	target := r.Data
 	// Make target FQDN (#rtype_variations)
 	if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
@@ -325,29 +323,26 @@ func toRc(domain string, r *godo.DomainRecord) (*models.RecordConfig, error) {
 		target = target + "."
 	}
 
-	t := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(r.TTL),
-		MxPreference: uint16(r.Priority),
-		SrvPriority:  uint16(r.Priority),
-		SrvWeight:    uint16(r.Weight),
-		SrvPort:      uint16(r.Port),
-		Original:     r,
-		CaaTag:       r.Tag,
-		CaaFlag:      uint8(r.Flags),
-	}
-	t.SetLabelFromFQDN(name, domain)
+	label := dc.LabelFromShort(r.Name)
+	var rc *models.RecordConfig
+	var err error
 	switch rtype := r.Type; rtype {
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeMX, uint16(r.Priority), target)
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
+	case "CAA":
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeCAA, uint8(r.Flags), r.Tag, target)
 	case "TXT":
-		if err := t.SetTargetTXT(target); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeTXT, target)
 	default:
-		if err := t.SetTarget(target); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.Type, target)
 	}
-	return t, nil
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+	return rc, nil
 }
 
 func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
