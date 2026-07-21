@@ -5,8 +5,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/qdm12/reprint"
 	"golang.org/x/net/idna"
 )

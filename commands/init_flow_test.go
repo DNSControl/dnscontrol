@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // stubAsker drives the init flow from a pre recorded script for

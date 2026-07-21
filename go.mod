@@ -1,8 +1,8 @@
-module github.com/DNSControl/dnscontrol/v4
+module github.com/DNSControl/dnscontrol/v5
 
 go 1.26
 
-retract v4.8.0
+retract v5.8.0
 
 require (
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.31 // indirect

@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/fatih/color"
 	"github.com/kylelemons/godebug/diff"
 )

@@ -3,7 +3,7 @@ package nameutil_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 )
 
 func TestToFqdn(t *testing.T) {
