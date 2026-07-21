@@ -3,7 +3,7 @@ package netbird
 import (
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 

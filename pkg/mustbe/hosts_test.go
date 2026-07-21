@@ -3,7 +3,7 @@ package mustbe_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 )
 
 func TestTargetHost(t *testing.T) {

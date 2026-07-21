@@ -7,8 +7,8 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 // RecomputeV3Fields re-derives the cached "V3 Fields" (.RDATA and
