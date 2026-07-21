@@ -7,7 +7,7 @@ import (
 	"net" // Needed for communicating with provider API.
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/pkg/errors"
 )
 

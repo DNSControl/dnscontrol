@@ -5,7 +5,7 @@ import (
 	"net/netip"
 	"strconv"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 type nativeRecord struct {

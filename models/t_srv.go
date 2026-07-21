@@ -19,11 +19,11 @@ func (rc *RecordConfig) SetTargetSRV(priority, weight, port uint16, target strin
 // 	return legacySetTargetArgs(rc, dnsv2.TypeSRV, priority, weight, port, target)
 // }
 
-// // SetTargetSRVStrings is like SetTargetSRV but accepts all parameters as strings.
-// // Deprecated. Use models.NewRecordConfig() instead.
-// func (rc *RecordConfig) SetTargetSRVStrings(priority, weight, port, target string) (err error) {
-// 	return legacySetTargetArgs(rc, dnsv2.TypeSRV, priority, weight, port, target)
-// }
+// SetTargetSRVStrings is like SetTargetSRV but accepts all parameters as strings.
+// Deprecated. Use models.NewRecordConfig() instead.
+func (rc *RecordConfig) SetTargetSRVStrings(priority, weight, port, target string) (err error) {
+	return legacySetTargetArgs(rc, dnsv2.TypeSRV, priority, weight, port, target)
+}
 
 // SetTargetSRVPriorityString is like SetTargetSRV but accepts priority as an
 // uint16 and the rest of the values joined in a string that needs to be parsed.

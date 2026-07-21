@@ -11,10 +11,10 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnstestv2 "codeberg.org/miekg/dns/dnstest"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 func parseAndRegen(t *testing.T, buf *bytes.Buffer, expected string) {
@@ -466,7 +466,7 @@ func TestWriteZoneFileOrder(t *testing.T) {
 		"zt.mup",
 		"zap",
 	} {
-		name := dnsutilv1.AddOrigin(td, "stackoverflow.com.")
+		name := nameutil.ToFqdnWithDot(td, "stackoverflow.com.")
 		r := dnstestv2.New(fmt.Sprintf("%s 300 IN A 1.2.3.%d", name, i))
 		records = append(records, r)
 	}

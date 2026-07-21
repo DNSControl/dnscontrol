@@ -6,7 +6,23 @@ GitHub Actions (GHA) will do most of the work for you. You will need to edit the
 
 Please change the version number as appropriate.  Substitute (for example) `v4.2.0` any place you see `$VERSION` in this doc.
 
-## Step 0. Update dependencies
+## Step 1. Verify everything is up to date
+
+### Automated (recommended)
+
+This script will run `bin/generate-all.sh` and prompt to upgrade depenencies.
+It must be run from branch `main` or `prep_release`.
+
+```shell
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
+bin/prep_release.sh
+```
+
+### Manual
+
+Dependencies:
 
 ```shell
 git checkout main
@@ -17,7 +33,7 @@ go mod tidy
 git commit -m "CHORE: Update dependencies" go.sum go.mod
 ```
 
-## Step 1. Rebuild generated files
+Generated files, linting, etc:
 
 ```shell
 git fetch origin main
@@ -28,18 +44,119 @@ git status
 git commit -am "CHORE: generate-all.sh"
 ```
 
-## Step 2. Tag the commit in main that you want to release
+## Step 2. Cut the release
+
+Pick the next release number:
 
 ```shell
-git checkout main
-git pull --rebase --ff-only --prune
 git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | tail
-export VERSION=v4.x.0
+```
+
+### Automated (recommended)
+
+The manual dance below (empty PR → wait for tests → merge → tag) is now done by
+a single GitHub Actions run — no local CLI needed:
+
+1. Go to **Actions → "RELEASE: Make release candidate" → Run workflow**.
+2. In the **"Use workflow from"** dropdown, choose the branch to release from
+   (usually `main`; any branch is supported).
+3. Fill in the inputs:
+   * **version** (required): e.g. `v4.44.0` or `v4.44.0-rc1`. The run **fails
+     fast if that tag already exists**.
+   * **previous_tag** (optional): the tag the changelog compares against. Leave
+     blank to auto-detect the most recent non-RC release (almost always what you
+     want; set it only when releasing from an unusual branch).
+   * **skip_longtest** (optional, default off): **danger** — skips the full
+     `longtest` integration gate. Use only for an emergency release or when the
+     suite is known-broken. When set, the run is loudly annotated and the job
+     summary records that tests were skipped. (`preflight` still runs, so an
+     invalid version or an existing tag still blocks the release.)
+4. Click **Run workflow**.
+
+The workflow then, in order:
+
+1. **preflight** — validates the version; refuses if the tag already exists.
+2. **verify** — runs the **entire** `longtest` integration suite as a gate. If
+   anything fails, nothing is tagged or published.
+3. **release** — tags the tip of the selected branch and runs GoReleaser to
+   produce the **draft** release.
+
+The release is tagged directly (not via an empty `Release <version>` commit):
+this org forbids GitHub Actions from opening pull requests and `main` is
+protected, so a PAT-free automated PR is not possible. The changelog range is
+still correct because it is computed by version, not by commit ancestry.
+
+### Manual (escape hatch)
+
+You can still do it by hand. Pushing a tag runs GoReleaser directly, but it
+**skips** the integration-test gate — so run/verify tests yourself first.
+
+```shell
+# Set the version we are going to release
+
+export VERSION=v4.43.2
+
+# Create an empty PR for the release
+
+git fetch origin main
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
+git reset --hard origin/main
+git checkout -b "release_$VERSION"
+git commit --allow-empty -m "Release $VERSION"
+git push
+gh pr create --base main --title "Release $VERSION" --body ""
+```
+
+Wait to tests to complete and merge.
+
+```
+gh run list -b "release_$VERSION"
+gh run watch
+```
+
+WAIT for the GHA to complete. If there are errors, stop and fix them.
+
+Merge it either manually or with this command:
+
+```
+gh pr merge --squash --delete-branch  $PR
+```
+
+Create the release
+
+```
+git fetch origin main
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
 git tag -m "Release $VERSION" -a $VERSION
 git push origin HEAD --tags
 ```
 
 Soon after GitHub will start an [Action](https://github.com/DNSControl/dnscontrol/actions) Workflow called "draft release" which will build all release binaries and write the draft release notes.
+
+Wait to tests to complete and merge.
+
+```
+gh run list -b "$VERSION"
+gh run watch
+```
+
+WAIT for the GHA to complete. If there are errors, stop and fix them.
+
+# Release it to the public
+
+Find the release
+        https://github.com/DNSControl/dnscontrol/releases
+and edit the notes.
+
+When you submit it: 
+
+* "Pre-Release" for rc releases, "Latest" for real releases.
+* Create a discussion for this release
+```
 
 ## Step 3. Create the release notes
 

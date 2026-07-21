@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	nc "github.com/billputer/go-namecheap"
+	nc "github.com/willpower232/go-namecheap"
 )
 
 func TestListZonesPaginates(t *testing.T) {

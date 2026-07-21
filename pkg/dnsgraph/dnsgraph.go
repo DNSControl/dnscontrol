@@ -1,6 +1,6 @@
 package dnsgraph
 
-import "github.com/DNSControl/dnscontrol/v4/pkg/dnstree"
+import "github.com/DNSControl/dnscontrol/v5/pkg/dnstree"
 
 type edgeDirection uint8
 
