@@ -3,7 +3,7 @@ package domaintags_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 )
 
 func TestEfficientToASCII(t *testing.T) {

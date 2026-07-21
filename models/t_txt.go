@@ -8,8 +8,8 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 /*

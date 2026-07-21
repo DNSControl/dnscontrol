@@ -3,7 +3,7 @@ package mustbe
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
 func OpenPGPKey(a any) string {

@@ -3,7 +3,7 @@ package mikrotik
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestAuditRecords_Valid(t *testing.T) {

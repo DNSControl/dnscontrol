@@ -1,7 +1,7 @@
 package zonerecs
 
 import (
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // CorrectZoneRecords calls both GetZoneRecords, does any
