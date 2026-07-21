@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 )
 
 // SoaMailbox format a SOA Mailbox string, such as tal.example.com (The "@" in

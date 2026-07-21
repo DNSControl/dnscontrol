@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
 )
 
 /*

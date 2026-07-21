@@ -91,7 +91,7 @@ In order to activate API functionality on your Namecheap account, you must enabl
 - Service discovery
   - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
   - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
-  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ❌
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
   - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
 - Security
   - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
