@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 )
 
 // TargetHost returns a FQDN (or @) suitable as a target for CNAME and other records.

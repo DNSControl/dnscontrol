@@ -1,6 +1,6 @@
 package desec
 
-import "github.com/DNSControl/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v5/models"
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are

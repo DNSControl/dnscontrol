@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 	"github.com/google/go-cmp/cmp"
 )
 
