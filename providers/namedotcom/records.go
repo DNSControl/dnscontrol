@@ -8,6 +8,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -34,12 +35,6 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *namedotcomProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
 	checkNSModifications(dc)
-
-	for _, rec := range dc.Records {
-		if rec.Type == "ALIAS" {
-			rec.ChangeType("ANAME", dc.Name)
-		}
-	}
 
 	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
@@ -93,13 +88,15 @@ func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig,
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
+	case "ANAME":
+		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeALIAS, r.Answer)
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, r.Answer)
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, uint16(r.Priority), r.Answer)
 	case "SRV":
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s.", r.Priority, r.Answer))
-	default: // "A", "AAAA", "ANAME", "CNAME", "NS"
+	default:
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer)
 	}
 	if err != nil {
@@ -149,8 +146,11 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		Priority:   uint32(rc.MxPreference),
 	}
 	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "ANAME", "CNAME", "MX", "NS":
-	// nothing
+	case "A", "AAAA", "CNAME", "MX", "NS":
+		// nothing
+	case "ALIAS":
+		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
+		record.Type = "ANAME"
 	case "TXT":
 		record.Answer = rc.GetTargetTXTJoined()
 	case "SRV":
