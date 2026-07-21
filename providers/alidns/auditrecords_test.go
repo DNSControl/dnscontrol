@@ -3,7 +3,7 @@ package alidns
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestTargetConstraint(t *testing.T) {
