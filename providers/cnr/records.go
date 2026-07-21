@@ -407,6 +407,9 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 
 // deleteRecordString constructs the record string based on the provided Record.
 func (n *Client) deleteRecordString(record *Record) string {
+
+	d1 := fmt.Sprintf(`COLLECT { "x", %q, %d, %q, %q`, record.Host, record.TTL, record.Type, record.Answer)
+
 	// Initialize values slice
 	values := []string{
 		record.Host,
@@ -420,6 +423,9 @@ func (n *Client) deleteRecordString(record *Record) string {
 	if record.Type == "NS" {
 		values = append(values[:2], values[3:]...) // Skip over the "IN"
 	}
+
+	d2 := strings.Join(values, " ")
+	fmt.Printf("%s, %q},\n", d1, d2)
 
 	// Return the final string by joining the elements with spaces
 	return strings.Join(values, " ")
