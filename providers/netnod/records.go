@@ -90,7 +90,7 @@ var httpsParamQuoteRe = regexp.MustCompile(`="([^"+/ ]*)"`)
 func buildRecordList(change diff2.Change) (records []netnodPrimaryDNS.Record) {
 	for _, recordContent := range change.New {
 		record := netnodPrimaryDNS.Record{
-			Content: recordContent.GetTargetCombined(),
+			Content: recordContent.GetRDATA().String(),
 		}
 		if recordContent.Type == "HTTPS" || recordContent.Type == "SVCB" {
 			// The API rejects double-quoted simple param values (e.g. alpn="h2,h3")
