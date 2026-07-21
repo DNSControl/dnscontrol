@@ -16,7 +16,7 @@ func TestNativeToRecordUsesV3RecordConfig(t *testing.T) {
 		want *models.RecordConfig
 	}{
 		{"A", domain.DNSEntry{Name: "www", Type: "A", Content: "192.0.2.1", Expire: 300}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeA, "192.0.2.1")},
-		{"TXT remains unquoted", domain.DNSEntry{Name: "www", Type: "TXT", Content: "hello world", Expire: 300}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeTXT, "hello world")},
+		{"TXT quoted", domain.DNSEntry{Name: "www", Type: "TXT", Content: `"hello world"`, Expire: 300}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeTXT, "hello world")},
 		{"MX", domain.DNSEntry{Name: "www", Type: "MX", Content: "10 mail.example.net.", Expire: 300}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeMX, uint16(10), "mail.example.net.")},
 	}
 
