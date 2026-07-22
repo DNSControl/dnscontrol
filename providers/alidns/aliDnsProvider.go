@@ -136,7 +136,7 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 			continue
 		}
 
-		rc, err := nativeToRecord(r, domain)
+		rc, err := nativeToRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -152,7 +152,10 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	}
 
 	for _, ns := range nameservers {
-		rc := nativeToRecordNS(ns, domain)
+		rc, err := nativeToRecordNS(ns, dc)
+		if err != nil {
+			return nil, err
+		}
 		out = append(out, rc)
 	}
 
