@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -204,6 +205,9 @@ func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error
 			// a missing item.
 			ans = strings.ReplaceAll(ans, "  ", ` "" `)
 			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans)
+		case "TXT":
+			// NS1 returns TXT values as plain strings, not RFC1035 quoted presentation.
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, ans)
 		case "REDIRECT":
 			// NS1 returns REDIRECTs as records, but there is only one and dummy answer:
 			// "NS1 MANAGED RECORD"
