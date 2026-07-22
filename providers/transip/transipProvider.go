@@ -268,7 +268,11 @@ func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.Rec
 	label := dc.LabelFromShort(entry.Name)
 	var rc *models.RecordConfig
 	var err error
-	rc, err = dc.NewRecordConfigParse(label, uint32(entry.Expire), entry.Type, entry.Content)
+	if entry.Type == "TXT" {
+		rc, err = dc.NewRecordConfig(label, uint32(entry.Expire), entry.Type, entry.Content)
+	} else {
+		rc, err = dc.NewRecordConfigParse(label, uint32(entry.Expire), entry.Type, entry.Content)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
 	}
