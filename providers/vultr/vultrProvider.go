@@ -94,7 +94,7 @@ func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		}
 		currentI := 0
 		for i, record := range records {
-			r, err := toRecordConfig(domain, record)
+			r, err := toRecordConfig(dc, record)
 			if err != nil {
 				return nil, err
 			}
@@ -223,14 +223,10 @@ func (api *vultrProvider) isDomainInAccount(domain string) (bool, error) {
 }
 
 // toRecordConfig converts a Vultr DomainRecord to a RecordConfig. #rtype_variations.
-func toRecordConfig(domain string, r govultr.DomainRecord) (*models.RecordConfig, error) {
-	origin, data := domain, r.Data
-
-	rc := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-	rc.SetLabel(r.Name, domain)
+func toRecordConfig(dc *models.DomainConfig, r govultr.DomainRecord) (*models.RecordConfig, error) {
+	data := r.Data
+	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
 
 	switch rtype := r.Type; rtype {
 	case "ALIAS", "MX", "NS", "CNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "CLOUDNS_WR":
@@ -242,28 +238,29 @@ func toRecordConfig(domain string, r govultr.DomainRecord) (*models.RecordConfig
 	default:
 	}
 
+	var rc *models.RecordConfig
+	var err error
 	switch rtype := r.Type; rtype {
 	case "CNAME", "NS":
-		rc.Type = r.Type
 		// Make target into a FQDN if it is a CNAME, NS, MX, or SRV.
 		if !strings.HasSuffix(data, ".") {
 			data = data + "."
 		}
-		return rc, rc.SetTarget(data)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, data)
 	case "CAA":
 		// Vultr returns CAA records in the format "[flag] [tag] [value]".
-		return rc, rc.SetTargetCAAString(data)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, data)
 	case "MX":
 		if !strings.HasSuffix(data, ".") {
 			data = data + "."
 		}
-		return rc, rc.SetTargetMX(uint16(r.Priority), data)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, data)
 	case "SRV":
 		// Vultr returns SRV records in the format "[weight] [port] [target]".
 		if !strings.HasSuffix(data, ".") {
 			data = data + "."
 		}
-		return rc, rc.SetTargetSRVPriorityString(uint16(r.Priority), data)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, fmt.Sprintf("%d %s", r.Priority, data))
 	case "TXT":
 		// TXT records from Vultr are always surrounded by quotes.
 		// They don't permit quotes within the string, therefore there is no
@@ -273,10 +270,15 @@ func toRecordConfig(domain string, r govultr.DomainRecord) (*models.RecordConfig
 			// than do the wrong thing.
 			return nil, errors.New("unexpected lack of quotes in TXT record from Vultr")
 		}
-		return rc, rc.SetTargetTXT(data[1 : len(data)-1])
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, data[1:len(data)-1])
 	default:
-		return rc, rc.PopulateFromString(rtype, r.Data, origin)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Data)
 	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+	return rc, nil
 }
 
 // toVultrRecord converts a RecordConfig converted by toRecordConfig back to a Vultr DomainRecordReq. #rtype_variations.

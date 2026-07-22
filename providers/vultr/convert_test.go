@@ -58,7 +58,7 @@ func TestConversion(t *testing.T) {
 	}
 
 	for _, record := range records {
-		rc, err := toRecordConfig(dc.Name, record)
+		rc, err := toRecordConfig(dc, record)
 		if err != nil {
 			t.Error("Error converting Vultr record", record)
 		}
