@@ -9,43 +9,26 @@ import (
 )
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
-func nativeToRecord(domain string, n fgDNSRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{}
-	rc.Type = strings.ToUpper(n.Type)
-	rc.Original = n
-
+func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
+	rtype := strings.ToUpper(n.Type)
 	// Label / Name
 	label := strings.TrimSuffix(n.Hostname, ".")
 	if label == "@" {
 		label = ""
 	}
-	rc.SetLabel(label, domain)
-
-	// TTL
-	if n.TTL == 0 {
-		rc.TTL = 0 // inherit
-	} else {
-		rc.TTL = n.TTL
-	}
-
-	// Status → Metadata
-	if strings.ToLower(n.Status) != "enable" {
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		rc.Metadata["fortigate_status"] = "disable"
-	}
 
 	// Type-specific fields
-	switch rc.Type {
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
 	case "A":
-		err := rc.SetTarget(n.IP)
+		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.IP)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv4 address %q in %+v", n.IP, n)
 		}
 
 	case "AAAA":
-		err := rc.SetTarget(n.IPv6)
+		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.IPv6)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv6 address %q in %+v", n.IPv6, n)
 		}
@@ -54,7 +37,8 @@ func nativeToRecord(domain string, n fgDNSRecord) (*models.RecordConfig, error) 
 		if n.CanonicalName == "" {
 			return nil, fmt.Errorf("[FORTIGATE] CNAME record without canonical-name (id=%d)", n.ID)
 		}
-		if err := rc.SetTarget(n.CanonicalName); err != nil {
+		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.CanonicalName)
+		if err != nil {
 			return nil, err
 		}
 
@@ -63,8 +47,8 @@ func nativeToRecord(domain string, n fgDNSRecord) (*models.RecordConfig, error) 
 			return nil, fmt.Errorf("[FORTIGATE] NS record missing hostname (id=%d)", n.ID)
 		}
 
-		rc.SetLabel("@", domain)
-		if err := rc.SetTarget(n.Hostname); err != nil {
+		rc, err = dc.NewRecordConfig("@", n.TTL, rtype, n.Hostname)
+		if err != nil {
 			return nil, err
 		}
 
@@ -73,16 +57,20 @@ func nativeToRecord(domain string, n fgDNSRecord) (*models.RecordConfig, error) 
 			return nil, fmt.Errorf("[FORTIGATE] MX record missing hostname (id=%d)", n.ID)
 		}
 
-		rc.SetLabel("@", domain)
-		rc.MxPreference = n.Preference
-
-		if err := rc.SetTarget(n.Hostname); err != nil {
+		rc, err = dc.NewRecordConfig("@", n.TTL, rtype, n.Preference, n.Hostname)
+		if err != nil {
 			return nil, err
 		}
 
 	default:
 		// Not supported due to FortiGate limitations
-		return nil, fmt.Errorf("[FORTIGATE] Record type %q is not supported by fortigate provider", rc.Type)
+		return nil, fmt.Errorf("[FORTIGATE] Record type %q is not supported by fortigate provider", rtype)
+	}
+	rc.Original = n
+
+	// Status → Metadata
+	if strings.ToLower(n.Status) != "enable" {
+		rc.Metadata["fortigate_status"] = "disable"
 	}
 
 	return rc, nil
