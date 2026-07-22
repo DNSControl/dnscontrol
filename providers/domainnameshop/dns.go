@@ -19,7 +19,7 @@ func (api *domainNameShopProvider) GetZoneRecords(dc *models.DomainConfig) (mode
 
 	var existingRecords []*models.RecordConfig
 	for i := range records {
-		rC, err := toRecordConfig(domain, &records[i])
+		rC, err := toRecordConfig(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}
