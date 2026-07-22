@@ -92,7 +92,7 @@ func (d *dynuProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, 
 	}
 	var existing models.Records
 	for _, r := range records {
-		rc, err := toRc(r, dc.Name)
+		rc, err := toRc(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -183,40 +183,34 @@ func (d *dynuProvider) GetZones() ([]string, error) {
 // NOTE: r.Content from the Dynu API is the full zone-file line (hostname TTL class
 // type rdata), not just the rdata. We therefore always use the individual structured
 // fields returned by Dynu rather than r.Content.
-func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
+func toRc(r *dynuRecord, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	switch r.RecordType {
 	case "SOA", "WCA":
 		return nil, nil
 	}
 
-	rc := &models.RecordConfig{
-		Type:     r.RecordType,
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-	rc.SetLabel(r.NodeName, domain)
-
+	domain := dc.Name
+	var rc *models.RecordConfig
 	var err error
 	switch r.RecordType {
 	case "A":
-		err = rc.SetTarget(r.IPv4Address)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, r.IPv4Address)
 	case "AAAA":
-		err = rc.SetTarget(r.IPv6Address)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, r.IPv6Address)
 	case "AFSDB":
-		err = rc.SetTarget(fmt.Sprintf("%d %s", intOrZero(r.SubType), ensureTrailingDot(r.Host)))
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, fmt.Sprintf("%d %s", intOrZero(r.SubType), ensureTrailingDot(r.Host)))
 	case "CAA":
-		err = rc.SetTargetCAA(uint8(intOrZero(r.Flags)), r.Tag, r.Value)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.Flags), r.Tag, r.Value)
 	case "CERT":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %d %s",
-			intOrZero(r.CertificateType), intOrZero(r.KeyTag), intOrZero(r.Algorithm), r.Certificate))
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, fmt.Sprintf("%d %d %d %s", intOrZero(r.CertificateType), intOrZero(r.KeyTag), intOrZero(r.Algorithm), r.Certificate))
 	case "CNAME":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, ensureTrailingDot(r.Host))
 	case "DHCID":
-		err = rc.SetTarget(r.RecordData)
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, r.RecordData)
 	case "DNAME":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, ensureTrailingDot(r.Host))
 	case "HINFO":
-		err = rc.SetTarget(fmt.Sprintf("%q %q", r.CPU, r.OperatingSystem))
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, fmt.Sprintf("%q %q", r.CPU, r.OperatingSystem))
 	case "HTTPS", "SVCB":
 		// Build rdata from individual structured Dynu fields.
 		// targetName is returned by Dynu with a trailing dot already.
@@ -228,10 +222,9 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		if ps := svcParamsToString(r.SvcParams); ps != "" {
 			rdata += " " + ps
 		}
-		err = rc.SetTargetSVCBString(domain, rdata)
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, rdata)
 	case "KEY":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %d %s",
-			intOrZero(r.Flags), intOrZero(r.KeyProtocol), intOrZero(r.Algorithm), r.PublicKey))
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, fmt.Sprintf("%d %d %d %s", intOrZero(r.Flags), intOrZero(r.KeyProtocol), intOrZero(r.Algorithm), r.PublicKey))
 	case "LOC":
 		// Parse DMS components from the content string (avoids miekg precision issues).
 		// Use Dynu's individual metric fields (r.Altitude, r.Size, r.Horizontal/
@@ -259,65 +252,60 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		if r.VerticalPrecision != nil {
 			vp = float32(*r.VerticalPrecision)
 		}
-		err = rc.SetLOCParams(d1, m1, s1, ns, d2, m2, s2, ew, float64(al), sz, hp, vp)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, d1, m1, s1, ns, d2, m2, s2, ew, float64(al), sz, hp, vp)
 	case "MX":
 		host := r.Host
 		// Dynu stores null MX (priority 0, target ".") by returning the zone name as host.
 		if intOrZero(r.Priority) == 0 && (host == "" || strings.TrimSuffix(host, ".") == domain) {
 			host = "."
 		}
-		err = rc.SetTargetMX(uint16(intOrZero(r.Priority)), ensureTrailingDot(host))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.Priority), ensureTrailingDot(host))
 	case "NAPTR":
 		// Dynu stores the null replacement (".") as an empty string.
 		naptrReplacement := r.Replacement
 		if naptrReplacement == "" {
 			naptrReplacement = "."
 		}
-		err = rc.SetTargetNAPTR(uint16(intOrZero(r.Order)), uint16(intOrZero(r.Preference)),
-			r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.Order), intOrZero(r.Preference), r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement))
 	case "NS":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, ensureTrailingDot(r.Host))
 	case "OPENPGPKEY":
-		err = rc.SetTarget(r.PublicKey)
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, r.PublicKey)
 	case "PTR":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, ensureTrailingDot(r.Host))
 	case "RP":
 		mbox := ensureTrailingDot(r.MailBox)
 		txt := ensureTrailingDot(r.TxtDomainName)
-		rd, err := models.MakeRP(domain, nil, mbox, txt)
-		if err == nil {
-			rc.SetRDATA(rd)
-		}
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, mbox, txt)
 	case "SMIMEA":
 		certHex, convErr := base64ToHex(r.CertificateAssociatedData)
 		if convErr != nil {
 			return nil, fmt.Errorf("SMIMEA certAssocData base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetSMIMEA(uint8(intOrZero(r.CertificateUsage)), uint8(intOrZero(r.Selector)), uint8(intOrZero(r.MatchingType)), certHex)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.CertificateUsage), intOrZero(r.Selector), intOrZero(r.MatchingType), certHex)
 	case "SPF", "TXT":
-		rc.Type = "TXT"
-		err = rc.SetTargetTXT(r.TextData)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), "TXT", r.TextData)
 	case "SRV":
 		// Dynu stores the null SRV target (".") as an empty host string.
 		srvHost := r.Host
 		if srvHost == "" {
 			srvHost = "."
 		}
-		err = rc.SetTargetSRV(uint16(intOrZero(r.Priority)), uint16(intOrZero(r.Weight)), uint16(intOrZero(r.Port)), ensureTrailingDot(srvHost))
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.Priority), intOrZero(r.Weight), intOrZero(r.Port), ensureTrailingDot(srvHost))
 	case "SSHFP":
 		fpHex, convErr := base64ToHex(r.FingerPrint)
 		if convErr != nil {
 			return nil, fmt.Errorf("SSHFP fingerprint base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetSSHFP(uint8(intOrZero(r.Algorithm)), uint8(intOrZero(r.FingerPrintType)), fpHex)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.Algorithm), intOrZero(r.FingerPrintType), fpHex)
 	case "TLSA":
 		certHex, convErr := base64ToHex(r.CertificateAssociatedData)
 		if convErr != nil {
 			return nil, fmt.Errorf("TLSA certAssocData base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetTLSA(uint8(intOrZero(r.CertificateUsage)), uint8(intOrZero(r.Selector)), uint8(intOrZero(r.MatchingType)), certHex)
+		rc, err = dc.NewRecordConfig(r.NodeName, uint32(r.TTL), r.RecordType, intOrZero(r.CertificateUsage), intOrZero(r.Selector), intOrZero(r.MatchingType), certHex)
 	case "URI":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %q", intOrZero(r.Priority), intOrZero(r.Weight), r.TargetURI))
+		rc, err = dc.NewRecordConfigParse(r.NodeName, uint32(r.TTL), r.RecordType, fmt.Sprintf("%d %d %q", intOrZero(r.Priority), intOrZero(r.Weight), r.TargetURI))
 	default:
 		return nil, nil
 	}
@@ -325,6 +313,7 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 	if err != nil {
 		return nil, fmt.Errorf("record %s %s: %w", r.RecordType, r.Hostname, err)
 	}
+	rc.Original = r
 	return rc, nil
 }
 
