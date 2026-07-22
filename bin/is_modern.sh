@@ -14,6 +14,10 @@ grep --color --include='*.go' -r -F 'RecordConfig{' *
 echo '========== Step 3. PopulateFromString{'
 grep --color --include='*.go' -r -F 'PopulateFromString' *
 
+echo '========== Step 3a.dnsv1'
+grep --color --include='*.go' -r -F -e github.com/miekg/dns *
+
+
 echo '========== Step 4. AddOrigin('
 grep --color --include='*.go' -r -F 'AddOrigin(' *
 
