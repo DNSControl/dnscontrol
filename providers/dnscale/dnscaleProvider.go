@@ -502,6 +502,9 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 		// rc, err = dc.NewRecordConfig(name, ttl, r.Type, uint16(priority), uint16(weight), uint16(port), target)
 
 		// NEW:
+		if !strings.HasSuffix(content, ".") {
+			content = content + "."
+		}
 		rc, err = dc.NewRecordConfigParse(name, ttl, r.Type, content)
 
 	default:
