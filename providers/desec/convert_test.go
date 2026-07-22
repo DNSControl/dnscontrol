@@ -25,7 +25,7 @@ func TestNativeToRecords(t *testing.T) {
 		t.Fatalf("got %d records, want 2", len(records))
 	}
 	for i, want := range native.Records {
-		if got := records[i].GetTargetCombined(); got != want {
+		if got := records[i].GetRDATA().String(); got != want {
 			t.Errorf("record %d target = %q, want %q", i, got, want)
 		}
 		if got := records[i].GetLabel(); got != "www" {

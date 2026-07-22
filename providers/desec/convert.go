@@ -58,11 +58,11 @@ func recordsToNative(rcs []*models.RecordConfig) []resourceRecord {
 				Type:    r.Type,
 				TTL:     r.TTL,
 				Subname: label,
-				Records: []string{r.GetTargetCombined()},
+				Records: []string{r.GetRDATA().String()},
 			}
 			keys[key] = &zr
 		} else {
-			zr.Records = append(zr.Records, r.GetTargetCombined())
+			zr.Records = append(zr.Records, r.GetRDATA().String())
 
 			if r.TTL != zr.TTL {
 				printer.Warnf("All TTLs for a rrset (%v) must be the same. Using smaller of %v and %v.\n", key, r.TTL, zr.TTL)
