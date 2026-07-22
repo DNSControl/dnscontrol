@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 type request struct {
@@ -76,53 +76,37 @@ func addTailingDot(destination string) string {
 	return destination
 }
 
-func toRecordConfig(domain string, r *record) *models.RecordConfig {
-	priority, _ := strconv.ParseUint(r.Priority, 10, 16)
-
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(0),
-		MxPreference: uint16(priority),
-		SrvPriority:  uint16(priority),
-		SrvWeight:    uint16(0),
-		SrvPort:      uint16(0),
-		Original:     r,
-	}
-	rc.SetLabel(r.Hostname, domain)
-
+func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(r.Hostname)
+	priority, _ := strconv.ParseInt(r.Priority, 10, 16)
+	var rc *models.RecordConfig
+	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		_ = rc.SetTargetTXT(r.Destination)
+		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeTXT, r.Destination)
 	case "NS", "ALIAS", "CNAME", "MX":
-		_ = rc.SetTarget(dnsutilv1.AddOrigin(addTailingDot(r.Destination), domain))
+		if r.Type == "MX" {
+			rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeMX, priority, addTailingDot(r.Destination))
+		} else {
+			rc, err = dc.NewRecordConfig(label, 0, r.Type, addTailingDot(r.Destination))
+		}
 	case "SRV":
 		parts := strings.Split(r.Destination, " ")
-		priority, _ := strconv.ParseUint(parts[0], 10, 16)
-		weight, _ := strconv.ParseUint(parts[1], 10, 16)
-		port, _ := strconv.ParseUint(parts[2], 10, 16)
-		rc.SrvPriority = uint16(priority)
-		rc.SrvWeight = uint16(weight)
-		rc.SrvPort = uint16(port)
-		_ = rc.SetTarget(parts[3])
+		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeSRV, parts[0], parts[1], parts[2], parts[3])
 	case "CAA":
 		parts := strings.Split(r.Destination, " ")
-		caaFlag, _ := strconv.ParseUint(parts[0], 10, 8)
-		rc.CaaFlag = uint8(caaFlag)
-		rc.CaaTag = parts[1]
-		_ = rc.SetTarget(strings.Trim(parts[2], "\""))
+		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeCAA, parts[0], parts[1], strings.Trim(parts[2], "\""))
 	case "TLSA":
 		parts := strings.Split(r.Destination, " ")
-		tlsaUsage, _ := strconv.ParseUint(parts[0], 10, 8)
-		tlsaSelector, _ := strconv.ParseUint(parts[1], 10, 8)
-		tlsaMatchingType, _ := strconv.ParseUint(parts[2], 10, 8)
-		rc.TlsaUsage = uint8(tlsaUsage)
-		rc.TlsaSelector = uint8(tlsaSelector)
-		rc.TlsaMatchingType = uint8(tlsaMatchingType)
-		_ = rc.SetTarget(parts[3])
+		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeTLSA, parts[0], parts[1], parts[2], parts[3])
 	default:
-		_ = rc.SetTarget(r.Destination)
+		rc, err = dc.NewRecordConfigParse(label, 0, r.Type, r.Destination)
 	}
-	return rc
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+	return rc, nil
 }
 
 func fromRecordConfig(in *models.RecordConfig) *record {

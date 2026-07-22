@@ -59,9 +59,12 @@ func (api *netcupProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
-		existingRecords[i] = toRecordConfig(domain, &records[i])
+		existingRecords[i], err = toRecordConfig(dc, &records[i])
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return existingRecords, nil
