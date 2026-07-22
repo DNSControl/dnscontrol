@@ -6,6 +6,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  # Cancel superseded runs when new commits are pushed to the same PR/branch.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -92,7 +97,8 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version: stable
-      - run: go install golang.org/x/tools/cmd/stringer@latest
+      # No stringer install: the go:generate directives use `go tool stringer`,
+      # pinned via the go.mod tool directive.
       - run: go generate ./...
       - uses: CatChen/check-git-status-action@v2
         with:

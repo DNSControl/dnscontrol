@@ -3,6 +3,11 @@ name: "PR: Run INTEGRATION tests"
 permissions:
   contents: read
 
+concurrency:
+  # Cancel superseded runs when new commits are pushed to the same PR/branch.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # When will this pipeline be activated?
 # 1. If someone pushes to a branch called "tlim_testpr".
 # 2. On a schedule (currently set to run every day at 4am UTC).
@@ -343,7 +348,7 @@ jobs:
         run: |-
           #
           echo "END: Running tests 0 to $END"
-          go install gotest.tools/gotestsum@latest
+          go install gotest.tools/gotestsum@v1.13.0
           if [ -n "$${{ matrix.provider }}_DOMAIN" ] ; then
             # NB(tlim): THe output of gotestsum needs to go to stdout AND the
             # gotestsum-output.txt file. That's why "tee" is used.
