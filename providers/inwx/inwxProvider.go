@@ -233,7 +233,7 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content[:len(content)-1])
 		}
 	default:
-		req.Content = rec.GetTargetCombined()
+		req.Content = rec.GetRDATA().String()
 	}
 
 	return req
@@ -397,7 +397,7 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 		return nil, err
 	}
 
-	records := []*models.RecordConfig{}
+	records := models.Records{}
 
 	for _, record := range info.Records {
 		if record.Type == "SOA" {
@@ -429,23 +429,24 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 			}
 		}
 
-		rc := &models.RecordConfig{
-			TTL:      uint32(record.TTL),
-			Original: record,
-		}
-		rc.SetLabelFromFQDN(record.Name, domain)
+		label := dc.ToShort(record.Name)
+		ttl := uint32(record.TTL)
 
+		var rc *models.RecordConfig
 		switch rType := record.Type; rType {
 		case "MX":
-			err = rc.SetTargetMX(uint16(record.Priority), record.Content)
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
 		case "SRV":
-			err = rc.SetTargetSRVPriorityString(uint16(record.Priority), record.Content)
+			rc, err = dc.NewRecordConfigParse(label, ttl, rType, fmt.Sprintf("%d %s", record.Priority, record.Content))
+		case "TXT", "ALIAS":
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Content)
 		default:
-			err = rc.PopulateFromString(rType, record.Content, domain)
+			rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content)
 		}
 		if err != nil {
 			return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
 		}
+		rc.Original = record
 
 		records = append(records, rc)
 	}
