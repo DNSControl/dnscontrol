@@ -13,7 +13,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
 
@@ -147,7 +146,7 @@ func (api *linodeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		return nil, fmt.Errorf("'%s' not a zone in Linode account", domain)
 	}
 
-	return api.getRecordsForDomain(domainID, domain)
+	return api.getRecordsForDomain(domainID, dc)
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -238,7 +237,7 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 	return corrections, actualChangeCount, nil
 }
 
-func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (models.Records, error) {
+func (api *linodeProvider) getRecordsForDomain(domainID int, dc *models.DomainConfig) (models.Records, error) {
 	records, err := api.getRecords(domainID)
 	if err != nil {
 		return nil, err
@@ -246,7 +245,7 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (mod
 
 	existingRecords := make([]*models.RecordConfig, len(records), len(records)+len(defaultNameServerNames))
 	for i := range records {
-		existingRecords[i], err = toRc(domain, &records[i])
+		existingRecords[i], err = toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}
@@ -255,14 +254,11 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (mod
 	// Linode always has read-only NS servers, but these are not mentioned in the API response
 	// https://github.com/linode/manager/blob/edd99dc4e1be5ab8190f243c3dbf8b830716255e/src/constants.js#L184
 	for _, name := range defaultNameServerNames {
-		rc := &models.RecordConfig{
-			Type:     "NS",
-			Original: &domainRecord{},
-		}
-		rc.SetLabelFromFQDN(domain, domain)
-		if err := rc.SetTarget(name); err != nil {
+		rc, err := dc.NewRecordConfig("@", 0, "NS", name)
+		if err != nil {
 			return nil, err
 		}
+		rc.Original = &domainRecord{}
 
 		existingRecords = append(existingRecords, rc)
 	}
@@ -270,28 +266,28 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (mod
 	return existingRecords, nil
 }
 
-func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          r.TTLSec,
-		MxPreference: r.Priority,
-		SrvPriority:  r.Priority,
-		SrvWeight:    r.Weight,
-		SrvPort:      r.Port,
-		CaaTag:       r.Tag,
-		Original:     r,
-	}
-	rc.SetLabel(r.Name, domain)
-
+func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
+	label := r.Name
+	ttl := r.TTLSec
+	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
-	case "CNAME", "MX", "NS", "SRV":
-		err = rc.SetTarget(dnsutilv1.AddOrigin(r.Target+".", domain))
+	case "CNAME", "NS":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, strings.TrimSuffix(r.Target, ".")+".")
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, strings.TrimSuffix(r.Target, ".")+".")
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Weight, r.Port, strings.TrimSuffix(r.Target, ".")+".")
 	case "CAA":
 		// Linode doesn't support CAA flags and just returns the tag and value separately
-		err = rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, 0, r.Tag, r.Target)
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Target)
 	default:
-		err = rc.PopulateFromString(r.Type, r.Target, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
