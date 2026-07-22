@@ -124,7 +124,7 @@ type recordRequestData struct {
 	IssuerCritical int    `json:"issuerCritical"`
 }
 
-func toRecordConfig(domain string, record *recordResponseDataEntry) *models.RecordConfig {
+func toRecordConfig(dc *models.DomainConfig, record *recordResponseDataEntry) *models.RecordConfig {
 	recordType := record.Type
 	if recordType == "ANAME" {
 		// ANAME is DNS Made Easy's name for ALIAS (inverse of the ALIAS->ANAME
@@ -132,33 +132,29 @@ func toRecordConfig(domain string, record *recordResponseDataEntry) *models.Reco
 		recordType = "ALIAS"
 	}
 
-	rc := &models.RecordConfig{
-		Type:     recordType,
-		TTL:      uint32(record.TTL),
-		Original: record,
-	}
-
-	rc.SetLabel(record.Name, domain)
-
+	var rc *models.RecordConfig
 	var err error
 	switch recordType {
 	case "MX":
-		err = rc.SetTargetMX(uint16(record.MxLevel), record.Value)
+		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.MxLevel, record.Value)
 	case "SRV":
-		err = rc.SetTargetSRV(uint16(record.Priority), uint16(record.Weight), uint16(record.Port), record.Value)
+		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.Priority, record.Weight, record.Port, record.Value)
 	case "CAA":
 		value, unquoteErr := strconv.Unquote(record.Value)
 		if unquoteErr != nil {
 			panic(unquoteErr)
 		}
-		err = rc.SetTargetCAA(uint8(record.IssuerCritical), record.CaaType, value)
+		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.IssuerCritical, record.CaaType, value)
+	case "ALIAS":
+		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.Value)
 	default:
-		err = rc.PopulateFromStringFunc(recordType, record.Value, domain, txtutil.ParseQuoted)
+		rc, err = dc.NewRecordConfigParse(record.Name, uint32(record.TTL), recordType, record.Value)
 	}
 
 	if err != nil {
 		panic(err)
 	}
+	rc.Original = record
 
 	return rc
 }
@@ -209,7 +205,7 @@ func fromRecordConfig(rc *models.RecordConfig) *recordRequestData {
 	return record
 }
 
-func systemNameServerToRecordConfig(domain string, nameServer string) *models.RecordConfig {
+func systemNameServerToRecordConfig(dc *models.DomainConfig, nameServer string) *models.RecordConfig {
 	target := nameServer + "."
-	return toRecordConfig(domain, &recordResponseDataEntry{Type: "NS", Value: target, TTL: fixedNameServerRecordTTL})
+	return toRecordConfig(dc, &recordResponseDataEntry{Type: "NS", Value: target, TTL: fixedNameServerRecordTTL})
 }

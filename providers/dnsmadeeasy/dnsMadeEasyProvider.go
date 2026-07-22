@@ -219,11 +219,11 @@ func (api *dnsMadeEasyProvider) GetZoneRecords(dc *models.DomainConfig) (models.
 		if records[i].Type == "HTTPRED" || records[i].Type == "SPF" {
 			continue
 		}
-		existingRecords = append(existingRecords, toRecordConfig(domain, &records[i]))
+		existingRecords = append(existingRecords, toRecordConfig(dc, &records[i]))
 	}
 
 	for i := range nameServers {
-		existingRecords = append(existingRecords, systemNameServerToRecordConfig(domain, nameServers[i]))
+		existingRecords = append(existingRecords, systemNameServerToRecordConfig(dc, nameServers[i]))
 	}
 
 	return existingRecords, nil
