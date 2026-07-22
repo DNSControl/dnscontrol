@@ -17,10 +17,8 @@ permissions:
 jobs:
   go-checks:
     # Consolidated Go checks: one checkout + one setup-go, so the Go module and
-    # build cache are warmed once and reused across every command below, instead
-    # of 5 parallel jobs each cold-compiling the dependency tree. A single
-    # git-status check verifies none of the commands changed tracked files; the
-    # diff it prints shows exactly what is out of date.
+    # build cache are warmed once and reused across every command below.
+    # A single git-status check verifies none of the commands changed tracked files.
     name: "Check: go (build/fmtjson/mod-tidy/generate/fmt/fix)"
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +33,6 @@ jobs:
       - run: go build -o dnscontrol .
       - run: bin/fmtjson $(find . -type f -name "*.json" ! -name "package-lock.json" -print)
       - run: go mod tidy
-      # go generate uses `go tool stringer` (pinned via the go.mod tool directive).
       - run: go generate ./...
       - run: go fmt ./...
       - run: go fix ./...
