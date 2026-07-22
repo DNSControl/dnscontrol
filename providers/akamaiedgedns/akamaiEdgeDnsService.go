@@ -225,7 +225,7 @@ func (a *edgeDNSProvider) rcToRs(records []*models.RecordConfig) (*dns.RecordBod
 		if r.Type == "AKAMAITLC" {
 			akaRecord.Target = append(akaRecord.Target, r.AnswerType+" "+r.GetTargetField())
 		} else {
-			akaRecord.Target = append(akaRecord.Target, r.GetTargetCombined())
+			akaRecord.Target = append(akaRecord.Target, r.GetRDATA().String())
 		}
 	}
 
