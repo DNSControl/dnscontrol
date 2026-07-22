@@ -29,7 +29,7 @@ func nativeToRecord(r *alidns.Record, dc *models.DomainConfig) (*models.RecordCo
 	var rc *models.RecordConfig
 	switch r.Type {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeMX, uint16(r.Priority), value)
+		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeMX, r.Priority, value)
 	case "SRV":
 		// SRV records in Alibaba Cloud: Value contains "priority weight port target"
 		// e.g., "1 1 5060 www.cloud-example.com."
