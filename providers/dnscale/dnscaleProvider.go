@@ -174,7 +174,7 @@ func (p *dnscaleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 			continue
 		}
 
-		rc, err := toRecordConfig(domain, rec)
+		rc, err := toRecordConfig(dc, rec)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert record: %w", err)
 		}
@@ -416,13 +416,9 @@ func (p *dnscaleProvider) deleteRecord(zoneID, recordID string) error {
 // Record conversion functions
 
 // toRecordConfig converts a DNScale Record to a RecordConfig.
-func toRecordConfig(domain string, r Record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-
+func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, error) {
 	// Extract label from full record name
+	domain := dc.Name
 	name := strings.TrimSuffix(r.Name, ".")
 	domainWithDot := domain + "."
 	if before, ok := strings.CutSuffix(r.Name, domainWithDot); ok {
@@ -434,21 +430,20 @@ func toRecordConfig(domain string, r Record) (*models.RecordConfig, error) {
 	if name == "" {
 		name = "@"
 	}
-	rc.SetLabel(name, domain)
 
 	content := r.Content
+	var rc *models.RecordConfig
+	var err error
 
 	switch r.Type {
 	case "A", "AAAA":
-		rc.Type = r.Type
-		return rc, rc.SetTarget(content)
+		rc, err = dc.NewRecordConfig(name, uint32(r.TTL), r.Type, content)
 	case "CNAME", "NS", "PTR", "ALIAS":
-		rc.Type = r.Type
 		// Ensure FQDN
 		if !strings.HasSuffix(content, ".") {
 			content = content + "."
 		}
-		return rc, rc.SetTarget(content)
+		rc, err = dc.NewRecordConfig(name, uint32(r.TTL), r.Type, content)
 	case "MX":
 		// DNScale API returns MX as "priority target" in content field
 		// If priority field is 0, parse it from content
@@ -466,10 +461,10 @@ func toRecordConfig(domain string, r Record) (*models.RecordConfig, error) {
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		return rc, rc.SetTargetMX(priority, target)
+		rc, err = dc.NewRecordConfig(name, uint32(r.TTL), r.Type, priority, target)
 	case "TXT":
 		// DNScale returns TXT content without surrounding quotes
-		return rc, rc.SetTargetTXT(content)
+		rc, err = dc.NewRecordConfig(name, uint32(r.TTL), r.Type, content)
 	case "SRV":
 		// DNScale API returns SRV as "priority weight port target"
 		// SetTargetSRV expects priority, weight, port, target separately
@@ -477,44 +472,31 @@ func toRecordConfig(domain string, r Record) (*models.RecordConfig, error) {
 		if len(parts) != 4 {
 			return nil, fmt.Errorf("SRV value does not contain 4 fields: (%q)", content)
 		}
-		priority, err := strconv.ParseUint(parts[0], 10, 16)
-		if err != nil {
-			return nil, fmt.Errorf("SRV priority parse error: %w", err)
+		priority, parseErr := strconv.ParseUint(parts[0], 10, 16)
+		if parseErr != nil {
+			return nil, fmt.Errorf("SRV priority parse error: %w", parseErr)
 		}
-		weight, err := strconv.ParseUint(parts[1], 10, 16)
-		if err != nil {
-			return nil, fmt.Errorf("SRV weight parse error: %w", err)
+		weight, parseErr := strconv.ParseUint(parts[1], 10, 16)
+		if parseErr != nil {
+			return nil, fmt.Errorf("SRV weight parse error: %w", parseErr)
 		}
-		port, err := strconv.ParseUint(parts[2], 10, 16)
-		if err != nil {
-			return nil, fmt.Errorf("SRV port parse error: %w", err)
+		port, parseErr := strconv.ParseUint(parts[2], 10, 16)
+		if parseErr != nil {
+			return nil, fmt.Errorf("SRV port parse error: %w", parseErr)
 		}
 		target := parts[3]
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		return rc, rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), target)
-	case "CAA":
-		// DNScale returns CAA as "flag tag value"
-		return rc, rc.SetTargetCAAString(content)
-	case "TLSA":
-		// DNScale returns TLSA as "usage selector matchingType certificate"
-		return rc, rc.SetTargetTLSAString(content)
-	case "SSHFP":
-		// DNScale returns SSHFP as "algorithm fpType fingerprint"
-		return rc, rc.SetTargetSSHFPString(content)
-	case "HTTPS":
-		// DNScale returns HTTPS as "priority target params"
-		// Must set Type before calling SetTargetSVCBString (it defaults to SVCB if empty)
-		rc.Type = "HTTPS"
-		return rc, rc.SetTargetSVCBString(domain, content)
-	case "SVCB":
-		// DNScale returns SVCB as "priority target params"
-		rc.Type = "SVCB"
-		return rc, rc.SetTargetSVCBString(domain, content)
+		rc, err = dc.NewRecordConfig(name, uint32(r.TTL), r.Type, uint16(priority), uint16(weight), uint16(port), target)
 	default:
-		return rc, rc.PopulateFromString(r.Type, content, domain)
+		rc, err = dc.NewRecordConfigParse(name, uint32(r.TTL), r.Type, content)
 	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+	return rc, nil
 }
 
 // fromRecordConfig converts a RecordConfig to a DNScale Record.
