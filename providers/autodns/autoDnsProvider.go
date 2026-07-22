@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -228,7 +229,7 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	existingRecords := make([]*models.RecordConfig, len(zone.ResourceRecords))
 	for i, resourceRecord := range zone.ResourceRecords {
 		var err error
-		existingRecords[i], err = toRecordConfig(domain, resourceRecord)
+		existingRecords[i], err = toRecordConfig(dc, resourceRecord)
 		if err != nil {
 			return nil, err
 		}
@@ -240,47 +241,33 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 
 	// AutoDNS doesn't respond with APEX nameserver records as regular RR but rather as a zone property
 	for _, nameServer := range zone.NameServers {
-		nameServerRecord := &models.RecordConfig{
-			TTL: zone.Soa.TTL,
-		}
-
-		nameServerRecord.SetLabel("", domain)
-
 		// make sure the value for this NS record is suffixed with a dot at the end
-		_ = nameServerRecord.PopulateFromString("NS", strings.TrimSuffix(nameServer.Name, ".")+".", domain)
+		nameServerRecord, err := dc.NewRecordConfig("@", zone.Soa.TTL, dnsv2.TypeNS, strings.TrimSuffix(nameServer.Name, ".")+".")
+		if err != nil {
+			return nil, err
+		}
 
 		existingRecords = append(existingRecords, nameServerRecord)
 	}
 
 	if zone.MainRecord != nil && zone.MainRecord.Value != "" {
-		addressRecord := &models.RecordConfig{
-			TTL: uint32(zone.MainRecord.TTL),
-		}
-
+		ttl := uint32(zone.MainRecord.TTL)
 		// If TTL is not set for an individual RR AutoDNS defaults to the zone TTL defined in SOA
-		if addressRecord.TTL == 0 {
-			addressRecord.TTL = zone.Soa.TTL
+		if ttl == 0 {
+			ttl = zone.Soa.TTL
 		}
-
-		addressRecord.SetLabel("", domain)
-
-		_ = addressRecord.PopulateFromString("A", zone.MainRecord.Value, domain)
+		addressRecord, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeA, zone.MainRecord.Value)
+		if err != nil {
+			return nil, err
+		}
 
 		existingRecords = append(existingRecords, addressRecord)
 
 		if zone.IncludeWwwForMain {
-			prefixedAddressRecord := &models.RecordConfig{
-				TTL: uint32(zone.MainRecord.TTL),
+			prefixedAddressRecord, err := dc.NewRecordConfig("www", ttl, dnsv2.TypeA, zone.MainRecord.Value)
+			if err != nil {
+				return nil, err
 			}
-
-			// If TTL is not set for an individual RR AutoDNS defaults to the zone TTL defined in SOA
-			if prefixedAddressRecord.TTL == 0 {
-				prefixedAddressRecord.TTL = zone.Soa.TTL
-			}
-
-			prefixedAddressRecord.SetLabel("www", domain)
-
-			_ = prefixedAddressRecord.PopulateFromString("A", zone.MainRecord.Value, domain)
 
 			existingRecords = append(existingRecords, prefixedAddressRecord)
 		}
@@ -359,65 +346,40 @@ func (api *autoDNSProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]
 	return nil, nil
 }
 
-func toRecordConfig(domain string, record *ResourceRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     record.Type,
-		TTL:      uint32(record.TTL),
-		Original: record,
-	}
-	rc.SetLabel(record.Name, domain)
+func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(record.Name)
+	var rc *models.RecordConfig
+	var err error
 
-	// special record types are handled below, skip the `rc.PopulateFromString` method
-	if record.Type != "MX" && record.Type != "SRV" {
-		if err := rc.PopulateFromString(record.Type, record.Value, domain); err != nil {
-			return nil, err
-		}
-	}
-
-	if record.Type == "MX" {
-		rc.MxPreference = uint16(record.Pref)
-		if err := rc.SetTarget(record.Value); err != nil {
-			return nil, err
-		}
-	}
-
-	if record.Type == "SRV" {
-		rc.SrvPriority = uint16(record.Pref)
-
+	switch record.Type {
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, uint32(record.TTL), dnsv2.TypeMX, uint16(record.Pref), record.Value)
+	case "SRV":
 		re := regexp.MustCompile(`(\d+) (\d+) (.+)$`)
 		found := re.FindStringSubmatch(record.Value)
 		if len(found) != 4 {
 			return nil, fmt.Errorf("invalid SRV record value: %s", record.Value)
 		}
 
-		weight, err := strconv.Atoi(found[1])
-		if err != nil {
-			return nil, err
+		weight, parseErr := strconv.Atoi(found[1])
+		if parseErr != nil {
+			return nil, parseErr
 		}
-		if weight < 0 {
-			rc.SrvWeight = 0
-		} else if weight > 65535 {
-			rc.SrvWeight = 65535
-		} else {
-			rc.SrvWeight = uint16(weight)
-		}
+		weight = min(max(weight, 0), 65535)
 
-		port, err := strconv.Atoi(found[2])
-		if err != nil {
-			return nil, err
+		port, parseErr := strconv.Atoi(found[2])
+		if parseErr != nil {
+			return nil, parseErr
 		}
-		if port < 0 {
-			rc.SrvPort = 0
-		} else if port > 65535 {
-			rc.SrvPort = 65535
-		} else {
-			rc.SrvPort = uint16(port)
-		}
-
-		if err := rc.SetTarget(found[3]); err != nil {
-			return nil, err
-		}
+		port = min(max(port, 0), 65535)
+		rc, err = dc.NewRecordConfig(label, uint32(record.TTL), dnsv2.TypeSRV, uint16(record.Pref), weight, port, found[3])
+	default:
+		rc, err = dc.NewRecordConfigParse(label, uint32(record.TTL), record.Type, record.Value)
+	}
+	if err != nil {
+		return nil, err
 	}
 
+	rc.Original = record
 	return rc, nil
 }
