@@ -145,7 +145,7 @@ func (c *gigahostProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			printer.Warnf("GIGAHOST: ignoring unsupported record type %s (%s)\n", t, recs[i].RecordName)
 			continue
 		}
-		rc, err := nativeToRecordConfig(dc.Name, &recs[i])
+		rc, err := nativeToRecordConfig(dc, &recs[i])
 		if err != nil {
 			return nil, err
 		}
@@ -213,36 +213,25 @@ func (c *gigahostProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 }
 
 // nativeToRecordConfig converts a Gigahost record into a RecordConfig.
-func nativeToRecordConfig(domain string, r *record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.RecordType,
-		TTL:      r.RecordTTL.Value,
-		Original: r,
-	}
-	rc.SetLabel(r.RecordName, domain)
-
+func nativeToRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
+	var rc *models.RecordConfig
 	var err error
 	switch r.RecordType {
 	case "MX":
-		err = rc.SetTargetMX(uint16(r.RecordPrio.Value), addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordPrio.Value, addDot(r.RecordValue))
 	case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
 		// Gigahost stores hostname targets inconsistently (some with a trailing
 		// dot, some without); RecordConfig targets are always FQDNs.
-		err = rc.SetTarget(addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, addDot(r.RecordValue))
 	case "TXT":
-		err = rc.SetTargetTXT(r.RecordValue)
-	case "CAA":
-		err = rc.SetTargetCAAString(r.RecordValue)
-	case "SRV":
-		err = rc.SetTargetSRVString(r.RecordValue)
-	case "NAPTR":
-		err = rc.SetTargetNAPTRString(r.RecordValue)
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordValue)
 	default:
-		err = rc.PopulateFromStringFunc(r.RecordType, r.RecordValue, domain, nil)
+		rc, err = dc.NewRecordConfigParse(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordValue)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("gigahost: unparsable %s record %q: %w", r.RecordType, r.RecordValue, err)
 	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -266,7 +255,7 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 		r.RecordValue = rc.GetTargetTXTJoined()
 	case "CAA", "SRV", "NAPTR":
 		// These are stored as full RFC1035 presentation strings in record_value.
-		r.RecordValue = rc.GetTargetCombined()
+		r.RecordValue = rc.GetRDATA().String()
 	default:
 		r.RecordValue = rc.GetTargetField()
 	}
