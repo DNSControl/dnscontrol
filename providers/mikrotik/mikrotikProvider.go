@@ -225,7 +225,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		}
 
-		rcs, err := nativeToRecords(nr, domain)
+		rcs, err := nativeToRecords(nr, dc)
 		if err != nil {
 			printer.Warnf("mikrotik: skipping record %q (type=%s): %v\n", nr.Name, nr.Type, err)
 			continue

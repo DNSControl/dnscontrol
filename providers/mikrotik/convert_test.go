@@ -6,6 +6,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
+var testDomain = models.MustNewDomainConfig("example.com")
+
 // --- Duration parsing/formatting ---
 
 func TestParseMikrotikDuration(t *testing.T) {
@@ -132,7 +134,7 @@ func TestNativeToRecords_A(t *testing.T) {
 		Address: "192.168.1.1",
 		TTL:     "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -150,7 +152,7 @@ func TestNativeToRecords_AAAA(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "v6.example.com", Type: "AAAA", Address: "2001:db8::1", TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -162,7 +164,7 @@ func TestNativeToRecords_CNAME(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "alias.example.com", Type: "CNAME", CName: "target.example.com", TTL: "5m",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -176,7 +178,7 @@ func TestNativeToRecords_MX(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "example.com", Type: "MX", MxExchange: "mail.example.com", MxPreference: "10", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -192,7 +194,7 @@ func TestNativeToRecords_NS(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "sub.example.com", Type: "NS", NS: "ns1.example.com", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -207,7 +209,7 @@ func TestNativeToRecords_SRV(t *testing.T) {
 		SrvTarget: "sipserver.example.com", SrvPort: "5060", SrvPriority: "10", SrvWeight: "20",
 		TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -229,7 +231,7 @@ func TestNativeToRecords_TXT(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "example.com", Type: "TXT", Text: "v=spf1 include:example.com ~all", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -243,7 +245,7 @@ func TestNativeToRecords_FWD(t *testing.T) {
 		Name: "example.com", Type: "FWD", ForwardTo: "8.8.8.8",
 		MatchSubdomain: "true", AddressList: "vpn-list", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -259,7 +261,7 @@ func TestNativeToRecords_FWD_WithRegexp(t *testing.T) {
 		Name: "example.com", Type: "FWD", ForwardTo: "8.8.8.8",
 		Regexp: `.*\.test$`, TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -271,7 +273,7 @@ func TestNativeToRecords_NXDOMAIN(t *testing.T) {
 		Name: "blocked.example.com", Type: "NXDOMAIN",
 		MatchSubdomain: "true", Comment: "blocked domain", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -287,7 +289,7 @@ func TestNativeToRecords_MetadataOnStandardTypes(t *testing.T) {
 		Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "1d",
 		MatchSubdomain: "true", AddressList: "my-list", Comment: "test comment",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -304,7 +306,7 @@ func TestNativeToRecords_NoMetadata(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -315,7 +317,7 @@ func TestNativeToRecords_NoMetadata(t *testing.T) {
 
 func TestNativeToRecords_UnsupportedType(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "BOGUS", TTL: "1d"}
-	_, err := nativeToRecords(nr, "example.com")
+	_, err := nativeToRecords(nr, testDomain)
 	if err == nil {
 		t.Error("expected error for unsupported type")
 	}
@@ -323,7 +325,7 @@ func TestNativeToRecords_UnsupportedType(t *testing.T) {
 
 func TestNativeToRecords_InvalidAddress(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "A", Address: "not-an-ip", TTL: "1d"}
-	_, err := nativeToRecords(nr, "example.com")
+	_, err := nativeToRecords(nr, testDomain)
 	if err == nil {
 		t.Error("expected error for invalid IP address")
 	}
@@ -331,7 +333,7 @@ func TestNativeToRecords_InvalidAddress(t *testing.T) {
 
 func TestNativeToRecords_InvalidTTL(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "bogus"}
-	_, err := nativeToRecords(nr, "example.com")
+	_, err := nativeToRecords(nr, testDomain)
 	if err == nil {
 		t.Error("expected error for invalid TTL")
 	}
@@ -339,7 +341,7 @@ func TestNativeToRecords_InvalidTTL(t *testing.T) {
 
 func TestNativeToRecords_ApexRecord(t *testing.T) {
 	nr := dnsStaticRecord{Name: "example.com", Type: "A", Address: "10.0.0.1", TTL: "1d"}
-	rcs, err := nativeToRecords(nr, "example.com")
+	rcs, err := nativeToRecords(nr, testDomain)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -382,11 +384,7 @@ func TestRecordToNative_CNAME(t *testing.T) {
 }
 
 func TestRecordToNative_FWD(t *testing.T) {
-	rc := &models.RecordConfig{}
-	rc.SetLabel("@", "example.com")
-	rc.Type = "MIKROTIK_FWD"
-	_ = rc.SetTarget("8.8.8.8")
-	rc.TTL = 86400
+	rc := testDomain.MustNewRecordConfig("@", 86400, "MIKROTIK_FWD", "8.8.8.8")
 	rc.Metadata = map[string]string{
 		"match_subdomain": "true",
 		"address_list":    "vpn-list",
@@ -405,11 +403,8 @@ func TestRecordToNative_FWD(t *testing.T) {
 }
 
 func TestRecordToNative_NXDOMAIN(t *testing.T) {
-	rc := &models.RecordConfig{}
-	rc.SetLabel("blocked", "example.com")
-	rc.Type = "MIKROTIK_NXDOMAIN"
+	rc := testDomain.MustNewRecordConfig("blocked", 86400, "MIKROTIK_NXDOMAIN")
 	_ = rc.SetTarget("NXDOMAIN")
-	rc.TTL = 86400
 	rc.Metadata = map[string]string{
 		"match_subdomain": "true",
 		"comment":         "blocked",
@@ -425,11 +420,7 @@ func TestRecordToNative_NXDOMAIN(t *testing.T) {
 }
 
 func TestRecordToNative_MX(t *testing.T) {
-	rc := &models.RecordConfig{}
-	rc.SetLabel("@", "example.com")
-	rc.Type = "MX"
-	_ = rc.SetTargetMX(10, "mail.example.com.")
-	rc.TTL = 86400
+	rc := testDomain.MustNewRecordConfig("@", 86400, "MX", 10, "mail.example.com.")
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -441,11 +432,7 @@ func TestRecordToNative_MX(t *testing.T) {
 }
 
 func TestRecordToNative_SRV(t *testing.T) {
-	rc := &models.RecordConfig{}
-	rc.SetLabel("_sip._tcp", "example.com")
-	rc.Type = "SRV"
-	_ = rc.SetTargetSRV(10, 20, 5060, "sipserver.example.com.")
-	rc.TTL = 3600
+	rc := testDomain.MustNewRecordConfig("_sip._tcp", 3600, "SRV", 10, 20, 5060, "sipserver.example.com.")
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -459,11 +446,7 @@ func TestRecordToNative_SRV(t *testing.T) {
 }
 
 func TestRecordToNative_TXT(t *testing.T) {
-	rc := &models.RecordConfig{}
-	rc.SetLabel("@", "example.com")
-	rc.Type = "TXT"
-	_ = rc.SetTargetTXT("v=spf1 ~all")
-	rc.TTL = 86400
+	rc := testDomain.MustNewRecordConfig("@", 86400, "TXT", "v=spf1 ~all")
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -491,7 +474,7 @@ func TestRecordToNative_MetadataOnStandardTypes(t *testing.T) {
 }
 
 func TestRecordToNative_UnsupportedType(t *testing.T) {
-	rc := &models.RecordConfig{}
+	rc := new(models.RecordConfig)
 	rc.SetLabel("@", "example.com")
 	rc.Type = "BOGUS"
 	_ = rc.SetTarget("whatever")
@@ -510,7 +493,7 @@ func TestNativeRoundTrip_A(t *testing.T) {
 		MatchSubdomain: "true", AddressList: "my-list", Comment: "round trip",
 	}
 
-	rcs, err := nativeToRecords(original, "example.com")
+	rcs, err := nativeToRecords(original, testDomain)
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -534,7 +517,7 @@ func TestNativeRoundTrip_FWD(t *testing.T) {
 		MatchSubdomain: "true", AddressList: "vpn-list", Regexp: `.*\.test`,
 	}
 
-	rcs, err := nativeToRecords(original, "example.com")
+	rcs, err := nativeToRecords(original, testDomain)
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -556,7 +539,7 @@ func TestNativeRoundTrip_NXDOMAIN(t *testing.T) {
 		MatchSubdomain: "true", Comment: "blocked",
 	}
 
-	rcs, err := nativeToRecords(original, "example.com")
+	rcs, err := nativeToRecords(original, testDomain)
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -600,7 +583,7 @@ func TestForwarderToRecord_Minimal(t *testing.T) {
 }
 
 func TestRecordToForwarder(t *testing.T) {
-	rc := &models.RecordConfig{}
+	rc := new(models.RecordConfig)
 	rc.SetLabel("my-fwd", ForwarderZone)
 	rc.Type = "MIKROTIK_FORWARDER"
 	_ = rc.SetTarget("1.1.1.1,8.8.8.8")
@@ -634,18 +617,8 @@ func TestForwarderRoundTrip(t *testing.T) {
 // --- Test helpers ---
 
 func makeRC(rtype, label, origin, target string) *models.RecordConfig {
-	rc := &models.RecordConfig{}
-	rc.SetLabel(label, origin)
-	rc.Type = rtype
-	switch rtype {
-	case "A", "AAAA":
-		rc.MustSetTarget(target)
-	case "TXT":
-		_ = rc.SetTargetTXT(target)
-	default:
-		_ = rc.SetTarget(target)
-	}
-	return rc
+	dc := models.MustNewDomainConfig(origin)
+	return dc.MustNewRecordConfig(label, 0, rtype, target)
 }
 
 func assertStr(t *testing.T, field, got, want string) {

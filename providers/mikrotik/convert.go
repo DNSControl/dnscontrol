@@ -7,95 +7,75 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // nativeToRecords converts a RouterOS DNS static record to dnscontrol RecordConfig(s).
-func nativeToRecords(nr dnsStaticRecord, origin string) ([]*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Original: &nr,
-	}
-	rc.SetLabelFromFQDN(nr.Name, origin)
-
+func nativeToRecords(nr dnsStaticRecord, dc *models.DomainConfig) (models.Records, error) {
 	ttl, err := parseMikrotikDuration(nr.TTL)
 	if err != nil {
 		return nil, fmt.Errorf("invalid TTL %q: %w", nr.TTL, err)
 	}
-	rc.TTL = ttl
+	label := dc.LabelFromFQDNNoDot(nr.Name)
+	var rc *models.RecordConfig
 
 	switch nr.Type {
 	case "A":
-		rc.Type = "A"
 		addr, parseErr := netip.ParseAddr(nr.Address)
 		if parseErr != nil {
 			return nil, fmt.Errorf("invalid A address %q: %w", nr.Address, parseErr)
 		}
-		if err := rc.SetTargetIP(addr); err != nil {
-			return nil, fmt.Errorf("invalid A address %q: %w", nr.Address, err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeA, addr)
 
 	case "AAAA":
-		rc.Type = "AAAA"
 		addr6, parseErr := netip.ParseAddr(nr.Address)
 		if parseErr != nil {
 			return nil, fmt.Errorf("invalid AAAA address %q: %w", nr.Address, parseErr)
 		}
-		if err := rc.SetTargetIP(addr6); err != nil {
-			return nil, fmt.Errorf("invalid AAAA address %q: %w", nr.Address, err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, addr6)
 
 	case "CNAME":
-		rc.Type = "CNAME"
-		if err := rc.SetTarget(ensureTrailingDot(nr.CName)); err != nil {
-			return nil, fmt.Errorf("invalid CNAME target %q: %w", nr.CName, err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, ensureTrailingDot(nr.CName))
 
 	case "FWD":
-		rc.Type = "MIKROTIK_FWD"
-		if err := rc.SetTarget(nr.ForwardTo); err != nil {
-			return nil, fmt.Errorf("invalid FWD target %q: %w", nr.ForwardTo, err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, "MIKROTIK_FWD", nr.ForwardTo)
 
 	case "NXDOMAIN":
-		rc.Type = "MIKROTIK_NXDOMAIN"
-		if err := rc.SetTarget("NXDOMAIN"); err != nil {
-			return nil, fmt.Errorf("NXDOMAIN SetTarget: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, "MIKROTIK_NXDOMAIN")
 
 	case "MX":
-		rc.Type = "MX"
-		pref, err := strconv.ParseUint(nr.MxPreference, 10, 16)
-		if err != nil {
-			return nil, fmt.Errorf("invalid MX preference %q: %w", nr.MxPreference, err)
+		if _, parseErr := strconv.ParseUint(nr.MxPreference, 10, 16); parseErr != nil {
+			return nil, fmt.Errorf("invalid MX preference %q: %w", nr.MxPreference, parseErr)
 		}
-		if err := rc.SetTargetMX(uint16(pref), ensureTrailingDot(nr.MxExchange)); err != nil {
-			return nil, fmt.Errorf("invalid MX: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, nr.MxPreference, ensureTrailingDot(nr.MxExchange))
 
 	case "NS":
-		rc.Type = "NS"
-		if err := rc.SetTarget(ensureTrailingDot(nr.NS)); err != nil {
-			return nil, fmt.Errorf("invalid NS target %q: %w", nr.NS, err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, ensureTrailingDot(nr.NS))
 
 	case "SRV":
-		rc.Type = "SRV"
-		priority, _ := strconv.ParseUint(nr.SrvPriority, 10, 16)
-		weight, _ := strconv.ParseUint(nr.SrvWeight, 10, 16)
-		port, _ := strconv.ParseUint(nr.SrvPort, 10, 16)
-		if err := rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), ensureTrailingDot(nr.SrvTarget)); err != nil {
-			return nil, fmt.Errorf("invalid SRV: %w", err)
-		}
+		priority, _ := strconv.ParseInt(nr.SrvPriority, 10, 16)
+		weight, _ := strconv.ParseInt(nr.SrvWeight, 10, 16)
+		port, _ := strconv.ParseInt(nr.SrvPort, 10, 16)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, weight, port, ensureTrailingDot(nr.SrvTarget))
 
 	case "TXT":
-		rc.Type = "TXT"
-		if err := rc.SetTargetTXT(nr.Text); err != nil {
-			return nil, fmt.Errorf("invalid TXT: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, nr.Text)
 
 	default:
 		return nil, fmt.Errorf("unsupported record type %q", nr.Type)
 	}
+	if err != nil {
+		return nil, fmt.Errorf("invalid %s record: %w", nr.Type, err)
+	}
+	if nr.Type == "NXDOMAIN" {
+		// The custom record's RDATA is empty, but legacy comparisons expect this target.
+		if err := rc.SetTarget("NXDOMAIN"); err != nil {
+			return nil, fmt.Errorf("NXDOMAIN SetTarget: %w", err)
+		}
+	}
+	rc.Original = &nr
+	rc.Metadata = nil
 
 	// Read RouterOS-specific metadata fields applicable to ALL record types.
 	if nr.MatchSubdomain == "true" || nr.MatchSubdomain == "yes" || nr.Regexp != "" || nr.AddressList != "" || nr.Comment != "" {
@@ -116,7 +96,7 @@ func nativeToRecords(nr dnsStaticRecord, origin string) ([]*models.RecordConfig,
 		}
 	}
 
-	return []*models.RecordConfig{rc}, nil
+	return models.Records{rc}, nil
 }
 
 // recordToNative converts a dnscontrol RecordConfig to a RouterOS DNS static record for create/update.
@@ -292,9 +272,8 @@ const ForwarderZone = "_forwarders.mikrotik"
 
 // forwarderToRecord converts a RouterOS DNS forwarder to a RecordConfig.
 func forwarderToRecord(fwd dnsForwarder) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Original: &fwd,
-	}
+	rc := new(models.RecordConfig)
+	rc.Original = &fwd
 	rc.SetLabel(fwd.Name, ForwarderZone)
 	rc.Type = "MIKROTIK_FORWARDER"
 	_ = rc.SetTarget(fwd.DNSServers)
