@@ -263,7 +263,7 @@ func (a *aliDNSDsp) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 			corrections = append(corrections, &models.Correction{
 				Msg: msgs,
 				F: func() error {
-					return a.deleteRecordset(change.Old, dcn)
+					return a.deleteRecordset(change.Old)
 				},
 			})
 		default:
