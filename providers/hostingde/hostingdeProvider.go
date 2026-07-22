@@ -122,16 +122,16 @@ func (hp *hostingdeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	if err != nil {
 		return nil, err
 	}
-	return hp.APIRecordsToStandardRecordsModel(domain, zone.Records)
+	return hp.APIRecordsToStandardRecordsModel(dc, zone.Records)
 }
 
-func (hp *hostingdeProvider) APIRecordsToStandardRecordsModel(domain string, src []record) (models.Records, error) {
-	records := []*models.RecordConfig{}
+func (hp *hostingdeProvider) APIRecordsToStandardRecordsModel(dc *models.DomainConfig, src []record) (models.Records, error) {
+	records := models.Records{}
 	for _, r := range src {
 		if r.Type == "SOA" {
 			continue
 		}
-		newr, err := r.nativeToRecord(domain)
+		newr, err := r.nativeToRecord(dc)
 		if err != nil {
 			return nil, err
 		}
@@ -203,7 +203,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		}
 	}
 	if desiredSoa == nil {
-		desiredSoa = &models.RecordConfig{}
+		desiredSoa = new(models.RecordConfig)
 	}
 
 	defaultSoa := &hp.defaultSoa

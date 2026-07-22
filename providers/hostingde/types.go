@@ -136,7 +136,7 @@ type responseData struct {
 	TotalPages uint `json:"totalPages"`
 }
 
-func (r record) nativeToRecord(domain string) (*models.RecordConfig, error) {
+func (r record) nativeToRecord(dc *models.DomainConfig) (*models.RecordConfig, error) {
 	// normalize cname,mx,ns records with dots to be consistent with our config format.
 	if r.Type == "ALIAS" || r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
 		if r.Content != "." {
@@ -144,31 +144,27 @@ func (r record) nativeToRecord(domain string) (*models.RecordConfig, error) {
 		}
 	}
 
-	rc := &models.RecordConfig{
-		Type:         "",
-		TTL:          r.TTL,
-		MxPreference: r.Priority,
-		SrvPriority:  r.Priority,
-		Original:     r,
-	}
-	rc.SetLabelFromFQDN(r.Name, domain)
-
+	label := dc.ToShort(r.Name)
+	var rc *models.RecordConfig
 	var err error
 	switch r.Type {
 	case "ALIAS":
-		rc.Type = r.Type
-		err = rc.SetTarget(r.Content)
+		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content)
 	case "NULLMX":
-		err = rc.PopulateFromString("MX", "0 .", domain)
+		rc, err = dc.NewRecordConfig(label, r.TTL, "MX", 0, ".")
 	case "MX":
-		err = rc.SetTargetMX(uint16(r.Priority), r.Content)
+		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Priority, r.Content)
 	case "PTR":
-		rc.Type = r.Type
-		err = rc.SetTarget(r.Content + ".")
+		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content+".")
 	case "SRV":
-		err = rc.SetTargetSRVPriorityString(uint16(r.Priority), r.Content)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content)
 	default:
-		err = rc.PopulateFromString(r.Type, r.Content, domain)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, r.Content)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
@@ -177,7 +173,7 @@ func recordToNative(rc *models.RecordConfig) *record {
 	record := &record{
 		Name:    rc.NameFQDN,
 		Type:    rc.Type,
-		Content: strings.TrimSuffix(rc.GetTargetCombined(), "."),
+		Content: strings.TrimSuffix(rc.GetRDATA().String(), "."),
 		TTL:     rc.TTL,
 	}
 
