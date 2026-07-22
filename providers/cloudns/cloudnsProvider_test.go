@@ -2,6 +2,8 @@ package cloudns
 
 import (
 	"testing"
+
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestToRcConvertsCloudWRToCloudnsWR(t *testing.T) {
@@ -17,11 +19,34 @@ func TestToRcConvertsCloudWRToCloudnsWR(t *testing.T) {
 		TTL:    "3600",
 	}
 
-	rc, err := toRc("example.com", r)
+	dc := models.MustNewDomainConfig("example.com")
+	rc, err := toRc(dc, r)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if rc.Type != "CLOUDNS_WR" {
 		t.Errorf("expected type CLOUDNS_WR, got %s", rc.Type)
+	}
+	if rc.GetTargetField() != r.Target {
+		t.Errorf("expected target %q, got %q", r.Target, rc.GetTargetField())
+	}
+}
+
+func TestToRcMX(t *testing.T) {
+	r := &domainRecord{
+		Type:     "MX",
+		Host:     "www",
+		Target:   "mail.example.net",
+		Priority: "10",
+		TTL:      "3600",
+	}
+
+	dc := models.MustNewDomainConfig("example.com")
+	rc, err := toRc(dc, r)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got := rc.GetRDATA().String(); got != "10 mail.example.net." {
+		t.Errorf("expected MX data %q, got %q", "10 mail.example.net.", got)
 	}
 }

@@ -10,12 +10,13 @@ import (
 
 	"github.com/fatih/color"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 /*
@@ -346,7 +347,7 @@ func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	}
 	existingRecords := make([]*models.RecordConfig, len(records))
 	for i := range records {
-		existingRecords[i], err = toRc(domain, &records[i])
+		existingRecords[i], err = toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}
@@ -380,89 +381,65 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 }
 
 // parses the ClouDNS format into our standard RecordConfig.
-func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
+func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
 	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
-	priority, _ := strconv.ParseUint(r.Priority, 10, 16)
-	weight, _ := strconv.ParseUint(r.Weight, 10, 16)
-	port, _ := strconv.ParseUint(r.Port, 10, 16)
+	label := dc.LabelFromShort(r.Host)
 
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(ttl),
-		MxPreference: uint16(priority),
-		SrvPriority:  uint16(priority),
-		SrvWeight:    uint16(weight),
-		SrvPort:      uint16(port),
-		Original:     r,
-	}
-	rc.SetLabel(r.Host, domain)
-
-	// Add metadata for GeoDNS
-	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
-	// but you can ask the support for others type of record and they enable it
-	// for your ClouDNS account.
-	if r.GeodnsCode != "" {
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		rc.Metadata[metaGeodnsCode] = r.GeodnsCode
-	}
-
+	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		err = rc.SetTargetTXT(r.Target)
-	case "CNAME", "DNAME", "MX", "NS", "SRV", "ALIAS", "PTR":
-		if err := rc.SetTarget(dnsutilv1.AddOrigin(r.Target+".", domain)); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, r.Target)
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+"."))
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+"."))
+	case "ALIAS":
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
+	case "CNAME", "DNAME", "NS", "PTR":
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), rtype, dc.ToFqdnWithDot(r.Target+"."))
 	case "CAA":
-		caaFlag, _ := strconv.ParseUint(r.CaaFlag, 10, 8)
-		rc.CaaFlag = uint8(caaFlag)
-		rc.CaaTag = r.CaaTag
-		err = rc.SetTarget(r.CaaValue)
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue)
 	case "TLSA":
-		tlsaUsage, _ := strconv.ParseUint(r.TlsaUsage, 10, 8)
-		rc.TlsaUsage = uint8(tlsaUsage)
-		tlsaSelector, _ := strconv.ParseUint(r.TlsaSelector, 10, 8)
-		rc.TlsaSelector = uint8(tlsaSelector)
-		tlsaMatchingType, _ := strconv.ParseUint(r.TlsaMatchingType, 10, 8)
-		rc.TlsaMatchingType = uint8(tlsaMatchingType)
-		err = rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target)
 	case "SSHFP":
-		sshfpAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8)
-		rc.SshfpAlgorithm = uint8(sshfpAlgorithm)
-		sshfpFingerprint, _ := strconv.ParseUint(r.SshfpFingerprint, 10, 8)
-		rc.SshfpFingerprint = uint8(sshfpFingerprint)
-		err = rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target)
 	case "DS":
-		dsKeyTag, _ := strconv.ParseUint(r.DsKeyTag, 10, 16)
-		rc.DsKeyTag = uint16(dsKeyTag)
-		dsAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8) // SshFpAlgorithm and DsAlgorithm both use json field "algorithm"
-		rc.DsAlgorithm = uint8(dsAlgorithm)
-		dsDigestType, _ := strconv.ParseUint(r.DsDigestType, 10, 8)
-		rc.DsDigestType = uint8(dsDigestType)
-		rc.DsDigest = r.Target
-		err = rc.SetTarget(r.Target)
+		// SshfpAlgorithm and DS algorithm both use the API's "algorithm" field.
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target)
 	case "CLOUD_WR":
-		rc.Type = "CLOUDNS_WR"
-		err = rc.SetTarget(r.Target)
+		// CLOUDNS_WR does not yet support construction through SetRDATA's
+		// legacy-field compatibility path. Seed its target with a TXT factory,
+		// then retain the provider's existing pseudo-record representation.
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, r.Target)
+		if err == nil {
+			rc.ChangeType("CLOUDNS_WR", dc.Name)
+			err = rc.SetTarget(r.Target)
+		}
 	case "LOC":
 		loc := fmt.Sprintf("%s %s %s %s %s %s %s %s %s %s %s %s",
 			r.LocLatDeg, r.LocLatMin, r.LocLatSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, r.LocLongSec, r.LocLongDir,
 			r.LocAltitude, r.LocSize, r.LocHPrecision, r.LocVPrecision)
-		err = rc.SetTargetLOCString(r.Target, loc)
+		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), dnsv2.TypeLOC, loc)
 	case "NAPTR":
-		naptrOrder, _ := strconv.ParseUint(r.NaptrOrder, 10, 16)
-		naptrPreference, _ := strconv.ParseUint(r.NaptrPreference, 10, 16)
-		target := dnsutilv1.AddOrigin(r.NaptrReplacement+".", domain)
-		err = rc.SetTargetNAPTR(uint16(naptrOrder), uint16(naptrPreference), r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
+		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
+		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
 	default:
-		err = rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), rtype, r.Target)
+	}
+	if err != nil {
+		return nil, err
 	}
 
-	return rc, err
+	rc.Original = r
+	// Add metadata for GeoDNS. By default, it works only with A, AAAA, CNAME,
+	// NAPTR, or SRV records, but support can enable other types per account.
+	if r.GeodnsCode != "" {
+		rc.Metadata = map[string]string{metaGeodnsCode: r.GeodnsCode}
+	}
+
+	return rc, nil
 }
 
 func formatLocParam(param string) string {
