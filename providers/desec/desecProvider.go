@@ -11,7 +11,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/net/idna"
 )
 
@@ -106,12 +105,16 @@ func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	if err != nil {
 		return nil, err
 	}
+	conversionDC, err := models.NewDomainConfig(punycodeDomain)
+	if err != nil {
+		return nil, err
+	}
 
 	// Convert them to DNScontrol's native format:
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	// spew.Dump(records)
 	for _, rr := range records {
-		existingRecords = append(existingRecords, nativeToRecords(rr, punycodeDomain)...)
+		existingRecords = append(existingRecords, nativeToRecords(rr, conversionDC)...)
 	}
 
 	return existingRecords, nil
@@ -164,6 +167,10 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 	if err != nil {
 		return nil, 0, err
 	}
+	conversionDC, err := models.NewDomainConfig(punycodeName)
+	if err != nil {
+		return nil, 0, err
+	}
 
 	minTTL, ok, err := c.searchDomainIndex(punycodeName)
 	if err != nil {
@@ -200,7 +207,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 					rc.Type = label.Type
 					rc.Records = make([]string, 0) // empty array of records should delete this rrset
 					rc.TTL = 3600
-					shortname := dnsutilv1.TrimDomainName(label.NameFQDN, punycodeName)
+					shortname := conversionDC.ToShort(label.NameFQDN)
 					if shortname == "@" {
 						shortname = ""
 					}
@@ -214,7 +221,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 			}
 		} else {
 			// it must be an update or create, both can be done with the same api call.
-			ns := recordsToNative(desiredRecords[label], punycodeName)
+			ns := recordsToNative(desiredRecords[label], conversionDC)
 			if len(ns) > 1 {
 				panic("we got more than one resource record to create / modify")
 			}
