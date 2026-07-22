@@ -3,6 +3,11 @@ name: "PR: Run INTEGRATION tests"
 permissions:
   contents: read
 
+concurrency:
+  # Cancel superseded runs when new commits are pushed to the same PR/branch.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # When will this pipeline be activated?
 # 1. If someone pushes to a branch called "tlim_testpr".
 # 2. On a schedule (currently set to run every day at 4am UTC).
@@ -40,10 +45,6 @@ on:
 
 # Environment Variables
 env:
-  # cache-key: Change to force cache reset `pwsh > Get-Date -UFormat %s`
-  cache-key: 1639697695
-  # go-mod-path: Where go-mod writes temp files
-  go-mod-path: /go/pkg/mod
   # BIND_DOMAIN: BIND is the one providers that we always test. By
   # defining this here, we know it will always be set.
   BIND_DOMAIN: example.com
@@ -65,24 +66,28 @@ jobs:
           sparse-checkout-cone-mode: false
       - name: Set Integration Test Providers
         id: get_integration_test_providers
-        shell: pwsh
+        shell: bash
+        # A provider is enabled for testing when its <PROVIDER>_DOMAIN is set.
+        # Those values live in the `env` and `vars` contexts (see the
+        # integration-tests job, which reads every *_DOMAIN from vars.*), so we
+        # only inspect those two. We deliberately do NOT read `toJson(secrets)`:
+        # that would copy every org/repo secret onto the runner (CodeQL
+        # "actions/excessive-secrets-exposure"), and no *_DOMAIN is stored as a
+        # secret anyway.
         run: |
-          $Providers = @()
-          $AllProviders = (Get-Content integrationTest/profiles.json | ConvertFrom-Json -AsHashtable).Keys
-          $EnvContext = ConvertFrom-Json -InputObject $env:ENV_CONTEXT
-          $VarsContext = ConvertFrom-Json -InputObject $env:VARS_CONTEXT
-          $SecretsContext = ConvertFrom-Json -InputObject $env:SECRETS_CONTEXT
-          $AllProviders | ForEach-Object {
-            if(($null -ne $EnvContext."$($_)_DOMAIN") -or ($null -ne $VarsContext."$($_)_DOMAIN") -or ($null -ne $SecretsContext."$($_)_DOMAIN")) {
-              $Providers += $_
-            }
-          }
-          Write-Host "Integration test providers: $Providers"
-          echo "integration_test_providers=$(ConvertTo-Json -InputObject $Providers -Compress)" >> $env:GITHUB_OUTPUT
+          set -euo pipefail
+          providers="$(
+            jq -c \
+              --argjson env "$ENV_CONTEXT" \
+              --argjson vars "$VARS_CONTEXT" \
+              '[ keys_unsorted[] | select( ($env[. + "_DOMAIN"] // $vars[. + "_DOMAIN"]) != null ) ]' \
+              integrationTest/profiles.json
+          )"
+          echo "Integration test providers: $providers"
+          echo "integration_test_providers=$providers" >> "$GITHUB_OUTPUT"
         env:
           ENV_CONTEXT: ${{ toJson(env) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
   # integration-tests: Run the integration tests on any provider listed
   # in needs.integration-test-providers.outputs.integration_test_providers.
@@ -278,13 +283,13 @@ jobs:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
       - uses: actions/checkout@v7
+      # No Go cache here on purpose. This job runs in the golang:1.26 container,
+      # where setup-go's cache key resolves to a distinct "...-undefined-..."
+      # family (~0.5 GB/branch) that does NOT share with the host jobs and would
+      # push the repo back over the 10 GB cache limit (causing eviction of the
+      # host jobs' caches). This job is gated (smoke tests) and dominated by
+      # live DNS API calls, so a cold `go` build here is cheap.
       - run: mkdir -p "$TEST_RESULTS"
-      - name: restore_cache
-        uses: actions/cache@v6.1.0
-        with:
-          key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
-          restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
-          path: ${{ env.go-mod-path }}
       - name: Set END value for PRs
         # For PRs we only run a smoke test (the first 3 tests) to save time.
         # For pushes to main or if the PR has the 'longtest' label, we run all tests.
@@ -343,7 +348,7 @@ jobs:
         run: |-
           #
           echo "END: Running tests 0 to $END"
-          go install gotest.tools/gotestsum@latest
+          go install gotest.tools/gotestsum@v1.13.0
           if [ -n "$${{ matrix.provider }}_DOMAIN" ] ; then
             # NB(tlim): THe output of gotestsum needs to go to stdout AND the
             # gotestsum-output.txt file. That's why "tee" is used.
