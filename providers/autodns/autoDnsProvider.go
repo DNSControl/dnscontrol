@@ -7,9 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -185,20 +183,23 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 			}
 
 			if record.Type == "SRV" {
-				resourceRecord.Value = fmt.Sprintf("%d %d %d %s",
-					record.SrvPriority,
-					record.SrvWeight,
-					record.SrvPort,
-					record.GetTargetField(),
-				)
+				// resourceRecord.Value = fmt.Sprintf("%d %d %d %s",
+				// 	record.SrvPriority,
+				// 	record.SrvWeight,
+				// 	record.SrvPort,
+				// 	record.GetTargetField(),
+				// )
+				resourceRecord.Value = record.GetRDATA().String()
+
 			}
 
 			if record.Type == "CAA" {
-				resourceRecord.Value = fmt.Sprintf("%d %s \"%s\"",
-					record.CaaFlag,
-					record.CaaTag,
-					record.GetTargetField(),
-				)
+				// resourceRecord.Value = fmt.Sprintf("%d %s \"%s\"",
+				// 	record.CaaFlag,
+				// 	record.CaaTag,
+				// 	record.GetTargetField(),
+				// )
+				resourceRecord.Value = record.GetRDATA().String()
 			}
 
 			resourceRecords = append(resourceRecords, resourceRecord)
@@ -351,30 +352,14 @@ func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.Re
 	var rc *models.RecordConfig
 	var err error
 
+	ttl := uint32(record.TTL)
 	switch record.Type {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(record.TTL), dnsv2.TypeMX, uint16(record.Pref), record.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.Pref), record.Value)
 	case "SRV":
-		re := regexp.MustCompile(`(\d+) (\d+) (.+)$`)
-		found := re.FindStringSubmatch(record.Value)
-		if len(found) != 4 {
-			return nil, fmt.Errorf("invalid SRV record value: %s", record.Value)
-		}
-
-		weight, parseErr := strconv.Atoi(found[1])
-		if parseErr != nil {
-			return nil, parseErr
-		}
-		weight = min(max(weight, 0), 65535)
-
-		port, parseErr := strconv.Atoi(found[2])
-		if parseErr != nil {
-			return nil, parseErr
-		}
-		port = min(max(port, 0), 65535)
-		rc, err = dc.NewRecordConfig(label, uint32(record.TTL), dnsv2.TypeSRV, uint16(record.Pref), weight, port, found[3])
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, record.Value)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, uint32(record.TTL), record.Type, record.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, record.Type, record.Value)
 	}
 	if err != nil {
 		return nil, err
