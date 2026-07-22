@@ -61,7 +61,7 @@ func TestRecordsToNativeUsesShortLabel(t *testing.T) {
 	}
 	record := dc.MustNewRecordConfigParse("www", 300, "A", "192.0.2.1")
 
-	native := recordsToNative(models.Records{record}, dc)
+	native := recordsToNative(models.Records{record})
 	if len(native) != 1 {
 		t.Fatalf("got %d records, want 1", len(native))
 	}

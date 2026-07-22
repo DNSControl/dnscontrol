@@ -37,7 +37,7 @@ func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.R
 	return rcs
 }
 
-func recordsToNative(rcs []*models.RecordConfig, dc *models.DomainConfig) []resourceRecord {
+func recordsToNative(rcs []*models.RecordConfig) []resourceRecord {
 	// Take a list of RecordConfig and return an equivalent list of resourceRecord.
 	// deSEC requires one resourceRecord for each label:key tuple, therefore we
 	// might collapse many RecordConfig into one resourceRecord.
@@ -45,7 +45,8 @@ func recordsToNative(rcs []*models.RecordConfig, dc *models.DomainConfig) []reso
 	keys := map[models.RecordKey]*resourceRecord{}
 	var zrs []resourceRecord
 	for _, r := range rcs {
-		label := dc.ToShort(r.NameFQDN)
+		// label := dnsutilv1.TrimDomainName(r.GetLabel(), origin)
+		label := r.Name
 		if label == "@" {
 			label = ""
 		}

@@ -221,7 +221,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 			}
 		} else {
 			// it must be an update or create, both can be done with the same api call.
-			ns := recordsToNative(desiredRecords[label], conversionDC)
+			ns := recordsToNative(desiredRecords[label])
 			if len(ns) > 1 {
 				panic("we got more than one resource record to create / modify")
 			}
