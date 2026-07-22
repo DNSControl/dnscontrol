@@ -278,13 +278,12 @@ jobs:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
       - uses: actions/checkout@v7
-      # setup-go caches the module + build cache (keyed on go.sum). Its cache
-      # key matches the other jobs' setup-go (same OS/arch/go-version), so they
-      # share one cache family instead of maintaining a second, redundant
-      # actions/cache entry that pushed the repo over the 10 GB cache limit.
-      - uses: actions/setup-go@v7
-        with:
-          go-version: "1.26"
+      # No Go cache here on purpose. This job runs in the golang:1.26 container,
+      # where setup-go's cache key resolves to a distinct "...-undefined-..."
+      # family (~0.5 GB/branch) that does NOT share with the host jobs and would
+      # push the repo back over the 10 GB cache limit (causing eviction of the
+      # host jobs' caches). This job is gated (smoke tests) and dominated by
+      # live DNS API calls, so a cold `go` build here is cheap.
       - run: mkdir -p "$TEST_RESULTS"
       - name: Set END value for PRs
         # For PRs we only run a smoke test (the first 3 tests) to save time.
