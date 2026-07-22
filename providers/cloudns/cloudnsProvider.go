@@ -382,51 +382,51 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 
 // parses the ClouDNS format into our standard RecordConfig.
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
-	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
+	ttl_, _ := strconv.ParseUint(r.TTL, 10, 32)
+	ttl := uint32(ttl_)
 	label := dc.LabelFromShort(r.Host)
 
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+"."))
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+"."))
 	case "ALIAS":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
 	case "CNAME", "DNAME", "NS", "PTR":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), rtype, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, dc.ToFqdnWithDot(r.Target+"."))
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue)
 	case "TLSA":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target)
 	case "SSHFP":
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target)
 	case "DS":
 		// SshfpAlgorithm and DS algorithm both use the API's "algorithm" field.
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target)
 	case "CLOUD_WR":
 		// CLOUDNS_WR does not yet support construction through SetRDATA's
 		// legacy-field compatibility path. Seed its target with a TXT factory,
 		// then retain the provider's existing pseudo-record representation.
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 		if err == nil {
 			rc.ChangeType("CLOUDNS_WR", dc.Name)
 			err = rc.SetTarget(r.Target)
 		}
 	case "LOC":
-		loc := fmt.Sprintf("%s %s %s %s %s %s %s %s %s %s %s %s",
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
 			r.LocLatDeg, r.LocLatMin, r.LocLatSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, r.LocLongSec, r.LocLongDir,
 			r.LocAltitude, r.LocSize, r.LocHPrecision, r.LocVPrecision)
-		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), dnsv2.TypeLOC, loc)
 	case "NAPTR":
 		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), rtype, r.Target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}
 	if err != nil {
 		return nil, err
