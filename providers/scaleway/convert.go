@@ -27,32 +27,30 @@ func nameFromLabel(rc *models.RecordConfig) string {
 }
 
 // toRecordConfig converts a Scaleway Record to a dnscontrol RecordConfig.
-func toRecordConfig(zone string, r *domain.Record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     string(r.Type),
-		TTL:      r.TTL,
-		Original: r,
-	}
-	rc.SetLabel(labelFromName(r.Name), zone)
-
+func toRecordConfig(dc *models.DomainConfig, r *domain.Record) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(labelFromName(r.Name))
+	ttl := r.TTL
+	rtype := string(r.Type)
 	data := strings.TrimSpace(r.Data)
 
-	switch rc.Type {
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
 	case "TXT":
 		// Scaleway returns the TXT value wrapped in quotes (BIND-style).
 		// SetTargetTXT expects the unquoted single-string value.
-		unq, err := unquoteTXT(data)
-		if err != nil {
-			return nil, err
+		unq, unquoteErr := unquoteTXT(data)
+		if unquoteErr != nil {
+			return nil, unquoteErr
 		}
-		if err := rc.SetTargetTXT(unq); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, unq)
 	default:
-		if err := rc.PopulateFromString(rc.Type, data, zone); err != nil {
-			return nil, fmt.Errorf("SCALEWAY: unparsable %s record %q: %w", rc.Type, data, err)
-		}
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, data)
 	}
+	if err != nil {
+		return nil, fmt.Errorf("SCALEWAY: unparsable %s record %q: %w", rtype, data, err)
+	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -66,13 +64,12 @@ func fromRecordConfig(rc *models.RecordConfig) domain.Record {
 	}
 
 	if rc.Type == "TXT" {
-		// Scaleway accepts the TXT data BIND-style quoted; the GetTargetCombined()
-		// for TXT uses the buggy zoneFileQuoted path, so build the quoted form
+		// Scaleway accepts the TXT data BIND-style quoted, so build that form
 		// from the joined value directly.
 		rec.Data = quoteTXT(rc.GetTargetTXTJoined())
 		return rec
 	}
-	rec.Data = rc.GetTargetCombined()
+	rec.Data = rc.GetRDATA().String()
 	return rec
 }
 
