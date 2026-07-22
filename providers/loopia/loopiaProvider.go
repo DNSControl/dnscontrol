@@ -27,7 +27,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Section 1: Register this provider in the system.
@@ -207,7 +206,7 @@ func (c *APIClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	}
 
 	// Convert them to DNScontrol's native format:
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, subdomain := range subdomains {
 		// here seems like a good place to get the records for a subdomain.
 		// fukn ballz tho: each subdomain requires one API call. 💩
@@ -223,7 +222,7 @@ func (c *APIClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 
 		for _, subdRr := range subdomainrecords {
 			// Note: subdomain cannot be any of [.-_ ]
-			record, err := nativeToRecord(subdRr, domain, subdomain)
+			record, err := nativeToRecord(subdRr, dc, subdomain)
 			if err != nil {
 				return nil, err
 			}
@@ -336,7 +335,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 		if len(desiredRecords[fqdn]) == 0 {
 			msgs := strings.Join(msgsForLabel[fqdn], "\n")
 			msgs = "records affected by deletion of subdomain " + fqdn + "\n" + msgs
-			subdomain := dnsutilv1.TrimDomainName(fqdn, dc.Name)
+			subdomain := dc.ToShort(fqdn + ".")
 			corrections = append(corrections, &models.Correction{
 				Msg: msgs,
 				F: func() error {
@@ -350,7 +349,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 		skip := false
 		for fqdn := range affectedLabels {
 			if len(desiredRecords[fqdn]) == 0 {
-				subdomain := dnsutilv1.TrimDomainName(fqdn, dc.Name)
+				subdomain := dc.ToShort(fqdn + ".")
 				if d.Existing.NameFQDN == fqdn && d.Existing.Name == subdomain {
 					// fmt.Printf("fqdn extinct wtf: %s\n", fqdn)
 					// deletion is a member of fqdn. skip its deletion (otherwise extra API call and its error)
@@ -395,7 +394,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 func debugRecords(note string, recs []*models.RecordConfig) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
-		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetTargetCombined())
+		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())
 	}
 }
 
