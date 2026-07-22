@@ -18,9 +18,19 @@ func makeNativeRecord(rtype, name, content string, priority int64, ttl int64) *e
 	}
 }
 
+func testDC(t *testing.T) *models.DomainConfig {
+	t.Helper()
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return dc
+}
+
 // TestNativeToRecord_ContentPopulated regression: rcontent was declared as "" and never
 // assigned from record.Content, so all records got empty content.
 func TestNativeToRecord_ContentPopulated(t *testing.T) {
+	dc := testDC(t)
 	tests := []struct {
 		name       string
 		record     *egoscale.DNSDomainRecord
@@ -49,7 +59,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := nativeToRecord(tt.record, "example.com")
+			rc, err := nativeToRecord(tt.record, dc)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -69,6 +79,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 // TestNativeToRecord_SRVNoDoubleDot: API returns content as "weight port target"; we appended
 // a trailing dot unconditionally, causing double-dot when the API already returned one.
 func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
+	dc := testDC(t)
 	tests := []struct {
 		name    string
 		content string // as returned by the API: "weight port target"
@@ -80,7 +91,7 @@ func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			record := makeNativeRecord("SRV", "_sip._tcp", tt.content, 10, 300)
-			rc, err := nativeToRecord(record, "example.com")
+			rc, err := nativeToRecord(record, dc)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -98,9 +109,10 @@ func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
 
 // TestNativeToRecord_CNAMENoDoubleDot: same trailing-dot guard for CNAME.
 func TestNativeToRecord_CNAMENoDoubleDot(t *testing.T) {
+	dc := testDC(t)
 	for _, content := range []string{"target.example.com", "target.example.com."} {
 		record := makeNativeRecord("CNAME", "foo", content, 0, 300)
-		rc, err := nativeToRecord(record, "example.com")
+		rc, err := nativeToRecord(record, dc)
 		if err != nil {
 			t.Fatalf("unexpected error for content %q: %v", content, err)
 		}
@@ -113,6 +125,7 @@ func TestNativeToRecord_CNAMENoDoubleDot(t *testing.T) {
 
 // TestNativeToRecord_SkippedTypes: SOA, NS, and TXT ALIAS mirrors should return nil.
 func TestNativeToRecord_SkippedTypes(t *testing.T) {
+	dc := testDC(t)
 	skipped := []*egoscale.DNSDomainRecord{
 		makeNativeRecord("SOA", "@", "ns1.example.com", 0, 3600),
 		makeNativeRecord("NS", "@", "ns1.example.com.", 0, 3600),
@@ -120,7 +133,7 @@ func TestNativeToRecord_SkippedTypes(t *testing.T) {
 	}
 
 	for _, r := range skipped {
-		rc, err := nativeToRecord(r, "example.com")
+		rc, err := nativeToRecord(r, dc)
 		if err != nil {
 			t.Errorf("type %s: unexpected error: %v", r.Type, err)
 		}
@@ -132,11 +145,10 @@ func TestNativeToRecord_SkippedTypes(t *testing.T) {
 
 // TestAuditRecords_PTRRejected: API does not support PTR; provider must reject it.
 func TestAuditRecords_PTRRejected(t *testing.T) {
-	rc := &models.RecordConfig{Type: "PTR"}
-	rc.SetLabel("4", "example.com")
-	rc.MustSetTarget("foo.example.com.")
+	dc := testDC(t)
+	rc := dc.MustNewRecordConfig("4", 300, "PTR", "foo.example.com.")
 
-	errs := AuditRecords([]*models.RecordConfig{rc})
+	errs := AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Error("expected PTR to be rejected, got no errors")
 	}
@@ -144,11 +156,10 @@ func TestAuditRecords_PTRRejected(t *testing.T) {
 
 // TestAuditRecords_EmptyTXTRejected: API rejects empty TXT values.
 func TestAuditRecords_EmptyTXTRejected(t *testing.T) {
-	rc := &models.RecordConfig{Type: "TXT"}
-	rc.SetLabel("foo", "example.com")
-	_ = rc.SetTargetTXT("")
+	dc := testDC(t)
+	rc := dc.MustNewRecordConfig("foo", 300, "TXT", "")
 
-	errs := AuditRecords([]*models.RecordConfig{rc})
+	errs := AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Error("expected empty TXT to be rejected, got no errors")
 	}
@@ -156,17 +167,11 @@ func TestAuditRecords_EmptyTXTRejected(t *testing.T) {
 
 // TestAuditRecords_ValidRecordsPass: common record types should pass without errors.
 func TestAuditRecords_ValidRecordsPass(t *testing.T) {
-	var records []*models.RecordConfig
-
-	a := &models.RecordConfig{Type: "A"}
-	a.SetLabel("foo", "example.com")
-	a.MustSetTarget("1.2.3.4")
-	records = append(records, a)
-
-	txt := &models.RecordConfig{Type: "TXT"}
-	txt.SetLabel("foo", "example.com")
-	_ = txt.SetTargetTXT("v=spf1 -all")
-	records = append(records, txt)
+	dc := testDC(t)
+	records := models.Records{
+		dc.MustNewRecordConfig("foo", 300, "A", "1.2.3.4"),
+		dc.MustNewRecordConfig("foo", 300, "TXT", "v=spf1 -all"),
+	}
 
 	errs := AuditRecords(records)
 	if len(errs) != 0 {

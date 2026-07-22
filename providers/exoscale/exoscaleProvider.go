@@ -115,7 +115,7 @@ func (provider *exoscaleProvider) GetZoneRecords(domainConfig *models.DomainConf
 
 	existingRecords := make([]*models.RecordConfig, 0, len(records.DNSDomainRecords))
 	for i := range records.DNSDomainRecords {
-		recordConfig, err := nativeToRecord(&records.DNSDomainRecords[i], domainName)
+		recordConfig, err := nativeToRecord(&records.DNSDomainRecords[i], domainConfig)
 		if err != nil {
 			return nil, err
 		}
@@ -129,7 +129,7 @@ func (provider *exoscaleProvider) GetZoneRecords(domainConfig *models.DomainConf
 
 // nativeToRecord converts an Exoscale DNS record to a RecordConfig.
 // Returns nil, nil for record types that should be silently skipped (SOA, NS, TXT ALIAS mirrors).
-func nativeToRecord(record *egoscale.DNSDomainRecord, domainName string) (*models.RecordConfig, error) {
+func nativeToRecord(record *egoscale.DNSDomainRecord, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	recordContent := record.Content
 
 	if record.Type == "SOA" || record.Type == "NS" {
@@ -152,31 +152,27 @@ func nativeToRecord(record *egoscale.DNSDomainRecord, domainName string) (*model
 		return nil, nil
 	}
 
-	recordConfig := &models.RecordConfig{
-		Original: record,
-	}
+	var ttl uint32
 	if record.Ttl != 0 {
-		recordConfig.TTL = uint32(record.Ttl)
+		ttl = uint32(record.Ttl)
 	}
-	recordConfig.SetLabel(record.Name, domainName)
 
+	var recordConfig *models.RecordConfig
 	var err error
 	switch record.Type {
 	case "ALIAS", "URL":
-		recordConfig.Type = string(record.Type)
-		_ = recordConfig.SetTarget(recordContent)
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
 	case "MX":
-		var priority uint16
-		if record.Priority != 0 {
-			priority = uint16(record.Priority)
-		}
-		err = recordConfig.SetTargetMX(priority, recordContent)
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), record.Priority, recordContent)
+	case "TXT":
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
 	default:
-		err = recordConfig.PopulateFromString(string(record.Type), recordContent, domainName)
+		recordConfig, err = dc.NewRecordConfigParse(record.Name, ttl, string(record.Type), recordContent)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from exoscale: %w", err)
 	}
+	recordConfig.Original = record
 
 	return recordConfig, nil
 }
@@ -231,7 +227,7 @@ func (provider *exoscaleProvider) createRecordFunc(
 	recordConfig *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetTargetCombined()
+		target := recordConfig.GetRDATA().String()
 		name := recordConfig.GetLabel()
 		var prio int64
 
@@ -301,7 +297,7 @@ func (provider *exoscaleProvider) updateRecordFunc(
 	recordConfig *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetTargetCombined()
+		target := recordConfig.GetRDATA().String()
 		name := recordConfig.GetLabel()
 
 		if recordConfig.Type == "MX" {
