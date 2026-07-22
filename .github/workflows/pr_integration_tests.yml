@@ -40,10 +40,6 @@ on:
 
 # Environment Variables
 env:
-  # cache-key: Change to force cache reset (e.g. `date +%s`)
-  cache-key: 1639697695
-  # go-mod-path: Where go-mod writes temp files
-  go-mod-path: /go/pkg/mod
   # BIND_DOMAIN: BIND is the one providers that we always test. By
   # defining this here, we know it will always be set.
   BIND_DOMAIN: example.com
@@ -282,13 +278,14 @@ jobs:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
       - uses: actions/checkout@v7
-      - run: mkdir -p "$TEST_RESULTS"
-      - name: restore_cache
-        uses: actions/cache@v6.1.0
+      # setup-go caches the module + build cache (keyed on go.sum). Its cache
+      # key matches the other jobs' setup-go (same OS/arch/go-version), so they
+      # share one cache family instead of maintaining a second, redundant
+      # actions/cache entry that pushed the repo over the 10 GB cache limit.
+      - uses: actions/setup-go@v7
         with:
-          key: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
-          restore-keys: linux-go-${{ hashFiles('go.sum') }}-${{ env.cache-key }}
-          path: ${{ env.go-mod-path }}
+          go-version: "1.26"
+      - run: mkdir -p "$TEST_RESULTS"
       - name: Set END value for PRs
         # For PRs we only run a smoke test (the first 3 tests) to save time.
         # For pushes to main or if the PR has the 'longtest' label, we run all tests.
