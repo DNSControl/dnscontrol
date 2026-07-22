@@ -9,22 +9,19 @@ import (
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
-func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(*r.TTL),
-		Original: r,
-		Metadata: map[string]string{},
-	}
+func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(*r.Name)
+	ttl := uint32(*r.TTL)
+	metadata := map[string]string{}
 	if r.Line != nil && *r.Line != "" {
-		rc.Metadata[metaRecordLine] = *r.Line
+		metadata[metaRecordLine] = *r.Line
 	}
 	if r.LineId != nil && *r.LineId != "" {
-		rc.Metadata[metaRecordLineID] = *r.LineId
+		metadata[metaRecordLineID] = *r.LineId
 	}
 	if r.Weight != nil {
-		rc.Metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
+		metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
 	}
-	rc.SetLabel(*r.Name, domainName)
 
 	val := *r.Value
 	switch *r.Type {
@@ -46,9 +43,25 @@ func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.Record
 		rtype = "ALIAS"
 	}
 
-	if err := rc.PopulateFromStringFunc(rtype, val, domainName, txtutil.ParseQuoted); err != nil {
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
+	case "TXT":
+		var txt string
+		txt, err = txtutil.ParseQuoted(val)
+		if err == nil {
+			rc, err = dc.NewRecordConfig(label, ttl, rtype, txt)
+		}
+	case "ALIAS":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+	}
+	if err != nil {
 		return nil, err
 	}
+	rc.Original = r
+	rc.Metadata = metadata
 
 	return rc, nil
 }
@@ -101,7 +114,10 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 		req.Weight = new(weight)
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+	val := rc.GetRDATA().String()
+	if rc.Type == "TXT" {
+		val = txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
+	}
 	if rc.Type == "MX" {
 		val = rc.GetTargetField()
 		req.MX = new(uint64(rc.MxPreference))
@@ -132,7 +148,10 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 		req.Weight = new(uint64(0))
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+	val := rc.GetRDATA().String()
+	if rc.Type == "TXT" {
+		val = txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
+	}
 	if rc.Type == "MX" {
 		val = rc.GetTargetField()
 		req.MX = new(uint64(rc.MxPreference))

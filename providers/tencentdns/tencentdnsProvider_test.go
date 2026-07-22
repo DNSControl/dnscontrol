@@ -319,13 +319,9 @@ func TestRecordWeightComparisonNormalizesValues(t *testing.T) {
 }
 
 func makeLineRecord(domain, target string, metadata map[string]string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type:     "A",
-		TTL:      600,
-		Metadata: metadata,
-	}
-	rc.SetLabel("www", domain)
-	rc.SetTarget(target)
+	dc := models.MustNewDomainConfig(domain)
+	rc := dc.MustNewRecordConfig("www", 600, "A", target)
+	rc.Metadata = metadata
 	return rc
 }
 

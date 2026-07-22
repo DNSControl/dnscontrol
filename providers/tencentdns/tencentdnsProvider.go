@@ -179,7 +179,7 @@ func (p *tencentdnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 		if *r.Status != "ENABLE" {
 			continue
 		}
-		rc, err := nativeToRecord(r, dc.Name)
+		rc, err := nativeToRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}
