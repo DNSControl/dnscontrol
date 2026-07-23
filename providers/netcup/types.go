@@ -78,7 +78,6 @@ func addTailingDot(destination string) string {
 
 func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
 	label := dc.LabelFromShort(r.Hostname)
-	priority, _ := strconv.ParseInt(r.Priority, 10, 16)
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
@@ -86,19 +85,19 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeTXT, r.Destination)
 	case "NS", "ALIAS", "CNAME", "MX":
 		if r.Type == "MX" {
-			rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeMX, priority, addTailingDot(r.Destination))
+			rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeMX, r.Priority, addTailingDot(r.Destination))
 		} else {
 			rc, err = dc.NewRecordConfig(label, 0, r.Type, addTailingDot(r.Destination))
 		}
-	case "SRV":
-		parts := strings.Split(r.Destination, " ")
-		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeSRV, parts[0], parts[1], parts[2], parts[3])
-	case "CAA":
-		parts := strings.Split(r.Destination, " ")
-		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeCAA, parts[0], parts[1], strings.Trim(parts[2], "\""))
-	case "TLSA":
-		parts := strings.Split(r.Destination, " ")
-		rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeTLSA, parts[0], parts[1], parts[2], parts[3])
+	// case "SRV":
+	// 	parts := strings.Split(r.Destination, " ")
+	// 	rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeSRV, parts[0], parts[1], parts[2], parts[3])
+	// case "CAA":
+	// 	parts := strings.Split(r.Destination, " ")
+	// 	rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeCAA, parts[0], parts[1], strings.Trim(parts[2], "\""))
+	// case "TLSA":
+	// 	parts := strings.Split(r.Destination, " ")
+	// 	rc, err = dc.NewRecordConfig(label, 0, dnsv2.TypeTLSA, parts[0], parts[1], parts[2], parts[3])
 	default:
 		rc, err = dc.NewRecordConfigParse(label, 0, r.Type, r.Destination)
 	}
