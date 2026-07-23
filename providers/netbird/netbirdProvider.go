@@ -253,9 +253,9 @@ func (api *netbirdProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
-	var existingRecords []*models.RecordConfig
+	var existingRecords models.Records
 	for _, r := range records {
-		rc, err := nativeToRecordConfig(domain, &r)
+		rc, err := nativeToRecordConfig(dc, &r)
 		if err != nil {
 			return nil, err
 		}
