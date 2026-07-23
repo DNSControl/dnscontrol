@@ -241,10 +241,8 @@ func (a *edgeDNSProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 
 // GetZoneRecords returns an array of RecordConfig structs for a zone.
 func (a *edgeDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
 	ctx := context.Background()
-	records, err := a.getRecords(ctx, domain)
+	records, err := a.getRecords(ctx, dc)
 	if err != nil {
 		return nil, err
 	}

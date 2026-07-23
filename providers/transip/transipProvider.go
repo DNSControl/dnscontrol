@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -265,14 +266,21 @@ func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
 }
 
 func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(entry.Name)
 	var rc *models.RecordConfig
 	var err error
-	rc, err = dc.NewRecordConfigParse(label, uint32(entry.Expire), entry.Type, entry.Content)
+
+	label := dc.LabelFromShort(entry.Name)
+	ttl := uint32(entry.Expire)
+
+	switch rtype := entry.Type; rtype {
+	case "TXT":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeTXT, entry.Content)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, entry.Content)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
 	}
-	rc.Original = entry
 	return rc, nil
 }
 
