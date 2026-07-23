@@ -4,56 +4,45 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // nativeToRecordConfig converts a NetBird record to a dnscontrol RecordConfig.
-func nativeToRecordConfig(domain string, r *Record) (*models.RecordConfig, error) {
+func nativeToRecordConfig(dc *models.DomainConfig, r *Record) (*models.RecordConfig, error) {
 	// NetBird API returns FQDNs, so we need to handle them properly
 	name := r.Name
+	var label string
 
 	// If the name doesn't end with a dot, it might be a FQDN from NetBird
 	// Check if it already contains the domain
 	if len(name) > 0 && name[len(name)-1] != '.' {
 		// Name doesn't end with dot, check if it's already a FQDN
-		if strings.HasSuffix(name, domain) {
-			// FQDN, add the dot
-			name = name + "."
+		if strings.HasSuffix(name, dc.Name) {
+			label = dc.LabelFromFQDNNoDot(name)
 		} else {
-			// short name, use dnsutilv1.AddOrigin
-			name = dnsutilv1.AddOrigin(r.Name, domain)
+			label = dc.LabelFromShort(name)
 		}
 	} else if len(name) > 0 && name[len(name)-1] == '.' {
-		// FQDN, already has the dot, do nothing
+		label = dc.LabelFromFQDNWithDot(name)
 	} else {
-		// Empty name (apex record)
-		name = dnsutilv1.AddOrigin(r.Name, domain)
+		label = dc.LabelFromShort(name)
 	}
 
 	target := r.Content
 	// Make target FQDN for CNAME records
 	if r.Type == "CNAME" {
 		if target == "@" {
-			target = domain
+			target = dc.Name
 		}
 		if target != "" && target[len(target)-1] != '.' {
 			target = target + "."
 		}
 	}
 
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      uint32(r.TTL),
-		Original: r,
+	rc, err := dc.NewRecordConfig(label, uint32(r.TTL), r.Type, target)
+	if err != nil {
+		return nil, err
 	}
-	rc.SetLabelFromFQDN(name, domain)
-
-	switch r.Type {
-	default:
-		if err := rc.SetTarget(target); err != nil {
-			return nil, err
-		}
-	}
+	rc.Original = r
 	return rc, nil
 }
 
