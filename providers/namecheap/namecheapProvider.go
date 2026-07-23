@@ -209,21 +209,20 @@ func (n *namecheapProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	}
 
 	recordModels, err := toRecords(records, dc)
-
 	if err != nil {
 		return nil, err
 	}
 
+	// If there are no SRV records, we're done.
 	if srvRecords == nil {
 		return recordModels, nil
 	}
 
 	srvRecordModels, err := toSRVRecords(srvRecords, dc)
-
 	if err != nil {
 		return nil, err
 	}
-
+	// Append the regular and SRV records and return them together.
 	return append(recordModels, srvRecordModels...), nil
 }
 
@@ -251,6 +250,7 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	}
 	dc.Records = recs
 
+	// TODO(tlim): Convert this to diff2.ByZone().
 	toReport, toCreate, toDelete, toModify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
 		return nil, 0, err
