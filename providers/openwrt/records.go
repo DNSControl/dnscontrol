@@ -121,9 +121,9 @@ func (c *openwrtProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		nativeRecords = append(nativeRecords, section)
 	}
 
-	records := make([]*models.RecordConfig, 0)
+	records := make(models.Records, 0)
 	for _, r := range nativeRecords {
-		rc, err := toRc(domain, r)
+		rc, err := toRc(dc, r)
 		if err != nil {
 			return nil, err
 		}
