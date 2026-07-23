@@ -276,7 +276,15 @@ jobs:
       TENCENTDNS_SECRET_KEY: ${{ secrets.TENCENTDNS_SECRET_KEY }}
 
     concurrency:
-      group: ${{ github.workflow }}-${{ matrix.provider }}
+      # Serialize by PROVIDER across the whole repo: each provider's tests share
+      # one live test zone, so the same provider must never run concurrently on
+      # two branches/runs. The group MUST be a stable literal (not
+      # ${{ github.workflow }}) because when these tests run via workflow_call
+      # (the release "verify" gate) github.workflow resolves to the *caller's*
+      # workflow name, which would put release-triggered and PR-triggered runs
+      # of the same provider in different groups and let them clobber each other.
+      # No github.ref here on purpose: serialization must span branches.
+      group: dnscontrol-integration-test-${{ matrix.provider }}
     strategy:
       fail-fast: false
       matrix:
