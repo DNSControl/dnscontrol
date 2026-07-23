@@ -122,7 +122,7 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 				continue
 			}
 
-			rc, err = newToRecord(domain, newRec)
+			rc, err = newToRecord(dc, newRec)
 			if err != nil {
 				return nil, fmt.Errorf("failed to convert record %s: %w", fqdn, err)
 			}
@@ -135,7 +135,7 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 				continue
 			}
 
-			rc, err = legacyToRecord(domain, legacyRec)
+			rc, err = legacyToRecord(dc, legacyRec)
 			if err != nil {
 				return nil, fmt.Errorf("failed to convert record %s: %w", fqdn, err)
 			}
