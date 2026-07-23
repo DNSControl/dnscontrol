@@ -85,7 +85,7 @@ func TestRecordConfigSetRDATANormalizesTXT(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := &RecordConfig{Type: "TXT", TypeNum: dnsv2.TypeTXT}
 			rc.SetRDATA(dnsrdatav2.TXT{Txt: tt.txt})
-			got := rc.AsTXT().Txt
+			got := rc.GetRDATA().(dnsrdatav2.TXT).Txt
 			if !equalStrings(got, tt.want) {
 				t.Fatalf("SetRDATA stored %#v, want %#v", got, tt.want)
 			}
@@ -149,7 +149,7 @@ func TestRecordConfigSetTargetTXT(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := testTXTRecord(t, tt.value)
-			rd := rc.AsTXT()
+			rd := rc.GetRDATA().(dnsrdatav2.TXT)
 			if !equalStrings(rd.Txt, tt.want) {
 				t.Fatalf("SetTargetTXT stored %#v, want %#v", rd.Txt, tt.want)
 			}
@@ -178,7 +178,7 @@ func TestRecordConfigSetTargetTXTs(t *testing.T) {
 			if err := rc.SetTargetTXTs(tt.txt); err != nil {
 				t.Fatalf("SetTargetTXTs: %v", err)
 			}
-			rd := rc.AsTXT()
+			rd := rc.GetRDATA().(dnsrdatav2.TXT)
 			if !equalStrings(rd.Txt, tt.want) {
 				t.Fatalf("SetTargetTXTs stored %#v, want %#v", rd.Txt, tt.want)
 			}
