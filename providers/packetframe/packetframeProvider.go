@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -181,15 +180,11 @@ func toReq(zoneID string, rc *models.RecordConfig) (*domainRecord, error) {
 		Zone:  zoneID,
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "PTR", "TXT", "CNAME", "NS":
-		req.Value = rc.GetTargetField()
-	case "MX":
-		req.Value = fmt.Sprintf("%d %s", rc.MxPreference, rc.GetTargetField())
-	case "SRV":
-		req.Value = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	switch rc.Type {
+	case "TXT":
+		req.Value = rc.GetTargetTXTJoined()
 	default:
-		return nil, fmt.Errorf("packetframe.toReq rtype %q unimplemented", rc.Type)
+		req.Value = rc.GetRDATA().String()
 	}
 
 	return req, nil
@@ -203,21 +198,11 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 
 	var rc *models.RecordConfig
 	var err error
-	switch rtype := r.Type; rtype { // #rtype_variations
+	switch rtype := r.Type; rtype {
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value)
-	case "SRV":
-		spl := strings.Split(r.Value, " ")
-		prio, _ := strconv.ParseInt(spl[0], 10, 16)
-		weight, _ := strconv.ParseInt(spl[1], 10, 16)
-		port, _ := strconv.ParseInt(spl[2], 10, 16)
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, prio, weight, port, spl[3])
-	case "MX":
-		spl := strings.Split(r.Value, " ")
-		prio, _ := strconv.ParseInt(spl[0], 10, 16)
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, prio, spl[1])
 	default:
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value)
 	}
 	if err != nil {
 		return nil, err
