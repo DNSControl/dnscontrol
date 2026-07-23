@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -33,7 +34,7 @@ func (n *nsone) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) 
 
 	found := models.Records{}
 	for _, r := range z.Records {
-		zrs, err := convert(r, domain)
+		zrs, err := convert(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -179,14 +180,13 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 	return rec
 }
 
-func convert(zr *dns.ZoneRecord, domain string) ([]*models.RecordConfig, error) {
-	found := []*models.RecordConfig{}
+func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error) {
+	found := models.Records{}
 	for _, ans := range zr.ShortAns {
-		rec := &models.RecordConfig{
-			TTL:      uint32(zr.TTL),
-			Original: zr,
-		}
-		rec.SetLabelFromFQDN(zr.Domain, domain)
+		label := dc.LabelFromFQDNNoDot(zr.Domain)
+		ttl := uint32(zr.TTL)
+		var rec *models.RecordConfig
+		var err error
 		switch rtype := zr.Type; rtype {
 		case "DNSKEY", "RRSIG":
 			// if a zone is enabled for DNSSEC, NS1 autoconfigures DNSKEY & RRSIG records.
@@ -194,24 +194,20 @@ func convert(zr *dns.ZoneRecord, domain string) ([]*models.RecordConfig, error) 
 			// 	ie. API returns "405 Operation on DNSSEC record is not allowed" on such operations
 			continue
 		case "ALIAS":
-			rec.Type = rtype
-			if err := rec.SetTarget(ans); err != nil {
-				return nil, fmt.Errorf("unparsable %s record received from ns1: %w", rtype, err)
-			}
+			rec, err = dc.NewRecordConfig(label, ttl, rtype, ans)
 		case "CAA":
 			// dnscontrol expects quotes around multivalue CAA entries, API doesn't add them
 			xAns := strings.SplitN(ans, " ", 3)
-			if err := rec.SetTargetCAAStrings(xAns[0], xAns[1], xAns[2]); err != nil {
-				return nil, fmt.Errorf("unparsable %s record received from ns1: %w", rtype, err)
-			}
+			rec, err = dc.NewRecordConfig(label, ttl, rtype, xAns[0], xAns[1], xAns[2])
 		case "NAPTR":
-			// NB(tlim): This is a stupid hack.  NS1 doesn't quote a missing
-			// parameter properly. Therefore we look for 2 spaces and assume there is
-			// a missing item.
-			ans = strings.ReplaceAll(ans, "  ", ` "" `)
-			if err := rec.PopulateFromString(rtype, ans, domain); err != nil {
-				return nil, fmt.Errorf("unparsable record received from ns1: %w", err)
+			ans, err = ns1NAPTRAnswer(ans)
+			if err != nil {
+				break
 			}
+			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans)
+		case "TXT":
+			// NS1 returns TXT values as plain strings, not RFC1035 quoted presentation.
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, ans)
 		case "REDIRECT":
 			// NS1 returns REDIRECTs as records, but there is only one and dummy answer:
 			// "NS1 MANAGED RECORD"
@@ -221,10 +217,12 @@ func convert(zr *dns.ZoneRecord, domain string) ([]*models.RecordConfig, error) 
 			printer.Warnf("NS1_REDIRECT is NOT supported by dnscontrol and all existing redirects are ignored.\n")
 			continue
 		default:
-			if err := rec.PopulateFromString(rtype, ans, domain); err != nil {
-				return nil, fmt.Errorf("unparsable record received from ns1: %w", err)
-			}
+			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans)
 		}
+		if err != nil {
+			return nil, fmt.Errorf("unparsable %s record received from ns1: %w", zr.Type, err)
+		}
+		rec.Original = zr
 		found = append(found, rec)
 	}
 	return found, nil

@@ -7,7 +7,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namedotcom/go/namecom"
 )
@@ -36,34 +36,44 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 func (n *namedotcomProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
 	checkNSModifications(dc)
 
-	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+	changes, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, d := range del {
-		rec := d.Existing.Original.(*namecom.Record)
-		c := &models.Correction{Msg: d.String(), F: func() error { return n.deleteRecord(rec.ID, dc.Name) }}
-		corrections = append(corrections, c)
-	}
-	for _, cre := range create {
-		rec := cre.Desired
-		c := &models.Correction{Msg: cre.String(), F: func() error { return n.createRecord(rec, dc.Name) }}
-		corrections = append(corrections, c)
-	}
-	for _, chng := range mod {
-		oldRec := chng.Existing.Original.(*namecom.Record)
-		newRec := chng.Desired
-		c := &models.Correction{Msg: chng.String(), F: func() error {
-			err := n.deleteRecord(oldRec.ID, dc.Name)
-			if err != nil {
-				return err
-			}
-			return n.createRecord(newRec, dc.Name)
-		}}
-		corrections = append(corrections, c)
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+		case diff2.CREATE:
+			newRec := change.New[0]
+			corrections = append(corrections, &models.Correction{
+				Msg: change.MsgsJoined,
+				F:   func() error { return n.createRecord(newRec, dc.Name) },
+			})
+		case diff2.DELETE:
+			oldRec := change.Old[0].Original.(*namecom.Record)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.MsgsJoined,
+				F:   func() error { return n.deleteRecord(oldRec.ID, dc.Name) },
+			})
+		case diff2.CHANGE:
+			// name.com has no update API; modify by deleting then recreating.
+			oldRec := change.Old[0].Original.(*namecom.Record)
+			newRec := change.New[0]
+			corrections = append(corrections, &models.Correction{
+				Msg: change.MsgsJoined,
+				F: func() error {
+					if err := n.deleteRecord(oldRec.ID, dc.Name); err != nil {
+						return err
+					}
+					return n.createRecord(newRec, dc.Name)
+				},
+			})
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	return corrections, actualChangeCount, nil
