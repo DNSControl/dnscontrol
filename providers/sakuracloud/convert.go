@@ -32,8 +32,8 @@ func toRc(dc *models.DomainConfig, r domainRecord) (*models.RecordConfig, error)
 }
 
 func toNative(rc *models.RecordConfig) domainRecord {
-	contents := rc.String()
-	contents = strings.ReplaceAll(contents, `"`, ``)
+	contentsOrig := rc.GetRDATA().String()
+	contents := strings.ReplaceAll(contentsOrig, `"`, ``)
 	rr := domainRecord{
 		Name:  rc.GetLabel(),
 		Type:  rc.Type,
@@ -51,7 +51,8 @@ func toNative(rc *models.RecordConfig) domainRecord {
 		// `0 issue "letsencrypt.org"`. The generic quote-stripping above
 		// produces `0 issue letsencrypt.org`, which the API rejects as
 		// malformed.
-		rr.RData = rc.GetRDATA().String()
+		rr.RData = contentsOrig
+		//rr.RData = rc.GetTargetCombined()
 	}
 	return rr
 }
