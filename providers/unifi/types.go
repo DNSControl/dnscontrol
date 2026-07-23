@@ -82,55 +82,50 @@ type siteInfo struct {
 }
 
 // legacyToRecord converts a UniFi legacy API record to a dnscontrol RecordConfig.
-func legacyToRecord(domain string, r *legacyDNSRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.RecordType,
-		Original: r,
-	}
-
+func legacyToRecord(dc *models.DomainConfig, r *legacyDNSRecord) (*models.RecordConfig, error) {
 	// Set TTL (UniFi uses 0 for default, we map to 300)
+	ttl := uint32(300)
 	if r.TTL > 0 {
-		rc.TTL = uint32(r.TTL)
-	} else {
-		rc.TTL = 300
+		ttl = uint32(r.TTL)
 	}
+	label := dc.LabelFromFQDNNoDot(r.Key)
 
-	// Set label from FQDN
-	rc.SetLabelFromFQDN(r.Key, domain)
-
+	var rc *models.RecordConfig
 	var err error
 	switch r.RecordType {
 	case "A", "AAAA":
-		err = rc.SetTarget(r.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Value)
 
 	case "CNAME", "NS":
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, target)
 
 	case "MX":
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTargetMX(uint16(r.Priority), target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Priority, target)
 
 	case "TXT":
-		err = rc.SetTargetTXT(r.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Value)
 
 	case "SRV":
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTargetSRV(uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Priority, r.Weight, r.Port, target)
 
 	default:
 		err = fmt.Errorf("unsupported record type: %s", r.RecordType)
 	}
-
+	if err == nil {
+		rc.Original = r
+	}
 	return rc, err
 }
 
@@ -211,34 +206,30 @@ func getRecordID(rc *models.RecordConfig) string {
 }
 
 // newToRecord converts a UniFi new API record to a dnscontrol RecordConfig.
-func newToRecord(domain string, r *dnsPolicyRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Original: r,
-	}
-
+func newToRecord(dc *models.DomainConfig, r *dnsPolicyRecord) (*models.RecordConfig, error) {
 	// Map new API type to standard type
+	var rtype string
 	switch r.Type {
 	case NewAPITypeA:
-		rc.Type = "A"
+		rtype = "A"
 	case NewAPITypeAAAA:
-		rc.Type = "AAAA"
+		rtype = "AAAA"
 	case NewAPITypeCNAME:
-		rc.Type = "CNAME"
+		rtype = "CNAME"
 	case NewAPITypeMX:
-		rc.Type = "MX"
+		rtype = "MX"
 	case NewAPITypeTXT:
-		rc.Type = "TXT"
+		rtype = "TXT"
 	case NewAPITypeSRV:
-		rc.Type = "SRV"
+		rtype = "SRV"
 	default:
 		return nil, fmt.Errorf("unsupported new API record type: %s", r.Type)
 	}
 
 	// Set TTL (UniFi uses 0 for default, we map to 300)
+	ttl := uint32(300)
 	if r.TTLSeconds > 0 {
-		rc.TTL = uint32(r.TTLSeconds)
-	} else {
-		rc.TTL = 300
+		ttl = uint32(r.TTLSeconds)
 	}
 
 	// Set label from FQDN. For SRV the new API splits the label, so rebuild
@@ -247,41 +238,44 @@ func newToRecord(domain string, r *dnsPolicyRecord) (*models.RecordConfig, error
 	if r.Type == NewAPITypeSRV && r.Service != "" && r.Protocol != "" {
 		fqdn = r.Service + "." + r.Protocol + "." + r.Domain
 	}
-	rc.SetLabelFromFQDN(fqdn, domain)
+	label := dc.LabelFromFQDNNoDot(fqdn)
 
+	var rc *models.RecordConfig
 	var err error
 	switch r.Type {
 	case NewAPITypeA:
-		err = rc.SetTarget(r.IPv4Address)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.IPv4Address)
 
 	case NewAPITypeAAAA:
-		err = rc.SetTarget(r.IPv6Address)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.IPv6Address)
 
 	case NewAPITypeCNAME:
 		target := r.TargetDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTarget(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case NewAPITypeMX:
 		target := r.MailServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTargetMX(uint16(r.Priority), target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, target)
 
 	case NewAPITypeTXT:
-		err = rc.SetTargetTXT(r.Text)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Text)
 
 	case NewAPITypeSRV:
 		target := r.ServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		err = rc.SetTargetSRV(uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Weight, r.Port, target)
 	}
-
+	if err == nil {
+		rc.Original = r
+	}
 	return rc, err
 }
 
