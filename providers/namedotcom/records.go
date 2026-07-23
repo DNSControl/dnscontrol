@@ -9,6 +9,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rcflag"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -100,14 +101,14 @@ func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig,
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "ANAME":
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeALIAS, r.Answer)
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, r.Answer)
+	//case "TXT":
+	//	rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, r.Answer)
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, uint16(r.Priority), r.Answer)
 	case "SRV":
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s.", r.Priority, r.Answer))
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer, rcflag.TxtDontParse)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)

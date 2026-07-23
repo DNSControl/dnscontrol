@@ -333,8 +333,8 @@ func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, 
 		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
 	case "CAA":
 		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeCAA, uint8(r.Flags), r.Tag, target)
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeTXT, target)
+	//case "TXT":
+	//	rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeTXT, target)
 	default:
 		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.Type, target)
 	}
