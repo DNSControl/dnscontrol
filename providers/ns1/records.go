@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -199,11 +200,14 @@ func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error
 			xAns := strings.SplitN(ans, " ", 3)
 			rec, err = dc.NewRecordConfig(label, ttl, rtype, xAns[0], xAns[1], xAns[2])
 		case "NAPTR":
-			// NB(tlim): This is a stupid hack.  NS1 doesn't quote a missing
-			// parameter properly. Therefore we look for 2 spaces and assume there is
-			// a missing item.
-			ans = strings.ReplaceAll(ans, "  ", ` "" `)
+			ans, err = ns1NAPTRAnswer(ans)
+			if err != nil {
+				break
+			}
 			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans)
+		case "TXT":
+			// NS1 returns TXT values as plain strings, not RFC1035 quoted presentation.
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, ans)
 		case "REDIRECT":
 			// NS1 returns REDIRECTs as records, but there is only one and dummy answer:
 			// "NS1 MANAGED RECORD"
