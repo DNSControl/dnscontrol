@@ -411,6 +411,7 @@
   "UNIFI": {
     "TYPE": "UNIFI",
     "api_key": "$UNIFI_API_KEY",
+    "console_id": "$UNIFI_CONSOLE_ID",
     "domain": "$UNIFI_DOMAIN",
     "host": "$UNIFI_HOST",
     "knownFailures": "26,43",
