@@ -9,13 +9,13 @@ import (
 	"strconv"
 	"strings"
 
-	egoscale "github.com/exoscale/egoscale/v3"
-	"github.com/exoscale/egoscale/v3/credentials"
-
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	egoscale "github.com/exoscale/egoscale/v3"
+	"github.com/exoscale/egoscale/v3/credentials"
 )
 
 type exoscaleProvider struct {
@@ -152,10 +152,7 @@ func nativeToRecord(record *egoscale.DNSDomainRecord, dc *models.DomainConfig) (
 		return nil, nil
 	}
 
-	var ttl uint32
-	if record.Ttl != 0 {
-		ttl = uint32(record.Ttl)
-	}
+	ttl := uint32(record.Ttl)
 
 	var recordConfig *models.RecordConfig
 	var err error
@@ -233,10 +230,7 @@ func (provider *exoscaleProvider) createRecordFunc(
 
 		if recordConfig.Type == "MX" {
 			target = recordConfig.GetTargetField()
-
-			if recordConfig.MxPreference != 0 {
-				prio = int64(recordConfig.MxPreference)
-			}
+			prio = int64(recordConfig.MxPreference)
 		}
 
 		if recordConfig.Type == "SRV" {
@@ -261,9 +255,7 @@ func (provider *exoscaleProvider) createRecordFunc(
 			Priority: prio,
 		}
 
-		if recordConfig.TTL != 0 {
-			record.Ttl = int64(recordConfig.TTL)
-		}
+		record.Ttl = int64(recordConfig.TTL)
 
 		ctx := context.Background()
 		op, err := provider.client.CreateDNSDomainRecord(ctx, domainID, record)
@@ -294,41 +286,34 @@ func (provider *exoscaleProvider) deleteRecordFunc(recordID, domainID egoscale.U
 // Returns a function that can be invoked to update a record in a zone.
 func (provider *exoscaleProvider) updateRecordFunc(
 	record *egoscale.DNSDomainRecord,
-	recordConfig *models.RecordConfig,
+	rc *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetRDATA().String()
-		name := recordConfig.GetLabel()
+		name := rc.GetLabel()
 
-		if recordConfig.Type == "MX" {
-			target = recordConfig.GetTargetField()
-
-			if recordConfig.MxPreference != 0 {
-				record.Priority = int64(recordConfig.MxPreference)
-			}
+		var target string
+		switch rc.Type {
+		case "MX":
+			mx := rc.GetRDATA().(dnsrdatav2.MX)
+			target = mx.Mx
+			record.Priority = int64(mx.Preference)
+		case "SRV":
+			// API wants priority as separate argument. The target contains the weight, port, target.
+			srv := rc.GetRDATA().(dnsrdatav2.SRV)
+			target = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, srv.Target)
+			record.Priority = int64(srv.Priority)
+		default:
+			target = rc.GetRDATA().String()
 		}
 
-		if recordConfig.Type == "SRV" {
-			// API wants priority as separate argument, here we will strip it from combined target.
-			sp := strings.Split(target, " ")
-			target = strings.Join(sp[1:], " ")
-			p, err := strconv.ParseInt(sp[0], 10, 64)
-			if err != nil {
-				return err
-			}
-			record.Priority = p
-		}
-
-		if recordConfig.Type == "NS" && (name == "@" || name == "") {
+		if rc.Type == "NS" && (name == "@" || name == "") {
 			name = "*"
 		}
 
 		record.Name = name
-		record.Type = egoscale.DNSDomainRecordType(recordConfig.Type)
+		record.Type = egoscale.DNSDomainRecordType(rc.Type)
 		record.Content = target
-		if recordConfig.TTL != 0 {
-			record.Ttl = int64(recordConfig.TTL)
-		}
+		record.Ttl = int64(rc.TTL)
 
 		ctx := context.Background()
 		op, err := provider.client.UpdateDNSDomainRecord(ctx, domainID, record.ID, egoscale.UpdateDNSDomainRecordRequest{
