@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
@@ -23,17 +24,6 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
 	}
 
-	val := *r.Value
-	switch *r.Type {
-	case "A", "AAAA", "CNAME", "NS", "PTR", "TXT", "CAA", "SRV":
-	case "MX":
-		if r.MX != nil {
-			val = fmt.Sprintf("%d %s", *r.MX, *r.Value)
-		}
-	default:
-		return nil, fmt.Errorf("unsupported record type: %s", *r.Type)
-	}
-
 	// DNSPod does not have a native ALIAS record type. DNSControl uses
 	// ALIAS("@") to model apex CNAME flattening, which DNSPod represents
 	// as a CNAME record at "@".
@@ -45,13 +35,17 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 
 	var rc *models.RecordConfig
 	var err error
+	val := *r.Value
 	switch rtype {
-	case "TXT":
-		var txt string
-		txt, err = txtutil.ParseQuoted(val)
-		if err == nil {
-			rc, err = dc.NewRecordConfig(label, ttl, rtype, txt)
+	case "MX":
+		p := uint64(0)
+		if r.MX != nil {
+			p = *r.MX
 		}
+		fmt.Printf("DEBUG TENCENT: mx=%v p=%v v=%q\n", *r.MX, p, val)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
 	case "ALIAS":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
 	default:
@@ -115,9 +109,6 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	}
 
 	val := rc.GetRDATA().String()
-	if rc.Type == "TXT" {
-		val = txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
-	}
 	if rc.Type == "MX" {
 		val = rc.GetTargetField()
 		req.MX = new(uint64(rc.MxPreference))
