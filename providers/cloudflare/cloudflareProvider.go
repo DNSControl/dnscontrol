@@ -966,12 +966,12 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 			target += "."
 		}
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target)
-	case "TXT":
-		s, serr := parseCfTxtContent(cr.Content)
-		if serr != nil {
-			return rc, err
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, s)
+	// case "TXT":
+	// 	s, serr := parseCfTxtContent(cr.Content)
+	// 	if serr != nil {
+	// 		return rc, err
+	// 	}
+	// 	rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, s)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
 	}

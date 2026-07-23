@@ -180,9 +180,9 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 	case "MX":
 		prio = fmt.Sprintf(" %d ", rec.MxPreference)
 	case "TXT":
-		content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+		content = rec.GetRDATA().String()
 	case "DS":
-		content = fmt.Sprintf("%d %d %d %s", rec.DsKeyTag, rec.DsAlgorithm, rec.DsDigestType, rec.DsDigest)
+		content = rec.GetRDATA().String()
 	}
 	if msg == "" {
 		msg = fmt.Sprintf("CREATE record: %s %s %d%s %s", rec.GetLabel(), rec.Type, rec.TTL, prio, content)

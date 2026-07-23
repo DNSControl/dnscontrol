@@ -9,6 +9,8 @@ import (
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rcflag"
+	dnsv1 "github.com/miekg/dns"
 	"golang.org/x/net/idna"
 )
 
@@ -27,6 +29,17 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		return nil, err
 	}
 
+	args, rcflags := rcflag.ProcessForNewRecordConfig(args)
+	// Called as: rc, err := NewRecordConfig(l, t, ty, content, rcflag.SrvWeirdSplit{})
+	// This means for SRV records, expect args[0].(string) is priority and args[1].(string) is "weight port target".
+	// We assume no quoting/escaping and just use strings.Fields()
+	if typeNum == dnsv2.TypeTXT && len(args) == 2 && rcflags.SrvWeirdSplit {
+		parts := strings.Fields(args[1].(string))
+		if len(parts) == 3 {
+			return dc.NewRecordConfig(name, ttl, dnsv1.TypeTXT, args[0], parts[0], parts[1], parts[2])
+		}
+	}
+
 	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
 	if !ok {
 		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
@@ -43,11 +56,19 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 
 // NewRecordConfigParse is like NewRecordConfig but the fields of the record
 // come from parsing data which is assumed to be in RFC1038 Zonefile format.
-func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string) (*RecordConfig, error) {
+func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string, rcflagList ...any) (*RecordConfig, error) {
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {
 		return nil, err
 	}
+
+	rcflags := rcflag.ProcessForNewRecordConfigParse(rcflagList)
+	// Called as: rc, err := NewRecordConfigParse(l, t, ty, content, rcflag.TxtIsRawBytes{})
+	// This means for TXT records, act as if NewRecordConfig was used.
+	if typeNum == dnsv2.TypeTXT && rcflags.TxtDontParse {
+		return dc.NewRecordConfig(name, ttl, dnsv1.TypeTXT, data)
+	}
+
 	rd, err := MyNewData(typeNum, data, dc.Name)
 	if err != nil {
 		return nil, err
