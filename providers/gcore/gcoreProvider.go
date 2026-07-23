@@ -103,13 +103,13 @@ func (c *gcoreProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 func (c *gcoreProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	zone, err := c.provider.Zone(c.ctx, domain)
+	_, err := c.provider.Zone(c.ctx, domain)
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert RRsets to DNSControl format on the fly
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 
 	// We cannot directly use Zone's ShortAnswers, they aren't complete for CAA & SRV
 
@@ -119,7 +119,7 @@ func (c *gcoreProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	}
 
 	for _, rec := range rrsets.RRSets {
-		nativeRecords, err := nativeToRecords(rec, zone.Name)
+		nativeRecords, err := nativeToRecords(rec, dc)
 		if err != nil {
 			return nil, err
 		}
