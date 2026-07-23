@@ -198,11 +198,7 @@ func (api *jokerProvider) parseZoneRecords(domain, zoneData string) (models.Reco
 						}
 					}
 				}
-
-				var caaFlag string
-				caaFlag = flags
-
-				rc, err = dc.NewRecordConfig(label, ttl, recordType, caaFlag, tag, value)
+				rc, err = dc.NewRecordConfig(label, ttl, recordType, flags, tag, value)
 			}
 		case "NAPTR":
 			var order, preference string
