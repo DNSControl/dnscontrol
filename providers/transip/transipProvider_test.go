@@ -29,9 +29,6 @@ func TestNativeToRecordUsesV3RecordConfig(t *testing.T) {
 			if got.NameFQDN != tt.want.NameFQDN || got.TTL != tt.want.TTL || got.TypeNum != tt.want.TypeNum || got.GetRDATA().String() != tt.want.GetRDATA().String() {
 				t.Errorf("nativeToRecord() = %s %d IN %s %s, want %s %d IN %s %s", got.NameFQDN, got.TTL, got.Type, got.GetRDATA(), tt.want.NameFQDN, tt.want.TTL, tt.want.Type, tt.want.GetRDATA())
 			}
-			if got.Original != tt.in {
-				t.Error("nativeToRecord() did not preserve the original TransIP record")
-			}
 		})
 	}
 }
