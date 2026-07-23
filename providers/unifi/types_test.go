@@ -8,6 +8,8 @@ import (
 
 const testDomain = "example.com"
 
+var testDC = models.MustNewDomainConfig(testDomain)
+
 func TestLegacyToRecord(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -93,7 +95,7 @@ func TestLegacyToRecord(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := legacyToRecord(testDomain, tt.in)
+			rc, err := legacyToRecord(testDC, tt.in)
 			if err != nil {
 				t.Fatalf("legacyToRecord() unexpected error: %v", err)
 			}
@@ -125,7 +127,7 @@ func TestLegacyToRecord(t *testing.T) {
 }
 
 func TestLegacyToRecordUnsupported(t *testing.T) {
-	_, err := legacyToRecord(testDomain, &legacyDNSRecord{Key: "example.com", RecordType: "CAA", Value: "0 issue \"ca.example.net\""})
+	_, err := legacyToRecord(testDC, &legacyDNSRecord{Key: "example.com", RecordType: "CAA", Value: "0 issue \"ca.example.net\""})
 	if err == nil {
 		t.Fatal("expected error for unsupported record type, got nil")
 	}
@@ -208,7 +210,7 @@ func TestNewToRecord(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := newToRecord(testDomain, tt.in)
+			rc, err := newToRecord(testDC, tt.in)
 			if err != nil {
 				t.Fatalf("newToRecord() unexpected error: %v", err)
 			}
@@ -239,7 +241,7 @@ func TestNewToRecord(t *testing.T) {
 }
 
 func TestNewToRecordUnsupported(t *testing.T) {
-	_, err := newToRecord(testDomain, &dnsPolicyRecord{Type: "CAA_RECORD", Domain: "example.com"})
+	_, err := newToRecord(testDC, &dnsPolicyRecord{Type: "CAA_RECORD", Domain: "example.com"})
 	if err == nil {
 		t.Fatal("expected error for unsupported new API record type, got nil")
 	}
@@ -302,7 +304,7 @@ func TestRecordToLegacyMap(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := legacyToRecord(testDomain, tt.in)
+			rc, err := legacyToRecord(testDC, tt.in)
 			if err != nil {
 				t.Fatalf("legacyToRecord() error: %v", err)
 			}
@@ -319,7 +321,7 @@ func TestRecordToLegacyMap(t *testing.T) {
 }
 
 func TestRecordToLegacyMapUnsupported(t *testing.T) {
-	_, err := recordToLegacyMap(&models.RecordConfig{Type: "CAA"})
+	_, err := recordToLegacyMap(recordWithType("CAA"))
 	if err == nil {
 		t.Fatal("expected error for unsupported record type, got nil")
 	}
@@ -382,7 +384,7 @@ func TestRecordToNew(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := newToRecord(testDomain, tt.in)
+			rc, err := newToRecord(testDC, tt.in)
 			if err != nil {
 				t.Fatalf("newToRecord() error: %v", err)
 			}
@@ -399,30 +401,42 @@ func TestRecordToNew(t *testing.T) {
 }
 
 func TestRecordToNewUnsupported(t *testing.T) {
-	_, err := recordToNew(&models.RecordConfig{Type: "CAA"})
+	_, err := recordToNew(recordWithType("CAA"))
 	if err == nil {
 		t.Fatal("expected error for unsupported record type, got nil")
 	}
 }
 
 func TestGetRecordID(t *testing.T) {
-	legacy := &models.RecordConfig{Original: &legacyDNSRecord{ID: "legacy-123"}}
+	legacy := recordWithOriginal(&legacyDNSRecord{ID: "legacy-123"})
 	if got := getRecordID(legacy); got != "legacy-123" {
 		t.Errorf("getRecordID(legacy) = %q, want %q", got, "legacy-123")
 	}
 
-	newRec := &models.RecordConfig{Original: &dnsPolicyRecord{ID: "new-456"}}
+	newRec := recordWithOriginal(&dnsPolicyRecord{ID: "new-456"})
 	if got := getRecordID(newRec); got != "new-456" {
 		t.Errorf("getRecordID(new) = %q, want %q", got, "new-456")
 	}
 
-	if got := getRecordID(&models.RecordConfig{}); got != "" {
+	if got := getRecordID(new(models.RecordConfig)); got != "" {
 		t.Errorf("getRecordID(nil Original) = %q, want empty", got)
 	}
 
-	if got := getRecordID(&models.RecordConfig{Original: "not-a-record"}); got != "" {
+	if got := getRecordID(recordWithOriginal("not-a-record")); got != "" {
 		t.Errorf("getRecordID(unknown Original) = %q, want empty", got)
 	}
+}
+
+func recordWithType(rtype string) *models.RecordConfig {
+	rc := new(models.RecordConfig)
+	rc.Type = rtype
+	return rc
+}
+
+func recordWithOriginal(original any) *models.RecordConfig {
+	rc := new(models.RecordConfig)
+	rc.Original = original
+	return rc
 }
 
 func wantMapKV(t *testing.T, m map[string]any, key string, want any) {

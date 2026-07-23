@@ -5,6 +5,7 @@ import (
 	"net/netip"
 	"strconv"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -57,62 +58,53 @@ func (r *nativeRecord) getDomain() (string, error) {
 	return recDomain, nil
 }
 
-func toRc(domain string, r nativeRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      300,
-		Original: r,
-	}
-
+func toRc(dc *models.DomainConfig, r nativeRecord) (*models.RecordConfig, error) {
 	recDomain, _ := r.getDomain()
-	rc.SetLabelFromFQDN(recDomain, domain)
+	label := dc.LabelFromFQDNNoDot(recDomain)
+	var rc *models.RecordConfig
+	var err error
 
 	switch r.Type {
 	case "domain":
-		addr, err := netip.ParseAddr(r.IP)
-		if err != nil {
-			return nil, err
+		addr, parseErr := netip.ParseAddr(r.IP)
+		if parseErr != nil {
+			return nil, parseErr
 		}
-
-		rc.SetTargetIP(addr)
 		switch {
 		case addr.Is4():
-			rc.Type = "A"
+			rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeA, addr)
 		case addr.Is6():
-			rc.Type = "AAAA"
+			rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeAAAA, addr)
 		}
 
 	case "cname":
-		rc.Type = "CNAME"
-		rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeCNAME, r.Target)
 
 	case "mxhost":
-		rc.Type = "MX"
-		pref, err := strconv.ParseUint(r.Pref, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Pref, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		rc.SetTargetMX(uint16(pref), r.Relay)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeMX, r.Pref, r.Relay)
 
 	case "srvhost":
-		rc.Type = "SRV"
-		priority, err := strconv.ParseUint(r.Priority, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Priority, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		weight, err := strconv.ParseUint(r.Weight, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Weight, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		port, err := strconv.ParseUint(r.Port, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Port, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), r.Target)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Target)
 
 	default:
 		return nil, fmt.Errorf("unhandled record type: %s", r.Type)
 	}
-
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
 	return rc, nil
 }
 
