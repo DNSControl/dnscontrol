@@ -9,7 +9,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/miekg/dns/dnsutil"
 )
 
 // infomaniakProvider is the handle for operations.
@@ -71,101 +70,86 @@ func addTrailingDot(target string) string {
 }
 
 // toRecordConfig converts a DNS record from Infomaniak API to RecordConfig.
-func toRecordConfig(domain string, r dnsRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-
+func toRecordConfig(dc *models.DomainConfig, r dnsRecord) (*models.RecordConfig, error) {
 	// Handle the source/label - Infomaniak uses empty string or "." for apex
 	label := r.Source
 	if label == "" || label == "." {
 		label = "@"
 	}
-	rc.SetLabel(label, domain)
-
 	// Parse the target based on record type
 	rtype := r.Type
 	target := r.Target
+	ttl := uint32(r.TTL)
 
+	var rc *models.RecordConfig
 	var err error
 	switch rtype {
 	case "A", "AAAA":
-		rc.Type = rtype
-		err = rc.SetTarget(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "CNAME", "NS", "DNAME":
-		rc.Type = rtype
-		// Add trailing dot and use AddOrigin to properly qualify the target
-		err = rc.SetTarget(dnsutil.AddOrigin(addTrailingDot(target), domain))
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, addTrailingDot(target))
 
 	case "MX":
 		// Infomaniak returns MX as "priority target" (e.g., "5 mta-gw.infomaniak.ch")
-		rc.Type = rtype
-		err = rc.SetTargetMXString(addTrailingDot(target))
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, addTrailingDot(target))
 
 	case "TXT":
-		rc.Type = rtype
 		// Infomaniak API returns TXT values wrapped in quotes, strip them
 		if len(target) >= 2 && strings.HasPrefix(target, "\"") && strings.HasSuffix(target, "\"") {
 			target = target[1 : len(target)-1]
 		}
-		err = rc.SetTargetTXT(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "SRV":
 		// Infomaniak returns SRV as "priority weight port target"
-		rc.Type = rtype
-		err = rc.SetTargetSRVString(addTrailingDot(target))
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, addTrailingDot(target))
 
 	case "CAA":
 		// Infomaniak returns CAA as "flags tag value" (e.g., "0 issue letsencrypt.org")
-		rc.Type = rtype
-		err = rc.SetTargetCAAString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "DS":
 		// Infomaniak returns DS as "keytag algorithm digesttype digest"
 		// Note: Infomaniak may split long digest data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 4 {
 			// Rejoin all parts after the first 3 (keytag, algorithm, digesttype) as the digest
 			digest := strings.Join(parts[3:], "")
 			target = fmt.Sprintf("%s %s %s %s", parts[0], parts[1], parts[2], digest)
 		}
-		err = rc.SetTargetDSString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "SSHFP":
 		// Infomaniak returns SSHFP as "algorithm fingerprint_type fingerprint"
 		// Note: Infomaniak may split long fingerprint data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 3 {
 			// Rejoin all parts after the first 2 (algorithm, fingerprint_type) as the fingerprint
 			fingerprint := strings.Join(parts[2:], "")
 			target = fmt.Sprintf("%s %s %s", parts[0], parts[1], fingerprint)
 		}
-		err = rc.SetTargetSSHFPString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "TLSA":
 		// Infomaniak returns TLSA as "usage selector matching_type certificate"
 		// Note: Infomaniak may split long certificate data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 4 {
 			// Rejoin all parts after the first 3 (usage, selector, matching_type) as the certificate
 			certificate := strings.Join(parts[3:], "")
 			target = fmt.Sprintf("%s %s %s %s", parts[0], parts[1], parts[2], certificate)
 		}
-		err = rc.SetTargetTLSAString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	default:
-		rc.Type = rtype
-		err = rc.SetTarget(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 	}
 
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record type=%q target=%q received from Infomaniak: %w", rtype, target, err)
 	}
+	rc.Original = r
 
 	return rc, nil
 }
@@ -287,7 +271,7 @@ func (p *infomaniakProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	cleanRecords := make(models.Records, 0, len(records))
 
 	for _, r := range records {
-		recConfig, err := toRecordConfig(domain, r)
+		recConfig, err := toRecordConfig(dc, r)
 		if err != nil {
 			return nil, err
 		}
