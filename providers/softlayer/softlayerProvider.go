@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -76,7 +77,7 @@ func (s *softlayerProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
-	actual, err := s.getExistingRecords(domain)
+	actual, err := s.getExistingRecords(dc, domain.ResourceRecords)
 	if err != nil {
 		return nil, err
 	}
@@ -144,37 +145,32 @@ func (s *softlayerProvider) getDomain(name *string) (*datatypes.Dns_Domain, erro
 	return &domains[0], nil
 }
 
-func (s *softlayerProvider) getExistingRecords(domain *datatypes.Dns_Domain) (models.Records, error) {
-	actual := []*models.RecordConfig{}
+func (s *softlayerProvider) getExistingRecords(dc *models.DomainConfig, resourceRecords []datatypes.Dns_Domain_ResourceRecord) (models.Records, error) {
+	actual := models.Records{}
 
-	for _, record := range domain.ResourceRecords {
+	for _, record := range resourceRecords {
 		recType := strings.ToUpper(*record.Type)
 
 		if recType == "SOA" {
 			continue
 		}
 
-		recConfig := &models.RecordConfig{
-			Type:     recType,
-			TTL:      uint32(*record.Ttl),
-			Original: record,
-		}
-		if err := recConfig.SetTarget(*record.Data); err != nil {
-			return nil, err
-		}
-
+		ttl := uint32(*record.Ttl)
+		label := dc.LabelFromShort(*record.Host)
+		var recConfig *models.RecordConfig
+		var err error
 		switch recType {
 		case "SRV":
 			service, protocol := "", "_tcp"
-
+			weight, port, priority := 0, 0, 0
 			if record.Weight != nil {
-				recConfig.SrvWeight = uint16(*record.Weight)
+				weight = *record.Weight
 			}
 			if record.Port != nil {
-				recConfig.SrvPort = uint16(*record.Port)
+				port = *record.Port
 			}
 			if record.Priority != nil {
-				recConfig.SrvPriority = uint16(*record.Priority)
+				priority = *record.Priority
 			}
 			if record.Protocol != nil {
 				protocol = *record.Protocol
@@ -182,23 +178,23 @@ func (s *softlayerProvider) getExistingRecords(domain *datatypes.Dns_Domain) (mo
 			if record.Service != nil {
 				service = *record.Service
 			}
-			recConfig.SetLabel(fmt.Sprintf("%s.%s", service, strings.ToLower(protocol)), *domain.Name)
+			label = dc.LabelFromShort(fmt.Sprintf("%s.%s", service, strings.ToLower(protocol)))
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, weight, port, *record.Data)
 		case "TXT":
-			// OLD: recConfig.TxtStrings = append(recConfig.TxtStrings, *record.Data)
-			if err := recConfig.SetTargetTXTs(append(recConfig.GetTargetTXTSegmented(), *record.Data)); err != nil {
-				return nil, err
-			}
-			// NB(tlim) The above code seems too complex.  Can it be simplied to this?
-			// recConfig.SetTargetTXT(*record.Data)
-			fallthrough
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, *record.Data)
 		case "MX":
+			preference := 0
 			if record.MxPriority != nil {
-				recConfig.MxPreference = uint16(*record.MxPriority)
+				preference = *record.MxPriority
 			}
-			fallthrough
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, preference, *record.Data)
 		default:
-			recConfig.SetLabel(*record.Host, *domain.Name)
+			recConfig, err = dc.NewRecordConfig(label, ttl, recType, *record.Data)
 		}
+		if err != nil {
+			return nil, err
+		}
+		recConfig.Original = record
 
 		actual = append(actual, recConfig)
 	}
