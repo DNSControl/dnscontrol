@@ -17,7 +17,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/edgegrid"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/session"
@@ -225,7 +225,7 @@ func (a *edgeDNSProvider) rcToRs(records []*models.RecordConfig) (*dns.RecordBod
 		if r.Type == "AKAMAITLC" {
 			akaRecord.Target = append(akaRecord.Target, r.AnswerType+" "+r.GetTargetField())
 		} else {
-			akaRecord.Target = append(akaRecord.Target, r.GetTargetCombined())
+			akaRecord.Target = append(akaRecord.Target, r.GetRDATA().String())
 		}
 	}
 
@@ -303,7 +303,8 @@ func (a *edgeDNSProvider) deleteRecordset(ctx context.Context, records []*models
 */
 
 // getRecords returns all RecordConfig records in the zone.
-func (a *edgeDNSProvider) getRecords(ctx context.Context, zonename string) ([]*models.RecordConfig, error) {
+func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+	zonename := dc.Name
 	queryArgs := dns.RecordSetQueryArgs{ShowAll: true}
 
 	rsetResp, err := a.client.GetRecordSets(ctx, dns.GetRecordSetsRequest{
@@ -322,6 +323,7 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, zonename string) ([]*m
 		akaname := akarecset.Name
 		akatype := akarecset.Type
 		akattl := akarecset.TTL
+		label := dc.LabelFromFQDNNoDot(akaname)
 
 		// Don't report the existence of an SOA record (because DnsControl will try to delete the SOA record).
 		if akatype == "SOA" {
@@ -335,10 +337,8 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, zonename string) ([]*m
 			if len(parts) != 2 {
 				return nil, fmt.Errorf("AKAMAITLC rdata must contain 2 fields, got: %v", akarecset.Rdata)
 			}
-			rc := &models.RecordConfig{Type: akatype, TTL: uint32(akattl)}
-			rc.SetLabelFromFQDN(akaname, zonename)
-			rc.AnswerType = parts[0]
-			if err = rc.SetTarget(parts[1]); err != nil {
+			rc, err := dc.NewRecordConfig(label, uint32(akattl), privatetypes.TypeAKAMAITLC, parts[0], parts[1])
+			if err != nil {
 				return nil, err
 			}
 			rc.Metadata = map[string]string{"akamai_raw_rdata": combined}
@@ -348,20 +348,11 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, zonename string) ([]*m
 
 		// ... convert the recordset into 1 or more RecordConfig structs
 		for _, r := range akarecset.Rdata {
-			rc := &models.RecordConfig{
-				Type: akatype,
-				TTL:  uint32(akattl),
+			data := r
+			if akatype == "LOC" {
+				data = fixLocAltitude(r)
 			}
-			rc.SetLabelFromFQDN(akaname, zonename)
-
-			switch akatype {
-			case "TXT":
-				err = rc.PopulateFromStringFunc(akatype, r, zonename, txtutil.ParseQuoted)
-			case "LOC":
-				err = rc.PopulateFromString(akatype, fixLocAltitude(r), zonename)
-			default:
-				err = rc.PopulateFromString(akatype, r, zonename)
-			}
+			rc, err := dc.NewRecordConfigParse(label, uint32(akattl), akatype, data)
 			if err != nil {
 				return nil, err
 			}
