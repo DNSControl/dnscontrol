@@ -4,6 +4,8 @@ package privatetypes
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	dnsv2 "codeberg.org/miekg/dns"
 )
@@ -69,6 +71,11 @@ func RegisterMaker(codepoint uint16, makeFn MakerRn) {
 		panic(fmt.Sprintf("TypeToMakeRDATA[%d] a.k.a. %s already in use by %T", codepoint, typeName, s))
 	}
 	TypeToMakeRDATA[codepoint] = makeFn
+}
+
+// AllTypes returns a sorted list of all type names.
+func GetAllTypeNames() []string {
+	return slices.Sorted(maps.Keys(dnsv2.StringToType))
 }
 
 // IsPrivateType returns true if the codepoint is for a private type.
