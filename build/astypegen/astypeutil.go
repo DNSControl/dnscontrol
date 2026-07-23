@@ -48,7 +48,7 @@ func StructName(rd any) (name, pkgPath string) {
 }
 
 // Namespace maps an RDATA struct's package import path.
-// Possible return values are ("privatetypesrdata", true), ("dnsrdatav2", true), or ("", false)
+// Possible return values are ("privatetypesrdata", true), ("dnsrdatav2", true), or ("", false).
 func Namespace(pkgPath string) (alias string, ok bool) {
 	switch {
 	case strings.HasSuffix(pkgPath, "/pkg/privatetypes/rdata"):

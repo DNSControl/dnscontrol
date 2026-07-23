@@ -73,7 +73,7 @@ func RegisterMaker(codepoint uint16, makeFn MakerRn) {
 	TypeToMakeRDATA[codepoint] = makeFn
 }
 
-// AllTypes returns a sorted list of all type names.
+// GetAllTypeNames returns a sorted list of all type names.
 func GetAllTypeNames() []string {
 	return slices.Sorted(maps.Keys(dnsv2.StringToType))
 }
