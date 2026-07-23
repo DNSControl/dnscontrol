@@ -213,23 +213,21 @@ func (o *oracleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 				continue
 			}
 
-			rc := &models.RecordConfig{
-				Type:     *record.Rtype,
-				TTL:      uint32(*record.Ttl),
-				Original: record,
-			}
-			rc.SetLabelFromFQDN(*record.Domain, zone)
+			label := dc.LabelFromFQDNNoDot(*record.Domain)
+			ttl := uint32(*record.Ttl)
+			var rc *models.RecordConfig
 
-			switch rc.Type {
+			switch *record.Rtype {
 			case "ALIAS":
-				err = rc.SetTarget(*record.Rdata)
+				rc, err = dc.NewRecordConfig(label, ttl, *record.Rtype, *record.Rdata)
 			default:
-				err = rc.PopulateFromString(*record.Rtype, *record.Rdata, zone)
+				rc, err = dc.NewRecordConfigParse(label, ttl, *record.Rtype, *record.Rdata)
 			}
 
 			if err != nil {
 				return nil, err
 			}
+			rc.Original = record
 
 			records = append(records, rc)
 		}
@@ -356,7 +354,7 @@ func convertToRecordOperation(rec *models.RecordConfig, op dns.RecordOperationOp
 
 	fqdn := rec.GetLabelFQDN()
 	rtype := rec.Type
-	rdata := rec.GetTargetCombined()
+	rdata := rec.GetRDATA().String()
 	ttl := int(rec.TTL)
 
 	return dns.RecordOperation{
