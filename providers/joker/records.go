@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
@@ -79,6 +80,10 @@ func parseZoneLine(line string) []string {
 // parseZoneRecords parses Joker zone format into RecordConfig format.
 func (api *jokerProvider) parseZoneRecords(domain, zoneData string) (models.Records, error) {
 	var records models.Records
+	dc, err := models.NewDomainConfig(domain)
+	if err != nil {
+		return nil, err
+	}
 
 	lines := strings.SplitSeq(strings.TrimSpace(zoneData), "\n")
 	for line := range lines {
@@ -130,93 +135,50 @@ func (api *jokerProvider) parseZoneRecords(domain, zoneData string) (models.Reco
 			}
 		}
 
-		// Convert @ to empty string for root domain
-		if label == "@" {
-			label = ""
-		}
-
-		rc := &models.RecordConfig{
-			TTL: ttl,
-		}
-
-		// Set the label and domain correctly
-		rc.SetLabel(label, domain)
-
 		// Handle different record types
+		var rc *models.RecordConfig
+		var err error
 		switch recordType {
 		case "A", "AAAA":
-			rc.Type = recordType
-			if err := rc.SetTarget(target); err != nil {
-				continue
-			}
-		case "CNAME":
-			rc.Type = recordType
+			rc, err = dc.NewRecordConfig(label, ttl, recordType, target)
+		case "CNAME", "NS":
 			// Ensure CNAME targets are fully qualified
 			if !strings.HasSuffix(target, ".") {
 				target = target + "."
 			}
-			if err := rc.SetTarget(target); err != nil {
-				continue
-			}
-		case "NS":
-			rc.Type = recordType
-			// Ensure NS targets are fully qualified
-			if !strings.HasSuffix(target, ".") {
-				target = target + "."
-			}
-			if err := rc.SetTarget(target); err != nil {
-				continue
-			}
+			rc, err = dc.NewRecordConfig(label, ttl, recordType, target)
 		case "TXT":
-			rc.Type = recordType
 			// TXT target is already extracted without quotes in the parsing above
-			if err := rc.SetTarget(target); err != nil {
-				continue
-			}
+			rc, err = dc.NewRecordConfig(label, ttl, recordType, target)
 		case "MX":
-			rc.Type = recordType
-			if prio, err := strconv.ParseUint(priority, 10, 16); err == nil {
-				rc.MxPreference = uint16(prio)
-			}
 			// Ensure MX targets are fully qualified
 			if !strings.HasSuffix(target, ".") {
 				target = target + "."
 			}
-			if err := rc.SetTarget(target); err != nil {
-				continue
-			}
+			rc, err = dc.NewRecordConfig(label, ttl, recordType, priority, target)
 		case "SRV":
-			rc.Type = recordType
+			var srvPriority, srvWeight, srvPort string
 			// SRV format: priority/weight target:port
 			if strings.Contains(priority, "/") {
 				priorityParts := strings.Split(priority, "/")
 				if len(priorityParts) == 2 {
-					if prio, err := strconv.ParseUint(priorityParts[0], 10, 16); err == nil {
-						rc.SrvPriority = uint16(prio)
-					}
-					if weight, err := strconv.ParseUint(priorityParts[1], 10, 16); err == nil {
-						rc.SrvWeight = uint16(weight)
-					}
+					srvPriority = priorityParts[0]
+					srvWeight = priorityParts[1]
 				}
 			}
 			if strings.Contains(target, ":") {
 				targetParts := strings.Split(target, ":")
 				if len(targetParts) == 2 {
-					if port, err := strconv.ParseUint(targetParts[1], 10, 16); err == nil {
-						rc.SrvPort = uint16(port)
-					}
+					srvPort = targetParts[1]
 					srvTarget := targetParts[0]
 					// Ensure SRV targets are fully qualified
 					if !strings.HasSuffix(srvTarget, ".") {
 						srvTarget = srvTarget + "."
 					}
-					if err := rc.SetTarget(srvTarget); err != nil {
-						continue
-					}
+					rc, err = dc.NewRecordConfig(label, ttl, recordType, srvPriority, srvWeight, srvPort, srvTarget)
 				}
 			}
 		case "CAA":
-			rc.Type = recordType
 			// CAA format: flags tag value [ttl]
 			if len(parts) >= 4 {
 				flags := priority // priority field contains flags for CAA
@@ -226,39 +188,29 @@ func (api *jokerProvider) parseZoneRecords(domain, zoneData string) (models.Reco
 				if len(parts) >= 5 {
 					value = parts[4]
 					// Remove surrounding quotes if present
-					if strings.HasPrefix(value, "\"") && strings.HasSuffix(value, "\"") && len(value) > 1 {
+					if len(value) > 1 && strings.HasPrefix(value, "\"") && strings.HasSuffix(value, "\"") {
 						value = value[1 : len(value)-1]
 					}
 					// Parse TTL from the end if present (position 5)
 					if len(parts) >= 6 {
 						if ttlParsed, err := strconv.ParseUint(parts[5], 10, 32); err == nil {
-							rc.TTL = uint32(ttlParsed)
+							ttl = uint32(ttlParsed)
 						}
 					}
 				}
-
-				if flagsInt, err := strconv.ParseUint(flags, 10, 8); err == nil {
-					rc.CaaFlag = uint8(flagsInt)
-				}
-				rc.CaaTag = tag
-				if err := rc.SetTarget(value); err != nil {
-					continue
-				}
+				rc, err = dc.NewRecordConfig(label, ttl, recordType, flags, tag, value)
 			}
 		case "NAPTR":
-			rc.Type = recordType
+			var order, preference string
+			var flags, service, regexp string
 			// NAPTR format for Joker: order/preference replacement ttl 0 0 "flags" "service" "regex"
 			if len(parts) >= 9 {
 				// Parse order/preference from priority field (parts[2])
 				if strings.Contains(priority, "/") {
 					priorityParts := strings.Split(priority, "/")
 					if len(priorityParts) == 2 {
-						if order, err := strconv.ParseUint(priorityParts[0], 10, 16); err == nil {
-							rc.NaptrOrder = uint16(order)
-						}
-						if pref, err := strconv.ParseUint(priorityParts[1], 10, 16); err == nil {
-							rc.NaptrPreference = uint16(pref)
-						}
+						order = priorityParts[0]
+						preference = priorityParts[1]
 					}
 				}
 				// Replacement is in position 3
@@ -268,29 +220,30 @@ func (api *jokerProvider) parseZoneRecords(domain, zoneData string) (models.Reco
 				// Parse TTL from position 4
 				if len(parts) >= 5 {
 					if ttlParsed, err := strconv.ParseUint(parts[4], 10, 32); err == nil {
-						rc.TTL = uint32(ttlParsed)
+						ttl = uint32(ttlParsed)
 					}
 				}
 				// Parse flags, service, and regex from positions 7, 8, 9
 				if len(parts) > 7 {
-					rc.NaptrFlags = strings.Trim(parts[7], "\"")
+					flags = strings.Trim(parts[7], "\"")
 				}
 				if len(parts) > 8 {
-					rc.NaptrService = strings.Trim(parts[8], "\"")
+					service = strings.Trim(parts[8], "\"")
 				}
 				if len(parts) > 9 {
-					rc.NaptrRegexp = strings.Trim(parts[9], "\"")
+					regexp = strings.Trim(parts[9], "\"")
 				}
 				// Ensure NAPTR targets are fully qualified if they're not empty or "."
 				if target != "" && target != "." && !strings.HasSuffix(target, ".") {
 					target = target + "."
 				}
-				if err := rc.SetTarget(target); err != nil {
-					continue
-				}
+				rc, err = dc.NewRecordConfig(label, ttl, recordType, order, preference, flags, service, regexp, target)
 			}
 		default:
 			// Skip unsupported record types
+			continue
+		}
+		if err != nil || rc == nil {
 			continue
 		}
 
@@ -368,30 +321,44 @@ func (api *jokerProvider) recordsToZoneFormat(_ string, records models.Records) 
 			label = "@"
 		}
 
+		// TODO(tlim): The <target> can probably be generated by rc.GetRDATA().String().
+		// Using that would simplify many of the cases. I've modified the easy ones.
+
 		// Joker format: <label> <type> <pri> <target> <ttl> (valid-from/valid-to omitted when 0)
 		switch rc.Type {
 		case "A", "AAAA":
-			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetTargetField(), rc.TTL)
+			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
 			lines = append(lines, line)
 		case "CNAME":
-			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetTargetField(), rc.TTL)
+			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
 			lines = append(lines, line)
 		case "NS":
-			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetTargetField(), rc.TTL)
+			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
 			lines = append(lines, line)
 		case "MX":
-			line := fmt.Sprintf("%s %s %d %s %d", label, rc.Type, rc.MxPreference, rc.GetTargetField(), rc.TTL)
+			rdmx := rc.GetRDATA().(dnsrdatav2.MX)
+			line := fmt.Sprintf("%s %s %d %s %d", label, rc.Type, rdmx.Preference, rdmx.Mx, rc.TTL)
 			lines = append(lines, line)
 		case "TXT":
 			// Fix TXT record escaping - escape backslashes first, then quotes
-			content := rc.GetTargetField()
+			content := rc.GetTargetTXTJoined()
 			content = strings.ReplaceAll(content, "\\", "\\\\")
 			content = strings.ReplaceAll(content, "\"", "\\\"")
 			line := fmt.Sprintf("%s %s 0 \"%s\" %d", label, rc.Type, content, rc.TTL)
+
+			// TODO(tlim): Possible replacement.
+			// t := dnsrdatav2.TXT{Txt: []string{rc.GetTargetTXTJoined()}}
+			// ts := t.String()
+			// line := fmt.Sprintf("%s TXT 0 \"%s\" %d", label, ts, rc.TTL)
+
 			lines = append(lines, line)
 		case "SRV":
-			target := fmt.Sprintf("%s:%d", rc.GetTargetField(), rc.SrvPort)
-			priority := fmt.Sprintf("%d/%d", rc.SrvPriority, rc.SrvWeight)
+			// target := fmt.Sprintf("%s:%d", rc.GetTargetField(), rc.SrvPort)
+			// priority := fmt.Sprintf("%d/%d", rc.SrvPriority, rc.SrvWeight)
+			srv := rc.GetRDATA().(dnsrdatav2.SRV)
+			target := fmt.Sprintf("%s:%d", srv.Target, srv.Port)
+			priority := fmt.Sprintf("%d/%d", srv.Priority, srv.Weight)
+			// TODO(tlim): If the above works, remove the commented out old code.
 			line := fmt.Sprintf("%s %s %s %s %d", label, rc.Type, priority, target, rc.TTL)
 			lines = append(lines, line)
 		case "CAA":
