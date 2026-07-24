@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -166,12 +166,27 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		return nil, 0, err
 	}
 
-	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(records)
+	changeset, actualChangeCount, err := diff2.ByRecord(records, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
+
+	var corrections []*models.Correction
+	var create, del, mod diff2.ChangeList
+	for _, change := range changeset {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+		case diff2.CREATE:
+			create = append(create, change)
+		case diff2.DELETE:
+			del = append(del, change)
+		case diff2.CHANGE:
+			mod = append(mod, change)
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
+	}
 
 	// NOPURGE
 	if dc.KeepUnknown {
@@ -180,7 +195,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 
 	// remove SOA record from corrections as it is handled separately
 	for i, r := range create {
-		if r.Desired.Type == "SOA" {
+		if r.New[0].Type == "SOA" {
 			create = append(create[:i], create[i+1:]...)
 			break
 		}
@@ -192,7 +207,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 
 	msg := []string{}
 	for _, c := range append(del, append(create, mod...)...) {
-		msg = append(msg, c.String())
+		msg = append(msg, c.MsgsJoined)
 	}
 
 	var desiredSoa *models.RecordConfig
