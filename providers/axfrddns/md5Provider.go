@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsv1 "github.com/miekg/dns"
 )
 
@@ -40,7 +41,7 @@ func (key md5Provider) Verify(msg []byte, t *dnsv1.TSIG) error {
 		return err
 	}
 	if !hmac.Equal(b, mac) {
-		return dnsv1.ErrSig
+		return dnsv2.ErrSig
 	}
 	return nil
 }

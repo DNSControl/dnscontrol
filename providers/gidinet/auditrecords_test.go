@@ -9,52 +9,52 @@ import (
 func TestAuditRecords(t *testing.T) {
 	tests := []struct {
 		name      string
-		records   []*models.RecordConfig
+		records   models.Records
 		wantCount int
 	}{
 		{
 			name:      "empty records",
-			records:   []*models.RecordConfig{},
+			records:   models.Records{},
 			wantCount: 0,
 		},
 		{
 			name: "valid A record",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("A", "test", "1.2.3.4"),
 			},
 			wantCount: 0,
 		},
 		{
 			name: "valid TXT record",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("TXT", "test", "hello world"),
 			},
 			wantCount: 0,
 		},
 		{
 			name: "TXT with double quotes should fail",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("TXT", "test", `hello "world"`),
 			},
 			wantCount: 1,
 		},
 		{
 			name: "empty TXT should fail",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("TXT", "test", ""),
 			},
 			wantCount: 1,
 		},
 		{
 			name: "valid SRV record",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("SRV", "_sip._tcp", "foo.com."),
 			},
 			wantCount: 0,
 		},
 		{
 			name: "SRV with null target should fail",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("SRV", "_sip._tcp", "."),
 			},
 			wantCount: 1,
@@ -72,15 +72,13 @@ func TestAuditRecords(t *testing.T) {
 }
 
 func makeRC(rtype, label, target string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type: rtype,
-	}
-	rc.SetLabel(label, "example.com")
+	dc, _ := models.NewDomainConfig("example.com")
 	switch rtype {
+	case "SRV":
+		return dc.MustNewRecordConfig(label, 300, rtype, 0, 0, 0, target)
 	case "TXT":
-		rc.SetTargetTXT(target)
+		return dc.MustNewRecordConfig(label, 300, rtype, target)
 	default:
-		rc.SetTarget(target)
+		return dc.MustNewRecordConfig(label, 300, rtype, target)
 	}
-	return rc
 }

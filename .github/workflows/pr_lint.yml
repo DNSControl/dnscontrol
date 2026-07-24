@@ -8,6 +8,11 @@ on:
     branches:
       - "tlim_testpr"
 
+concurrency:
+  # Cancel superseded runs when new commits are pushed to the same PR/branch.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   golangci-lint:
     runs-on: ubuntu-latest
