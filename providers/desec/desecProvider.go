@@ -11,7 +11,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"golang.org/x/net/idna"
 )
 
 /*
@@ -94,18 +93,7 @@ func (c *desecProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	punycodeDomain, err := idna.ToASCII(domain)
-	if err != nil {
-		return nil, err
-	}
-
-	records, err := c.getRecords(punycodeDomain)
-	if err != nil {
-		return nil, err
-	}
-	conversionDC, err := models.NewDomainConfig(punycodeDomain)
+	records, err := c.getRecords(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +102,7 @@ func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	existingRecords := models.Records{}
 	// spew.Dump(records)
 	for _, rr := range records {
-		existingRecords = append(existingRecords, nativeToRecords(rr, conversionDC)...)
+		existingRecords = append(existingRecords, nativeToRecords(rr, dc)...)
 	}
 
 	return existingRecords, nil
@@ -142,7 +130,15 @@ func PrepDesiredRecords(dc *models.DomainConfig, minTTL uint32) {
 	// provider.  We try to do minimal changes otherwise it gets
 	// confusing.
 
-	// dc.Punycode()
+	// TODO(tlim): We shouldn't modify rec's because if the same rec is used
+	// for another provider, there will be confusion. Right now we use a
+	// little memory by making a copy of every record for each provider, but
+	// we'd like to not do that in the future.
+	// If possible, it would be better to eliminate this function
+	// and instead:
+	// * ALIAS: Skip them in recordsToNative()
+	// * minTTL: recordsToNative() should return records with fixed TTLs.
+
 	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
@@ -163,16 +159,7 @@ func PrepDesiredRecords(dc *models.DomainConfig, minTTL uint32) {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	punycodeName, err := idna.ToASCII(dc.Name)
-	if err != nil {
-		return nil, 0, err
-	}
-	conversionDC, err := models.NewDomainConfig(punycodeName)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	minTTL, ok, err := c.searchDomainIndex(punycodeName)
+	minTTL, ok, err := c.searchDomainIndex(dc.Name)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -204,7 +191,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 			rc.Type = change.Key.Type
 			rc.Records = make([]string, 0)
 			rc.TTL = 3600
-			shortname := conversionDC.ToShort(change.Key.NameFQDN)
+			shortname := dc.ToShort(change.Key.NameFQDN)
 			if shortname == "@" {
 				shortname = ""
 			}
@@ -238,7 +225,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 				Msg: msg,
 				F: func() error {
 					rc := rrs
-					err := c.upsertRR(rc, punycodeName)
+					err := c.upsertRR(rc, dc.Name)
 					if err != nil {
 						return err
 					}
