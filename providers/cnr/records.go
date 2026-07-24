@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 )
@@ -355,9 +354,9 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 func deleteRecordString(rc *models.RecordConfig) string {
 	switch rc.Type {
 	case "MX":
-		return fmt.Sprintf("%s %d IN MX %s", rc.GetLabel(), rc.TTL, rc.GetRDATA().(dnsrdatav2.MX).Mx)
+		return fmt.Sprintf("%s %d IN MX %s", rc.GetLabel(), rc.TTL, rc.AsMX().Mx)
 	case "NS":
-		return fmt.Sprintf("%s %d NS %s", rc.GetLabel(), rc.TTL, rc.GetRDATA().(dnsrdatav2.NS).Ns)
+		return fmt.Sprintf("%s %d NS %s", rc.GetLabel(), rc.TTL, rc.AsNS().Ns)
 	case "SVCB", "HTTPS":
 		d := rc.GetRDATA().String()
 		d = strings.ReplaceAll(d, `"`, ``)

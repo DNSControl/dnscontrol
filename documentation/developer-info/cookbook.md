@@ -127,21 +127,39 @@ rd := rc.GetRDATA()     // The generic RDATA
 fmt.Printf("Like in a zonefile: %s\n", rd.String())
 ```
 
-If you know the RDATA's type, you can cast it to the specific type and access the individual fields:
+Generally you then need to cast it to the correct type.
+
+```
+rd := rc.GetRDATA()             // The generic RDATA
+mx1 := rc.GetRDATA().(dnsv2.MX)  // Cast as a MX so we can work with it.
+mx2 := rc.AsMX()                 // Same as mx1, but less typing.
+```
+
+Typical useage:
+
+```
+switch rtype {
+case "MX":
+    mx = rc.AsMX()
+case "SRV":
+    srv = rc.AsSRV()
+case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+    csr = rc.AsCLOUDFLAREAPISINGLEREDIRECT()
+}
+```
 
 ```go
-rdmx := rd.(dnsv2.MX)   // Cast to the MX record
-fmt.Printf("my MX is preference=%d target=%q\n", rdmx.Preference, rdmx.Mx)
-fmt.Printf("Like in a zonefile: %s\n", rdmx.String()) // Same as rd.String()
+mx := rc.AsMX() // Cast to the MX record
+fmt.Printf("my MX is preference=%d target=%q\n", mx.Preference, mx.Mx)
+fmt.Printf("Like in a zonefile: %s\n", mx.String()) // Same as rd.String()
 ```
 
 To alter fields call `GetRDATA()`, change the fields, then call `SetRDATA()` to save it back.  `GetRDATA()` returns a copy of the RDATA, therefore mutating it without saving it back is fruitless.
 
 ```go
-rd := rc.GetRDATA()     // Get the generic RDATA
-rdmx := rd.(dnsv2.MX)   // Cast to the MX struct
-rdmx.Preference = 999   // Alter a field.
-rc.SetRDATA(rdmx)       // Save it back.
+rd := rc.AsMX()       // Get the RDATA, cast as an MX
+mx.Preference = 999   // Alter a field.
+rc.SetRDATA(mx)       // Save it back.
 ```
 
 ## Create `models.RecordConfig` literals for testdata
