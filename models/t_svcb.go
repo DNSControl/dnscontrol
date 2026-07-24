@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	svcbv2 "codeberg.org/miekg/dns/svcb"
 	dnsv1 "github.com/miekg/dns"
 )
@@ -165,7 +164,7 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 			k := svcbEncKey(rec)
 			if _, ok := cache[k]; ok {
 				// if eValue, ok := cache[k]; ok {
-				rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+				rd := rec.AsSVCB()
 				desiredPairs := rd.Value
 				newPairs, found := svcbReplaceIGNOREWithData(desiredPairs, cache, rec)
 				if found {
@@ -178,12 +177,12 @@ func SVCBHydrateDesiredEchIgnore(existing, desired Records) {
 }
 
 func svcbEncKey(rec *RecordConfig) string {
-	rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+	rd := rec.AsSVCB()
 	return fmt.Sprintf("%s:%v", rec.NameFQDN, rd.Priority)
 }
 
 func svcbEncValue(rec *RecordConfig) []byte {
-	rd := rec.GetRDATA().(dnsrdatav2.SVCB)
+	rd := rec.AsSVCB()
 	for _, pair := range rd.Value {
 		kNum := svcbv2.PairToKey(pair)
 		if kNum != svcbv2.KeyEchConfig {
