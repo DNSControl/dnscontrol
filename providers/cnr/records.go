@@ -48,26 +48,26 @@ func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error)
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
-	for _, rc := range actual {
-		if rc.Type == "SVCB" {
-			rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
-		}
-	}
-	for _, rc := range dc.Records {
-		if rc.Type != "SVCB" {
-			continue
-		}
-		fields := strings.Fields(rc.SvcParams)
-		params := make([]string, 0, len(fields))
-		for _, field := range fields {
-			key, value, _ := strings.Cut(field, "=")
-			if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
-				continue
-			}
-			params = append(params, field)
-		}
-		rc.SvcParams = strings.Join(params, " ")
-	}
+	// for _, rc := range actual {
+	// 	if rc.Type == "SVCB" {
+	// 		rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
+	// 	}
+	// }
+	// for _, rc := range dc.Records {
+	// 	if rc.Type != "SVCB" {
+	// 		continue
+	// 	}
+	// 	fields := strings.Fields(rc.SvcParams)
+	// 	params := make([]string, 0, len(fields))
+	// 	for _, field := range fields {
+	// 		key, value, _ := strings.Cut(field, "=")
+	// 		if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
+	// 			continue
+	// 		}
+	// 		params = append(params, field)
+	// 	}
+	// 	rc.SvcParams = strings.Join(params, " ")
+	// }
 
 	var aliasSkip *models.Correction
 	hasAlias := false
@@ -118,6 +118,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 			}
 		}
 	}
+
 	result, err := diff2.ByZone(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
@@ -140,7 +141,6 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	// Accumulate every add/delete into a single "generate zone" API call. CNR
 	// has no in-place update, so a CHANGE is a delete of the old record string
 	// followed by an add of the new one.
-	changes := false
 	var builder strings.Builder
 	params := map[string]any{}
 	delrridx := 0
@@ -170,17 +170,14 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		case diff2.REPORT:
 			// Reports were already collected above.
 		case diff2.CREATE:
-			changes = true
 			fmt.Fprintln(buf, change.MsgsJoined)
 			if err := addRR(change.New[0]); err != nil {
 				return corrections, 0, err
 			}
 		case diff2.DELETE:
-			changes = true
 			fmt.Fprintln(buf, change.MsgsJoined)
 			delRR(change.Old[0])
 		case diff2.CHANGE:
-			changes = true
 			fmt.Fprintln(buf, change.MsgsJoined)
 			delRR(change.Old[0])
 			if err := addRR(change.New[0]); err != nil {
@@ -191,7 +188,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		}
 	}
 
-	if changes {
+	if result.HasChanges {
 		msg := fmt.Sprintf("GENERATE_ZONE: %s\n%s", dc.Name, buf.String())
 		if n.isDebugOn() {
 			msg = fmt.Sprintf("GENERATE_ZONE: %s\n%sPROVIDER CNR, API COMMAND PARAMETERS:\n%s", dc.Name, buf.String(), builder.String())
