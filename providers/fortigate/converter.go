@@ -11,7 +11,7 @@ import (
 func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
 	rtype := strings.ToUpper(n.Type)
 
-	label := dc.LabelFromFQDNWithDot(n.Hostname)
+	label := dc.LabelFromShort(n.Hostname)
 	ttl := n.TTL
 
 	// Type-specific fields
