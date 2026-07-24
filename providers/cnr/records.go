@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // dotSuffixTypes lists record types whose content requires a trailing dot
@@ -118,63 +118,75 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 			}
 		}
 	}
-	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+	changeset, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
+
+	// Start corrections with the reports.
+	var corrections []*models.Correction
+	for _, change := range changeset {
+		if change.Type == diff2.REPORT {
+			corrections = append(corrections, change.CreateMessage())
+		}
+	}
 	if aliasSkip != nil {
 		corrections = append(corrections, aliasSkip)
 	}
 
 	buf := &bytes.Buffer{}
-	// Print a list of changes. Generate an actual change that is the zone
+	// Accumulate every add/delete into a single "generate zone" API call. CNR
+	// has no in-place update, so a CHANGE is a delete of the old record string
+	// followed by an add of the new one.
 	changes := false
 	var builder strings.Builder
 	params := map[string]any{}
 	delrridx := 0
 	addrridx := 0
 
-	for _, cre := range create {
-		changes = true
-		fmt.Fprintln(buf, cre)
-		newRecordString, err := n.createRecordString(cre.Desired, dc.Name)
+	addRR := func(rc *models.RecordConfig) error {
+		newRecordString, err := n.createRecordString(rc, dc.Name)
 		if err != nil {
-			return corrections, 0, err
+			return err
 		}
 		key := fmt.Sprintf("ADDRR%d", addrridx)
 		params[key] = newRecordString
 		fmt.Fprintf(&builder, "\033[32m+ %s = %s\033[0m\n", key, newRecordString)
 		addrridx++
+		return nil
 	}
-	for _, d := range del {
-		changes = true
-		fmt.Fprintln(buf, d)
+	delRR := func(rc *models.RecordConfig) {
 		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := d.Existing.Original.(string)
+		oldRecordString := rc.Original.(string)
 		params[key] = oldRecordString
 		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
 		delrridx++
 	}
-	for _, chng := range mod {
-		changes = true
-		fmt.Fprintln(buf, chng)
-		// old record deletion
-		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := chng.Existing.Original.(string)
-		params[key] = oldRecordString
-		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
-		delrridx++
-		// new record creation
-		newRecordString, err := n.createRecordString(chng.Desired, dc.Name)
-		if err != nil {
-			return corrections, 0, err
+
+	for _, change := range changeset {
+		switch change.Type {
+		case diff2.REPORT:
+			// Reports were already collected above.
+		case diff2.CREATE:
+			changes = true
+			fmt.Fprintln(buf, change.MsgsJoined)
+			if err := addRR(change.New[0]); err != nil {
+				return corrections, 0, err
+			}
+		case diff2.DELETE:
+			changes = true
+			fmt.Fprintln(buf, change.MsgsJoined)
+			delRR(change.Old[0])
+		case diff2.CHANGE:
+			changes = true
+			fmt.Fprintln(buf, change.MsgsJoined)
+			delRR(change.Old[0])
+			if err := addRR(change.New[0]); err != nil {
+				return corrections, 0, err
+			}
+		default:
+			panic(fmt.Sprintf("unhandled change type %v", change.Type))
 		}
-		key = fmt.Sprintf("ADDRR%d", addrridx)
-		params[key] = newRecordString
-		fmt.Fprintf(&builder, "\033[32m+ %s = %s\033[0m\n", key, newRecordString)
-		addrridx++
 	}
 
 	if changes {
