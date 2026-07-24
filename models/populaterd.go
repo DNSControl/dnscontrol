@@ -6,7 +6,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
@@ -71,7 +70,7 @@ func (rc *RecordConfig) RegenerateComparableV3() {
 		// number, because the serial number changes on every update and
 		// would prevent correct diffing. List it as "X" so-as it stands out
 		// in debug output that the serial is intentionally excluded.
-		rd := rc.GetRDATA().(dnsrdatav2.SOA)
+		rd := rc.AsSOA()
 		rc.ComparableV3 = fmt.Sprintf("%s %s X %d %d %d %d", rd.Ns, rd.Mbox, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl)
 
 	default:
