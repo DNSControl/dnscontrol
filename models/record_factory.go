@@ -34,8 +34,7 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 	}
 	rd, err := f(dc.Name, nil, args...)
 	if err != nil {
-		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v\n", typeNum, err)
-		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
+		return nil, fmt.Errorf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
 
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)

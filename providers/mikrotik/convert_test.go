@@ -310,7 +310,7 @@ func TestNativeToRecords_NoMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if rcs[0].Metadata != nil {
+	if len(rcs[0].Metadata) != 0 {
 		t.Errorf("Metadata = %v, want nil", rcs[0].Metadata)
 	}
 }

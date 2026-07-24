@@ -6,7 +6,7 @@ import (
 	"net/netip"
 )
 
-func IPv4(a any) netip.Addr {
+func IPv4(a any) (netip.Addr, error) {
 	switch v := a.(type) {
 	case float64:
 		i := int32(v)
@@ -20,55 +20,55 @@ func IPv4(a any) netip.Addr {
 			byte(c),
 			byte(d),
 		})
-		return x
+		return x, nil
 	case string:
 		a, err := netip.ParseAddr(v)
 		if err != nil || !a.Is4() {
-			return netip.Addr{}
+			return netip.Addr{}, fmt.Errorf("not a valid IPv4 address: %v", v)
 		}
-		return a
+		return a, nil
 	case netip.Addr:
 		if !v.Is4() {
-			return netip.Addr{}
+			return netip.Addr{}, fmt.Errorf("not an IPv4 address: %v", v)
 		}
-		return v
+		return v, nil
 	case net.IP:
 		ipv4Bytes := v.To4()
 		if ipv4Bytes == nil {
-			panic(fmt.Sprintf("not a valid IPv4 address: %v", v))
+			return netip.Addr{}, fmt.Errorf("not an IPv4 address: %v", v)
 		}
 		addr, ok := netip.AddrFromSlice(ipv4Bytes)
 		if !ok {
-			panic(fmt.Sprintf("failed to convert IPv4 address: %v", v))
+			return netip.Addr{}, fmt.Errorf("not an IPv4 address: %v", v)
 		}
-		return addr
+		return addr, nil
 	}
 	panic(fmt.Sprintf("mustbe.IPv4: unhandled type: %T", a))
 }
 
-func IPv6(a any) netip.Addr {
+func IPv6(a any) (netip.Addr, error) {
 	switch v := a.(type) {
 	case string:
 		a, err := netip.ParseAddr(v)
 		if err != nil || !a.Is6() {
-			return netip.Addr{}
+			return netip.Addr{}, fmt.Errorf("not a valid IPv6 address: %v", v)
 		}
-		return a
+		return a, nil
 	case netip.Addr:
 		if !v.Is6() {
-			return netip.Addr{}
+			return netip.Addr{}, fmt.Errorf("not an IPv6 address: %v", v)
 		}
-		return v
+		return v, nil
 	case net.IP:
 		ipv6Bytes := v.To16()
 		if ipv6Bytes == nil {
-			panic(fmt.Sprintf("not a valid IPv6 address: %v", v))
+			return netip.Addr{}, fmt.Errorf("not a valid IPv6 address: %v", v)
 		}
 		addr, ok := netip.AddrFromSlice(ipv6Bytes)
 		if !ok {
-			panic(fmt.Sprintf("failed to convert IPv6 address: %v", v))
+			return netip.Addr{}, fmt.Errorf("not a valid IPv6 address: %v", v)
 		}
-		return addr
+		return addr, nil
 
 	}
 	panic(fmt.Sprintf("mustbe.IPv6: unhandled type: %T", a))

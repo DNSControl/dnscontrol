@@ -20,13 +20,13 @@ func TestIPv4_RoundTrip(t *testing.T) {
 			// Convert
 			original := tt.a
 			originalStr := tt.a.(string)
-			first := mustbe.IPv4(original)
+			first, _ := mustbe.IPv4(original)
 			firstStr := first.String()
 			if firstStr != originalStr {
 				t.Errorf("IPv4(%v) = %v, want %v", original, originalStr, firstStr)
 			}
 			// Round Trip
-			second := mustbe.IPv4(firstStr)
+			second, _ := mustbe.IPv4(firstStr)
 			secondStr := second.String()
 			if secondStr != originalStr {
 				t.Errorf("IPv4(%v) = %v, want %v", original, originalStr, secondStr)
@@ -48,7 +48,7 @@ func TestIPv4_Parse(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := mustbe.IPv4(tt.a)
+			got, _ := mustbe.IPv4(tt.a)
 			// TODO: update the condition below to compare got with tt.want.
 			if tt.want != got {
 				t.Errorf("IPv4() = %v, want %v", got, tt.want)
@@ -70,13 +70,13 @@ func TestIPv6(t *testing.T) {
 			// Convert
 			original := tt.a
 			originalStr := tt.a.(string)
-			first := mustbe.IPv6(original)
+			first, _ := mustbe.IPv6(original)
 			firstStr := first.String()
 			if firstStr != originalStr {
 				t.Errorf("IPv6(%v) = %v, want %v", original, originalStr, firstStr)
 			}
 			// Round Trip
-			second := mustbe.IPv6(firstStr)
+			second, _ := mustbe.IPv6(firstStr)
 			secondStr := second.String()
 			if secondStr != originalStr {
 				t.Errorf("IPv6(%v) = %v, want %v", original, originalStr, secondStr)

@@ -2,13 +2,13 @@ package mikrotik
 
 import (
 	"fmt"
-	"net/netip"
 	"regexp"
 	"strconv"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 // nativeToRecords converts a RouterOS DNS static record to dnscontrol RecordConfig(s).
@@ -22,42 +22,28 @@ func nativeToRecords(nr dnsStaticRecord, dc *models.DomainConfig) (models.Record
 
 	switch nr.Type {
 	case "A":
-		addr, parseErr := netip.ParseAddr(nr.Address)
-		if parseErr != nil {
-			return nil, fmt.Errorf("invalid A address %q: %w", nr.Address, parseErr)
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeA, addr)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeA, nr.Address)
 
 	case "AAAA":
-		addr6, parseErr := netip.ParseAddr(nr.Address)
-		if parseErr != nil {
-			return nil, fmt.Errorf("invalid AAAA address %q: %w", nr.Address, parseErr)
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, addr6)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, nr.Address)
 
 	case "CNAME":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, ensureTrailingDot(nr.CName))
 
 	case "FWD":
-		rc, err = dc.NewRecordConfig(label, ttl, "MIKROTIK_FWD", nr.ForwardTo)
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeMIKROTIKFWD, nr.ForwardTo)
 
 	case "NXDOMAIN":
-		rc, err = dc.NewRecordConfig(label, ttl, "MIKROTIK_NXDOMAIN")
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeMIKROTIKNXDOMAIN)
 
 	case "MX":
-		if _, parseErr := strconv.ParseUint(nr.MxPreference, 10, 16); parseErr != nil {
-			return nil, fmt.Errorf("invalid MX preference %q: %w", nr.MxPreference, parseErr)
-		}
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, nr.MxPreference, ensureTrailingDot(nr.MxExchange))
 
 	case "NS":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, ensureTrailingDot(nr.NS))
 
 	case "SRV":
-		priority, _ := strconv.ParseInt(nr.SrvPriority, 10, 16)
-		weight, _ := strconv.ParseInt(nr.SrvWeight, 10, 16)
-		port, _ := strconv.ParseInt(nr.SrvPort, 10, 16)
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, weight, port, ensureTrailingDot(nr.SrvTarget))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, nr.SrvPriority, nr.SrvWeight, nr.SrvPort, ensureTrailingDot(nr.SrvTarget))
 
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, nr.Text)
@@ -68,6 +54,7 @@ func nativeToRecords(nr dnsStaticRecord, dc *models.DomainConfig) (models.Record
 	if err != nil {
 		return nil, fmt.Errorf("invalid %s record: %w", nr.Type, err)
 	}
+	// TODO(tlim): Test without this next if statement.
 	if nr.Type == "NXDOMAIN" {
 		// The custom record's RDATA is empty, but legacy comparisons expect this target.
 		if err := rc.SetTarget("NXDOMAIN"); err != nil {
@@ -75,25 +62,19 @@ func nativeToRecords(nr dnsStaticRecord, dc *models.DomainConfig) (models.Record
 		}
 	}
 	rc.Original = &nr
-	rc.Metadata = nil
 
 	// Read RouterOS-specific metadata fields applicable to ALL record types.
-	if nr.MatchSubdomain == "true" || nr.MatchSubdomain == "yes" || nr.Regexp != "" || nr.AddressList != "" || nr.Comment != "" {
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
-		if nr.MatchSubdomain == "true" || nr.MatchSubdomain == "yes" {
-			rc.Metadata["match_subdomain"] = "true"
-		}
-		if nr.Regexp != "" {
-			rc.Metadata["regexp"] = nr.Regexp
-		}
-		if nr.AddressList != "" {
-			rc.Metadata["address_list"] = nr.AddressList
-		}
-		if nr.Comment != "" {
-			rc.Metadata["comment"] = nr.Comment
-		}
+	if nr.MatchSubdomain == "true" || nr.MatchSubdomain == "yes" {
+		rc.Metadata["match_subdomain"] = "true"
+	}
+	if nr.Regexp != "" {
+		rc.Metadata["regexp"] = nr.Regexp
+	}
+	if nr.AddressList != "" {
+		rc.Metadata["address_list"] = nr.AddressList
+	}
+	if nr.Comment != "" {
+		rc.Metadata["comment"] = nr.Comment
 	}
 
 	return models.Records{rc}, nil
@@ -109,19 +90,19 @@ func recordToNative(rc *models.RecordConfig) (*dnsStaticRecord, error) {
 	switch rc.Type {
 	case "A":
 		nr.Type = "A"
-		nr.Address = rc.GetTargetIP().String()
+		nr.Address = rc.AsA().String()
 
 	case "AAAA":
 		nr.Type = "AAAA"
-		nr.Address = rc.GetTargetIP().String()
+		nr.Address = rc.AsAAAA().String()
 
 	case "CNAME":
 		nr.Type = "CNAME"
-		nr.CName = stripTrailingDot(rc.GetTargetField())
+		nr.CName = stripTrailingDot(rc.AsCNAME().Target)
 
 	case "MIKROTIK_FWD":
 		nr.Type = "FWD"
-		nr.ForwardTo = rc.GetTargetField()
+		nr.ForwardTo = rc.AsMIKROTIKFWD().ForwardTo
 
 	case "MIKROTIK_NXDOMAIN":
 		nr.Type = "NXDOMAIN"
@@ -129,19 +110,20 @@ func recordToNative(rc *models.RecordConfig) (*dnsStaticRecord, error) {
 
 	case "MX":
 		nr.Type = "MX"
-		nr.MxExchange = stripTrailingDot(rc.GetTargetField())
-		nr.MxPreference = strconv.FormatUint(uint64(rc.MxPreference), 10)
+		nr.MxExchange = stripTrailingDot(rc.AsMX().Mx)
+		nr.MxPreference = strconv.FormatUint(uint64(rc.AsMX().Preference), 10)
 
 	case "NS":
 		nr.Type = "NS"
-		nr.NS = stripTrailingDot(rc.GetTargetField())
+		nr.NS = stripTrailingDot(rc.AsNS().String())
 
 	case "SRV":
 		nr.Type = "SRV"
-		nr.SrvTarget = stripTrailingDot(rc.GetTargetField())
-		nr.SrvPort = strconv.FormatUint(uint64(rc.SrvPort), 10)
-		nr.SrvPriority = strconv.FormatUint(uint64(rc.SrvPriority), 10)
-		nr.SrvWeight = strconv.FormatUint(uint64(rc.SrvWeight), 10)
+		srv := rc.AsSRV()
+		nr.SrvTarget = stripTrailingDot(srv.Target)
+		nr.SrvPort = strconv.FormatUint(uint64(srv.Port), 10)
+		nr.SrvPriority = strconv.FormatUint(uint64(srv.Priority), 10)
+		nr.SrvWeight = strconv.FormatUint(uint64(srv.Weight), 10)
 
 	case "TXT":
 		nr.Type = "TXT"
@@ -155,7 +137,7 @@ func recordToNative(rc *models.RecordConfig) (*dnsStaticRecord, error) {
 	// Always set these fields (even to empty) so the JSON payload explicitly
 	// clears them on RouterOS when they are no longer desired.
 	// match-subdomain is a boolean that RouterOS requires as "yes" or "no".
-	if rc.Metadata != nil && rc.Metadata["match_subdomain"] == "true" {
+	if rc.Metadata["match_subdomain"] == "true" {
 		nr.MatchSubdomain = "yes"
 	} else {
 		nr.MatchSubdomain = "no"
