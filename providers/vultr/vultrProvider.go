@@ -11,7 +11,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/vultr/govultr/v2"
-	"golang.org/x/net/idna"
 	"golang.org/x/oauth2"
 )
 
@@ -119,21 +118,26 @@ func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 func (api *vultrProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, curRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	for _, rec := range dc.Records {
-		switch rec.Type { // #rtype_variations
-		case "ALIAS", "MX", "NS", "CNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "CLOUDNS_WR":
-			// These rtypes are hostnames, therefore need to be converted (unlike, for example, an AAAA record)
-			t, err := idna.ToUnicode(rec.GetTargetField())
-			if err != nil {
-				return nil, 0, err
-			}
-			if err := rec.SetTarget(t); err != nil {
-				return nil, 0, err
-			}
-		default:
-			// Nothing to do.
-		}
-	}
+	// TODO(tlim): Lets try it two ways:
+
+	// Option A: Comment out this code.
+	// Option B: If "A" doesn't work, uncomment these.
+
+	// for _, rec := range dc.Records {
+	// 	switch rec.Type { // #rtype_variations
+	// 	case "ALIAS", "MX", "NS", "CNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "CLOUDNS_WR":
+	// 		// These rtypes are hostnames, therefore need to be converted (unlike, for example, an AAAA record)
+	// 		t, err := idna.ToUnicode(rec.GetTargetField())
+	// 		if err != nil {
+	// 			return nil, 0, err
+	// 		}
+	// 		if err := rec.SetTarget(t); err != nil {
+	// 			return nil, 0, err
+	// 		}
+	// 	default:
+	// 		// Nothing to do.
+	// 	}
+	// }
 
 	changes, actualChangeCount, err := diff2.ByRecord(curRecords, dc, nil)
 	if err != nil {
@@ -228,15 +232,20 @@ func toRecordConfig(dc *models.DomainConfig, r govultr.DomainRecord) (*models.Re
 	label := dc.LabelFromShort(r.Name)
 	ttl := uint32(r.TTL)
 
-	switch rtype := r.Type; rtype {
-	case "ALIAS", "MX", "NS", "CNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "CLOUDNS_WR":
-		var err error
-		data, err = idna.ToUnicode(data)
-		if err != nil {
-			return nil, err
-		}
-	default:
-	}
+	// TODO(tlim): Lets try it two ways:
+
+	// Option A: Comment out this code.
+	// Option B: If "A" doesn't work, uncomment these.
+
+	// switch rtype := r.Type; rtype {
+	// case "ALIAS", "MX", "NS", "CNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "CLOUDNS_WR":
+	// 	var err error
+	// 	data, err = idna.ToUnicode(data)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// default:
+	// }
 
 	var rc *models.RecordConfig
 	var err error
@@ -262,15 +271,24 @@ func toRecordConfig(dc *models.DomainConfig, r govultr.DomainRecord) (*models.Re
 		}
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, fmt.Sprintf("%d %s", r.Priority, data))
 	case "TXT":
-		// TXT records from Vultr are always surrounded by quotes.
-		// They don't permit quotes within the string, therefore there is no
-		// need to resolve \" or other quoting.
-		if !strings.HasPrefix(data, `"`) || !strings.HasSuffix(data, `"`) {
-			// Give an error if Vultr changes their protocol. We'd rather break
-			// than do the wrong thing.
-			return nil, errors.New("unexpected lack of quotes in TXT record from Vultr")
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, data[1:len(data)-1])
+
+		// TODO(tlim): Let's try this 2 ways.
+
+		// Option A: The new way:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, data)
+
+		// Option B: Revert to the old code. (uncomment these lines)
+
+		// // TXT records from Vultr are always surrounded by quotes.
+		// // They don't permit quotes within the string, therefore there is no
+		// // need to resolve \" or other quoting.
+		// if !strings.HasPrefix(data, `"`) || !strings.HasSuffix(data, `"`) {
+		// 	// Give an error if Vultr changes their protocol. We'd rather break
+		// 	// than do the wrong thing.
+		// 	return nil, errors.New("unexpected lack of quotes in TXT record from Vultr")
+		// }
+		// rc, err = dc.NewRecordConfig(label, ttl, rtype, data[1:len(data)-1])
+
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Data)
 	}
@@ -322,10 +340,19 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 	case "SSHFP":
 		r.Data = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 	case "TXT":
+
+		// TODO(tlim): Let's try this two ways:
+
+		// Option A: The original
+
 		// Vultr doesn't permit TXT strings to include double-quotes
 		// therefore, we don't have to escape interior double-quotes.
 		// Vultr's API requires the string to begin and end with double-quotes.
-		r.Data = `"` + strings.Join(rc.GetTargetTXTSegmented(), "") + `"`
+		r.Data = `"` + rc.GetTargetTXTJoined() + `"`
+
+		// Option B: the new way
+		//r.Data = rc.AsTXT().String()
+
 	default:
 	}
 
