@@ -139,7 +139,7 @@ default:
 }
 if err != nil { whatever }
 
-## Step 4. Replace dnsutilv1.AddOrigin()
+## Step 4.  Replace dnsutilv1.AddOrigin()
 
 OLD:
 
@@ -168,7 +168,11 @@ or
 shortname := dc.ToShort(label)
 ```
 
-## Step 6. Remove obsolete setters
+## Step 3a. Upgrade any remaining dnsv1 or dnsutilv1 references
+
+Replace any remaining uses of dnsv1 or dnsutilv1 with dnsv2 and dnsutilv2 respectively.
+
+## Step 7. Remove obsolete setters
 
 `rc.GetTargetCombined()` is now `rc.GetRDATA().String()`
 
@@ -186,6 +190,16 @@ default:
     t := rc.GetRDATA().String()
 }
 ```
+
+`rc.GetTargetField()` can still be used, but replace it if possible.
+
+* `rc.GetRDATA().String()` (if we know the struct only has 1 field)
+
+If it is a TXT record, there are 3 permitted getters:
+
+* `rc.GetTargetTXTJoined()`
+* `rc.GetTargetTXTSegmented()`
+* `rc.GetRDATA().String()`   // quoted and escaped.
 
 ## Step 6. Remove obsolete getters
 
@@ -218,10 +232,9 @@ In general these are no longer needed if you use `NewRecordConfig*()` functions.
 However, if you want to alter an existing RC...
 
 ```go
-rd := rc.GetRDATA()     // Get the generic RDATA
-rdmx := rd.(dnsv2.MX)   // Cast to the MX struct 
-rdmx.Preference = 999   // Alter a field.
-rc.SetRDATA(rdmx)       // Save it back.
+mx := rc.AsMX()      // Get the RDATA as an MX.
+mx.Preference = 999  // Alter a field.
+rc.SetRDATA(mx)      // Save it back.
 ```
 
 See the [cookbook](cookbook.md) for more details.
