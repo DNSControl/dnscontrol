@@ -104,10 +104,13 @@ func (h *hetznerv2Provider) fetchAllZones() (map[string]*hcloud.Zone, error) {
 // EnsureZoneExists creates a zone if it does not exist.
 func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
 	domain := dc.Name
-	encoded, err := idna.ToASCII(domain)
-	if err != nil {
-		return err
-	}
+
+	// TODO(tlim): This should no longer be needed.
+	// encoded, err := idna.ToASCII(domain)
+	// if err != nil {
+	// 	return err
+	// }
+	encoded := domain
 	if ok, err2 := h.zoneCache.HasZone(encoded); err2 != nil || ok {
 		return err2
 	}
@@ -132,10 +135,12 @@ func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (h *hetznerv2Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
-	encoded, err := idna.ToASCII(dc.Name)
-	if err != nil {
-		return nil, 0, err
-	}
+	// TODO(tlim): This should no longer be needed.
+	// encoded, err := idna.ToASCII(dc.Name)
+	// if err != nil {
+	// 	return nil, 0, err
+	// }
+	encoded := dc.Name
 
 	z, err := h.zoneCache.GetZone(encoded)
 	if err != nil {
@@ -233,10 +238,13 @@ func (h *hetznerv2Provider) GetNameservers(domain string) ([]*models.Nameserver,
 func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	encoded, err := idna.ToASCII(domain)
-	if err != nil {
-		return nil, err
-	}
+	// TODO(tlim): This should no longer be needed.
+	// encoded, err := idna.ToASCII(domain)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	encoded := domain
+
 	z, err := h.zoneCache.GetZone(encoded)
 	if err != nil {
 		return nil, err
