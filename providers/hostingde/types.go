@@ -3,7 +3,6 @@ package hostingde
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net" // Needed for communicating with provider API.
 	"strings"
 
@@ -147,21 +146,22 @@ func (r record) nativeToRecord(dc *models.DomainConfig) (*models.RecordConfig, e
 	label := dc.ToShort(r.Name)
 	var rc *models.RecordConfig
 	var err error
+	ttl := r.TTL
 	switch r.Type {
 	case "ALIAS":
-		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
 	case "NULLMX":
-		rc, err = dc.NewRecordConfig(label, r.TTL, "MX", 0, ".")
+		rc, err = dc.NewRecordConfig(label, ttl, "MX", 0, ".")
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Priority, r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Priority, r.Content)
 	case "PTR":
-		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content+".")
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content+".")
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, r.TTL, r.Type, r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, r.Type, r.Content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content)
 	}
 	if err == nil {
 		rc.Original = r
@@ -177,10 +177,11 @@ func recordToNative(rc *models.RecordConfig) *record {
 		TTL:     rc.TTL,
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "ALIAS", "CAA", "CNAME", "DNSKEY", "DS", "NS", "NSEC", "NSEC3", "NSEC3PARAM", "PTR", "RRSIG", "SSHFP", "TSLA":
-		// Nothing special.
+	switch rc.Type {
 	case "TXT":
+		// TODO(tlim): I think all of this can be replaced by:
+		// record.Content = rc.AsTXT().String()
+
 		// TODO(tlim): Move this to a function with unit tests.
 		txtStrings := make([]string, rc.GetTargetTXTSegmentCount())
 		copy(txtStrings, rc.GetTargetTXTSegmented())
@@ -192,17 +193,19 @@ func recordToNative(rc *models.RecordConfig) *record {
 
 		record.Content = strings.Join(txtStrings, " ")
 	case "MX":
-		record.Priority = rc.MxPreference
-		record.Content = strings.TrimSuffix(rc.GetTargetField(), ".")
+		mx := rc.AsMX()
+		record.Priority = mx.Preference
+		record.Content = strings.TrimSuffix(mx.Mx, ".")
 		if record.Content == "" {
 			record.Type = "NULLMX"
 			record.Priority = 10
 		}
 	case "SRV":
-		record.Priority = rc.SrvPriority
-		record.Content = fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, strings.TrimSuffix(rc.GetTargetField(), "."))
+		srv := rc.AsSRV()
+		record.Priority = srv.Priority
+		record.Content = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, strings.TrimSuffix(srv.Target, "."))
 	default:
-		log.Printf("hosting.de rtype %v unimplemented", rc.Type)
+		// no-op
 	}
 
 	return record
