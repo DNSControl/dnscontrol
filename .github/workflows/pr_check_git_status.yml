@@ -6,12 +6,20 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  # Cancel superseded runs when new commits are pushed to the same PR/branch.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
-  go-fmt:
-    name: "Check: go fmt"
+  go-checks:
+    # Consolidated Go checks: one checkout + one setup-go, so the Go module and
+    # build cache are warmed once and reused across every command below.
+    # A single git-status check verifies none of the commands changed tracked files.
+    name: "Check: go (build/fmtjson/mod-tidy/generate/fmt/fix)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -21,7 +29,13 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version: stable
+      # `go build` also warms the module + build cache for the commands below.
+      - run: go build -o dnscontrol .
+      - run: bin/fmtjson $(find . -type f -name "*.json" ! -name "package-lock.json" -print)
+      - run: go mod tidy
+      - run: go generate ./...
       - run: go fmt ./...
+      - run: go fix ./...
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true
@@ -41,76 +55,6 @@ jobs:
       - run: npm install
       - run: node_modules/.bin/prettier --write pkg/js/helpers.js
       - run: git checkout -- package-lock.json
-      - uses: CatChen/check-git-status-action@v2
-        with:
-          fail-if-not-clean: true
-          request-changes-if-not-clean: false
-
-  fmtjson:
-    name: "Check: fmtjson"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-go@v7
-        with:
-          go-version: stable
-      - run: go build -o dnscontrol .
-      - run: bin/fmtjson $(find . -type f -name "*.json" ! -name "package-lock.json" -print)
-      - uses: CatChen/check-git-status-action@v2
-        with:
-          fail-if-not-clean: true
-          request-changes-if-not-clean: false
-
-  go-mod-tidy:
-    name: "Check: go mod tidy"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-go@v7
-        with:
-          go-version: stable
-      - run: go mod tidy
-      - uses: CatChen/check-git-status-action@v2
-        with:
-          fail-if-not-clean: true
-          request-changes-if-not-clean: false
-
-  go-generate:
-    name: "Check: go generate"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-go@v7
-        with:
-          go-version: stable
-      - run: go install golang.org/x/tools/cmd/stringer@latest
-      - run: go generate ./...
-      - uses: CatChen/check-git-status-action@v2
-        with:
-          fail-if-not-clean: true
-          request-changes-if-not-clean: false
-
-  go-fix:
-    name: "Check: go fix"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-go@v7
-        with:
-          go-version: stable
-      - run: go fix ./...
       - uses: CatChen/check-git-status-action@v2
         with:
           fail-if-not-clean: true

@@ -135,7 +135,7 @@ func (l *luadnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 	}
 	existingRecords := make([]*models.RecordConfig, len(records))
 	for i := range records {
-		newr, err := nativeToRecord(domain, records[i])
+		newr, err := nativeToRecord(dc, records[i])
 		if err != nil {
 			return nil, err
 		}
@@ -273,25 +273,25 @@ func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
 func (l *luadnsProvider) checkNS(dc *models.DomainConfig) {
 	for _, rec := range dc.Records {
 		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
-		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetTargetCombined()) && rec.TTL != 86400 {
+		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetRDATA().String()) && rec.TTL != 86400 {
 			rec.TTL = 86400
 		}
 	}
 }
 
-func nativeToRecord(domain string, r *api.Record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      r.TTL,
-		Original: r,
-	}
-	rc.SetLabelFromFQDN(r.Name, domain)
+func nativeToRecord(dc *models.DomainConfig, r *api.Record) (*models.RecordConfig, error) {
+	label := dc.ToShort(r.Name)
+	ttl := r.TTL
+	var rc *models.RecordConfig
 	var err error
-	switch rtype := rc.Type; rtype {
+	switch rtype := r.Type; rtype {
 	case "TXT":
-		err = rc.SetTargetTXT(r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Content)
 	default:
-		err = rc.PopulateFromString(rtype, r.Content, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Content)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
@@ -314,7 +314,7 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 			}
 			r.Content = content
 		default:
-			r.Content = rec.GetTargetCombined()
+			r.Content = rec.GetRDATA().String()
 		}
 		rrs = append(rrs, r)
 	}
