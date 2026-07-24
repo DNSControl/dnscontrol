@@ -5,30 +5,27 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"golang.org/x/net/idna"
 )
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
 func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
 	rtype := strings.ToUpper(n.Type)
-	// Label / Name
-	label := strings.TrimSuffix(n.Hostname, ".")
-	if label == "@" {
-		label = ""
-	}
+
+	label := dc.LabelFromFQDNWithDot(n.Hostname)
+	ttl := n.TTL
 
 	// Type-specific fields
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
 	case "A":
-		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.IP)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.IP)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv4 address %q in %+v", n.IP, n)
 		}
 
 	case "AAAA":
-		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.IPv6)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.IPv6)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv6 address %q in %+v", n.IPv6, n)
 		}
@@ -37,7 +34,7 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 		if n.CanonicalName == "" {
 			return nil, fmt.Errorf("[FORTIGATE] CNAME record without canonical-name (id=%d)", n.ID)
 		}
-		rc, err = dc.NewRecordConfig(label, n.TTL, rtype, n.CanonicalName)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.CanonicalName)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +44,7 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 			return nil, fmt.Errorf("[FORTIGATE] NS record missing hostname (id=%d)", n.ID)
 		}
 
-		rc, err = dc.NewRecordConfig("@", n.TTL, rtype, n.Hostname)
+		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Hostname)
 		if err != nil {
 			return nil, err
 		}
@@ -57,7 +54,7 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 			return nil, fmt.Errorf("[FORTIGATE] MX record missing hostname (id=%d)", n.ID)
 		}
 
-		rc, err = dc.NewRecordConfig("@", n.TTL, rtype, n.Preference, n.Hostname)
+		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Preference, n.Hostname)
 		if err != nil {
 			return nil, err
 		}
@@ -131,27 +128,27 @@ func recordsToNative(recs models.Records) ([]*fgDNSRecord, []error) {
 			n.IPv6 = ip.String()
 
 		case "CNAME":
-			target := record.GetTargetField()
-			if ascii, err := idna.ToASCII(target); err == nil {
-				target = ascii
-			}
+			target := record.AsCNAME().String()
+			//if ascii, err := idna.ToASCII(target); err == nil {
+			//	target = ascii
+			//}
 			n.CanonicalName = target
 
 		case "NS":
-			target := record.GetTargetField()
-			if ascii, err := idna.ToASCII(target); err == nil {
-				target = ascii
-			}
+			target := record.AsNS().String()
+			//if ascii, err := idna.ToASCII(target); err == nil {
+			//	target = ascii
+			//}
 			n.Hostname = target
 			n.CanonicalName = ""
 
 		case "MX":
-			target := record.GetTargetField()
-			if ascii, err := idna.ToASCII(target); err == nil {
-				target = ascii
-			}
-			n.Hostname = target
-			n.Preference = record.MxPreference
+			mx := record.AsMX()
+			//if ascii, err := idna.ToASCII(target); err == nil {
+			//	target = ascii
+			//}
+			n.Hostname = mx.Mx
+			n.Preference = mx.Preference
 			n.CanonicalName = ""
 
 		default:
