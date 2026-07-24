@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"golang.org/x/net/idna"
@@ -182,58 +182,51 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 
 	PrepDesiredRecords(dc, minTTL)
 
-	keysToUpdate, toReport, actualChangeCount, err := diff.NewCompat(dc).ChangedGroups(existing)
+	changes, actualChangeCount, err := diff2.ByRecordSet(existing, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	if len(corrections) == 0 && len(keysToUpdate) == 0 {
-		return nil, 0, nil
-	}
-
-	desiredRecords := dc.Records.GroupedByKey()
+	var corrections []*models.Correction
 	var rrs []resourceRecord
 	buf := &bytes.Buffer{}
-	// For any key with an update, delete or replace those records.
-	for label := range keysToUpdate {
-		if _, ok := desiredRecords[label]; !ok {
-			// we could not find this RecordKey in the desiredRecords
-			// this means it must be deleted
-			for i, msg := range keysToUpdate[label] {
-				if i == 0 {
-					rc := resourceRecord{}
-					rc.Type = label.Type
-					rc.Records = make([]string, 0) // empty array of records should delete this rrset
-					rc.TTL = 3600
-					shortname := conversionDC.ToShort(label.NameFQDN)
-					if shortname == "@" {
-						shortname = ""
-					}
-					rc.Subname = shortname
-					fmt.Fprintln(buf, msg)
-					rrs = append(rrs, rc)
-				} else {
-					// just add the message
-					fmt.Fprintln(buf, msg)
-				}
+	// For any rrset with an update, delete or replace those records. deSEC's
+	// API is rrset-oriented: a single upsert call replaces the whole rrset (an
+	// empty record list deletes it).
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+
+		case diff2.DELETE:
+			// An empty array of records deletes this rrset.
+			rc := resourceRecord{}
+			rc.Type = change.Key.Type
+			rc.Records = make([]string, 0)
+			rc.TTL = 3600
+			shortname := conversionDC.ToShort(change.Key.NameFQDN)
+			if shortname == "@" {
+				shortname = ""
 			}
-		} else {
-			// it must be an update or create, both can be done with the same api call.
-			ns := recordsToNative(desiredRecords[label])
+			rc.Subname = shortname
+			rrs = append(rrs, rc)
+			for _, msg := range change.Msgs {
+				fmt.Fprintln(buf, msg)
+			}
+
+		case diff2.CREATE, diff2.CHANGE:
+			// A create or update are both done with the same api call.
+			ns := recordsToNative(change.New)
 			if len(ns) > 1 {
 				panic("we got more than one resource record to create / modify")
 			}
-			for i, msg := range keysToUpdate[label] {
-				if i == 0 {
-					rrs = append(rrs, ns[0])
-					fmt.Fprintln(buf, msg)
-				} else {
-					// noop just for printing the additional messages
-					fmt.Fprintln(buf, msg)
-				}
+			rrs = append(rrs, ns[0])
+			for _, msg := range change.Msgs {
+				fmt.Fprintln(buf, msg)
 			}
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
 	}
 
