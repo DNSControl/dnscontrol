@@ -21,25 +21,6 @@ func (client *providerClient) GetZoneRecords(dc *models.DomainConfig) (models.Re
 
 	existingRecords := models.Records{}
 
-	// Option 1: One long list.  If your provider returns one long list,
-	// convert each one to RecordType like this:
-	// for _, rr := range records {
-	// 	existingRecords = append(existingRecords, nativeToRecord(rr, domain))
-	//}
-
-	// Option 2: Grouped records. Sometimes the provider returns one item per
-	// label. Each item contains a list of all the records at that label.
-	// You'll need to split them out into one RecordConfig for each record.  An
-	// example of this is the ROUTE53 provider.
-	// for _, rg := range records {
-	// 	for _, rr := range rg {
-	// 		existingRecords = append(existingRecords, nativeToRecords(rg, rr, domain)...)
-	// 	}
-	// }
-
-	// Option 3: Something else.  In this case, we get a big massive structure
-	// which needs to be broken up.  Still, we're generating a list of
-	// RecordConfig structures.
 	defaultTTL := records.Soa.TTL
 	for _, rr := range records.A {
 		existingRecords = append(existingRecords, nativeToRecordA(rr, dc, defaultTTL))
@@ -161,7 +142,7 @@ func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
 	}
 
 	if existing.Type == "CAA" {
-		tagValue := existing.CaaTag
+		tagValue := existing.AsCAA().Tag
 		// printer.Printf("DEBUG: CAA TAG = %q\n", tagValue)
 		zer.CurrentTag = &tagValue
 	}
@@ -188,16 +169,19 @@ func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
 
 	switch rec.Type {
 	case "CAA":
-		tagValue := rec.CaaTag
-		flagValue := rec.CaaFlag
+		f := rec.AsCAA()
+		tagValue := f.Tag
+		flagValue := f.Flag
 		zer.NewTag = &tagValue
 		zer.NewFlag = &flagValue
 	case "MX":
-		zer.NewPriority = rec.MxPreference
+		f := rec.AsMX()
+		zer.NewPriority = f.Preference
 	case "SRV":
-		zer.NewPriority = rec.SrvPriority
-		zer.NewWeight = rec.SrvWeight
-		zer.NewPort = rec.SrvPort
+		f := rec.AsSRV()
+		zer.NewPriority = f.Priority
+		zer.NewWeight = f.Weight
+		zer.NewPort = f.Port
 	case "TXT":
 		zer.NewValue = rec.GetTargetTXTJoined()
 	default: // "A", "CNAME", "NS"
@@ -208,8 +192,12 @@ func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
 }
 
 func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
-	// TODO: Assert that old.Type == rec.Type
-	// TODO: Assert that old.Name == rec.Name
+	if old.Type != rec.Type {
+		panic(fmt.Sprintf("record type mismatch: %q != %q", old.Type, rec.Type))
+	}
+	if old.Name != rec.Name {
+		panic(fmt.Sprintf("record name mismatch: %q != %q", old.Name, rec.Name))
+	}
 
 	var oldTarget, recTarget string
 	switch old.Type {
@@ -236,21 +224,24 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 
 	switch old.Type {
 	case "CAA":
-		tagValue := old.CaaTag
+		of := old.AsCAA()
+		tagValue := of.Tag
 		zer.CurrentTag = &tagValue
 		if old.CaaTag != rec.CaaTag || old.CaaFlag != rec.CaaFlag || old.TTL != rec.TTL {
 			// If anything changed, we need to update both tag and flag.
-			zer.NewTag = &(rec.CaaTag)
-			zer.NewFlag = &(rec.CaaFlag)
+			zer.NewFlag = new(rec.AsCAA().Flag)
+			zer.NewTag = new(rec.AsCAA().Tag)
+			zer.NewFlag = new(rec.AsCAA().Flag)
 		}
 	case "MX":
 		if old.MxPreference != rec.MxPreference {
-			zer.NewPriority = rec.MxPreference
+			zer.NewPriority = rec.AsMX().Preference
 		}
 	case "SRV":
-		zer.NewWeight = rec.SrvWeight
-		zer.NewPort = rec.SrvPort
-		zer.NewPriority = rec.SrvPriority
+		f := rec.AsSRV()
+		zer.NewWeight = f.Weight
+		zer.NewPort = f.Port
+		zer.NewPriority = f.Priority
 	default: // "A", "CNAME", "NS", "TXT"
 		// Nothing to do.
 	}
