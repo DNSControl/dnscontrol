@@ -11,7 +11,7 @@ import (
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	egoscale "github.com/exoscale/egoscale/v3"
@@ -184,36 +184,41 @@ func (provider *exoscaleProvider) GetZoneRecordsCorrections(
 		return nil, 0, err
 	}
 
-	toReport, toCreate, toDelete, toUpdate, actualChangeCount, err := diff.NewCompat(domainConfig).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, domainConfig, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, deletionCorrelation := range toDelete {
-		record := deletionCorrelation.Existing.Original.(*egoscale.DNSDomainRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: deletionCorrelation.String(),
-			F:   provider.deleteRecordFunc(record.ID, domain.ID),
-		})
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, creationCorrelation := range toCreate {
-		recordConfig := creationCorrelation.Desired
-		corrections = append(corrections, &models.Correction{
-			Msg: creationCorrelation.String(),
-			F:   provider.createRecordFunc(recordConfig, domain.ID),
-		})
-	}
+		case diff2.CREATE:
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.createRecordFunc(change.New[0], domain.ID),
+			})
 
-	for _, updateCorrelation := range toUpdate {
-		oldc := updateCorrelation.Existing.Original.(*egoscale.DNSDomainRecord)
-		newc := updateCorrelation.Desired
-		corrections = append(corrections, &models.Correction{
-			Msg: updateCorrelation.String(),
-			F:   provider.updateRecordFunc(oldc, newc, domain.ID),
-		})
+		case diff2.DELETE:
+			record := change.Old[0].Original.(*egoscale.DNSDomainRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.deleteRecordFunc(record.ID, domain.ID),
+			})
+
+		case diff2.CHANGE:
+			oldc := change.Old[0].Original.(*egoscale.DNSDomainRecord)
+			newc := change.New[0]
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.updateRecordFunc(oldc, newc, domain.ID),
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	return corrections, actualChangeCount, nil
