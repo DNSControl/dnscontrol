@@ -1,5 +1,7 @@
 package models
 
+//go:generate go run github.com/DNSControl/dnscontrol/v5/build/astypegen
+
 import (
 	"fmt"
 	"os"
