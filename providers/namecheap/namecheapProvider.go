@@ -297,6 +297,8 @@ func toRecords(result *nc.DomainDNSGetHostsResult, dc *models.DomainConfig) (mod
 			record, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, dnsHost.MXPref, dnsHost.Address)
 		case "FRAME", "URL", "URL301":
 			record, err = dc.NewRecordConfig(label, ttl, dnsHost.Type, dnsHost.Address)
+		case "TXT":
+			record, err = dc.NewRecordConfig(label, ttl, dnsHost.Type, dnsHost.Address)
 		default:
 			record, err = dc.NewRecordConfigParse(label, ttl, dnsHost.Type, dnsHost.Address)
 		}
