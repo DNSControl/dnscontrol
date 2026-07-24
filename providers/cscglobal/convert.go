@@ -3,141 +3,53 @@ package cscglobal
 // Convert the provider's native record description to models.RecordConfig.
 
 import (
-	"net/netip"
-
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
-// nativeToRecordA takes an A record from DNS and returns a native RecordConfig struct.
-func nativeToRecordA(nr nativeRecordA, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
+func recordTTL(ttl, defaultTTL uint32) uint32 {
 	if ttl == 0 {
-		ttl = defaultTTL
+		return defaultTTL
 	}
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetIP(netip.MustParseAddr(nr.Value)); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+	return ttl
+}
+
+// nativeToRecordA takes an A record from DNS and returns a native RecordConfig struct.
+func nativeToRecordA(nr nativeRecordA, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeA, nr.Value)
 }
 
 // nativeToRecordCNAME takes a CNAME record from DNS and returns a native RecordConfig struct.
-func nativeToRecordCNAME(nr nativeRecordCNAME, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "CNAME",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTarget(nr.Value); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+func nativeToRecordCNAME(nr nativeRecordCNAME, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeCNAME, nr.Value)
 }
 
 // nativeToRecordAAAA takes an AAAA record from DNS and returns a native RecordConfig struct.
-func nativeToRecordAAAA(nr nativeRecordAAAA, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "AAAA",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetIP(netip.MustParseAddr(nr.Value)); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+func nativeToRecordAAAA(nr nativeRecordAAAA, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeAAAA, nr.Value)
 }
 
 // nativeToRecordTXT takes a TXT record from DNS and returns a native RecordConfig struct.
-func nativeToRecordTXT(nr nativeRecordTXT, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "TXT",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetTXT(nr.Value); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+func nativeToRecordTXT(nr nativeRecordTXT, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeTXT, nr.Value)
 }
 
-// nativeToRecordMX takes a MX record from DNS and returns a native RecordConfig struct.
-func nativeToRecordMX(nr nativeRecordMX, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "MX",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetMX(nr.Priority, nr.Value); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+// nativeToRecordMX takes an MX record from DNS and returns a native RecordConfig struct.
+func nativeToRecordMX(nr nativeRecordMX, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeMX, nr.Priority, nr.Value)
 }
 
 // nativeToRecordNS takes a NS record from DNS and returns a native RecordConfig struct.
-func nativeToRecordNS(nr nativeRecordNS, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "NS",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	rc.MustSetTarget(nr.Value)
-	return rc
+func nativeToRecordNS(nr nativeRecordNS, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeNS, nr.Value)
 }
 
 // nativeToRecordSRV takes a SRV record from DNS and returns a native RecordConfig struct.
-func nativeToRecordSRV(nr nativeRecordSRV, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "SRV",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetSRV(nr.Priority, nr.Weight, nr.Port, nr.Value); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+func nativeToRecordSRV(nr nativeRecordSRV, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeSRV, nr.Priority, nr.Weight, nr.Port, nr.Value)
 }
 
 // nativeToRecordCAA takes a CAA record from DNS and returns a native RecordConfig struct.
-func nativeToRecordCAA(nr nativeRecordCAA, origin string, defaultTTL uint32) *models.RecordConfig {
-	ttl := nr.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
-	}
-	rc := &models.RecordConfig{
-		Type: "CAA",
-		TTL:  ttl,
-	}
-	rc.SetLabel(nr.Key, origin)
-	if err := rc.SetTargetCAA(nr.Flag, nr.Tag, nr.Value); err != nil {
-		panic(err) // Should never happen.
-	}
-	return rc
+func nativeToRecordCAA(nr nativeRecordCAA, dc *models.DomainConfig, defaultTTL uint32) *models.RecordConfig {
+	return dc.MustNewRecordConfig(dc.LabelFromShort(nr.Key), recordTTL(nr.TTL, defaultTTL), dnsv2.TypeCAA, nr.Flag, nr.Tag, nr.Value)
 }
