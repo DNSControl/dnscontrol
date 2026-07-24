@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"golang.org/x/oauth2"
 )
@@ -169,69 +169,73 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		return nil, 0, fmt.Errorf("'%s' not a zone in Linode account", dc.Name)
 	}
 
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		id := m.Existing.Original.(*domainRecord).ID
-		if id == 0 { // Skip ID 0, these are the default nameservers always present
-			continue
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+
+		case diff2.CREATE:
+			req, err := toReq(dc, change.New[0])
+			if err != nil {
+				return nil, 0, err
+			}
+			j, err := json.Marshal(req)
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s: %s", change.Msgs[0], string(j)),
+				F: func() error {
+					record, err := api.createRecord(domainID, req)
+					if err != nil {
+						return err
+					}
+					// TTL isn't saved when creating a record, so we will need to modify it immediately afterwards
+					return api.modifyRecord(domainID, record.ID, req)
+				},
+			})
+
+		case diff2.DELETE:
+			id := change.Old[0].Original.(*domainRecord).ID
+			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				continue
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Linode ID: %d", change.Msgs[0], id),
+				F: func() error {
+					return api.deleteRecord(domainID, id)
+				},
+			})
+
+		case diff2.CHANGE:
+			id := change.Old[0].Original.(*domainRecord).ID
+			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				continue
+			}
+			req, err := toReq(dc, change.New[0])
+			if err != nil {
+				return nil, 0, err
+			}
+			j, err := json.Marshal(req)
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Linode ID: %d: %s", change.Msgs[0], id, string(j)),
+				F: func() error {
+					return api.modifyRecord(domainID, id, req)
+				},
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Linode ID: %d", m.String(), id),
-			F: func() error {
-				return api.deleteRecord(domainID, id)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
-	for _, m := range create {
-		req, err := toReq(dc, m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-		j, err := json.Marshal(req)
-		if err != nil {
-			return nil, 0, err
-		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s: %s", m.String(), string(j)),
-			F: func() error {
-				record, err := api.createRecord(domainID, req)
-				if err != nil {
-					return err
-				}
-				// TTL isn't saved when creating a record, so we will need to modify it immediately afterwards
-				return api.modifyRecord(domainID, record.ID, req)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
-	for _, m := range modify {
-		id := m.Existing.Original.(*domainRecord).ID
-		if id == 0 { // Skip ID 0, these are the default nameservers always present
-			continue
-		}
-		req, err := toReq(dc, m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-		j, err := json.Marshal(req)
-		if err != nil {
-			return nil, 0, err
-		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Linode ID: %d: %s", m.String(), id, string(j)),
-			F: func() error {
-				return api.modifyRecord(domainID, id, req)
-			},
-		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
