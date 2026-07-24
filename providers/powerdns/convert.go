@@ -14,10 +14,7 @@ import (
 
 // toRecordConfig converts a PowerDNS DNSRecord to a RecordConfig. #rtype_variations.
 func toRecordConfig(dc *models.DomainConfig, r zones.Record, ttl int, name string, rtype string) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(name)
-	if strings.HasSuffix(name, ".") {
-		label = dc.LabelFromFQDNWithDot(name)
-	}
+	label := dc.LabelFromFQDNWithDot(name)
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
