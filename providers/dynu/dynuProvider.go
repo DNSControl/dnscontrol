@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -454,7 +453,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// Target is the base64-encoded public key (zone-file format == API format).
 		req.PublicKey = rc.GetTargetField()
 	case "RP":
-		rd := rc.GetRDATA().(dnsrdatav2.RP)
+		rd := rc.AsRP()
 		req.MailBox = rd.Mbox
 		req.TxtDomainName = rd.Txt
 	case "SMIMEA":
