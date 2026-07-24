@@ -16,7 +16,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	nc "github.com/willpower232/go-namecheap"
@@ -250,28 +250,25 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	}
 	dc.Records = recs
 
-	// TODO(tlim): Convert this to diff2.ByZone().
-	toReport, toCreate, toDelete, toModify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+	result, err := diff2.ByZone(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
 	// because namecheap doesn't have selective create, delete, modify,
-	// we bundle them all up to send at once.  We *do* want to see the
-	// changes though
-
+	// we bundle them all up to send the whole zone at once. We *do* want
+	// to see the changes though.
+	var corrections []*models.Correction
 	var desc []string
-	for _, i := range toCreate {
-		desc = append(desc, "\n"+i.String())
+	for _, inst := range result.Instructions {
+		if inst.Type == diff2.REPORT {
+			// Reports are shown but don't trigger a zone regeneration.
+			corrections = append(corrections, &models.Correction{Msg: inst.MsgsJoined})
+			continue
+		}
+		desc = append(desc, "\n"+inst.MsgsJoined)
 	}
-	for _, i := range toDelete {
-		desc = append(desc, "\n"+i.String())
-	}
-	for _, i := range toModify {
-		desc = append(desc, "\n"+i.String())
-	}
+	actualChangeCount := result.ActualChangeCount
 
 	// only create corrections if there are changes
 	if len(desc) > 0 {
