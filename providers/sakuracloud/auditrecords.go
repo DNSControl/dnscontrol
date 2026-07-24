@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 	dnsv1 "github.com/miekg/dns"
@@ -82,7 +81,7 @@ func hasLabelExample(domain string) error {
 //   - exampleN, where N is a numerical character
 func rejectifTargetHasExample(rc *models.RecordConfig) error {
 	if rc.TypeNum == dnsv2.TypeHTTPS || rc.TypeNum == dnsv2.TypeSVCB {
-		return hasLabelExample(rc.GetRDATA().(dnsrdatav2.SVCB).Target)
+		return hasLabelExample(rc.AsSVCB().Target)
 	}
 	return hasLabelExample(rc.GetTargetField())
 }

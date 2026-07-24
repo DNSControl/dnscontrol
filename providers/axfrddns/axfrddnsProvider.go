@@ -22,6 +22,7 @@ import (
 	"sync"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
@@ -317,14 +318,14 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	foundRecords := models.Records{}
 	for _, rr := range rawRecords {
 		switch rr.Header().Rrtype {
-		case dnsv1.TypeRRSIG,
-			dnsv1.TypeDNSKEY,
-			dnsv1.TypeCDNSKEY,
-			dnsv1.TypeCDS,
-			dnsv1.TypeNSEC,
-			dnsv1.TypeNSEC3,
-			dnsv1.TypeNSEC3PARAM,
-			dnsv1.TypeZONEMD,
+		case dnsv2.TypeRRSIG,
+			dnsv2.TypeDNSKEY,
+			dnsv2.TypeCDNSKEY,
+			dnsv2.TypeCDS,
+			dnsv2.TypeNSEC,
+			dnsv2.TypeNSEC3,
+			dnsv2.TypeNSEC3PARAM,
+			dnsv2.TypeZONEMD,
 			65281,
 			65534:
 			// Ignoring DNSSec RRs, but replacing it with a single
@@ -333,10 +334,7 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			// Also ignoring spurious TYPE65534, see:
 			// https://bind9-users.isc.narkive.com/zX29ay0j/rndc-signing-list-not-working#post2
 			if foundDNSSecRecords == nil {
-				foundDNSSecRecords = new(models.RecordConfig)
-				foundDNSSecRecords.Type = "TXT"
-				foundDNSSecRecords.SetLabel(dnssecDummyLabel, domain)
-				err = foundDNSSecRecords.SetTargetTXT(dnssecDummyTxt)
+				foundDNSSecRecords, err = dc.NewRecordConfig(dc.LabelFromShort(dnssecDummyLabel), 0, dnsv2.TypeTXT, dnssecDummyTxt)
 				if err != nil {
 					return nil, err
 				}
@@ -344,6 +342,7 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		default:
 			rec, err := dnsrr.RRtoRC(rr, domain)
+			// FUTURE(tlim): use dnsrr.RRv2toRC(dc, rr)
 			if err != nil {
 				return nil, err
 			}
@@ -509,6 +508,8 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 
 	i := 1
 	appendFinalUpdate := true
+
+	// NB(tlim): When moving to dnsv2, change .ToRR() to .ToRRv2().
 
 	for _, change := range changes {
 		switch change.Type {

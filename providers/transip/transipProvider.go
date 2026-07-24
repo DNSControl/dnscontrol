@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -208,9 +209,9 @@ retry:
 		return nil, err
 	}
 
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, entry := range entries {
-		rts, err := nativeToRecord(entry, domainName)
+		rts, err := nativeToRecord(entry, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -260,22 +261,26 @@ func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
 		Name:    config.Name,
 		Expire:  int(config.TTL),
 		Type:    config.Type,
-		Content: config.GetTargetCombinedFunc(nil),
+		Content: config.GetRDATA().String(),
 	}, nil
 }
 
-func nativeToRecord(entry domain.DNSEntry, origin string) (*models.RecordConfig, error) {
+func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	var rc *models.RecordConfig
+	var err error
 
-	rc := &models.RecordConfig{
-		TTL:      uint32(entry.Expire),
-		Type:     entry.Type,
-		Original: entry,
+	label := dc.LabelFromShort(entry.Name)
+	ttl := uint32(entry.Expire)
+
+	switch rtype := entry.Type; rtype {
+	case "TXT":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeTXT, entry.Content)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, entry.Content)
 	}
-	rc.SetLabel(entry.Name, origin)
-	if err := rc.PopulateFromStringFunc(entry.Type, entry.Content, origin, nil); err != nil {
+	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
 	}
-
 	return rc, nil
 }
 

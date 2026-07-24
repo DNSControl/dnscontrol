@@ -15,7 +15,8 @@ import (
 	"fmt"
 	"time"
 
-	"codeberg.org/miekg/dns/dnsutil"
+	dnsv2 "codeberg.org/miekg/dns"
+	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -59,25 +60,6 @@ type vercelProvider struct {
 	updateLimiter *rateLimiter
 	deleteLimiter *rateLimiter
 	listLimiter   *rateLimiter
-}
-
-// uint16Zero converts value to uint16 or returns 0, use wisely
-//
-// Vercel's Go SDK implies int64 for almost everything, but since Vercel doesn't actually
-// implement their own NS and instead uses NS1 / Constellix (previously), we'd assume if
-// TTL and Priority are int64, they are in fact uint16 and otherwise be rejected by upstream
-// providers. Under this assumption, we'd convert int64 to uint16 as wells.
-func uint16Zero(value any) uint16 {
-	switch v := value.(type) {
-	case float64:
-		return uint16(v)
-	case uint16:
-		return v
-	case int64:
-		return uint16(v)
-	case nil:
-	}
-	return 0
 }
 
 func init() {
@@ -152,64 +134,49 @@ func (c *vercelProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 			continue
 		}
 
-		rc := &models.RecordConfig{
-			TTL:      uint32(r.TTL),
-			Original: r,
+		rc, err := vercelRecordToRC(dc, r)
+		if err != nil {
+			return nil, err
 		}
-
-		name := r.Name
-		if name == "@" {
-			name = ""
-		}
-		rc.SetLabel(name, domain)
-
-		if r.Type == "CNAME" || r.Type == "MX" {
-			r.Value = dnsutil.Canonical(r.Value)
-		}
-
-		switch rtype := r.RecordType; rtype {
-		case "MX":
-			if err := rc.SetTargetMX(uint16Zero(r.MXPriority), r.Value); err != nil {
-				return nil, fmt.Errorf("unparsable MX record: %w", err)
-			}
-		case "SRV":
-			// Vercel's API doesn't always return SRV as an SRV object.
-			// It might return priority in the json field, and the srv as a big string `[weight] [port] [domain]` in json 'value' field.
-			// We have to create our own string before passing in.
-			// Fallback to parsing from string if SRV object is missing
-			// r.Value is "weight port target", we need "priority weight port target"
-			if err := rc.PopulateFromString(
-				rtype,
-				fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value),
-				domain,
-			); err != nil {
-				return nil, fmt.Errorf("unparsable SRV record from value: %w", err)
-			}
-		case "HTTPS":
-			// Vercel returns priority in a separate field, and value contains "target params".
-			// We need to combine them for PopulateFromString.
-			if err := rc.PopulateFromString(
-				rtype,
-				fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value),
-				domain,
-			); err != nil {
-				return nil, fmt.Errorf("unparsable HTTPS record: %w", err)
-			}
-		case "TXT":
-			err := rc.SetTargetTXT(r.Value)
-			if err != nil {
-				return nil, fmt.Errorf("unparsable TXT record: %w", err)
-			}
-		default:
-			if err := rc.PopulateFromString(rtype, r.Value, domain); err != nil {
-				return nil, fmt.Errorf("unparsable record received from vercel: %w", err)
-			}
-		}
-
 		zoneRecords = append(zoneRecords, rc)
 	}
 
 	return zoneRecords, nil
+}
+
+func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfig, error) {
+	original := r
+	label := dc.LabelFromShort(r.Name)
+	if r.Type == "CNAME" || r.Type == "MX" {
+		r.Value = dnsutilv2.Canonical(r.Value)
+	}
+
+	ttl := uint32(r.TTL)
+
+	rtype := r.RecordType
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
+	// NB(tlim): *Parse() with the fmt.Sprintf() is required for SRV, HTTPS, SVCB
+	// because v.Value includes all the fields except the priority.
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.MXPriority, r.Value)
+	case "SRV":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", r.Priority, r.Value))
+	case "HTTPS":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeHTTPS, fmt.Sprintf("%d %s", r.Priority, r.Value))
+	case "SVCB":
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSVCB, fmt.Sprintf("%d %s", r.Priority, r.Value))
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("unparsable %s record received from vercel: %w", rtype, err)
+	}
+	rc.Original = original
+	return rc, nil
 }
 
 func (c *vercelProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {

@@ -489,6 +489,7 @@ func makeTests() []*TestGroup {
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NETCUP",            // NS records not currently supported.
 				"PORKBUN",           // Record ignored.
+				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
 				"VERCEL",            // "invalid_name - Cannot set NS records at the root level. Only subdomain NS records are supported"
@@ -898,6 +899,7 @@ func makeTests() []*TestGroup {
 			not(
 				"OPENWRT",   // OpenWRT does not support per record TTL
 				"NAMECHEAP", // Namecheap does not support per record TTL
+				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
 			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
