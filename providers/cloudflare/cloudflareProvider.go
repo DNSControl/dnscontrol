@@ -394,7 +394,7 @@ func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, dom
 			Msg: msg,
 			F: func() error {
 				//return c.createSingleRedirect(domainID, *newrec.F.(*cfsingleredirect.SingleRedirectConfig))
-				return c.createSingleRedirect(domainID, newrec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT))
+				return c.createSingleRedirect(domainID, newrec.AsCLOUDFLAREAPISINGLEREDIRECT())
 			},
 		}}
 	default:
@@ -408,7 +408,7 @@ func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordCon
 	case "CF_WORKER_ROUTE":
 		idTxt = oldrec.Original.(cloudflare.WorkerRoute).ID
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
-		idTxt = oldrec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT).SRRRulesetID
+		idTxt = oldrec.AsCLOUDFLAREAPISINGLEREDIRECT().SRRRulesetID
 	default:
 		idTxt = oldrec.Original.(cloudflare.DNSRecord).ID
 	}
@@ -463,7 +463,7 @@ func (c *cloudflareProvider) mkDeleteCorrection(recType string, origRec *models.
 			case "CF_WORKER_ROUTE":
 				return c.deleteWorkerRoute(origRec.Original.(cloudflare.WorkerRoute).ID, domainID)
 			case "CLOUDFLAREAPI_SINGLE_REDIRECT":
-				return c.deleteSingleRedirects(domainID, origRec.GetRDATA().(privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT))
+				return c.deleteSingleRedirects(domainID, origRec.AsCLOUDFLAREAPISINGLEREDIRECT())
 			default:
 				return c.deleteDNSRecord(origRec.Original.(cloudflare.DNSRecord), domainID)
 			}
