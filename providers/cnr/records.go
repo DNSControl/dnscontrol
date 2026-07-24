@@ -126,13 +126,8 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	changeset := result.Instructions
 	actualChangeCount := result.ActualChangeCount
 
-	// Start corrections with the reports.
 	var corrections []*models.Correction
-	for _, change := range changeset {
-		if change.Type == diff2.REPORT {
-			corrections = append(corrections, change.CreateMessage())
-		}
-	}
+
 	if aliasSkip != nil {
 		corrections = append(corrections, aliasSkip)
 	}
@@ -168,7 +163,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	for _, change := range changeset {
 		switch change.Type {
 		case diff2.REPORT:
-			// Reports were already collected above.
+			fmt.Fprintln(buf, change.MsgsJoined)
 		case diff2.CREATE:
 			fmt.Fprintln(buf, change.MsgsJoined)
 			if err := addRR(change.New[0]); err != nil {
