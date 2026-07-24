@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -113,60 +113,59 @@ func (api *packetframeProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 		return nil, 0, fmt.Errorf("no such zone %q in Packetframe account", dc.Name)
 	}
 
-	toReport, create, dels, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, m := range create {
-		req, err := toReq(zone.ID, m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				_, err := api.createRecord(req)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, m := range dels {
-		original := m.Existing.Original.(*domainRecord)
-		if original.ID == "0" { // Skip the default nameservers
-			continue
-		}
+		case diff2.CREATE:
+			req, err := toReq(zone.ID, change.New[0])
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					_, err := api.createRecord(req)
+					return err
+				},
+			})
 
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				err := api.deleteRecord(zone.ID, original.ID)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+		case diff2.DELETE:
+			original := change.Old[0].Original.(*domainRecord)
+			if original.ID == "0" { // Skip the default nameservers
+				continue
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return api.deleteRecord(zone.ID, original.ID)
+				},
+			})
 
-	for _, m := range modify {
-		original := m.Existing.Original.(*domainRecord)
-		if original.ID == "0" { // Skip the default nameservers
-			continue
-		}
+		case diff2.CHANGE:
+			original := change.Old[0].Original.(*domainRecord)
+			if original.ID == "0" { // Skip the default nameservers
+				continue
+			}
+			req, _ := toReq(zone.ID, change.New[0])
+			req.ID = original.ID
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return api.modifyRecord(req)
+				},
+			})
 
-		req, _ := toReq(zone.ID, m.Desired)
-		req.ID = original.ID
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				err := api.modifyRecord(req)
-				return err
-			},
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
