@@ -357,7 +357,7 @@ func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.Re
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.Pref), record.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, record.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", record.Pref, record.Value))
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, record.Type, record.Value)
 	}

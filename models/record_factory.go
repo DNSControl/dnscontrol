@@ -29,13 +29,11 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 
 	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
 	if !ok {
-		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 	}
 	rd, err := f(dc.Name, nil, args...)
 	if err != nil {
-		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v\n", typeNum, err)
-		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
+		return nil, fmt.Errorf("NewRecordConfig: failed MakeRDATA: %w", err)
 	}
 
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
