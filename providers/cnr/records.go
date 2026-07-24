@@ -118,10 +118,12 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 			}
 		}
 	}
-	changeset, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
+	result, err := diff2.ByZone(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
+	changeset := result.Instructions
+	actualChangeCount := result.ActualChangeCount
 
 	// Start corrections with the reports.
 	var corrections []*models.Correction
