@@ -117,10 +117,6 @@ func recordsToNative(rcs models.Records, expectedKey models.RecordKey) (*model.S
 			continue
 		}
 		val := r.GetRDATA().String()
-		// special case for empty TXT records
-		if key.Type == "TXT" && len(val) == 0 {
-			val = "\"\""
-		}
 
 		resultVal = append(resultVal, val)
 		if resultTTL == 0 {
