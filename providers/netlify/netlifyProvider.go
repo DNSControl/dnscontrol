@@ -9,7 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -163,57 +163,60 @@ func (n *netlifyProvider) ListZones() ([]string, error) {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(records)
+	changes, actualChangeCount, err := diff2.ByRecord(records, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
 	zone, err := n.getZone(dc.Name)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		id := m.Existing.Original.(*dnsRecord).ID
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				return n.deleteDNSRecord(zone.ID, id)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, m := range create {
-		req := toReq(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				_, err := n.createDNSRecord(zone.ID, req)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
-
-	for _, m := range modify {
-		id := m.Existing.Original.(*dnsRecord).ID
-		req := toReq(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				if err := n.deleteDNSRecord(zone.ID, id); err != nil {
+		case diff2.CREATE:
+			req := toReq(change.New[0])
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					_, err := n.createDNSRecord(zone.ID, req)
 					return err
-				}
+				},
+			})
 
-				_, err := n.createDNSRecord(zone.ID, req)
-				return err
-			},
+		case diff2.DELETE:
+			id := change.Old[0].Original.(*dnsRecord).ID
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return n.deleteDNSRecord(zone.ID, id)
+				},
+			})
+
+		case diff2.CHANGE:
+			// Netlify has no update API, so a change is a delete followed by a create.
+			id := change.Old[0].Original.(*dnsRecord).ID
+			req := toReq(change.New[0])
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					if err := n.deleteDNSRecord(zone.ID, id); err != nil {
+						return err
+					}
+
+					_, err := n.createDNSRecord(zone.ID, req)
+					return err
+				},
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
