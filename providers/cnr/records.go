@@ -119,12 +119,10 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		}
 	}
 
-	result, err := diff2.ByZone(actual, dc, nil)
+	changeset, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	changeset := result.Instructions
-	actualChangeCount := result.ActualChangeCount
 
 	var corrections []*models.Correction
 
@@ -183,7 +181,9 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		}
 	}
 
-	if result.HasChanges {
+	// Every CREATE/DELETE/CHANGE adds at least one ADDRR/DELRR parameter; a
+	// non-empty params map therefore means there is a zone update to send.
+	if len(params) > 0 {
 		msg := fmt.Sprintf("GENERATE_ZONE: %s\n%s", dc.Name, buf.String())
 		if n.isDebugOn() {
 			msg = fmt.Sprintf("GENERATE_ZONE: %s\n%sPROVIDER CNR, API COMMAND PARAMETERS:\n%s", dc.Name, buf.String(), builder.String())
