@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
@@ -31,7 +32,7 @@ func (rd R53ALIAS) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeR53ALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) < 2 || len(args) > 4 {
 		return nil, fmt.Errorf("R53_ALIAS expects 4 arguments, got %d: %+v", len(args), args)
@@ -39,9 +40,12 @@ func MakeR53ALIAS(origin string, _ map[string]string, args ...any) (dnsv2.RDATA,
 	for len(args) < 4 {
 		args = append(args, "")
 	}
+	if isEnabled.TargetIsFqdnNoDot {
+		origin = "."
+	}
 	return R53ALIAS{
 		AliasType:        mustbe.RawString(args[0]),
-		Target:           mustbe.TargetHost(origin, args[1]),
+		Target:           mustbe.TargetHost(origin, isEnabled, args[1]),
 		EvalTargetHealth: mustbe.RawString(args[2]),
 		ZoneID:           mustbe.RawString(args[3]),
 	}, nil

@@ -23,6 +23,7 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -212,11 +213,16 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	// confusing.
 
 	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	var err error
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" && rec.Name != "@" {
 			// GANDI only permits aliases on a naked domain.
 			// Therefore, we change this to a CNAME.
-			rec.ChangeType("CNAME", dc.Name)
+
+			rec, err = dc.NewRecordConfig(dc.LabelFromShort(rec.Name), rec.TTL, dnsv2.TypeCNAME, rec.AsALIAS().Target)
+			if err != nil {
+				panic("should not happen PrepDesiredRecords")
+			}
 		}
 		if rec.TTL < 300 {
 			printer.Warnf("Gandi does not support ttls < 300. Setting %s from %d to 300\n", rec.GetLabelFQDN(), rec.TTL)

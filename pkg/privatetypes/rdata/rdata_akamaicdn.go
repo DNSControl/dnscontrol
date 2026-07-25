@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
 type AKAMAICDN struct {
@@ -24,13 +25,16 @@ func (rd AKAMAICDN) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeAKAMAICDN(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeAKAMAICDN(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("AKAMAICDN expects 1 arguments, got %d: %+v", len(args), args)
 	}
+	if isEnabled.TargetIsFqdnNoDot {
+		origin = "."
+	}
 	return AKAMAICDN{
-		Target: mustbe.TargetHost(origin, args[0]),
+		Target: mustbe.TargetHost(origin, isEnabled, args[0]),
 	}, nil
 }
 
