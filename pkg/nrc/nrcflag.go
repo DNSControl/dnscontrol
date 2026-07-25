@@ -1,5 +1,8 @@
 package nrc
 
+// FlagType is
+// type FlagType int
+
 type Flags struct {
 	// SrvWeirdSplit the last field contains multiple fields.
 	// Only for use with NewRecordConfigParse() && rtype=="SRV" && len(args) == 2.
@@ -19,14 +22,12 @@ type Flags struct {
 	TxtDontParse bool
 }
 
-type FlagType int
-
 var SRV_WEIRD_SPLIT = Flags{SrvWeirdSplit: true}
 var TARGET_IS_FQDN_NO_DOT = Flags{TargetIsFqdnNoDot: true}
 var TXT_DONT_PARSE = Flags{TxtDontParse: true}
 
-const (
-	SrvWeirdSplit FlagType = iota
-	TargetIsFqdnNoDot
-	TxtDontParse
-)
+// const (
+// 	SrvWeirdSplit FlagType = iota
+// 	TargetIsFqdnNoDot
+// 	TxtDontParse
+// )

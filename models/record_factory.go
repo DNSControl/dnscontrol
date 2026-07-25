@@ -38,19 +38,22 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 			args = slices.Delete(args, len(args)-1, len(args))
 		}
 	}
+
+	// SrvWeirdSplit
 	if isEnabled.SrvWeirdSplit && len(args) == 2 {
-		return dc.NewRecordConfigParse(name, ttl, typeNum, fmt.Sprintf("%d %s", args[0], args[1].(string)))
+		isEnabled.SrvWeirdSplit = false
+		return dc.NewRecordConfigParse(name, ttl, typeNum, fmt.Sprintf("%d %s", args[0], args[1].(string)), isEnabled)
 	}
-	// if isEnabled.TargetIsFqdnNoDot {
-	// 	// Passed to downstream functions.
-	// }
+	// TargetIsFqdnNoDot
+	// Passed to downstream functions.
+
+	// TxtDontParse
 	if isEnabled.TxtDontParse {
 		panic("NewRecordConfig() incompatible with TxtDontParse")
 	}
 
 	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
 	if !ok {
-		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 	}
 	rd, err := f(dc.Name, nil, isEnabled, args...)
@@ -92,7 +95,8 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 
 	// TxtDontParse
 	if isEnabled.TxtDontParse && typeNum == dnsv2.TypeTXT {
-		return dc.NewRecordConfig(name, ttl, typeNum, data)
+		isEnabled.TxtDontParse = false
+		return dc.NewRecordConfig(name, ttl, typeNum, data, isEnabled)
 	}
 
 	rd, err := MyNewData(typeNum, data, origin)
