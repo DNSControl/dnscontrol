@@ -14,11 +14,11 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/fatih/color"
@@ -696,7 +696,7 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		}
 
 		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
-		rd, err := models.MakeA(dc.Name, rec.Metadata, newIP)
+		rd, err := models.MakeA(dc.Name, rec.Metadata, nrc.Flags{}, newIP)
 		if err != nil {
 			return err
 		}
@@ -941,39 +941,22 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 		cr.Type = "TXT"
 	}
 
-	// normalize cname,mx,ns records with dots to be consistent with our config format.
-	if cr.Type == "ALIAS" || cr.Type == "CNAME" || cr.Type == "MX" || cr.Type == "NS" || cr.Type == "PTR" {
-		if cr.Content != "." {
-			cr.Content = cr.Content + "."
-		}
-	}
+	label := dc.LabelFromFQDNNoDot(cr.Name)
+	ttl := uint32(cr.TTL)
+	nFlags := nrc.TARGET_IS_FQDN_NO_DOT
 
 	var rc *models.RecordConfig
 	var err error
-	label := dc.LabelFromFQDNNoDot(cr.Name)
-	ttl := uint32(cr.TTL)
+
 	switch rType := cr.Type; rType { // #rtype_variations
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content)
-		if err != nil {
-			return nil, fmt.Errorf("unparsable MX record received from cloudflare: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content, nFlags)
 	case "SRV":
 		data := cr.Data.(map[string]any)
-
 		target := stringDefault(data["target"], "MISSING.TARGET")
-		if target != "." {
-			target += "."
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target)
-	case "TXT":
-		s, serr := parseCfTxtContent(cr.Content)
-		if serr != nil {
-			return rc, err
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, s)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target, nFlags)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content, nFlags)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable %q record received from cloudflare: %w", cr.Type, err)
@@ -982,7 +965,8 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 	// Save a pointer to the original cr so that "push" can refer to it for IDs, etc.
 	rc.Original = cr
 
-	if cr.Type == "A" || cr.Type == "AAAA" || cr.Type == "CNAME" {
+	//if cr.Type == "A" || cr.Type == "AAAA" || cr.Type == "CNAME" {
+	if rc.TypeNum == dnsv2.TypeA || rc.TypeNum == dnsv2.TypeAAAA || rc.TypeNum == dnsv2.TypeCNAME {
 		if cr.Proxied != nil {
 			if *(cr.Proxied) {
 				rc.Metadata[metaProxy] = "on"
@@ -1010,55 +994,6 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 	}
 
 	return rc, nil
-}
-
-func parseCfTxtContent(s string) (string, error) {
-	// Cloudflare encodes TXT records in a mystery format. They tell you when
-	// you've done something wrong, but won't document what they do want.
-	// If you use their web dashboard and enter the string as any normal human
-	// would, they display a warning that you're a bad person and should feel
-	// bad for doing that.  However, they accept it just fine, and present it in
-	// their API as a string like any person on this planet would expect.  If
-	// you enter the string with quotes, they accept that like a BIND zonefile.
-
-	// There is a difference between what you enter in their web dashboard, how
-	// it is rewritten by the UI, and what you get in the JSON. Examples:
-
-	// dashboard: i love dns it is great
-	// rewritten: "i love dns it is great"
-	// seen json: "i love dns it is great"
-
-	// dashboard: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	// rewritten: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// dashboard: "i love dns" "it is great"
-	// rewritten: "i love dns" "it is great"
-	// seen json: "i love dns" "it is great"
-
-	// dashboard: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// rewritten: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// dashboard: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// rewritten: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// From this we conclude:
-	// If it begins and ends with a quote, use ParseQuoted() to decode it.
-	// Otherwise, it is a raw string. They could just fucking tell us that in
-	// the documenation, but where's the fun in that?
-
-	if s == "" {
-		return "", nil
-	}
-	if s == `"` {
-		return "", errors.New("invalid TXT record content: one double quote")
-	}
-	if s[0] == '"' && s[len(s)-1] == '"' {
-		return txtutil.ParseQuoted(s)
-	}
-	return s, nil
 }
 
 func getProxyMetadata(r *models.RecordConfig) map[string]string {

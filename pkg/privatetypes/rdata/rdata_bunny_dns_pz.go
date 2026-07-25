@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
 type BUNNYDNSPZ struct {
@@ -24,7 +25,7 @@ func (rd BUNNYDNSPZ) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeBUNNYDNSPZ(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeBUNNYDNSPZ(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("BUNNY_DNS_PZ expects 1 arguments, got %d: %+v", len(args), args)
