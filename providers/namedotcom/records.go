@@ -8,8 +8,8 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rcflag"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -108,7 +108,7 @@ func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig,
 	case "SRV":
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s.", r.Priority, r.Answer))
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer, rcflag.TxtDontParse)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer, nrc.TARGET_IS_FQDN_NO_DOT)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)

@@ -12,6 +12,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/digitalocean/godo"
 	"golang.org/x/oauth2"
@@ -308,35 +309,33 @@ retry:
 }
 
 func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, error) {
-	domain := dc.Name
 	target := r.Data
 	// Make target FQDN (#rtype_variations)
-	if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
-		// If target is the domainname, e.g. cname foo.example.com -> example.com,
-		// DO returns "@" on read even if fqdn was written.
-		switch target {
-		case "@":
-			target = domain
-		case ".":
-			target = ""
-		}
-		target = target + "."
-	}
+	// if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
+	// 	// If target is the domainname, e.g. cname foo.example.com -> example.com,
+	// 	// DO returns "@" on read even if fqdn was written.
+	// 	switch target {
+	// 	case "@":
+	// 		target = domain
+	// 	case ".":
+	// 		target = ""
+	// 	}
+	// 	target = target + "."
+	//}
 
 	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeMX, uint16(r.Priority), target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(r.Priority), target, nrc.TARGET_IS_FQDN_NO_DOT)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), target, nrc.TARGET_IS_FQDN_NO_DOT)
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeCAA, uint8(r.Flags), r.Tag, target)
-	//case "TXT":
-	//	rc, err = dc.NewRecordConfig(label, uint32(r.TTL), dnsv2.TypeTXT, target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(r.Flags), r.Tag, target)
 	default:
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.Type, target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, target, nrc.TARGET_IS_FQDN_NO_DOT)
 	}
 	if err != nil {
 		return nil, err

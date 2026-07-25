@@ -21,6 +21,10 @@ type Flags struct {
 
 type FlagType int
 
+var SRV_WEIRD_SPLIT = Flags{SrvWeirdSplit: true}
+var TARGET_IS_FQDN_NO_DOT = Flags{TargetIsFqdnNoDot: true}
+var TXT_DONT_PARSE = Flags{TxtDontParse: true}
+
 const (
 	SrvWeirdSplit FlagType = iota
 	TargetIsFqdnNoDot

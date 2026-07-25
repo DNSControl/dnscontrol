@@ -16,9 +16,9 @@ import (
 	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	vercelClient "github.com/vercel/terraform-provider-vercel/client"
 )
@@ -147,9 +147,6 @@ func (c *vercelProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfig, error) {
 	original := r
 	label := dc.LabelFromShort(r.Name)
-	if r.Type == "CNAME" || r.Type == "MX" {
-		r.Value = dnsutilv2.Canonical(r.Value)
-	}
 
 	ttl := uint32(r.TTL)
 
@@ -157,16 +154,12 @@ func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfi
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
-	// NB(tlim): *Parse() with the fmt.Sprintf() is required for SRV, HTTPS, SVCB
-	// because v.Value includes all the fields except the priority.
+	case "CNAME":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value, r.Value, nrc.TARGET_IS_FQDN_NO_DOT)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.MXPriority, r.Value)
-	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", r.Priority, r.Value))
-	case "HTTPS":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeHTTPS, fmt.Sprintf("%d %s", r.Priority, r.Value))
-	case "SVCB":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSVCB, fmt.Sprintf("%d %s", r.Priority, r.Value))
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.MXPriority, r.Value, nrc.TARGET_IS_FQDN_NO_DOT)
+	case "SRV", "HTTPS", "SVCB":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Value, nrc.SRV_WEIRD_SPLIT)
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
 	default:

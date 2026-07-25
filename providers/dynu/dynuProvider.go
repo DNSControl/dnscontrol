@@ -14,6 +14,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -283,7 +284,7 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 	case "RP":
 		mbox := ensureTrailingDot(r.MailBox)
 		txt := ensureTrailingDot(r.TxtDomainName)
-		rd, err := models.MakeRP(domain, nil, mbox, txt)
+		rd, err := models.MakeRP(domain, nil, nrc.Flags{}, mbox, txt)
 		if err == nil {
 			rc.SetRDATA(rd)
 		}

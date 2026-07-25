@@ -14,6 +14,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -695,7 +696,7 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		}
 
 		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
-		rd, err := models.MakeA(dc.Name, rec.Metadata, newIP)
+		rd, err := models.MakeA(dc.Name, rec.Metadata, nrc.Flags{}, newIP)
 		if err != nil {
 			return err
 		}
