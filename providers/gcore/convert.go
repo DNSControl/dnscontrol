@@ -5,6 +5,7 @@ package gcore
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -12,9 +13,9 @@ import (
 )
 
 // nativeToRecord takes a DNS record from G-Core and returns a native RecordConfig struct.
-func nativeToRecords(n gcoreRRSetExtended, zoneName string) ([]*models.RecordConfig, error) {
+func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
 	var rcs []*models.RecordConfig
-	recName := n.Name
+	recName := dc.ToShort(n.Name)
 	recType := n.Type
 
 	// Split G-Core's RRset into individual records
@@ -23,12 +24,7 @@ func nativeToRecords(n gcoreRRSetExtended, zoneName string) ([]*models.RecordCon
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
 		}
-		rc := &models.RecordConfig{
-			TTL:      uint32(n.TTL),
-			Original: n,
-			Metadata: metadata,
-		}
-		rc.SetLabelFromFQDN(recName, zoneName)
+		var rc *models.RecordConfig
 		switch recType {
 		case "CAA": // G-Core API don't need quotes around CAA with whitespace
 			if len(value.Content) != 3 {
@@ -41,25 +37,22 @@ func nativeToRecords(n gcoreRRSetExtended, zoneName string) ([]*models.RecordCon
 			}
 
 			flag, tag, target := parts[0], parts[1], parts[2]
-			if err := rc.SetTargetCAAStrings(flag, tag, target); err != nil {
-				return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
-			}
+			rc, err = dc.NewRecordConfig(recName, uint32(n.TTL), recType, flag, tag, target)
 
 		case "TXT": // Avoid double quoting for TXT records
-			if err := rc.SetTargetTXTs(convertSdkAnySliceToTxtSlice(value.Content)); err != nil {
-				return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
-			}
+			rc, err = dc.NewRecordConfig(recName, uint32(n.TTL), recType, strings.Join(convertSdkAnySliceToTxtSlice(value.Content), ""))
 
 		case "SCVB": // GCore mistypes "SVCB" as "SCVB"
-			if err := rc.PopulateFromString("SVCB", value.ContentToString(), zoneName); err != nil {
-				return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
-			}
+			rc, err = dc.NewRecordConfigParse(recName, uint32(n.TTL), "SVCB", value.ContentToString())
 
 		default: //  "A", "AAAA", "CAA", "NS", "CNAME", "MX", "PTR", "SRV"
-			if err := rc.PopulateFromString(recType, value.ContentToString(), zoneName); err != nil {
-				return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
-			}
+			rc, err = dc.NewRecordConfigParse(recName, uint32(n.TTL), recType, value.ContentToString())
 		}
+		if err != nil {
+			return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
+		}
+		rc.Original = n
+		rc.Metadata = metadata
 		rcs = append(rcs, rc)
 	}
 
@@ -129,13 +122,13 @@ func recordsToNative(rcs []*models.RecordConfig, expectedKey models.RecordKey) (
 		case "SVCB":
 			// GCore mistypes "SVCB" as "SCVB"
 			rr = dnssdk.ResourceRecord{
-				Content: dnssdk.ContentFromValue("SCVB", r.GetTargetCombined()),
+				Content: dnssdk.ContentFromValue("SCVB", r.GetRDATA().String()),
 				Meta:    recordMeta,
 				Enabled: true,
 			}
 		default:
 			rr = dnssdk.ResourceRecord{
-				Content: dnssdk.ContentFromValue(key.Type, r.GetTargetCombined()),
+				Content: dnssdk.ContentFromValue(key.Type, r.GetRDATA().String()),
 				Meta:    recordMeta,
 				Enabled: true,
 			}
