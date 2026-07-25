@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
 // TargetHost returns a FQDN (or @) suitable as a target for CNAME and other records.
@@ -33,7 +34,7 @@ import (
 //   - `$origin.` -> `$origin.`
 //   - `other.com.` -> `other.com.`
 //   - `short` -> `short.$origin`
-func TargetHost(origin string, arg any) string {
+func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	// Check for programmer error.
 	if strings.HasSuffix(origin, ".") {
 		panic("mustbe.Host must NOT be called with an origin ending with .")
@@ -66,6 +67,13 @@ func TargetHost(origin string, arg any) string {
 	// Normalize it
 	name = domaintags.EfficientToASCII(name)
 
+	if isEnabled.TargetIsFqdnNoDot {
+		if name[len(name)-1] == '.' {
+			return name
+		}
+		return name + "."
+	}
+
 	// Is this already a FQDN? Return it.
 	if strings.HasSuffix(name, ".") {
 		return name
@@ -76,7 +84,7 @@ func TargetHost(origin string, arg any) string {
 }
 
 // TargetHostSRV is like TargetHost with the exception that "." and "" have special meaning and are left alone.
-func TargetHostSRV(origin string, arg any) string {
+func TargetHostSRV(origin string, isEnabled nrc.Flags, arg any) string {
 
 	var name string
 	switch v := arg.(type) {
@@ -92,5 +100,5 @@ func TargetHostSRV(origin string, arg any) string {
 		return name
 	}
 
-	return TargetHost(origin, name)
+	return TargetHost(origin, isEnabled, name)
 }
