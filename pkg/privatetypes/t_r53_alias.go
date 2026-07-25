@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -64,7 +65,7 @@ func (rr *R53ALIAS) Parse(tokens []string, s string) error {
 		return fmt.Errorf("R53_ALIAS requires exactly 4 arguments, got %d: %v", len(args), args)
 	}
 	rr.AliasType = mustbe.RawString(args[0])
-	rr.Target = mustbe.TargetHost("", args[1])
+	rr.Target = mustbe.TargetHost("", nrc.Flags{}, args[1])
 	return nil
 }
 
