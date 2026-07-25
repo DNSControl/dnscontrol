@@ -3,13 +3,14 @@ package models
 import (
 	"fmt"
 	"log"
+	"slices"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rcflag"
+	nrc "github.com/DNSControl/dnscontrol/v5/pkg/rcflag"
 	dnsv1 "github.com/miekg/dns"
 	"golang.org/x/net/idna"
 )
@@ -22,6 +23,7 @@ import (
 // which is stored in a DomainConfig. If you need to create a RecordConfig
 // outside of a DomainConfig, consider using models.MakeTestRC() or
 // models.MakeTestRCParse() (both in record_helpers_test.go).
+// Behavior can be modified by sending an optional nrc.Flag struct as the last arg.
 func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, args ...any) (*RecordConfig, error) {
 	mustbe.ValidArgs(args)
 	typeNum, err := anyToTypeNum(typeAny)
@@ -29,11 +31,25 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		return nil, err
 	}
 
-	args, rcflags := rcflag.ProcessForNewRecordConfig(args)
-	// Called as: rc, err := NewRecordConfig(l, t, ty, content, rcflag.SrvWeirdSplit{})
-	// This means for SRV records, expect args[0].(string) is priority and args[1].(string) is "weight port target".
-	// We assume no quoting/escaping and just use strings.Fields()
-	if typeNum == dnsv2.TypeTXT && len(args) == 2 && rcflags.SrvWeirdSplit {
+	// if last arg is type nrc.Flags, assign it to isEnabled then remove it from the args array.
+	var isEnabled nrc.Flags
+	if len(args) > 0 {
+		if f, ok := args[len(args)-1].(nrc.Flags); ok {
+			isEnabled = f
+			args = slices.Delete(args, len(args)-1, len(args))
+		}
+	}
+	if isEnabled.SrvWeirdSplit && len(args) == 2 {
+		return dc.NewRecordConfigParse(name, ttl, typeNum, fmt.Sprintf("%d %s", args[0].(string), args[1].(string)))
+	}
+	if isEnabled.TargetIsFqdnNoDot {
+
+	}
+	if isEnabled.TxtDontParse {
+		panic(fmt.Sprintf("NewRecordConfig() incompatible with TxtDontParse"))
+	}
+
+	if typeNum == dnsv2.TypeSRV && len(args) == 2 && isEnabled.SrvWeirdSplit {
 		parts := strings.Fields(args[1].(string))
 		if len(parts) == 3 {
 			return dc.NewRecordConfig(name, ttl, dnsv1.TypeTXT, args[0], parts[0], parts[1], parts[2])
@@ -51,35 +67,51 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
 	}
 
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil, isEnabled)
 }
 
 // NewRecordConfigParse is like NewRecordConfig but the fields of the record
 // come from parsing data which is assumed to be in RFC1038 Zonefile format.
-func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string, rcflagList ...any) (*RecordConfig, error) {
+// Behavior can be modified by sending an optional rfc.Flag struct.
+func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string, rcflag ...nrc.Flags) (*RecordConfig, error) {
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {
 		return nil, err
 	}
 
-	rcflags := rcflag.ProcessForNewRecordConfigParse(rcflagList)
-	// Called as: rc, err := NewRecordConfigParse(l, t, ty, content, rcflag.TxtIsRawBytes{})
-	// This means for TXT records, act as if NewRecordConfig was used.
-	if typeNum == dnsv2.TypeTXT && rcflags.TxtDontParse {
-		return dc.NewRecordConfig(name, ttl, dnsv1.TypeTXT, data)
+	var isEnabled nrc.Flags
+	switch len(rcflag) {
+	case 0:
+	case 1:
+		isEnabled = rcflag[0]
+	default:
+		panic(fmt.Sprintf("NewRecordConfigParse() called with multiple flags: %v", rcflag))
 	}
 
-	rd, err := MyNewData(typeNum, data, dc.Name)
+	if isEnabled.SrvWeirdSplit {
+		panic(fmt.Sprintf("NewRecordConfigParse() incompatible with SrvWeirdSplit"))
+	}
+
+	origin := dc.Name
+	if isEnabled.TargetIsFqdnNoDot {
+		origin = ""
+	}
+
+	if isEnabled.TxtDontParse && typeNum == dnsv2.TypeTXT {
+		return dc.NewRecordConfig(name, ttl, typeNum, data)
+	}
+
+	rd, err := MyNewData(typeNum, data, origin)
 	if err != nil {
 		return nil, err
 	}
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil, isEnabled)
 }
 
 // NewRecordConfigForRRv2toRC is like NewRecordConfig but takes an RDATA. It
 // should only be used by RRv2toRC. It is not intended for general use.
 func (dc *DomainConfig) NewRecordConfigForRRv2toRC(name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA) (*RecordConfig, error) {
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil, isEnabled)
 }
 
 // NewRecordConfigForRRtoRC is only for use by dnsrr.go. Do not use this. The signature may change at any time.
@@ -99,7 +131,7 @@ func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, a
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
-	return newRecordConfigHelper(origin, name, ttl, typeNum, rd, nil)
+	return newRecordConfigHelper(origin, name, ttl, typeNum, rd, nil, isEnabled)
 }
 
 // newRecordConfigFromDnsconfigjs is only for use by models.ImportRawRecords().
@@ -124,12 +156,12 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
 		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata, isEnabled)
 }
 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.
 // All valid RecordConfig structs come through this function. Everything else is questionable.
-func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
+func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string, isEnabled nrc.Flags) (*RecordConfig, error) {
 	rc := &RecordConfig{
 		Type:        dnsutilv2.TypeToString(typeNum),
 		TypeNum:     typeNum,
