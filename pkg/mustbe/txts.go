@@ -7,15 +7,32 @@ import (
 
 func Txts(args ...any) []string {
 	if len(args) == 0 {
-		return []string{}
+		return []string{""}
 	}
-	if len(args) == 1 {
-		return []string{fmt.Sprintf("%s", args[0])}
-	}
-	// Use a string builder. For each args if it's a string, add it to the builder. If it is anything else, convert it to a string and add it to the builder.
+	// Join the parts using a string builder, assuring each part is a string (or converting it if needed)
 	var sb bytes.Buffer
 	for _, a := range args {
-		fmt.Fprintf(&sb, "%s", a)
+		fmt.Fprintf(&sb, "%v", a)
 	}
-	return []string{sb.String()}
+	return splitChunks(sb.String(), 255)
+}
+
+func splitChunks(buf string, lim int) []string {
+	if len(buf) == 0 {
+		return []string{""}
+	}
+	if len(buf) <= lim {
+		return []string{buf}
+	}
+
+	var chunk string
+	chunks := make([]string, 0, len(buf)/lim+1)
+	for len(buf) >= lim {
+		chunk, buf = buf[:lim], buf[lim:]
+		chunks = append(chunks, chunk)
+	}
+	if len(buf) > 0 {
+		chunks = append(chunks, buf)
+	}
+	return chunks
 }
