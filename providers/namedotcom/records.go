@@ -1,13 +1,12 @@
 package namedotcom
 
 import (
-	"errors"
 	"fmt"
-	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namedotcom/go/namecom"
 )
@@ -91,28 +90,26 @@ func checkNSModifications(dc *models.DomainConfig) {
 }
 
 func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
-	if !strings.HasSuffix(r.Fqdn, ".") {
-		panic(fmt.Errorf("namedotcom suddenly changed protocol. Bailing. (%v)", r.Fqdn))
-	}
 	label := dc.LabelFromFQDNWithDot(r.Fqdn)
+
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "ANAME":
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeALIAS, r.Answer)
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, r.Answer)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, uint16(r.Priority), r.Answer)
+		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, r.Priority, r.Answer)
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s.", r.Priority, r.Answer))
+		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeSRV, r.Priority, r.Answer, nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer, nrc.TXT_DONT_PARSE)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)
 	}
+
 	rc.Original = r
+
 	return rc, nil
 }
 
@@ -147,33 +144,35 @@ func (n *namedotcomProvider) getRecords(domain string) ([]*namecom.Record, error
 }
 
 func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string) error {
+
+	rtype := rc.Type
+	answer := rc.GetTargetField()
+	var priority uint32
+
+	switch rc.TypeNum {
+	case privatetypes.TypeALIAS:
+		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
+		rtype = "ANAME"
+	case dnsv2.TypeTXT:
+		answer = rc.GetTargetTXTJoined()
+	case dnsv2.TypeMX:
+		priority = uint32(rc.AsMX().Preference)
+	case dnsv2.TypeSRV:
+		// SRV records with empty targets are not supported (as of 2019-11-05, the API returns 'Parameter Value Error - Invalid Srv Format'
+		priority = uint32(rc.SrvPriority)
+		srv := rc.AsSRV()
+		answer = fmt.Sprintf("%d %d %v", srv.Weight, srv.Port, srv.Target)
+	}
+
 	record := &namecom.Record{
 		DomainName: domain,
 		Host:       rc.GetLabel(),
-		Type:       rc.Type,
-		Answer:     rc.GetTargetField(),
+		Type:       rtype,
+		Answer:     answer,
 		TTL:        rc.TTL,
-		Priority:   uint32(rc.MxPreference),
+		Priority:   priority,
 	}
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "CNAME", "MX", "NS":
-		// nothing
-	case "ALIAS":
-		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
-		record.Type = "ANAME"
-	case "TXT":
-		record.Answer = rc.GetTargetTXTJoined()
-	case "SRV":
-		if rc.GetTargetField() == "." {
-			return errors.New("SRV records with empty targets are not supported (as of 2019-11-05, the API returns 'Parameter Value Error - Invalid Srv Format')")
-		}
-		record.Answer = fmt.Sprintf("%d %d %v", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
-		record.Priority = uint32(rc.SrvPriority)
-	default:
-		panic(fmt.Sprintf("createRecord rtype %v unimplemented", rc.Type))
-		// We panic so that we quickly find any switch statements
-		// that have not been updated for a new RR type.
-	}
+
 	_, err := n.client.CreateRecord(record)
 	return err
 }

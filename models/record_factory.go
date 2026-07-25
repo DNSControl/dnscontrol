@@ -3,11 +3,13 @@ package models
 import (
 	"fmt"
 	"log"
+	"slices"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	nrc "github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"golang.org/x/net/idna"
 )
@@ -20,6 +22,7 @@ import (
 // which is stored in a DomainConfig. If you need to create a RecordConfig
 // outside of a DomainConfig, consider using models.MakeTestRC() or
 // models.MakeTestRCParse() (both in record_helpers_test.go).
+// Behavior can be modified by sending an optional nrc.Flag struct as the last arg.
 func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, args ...any) (*RecordConfig, error) {
 	mustbe.ValidArgs(args)
 	typeNum, err := anyToTypeNum(typeAny)
@@ -27,15 +30,35 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 		return nil, err
 	}
 
+	// if last arg is type nrc.Flags, assign it to isEnabled then remove it from the args array.
+	var isEnabled nrc.Flags
+	if len(args) > 0 {
+		if f, ok := args[len(args)-1].(nrc.Flags); ok {
+			isEnabled = f
+			args = slices.Delete(args, len(args)-1, len(args))
+		}
+	}
+
+	// SrvWeirdSplit
+	if isEnabled.SrvWeirdSplit && len(args) == 2 {
+		isEnabled.SrvWeirdSplit = false
+		return dc.NewRecordConfigParse(name, ttl, typeNum, fmt.Sprintf("%d %s", args[0], args[1].(string)), isEnabled)
+	}
+	// TargetIsFqdnNoDot
+	// Passed to downstream functions.
+
+	// TxtDontParse
+	if isEnabled.TxtDontParse {
+		panic("NewRecordConfig() incompatible with TxtDontParse")
+	}
+
 	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
 	if !ok {
-		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 		return nil, fmt.Errorf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 	}
-	rd, err := f(dc.Name, nil, args...)
+	rd, err := f(dc.Name, nil, isEnabled, args...)
 	if err != nil {
-		log.Printf("NewRecordConfig: Failed to create RDATA for type %d: %+v\n", typeNum, err)
-		log.Fatalf("NewRecordConfig: Failed to create RDATA for type %d: %+v", typeNum, err)
+		return nil, fmt.Errorf("NewRecordConfig: Failed to create RDATA for type %d: %w", typeNum, err)
 	}
 
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
@@ -43,12 +66,40 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 
 // NewRecordConfigParse is like NewRecordConfig but the fields of the record
 // come from parsing data which is assumed to be in RFC1038 Zonefile format.
-func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string) (*RecordConfig, error) {
+// Behavior can be modified by sending an optional rfc.Flag struct.
+func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string, rcflag ...nrc.Flags) (*RecordConfig, error) {
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {
 		return nil, err
 	}
-	rd, err := MyNewData(typeNum, data, dc.Name)
+
+	var isEnabled nrc.Flags
+	switch len(rcflag) {
+	case 0:
+	case 1:
+		isEnabled = rcflag[0]
+	default:
+		panic(fmt.Sprintf("NewRecordConfigParse() called with multiple flags: %v", rcflag))
+	}
+
+	// SrvWeirdSplit
+	if isEnabled.SrvWeirdSplit {
+		panic("NewRecordConfigParse() incompatible with SrvWeirdSplit")
+	}
+
+	// TargetIsFqdnNoDot
+	origin := dc.Name
+	if isEnabled.TargetIsFqdnNoDot {
+		origin = ""
+	}
+
+	// TxtDontParse
+	if isEnabled.TxtDontParse && typeNum == dnsv2.TypeTXT {
+		isEnabled.TxtDontParse = false
+		return dc.NewRecordConfig(name, ttl, typeNum, data, isEnabled)
+	}
+
+	rd, err := MyNewData(typeNum, data, origin)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +125,9 @@ func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, a
 		name = "@"
 	}
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, args...)
+	isEnabled := nrc.Flags{}
+
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, isEnabled, args...)
 	if err != nil {
 		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
@@ -98,7 +151,7 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 	if subdomain != "" {
 		targetOrigin = subdomain + "." + dc.Name
 	}
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, args...)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{}, args...)
 	if err != nil {
 		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
 		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
@@ -167,7 +220,7 @@ func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
 		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
 		return fmt.Errorf("legacySetTargetArgs: failed TypeToMakeRDATA[%d] == nil", typeNum)
 	}
-	rd, err := f("", nil, args...)
+	rd, err := f("", nil, nrc.Flags{}, args...)
 	if err != nil {
 		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
 	}
