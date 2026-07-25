@@ -19,6 +19,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/PuerkitoBio/goquery"
@@ -507,20 +508,24 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 
 func recordToRC(dc *models.DomainConfig, rec Record) (*models.RecordConfig, error) {
 	label := dc.LabelFromFQDNNoDot(rec.Name)
+	ttl := rec.TTL
 	rtype := rec.Type
+	if rtype == "SPF" {
+		rtype = "TXT"
+	}
+
+	nFlags := nrc.Flags{TargetIsFqdnNoDot: true}
+	stFlags := nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true}
+
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
 	case "MX":
-		// HEDNS omits the trailing "." on MX hostnames.
-		rc, err = dc.NewRecordConfig(label, rec.TTL, dnsv2.TypeMX, rec.Priority, rec.Data+".")
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, rec.Priority, rec.Data, nFlags)
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, rec.TTL, dnsv2.TypeSRV, fmt.Sprintf("%d %s", rec.Priority, rec.Data))
-	case "SPF":
-		// Convert to TXT because SPF is deprecated.
-		rc, err = dc.NewRecordConfigParse(label, rec.TTL, dnsv2.TypeTXT, rec.Data)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, rec.Priority, rec.Data, stFlags)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, rec.TTL, rtype, rec.Data)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, rec.Data, nFlags)
 	}
 	if err != nil {
 		return nil, err
