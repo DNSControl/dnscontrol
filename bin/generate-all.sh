@@ -3,7 +3,7 @@
 echo ========== go fmt
 go fmt ./...
 
-if [[ -x node_modules/.bin/prettier ]]; then
+if [ -x node_modules/.bin/prettier ]; then
   echo ========== prettier
   node_modules/.bin/prettier --write pkg/js/helpers.js
 fi
