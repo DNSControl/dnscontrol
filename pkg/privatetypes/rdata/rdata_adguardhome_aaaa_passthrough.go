@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
@@ -25,7 +26,7 @@ func (rd ADGUARDHOMEAAAAPASSTHROUGH) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeADGUARDHOMEAAAAPASSTHROUGH(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeADGUARDHOMEAAAAPASSTHROUGH(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("ADGUARDHOME_AAAA_PASSTHROUGH expects 1 arguments, got %d: %+v", len(args), args)
