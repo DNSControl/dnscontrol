@@ -479,6 +479,7 @@ func makeTests() []*TestGroup {
 		testgroup("NS only APEX",
 			not(
 				"AZURE_PRIVATE_DNS", // Apex NS records are managed by Azure.
+				"BUNNY_DNS",         // Apex NS records are managed by BunnyDNS.
 				"DNSCALE",           // Apex NS records are managed by DNScale.
 				"DNSIMPLE",          // Does not support NS records nor subdomains.
 				"DYNU",              // Apex NS records are managed by Dynu.
@@ -2314,8 +2315,8 @@ func makeTests() []*TestGroup {
 
 		testgroup("Bunny DNS Pull Zone",
 			only("BUNNY_DNS"),
-			tc("Create PZ", bunnyPullZone("@", "5269987")),
-			tc("Change PZ", bunnyPullZone("@", "5269992")),
+			tc("Create PZ", bunnyPullZone("@", "6214614")),
+			tc("Change PZ", bunnyPullZone("@", "6214615")),
 		),
 
 		// HEDNS: Dynamic DNS

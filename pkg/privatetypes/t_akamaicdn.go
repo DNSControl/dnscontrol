@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -59,7 +60,7 @@ func (rr *AKAMAICDN) Parse(tokens []string, s string) error {
 	if len(args) != 1 {
 		return fmt.Errorf("AKAMAICDN requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
-	rr.Target = mustbe.TargetHost("", args[0])
+	rr.Target = mustbe.TargetHost("", nrc.Flags{}, args[0])
 	return nil
 }
 
