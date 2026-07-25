@@ -27,7 +27,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -615,6 +614,12 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 						val = val + "."
 					}
 				}
+				// Update: 2026-07-25:
+				// Decision: Don't use nrc.TARGET_IS_FQDN_NO_DOT to work around this bug.
+				// Why? Too risky. We know the exact situation where a "." is
+				// needed and can target the workaround to that exact situation.
+				// Using nrc.TARGET_IS_FQDN_NO_DOT will work, but will be extra
+				// work for all other records.
 
 				rc, err := dc.NewRecordConfigParse(
 					dc.LabelFromFQDNNoDot(unescape(set.Name)),
@@ -681,7 +686,7 @@ func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.
 }
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
-	target := r.GetRDATA().(privatetypesrdata.R53ALIAS).Target
+	target := r.AsR53ALIAS().Target
 	zoneID := getZoneID(zone, r)
 	evalTargetHealth, err := strconv.ParseBool(r.R53Alias["evaluate_target_health"])
 	if err != nil {
