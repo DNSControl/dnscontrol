@@ -17,16 +17,10 @@ var fqdnTypes = []recordType{recordTypeCNAME, recordTypeHTTPS, recordTypeMX, rec
 var nullTypes = []recordType{recordTypeHTTPS, recordTypeMX, recordTypeSVCB}
 
 func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
-
-	ttl := rc.TTL
-	if rc.Type == "NS" {
-		ttl = 0
-	}
-
 	r := record{
 		Type: recordTypeFromString(rc.Type),
 		Name: rc.GetLabel(),
-		TTL:  ttl,
+		TTL:  rc.TTL,
 	}
 
 	switch r.Type {
@@ -128,7 +122,7 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 	case "TLSA":
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeTLSA, recordValue)
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeTXT, recordValue)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeTXT, recordValue)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, recordValue)
 	}
