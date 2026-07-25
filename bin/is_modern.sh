@@ -25,7 +25,10 @@ echo '========== Step 5. TrimDomainName('
 grep --color --include='*.go' -r -F 'TrimDomainName(' *
 
 echo '========== Step 6. SetTarget'
-grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\('
+grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\(' *
 
 echo '========== Step 7. GetTarget'
-grep --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|SetTargetCAAString\(|SetTargetDNSKEYString\(|SetTargetDSString\(|SetTargetLOCString\(|SetTargetMX\(|SetTargetMXString\(|SetTargetNAPTR\(|SetTargetNAPTRString\(|SetTargetSMIMEA\(|SetTargetSOA\(|SetTargetSRV\(|SetTargetSRVPriorityString\(|SetTargetSRVString\(|SetTargetSSHFP\(|SetTargetSSHFPStrings\(|SetTargetSSHFPString\(|SetTargetSVCBString\(|SetTargetTLSA\(|SetTargetTLSAString\('
+grep --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|SetTargetCAAString\(|SetTargetDNSKEYString\(|SetTargetDSString\(|SetTargetLOCString\(|SetTargetMX\(|SetTargetMXString\(|SetTargetNAPTR\(|SetTargetNAPTRString\(|SetTargetSMIMEA\(|SetTargetSOA\(|SetTargetSRV\(|SetTargetSRVPriorityString\(|SetTargetSRVString\(|SetTargetSSHFP\(|SetTargetSSHFPStrings\(|SetTargetSSHFPString\(|SetTargetSVCBString\(|SetTargetTLSA\(|SetTargetTLSAString\(' *
+
+echo '========== Step 8. Old Fields'
+grep --color --include='*.go' -r -E '\.(MxPreference|SrvPriority|SrvWeight|SrvPort|CaaTag|CaaFlag|DsKeyTag|DsAlgorithm|DsDigestType|DsDigest|DnskeyFlags|DnskeyProtocol|DnskeyAlgorithm|DnskeyPublicKey|LocVersion|LocSize|LocHorizPre|LocVertPre|LocLatitude|LocLongitude|LocAltitude|LuaRType|NaptrOrder|NaptrPreference|NaptrFlags|NaptrService|NaptrRegexp|SmimeaUsage|SmimeaSelector|SmimeaMatchingType|SshfpAlgorithm|SshfpFingerprint|SoaMbox|SoaSerial|SoaRefresh|SoaRetry|SoaExpire|SoaMinttl|SvcPriority|SvcParams|TlsaUsage|TlsaSelector|TlsaMatchingType|R53Alias|AzureAlias|AnswerType|UnknownTypeName)' *
