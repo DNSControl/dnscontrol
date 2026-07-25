@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -62,7 +63,7 @@ func (rr *AKAMAITLC) Parse(tokens []string, s string) error {
 		return fmt.Errorf("AKAMAITLC requires exactly 2 arguments, got %d: %v", len(args), args)
 	}
 	rr.AnswerType = mustbe.RawString(args[0])
-	rr.Target = mustbe.TargetHost("", args[1])
+	rr.Target = mustbe.TargetHost("", nrc.Flags{}, args[1])
 	return nil
 }
 

@@ -1,5 +1,7 @@
 package models
 
+//go:generate go run github.com/DNSControl/dnscontrol/v5/build/astypegen
+
 import (
 	"fmt"
 	"os"
@@ -47,7 +49,7 @@ func (rc *RecordConfig) ClearRDATA() {
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
 	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewData(%d, %q, %q) failed: %w", typeNum, contents, origin+".", err)
 	}
 	return normalizeRDATA(rd2), nil
 }

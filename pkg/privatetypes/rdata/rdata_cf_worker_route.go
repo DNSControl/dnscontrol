@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
@@ -27,7 +28,7 @@ func (rd CFWORKERROUTE) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeCFWORKERROUTE(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeCFWORKERROUTE(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return nil, fmt.Errorf("CF_WORKER_ROUTE expects 2 arguments, got %d: %+v", len(args), args)

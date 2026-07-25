@@ -7,6 +7,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
 type BUNNYDNSRDR struct {
@@ -20,7 +21,7 @@ func (rd BUNNYDNSRDR) String() string {
 	return ""
 }
 
-func MakeBUNNYDNSRDR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeBUNNYDNSRDR(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 0 {
 		return nil, fmt.Errorf("BUNNY_DNS_RDR expects 0 arguments, got %d: %+v", len(args), args)
