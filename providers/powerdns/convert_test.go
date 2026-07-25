@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/mittwald/go-powerdns/apis/zones"
 	"github.com/stretchr/testify/assert"
 )

@@ -129,6 +129,16 @@ func anyNonString(fields []FieldDef) bool {
 	return false
 }
 
+// needsNrc returns true if any field requires nrc functions.
+func needsNrc(fields []FieldDef) bool {
+	for _, f := range fields {
+		if f.Type == "TargetHost" {
+			return true
+		}
+	}
+	return false
+}
+
 // needsTxtutil returns true if any field requires txtutil functions.
 func needsTxtutil(fields []FieldDef) bool {
 	for _, f := range fields {
@@ -261,9 +271,12 @@ func generateTypeFile(t *TypeDef) error {
 		`dnsutilv2 "codeberg.org/miekg/dns/dnsutil"`,
 	}
 	if len(t.Fields) > 0 {
-		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`)
+		third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"`)
 	}
-	third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
+	if needsNrc(t.Fields) || needsNrc(t.RuntimeFields) {
+		third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/nrc"`)
+	}
+	third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"`)
 	writeImports(&buf, std, third)
 
 	fmt.Fprintf(&buf, "// %s\n\n", displayName)
@@ -372,7 +385,7 @@ func generateTypeFile(t *TypeDef) error {
 	for i, f := range t.Fields {
 		ti := info(f.Type)
 		if ti.NeedsOrigin {
-			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(\"\", args[%d])\n", f.Name, f.Type, i)
+			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(\"\", nrc.Flags{}, args[%d])\n", f.Name, f.Type, i)
 		} else {
 			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(args[%d])\n", f.Name, f.Type, i)
 		}
@@ -402,7 +415,7 @@ func generateTestFile(t *TypeDef) error {
 	}
 	third := []string{`dnsv2 "codeberg.org/miekg/dns"`}
 	if len(t.Fields) > 0 {
-		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"`)
+		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"`)
 	}
 	writeImports(&buf, std, third)
 
@@ -498,10 +511,13 @@ func generateRdataFile(t *TypeDef) error {
 	}
 	third := []string{
 		`dnsv2 "codeberg.org/miekg/dns"`,
-		`"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"`,
+		`"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"`,
 	}
+	// if needsNrc(t.Fields) || needsNrc(t.RuntimeFields) {
+	third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/nrc"`)
+	// }
 	if needsTxtutil(t.Fields) || needsTxtutil(t.RuntimeFields) {
-		third = append(third, `"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"`)
+		third = append(third, `"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"`)
 	}
 	writeImports(&buf, std, third)
 
@@ -562,7 +578,11 @@ func generateRdataFile(t *TypeDef) error {
 	buf.WriteString("}\n\n")
 
 	// Make: validate arg count, then build the rdata using mustbe.X conversions.
-	fmt.Fprintf(&buf, "func Make%s(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {\n", typeName)
+	isEnabledName := "isEnabled"
+	if !(needsNrc(t.Fields) || needsNrc(t.RuntimeFields)) {
+		isEnabledName = "_"
+	}
+	fmt.Fprintf(&buf, "func Make%s(origin string, _ map[string]string, %s nrc.Flags, args ...any) (dnsv2.RDATA, error) {\n", typeName, isEnabledName)
 	buf.WriteString("\tmustbe.ValidArgs(args)\n")
 
 	minArgs := len(t.Fields)
@@ -589,11 +609,14 @@ func generateRdataFile(t *TypeDef) error {
 	if len(t.Fields) == 0 {
 		fmt.Fprintf(&buf, "\treturn %s{}, nil\n", typeName)
 	} else {
+		if needsNrc(t.Fields) || needsNrc(t.RuntimeFields) {
+			fmt.Fprint(&buf, "\tif isEnabled.TargetIsFqdnNoDot {\n\t\torigin = \".\"\n\t}\n")
+		}
 		fmt.Fprintf(&buf, "\treturn %s{\n", typeName)
 		for i, f := range append(t.Fields, t.OptionalFields...) {
 			ti := info(f.Type)
 			if ti.NeedsOrigin {
-				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(origin, args[%d]),\n", f.Name, f.Type, i)
+				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(origin, isEnabled, args[%d]),\n", f.Name, f.Type, i)
 			} else {
 				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(args[%d]),\n", f.Name, f.Type, i)
 			}
@@ -615,8 +638,8 @@ func generateRdataFile(t *TypeDef) error {
 		if !needsOrigin {
 			// Rewrite the receiver to use _ instead of origin to avoid unused-var warnings.
 			out := bytes.Replace(buf.Bytes(),
-				[]byte(fmt.Sprintf("func Make%s(origin string, args ...any)", typeName)),
-				[]byte(fmt.Sprintf("func Make%s(_ string, args ...any)", typeName)),
+				[]byte(fmt.Sprintf("func Make%s(origin string, isEnabled, args ...any)", typeName)),
+				[]byte(fmt.Sprintf("func Make%s(_ string, isEnabled, args ...any)", typeName)),
 				1)
 			buf.Reset()
 			buf.Write(out)

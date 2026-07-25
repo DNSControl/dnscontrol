@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 )
 
 func TestDNSProviders(t *testing.T) {
@@ -479,6 +479,7 @@ func makeTests() []*TestGroup {
 		testgroup("NS only APEX",
 			not(
 				"AZURE_PRIVATE_DNS", // Apex NS records are managed by Azure.
+				"BUNNY_DNS",         // Apex NS records are managed by BunnyDNS.
 				"DNSCALE",           // Apex NS records are managed by DNScale.
 				"DNSIMPLE",          // Does not support NS records nor subdomains.
 				"DYNU",              // Apex NS records are managed by Dynu.
@@ -489,6 +490,7 @@ func makeTests() []*TestGroup {
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NETCUP",            // NS records not currently supported.
 				"PORKBUN",           // Record ignored.
+				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
 				"VERCEL",            // "invalid_name - Cannot set NS records at the root level. Only subdomain NS records are supported"
@@ -866,7 +868,10 @@ func makeTests() []*TestGroup {
 		testgroup("SOA",
 			requires(providers.CanUseSOA),
 			tcEmptyZone(), // Required or only the first run passes.
-			tc("Create SOA record", soa("@", "kim.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
+			// Providers such as Route53 cannot delete the mandatory SOA during
+			// the empty-zone setup. It may therefore already have this value
+			// when a previous run stopped after this test.
+			tc("Create SOA record", soa("@", "kim.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)).AllowNoChanges(),
 			tc("Modify SOA ns    ", soa("@", "mmm.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
 			tc("Modify SOA mbox  ", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
 			tc("Modify SOA refres", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2400, 604800, 3600)),
@@ -892,8 +897,11 @@ func makeTests() []*TestGroup {
 		// https://github.com/DNSControl/dnscontrol/issues/2066
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
-			not("UNIFI"),   // UniFi has no per-record TTL for SRV records.
-			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not(
+				"OPENWRT",   // OpenWRT does not support per record TTL
+				"NAMECHEAP", // Namecheap does not support per record TTL
+				"UNIFI",     // Per record TTLs not supported.
+			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
 			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
 		),
@@ -2307,8 +2315,8 @@ func makeTests() []*TestGroup {
 
 		testgroup("Bunny DNS Pull Zone",
 			only("BUNNY_DNS"),
-			tc("Create PZ", bunnyPullZone("@", "5269987")),
-			tc("Change PZ", bunnyPullZone("@", "5269992")),
+			tc("Create PZ", bunnyPullZone("@", "6214614")),
+			tc("Change PZ", bunnyPullZone("@", "6214615")),
 		),
 
 		// HEDNS: Dynamic DNS

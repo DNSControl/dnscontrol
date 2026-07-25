@@ -7,8 +7,9 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 type CLOUDNSWR struct {
@@ -25,7 +26,7 @@ func (rd CLOUDNSWR) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeCLOUDNSWR(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakeCLOUDNSWR(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("CLOUDNS_WR expects 1 arguments, got %d: %+v", len(args), args)

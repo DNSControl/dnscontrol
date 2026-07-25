@@ -11,10 +11,10 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnstestv2 "codeberg.org/miekg/dns/dnstest"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 func parseAndRegen(t *testing.T, buf *bytes.Buffer, expected string) {
@@ -400,9 +400,7 @@ x                IN CNAME bosun.org.
 
 func TestWriteZoneFileSynth(t *testing.T) {
 	dc := models.MustNewDomainConfig("bosun.org")
-	_ = dc
 
-	//t.FailNow()
 	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.153")
 	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.154")
 	dc.AddTestRC(t, "www.bosun.org.", 300, dnsv2.TypeCNAME, "bosun.org.")
@@ -410,16 +408,6 @@ func TestWriteZoneFileSynth(t *testing.T) {
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo1", "A", "id123", "true")
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo2", "A", "id123", "true")
 	dc.AddTestRC(t, "zalias", 300, privatetypes.TypeR53ALIAS, "foo3", "A", "id123", "true")
-
-	// var recs []dnsv2.RR
-	// for i, rc := range dc.Records {
-	// 	recs = append(recs, rc.ToRRv2())
-	// }
-
-	// recs, err := rrstoRCs(dc.Records, "bosun.org")
-	// if err != nil {
-	// 	panic(err)
-	// }
 
 	buf := &bytes.Buffer{}
 	if err := WriteZoneFileRC(buf, dc.Records, "bosun.org", 0, []string{"c1", "c2", "c3\nc4"}); err != nil {
@@ -466,7 +454,7 @@ func TestWriteZoneFileOrder(t *testing.T) {
 		"zt.mup",
 		"zap",
 	} {
-		name := dnsutilv1.AddOrigin(td, "stackoverflow.com.")
+		name := nameutil.ToFqdnWithDot(td, "stackoverflow.com.")
 		r := dnstestv2.New(fmt.Sprintf("%s 300 IN A 1.2.3.%d", name, i))
 		records = append(records, r)
 	}

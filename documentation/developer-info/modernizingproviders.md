@@ -139,8 +139,40 @@ default:
 }
 if err != nil { whatever }
 
+## Step 4.  Replace dnsutilv1.AddOrigin()
 
-## Step 4. Remove obsolete setters
+OLD:
+
+```go
+n := dnsutilv1.AddOrigin(ns.Name, domain.Name+".")
+```
+
+NEW:
+
+n1 := nameutil.ToFqdnWithDot(ns.Name, domain.Name) // result always ends with "."
+n2 := nameutil.ToFqdnNoDot(ns.Name, domain.Name)   // result never ends with "."
+
+## Step 5. Replace TrimDomainName()
+
+OLD:
+
+```go
+shortname := dnsutilv1.TrimDomainName(label, origin)
+```
+
+NEW:
+
+```go
+shortname := nameutil.ToShort(label, origin)
+or
+shortname := dc.ToShort(label)
+```
+
+## Step 3a. Upgrade any remaining dnsv1 or dnsutilv1 references
+
+Replace any remaining uses of dnsv1 or dnsutilv1 with dnsv2 and dnsutilv2 respectively.
+
+## Step 7. Remove obsolete setters
 
 `rc.GetTargetCombined()` is now `rc.GetRDATA().String()`
 
@@ -159,8 +191,17 @@ default:
 }
 ```
 
+`rc.GetTargetField()` can still be used, but replace it if possible.
 
-## Step 5. Remove obsolete getters
+* `rc.GetRDATA().String()` (if we know the struct only has 1 field)
+
+If it is a TXT record, there are 3 permitted getters:
+
+* `rc.GetTargetTXTJoined()`
+* `rc.GetTargetTXTSegmented()`
+* `rc.GetRDATA().String()`   // quoted and escaped.
+
+## Step 6. Remove obsolete getters
 
 OLD:
 
@@ -191,10 +232,9 @@ In general these are no longer needed if you use `NewRecordConfig*()` functions.
 However, if you want to alter an existing RC...
 
 ```go
-rd := rc.GetRDATA()     // Get the generic RDATA
-rdmx := rd.(dnsv2.MX)   // Cast to the MX struct 
-rdmx.Preference = 999   // Alter a field.
-rc.SetRDATA(rdmx)       // Save it back.
+mx := rc.AsMX()      // Get the RDATA as an MX.
+mx.Preference = 999  // Alter a field.
+rc.SetRDATA(mx)      // Save it back.
 ```
 
-See the cookbook for more details.
+See the [cookbook](cookbook.md) for more details.

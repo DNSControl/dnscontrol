@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
 )
 
 // Verb indicates the Change's type (create, delete, etc.)

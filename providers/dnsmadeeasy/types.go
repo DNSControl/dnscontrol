@@ -3,8 +3,8 @@ package dnsmadeeasy
 import (
 	"strconv"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 // DNS Made Easy does not allow the system name servers to be edited, and said records appear to always have a fixed TTL of 86400.

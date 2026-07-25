@@ -8,9 +8,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // supportedRecordTypes is the set of DNS record types supported by NetBird.
@@ -253,9 +253,9 @@ func (api *netbirdProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
-	var existingRecords []*models.RecordConfig
+	var existingRecords models.Records
 	for _, r := range records {
-		rc, err := nativeToRecordConfig(domain, &r)
+		rc, err := nativeToRecordConfig(dc, &r)
 		if err != nil {
 			return nil, err
 		}

@@ -14,11 +14,11 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	aauth "github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
@@ -617,11 +617,14 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
+			f := rec.AsMX()
+			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(f.Mx), Preference: new(int32(f.Preference))})
 		case "SRV":
-			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
+			f := rec.AsSRV()
+			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(f.Target), Port: new(int32(f.Port)), Weight: new(int32(f.Weight)), Priority: new(int32(f.Priority))})
 		case "CAA":
-			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(rec.GetTargetField()), Tag: new(rec.CaaTag), Flags: new(int32(rec.CaaFlag))})
+			f := rec.AsCAA()
+			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(f.Value), Tag: new(f.Tag), Flags: new(int32(f.Flag))})
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
 			recordSet.Type = new(rec.AzureAlias["type"])
 			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(rec.GetTargetField())})

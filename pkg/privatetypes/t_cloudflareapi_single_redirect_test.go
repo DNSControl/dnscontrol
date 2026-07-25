@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestCloudflareapiSingleRedirect(t *testing.T) {

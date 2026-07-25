@@ -65,7 +65,17 @@ func Uint16(arg any) uint16 {
 			panic(fmt.Sprintf("value %q overflows uint16", arg))
 		}
 		return uint16(v)
+	case uint32:
+		if v > math.MaxUint16 {
+			panic(fmt.Sprintf("value %q overflows uint16", arg))
+		}
+		return uint16(v)
 	case int:
+		if v < 0 || v > math.MaxUint16 {
+			panic(fmt.Sprintf("value %q overflows uint16", arg))
+		}
+		return uint16(v)
+	case int64:
 		if v < 0 || v > math.MaxUint16 {
 			panic(fmt.Sprintf("value %q overflows uint16", arg))
 		}

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -121,9 +121,9 @@ func (c *openwrtProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		nativeRecords = append(nativeRecords, section)
 	}
 
-	records := make([]*models.RecordConfig, 0)
+	records := make(models.Records, 0)
 	for _, r := range nativeRecords {
-		rc, err := toRc(domain, r)
+		rc, err := toRc(dc, r)
 		if err != nil {
 			return nil, err
 		}

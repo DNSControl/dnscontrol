@@ -11,7 +11,7 @@ import (
 	"fmt"
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v4/pkg/privatetypes/rdata"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 // copyRDtoLegacyFields copies the fields from rc.rdata to the legacy fields for that record type.

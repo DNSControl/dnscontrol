@@ -127,21 +127,39 @@ rd := rc.GetRDATA()     // The generic RDATA
 fmt.Printf("Like in a zonefile: %s\n", rd.String())
 ```
 
-If you know the RDATA's type, you can cast it to the specific type and access the individual fields:
+Generally you then need to cast it to the correct type.
+
+```
+rd := rc.GetRDATA()             // The generic RDATA
+mx1 := rc.GetRDATA().(dnsv2.MX)  // Cast as a MX so we can work with it.
+mx2 := rc.AsMX()                 // Same as mx1, but less typing.
+```
+
+Typical useage:
+
+```
+switch rtype {
+case "MX":
+    mx = rc.AsMX()
+case "SRV":
+    srv = rc.AsSRV()
+case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+    csr = rc.AsCLOUDFLAREAPISINGLEREDIRECT()
+}
+```
 
 ```go
-rdmx := rd.(dnsv2.MX)   // Cast to the MX record
-fmt.Printf("my MX is preference=%d target=%q\n", rdmx.Preference, rdmx.Mx)
-fmt.Printf("Like in a zonefile: %s\n", rdmx.String()) // Same as rd.String()
+mx := rc.AsMX() // Cast to the MX record
+fmt.Printf("my MX is preference=%d target=%q\n", mx.Preference, mx.Mx)
+fmt.Printf("Like in a zonefile: %s\n", mx.String()) // Same as rd.String()
 ```
 
 To alter fields call `GetRDATA()`, change the fields, then call `SetRDATA()` to save it back.  `GetRDATA()` returns a copy of the RDATA, therefore mutating it without saving it back is fruitless.
 
 ```go
-rd := rc.GetRDATA()     // Get the generic RDATA
-rdmx := rd.(dnsv2.MX)   // Cast to the MX struct
-rdmx.Preference = 999   // Alter a field.
-rc.SetRDATA(rdmx)       // Save it back.
+rd := rc.AsMX()       // Get the RDATA, cast as an MX
+mx.Preference = 999   // Alter a field.
+rc.SetRDATA(mx)       // Save it back.
 ```
 
 ## Create `models.RecordConfig` literals for testdata
@@ -207,16 +225,34 @@ All builders must have unit tests.
 
 ## How to manipulate domain/zone names
 
-How to remove a domain from a name?
+Rather than use strings.Trim() or other functions, use these functions. They
+handle "@", apex domains, and other edge cases properly. See the unit tests for
+examples.
+
+Turn a short name (`foo`) into a FQDN (`foo.example.com.`) (with trailing dot).
 
 ```go
-txtutil.StripZone()
+f1 := nameutil.ToFqdnWithDot("foo", "example.com")
+f2 := dc.ToFqdnWithDot("foo")         // Assume dc.Name = "example.com"
+# result: foo.example.com.
+# The result will always end in ".".
 ```
 
-How to add a domain to a shortname?
+Turn a short name (`foo`) into a FQDN (`foo.example.com`) (no trailing dot).
 
 ```go
-txtutil.Extend()
+f1 := nameutil.ToFqdnNoDot("foo", "example.com")
+f2 := dc.ToFqdnNoDot("foo")           // Assume dc.Name = "example.com"
+# result: foo.example.com
+# The result will never end in "." (even if the origin did).
+```
+
+Turn a name (FQDN end with a ".") into a shortname:
+```go
+short1 := nameutil.ToShort("foo.example.com.", "example.com")
+short2 := dc.ToShort("foo.example.com.")    // Assume dc.Name = "example.com"
+# result: foo
+# The result ends in "." if it is a FQDN (even if the origin didn't.)
 ```
 
 ## What you should know about TXT records

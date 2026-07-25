@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/soautil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/soautil"
 )
 
 func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {

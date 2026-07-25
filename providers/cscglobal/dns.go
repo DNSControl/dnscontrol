@@ -3,8 +3,8 @@ package cscglobal
 import (
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
@@ -18,7 +18,7 @@ func (client *providerClient) GetZoneRecords(dc *models.DomainConfig) (models.Re
 
 	// Convert them to DNScontrol's native format:
 
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 
 	// Option 1: One long list.  If your provider returns one long list,
 	// convert each one to RecordType like this:
@@ -41,28 +41,28 @@ func (client *providerClient) GetZoneRecords(dc *models.DomainConfig) (models.Re
 	// RecordConfig structures.
 	defaultTTL := records.Soa.TTL
 	for _, rr := range records.A {
-		existingRecords = append(existingRecords, nativeToRecordA(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordA(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Cname {
-		existingRecords = append(existingRecords, nativeToRecordCNAME(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordCNAME(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Aaaa {
-		existingRecords = append(existingRecords, nativeToRecordAAAA(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordAAAA(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Txt {
-		existingRecords = append(existingRecords, nativeToRecordTXT(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordTXT(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Mx {
-		existingRecords = append(existingRecords, nativeToRecordMX(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordMX(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Ns {
-		existingRecords = append(existingRecords, nativeToRecordNS(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordNS(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Srv {
-		existingRecords = append(existingRecords, nativeToRecordSRV(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordSRV(rr, dc, defaultTTL))
 	}
 	for _, rr := range records.Caa {
-		existingRecords = append(existingRecords, nativeToRecordCAA(rr, domain, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordCAA(rr, dc, defaultTTL))
 	}
 
 	return existingRecords, nil

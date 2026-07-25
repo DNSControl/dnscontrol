@@ -23,14 +23,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/go-gandi/go-gandi"
 	"github.com/go-gandi/go-gandi/config"
 	"github.com/go-gandi/go-gandi/livedns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Section 1: Register this provider in the system.
@@ -213,11 +213,16 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	// confusing.
 
 	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	var err error
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" && rec.Name != "@" {
 			// GANDI only permits aliases on a naked domain.
 			// Therefore, we change this to a CNAME.
-			rec.ChangeType("CNAME", dc.Name)
+
+			rec, err = dc.NewRecordConfig(dc.LabelFromShort(rec.Name), rec.TTL, dnsv2.TypeCNAME, rec.AsALIAS().Target)
+			if err != nil {
+				panic("should not happen PrepDesiredRecords")
+			}
 		}
 		if rec.TTL < 300 {
 			printer.Warnf("Gandi does not support ttls < 300. Setting %s from %d to 300\n", rec.GetLabelFQDN(), rec.TTL)
@@ -269,7 +274,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 				label := inst.Key.NameFQDN
 				rtype := n.RrsetType
 				domain := dc.Name
-				shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+				shortname := dc.ToShort(label)
 				ttl := n.RrsetTTL
 				values := n.RrsetValues
 				key := models.RecordKey{NameFQDN: label, Type: rtype}
@@ -320,7 +325,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 			msgs := strings.Join(inst.Msgs, "\n")
 			domain := dc.Name
 			label := inst.Key.NameFQDN
-			shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+			shortname := dc.ToShort(label)
 			corrections = append(corrections,
 				&models.Correction{
 					Msg: msgs,

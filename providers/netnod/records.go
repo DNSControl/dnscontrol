@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/fatih/color"
 	netnodPrimaryDNS "github.com/netnod/netnod-primary-dns-client"
 )
@@ -90,7 +90,7 @@ var httpsParamQuoteRe = regexp.MustCompile(`="([^"+/ ]*)"`)
 func buildRecordList(change diff2.Change) (records []netnodPrimaryDNS.Record) {
 	for _, recordContent := range change.New {
 		record := netnodPrimaryDNS.Record{
-			Content: recordContent.GetTargetCombined(),
+			Content: recordContent.GetRDATA().String(),
 		}
 		if recordContent.Type == "HTTPS" || recordContent.Type == "SVCB" {
 			// The API rejects double-quoted simple param values (e.g. alpn="h2,h3")

@@ -3,7 +3,7 @@ package txtutil_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 func TestStripZone(t *testing.T) {

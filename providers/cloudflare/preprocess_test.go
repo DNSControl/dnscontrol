@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
 func makeRCmeta(meta map[string]string) *models.RecordConfig {

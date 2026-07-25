@@ -14,10 +14,10 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
 )
 
@@ -241,10 +241,8 @@ func (a *edgeDNSProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 
 // GetZoneRecords returns an array of RecordConfig structs for a zone.
 func (a *edgeDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
 	ctx := context.Background()
-	records, err := a.getRecords(ctx, domain)
+	records, err := a.getRecords(ctx, dc)
 	if err != nil {
 		return nil, err
 	}

@@ -7,9 +7,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/transip/gotransip/v6"
 	"github.com/transip/gotransip/v6/domain"
 	"github.com/transip/gotransip/v6/repository"
@@ -208,9 +208,9 @@ retry:
 		return nil, err
 	}
 
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, entry := range entries {
-		rts, err := nativeToRecord(entry, domainName)
+		rts, err := nativeToRecord(entry, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -260,23 +260,12 @@ func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
 		Name:    config.Name,
 		Expire:  int(config.TTL),
 		Type:    config.Type,
-		Content: config.GetTargetCombinedFunc(nil),
+		Content: config.GetRDATA().String(),
 	}, nil
 }
 
-func nativeToRecord(entry domain.DNSEntry, origin string) (*models.RecordConfig, error) {
-
-	rc := &models.RecordConfig{
-		TTL:      uint32(entry.Expire),
-		Type:     entry.Type,
-		Original: entry,
-	}
-	rc.SetLabel(entry.Name, origin)
-	if err := rc.PopulateFromStringFunc(entry.Type, entry.Content, origin, nil); err != nil {
-		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
-	}
-
-	return rc, nil
+func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	return dc.NewRecordConfigParse(dc.LabelFromShort(entry.Name), uint32(entry.Expire), entry.Type, entry.Content)
 }
 
 // removeDomainNameserversFromDomainRecords removes the nameserver records from the dc.Records which are already defined as the Domain nameservers.

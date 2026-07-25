@@ -9,11 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/digitalocean/godo"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
 
@@ -195,12 +196,12 @@ func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models
 
 	var existingRecords []*models.RecordConfig
 	for i := range records {
-		r, err := toRc(domain, &records[i])
+		if records[i].Type == "SOA" {
+			continue
+		}
+		r, err := toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
-		}
-		if r.Type == "SOA" {
-			continue
 		}
 		existingRecords = append(existingRecords, r)
 	}
@@ -307,82 +308,73 @@ retry:
 	return records, nil
 }
 
-func toRc(domain string, r *godo.DomainRecord) (*models.RecordConfig, error) {
-	// This handles "@" etc.
-	name := dnsutilv1.AddOrigin(r.Name, domain)
+func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, error) {
 
-	target := r.Data
-	// Make target FQDN (#rtype_variations)
-	if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
-		// If target is the domainname, e.g. cname foo.example.com -> example.com,
-		// DO returns "@" on read even if fqdn was written.
-		switch target {
-		case "@":
-			target = domain
-		case ".":
-			target = ""
-		}
-		target = target + "."
-	}
+	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
 
-	t := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(r.TTL),
-		MxPreference: uint16(r.Priority),
-		SrvPriority:  uint16(r.Priority),
-		SrvWeight:    uint16(r.Weight),
-		SrvPort:      uint16(r.Port),
-		Original:     r,
-		CaaTag:       r.Tag,
-		CaaFlag:      uint8(r.Flags),
-	}
-	t.SetLabelFromFQDN(name, domain)
+	nFlags := nrc.TARGET_IS_FQDN_NO_DOT
+
+	var rc *models.RecordConfig
+	var err error
 	switch rtype := r.Type; rtype {
-	case "TXT":
-		if err := t.SetTargetTXT(target); err != nil {
-			return nil, err
-		}
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(r.Priority), r.Data, nFlags)
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), r.Data, nFlags)
+	case "CAA":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(r.Flags), r.Tag, r.Data, nFlags)
 	default:
-		if err := t.SetTarget(target); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Data, nFlags)
 	}
-	return t, nil
+	if err != nil {
+		return nil, err
+	}
+
+	rc.Original = r
+
+	return rc, nil
 }
 
 func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
-	name := rc.GetLabel()         // DO wants the short name or "@" for apex.
-	target := rc.GetTargetField() // DO uses the target field only for a single value
-	priority := 0                 // DO uses the same property for MX and SRV priority
+	name := rc.GetLabel() // DO wants the short name or "@" for apex.
 
-	switch rc.Type { // #rtype_variations
+	r := &godo.DomainRecordEditRequest{
+		Type: rc.Type,
+		Name: name,
+		TTL:  int(rc.TTL),
+	}
+
+	switch rc.Type {
 	case "CAA":
 		// DO API requires that a CAA target ends in dot.
 		// Interestingly enough, the value returned from API doesn't
 		// contain a trailing dot.
-		target = target + "."
+		f := rc.AsCAA()
+		// r.Data = target + "."
+		r.Tag = f.Tag
+		r.Flags = int(f.Flag)
+		r.Data = f.Value + "."
 	case "MX":
-		priority = int(rc.MxPreference)
+		f := rc.AsMX()
+		// DO uses the same field for MX and SRV priority
+		r.Priority = int(f.Preference)
+		r.Data = f.Mx
 	case "SRV":
-		priority = int(rc.SrvPriority)
+		f := rc.AsSRV()
+		// DO uses the same field for MX and SRV priority
+		r.Priority = int(f.Priority)
+		r.Weight = int(f.Weight)
+		r.Port = int(f.Port)
+		r.Data = f.Target
 	case "TXT":
 		// TXT records are the one place where DO combines many items into one field.
-		target = rc.GetTargetTXTJoined()
+		r.Data = rc.GetTargetTXTJoined()
 	default:
-		// no action required
+		r.Data = rc.GetTargetField() // DO uses the target field only for a single value
 	}
 
-	return &godo.DomainRecordEditRequest{
-		Type:     rc.Type,
-		Name:     name,
-		Data:     target,
-		TTL:      int(rc.TTL),
-		Priority: priority,
-		Port:     int(rc.SrvPort),
-		Weight:   int(rc.SrvWeight),
-		Tag:      rc.CaaTag,
-		Flags:    int(rc.CaaFlag),
-	}
+	return r
 }
 
 // backoff is the amount of time to sleep if a 429 or 504 is received.

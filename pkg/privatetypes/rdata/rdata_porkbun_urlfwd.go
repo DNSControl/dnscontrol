@@ -7,8 +7,9 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v4/pkg/mustbe"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 type PORKBUNURLFWD struct {
@@ -25,7 +26,7 @@ func (rd PORKBUNURLFWD) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakePORKBUNURLFWD(origin string, _ map[string]string, args ...any) (dnsv2.RDATA, error) {
+func MakePORKBUNURLFWD(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
 		return nil, fmt.Errorf("PORKBUN_URLFWD expects 1 arguments, got %d: %+v", len(args), args)

@@ -16,11 +16,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pquerna/otp/totp"
 )
@@ -485,31 +486,11 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 			return true
 		}
 
-		var rc *models.RecordConfig
-		{
-			rc = &models.RecordConfig{Type: rec.Type, TTL: rec.TTL}
-			rc.SetLabelFromFQDN(rec.Name, domain)
-			switch rec.Type {
-			case "ALIAS":
-				err = rc.SetTarget(rec.Data)
-			case "MX":
-				// HEDNS omits the trailing "." on the hostnames for MX records
-				err = rc.SetTargetMX(rec.Priority, rec.Data+".")
-			case "SRV":
-				err = rc.SetTargetSRVPriorityString(rec.Priority, rec.Data)
-			case "SPF":
-				// Convert to TXT record as SPF is deprecated
-				rc.ChangeType("TXT", domain)
-				fallthrough
-			default:
-				err = rc.PopulateFromStringFunc(rec.Type, rec.Data, domain, txtutil.ParseQuoted)
-			}
-		}
+		rc, conversionErr := recordToRC(dc, rec)
+		err = conversionErr
 		if err != nil {
 			return false
 		}
-
-		rc.Original = rec
 		rc.Metadata = map[string]string{
 			metaDynamic: "off",
 		}
@@ -523,6 +504,34 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	})
 
 	return zoneRecords, err
+}
+
+func recordToRC(dc *models.DomainConfig, rec Record) (*models.RecordConfig, error) {
+	label := dc.LabelFromFQDNNoDot(rec.Name)
+	ttl := rec.TTL
+	rtype := rec.Type
+	if rtype == "SPF" {
+		rtype = "TXT"
+	}
+
+	nFlags := nrc.Flags{TargetIsFqdnNoDot: true}
+	stFlags := nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true}
+
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, rec.Priority, rec.Data, nFlags)
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, rec.Priority, rec.Data, stFlags)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, rec.Data, nFlags)
+	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = rec
+	return rc, nil
 }
 
 func (c *hednsProvider) authUsernameAndPassword() (document *goquery.Document, requiresTfa bool, err error) {
@@ -754,7 +763,7 @@ func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *model
 		values.Set("Weight", strconv.FormatUint(uint64(rc.SrvWeight), 10))
 		values.Set("Port", strconv.FormatUint(uint64(rc.SrvPort), 10))
 	default:
-		values.Set("Content", rc.GetTargetCombinedFunc(txtutil.EncodeQuoted))
+		values.Set("Content", rc.GetRDATA().String())
 	}
 
 	response, err := c.httpClient.PostForm(apiEndpoint, values)

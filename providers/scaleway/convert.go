@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	domain "github.com/scaleway/scaleway-sdk-go/api/domain/v2beta1"
 )
 

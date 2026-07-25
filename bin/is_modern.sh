@@ -5,17 +5,30 @@ if [[ $? -ne 0 ]] ; then
     exit 1
 fi
 
-echo '========== DomainConfig{'
+echo '========== Step 1. DomainConfig{'
 grep --color --include='*.go' -r -F 'DomainConfig{' *
 
-echo '========== RecordConfig{'
+echo '========== Step 2. RecordConfig{'
 grep --color --include='*.go' -r -F 'RecordConfig{' *
 
-echo '========== PopulateFromString{'
+echo '========== Step 3. PopulateFromString{'
 grep --color --include='*.go' -r -F 'PopulateFromString' *
 
-echo '========== SetTarget'
-grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\('
+echo '========== Step 3a.dnsv1'
+grep --color --include='*.go' -r -F -e github.com/miekg/dns *
 
-echo '========== GetTarget'
-grep --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|SetTargetCAAString\(|SetTargetDNSKEYString\(|SetTargetDSString\(|SetTargetLOCString\(|SetTargetMX\(|SetTargetMXString\(|SetTargetNAPTR\(|SetTargetNAPTRString\(|SetTargetSMIMEA\(|SetTargetSOA\(|SetTargetSRV\(|SetTargetSRVPriorityString\(|SetTargetSRVString\(|SetTargetSSHFP\(|SetTargetSSHFPStrings\(|SetTargetSSHFPString\(|SetTargetSVCBString\(|SetTargetTLSA\(|SetTargetTLSAString\('
+
+echo '========== Step 4. AddOrigin('
+grep --color --include='*.go' -r -F 'AddOrigin(' *
+
+echo '========== Step 5. TrimDomainName('
+grep --color --include='*.go' -r -F 'TrimDomainName(' *
+
+echo '========== Step 6. SetTarget'
+grep --color --include='*.go' -r -E 'GetTargetCombinedFunc\(|GetTargetCombined\(|GetTargetRFC1035Quoted\(' *
+
+echo '========== Step 7. GetTarget'
+grep --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|SetTargetCAAString\(|SetTargetDNSKEYString\(|SetTargetDSString\(|SetTargetLOCString\(|SetTargetMX\(|SetTargetMXString\(|SetTargetNAPTR\(|SetTargetNAPTRString\(|SetTargetSMIMEA\(|SetTargetSOA\(|SetTargetSRV\(|SetTargetSRVPriorityString\(|SetTargetSRVString\(|SetTargetSSHFP\(|SetTargetSSHFPStrings\(|SetTargetSSHFPString\(|SetTargetSVCBString\(|SetTargetTLSA\(|SetTargetTLSAString\(' *
+
+echo '========== Step 8. Old Fields'
+grep --color --include='*.go' -r -E '\.(MxPreference|SrvPriority|SrvWeight|SrvPort|CaaTag|CaaFlag|DsKeyTag|DsAlgorithm|DsDigestType|DsDigest|DnskeyFlags|DnskeyProtocol|DnskeyAlgorithm|DnskeyPublicKey|LocVersion|LocSize|LocHorizPre|LocVertPre|LocLatitude|LocLongitude|LocAltitude|LuaRType|NaptrOrder|NaptrPreference|NaptrFlags|NaptrService|NaptrRegexp|SmimeaUsage|SmimeaSelector|SmimeaMatchingType|SshfpAlgorithm|SshfpFingerprint|SoaMbox|SoaSerial|SoaRefresh|SoaRetry|SoaExpire|SoaMinttl|SvcPriority|SvcParams|TlsaUsage|TlsaSelector|TlsaMatchingType|R53Alias|AzureAlias|AnswerType|UnknownTypeName)' *
