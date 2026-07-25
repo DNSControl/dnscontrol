@@ -11,14 +11,8 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
-
-// dotSuffixTypes lists record types whose content requires a trailing dot
-// to be appended when returned by the API without one.
-var dotSuffixTypes = map[string]bool{
-	"ALIAS": true, "CNAME": true, "DNAME": true,
-	"MX": true, "NS": true, "SRV": true, "PTR": true,
-}
 
 // Record covers an individual DNS resource record.
 type Record struct {
@@ -201,28 +195,17 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 }
 
 func toRC(dc *models.DomainConfig, data map[string]string) (*models.RecordConfig, error) {
-	var rc *models.RecordConfig
-	var err error
-
-	label := dc.LabelFromShort(data["NAME"])
 
 	ttl, err := strconv.ParseUint(data["TTL"], 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("invalid TTL value for domain %s: %s", dc.Name, data["TTL"])
 	}
 
-	// Add trailing dot to Answer for record types that require it
-	if dotSuffixTypes[data["TYPE"]] && !strings.HasSuffix(data["CONTENT"], ".") {
-		data["CONTENT"] += "."
+	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(data["NAME"]), uint32(ttl), data["TYPE"], data["CONTENT"], nrc.TARGET_IS_FQDN_NO_DOT)
+	if err != nil {
+		return nil, fmt.Errorf("parse error: %w", err)
 	}
 
-	switch data["TYPE"] {
-	default:
-		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), data["TYPE"], data["CONTENT"])
-		if err != nil {
-			return nil, fmt.Errorf("parse error: %w", err)
-		}
-	}
 	rc.Original = deleteRecordString(rc) // This is the code we'll need to delete the record.
 
 	return rc, nil
@@ -329,15 +312,20 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 		answer = rc.GetRDATA().String()
 		answer = strings.ReplaceAll(answer, `"`, ``)
 	case "SSHFP":
-		answer = fmt.Sprintf(`%v %v %s`, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		f := rc.AsSSHFP()
+		answer = fmt.Sprintf(`%v %v %s`, f.Algorithm, f.Type, f.FingerPrint)
 	case "NAPTR":
-		answer = fmt.Sprintf(`%v %v "%v" "%v" "%v" %v`, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
+		f := rc.AsNAPTR()
+		answer = fmt.Sprintf(`%v %v "%v" "%v" "%v" %v`, f.Order, f.Preference, f.Flags, f.Service, f.Regexp, f.Replacement)
 	case "TLSA":
-		answer = fmt.Sprintf(`%v %v %v %s`, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+		f := rc.AsTLSA()
+		answer = fmt.Sprintf(`%v %v %v %s`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "SMIMEA":
-		answer = fmt.Sprintf(`%v %v %v %s`, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
+		f := rc.AsSMIMEA()
+		answer = fmt.Sprintf(`%v %v %v %s`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "CAA":
-		answer = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		answer = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	default:
 		answer = rc.GetRDATA().String()
 	}

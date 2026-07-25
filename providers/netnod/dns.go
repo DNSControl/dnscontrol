@@ -36,9 +36,9 @@ func (dsp *netnodProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		if rrset.Type == "SOA" {
 			continue
 		}
-		ttl := 0
+		var ttl uint32
 		if rrset.TTL != nil {
-			ttl = int(*rrset.TTL)
+			ttl = uint32(*rrset.TTL)
 		}
 		// loop over single records of this group and create records
 		for _, record := range rrset.Records {

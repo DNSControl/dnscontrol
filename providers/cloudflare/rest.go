@@ -75,76 +75,84 @@ func (c *cloudflareProvider) createZone(domainName string) (string, error) {
 }
 
 func cfDnskeyData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsDNSKEY()
 	return &cfRecData{
-		Algorithm: rec.DnskeyAlgorithm,
-		Flags:     rec.DnskeyFlags,
-		Protocol:  rec.DnskeyProtocol,
-		PublicKey: rec.DnskeyPublicKey,
+		Algorithm: f.Algorithm,
+		Flags:     f.Flags,
+		Protocol:  f.Protocol,
+		PublicKey: f.PublicKey,
 	}
 }
 
 func cfDSData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsDS()
 	return &cfRecData{
-		KeyTag:     rec.DsKeyTag,
-		Algorithm:  rec.DsAlgorithm,
-		DigestType: rec.DsDigestType,
-		Digest:     rec.DsDigest,
+		KeyTag:     f.KeyTag,
+		Algorithm:  f.Algorithm,
+		DigestType: f.DigestType,
+		Digest:     f.Digest,
 	}
 }
 
 func cfSrvData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsSRV()
 	serverParts := strings.Split(rec.GetLabelFQDN(), ".")
 	c := &cfRecData{
 		Service:  serverParts[0],
 		Proto:    serverParts[1],
 		Name:     strings.Join(serverParts[2:], "."),
-		Port:     rec.SrvPort,
-		Priority: rec.SrvPriority,
-		Weight:   rec.SrvWeight,
+		Port:     f.Port,
+		Priority: f.Priority,
+		Weight:   f.Weight,
 	}
-	c.Target = cfTarget(rec.GetTargetField())
+	c.Target = cfTarget(f.Target)
 	return c
 }
 
 func cfCaaData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsCAA()
 	return &cfRecData{
-		Tag:   rec.CaaTag,
-		Flags: uint16(rec.CaaFlag),
-		Value: rec.GetTargetField(),
+		Tag:   f.Tag,
+		Flags: uint16(f.Flag),
+		Value: f.Value,
 	}
 }
 
 func cfTlsaData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsTLSA()
 	return &cfRecData{
-		Usage:        rec.TlsaUsage,
-		Selector:     rec.TlsaSelector,
-		MatchingType: rec.TlsaMatchingType,
-		Certificate:  rec.GetTargetField(),
+		Usage:        f.Usage,
+		Selector:     f.Selector,
+		MatchingType: f.MatchingType,
+		Certificate:  f.Certificate,
 	}
 }
 
 func cfSshfpData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsSSHFP()
 	return &cfRecData{
-		Algorithm:   rec.SshfpAlgorithm,
-		HashType:    rec.SshfpFingerprint,
-		Fingerprint: rec.GetTargetField(),
+		Algorithm:   f.Algorithm,
+		HashType:    f.Type,
+		Fingerprint: f.FingerPrint,
 	}
 }
 
 func cfSvcbData(rec *models.RecordConfig) *cfRecData {
+	f := rec.AsSVCB()
 	return &cfRecData{
-		Priority: rec.SvcPriority,
-		Target:   cfTarget(rec.GetTargetField()),
+		Priority: f.Priority,
+		Target:   cfTarget(f.Target),
 		Value:    rec.SvcParams,
 	}
 }
 
 func cfLocData(rec *models.RecordConfig) *cfRecData {
-	latDir, latDeg, latMin, latSec := models.ReverseLatitude(rec.LocLatitude)
-	longDir, longDeg, longMin, longSec := models.ReverseLongitude(rec.LocLongitude)
+	f := rec.AsLOC()
+	latDir, latDeg, latMin, latSec := models.ReverseLatitude(f.Latitude)
+	longDir, longDeg, longMin, longSec := models.ReverseLongitude(f.Longitude)
 
 	return &cfRecData{
-		Altitude:      models.ReverseAltitude(rec.LocAltitude),
+		Altitude:      models.ReverseAltitude(f.Altitude),
 		LatDegrees:    latDeg,
 		LatDirection:  latDir,
 		LatMinutes:    latMin,
@@ -153,20 +161,21 @@ func cfLocData(rec *models.RecordConfig) *cfRecData {
 		LongDirection: longDir,
 		LongMinutes:   longMin,
 		LongSeconds:   longSec,
-		PrecisionHorz: models.ReverseENotationInt(rec.LocHorizPre),
-		PrecisionVert: models.ReverseENotationInt(rec.LocVertPre),
-		Size:          models.ReverseENotationInt(rec.LocSize),
+		PrecisionHorz: models.ReverseENotationInt(f.HorizPre),
+		PrecisionVert: models.ReverseENotationInt(f.VertPre),
+		Size:          models.ReverseENotationInt(f.Size),
 	}
 }
 
 func cfNaptrData(rec *models.RecordConfig) *cfNaptrRecData {
+	f := rec.AsNAPTR()
 	return &cfNaptrRecData{
-		Flags:       rec.NaptrFlags,
-		Order:       rec.NaptrOrder,
-		Preference:  rec.NaptrPreference,
-		Regex:       rec.NaptrRegexp,
-		Replacement: rec.GetTargetField(),
-		Service:     rec.NaptrService,
+		Flags:       f.Flags,
+		Order:       f.Order,
+		Preference:  f.Preference,
+		Regex:       f.Regexp,
+		Replacement: f.Replacement,
+		Service:     f.Service,
 	}
 }
 
@@ -176,13 +185,15 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 		content = rec.Metadata[metaOriginalIP]
 	}
 	prio := ""
+	priorityNum := uint16(0)
 	switch rec.Type {
 	case "MX":
-		prio = fmt.Sprintf(" %d ", rec.MxPreference)
+		priorityNum = rec.AsMX().Preference
+		prio = fmt.Sprintf(" %d ", priorityNum)
 	case "TXT":
-		content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+		content = rec.GetRDATA().String()
 	case "DS":
-		content = fmt.Sprintf("%d %d %d %s", rec.DsKeyTag, rec.DsAlgorithm, rec.DsDigestType, rec.DsDigest)
+		content = rec.GetRDATA().String()
 	}
 	if msg == "" {
 		msg = fmt.Sprintf("CREATE record: %s %s %d%s %s", rec.GetLabel(), rec.Type, rec.TTL, prio, content)
@@ -207,7 +218,7 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 				Type:     rec.Type,
 				TTL:      int(rec.TTL),
 				Content:  content,
-				Priority: &rec.MxPreference,
+				Priority: &priorityNum,
 			}
 			// Set comment if specified
 			if comment := rec.Metadata[metaComment]; comment != "" {
@@ -268,6 +279,10 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	if domainID == "" || recID == "" {
 		return errors.New("cannot modify record if domain or record id are empty")
 	}
+	priority := uint16(0)
+	if rec.TypeNum == dnsv2.TypeMX {
+		priority = rec.AsMX().Preference
+	}
 
 	r := cloudflare.UpdateDNSRecordParams{
 		ID:       recID,
@@ -275,7 +290,7 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 		Name:     rec.GetLabel(),
 		Type:     rec.Type,
 		Content:  rec.GetTargetField(),
-		Priority: &rec.MxPreference,
+		Priority: &priority,
 		TTL:      int(rec.TTL),
 	}
 
