@@ -9,6 +9,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/vultr/govultr/v2"
 	"golang.org/x/oauth2"
@@ -118,7 +119,31 @@ func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 func (api *vultrProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, curRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	changes, actualChangeCount, err := diff2.ByRecord(curRecords, dc, nil)
+	// Vultr requires all records in a recordset (i.e., a name/type pair) to
+	// have the same TTL. The checkRecordSetHasMultipleTTLs validation only
+	// warns about this, and most other providers like gcore and huaweicloud
+	// also go with the smallest value.
+	lowest := map[models.RecordKey]uint32{}
+	for _, r := range dc.Records {
+		if !r.IsTTLSignificant() {
+			continue
+		}
+		if ttl, ok := lowest[r.Key()]; !ok || r.TTL < ttl {
+			lowest[r.Key()] = r.TTL
+		}
+	}
+	for _, r := range dc.Records {
+		if ttl, ok := lowest[r.Key()]; ok && r.TTL != ttl {
+			printer.Warnf("All TTLs for a rrset (%v) must be the same. Using smaller of %v and %v.\n", r.Key(), r.TTL, ttl)
+			r.TTL = ttl
+		}
+	}
+
+	// Vultr rejects any operation which would result in mixed recordset TTLs,
+	// so delete/re-create entire recordsets at a time (this is a bit
+	// heavy-handed, but it's simpler than trying to be smart about it, and
+	// matches what other provders like akamaiedgedns and alidns do).
+	changes, actualChangeCount, err := diff2.ByRecordSet(curRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -126,32 +151,30 @@ func (api *vultrProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 	for _, change := range changes {
 		switch change.Type {
 		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			r := toVultrRecord(change.New[0], "0")
-			corrections = append(corrections, &models.Correction{
-				Msg: change.Msgs[0],
-				F: func() error {
-					_, err := api.client.DomainRecord.Create(context.Background(), dc.Name, &govultr.DomainRecordReq{Name: r.Name, Type: r.Type, Data: r.Data, TTL: r.TTL, Priority: &r.Priority})
-					return err
-				},
-			})
-		case diff2.CHANGE:
-			r := toVultrRecord(change.New[0], change.Old[0].Original.(govultr.DomainRecord).ID)
-			corrections = append(corrections, &models.Correction{
-				Msg: fmt.Sprintf("%s; Vultr RecordID: %v", change.Msgs[0], r.ID),
-				F: func() error {
-					return api.client.DomainRecord.Update(context.Background(), dc.Name, r.ID, &govultr.DomainRecordReq{Name: r.Name, Type: r.Type, Data: r.Data, TTL: r.TTL, Priority: &r.Priority})
-				},
-			})
-		case diff2.DELETE:
-			id := change.Old[0].Original.(govultr.DomainRecord).ID
-			corrections = append(corrections, &models.Correction{
-				Msg: fmt.Sprintf("%s; Vultr RecordID: %v", change.Msgs[0], id),
-				F: func() error {
-					return api.client.DomainRecord.Delete(context.Background(), dc.Name, id)
-				},
-			})
+			corrections = append(corrections, change.CreateMessage())
+		case diff2.CREATE, diff2.CHANGE, diff2.DELETE:
+			oldRecords, newRecords := change.Old, change.New
+			corrections = append(corrections, change.CreateCorrection(func() error {
+				for _, rc := range oldRecords {
+					id := rc.Original.(govultr.DomainRecord).ID
+					if err := api.client.DomainRecord.Delete(context.Background(), dc.Name, id); err != nil {
+						return err
+					}
+				}
+				for _, rc := range newRecords {
+					r := toVultrRecord(rc, "")
+					if _, err := api.client.DomainRecord.Create(context.Background(), dc.Name, &govultr.DomainRecordReq{
+						Name:     r.Name,
+						Type:     r.Type,
+						Data:     r.Data,
+						TTL:      r.TTL,
+						Priority: &r.Priority,
+					}); err != nil {
+						return err
+					}
+				}
+				return nil
+			}))
 		default:
 			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
