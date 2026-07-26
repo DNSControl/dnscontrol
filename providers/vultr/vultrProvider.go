@@ -312,6 +312,11 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		Priority: priority,
 	}
 	switch rtype := rc.Type; rtype { // #rtype_variations
+	case "MX":
+		if data == "" {
+			// Vultr represents a null MX (RFC 7505) as a literal ".".
+			r.Data = "."
+		}
 	case "SRV":
 		if data == "" {
 			data = "."

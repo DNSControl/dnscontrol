@@ -11,8 +11,6 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("MX", rejectif.MxNull) // Last verified 2020-12-28
-
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2021-03-02
 	// Needs investigation. Could be a dnscontrol issue or
 	// the provider doesn't support double quotes.
