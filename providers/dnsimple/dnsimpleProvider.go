@@ -142,6 +142,17 @@ func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return cleanedRecords, nil
 }
 
+func qualifySVCBTarget(content string) string {
+	fields := strings.SplitN(content, " ", 3)
+	if len(fields) < 2 {
+		return content
+	}
+	if target := fields[1]; !strings.HasSuffix(target, ".") {
+		fields[1] = target + "."
+	}
+	return strings.Join(fields, " ")
+}
+
 func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.RecordConfig, error) {
 	if r.Name == "" {
 		r.Name = "@"
@@ -151,6 +162,8 @@ func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.
 		r.Content += "."
 	} else if r.Type == "MX" && r.Content != "." {
 		r.Content += "."
+	} else if r.Type == "SVCB" || r.Type == "HTTPS" {
+		r.Content = qualifySVCBTarget(r.Content)
 	}
 
 	var rec *models.RecordConfig
