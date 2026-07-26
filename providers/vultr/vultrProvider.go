@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -193,29 +194,33 @@ func (api *vultrProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 }
 
 func (api *vultrProvider) isDomainInAccount(domain string) (bool, error) {
+	zones, err := api.ListZones()
+	if err != nil {
+		return false, err
+	}
+	return slices.Contains(zones, domain), nil
+}
+
+// ListZones returns the list of zones (domains) in the account.
+func (api *vultrProvider) ListZones() ([]string, error) {
+	var zones []string
+
 	listOptions := &govultr.ListOptions{}
-	domains, meta, err := api.client.Domain.List(context.Background(), listOptions)
-
 	for {
+		domains, meta, err := api.client.Domain.List(context.Background(), listOptions)
 		if err != nil {
-			return false, err
+			return nil, err
 		}
-
 		for _, d := range domains {
-			if d.Domain == domain {
-				return true, nil
-			}
+			zones = append(zones, d.Domain)
 		}
-
 		if meta.Links.Next == "" {
 			break
-		} else {
-			listOptions.Cursor = meta.Links.Next
-			domains, meta, err = api.client.Domain.List(context.Background(), listOptions)
-			continue
 		}
+		listOptions.Cursor = meta.Links.Next
 	}
-	return false, nil
+
+	return zones, nil
 }
 
 // toRecordConfig converts a Vultr DomainRecord to a RecordConfig. #rtype_variations.
