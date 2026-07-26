@@ -216,6 +216,7 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		case diff2.CHANGE:
 			id := change.Old[0].Original.(*domainRecord).ID
 			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				actualChangeCount--
 				continue
 			}
 			req, err := toReq(dc, change.New[0])
