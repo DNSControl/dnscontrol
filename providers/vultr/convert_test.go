@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/vultr/govultr/v2"
+	"github.com/vultr/govultr/v3"
 )
 
 func TestConversion(t *testing.T) {

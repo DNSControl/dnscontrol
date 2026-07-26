@@ -12,7 +12,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/vultr/govultr/v2"
+	"github.com/vultr/govultr/v3"
 	"golang.org/x/oauth2"
 )
 
@@ -75,7 +75,7 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 	client := govultr.NewClient(config.Client(context.Background(), &oauth2.Token{AccessToken: token}))
 	client.SetUserAgent("dnscontrol")
 
-	_, err := client.Account.Get(context.Background())
+	_, _, err := client.Account.Get(context.Background())
 	return &vultrProvider{client}, err
 }
 
@@ -85,7 +85,7 @@ func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 
 	listOptions := &govultr.ListOptions{}
 	for {
-		records, recordsMeta, err := api.client.DomainRecord.List(context.Background(), dc.Name, listOptions)
+		records, recordsMeta, _, err := api.client.DomainRecord.List(context.Background(), dc.Name, listOptions)
 		if err != nil {
 			return nil, err
 		}
@@ -153,7 +153,7 @@ func (api *vultrProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 				}
 				for _, rc := range newRecords {
 					r := toVultrRecord(rc, "")
-					if _, err := api.client.DomainRecord.Create(context.Background(), dc.Name, &govultr.DomainRecordReq{
+					if _, _, err := api.client.DomainRecord.Create(context.Background(), dc.Name, &govultr.DomainRecordCreateReq{
 						Name:     r.Name,
 						Type:     r.Type,
 						Data:     r.Data,
@@ -188,7 +188,7 @@ func (api *vultrProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 	}
 
 	// Vultr requires an initial IP, use a dummy one.
-	_, err := api.client.Domain.Create(context.Background(), &govultr.DomainReq{Domain: domain, IP: "0.0.0.0", DNSSec: "disabled"})
+	_, _, err := api.client.Domain.Create(context.Background(), &govultr.DomainReq{Domain: domain, IP: "0.0.0.0", DNSSec: "disabled"})
 	return err
 }
 
@@ -206,7 +206,7 @@ func (api *vultrProvider) ListZones() ([]string, error) {
 
 	listOptions := &govultr.ListOptions{}
 	for {
-		domains, meta, err := api.client.Domain.List(context.Background(), listOptions)
+		domains, meta, _, err := api.client.Domain.List(context.Background(), listOptions)
 		if err != nil {
 			return nil, err
 		}
