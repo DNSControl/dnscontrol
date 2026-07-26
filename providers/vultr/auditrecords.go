@@ -11,11 +11,9 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2021-03-02
-	// Needs investigation. Could be a dnscontrol issue or
-	// the provider doesn't support double quotes.
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-26
 
-	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2023-01-19
+	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2026-07-26
 
 	return a.Audit(records)
 }
