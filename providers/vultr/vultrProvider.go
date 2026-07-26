@@ -55,7 +55,6 @@ func init() {
 // vultrProvider represents the Vultr DNSServiceProvider.
 type vultrProvider struct {
 	client *govultr.Client
-	token  string
 }
 
 // defaultNS contains the default nameservers for Vultr.
@@ -77,7 +76,7 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 	client.SetUserAgent("dnscontrol")
 
 	_, err := client.Account.Get(context.Background())
-	return &vultrProvider{client, token}, err
+	return &vultrProvider{client}, err
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
