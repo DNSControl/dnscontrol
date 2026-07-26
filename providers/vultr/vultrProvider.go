@@ -81,35 +81,25 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (api *vultrProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
+	var curRecords models.Records
 
 	listOptions := &govultr.ListOptions{}
-	records, recordsMeta, err := api.client.DomainRecord.List(context.Background(), domain, listOptions)
-	curRecords := make(models.Records, recordsMeta.Total)
-	nextI := 0
-
 	for {
+		records, recordsMeta, err := api.client.DomainRecord.List(context.Background(), dc.Name, listOptions)
 		if err != nil {
 			return nil, err
 		}
-		currentI := 0
-		for i, record := range records {
+		for _, record := range records {
 			r, err := toRecordConfig(dc, record)
 			if err != nil {
 				return nil, err
 			}
-			curRecords[nextI+i] = r
-			currentI = nextI + i
+			curRecords = append(curRecords, r)
 		}
-		nextI = currentI + 1
-
 		if recordsMeta.Links.Next == "" {
 			break
-		} else {
-			listOptions.Cursor = recordsMeta.Links.Next
-			records, recordsMeta, err = api.client.DomainRecord.List(context.Background(), domain, listOptions)
-			continue
 		}
+		listOptions.Cursor = recordsMeta.Links.Next
 	}
 
 	return curRecords, nil
