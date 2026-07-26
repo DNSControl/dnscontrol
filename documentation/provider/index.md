@@ -412,6 +412,7 @@ Jump to a table:
 | [`SCALEWAY`](scaleway.md) | ❌ | ❔ | ❌ |
 | [`TRANSIP`](transip.md) | ❌ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❌ | ❌ | ❌ |
+| [`VULTR`](vultr.md) | ✅ | ❔ | ❔ |
 | [`WEBSUPPORT`](websupport.md) | ❔ | ❔ | ❌ |
 
 <!-- provider-matrix-end -->

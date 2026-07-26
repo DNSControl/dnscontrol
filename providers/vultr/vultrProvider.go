@@ -28,6 +28,7 @@ Info required in `creds.json`:
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
 	// See providers/capabilities.go for the entire list of capabilities.
+	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanUseAlias:            providers.Cannot(),
@@ -170,7 +171,42 @@ func (api *vultrProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 		}
 	}
 
-	return corrections, actualChangeCount, nil
+	dnssecCorrections, dnssecChangeCount, err := api.getDNSSECCorrections(dc)
+	if err != nil {
+		return nil, 0, err
+	}
+	corrections = append(corrections, dnssecCorrections...)
+
+	return corrections, actualChangeCount + dnssecChangeCount, nil
+}
+
+// getDNSSECCorrections returns corrections that update the domain's DNSSEC state.
+func (api *vultrProvider) getDNSSECCorrections(dc *models.DomainConfig) ([]*models.Correction, int, error) {
+	if dc.AutoDNSSEC == "" {
+		return nil, 0, nil
+	}
+
+	domain, _, err := api.client.Domain.Get(context.Background(), dc.Name)
+	if err != nil {
+		return nil, 0, err
+	}
+	enabled := domain.DNSSec == "enabled"
+
+	if enabled && dc.AutoDNSSEC == "off" {
+		return []*models.Correction{{
+			Msg: "Disable DNSSEC",
+			F:   func() error { return api.client.Domain.Update(context.Background(), dc.Name, "disabled") },
+		}}, 1, nil
+	}
+
+	if !enabled && dc.AutoDNSSEC == "on" {
+		return []*models.Correction{{
+			Msg: "Enable DNSSEC",
+			F:   func() error { return api.client.Domain.Update(context.Background(), dc.Name, "enabled") },
+		}}, 1, nil
+	}
+
+	return nil, 0, nil
 }
 
 // GetNameservers gets the Vultr nameservers for a domain.
