@@ -23,6 +23,10 @@ func TestToRecordConfig(t *testing.T) {
 		{"apex TXT", dnsimpleapi.ZoneRecord{Name: "", Type: "TXT", Content: `"quoted text"`, TTL: 300}, "@", `"quoted text"`},
 		{"MX", dnsimpleapi.ZoneRecord{Name: "", Type: "MX", Content: "mail.example.net", TTL: 300, Priority: 10}, "@", "10 mail.example.net."},
 		{"SRV", dnsimpleapi.ZoneRecord{Name: "_sip._tcp", Type: "SRV", Content: "2 5060 sip.example.net.", TTL: 300, Priority: 1}, "_sip._tcp", "1 2 5060 sip.example.net."},
+		{"HTTPS alias mode", dnsimpleapi.ZoneRecord{Name: "", Type: "HTTPS", Content: "0 target.example.net", TTL: 300}, "@", "0 target.example.net."},
+		{"HTTPS with params", dnsimpleapi.ZoneRecord{Name: "", Type: "HTTPS", Content: `3 target.example.net alpn="h2,h3" port="999"`, TTL: 300}, "@", `3 target.example.net. alpn="h2,h3" port="999"`},
+		{"SVCB alias mode", dnsimpleapi.ZoneRecord{Name: "", Type: "SVCB", Content: "0 target.example.net", TTL: 300}, "@", "0 target.example.net."},
+		{"SVCB already qualified", dnsimpleapi.ZoneRecord{Name: "", Type: "SVCB", Content: "0 target.example.net.", TTL: 300}, "@", "0 target.example.net."},
 	}
 
 	for _, tc := range tests {
