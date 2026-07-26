@@ -163,7 +163,7 @@ Jump to a table:
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ✅ |
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❔ | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ❔ | ❔ | ✅ | ✅ |
+| [`VULTR`](vultr.md) | ✅ | ❔ | ✅ | ✅ |
 | [`WEBSUPPORT`](websupport.md) | ❔ | ❌ | ❌ | ❌ |
 
 
