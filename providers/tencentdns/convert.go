@@ -6,7 +6,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
@@ -42,7 +41,7 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		if r.MX != nil {
 			p = *r.MX
 		}
-		fmt.Printf("DEBUG TENCENT: mx=%v p=%v v=%q\n", *r.MX, p, val)
+		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
@@ -108,11 +107,19 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 		req.Weight = new(weight)
 	}
 
-	val := rc.GetRDATA().String()
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
+	var val string
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		val = f.Mx
+		req.MX = new(uint64(f.Preference))
+	case dnsv2.TypeTXT:
+		f := rc.AsTXT()
+		val = f.String()
+	default:
+		val = rc.GetRDATA().String()
 	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 
@@ -139,14 +146,19 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 		req.Weight = new(uint64(0))
 	}
 
-	val := rc.GetRDATA().String()
-	if rc.Type == "TXT" {
-		val = txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
+	var val string
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		val = f.Mx
+		req.MX = new(uint64(f.Preference))
+	case dnsv2.TypeTXT:
+		f := rc.AsTXT()
+		val = f.String()
+	default:
+		val = rc.GetRDATA().String()
 	}
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
-	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 
