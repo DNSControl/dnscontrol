@@ -78,6 +78,16 @@ func TestBuildRecordListSvcbAutoHints(t *testing.T) {
 	assert.Equal(t, "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto", records[0].Content)
 }
 
+func TestBuildRecordListSvcbEchKeepsQuotes(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	recordConfig := dc.MustNewRecordConfig("@", 300, "SVCB", uint16(3), "example.com.", "alpn=h2,h3 port=999 ech=some+base64+encoded+value///")
+
+	records := buildRecordList(diff2.Change{New: models.Records{recordConfig}})
+
+	assert.Len(t, records, 1)
+	assert.Equal(t, `3 example.com. alpn=h2,h3 port=999 ech="some+base64+encoded+value///"`, records[0].Content)
+}
+
 func TestParseText(t *testing.T) {
 	// short TXT record
 	short := parseTxt("\"simple\"")
