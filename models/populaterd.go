@@ -99,6 +99,8 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		switch rc.Type {
 		case "IGNORE":
 			return
+		case "IMPORT_TRANSFORM":
+			return
 		}
 		fmt.Printf("DEBUG: copyLegacyFieldsToRD: typeNum=0, Type=%q, Comparablev3=%q\n", rc.Type, rc.ComparableV3)
 		return

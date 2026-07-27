@@ -11,6 +11,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 	dnsv1 "github.com/miekg/dns"
@@ -324,9 +325,13 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 					return err
 				}
 				r.SetLabel(l, dstDomain.Name)
-				if err := r.SetTarget(tr.String()); err != nil {
+
+				rd, err := models.MakeA(dstDomain.Name, rec.Metadata, nrc.Flags{}, tr.String())
+				if err != nil {
 					return err
 				}
+				r.SetRDATA(rd)
+
 				dstDomain.Records = append(dstDomain.Records, r)
 			}
 		case "CNAME":
@@ -336,9 +341,13 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 				return err
 			}
 			r.SetLabel(l, dstDomain.Name)
-			if err := r.SetTarget(transformCNAME(r.GetTargetField(), srcDomain.Name, dstDomain.Name, suffixstrip)); err != nil {
+
+			rd, err := models.MakeCNAME(dstDomain.Name, rec.Metadata, nrc.Flags{}, transformCNAME(r.GetTargetField(), srcDomain.Name, dstDomain.Name, suffixstrip))
+			if err != nil {
 				return err
 			}
+			r.SetRDATA(rd)
+
 			dstDomain.Records = append(dstDomain.Records, r)
 		default:
 			// Anything else is ignored.
@@ -698,8 +707,7 @@ func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
 func checkDuplicates(records []*models.RecordConfig) (errs []error) {
 	seen := map[string]*models.RecordConfig{}
 	for _, r := range records {
-		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ToComparableNoTTL())
-		//diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
+		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
 
 		if seen[diffable] != nil {
 			errs = append(errs, fmt.Errorf("exact duplicate record found: %s", diffable))

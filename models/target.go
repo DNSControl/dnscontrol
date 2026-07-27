@@ -6,6 +6,7 @@ import (
 	"net/netip"
 	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnsv1 "github.com/miekg/dns"
 )
@@ -23,6 +24,13 @@ func (rc *RecordConfig) GetTargetField() string {
 		// is not populated for TXT.
 		return rc.GetTargetTXTJoined()
 	}
+	if rc.rdata != nil && (rc.Type == "A" || rc.Type == "AAAA" || rc.Type == "CNAME" || rc.Type == "NX") {
+		return rc.GetRDATA().String()
+	}
+	return rc.target
+}
+
+func (rc *RecordConfig) GetTargetRaw() string {
 	return rc.target
 }
 
@@ -31,6 +39,16 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 	if rc.Type != "A" && rc.Type != "AAAA" {
 		panic(fmt.Errorf("GetTargetIP called on an inappropriate rtype (%s)", rc.Type))
 	}
+
+	if rc.GetRDATA() != nil {
+		if rc.Type == "A" {
+			return rc.rdata.(dnsrdatav2.A).Addr
+		}
+		if rc.Type == "AAAA" {
+			return rc.rdata.(dnsrdatav2.AAAA).Addr
+		}
+	}
+
 	ip, _ := netip.ParseAddr(rc.target)
 	return ip
 }

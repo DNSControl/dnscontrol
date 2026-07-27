@@ -3,6 +3,7 @@ package normalize
 import (
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -17,15 +18,17 @@ func TestImportTransform(t *testing.T) {
 	const transformSingle = "0.0.0.0~1.1.1.1~~8.0.0.0"
 
 	src := models.MustNewDomainConfig("stackexchange.com")
-	s1 := makeRC("*", "stackexchange.com", "0.0.2.2", models.RecordConfig{Type: "A"})
-	s2 := makeRC("www", "stackexchange.com", "0.0.1.1", models.RecordConfig{Type: "A"})
+	s1 := src.MustNewRecordConfig("*", 0, dnsv2.TypeA, "0.0.2.2")
+	s2 := src.MustNewRecordConfig("www", 0, dnsv2.TypeA, "0.0.1.1")
 	src.Records = []*models.RecordConfig{s1, s2}
 
 	dst := models.MustNewDomainConfig("internal")
-	d1 := makeRC("*.stackexchange.com", "*.stackexchange.com.internal", "0.0.3.3", models.RecordConfig{Type: "A"})
+	d1 := dst.MustNewRecordConfig("*.stackexchange.com", 0, dnsv2.TypeA, "0.0.3.3")
 	d1.Metadata = map[string]string{"transform_table": transformSingle}
 	d2 := makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM"})
 	d2.Metadata = map[string]string{"transform_table": transformDouble}
+	d2.FixRD(dst.Name)
+
 	dst.Records = []*models.RecordConfig{d1, d2}
 
 	cfg := &models.DNSConfig{
