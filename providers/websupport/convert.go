@@ -43,19 +43,31 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 
 	switch rc.Type {
 	case "MX":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.MxPreference)
+		f := rc.AsMX()
+		r.Priority = intPtr(f.Preference)
+		r.Content = f.Mx
+		// r.Content = trimDot(rc.GetTargetField())
+		// r.Priority = intPtr(rc.MxPreference)
+		fmt.Printf("DEBUG: websupport toNative: r.Priority=%v r.Content=%q\n", r.Priority, r.Content)
 	case "SRV":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.SrvPriority)
-		r.Weight = intPtr(rc.SrvWeight)
-		r.Port = intPtr(rc.SrvPort)
+		f := rc.AsSRV()
+		r.Priority = intPtr(f.Priority)
+		r.Weight = intPtr(f.Weight)
+		r.Port = intPtr(f.Port)
+		r.Content = trimDot(f.Target)
+		//r.Content = trimDot(rc.GetTargetField())
+		//r.Priority = intPtr(rc.SrvPriority)
+		//r.Weight = intPtr(rc.SrvWeight)
+		//r.Port = intPtr(rc.SrvPort)
 	case "TXT":
 		r.Content = rc.GetTargetTXTJoined()
 	case "CNAME":
-		r.Content = trimDot(rc.GetTargetField())
+		f := rc.AsCNAME()
+		r.Content = trimDot(f.Target)
 	default:
 		r.Content = rc.GetTargetField()
+		// TODO(tlim): Try this instead.
+		//r.Content = rc.GetRDATA().String()
 	}
 
 	return r, nil
@@ -74,6 +86,7 @@ func toRecordConfig(dc *models.DomainConfig, n nativeRecord) (*models.RecordConf
 	var err error
 	switch n.Type {
 	case "MX":
+		fmt.Printf("DEBUG: websupport toRecordConfig: dc.NewRecordConfig(%v, %v, %v, %v, %q)\n", label, ttl, n.Type, derefInt(n.Priority), content)
 		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), content)
 	case "SRV":
 		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
