@@ -27,12 +27,12 @@ func (c *huaweicloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 	}
 
 	// Convert rrsets to DNSControl's RecordConfig
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, rec := range *records {
 		if *rec.Type == "SOA" {
 			continue
 		}
-		nativeRecords, err := nativeToRecords(&rec, domain)
+		nativeRecords, err := nativeToRecords(&rec, dc)
 		if err != nil {
 			return nil, err
 		}
