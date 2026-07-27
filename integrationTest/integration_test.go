@@ -421,6 +421,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"INFOMANIAK",
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -444,6 +445,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMXApex",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"INFOMANIAK",
 			),
 			tc("create", // Install a Null MX.
 				a("@", "1.2.3.2"),   // Install this so it is ready for the next tc()
@@ -896,6 +898,9 @@ func makeTests() []*TestGroup {
 
 		// https://github.com/DNSControl/dnscontrol/issues/2066
 		testgroup("SRV",
+			not(
+				"INFOMANIAK",
+			),
 			requires(providers.CanUseSRV),
 			not(
 				"OPENWRT",   // OpenWRT does not support per record TTL
@@ -927,7 +932,10 @@ func makeTests() []*TestGroup {
 
 		testgroup("DS",
 			requires(providers.CanUseDS),
-			not("CLOUDFLAREAPI"),
+			not(
+				"CLOUDFLAREAPI",
+				"INFOMANIAK",
+			),
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
