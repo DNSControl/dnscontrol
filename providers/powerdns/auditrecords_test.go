@@ -4,6 +4,8 @@ import (
 	"strings"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	svcbv2 "codeberg.org/miekg/dns/svcb"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/stretchr/testify/assert"
 )
@@ -52,12 +54,11 @@ func TestAuditRecordsSvcbAutoHintOrder(t *testing.T) {
 }
 
 func powerDNSSVCBRecord(rtype, params string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type:        rtype,
-		SvcPriority: 1,
-		SvcParams:   params,
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("auto", 0, dnsv2.TypeHTTPS, uint16(1), ".", []svcbv2.Pair{})
+	if rtype == "SVCB" {
+		rc = dc.MustNewRecordConfig("auto", 0, dnsv2.TypeSVCB, uint16(1), ".", []svcbv2.Pair{})
 	}
-	rc.SetLabel("auto", "example.com")
-	rc.MustSetTarget(".")
+	rc.SvcParams = params
 	return rc
 }

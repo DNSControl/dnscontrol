@@ -105,7 +105,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/urfave/cli/v3 v3.10.1
 	github.com/vercel/terraform-provider-vercel v1.14.1
-	github.com/vultr/govultr/v2 v2.17.2
+	github.com/vultr/govultr/v3 v3.32.0
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	golang.org/x/text v0.40.0
 	golang.org/x/time v0.15.0
@@ -151,7 +151,7 @@ require (
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
-	github.com/hashicorp/go-retryablehttp v0.7.7 // indirect
+	github.com/hashicorp/go-retryablehttp v0.7.8 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.9.0 // indirect
 	github.com/influxdata/tdigest v0.0.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
