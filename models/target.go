@@ -30,10 +30,6 @@ func (rc *RecordConfig) GetTargetField() string {
 	return rc.target
 }
 
-func (rc *RecordConfig) GetTargetRaw() string {
-	return rc.target
-}
-
 // GetTargetIP returns the net.IP stored in .target.
 func (rc *RecordConfig) GetTargetIP() netip.Addr {
 	if rc.Type != "A" && rc.Type != "AAAA" {
@@ -166,12 +162,12 @@ func (rc *RecordConfig) GetTargetRFC1035Quoted() string {
 
 // GetTargetDebug returns a string with the various fields spelled out.
 func (rc *RecordConfig) GetTargetDebug() string {
-	content := fmt.Sprintf("%s %s %d %q", rc.Type, rc.NameFQDN, rc.TTL, rc.GetRDATA().String())
-
+	var content strings.Builder
+	fmt.Fprintf(&content, "%s %s %d %q", rc.Type, rc.NameFQDN, rc.TTL, rc.GetRDATA().String())
 	for k, v := range rc.Metadata {
-		content += fmt.Sprintf(" %s=%q", k, v)
+		fmt.Fprintf(&content, " %s=%q", k, v)
 	}
-	return content
+	return content.String()
 }
 
 // GetTargetJS returns the target as a JavaScript literal, as documented in
