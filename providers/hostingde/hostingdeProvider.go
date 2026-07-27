@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -203,20 +204,18 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		}
 	}
 	if desiredSoa == nil {
-		desiredSoa = &models.RecordConfig{}
+		desiredSoa = dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", 1, 0, 0, 0, 0)
 	}
 
 	defaultSoa := &hp.defaultSoa
-	// Commented out because this can not happen:
-	// if defaultSoa == nil {
-	// 	defaultSoa = &soaValues{}
-	// }
+
+	df := desiredSoa.AsSOA()
 
 	newSOA := soaValues{
-		Refresh:     firstNonZero(desiredSoa.SoaRefresh, defaultSoa.Refresh, 86400),
-		Retry:       firstNonZero(desiredSoa.SoaRetry, defaultSoa.Retry, 7200),
-		Expire:      firstNonZero(desiredSoa.SoaExpire, defaultSoa.Expire, 3600000),
-		NegativeTTL: firstNonZero(desiredSoa.SoaMinttl, defaultSoa.NegativeTTL, 900),
+		Refresh:     firstNonZero(df.Refresh, defaultSoa.Refresh, 86400),
+		Retry:       firstNonZero(df.Retry, defaultSoa.Retry, 7200),
+		Expire:      firstNonZero(df.Expire, defaultSoa.Expire, 3600000),
+		NegativeTTL: firstNonZero(df.Minttl, defaultSoa.NegativeTTL, 900),
 		TTL:         firstNonZero(desiredSoa.TTL, defaultSoa.TTL, 86400),
 	}
 
@@ -226,10 +225,10 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		zoneChanged = true
 	}
 
-	if desiredSoa.SoaMbox != "" {
+	if df.Mbox != "" {
 		desiredMail := ""
-		if desiredSoa.SoaMbox[len(desiredSoa.SoaMbox)-1] != '.' {
-			desiredMail = desiredSoa.SoaMbox + "@" + dc.Name
+		if df.Mbox[len(df.Mbox)-1] != '.' {
+			desiredMail = df.Mbox + "@" + dc.Name
 		}
 		if desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
 			msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))
