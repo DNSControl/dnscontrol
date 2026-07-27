@@ -17,16 +17,16 @@ func TestImportTransform(t *testing.T) {
 	const transformSingle = "0.0.0.0~1.1.1.1~~8.0.0.0"
 
 	src := models.MustNewDomainConfig("stackexchange.com")
-	src.Records = []*models.RecordConfig{
-		makeRC("*", "stackexchange.com", "0.0.2.2", models.RecordConfig{Type: "A"}),
-		makeRC("www", "stackexchange.com", "0.0.1.1", models.RecordConfig{Type: "A"}),
-	}
+	s1 := makeRC("*", "stackexchange.com", "0.0.2.2", models.RecordConfig{Type: "A"})
+	s2 := makeRC("www", "stackexchange.com", "0.0.1.1", models.RecordConfig{Type: "A"})
+	src.Records = []*models.RecordConfig{s1, s2}
 
 	dst := models.MustNewDomainConfig("internal")
-	dst.Records = []*models.RecordConfig{
-		makeRC("*.stackexchange.com", "*.stackexchange.com.internal", "0.0.3.3", models.RecordConfig{Type: "A", Metadata: map[string]string{"transform_table": transformSingle}}),
-		makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM", Metadata: map[string]string{"transform_table": transformDouble}}),
-	}
+	d1 := makeRC("*.stackexchange.com", "*.stackexchange.com.internal", "0.0.3.3", models.RecordConfig{Type: "A"})
+	d1.Metadata = map[string]string{"transform_table": transformSingle}
+	d2 := makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM"})
+	d2.Metadata = map[string]string{"transform_table": transformDouble}
+	dst.Records = []*models.RecordConfig{d1, d2}
 
 	cfg := &models.DNSConfig{
 		Domains: []*models.DomainConfig{src, dst},

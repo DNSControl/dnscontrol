@@ -699,6 +699,8 @@ func checkDuplicates(records []*models.RecordConfig) (errs []error) {
 	seen := map[string]*models.RecordConfig{}
 	for _, r := range records {
 		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ToComparableNoTTL())
+		//diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
+
 		if seen[diffable] != nil {
 			errs = append(errs, fmt.Errorf("exact duplicate record found: %s", diffable))
 		}
