@@ -41,15 +41,13 @@ func nativeToRecords(n *model.ShowRecordSetByZoneResp, dc *models.DomainConfig) 
 	for _, value := range *n.Records {
 		var rc *models.RecordConfig
 		var err error
-		//if recType == "TXT" {
-		//	rc, err = dc.NewRecordConfig(label, ttl, recType, value)
-		//} else {
 		rc, err = dc.NewRecordConfigParse(label, ttl, recType, value)
-		//}
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from Huaweicloud: %w", err)
 		}
+
 		rc.Original = n
+
 		if n.Line != nil {
 			rc.Metadata[metaLine] = *n.Line
 		}
@@ -59,6 +57,7 @@ func nativeToRecords(n *model.ShowRecordSetByZoneResp, dc *models.DomainConfig) 
 		if n.Description != nil {
 			rc.Metadata[metaKey] = *n.Description
 		}
+
 		rcs = append(rcs, rc)
 	}
 
