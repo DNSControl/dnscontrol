@@ -927,7 +927,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DS",
 			requires(providers.CanUseDS),
-			not("CLOUDFLAREAPI"),
+			not("CLOUDFLAREAPI", "POWERDNS"), // PowerDNS: DS records are not supported for the apex domain.
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
@@ -1031,6 +1031,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DNSKEY",
 			requires(providers.CanUseDNSKEY),
+			not("POWERDNS"), // PowerDNS: DNSKEY records are only supported for the apex domain.
 			tc("Create DNSKEY record", dnskey("test", 257, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 1", dnskey("test", 256, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 2", dnskey("test", 256, 3, 13, "whjtMiJP9C86l0oTJUxemuYtQ0RIZePWt6QETC2kkKM=")),
