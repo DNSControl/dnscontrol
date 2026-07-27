@@ -566,7 +566,7 @@ func makeTests() []*TestGroup {
 			tc("TXT with semicolon ws", txt("foosc2", `wssemi ; colon`)),
 
 			tc("TXT interior ws", txt("foosp", "with spaces")),
-			// tc("TXT leading ws", txt("foowsb", " leadingspace")),
+			//c("TXT leading ws", txt("foowsb", " leadingspace")),
 			tc("TXT trailing ws", txt("foows1", "trailingws ")),
 
 			// Vultr syntax-checks TXT records with SPF contents.
