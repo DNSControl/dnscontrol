@@ -9,9 +9,26 @@ import (
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
 func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
+
+	//spew.Dump(n)
+	// TODO(tlim): Please uncomment the above line and run the full integration tests. Use the `-v` flag. I'd like the full output. Thanks!
+	// The output will be very large, but it will give me info I need to prevent future regressions.
+	// Run the integration tests with:
+	// 		cd integrationTest
+	// 		go test -timeout 1h -v -args -verbose -profile FORTIGATE
+	// Thanks!
+
 	rtype := strings.ToUpper(n.Type)
 
-	label := dc.LabelFromFQDNWithDot(n.Hostname)
+	var label string
+	hostname := n.Hostname
+	if hostname == "@" || hostname == "" {
+		label = "@"
+	} else if hostname[len(hostname)-1] == '.' {
+		label = dc.LabelFromFQDNWithDot(n.Hostname)
+	} else {
+		label = dc.LabelFromShort(n.Hostname)
+	}
 	ttl := n.TTL
 
 	// Type-specific fields
