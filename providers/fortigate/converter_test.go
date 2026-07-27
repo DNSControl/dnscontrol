@@ -17,6 +17,7 @@ func TestNativeToRecord(t *testing.T) {
 		wantTarget string
 	}{
 		{"A", fgDNSRecord{Type: "A", Hostname: "www", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "192.0.2.1"},
+		{"A", fgDNSRecord{Type: "A", Hostname: "@", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "192.0.2.1"},
 		{"CNAME", fgDNSRecord{Type: "CNAME", Hostname: "www", CanonicalName: "target.example.net.", TTL: 300, Status: "enable"}, "target.example.net."},
 		{"MX", fgDNSRecord{Type: "MX", Hostname: "mail.example.net.", Preference: 10, TTL: 300, Status: "disable"}, "10 mail.example.net."},
 	}
