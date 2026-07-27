@@ -66,6 +66,9 @@ func (rc *RecordConfig) RegenerateComparableV3() {
 	case "IGNORE":
 		return
 
+	case "IMPORT_TRANSFORM":
+		return
+
 	case "SOA":
 		// The comparable string for SOA intentionally excludes the serial
 		// number, because the serial number changes on every update and
@@ -260,9 +263,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case dnsv2.TypeSOA:
-		rd, err := MakeSOA(origin, nil, isEnabled, rc.GetTargetField(), rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no op -- legacy fields have been eliminated
 	case dnsv2.TypeSRV:
 		rd, err := MakeSRV(origin, nil, isEnabled, rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
 		errorChk(err)

@@ -87,7 +87,8 @@ func (rc *RecordConfig) GetTargetCombined() string {
 	case "TXT":
 		return rc.zoneFileQuoted()
 	case "SOA":
-		return fmt.Sprintf("%s %v %d %d %d %d %d", rc.target, rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
+		panic("SOA converted")
+		// return fmt.Sprintf("%s %v %d %d %d %d %d", rc.target, rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
 	}
 
 	return rc.zoneFileQuoted()
@@ -147,57 +148,10 @@ func (rc *RecordConfig) GetTargetRFC1035Quoted() string {
 
 // GetTargetDebug returns a string with the various fields spelled out.
 func (rc *RecordConfig) GetTargetDebug() string {
-	if rc.Type == "TXT" {
-		return rc.GetRDATA().String()
-	}
+	content := fmt.Sprintf("%s %s %d %q", rc.Type, rc.NameFQDN, rc.TTL, rc.GetRDATA().String())
 
-	// TODO(tlim): If possible, use .String().
-
-	target := rc.GetTargetField()
-	//if rc.Type == "TXT" {
-	if rc.HasFormatIdenticalToTXT() {
-		target = fmt.Sprintf("%q", target)
-	}
-	content := fmt.Sprintf("%s %s %s %d", rc.Type, rc.NameFQDN, target, rc.TTL)
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "AKAMAICDN", "CNAME", "DHCID", "NS", "OPENPGPKEY", "PTR", "TXT":
-		// Nothing special.
-	case "LUA":
-		content += " luartype=" + rc.luaTypeUpper()
-	case "AZURE_ALIAS":
-		content += " type=" + rc.AzureAlias["type"]
-	case "CAA":
-		content += fmt.Sprintf(" caatag=%s caaflag=%d", rc.CaaTag, rc.CaaFlag)
-	case "DS":
-		content += fmt.Sprintf(" ds_algorithm=%d ds_keytag=%d ds_digesttype=%d ds_digest=%s", rc.DsAlgorithm, rc.DsKeyTag, rc.DsDigestType, rc.DsDigest)
-	case "DNSKEY":
-		content += fmt.Sprintf(" dnskey_flags=%d dnskey_protocol=%d dnskey_algorithm=%d dnskey_publickey=%s", rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey)
-	case "MX":
-		content += fmt.Sprintf(" pref=%d", rc.MxPreference)
-	case "NAPTR":
-		content += fmt.Sprintf(" naptrorder=%d naptrpreference=%d naptrflags=%s naptrservice=%s naptrregexp=%s", rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp)
-	case "R53_ALIAS":
-		content += fmt.Sprintf(" type=%s zone_id=%s evaluate_target_health=%s", rc.R53Alias["type"], rc.R53Alias["zone_id"], rc.R53Alias["evaluate_target_health"])
-	case "SMIMEA":
-		content += fmt.Sprintf(" smimeausage=%d smimeaselector=%d smimeamatchingtype=%d", rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType)
-	case "SOA":
-		content = fmt.Sprintf("%s ns=%v mbox=%v serial=%v refresh=%v retry=%v expire=%v minttl=%v", rc.Type, rc.target, rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
-	case "SRV":
-		content += fmt.Sprintf(" srvpriority=%d srvweight=%d srvport=%d", rc.SrvPriority, rc.SrvWeight, rc.SrvPort)
-	case "SSHFP":
-		content += fmt.Sprintf(" sshfpalgorithm=%d sshfpfingerprint=%d", rc.SshfpAlgorithm, rc.SshfpFingerprint)
-	case "SVCB", "HTTPS":
-		// HTTPS is only a special subform of the SVCB Record
-		content += fmt.Sprintf(" priority=%d params=%v", rc.SvcPriority, rc.SvcParams)
-	case "TLSA":
-		content += fmt.Sprintf(" tlsausage=%d tlsaselector=%d tlsamatchingtype=%d", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType)
-	default:
-		panic(fmt.Errorf("rc.String rtype %v unimplemented", rc.Type))
-		// We panic so that we quickly find any switch statements
-		// that have not been updated for a new RR type.
-	}
 	for k, v := range rc.Metadata {
-		content += fmt.Sprintf(" %s=%s", k, v)
+		content += fmt.Sprintf(" %s=%q", k, v)
 	}
 	return content
 }
@@ -227,7 +181,8 @@ func (rc *RecordConfig) GetTargetJS() string {
 		return fmt.Sprintf("%q", rc.target)
 	case "SOA":
 		// SOA(ns, mbox, refresh, retry, expire, minttl)
-		return fmt.Sprintf("%q, %q, %d, %d, %d, %d", rc.target, rc.SoaMbox, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
+		f := rc.AsSOA()
+		return fmt.Sprintf("%q, %q, %d, %d, %d, %d", f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
 	case "SRV":
 		// SRV(priority, weight, port, target)
 		return fmt.Sprintf("%d, %d, %d, %q", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.target)
