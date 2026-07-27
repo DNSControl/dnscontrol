@@ -110,12 +110,22 @@ func (c *ovhProvider) createRecordFunc(rc *models.RecordConfig, fqdn string) fun
 		if nativeType, ok := rc.Metadata["create_ovh_native_record"]; ok {
 			recordType = nativeType
 		}
+
+		var target string
+		switch recordType {
+		case "TXT":
+			target = rc.GetTargetTXTJoined()
+		default:
+			target = rc.GetRDATA().String()
+		}
+
 		record := Record{
 			SubDomain: rc.GetLabel(),
 			FieldType: recordType,
-			Target:    rc.GetRDATA().String(),
+			Target:    target,
 			TTL:       rc.TTL,
 		}
+
 		if record.SubDomain == "@" {
 			record.SubDomain = ""
 		}
@@ -147,10 +157,18 @@ func (c *ovhProvider) updateRecordFunc(old *Record, rc *models.RecordConfig, fqd
 			recordType = old.FieldType
 		}
 
+		var target string
+		switch recordType {
+		case "TXT":
+			target = rc.GetTargetTXTJoined()
+		default:
+			target = rc.GetRDATA().String()
+		}
+
 		record := Record{
 			SubDomain: rc.GetLabel(),
 			FieldType: recordType,
-			Target:    rc.GetRDATA().String(),
+			Target:    target,
 			TTL:       rc.TTL,
 			Zone:      fqdn,
 			ID:        old.ID,
