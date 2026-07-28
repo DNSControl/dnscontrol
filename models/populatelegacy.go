@@ -50,6 +50,8 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(fmt.Sprintf("%s,%s", rd.When, rd.Then))
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
 		// no-op
+	case privatetypesrdata.CLOUDNSWR:
+		rc.SetTarget(rd.Target)
 	case dnsrdatav2.CNAME:
 		rc.SetTarget(rd.Target)
 
