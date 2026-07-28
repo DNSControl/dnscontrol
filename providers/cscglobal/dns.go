@@ -131,7 +131,7 @@ func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
 	case "TXT":
 		existingTarget = existing.GetTargetTXTJoined()
 	default:
-		existingTarget = existing.GetTargetField()
+		existingTarget = existing.GetRDATA().String()
 	}
 
 	zer := zoneResourceRecordEdit{
@@ -151,19 +151,11 @@ func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
 }
 
 func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
-	var recTarget string
-	switch rec.Type {
-	case "TXT":
-		recTarget = rec.GetTargetTXTJoined()
-	default:
-		recTarget = rec.GetTargetField()
-	}
 
 	zer := zoneResourceRecordEdit{
 		Action:     "ADD",
 		RecordType: rec.Type,
 		NewKey:     rec.Name,
-		NewValue:   recTarget,
 		NewTTL:     rec.TTL,
 	}
 
@@ -174,18 +166,21 @@ func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
 		flagValue := f.Flag
 		zer.NewTag = &tagValue
 		zer.NewFlag = &flagValue
+		zer.NewValue = f.Value
 	case "MX":
 		f := rec.AsMX()
 		zer.NewPriority = f.Preference
+		zer.NewValue = f.Mx
 	case "SRV":
 		f := rec.AsSRV()
 		zer.NewPriority = f.Priority
 		zer.NewWeight = f.Weight
 		zer.NewPort = f.Port
+		zer.NewValue = f.Target
 	case "TXT":
 		zer.NewValue = rec.GetTargetTXTJoined()
-	default: // "A", "CNAME", "NS"
-		// Nothing to do.
+	default:
+		zer.NewValue = rec.GetRDATA().String()
 	}
 
 	return zer
@@ -205,8 +200,8 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 		oldTarget = old.GetTargetTXTJoined()
 		recTarget = rec.GetTargetTXTJoined()
 	default:
-		oldTarget = old.GetTargetField()
-		recTarget = rec.GetTargetField()
+		oldTarget = old.GetRDATA().String()
+		recTarget = rec.GetRDATA().String()
 	}
 
 	zer := zoneResourceRecordEdit{
@@ -227,14 +222,14 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 		of := old.AsCAA()
 		tagValue := of.Tag
 		zer.CurrentTag = &tagValue
-		if old.CaaTag != rec.CaaTag || old.CaaFlag != rec.CaaFlag || old.TTL != rec.TTL {
+		if old.AsCAA().Tag != rec.AsCAA().Tag || old.AsCAA().Flag != rec.AsCAA().Flag || old.TTL != rec.TTL {
 			// If anything changed, we need to update both tag and flag.
 			zer.NewFlag = new(rec.AsCAA().Flag)
 			zer.NewTag = new(rec.AsCAA().Tag)
 			zer.NewFlag = new(rec.AsCAA().Flag)
 		}
 	case "MX":
-		if old.MxPreference != rec.MxPreference {
+		if old.AsMX().Preference != rec.AsMX().Preference {
 			zer.NewPriority = rec.AsMX().Preference
 		}
 	case "SRV":
@@ -242,7 +237,7 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 		zer.NewWeight = f.Weight
 		zer.NewPort = f.Port
 		zer.NewPriority = f.Priority
-	default: // "A", "CNAME", "NS", "TXT"
+	default:
 		// Nothing to do.
 	}
 
