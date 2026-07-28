@@ -9,7 +9,6 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
-	dnsv1 "github.com/miekg/dns"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -68,7 +67,8 @@ func rejectifNsPointsToOrigin(rc *models.RecordConfig) error {
 var labelExampleRe = regexp.MustCompile(`^example[0-9]?$`)
 
 func hasLabelExample(domain string) error {
-	if slices.ContainsFunc(dnsv1.SplitDomainName(domain), labelExampleRe.MatchString) {
+	labels := strings.Split(strings.TrimSuffix(domain, "."), ".")
+	if slices.ContainsFunc(labels, labelExampleRe.MatchString) {
 		return fmt.Errorf("label contains `example`: %s", domain)
 	}
 	return nil
