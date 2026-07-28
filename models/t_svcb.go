@@ -87,9 +87,10 @@ func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error)
 	return result, nil
 }
 
-// svcbv2ValueToString converts a SVCB value list to a string.
-// TODO(tlim): THIS NEEDS A UNIT TEST!
-func svcbv2ValueToString(pairs []svcbv2.Pair) string {
+// Svcbv2ValueToString converts a SVCB value list to a string.
+// Typical usage: models.Svcbv2ValueToString(rc.AsHTTPS().Value)
+// Does NOT generate quotes around values in key=value pairs.
+func Svcbv2ValueToString(pairs []svcbv2.Pair) string {
 	var sb strings.Builder
 	for i, p := range pairs {
 		if i > 0 {
