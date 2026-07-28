@@ -45,7 +45,7 @@ func recordsToNative(rcs []*models.RecordConfig) []resourceRecord {
 	keys := map[models.RecordKey]*resourceRecord{}
 	var zrs []resourceRecord
 	for _, r := range rcs {
-		// label := dnsutilv1.TrimDomainName(r.GetLabel(), origin)
+		// label := dnsutilv1.Trim DomainName(r.GetLabel(), origin)
 		label := r.Name
 		if label == "@" {
 			label = ""
