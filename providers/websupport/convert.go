@@ -55,10 +55,6 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		r.Weight = intPtr(f.Weight)
 		r.Port = intPtr(f.Port)
 		r.Content = trimDot(f.Target)
-		//r.Content = trimDot(rc.GetTargetField())
-		//r.Priority = intPtr(rc.SrvPriority)
-		//r.Weight = intPtr(rc.SrvWeight)
-		//r.Port = intPtr(rc.SrvPort)
 	case "TXT":
 		r.Content = rc.GetTargetTXTJoined()
 	case "CNAME":
