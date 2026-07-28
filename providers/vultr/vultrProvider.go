@@ -360,7 +360,7 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		r.Data = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	case "SSHFP":
 		f := rc.AsSSHFP()
-		r.Data = fmt.Sprintf("%d %s %d", f.Algorithm, f.FingerPrint, f.Type)
+		r.Data = fmt.Sprintf("%d %s %d", f.Algorithm, f.Type, f.FingerPrint)
 	case "TXT":
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
