@@ -11,6 +11,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 // features describes the capabilities of the Gigahost provider. Start with
@@ -69,10 +70,33 @@ func newGigahost(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 // aren't supported by this provider.
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
+	a.Add("MX", rejectif.MxNull) // The API rejects a "." target ("MX record value must be a valid mail server hostname").
 	a.Add("TXT", rejectif.TxtIsEmpty)
+	// The API cannot round-trip double quotes in TXT values: raw interior
+	// quotes are rejected by its zone parser, and if sent escaped
+	// (`"right\""`) the record is stored correctly but the read-back
+	// record_value is mangled (`right\`), breaking diffing and deletes.
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes)
+	a.Add("TXT", rejectif.TxtStartsOrEndsWithSpaces) // The API trims leading/trailing whitespace on store.
 	a.Add("CAA", rejectif.CaaTargetContainsWhitespace)
 	a.Add("SRV", rejectif.SrvHasNullTarget)
-	return a.Audit(records)
+	errs := a.Audit(records)
+
+	// The API silently replaces the entire NAPTR RRset on every create
+	// (POSTing a second NAPTR at a label deletes the first), so only one
+	// NAPTR per label can be represented. Verified against the live API
+	// 2026-07-27.
+	naptrSeen := map[string]bool{}
+	for _, rc := range records {
+		if rc.Type != "NAPTR" {
+			continue
+		}
+		if naptrSeen[rc.GetLabelFQDN()] {
+			errs = append(errs, fmt.Errorf("only one NAPTR record per label is supported (%s)", rc.GetLabelFQDN()))
+		}
+		naptrSeen[rc.GetLabelFQDN()] = true
+	}
+	return errs
 }
 
 // findZone resolves a domain name to its Gigahost zone, caching the zone list.
@@ -145,7 +169,7 @@ func (c *gigahostProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			printer.Warnf("GIGAHOST: ignoring unsupported record type %s (%s)\n", t, recs[i].RecordName)
 			continue
 		}
-		rc, err := nativeToRecordConfig(dc.Name, &recs[i])
+		rc, err := nativeToRecordConfig(dc, &recs[i])
 		if err != nil {
 			return nil, err
 		}
@@ -201,7 +225,7 @@ func (c *gigahostProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 			corrections = append(corrections, &models.Correction{
 				Msg: inst.Msgs[0],
 				F: func() error {
-					return c.deleteRecord(z.ZoneID, old.RecordID, old.RecordName, old.RecordType, old.RecordValue)
+					return c.deleteRecord(z.ZoneID, old.RecordID, old.RecordName, old.RecordType, deleteValue(old))
 				},
 			})
 		default:
@@ -213,36 +237,37 @@ func (c *gigahostProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 }
 
 // nativeToRecordConfig converts a Gigahost record into a RecordConfig.
-func nativeToRecordConfig(domain string, r *record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.RecordType,
-		TTL:      r.RecordTTL.Value,
-		Original: r,
-	}
-	rc.SetLabel(r.RecordName, domain)
-
+func nativeToRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
+	var rc *models.RecordConfig
 	var err error
 	switch r.RecordType {
 	case "MX":
-		err = rc.SetTargetMX(uint16(r.RecordPrio.Value), addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordPrio.Value, addDot(r.RecordValue))
 	case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
 		// Gigahost stores hostname targets inconsistently (some with a trailing
 		// dot, some without); RecordConfig targets are always FQDNs.
-		err = rc.SetTarget(addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, addDot(r.RecordValue))
 	case "TXT":
-		err = rc.SetTargetTXT(r.RecordValue)
-	case "CAA":
-		err = rc.SetTargetCAAString(r.RecordValue)
-	case "SRV":
-		err = rc.SetTargetSRVString(r.RecordValue)
-	case "NAPTR":
-		err = rc.SetTargetNAPTRString(r.RecordValue)
+		val := r.RecordValue
+		// The API returns >255-octet TXT values in the RFC1035 chunked form
+		// we sent (see recordConfigToRequest) with the outer quotes stripped,
+		// e.g. `aaa...aaa" "bbb`. A single TXT character-string cannot exceed
+		// 255 octets, so a longer record_value must be that form: re-wrap and
+		// decode to the raw joined text. Shorter values are stored and
+		// returned verbatim (kept as-is on decode failure).
+		if len(val) > 255 {
+			if decoded, derr := txtutil.ParseQuoted(`"` + val + `"`); derr == nil {
+				val = decoded
+			}
+		}
+		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, val)
 	default:
-		err = rc.PopulateFromStringFunc(r.RecordType, r.RecordValue, domain, nil)
+		rc, err = dc.NewRecordConfigParse(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordValue)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("gigahost: unparsable %s record %q: %w", r.RecordType, r.RecordValue, err)
 	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -263,14 +288,34 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 		// needed and reads are re-dotted in nativeToRecordConfig.
 		r.RecordValue = strings.TrimSuffix(rc.GetTargetField(), ".")
 	case "TXT":
-		r.RecordValue = rc.GetTargetTXTJoined()
+		txt := rc.GetTargetTXTJoined()
+		// The API requires values over 255 octets to be sent as RFC1035
+		// quoted 255-octet chunks: `"aaa...aaa" "bbb"`. Shorter values are
+		// sent raw and stored verbatim. (Values with double quotes are
+		// rejected by AuditRecords: the API cannot round-trip them.)
+		if len(txt) > 255 {
+			txt = txtutil.EncodeQuoted(txt)
+		}
+		r.RecordValue = txt
 	case "CAA", "SRV", "NAPTR":
 		// These are stored as full RFC1035 presentation strings in record_value.
-		r.RecordValue = rc.GetTargetCombined()
+		r.RecordValue = rc.GetRDATA().String()
 	default:
 		r.RecordValue = rc.GetTargetField()
 	}
 	return r
+}
+
+// deleteValue returns the value the DELETE endpoint matches against. For most
+// types this is record_value exactly as the API returns it, but for MX the
+// endpoint matches the internal RDATA presentation ("<priority> <target.>"),
+// NOT the priority-less record_value it returns; sending record_value yields
+// 404 "Record not found". Verified against the live API 2026-07-27.
+func deleteValue(r *record) string {
+	if r.RecordType == "MX" {
+		return fmt.Sprintf("%d %s", r.RecordPrio.Value, addDot(r.RecordValue))
+	}
+	return r.RecordValue
 }
 
 // addDot appends a trailing dot to a hostname if it lacks one.

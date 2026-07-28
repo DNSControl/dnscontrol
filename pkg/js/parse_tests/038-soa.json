@@ -19,12 +19,6 @@
             "Retry": 900,
             "Serial": 0
           },
-          "soaexpire": 604800,
-          "soambox": "admin.foo.com",
-          "soaminttl": 86400,
-          "soarefresh": 3600,
-          "soaretry": 900,
-          "target": "ns1.foo.com.",
           "ttl": 300,
           "type": "SOA",
           "typenum": 6
