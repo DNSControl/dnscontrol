@@ -123,45 +123,12 @@ func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 
 	var cleanedRecords models.Records
 	for _, r := range records {
-		if r.Type == "SOA" {
+		switch r.Type {
+		case "SOA", "DNSKEY", "CDNSKEY", "CDS":
 			continue
 		}
 
-		if r.Name == "" {
-			r.Name = "@"
-		}
-
-		if r.Type == "CNAME" || r.Type == "ALIAS" || r.Type == "NS" {
-			r.Content += "."
-		} else if r.Type == "MX" && r.Content != "." {
-			r.Content += "."
-		}
-
-		rec := &models.RecordConfig{
-			TTL:      uint32(r.TTL),
-			Original: r,
-		}
-		rec.SetLabel(r.Name, domain)
-
-		var err error
-		switch rtype := r.Type; rtype {
-		case "DNSKEY", "CDNSKEY", "CDS":
-			continue
-		case "ALIAS", "URL":
-			rec.Type = r.Type
-			err = rec.SetTarget(r.Content)
-		case "DS":
-			err = rec.SetTargetDSString(r.Content)
-		case "MX":
-			err = rec.SetTargetMX(uint16(r.Priority), r.Content)
-		case "SRV":
-			err = rec.SetTargetSRVPriorityString(uint16(r.Priority), r.Content)
-		case "TXT":
-			err = rec.PopulateFromStringFunc(r.Type, r.Content, domain, txtutil.ParseQuoted)
-		default:
-			err = rec.PopulateFromString(r.Type, r.Content, domain)
-		}
-
+		rec, err := toRecordConfig(dc, r)
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from dnsimple: %w", err)
 		}
@@ -173,6 +140,49 @@ func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	cleanedRecords = removeApexNS(cleanedRecords)
 
 	return cleanedRecords, nil
+}
+
+func qualifySVCBTarget(content string) string {
+	fields := strings.SplitN(content, " ", 3)
+	if len(fields) < 2 {
+		return content
+	}
+	if target := fields[1]; !strings.HasSuffix(target, ".") {
+		fields[1] = target + "."
+	}
+	return strings.Join(fields, " ")
+}
+
+func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.RecordConfig, error) {
+	if r.Name == "" {
+		r.Name = "@"
+	}
+
+	if r.Type == "CNAME" || r.Type == "ALIAS" || r.Type == "NS" {
+		r.Content += "."
+	} else if r.Type == "MX" && r.Content != "." {
+		r.Content += "."
+	} else if r.Type == "SVCB" || r.Type == "HTTPS" {
+		r.Content = qualifySVCBTarget(r.Content)
+	}
+
+	var rec *models.RecordConfig
+	var err error
+	switch r.Type {
+	case "ALIAS", "URL":
+		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Content)
+	case "MX":
+		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Priority, r.Content)
+	case "SRV":
+		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+	default:
+		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, r.Content)
+	}
+	if err != nil {
+		return nil, err
+	}
+	rec.Original = r
+	return rec, nil
 }
 
 func (c *dnsimpleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {

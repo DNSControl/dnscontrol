@@ -106,12 +106,6 @@ type RecordConfig struct {
 	SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
 	SshfpAlgorithm     uint8             `json:"sshfpalgorithm,omitempty"`
 	SshfpFingerprint   uint8             `json:"sshfpfingerprint,omitempty"`
-	SoaMbox            string            `json:"soambox,omitempty"`
-	SoaSerial          uint32            `json:"soaserial,omitempty"`
-	SoaRefresh         uint32            `json:"soarefresh,omitempty"`
-	SoaRetry           uint32            `json:"soaretry,omitempty"`
-	SoaExpire          uint32            `json:"soaexpire,omitempty"`
-	SoaMinttl          uint32            `json:"soaminttl,omitempty"`
 	SvcPriority        uint16            `json:"svcpriority,omitempty"`
 	SvcParams          string            `json:"svcparams,omitempty"`
 	TlsaUsage          uint8             `json:"tlsausage,omitempty"`
@@ -190,12 +184,6 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
 		SshfpAlgorithm     uint8             `json:"sshfpalgorithm,omitempty"`
 		SshfpFingerprint   uint8             `json:"sshfpfingerprint,omitempty"`
-		SoaMbox            string            `json:"soambox,omitempty"`
-		SoaSerial          uint32            `json:"soaserial,omitempty"`
-		SoaRefresh         uint32            `json:"soarefresh,omitempty"`
-		SoaRetry           uint32            `json:"soaretry,omitempty"`
-		SoaExpire          uint32            `json:"soaexpire,omitempty"`
-		SoaMinttl          uint32            `json:"soaminttl,omitempty"`
 		SvcPriority        uint16            `json:"svcpriority,omitempty"`
 		SvcParams          string            `json:"svcparams,omitempty"`
 		TlsaUsage          uint8             `json:"tlsausage,omitempty"`
@@ -327,8 +315,7 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 
 	switch rc.Type {
 	case "SOA":
-		return fmt.Sprintf("%s %v %d %d %d %d", rc.target, rc.SoaMbox, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
-		// SoaSerial is not included because it isn't used in comparisons.
+		panic("should not be reached because SOA has a .ComparableV3")
 	case "TXT":
 		return txtutil.EncodeSingle(rc.GetTargetField())
 	case "LUA":
@@ -431,13 +418,14 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 		rr.(*dnsv1.SMIMEA).Selector = rc.SmimeaSelector
 		rr.(*dnsv1.SMIMEA).Certificate = rc.GetTargetField()
 	case dnsv1.TypeSOA:
-		rr.(*dnsv1.SOA).Ns = rc.GetTargetField()
-		rr.(*dnsv1.SOA).Mbox = rc.SoaMbox
-		rr.(*dnsv1.SOA).Serial = rc.SoaSerial
-		rr.(*dnsv1.SOA).Refresh = rc.SoaRefresh
-		rr.(*dnsv1.SOA).Retry = rc.SoaRetry
-		rr.(*dnsv1.SOA).Expire = rc.SoaExpire
-		rr.(*dnsv1.SOA).Minttl = rc.SoaMinttl
+		f := rc.AsSOA()
+		rr.(*dnsv1.SOA).Ns = f.Ns
+		rr.(*dnsv1.SOA).Mbox = f.Mbox
+		rr.(*dnsv1.SOA).Serial = f.Serial
+		rr.(*dnsv1.SOA).Refresh = f.Refresh
+		rr.(*dnsv1.SOA).Retry = f.Retry
+		rr.(*dnsv1.SOA).Expire = f.Expire
+		rr.(*dnsv1.SOA).Minttl = f.Minttl
 	case dnsv1.TypeSPF:
 		rr.(*dnsv1.SPF).Txt = rc.GetTargetTXTSegmented()
 	case dnsv1.TypeSRV:
@@ -633,13 +621,6 @@ func Downcase(recs []*RecordConfig) {
 			// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
 		case "A", "CAA", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "DHCID", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SSHFP", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
 			// Do nothing. (IP address or case sensitive target)
-		case "SOA":
-			//if r.target != "DEFAULT_NOT_SET." {
-			r.target = strings.ToLower(r.target) // .target stores the Ns
-			//}
-			//if r.SoaMbox != "DEFAULT_NOT_SET." {
-			r.SoaMbox = strings.ToLower(r.SoaMbox)
-			//}
 		case "AZURE_ALIAS":
 			// do nothing.
 		default:
@@ -659,13 +640,6 @@ func CanonicalizeTargets(recs []*RecordConfig, origin string) {
 			r.target = nameutil.ToFqdnWithDot(r.target, originFQDN)
 		case "A", "AKAMAICDN", "AKAMAITLC", "CAA", "DHCID", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "HTTPS", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
 			// Do nothing.
-		case "SOA":
-			if r.target != "default_not_set." {
-				r.target = nameutil.ToFqdnWithDot(r.target, originFQDN) // .target stores the Ns
-			}
-			if r.SoaMbox != "default_not_set." {
-				r.SoaMbox = nameutil.ToFqdnWithDot(r.SoaMbox, originFQDN)
-			}
 		default:
 			// TODO: we'd like to panic here, but custom record types complicate things.
 		}
