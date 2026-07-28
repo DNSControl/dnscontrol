@@ -75,7 +75,7 @@ func (a *aliDNSDsp) getNameservers(domain string) ([]string, error) {
 	return nameservers, nil
 }
 
-func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig, domainName string) error {
+func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig) error {
 	for _, r := range records {
 		req := alidns.CreateDeleteDomainRecordRequest()
 		original, ok := r.Original.(*alidns.Record)
@@ -122,7 +122,7 @@ func (a *aliDNSDsp) updateRecordset(existing, desired []*models.RecordConfig, do
 	// 3. Alibaba Cloud API requires RecordId for updates, which desired records don't have
 
 	// Delete all existing records first
-	if err := a.deleteRecordset(existing, domainName); err != nil {
+	if err := a.deleteRecordset(existing); err != nil {
 		return err
 	}
 

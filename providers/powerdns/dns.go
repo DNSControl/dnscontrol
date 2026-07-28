@@ -37,7 +37,7 @@ func (dsp *powerdnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	for _, rrset := range zone.ResourceRecordSets {
 		// loop over single records of this group and create records
 		for _, pdnsRecord := range rrset.Records {
-			r, err := toRecordConfig(domain, pdnsRecord, rrset.TTL, rrset.Name, rrset.Type)
+			r, err := toRecordConfig(dc, pdnsRecord, rrset.TTL, rrset.Name, rrset.Type)
 			if err != nil {
 				return nil, err
 			}
