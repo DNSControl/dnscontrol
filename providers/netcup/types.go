@@ -2,7 +2,6 @@ package netcup
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -108,37 +107,46 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 	return rc, nil
 }
 
-func fromRecordConfig(in *models.RecordConfig) *record {
-	rc := &record{
-		Hostname:    in.GetLabel(),
-		Type:        in.Type,
-		Destination: in.GetTargetField(),
-		Delete:      false,
-		State:       "",
+func fromRecordConfig(rc *models.RecordConfig) *record {
+
+	ncRec := &record{
+		Hostname: rc.GetLabel(),
+		Type:     rc.Type,
+		Delete:   false,
+		State:    "",
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "PTR", "TXT", "SOA", "ALIAS":
-		// Nothing special.
+	switch ncRec.Type {
 	case "CAA":
-		rc.Destination = strconv.Itoa(int(in.CaaFlag)) + " " + in.CaaTag + " \"" + in.GetTargetField() + "\""
+		f := rc.AsCAA()
+		ncRec.Destination = strconv.Itoa(int(f.Flag)) + " " + f.Tag + " \"" + f.Value + "\""
+		// TODO(tlim): Try this instead:
+		//ncRec.Destination = f.String()
 	case "CNAME":
-		rc.Destination = strings.TrimSuffix(in.GetTargetField(), ".")
+		f := rc.AsCNAME()
+		ncRec.Destination = strings.TrimSuffix(f.Target, ".")
 	case "MX":
-		rc.Destination = strings.TrimSuffix(in.GetTargetField(), ".")
-		rc.Priority = strconv.Itoa(int(in.MxPreference))
+		f := rc.AsMX()
+		ncRec.Priority = strconv.Itoa(int(f.Preference))
+		ncRec.Destination = strings.TrimSuffix(f.Mx, ".")
 	case "NS":
 		return nil // API ignores NS records
 	case "SRV":
-		rc.Destination = strconv.Itoa(int(in.SrvPriority)) + " " + strconv.Itoa(int(in.SrvWeight)) + " " + strconv.Itoa(int(in.SrvPort)) + " " + in.GetTargetField()
+		f := rc.AsSRV()
+		ncRec.Destination = strconv.Itoa(int(f.Priority)) + " " + strconv.Itoa(int(f.Weight)) + " " + strconv.Itoa(int(f.Port)) + " " + f.Target
+		// TODO(tlim): Try this instead:
+		//ncRec.Destination = f.String()
 	case "SSHFP":
-		rc.Destination = strconv.Itoa(int(in.SshfpAlgorithm)) + " " + strconv.Itoa(int(in.SshfpFingerprint))
+		f := rc.AsSSHFP()
+		ncRec.Destination = f.String()
 	case "TLSA":
-		rc.Destination = strconv.Itoa(int(in.TlsaUsage)) + " " + strconv.Itoa(int(in.TlsaSelector)) + " " + strconv.Itoa(int(in.TlsaMatchingType)) + " " + in.GetTargetField()
+		f := rc.AsTLSA()
+		ncRec.Destination = strconv.Itoa(int(f.Usage)) + " " + strconv.Itoa(int(f.Selector)) + " " + strconv.Itoa(int(f.MatchingType)) + " " + f.Certificate
+		// TODO(tlim): Try this instead:
+		//ncRec.Destination = f.String()
 	default:
-		msg := fmt.Sprintf("ClouDNS.toReq rtype %v unimplemented", rc.Type)
-		panic(msg)
-		// We panic so that we quickly find any switch statements
+		ncRec.Destination = rc.GetRDATA().String()
 	}
-	return rc
+
+	return ncRec
 }
