@@ -45,10 +45,9 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 	case "MX":
 		f := rc.AsMX()
 		r.Priority = intPtr(f.Preference)
-		r.Content = f.Mx
+		r.Content = trimDot(f.Mx)
 		// r.Content = trimDot(rc.GetTargetField())
 		// r.Priority = intPtr(rc.MxPreference)
-		fmt.Printf("DEBUG: websupport toNative: r.Priority=%v r.Content=%q\n", r.Priority, r.Content)
 	case "SRV":
 		f := rc.AsSRV()
 		r.Priority = intPtr(f.Priority)
@@ -82,7 +81,6 @@ func toRecordConfig(dc *models.DomainConfig, n nativeRecord) (*models.RecordConf
 	var err error
 	switch n.Type {
 	case "MX":
-		fmt.Printf("DEBUG: websupport toRecordConfig: dc.NewRecordConfig(%v, %v, %v, %v, %q)\n", label, ttl, n.Type, derefInt(n.Priority), content)
 		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), content)
 	case "SRV":
 		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
