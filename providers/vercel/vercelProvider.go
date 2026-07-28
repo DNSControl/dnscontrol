@@ -287,13 +287,15 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 
 	switch rc.Type {
 	case "MX":
-		req.MXPriority = int64(rc.MxPreference)
+		f := rc.AsMX()
+		req.MXPriority = int64(f.Preference)
 	case "SRV":
+		f := rc.AsSRV()
 		req.SRV = &vercelClient.SRV{
-			Priority: int64(rc.SrvPriority),
-			Weight:   int64(rc.SrvWeight),
-			Port:     int64(rc.SrvPort),
-			Target:   rc.GetTargetField(),
+			Priority: int64(f.Priority),
+			Weight:   int64(f.Weight),
+			Port:     int64(f.Port),
+			Target:   f.Target,
 		}
 		// When dealing with SRV records, we must not set the Value fields,
 		// otherwise the API throws an error:
@@ -302,10 +304,11 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 	case "TXT":
 		req.Value = new(rc.GetTargetTXTJoined())
 	case "HTTPS":
+		f := rc.AsHTTPS()
 		req.HTTPS = &httpsRecord{
-			Priority: int64(rc.SvcPriority),
-			Target:   rc.GetTargetField(),
-			Params:   rc.SvcParams,
+			Priority: int64(f.Priority),
+			Target:   f.Target,
+			Params:   models.Svcbv2ValueToString(rc.AsHTTPS().Value),
 		}
 		// When dealing with HTTPS records, we must not set the Value fields,
 		// otherwise the API throws an error:
