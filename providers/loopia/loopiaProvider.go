@@ -24,10 +24,9 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Section 1: Register this provider in the system.
@@ -207,7 +206,7 @@ func (c *APIClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	}
 
 	// Convert them to DNScontrol's native format:
-	existingRecords := []*models.RecordConfig{}
+	existingRecords := models.Records{}
 	for _, subdomain := range subdomains {
 		// here seems like a good place to get the records for a subdomain.
 		// fukn ballz tho: each subdomain requires one API call. 💩
@@ -223,7 +222,7 @@ func (c *APIClient) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 
 		for _, subdRr := range subdomainrecords {
 			// Note: subdomain cannot be any of [.-_ ]
-			record, err := nativeToRecord(subdRr, domain, subdomain)
+			record, err := nativeToRecord(subdRr, dc, subdomain)
 			if err != nil {
 				return nil, err
 			}
@@ -280,19 +279,6 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	dc.Records = recordsToKeep
 }
 
-// gatherAffectedLabels takes the output of diff.ChangedGroups and
-// regroups it by FQDN of the label, not by Key. It also returns
-// a list of all the FQDNs.
-func gatherAffectedLabels(groups map[models.RecordKey][]string) (labels map[string]bool, msgs map[string][]string) {
-	labels = map[string]bool{}
-	msgs = map[string][]string{}
-	for k, v := range groups {
-		labels[k.NameFQDN] = true
-		msgs[k.NameFQDN] = append(msgs[k.NameFQDN], v...)
-	}
-	return labels, msgs
-}
-
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	if c.Debug {
@@ -301,26 +287,50 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 
 	PrepDesiredRecords(dc)
 
-	var keysToUpdate map[models.RecordKey][]string
-	differ := diff.NewCompat(dc)
-	toReport, create, del, modify, actualChangeCount, err := differ.IncrementalDiff(existingRecords)
-	if err != nil {
-		return nil, 0, err
-	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
-
-	keysToUpdate, _, _, err = differ.ChangedGroups(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	for _, d := range create {
-		// fmt.Printf("a creation: subdomain: %+v, existingfqdn: %+v \n", d.Desired.Name, d.Desired.NameFQDN)
-		des := d.Desired
+	var corrections []*models.Correction
+
+	// Regroup the changes by the FQDN of the affected label so we can detect
+	// subdomains that become extinct (Loopia deletes a whole subdomain in a
+	// single API call). affectedLabels records every FQDN touched by a change;
+	// msgsForLabel accumulates the human-readable messages per FQDN.
+	var creates, dels, modifies []diff2.Change
+	affectedLabels := map[string]bool{}
+	msgsForLabel := map[string][]string{}
+	for _, change := range changes {
+		if change.Type == diff2.REPORT {
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+			continue
+		}
+
+		var fqdn string
+		switch change.Type {
+		case diff2.CREATE:
+			creates = append(creates, change)
+			fqdn = change.New[0].NameFQDN
+		case diff2.CHANGE:
+			modifies = append(modifies, change)
+			fqdn = change.New[0].NameFQDN
+		case diff2.DELETE:
+			dels = append(dels, change)
+			fqdn = change.Old[0].NameFQDN
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
+		affectedLabels[fqdn] = true
+		msgsForLabel[fqdn] = append(msgsForLabel[fqdn], change.Msgs...)
+	}
+
+	for _, change := range creates {
+		// fmt.Printf("a creation: subdomain: %+v, existingfqdn: %+v \n", change.New[0].Name, change.New[0].NameFQDN)
+		des := change.New[0]
 		zrec := recordToNative(des)
 		corrections = append(corrections, &models.Correction{
-			Msg: d.String(),
+			Msg: change.Msgs[0],
 			F: func() error {
 				// return c.CreateRecordSimulate(dc.Name, des.Name, zrec)
 				return c.CreateRecord(dc.Name, des.Name, zrec)
@@ -329,14 +339,13 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 	}
 
 	// Determine which subdomains become extinct. Delete them.
-	affectedLabels, msgsForLabel := gatherAffectedLabels(keysToUpdate)
 	_, desiredRecords := dc.Records.GroupedByFQDN()
 
 	for fqdn := range affectedLabels {
 		if len(desiredRecords[fqdn]) == 0 {
 			msgs := strings.Join(msgsForLabel[fqdn], "\n")
 			msgs = "records affected by deletion of subdomain " + fqdn + "\n" + msgs
-			subdomain := dnsutilv1.TrimDomainName(fqdn, dc.Name)
+			subdomain := dc.ToShort(fqdn + ".")
 			corrections = append(corrections, &models.Correction{
 				Msg: msgs,
 				F: func() error {
@@ -346,12 +355,13 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 		}
 	}
 
-	for _, d := range del {
+	for _, change := range dels {
+		existing := change.Old[0]
 		skip := false
 		for fqdn := range affectedLabels {
 			if len(desiredRecords[fqdn]) == 0 {
-				subdomain := dnsutilv1.TrimDomainName(fqdn, dc.Name)
-				if d.Existing.NameFQDN == fqdn && d.Existing.Name == subdomain {
+				subdomain := dc.ToShort(fqdn + ".")
+				if existing.NameFQDN == fqdn && existing.Name == subdomain {
 					// fmt.Printf("fqdn extinct wtf: %s\n", fqdn)
 					// deletion is a member of fqdn. skip its deletion (otherwise extra API call and its error)
 					skip = true
@@ -359,28 +369,29 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 			}
 		}
 		if !skip {
-			// fmt.Printf("a deletion: subdomain: %+v, existingfqdn: %+v \n", d.Existing.Name, d.Existing.NameFQDN)
-			existingRecord := d.Existing.Original.(zRec)
+			// fmt.Printf("a deletion: subdomain: %+v, existingfqdn: %+v \n", existing.Name, existing.NameFQDN)
+			existingRecord := existing.Original.(zRec)
 			corrections = append(corrections, &models.Correction{
-				Msg: d.String(),
+				Msg: change.Msgs[0],
 				F: func() error {
-					// return c.DeleteRecordSimulate(dc.Name, d.Existing.Name, existingRecord.RecordID)
-					return c.DeleteRecord(dc.Name, d.Existing.Name, existingRecord.RecordID)
+					// return c.DeleteRecordSimulate(dc.Name, existing.Name, existingRecord.RecordID)
+					return c.DeleteRecord(dc.Name, existing.Name, existingRecord.RecordID)
 				},
 			})
 		}
 	}
 
-	for _, d := range modify {
-		subdomain := d.Existing.Name
-		// fmt.Printf("a modification: subdomain: %+v, existingfqdn: %+v \n", d.Existing.Name, d.Existing.NameFQDN)
-		rec := d.Desired
-		existingID := d.Existing.Original.(zRec).RecordID
+	for _, change := range modifies {
+		existing := change.Old[0]
+		subdomain := existing.Name
+		// fmt.Printf("a modification: subdomain: %+v, existingfqdn: %+v \n", existing.Name, existing.NameFQDN)
+		rec := change.New[0]
+		existingID := existing.Original.(zRec).RecordID
 		zrec := recordToNative(rec, existingID)
 		corrections = append(corrections, &models.Correction{
-			Msg: d.String(),
+			Msg: change.Msgs[0],
 			F: func() error {
-				// weird BUG: if we provide d.Desired.Name, instead of 'subdomain',
+				// weird BUG: if we provide change.New[0].Name, instead of 'subdomain',
 				// all change records get assigned a single subdomain, common across all change records.
 				// return c.UpdateRecordSimulate(dc.Name, subdomain, zrec)
 				return c.UpdateRecord(dc.Name, subdomain, zrec)
@@ -395,7 +406,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 func debugRecords(note string, recs []*models.RecordConfig) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
-		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetTargetCombined())
+		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())
 	}
 }
 
