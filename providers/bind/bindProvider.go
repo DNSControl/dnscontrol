@@ -243,20 +243,22 @@ func findSoaRecord(recs models.Records) *models.RecordConfig {
 	return nil
 }
 
-func updateSerialNumber(origin string, recs models.Records, forcedSerial uint32) {
+func updateSerialNumber(recs models.Records, forcedSerial uint32) {
 
 	recToUpdate := findSoaRecord(recs)
 	if recToUpdate == nil {
 		return
 	}
 
+	f := recToUpdate.AsSOA()
+
 	if forcedSerial != 0 {
-		recToUpdate.SoaSerial = forcedSerial
+		f.Serial = forcedSerial
 	} else {
-		recToUpdate.SoaSerial = generateSerial(recToUpdate.SoaSerial)
+		f.Serial = generateSerial(f.Serial)
 	}
 
-	recToUpdate.RecomputeV3Fields(origin)
+	recToUpdate.SetRDATA(f)
 }
 
 // ParseZoneContents parses a string as a BIND zone and returns the records.
@@ -332,7 +334,7 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 	)
 
 	// We know there are changes. Update the SOA record's serial number.
-	updateSerialNumber(dc.Name, result.DesiredPlus, uint32(bindserial.ForcedValue&0xFFFF))
+	updateSerialNumber(result.DesiredPlus, uint32(bindserial.ForcedValue&0xFFFF))
 
 	corrections = append(corrections,
 		&models.Correction{

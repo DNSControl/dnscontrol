@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 const (
@@ -289,11 +289,11 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, 0)
+	existingRecords := make(models.Records, 0)
 	for i := range records {
 		shouldSkip := false
 		if strings.HasSuffix(records[i].Content, ".porkbun.com") {
-			name := dnsutilv1.TrimDomainName(records[i].Name, domain)
+			name := dc.ToShort(records[i].Name)
 			if name == "@" {
 				name = ""
 			}
@@ -317,7 +317,7 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if shouldSkip {
 			continue
 		}
-		newr, err := toRc(domain, &records[i])
+		newr, err := toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}
@@ -329,18 +329,15 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if r.Type == "permanent" {
 			recordType = "URL301"
 		}
-		rc := &models.RecordConfig{
-			Type:     recordType,
-			Original: r,
-			Metadata: map[string]string{
-				metaType:        r.Type,
-				metaIncludePath: r.IncludePath,
-				metaWildcard:    r.Wildcard,
-			},
-		}
-		rc.SetLabel(r.Subdomain, domain)
-		if err := rc.SetTarget(r.Location); err != nil {
+		rc, err := dc.NewRecordConfig(dc.LabelFromShort(r.Subdomain), 0, recordType, r.Location)
+		if err != nil {
 			return nil, err
+		}
+		rc.Original = r
+		rc.Metadata = map[string]string{
+			metaType:        r.Type,
+			metaIncludePath: r.IncludePath,
+			metaWildcard:    r.Wildcard,
 		}
 		existingRecords = append(existingRecords, rc)
 	}
@@ -348,74 +345,64 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 }
 
 // parses the porkbun format into our standard RecordConfig.
-func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
-	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
-	priority, _ := strconv.ParseUint(r.Prio, 10, 16)
+func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
+	ttlValue, _ := strconv.ParseUint(r.TTL, 10, 32)
+	ttl := uint32(ttlValue)
+	priority, _ := strconv.ParseInt(r.Prio, 10, 16)
+	label := dc.LabelFromFQDNNoDot(r.Name)
 
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(ttl),
-		MxPreference: uint16(priority),
-		SrvPriority:  uint16(priority),
-		Original:     r,
-	}
-	rc.SetLabelFromFQDN(r.Name, domain)
-
+	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		err = rc.SetTargetTXT(r.Content)
-	case "MX", "CNAME", "ALIAS", "NS":
-		if strings.HasSuffix(r.Content, ".") {
-			err = rc.SetTarget(r.Content)
-		} else {
-			err = rc.SetTarget(r.Content + ".")
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Content)
+	case "MX":
+		target := r.Content
+		if !strings.HasSuffix(target, ".") {
+			target += "."
 		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, priority, target)
+	case "CNAME", "ALIAS", "NS":
+		target := r.Content
+		if !strings.HasSuffix(target, ".") {
+			target += "."
+		}
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 	case "CAA":
 		// 0, issue, "letsencrypt.org"
 		c := strings.Split(r.Content, " ")
 
-		caaFlag, _ := strconv.ParseUint(c[0], 10, 8)
-		rc.CaaFlag = uint8(caaFlag)
-		rc.CaaTag = c[1]
-		err = rc.SetTarget(strings.ReplaceAll(c[2], "\"", ""))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, c[0], c[1], strings.ReplaceAll(c[2], "\"", ""))
 	case "TLSA":
 		// 0 0 0 00000000000000000000000
 		c := strings.Split(r.Content, " ")
 
-		tlsaUsage, _ := strconv.ParseUint(c[0], 10, 8)
-		rc.TlsaUsage = uint8(tlsaUsage)
-		tlsaSelector, _ := strconv.ParseUint(c[1], 10, 8)
-		rc.TlsaSelector = uint8(tlsaSelector)
-		tlsaMatchingType, _ := strconv.ParseUint(c[2], 10, 8)
-		rc.TlsaMatchingType = uint8(tlsaMatchingType)
-		err = rc.SetTarget(c[3])
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, c[0], c[1], c[2], c[3])
 	case "SRV":
 		// 5 5060 sip.example.com
 		c := strings.Split(r.Content, " ")
 
-		srvWeight, _ := strconv.ParseUint(c[0], 10, 16)
-		rc.SrvWeight = uint16(srvWeight)
-		srvPort, _ := strconv.ParseUint(c[1], 10, 16)
-		rc.SrvPort = uint16(srvPort)
-		err = rc.SetTarget(c[2])
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, c[0], c[1], c[2])
 	case "HTTPS":
 		fallthrough
 	case "SVCB":
 		// 5 . ech=AAAAABBBBB...
 		c := strings.Split(r.Content, " ")
 
-		svcPriority, _ := strconv.ParseUint(c[0], 10, 16)
-		rc.SvcPriority = uint16(svcPriority)
+		params := ""
 		if len(c) > 2 {
-			rc.SvcParams = strings.Join(c[2:], " ")
+			params = strings.Join(c[2:], " ")
 		}
-		err = rc.SetTarget(c[1])
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, c[0], c[1], params)
 	case "SSHFP":
-		err = rc.SetTargetSSHFPString(r.Content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSSHFP, r.Content)
 	default:
-		err = rc.SetTarget(r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Content)
 	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
 	return rc, err
 }
 
@@ -478,7 +465,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 }
 
 func checkNSModifications(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
 			if strings.HasSuffix(rec.GetTargetField(), ".porkbun.com") {

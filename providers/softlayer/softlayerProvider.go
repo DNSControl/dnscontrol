@@ -9,7 +9,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/softlayer/softlayer-go/datatypes"
@@ -92,34 +92,40 @@ func (s *softlayerProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 		return nil, 0, err
 	}
 
-	toReport, create, deletes, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+	changes, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, del := range deletes {
-		existing := del.Existing.Original.(datatypes.Dns_Domain_ResourceRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: del.String(),
-			F:   s.deleteRecordFunc(*existing.Id),
-		})
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, cre := range create {
-		corrections = append(corrections, &models.Correction{
-			Msg: cre.String(),
-			F:   s.createRecordFunc(cre.Desired, domain),
-		})
-	}
+		case diff2.CREATE:
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.createRecordFunc(change.New[0], domain),
+			})
 
-	for _, mod := range modify {
-		existing := mod.Existing.Original.(datatypes.Dns_Domain_ResourceRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: mod.String(),
-			F:   s.updateRecordFunc(&existing, mod.Desired),
-		})
+		case diff2.DELETE:
+			existing := change.Old[0].Original.(datatypes.Dns_Domain_ResourceRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.deleteRecordFunc(*existing.Id),
+			})
+
+		case diff2.CHANGE:
+			existing := change.Old[0].Original.(datatypes.Dns_Domain_ResourceRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.updateRecordFunc(&existing, change.New[0]),
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	return corrections, actualChangeCount, nil
