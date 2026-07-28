@@ -273,27 +273,28 @@ func (c *vercelProvider) mkDeleteCorrection(domain string, oldRec *models.Record
 func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRecordRequest, error) {
 	req := createDNSRecordRequest{}
 
-	req.Domain = domain
-
 	name := rc.GetLabel()
 	if name == "@" {
 		name = ""
 	}
 	req.Name = name
+	req.Domain = domain
 	req.Type = rc.Type
-	req.Value = new(rc.GetTargetField())
 	req.TTL = int64(rc.TTL)
 	req.Comment = ""
 
 	switch rc.Type {
 	case "MX":
-		req.MXPriority = int64(rc.MxPreference)
+		f := rc.AsMX()
+		req.MXPriority = int64(f.Preference)
+		req.Value = new(f.Mx)
 	case "SRV":
+		f := rc.AsSRV()
 		req.SRV = &vercelClient.SRV{
-			Priority: int64(rc.SrvPriority),
-			Weight:   int64(rc.SrvWeight),
-			Port:     int64(rc.SrvPort),
-			Target:   rc.GetTargetField(),
+			Priority: int64(f.Priority),
+			Weight:   int64(f.Weight),
+			Port:     int64(f.Port),
+			Target:   f.Target,
 		}
 		// When dealing with SRV records, we must not set the Value fields,
 		// otherwise the API throws an error:
@@ -302,17 +303,21 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 	case "TXT":
 		req.Value = new(rc.GetTargetTXTJoined())
 	case "HTTPS":
+		f := rc.AsHTTPS()
 		req.HTTPS = &httpsRecord{
-			Priority: int64(rc.SvcPriority),
-			Target:   rc.GetTargetField(),
-			Params:   rc.SvcParams,
+			Priority: int64(f.Priority),
+			Target:   f.Target,
+			Params:   models.Svcbv2ValueToString(rc.AsHTTPS().Value),
 		}
 		// When dealing with HTTPS records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
 	case "CAA":
-		req.Value = new(fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField()))
+		f := rc.AsCAA()
+		req.Value = new(fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value))
+	default:
+		req.Value = new(rc.GetRDATA().String())
 	}
 
 	return req, nil
@@ -328,21 +333,21 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 	}
 	req.Name = &name
 
-	value := rc.GetTargetField()
-	req.Value = &value
-
 	req.TTL = new(int64(rc.TTL))
 	req.Comment = ""
 
 	switch rc.Type {
 	case "MX":
-		req.MXPriority = new(int64(rc.MxPreference))
+		f := rc.AsMX()
+		req.MXPriority = new(int64(f.Preference))
+		req.Value = new(f.Mx)
 	case "SRV":
+		f := rc.AsSRV()
 		req.SRV = &vercelClient.SRVUpdate{
-			Priority: new(int64(rc.SrvPriority)),
-			Weight:   new(int64(rc.SrvWeight)),
-			Port:     new(int64(rc.SrvPort)),
-			Target:   &value,
+			Priority: new(int64(f.Priority)),
+			Weight:   new(int64(f.Weight)),
+			Port:     new(int64(f.Port)),
+			Target:   new(f.Target),
 		}
 		// When dealing with SRV records, we must not set the Value fields,
 		// otherwise the API throws an error:
@@ -352,17 +357,22 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 		txtValue := rc.GetTargetTXTJoined()
 		req.Value = &txtValue
 	case "HTTPS":
+		f := rc.AsHTTPS()
 		req.HTTPS = &httpsRecord{
-			Priority: int64(rc.SvcPriority),
-			Target:   rc.GetTargetField(),
-			Params:   rc.SvcParams,
+			Priority: int64(f.Priority),
+			Target:   f.Target,
+			Params:   models.Svcbv2ValueToString(f.Value),
 		}
 		// When dealing with HTTPS records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
 	case "CAA":
-		value := fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		value := fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
+		req.Value = &value
+	default:
+		value := rc.GetRDATA().String()
 		req.Value = &value
 	}
 
