@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 const baseURL = "https://api.gigahost.no/api/v0"
@@ -85,13 +87,13 @@ type recordRequest struct {
 // request performs an HTTP request against the Gigahost API, unwraps the
 // standard envelope, surfaces meta-level errors, and decodes data into target.
 func (c *gigahostProvider) request(method, path string, query url.Values, body, target any) error {
-	var reqBody io.Reader
+	var bodyJSON []byte
 	if body != nil {
 		j, err := json.Marshal(body)
 		if err != nil {
 			return err
 		}
-		reqBody = bytes.NewBuffer(j)
+		bodyJSON = j
 	}
 
 	u := baseURL + path
@@ -99,39 +101,67 @@ func (c *gigahostProvider) request(method, path string, query url.Values, body, 
 		u += "?" + query.Encode()
 	}
 
-	req, err := http.NewRequest(method, u, reqBody)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Authorization", "Bearer "+c.apiKey)
-	req.Header.Set("Accept", "application/json")
-	if reqBody != nil {
-		req.Header.Set("Content-Type", "application/json")
-	}
-
-	resp, err := httpClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	raw, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
+	// The API rate-limits aggressively enough that a normal push can trip it,
+	// so retry 429s with a backoff (honoring Retry-After when present).
+	const maxRetries = 5
+	var resp *http.Response
+	var raw []byte
 	var env apiEnvelope
-	if len(raw) > 0 {
-		if err := json.Unmarshal(raw, &env); err != nil {
-			return fmt.Errorf("gigahost: could not decode response for %s %s (HTTP %d): %w", method, path, resp.StatusCode, err)
+	var status int
+	for attempt := 0; ; attempt++ {
+		var reqBody io.Reader
+		if bodyJSON != nil {
+			reqBody = bytes.NewReader(bodyJSON)
 		}
+		req, err := http.NewRequest(method, u, reqBody)
+		if err != nil {
+			return err
+		}
+		req.Header.Set("Authorization", "Bearer "+c.apiKey)
+		req.Header.Set("Accept", "application/json")
+		if reqBody != nil {
+			req.Header.Set("Content-Type", "application/json")
+		}
+
+		resp, err = httpClient.Do(req)
+		if err != nil {
+			return err
+		}
+		raw, err = io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return err
+		}
+
+		env = apiEnvelope{}
+		if len(raw) > 0 {
+			if err := json.Unmarshal(raw, &env); err != nil {
+				return fmt.Errorf("gigahost: could not decode response for %s %s (HTTP %d): %w", method, path, resp.StatusCode, err)
+			}
+		}
+
+		// Prefer the envelope's meta.status, falling back to the HTTP status code.
+		status = env.Meta.Status
+		if status == 0 {
+			status = resp.StatusCode
+		}
+
+		if status != http.StatusTooManyRequests || attempt >= maxRetries {
+			break
+		}
+		wait := time.Duration(2<<attempt) * time.Second // 2s, 4s, 8s, 16s, 32s
+		if ra := resp.Header.Get("Retry-After"); ra != "" {
+			if secs, err := strconv.ParseInt(ra, 10, 64); err == nil {
+				if secs > 180 {
+					return fmt.Errorf("gigahost: %s %s rate limited; Retry-After %ds too long", method, path, secs)
+				}
+				wait = time.Duration(secs+1) * time.Second
+			}
+		}
+		printer.Warnf("GIGAHOST: rate limited, retrying in %v\n", wait)
+		time.Sleep(wait)
 	}
 
-	// Prefer the envelope's meta.status, falling back to the HTTP status code.
-	status := env.Meta.Status
-	if status == 0 {
-		status = resp.StatusCode
-	}
 	if status >= 400 {
 		msg := env.Meta.Message
 		if msg == "" {
