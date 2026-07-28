@@ -224,29 +224,34 @@ func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, rec
 
 func toReq(rc *models.RecordConfig) *dnsRecordCreate {
 	name := rc.GetLabelFQDN() // Netlify wants the FQDN
-	target := rc.GetTargetField()
-	priority := int64(0)
 
-	switch rc.Type {
-	case "MX":
-		priority = int64(rc.MxPreference)
-	case "SRV":
-		priority = int64(rc.SrvPriority)
-	case "TXT":
-		target = rc.GetTargetTXTJoined()
-	default:
-		// no action required
-	}
-
-	return &dnsRecordCreate{
+	r := &dnsRecordCreate{
 		Type:     rc.Type,
 		Hostname: name,
-		Value:    target,
 		TTL:      int64(rc.TTL),
-		Priority: priority,
-		Port:     int64(rc.SrvPort),
-		Weight:   int64(rc.SrvWeight),
-		Tag:      rc.CaaTag,
-		Flag:     int64(rc.CaaFlag),
 	}
+
+	switch rc.Type {
+	case "CAA":
+		f := rc.AsCAA()
+		r.Tag = f.Tag
+		r.Flag = int64(f.Flag)
+		r.Value = f.Value
+	case "MX":
+		f := rc.AsMX()
+		r.Priority = int64(f.Preference)
+		r.Value = f.Mx
+	case "SRV":
+		f := rc.AsSRV()
+		r.Priority = int64(f.Priority)
+		r.Port = int64(f.Port)
+		r.Weight = int64(f.Weight)
+		r.Value = f.Target
+	case "TXT":
+		r.Value = rc.GetTargetTXTJoined()
+	default:
+		r.Value = rc.GetRDATA().String()
+	}
+
+	return r
 }
