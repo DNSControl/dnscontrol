@@ -633,38 +633,50 @@ func removeOtherApexNS(dc *models.DomainConfig) {
 // Using RecordConfig.GetTargetCombined returns priority in the string, which we do not allow.
 func getTargetRecordContent(rc *models.RecordConfig) string {
 	switch rtype := rc.Type; rtype {
-	case "CAA":
-		return rc.GetTargetCombined()
-	case "DS":
-		return fmt.Sprintf("%d %d %d %s", rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
-	case "HTTPS", "SVCB":
+	// case "CAA":
+	// 	return rc.GetRDATA().String()
+	// case "DS":
+	// 	return rc.GetRDATA().String()
+	case "HTTPS":
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
-		target := rc.GetTargetField()
+		f := rc.AsHTTPS()
+		target := f.Target
 		if target != "." {
 			target = strings.TrimSuffix(target, ".")
 		}
-		if rc.SvcParams != "" {
-			return fmt.Sprintf("%d %s %s", rc.SvcPriority, target, rc.SvcParams)
+		if len(f.Value) != 0 {
+			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
-		return fmt.Sprintf("%d %s", rc.SvcPriority, target)
+		return fmt.Sprintf("%d %s", f.Priority, target)
+	case "SVCB":
+		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
+		// Preserve "." for AliasMode (priority 0) self-referencing records.
+		f := rc.AsSVCB()
+		target := f.Target
+		if target != "." {
+			target = strings.TrimSuffix(target, ".")
+		}
+		if len(f.Value) != 0 {
+			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
+		}
+		return fmt.Sprintf("%d %s", f.Priority, target)
 	case "MX":
-		return rc.GetTargetField()
-	case "NAPTR":
-		return fmt.Sprintf(`%d %d "%s" "%s" "%s" %s`,
-			rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp,
-			rc.GetTargetField())
-	case "SSHFP":
-		return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-	case "SRV":
-		return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
-	case "TLSA":
-		return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+		return rc.AsMX().Mx
+	// case "NAPTR":
+	// 	return fmt.Sprintf(`%d %d "%s" "%s" "%s" %s`,
+	// 		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp,
+	// 		rc.GetTargetField())
+	// case "SSHFP":
+	// 	return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+	// case "SRV":
+	// 	return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	// case "TLSA":
+	// 	return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 	case "TXT":
 		return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-	default:
-		return rc.GetTargetField()
 	}
+	return rc.GetRDATA().String()
 }
 
 // Returns the correct priority for the record type, 0 for records without priority.
