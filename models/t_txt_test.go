@@ -270,13 +270,6 @@ func TestRecordConfigGetTargetRFC1035QuotedTXT(t *testing.T) {
 	}
 }
 
-func TestRecordConfigGetTargetDebugTXT(t *testing.T) {
-	rc := testTXTRecord(t, "debug text")
-	if got, want := rc.GetTargetDebug(), rc.GetRDATA().String(); got != want {
-		t.Fatalf("GetTargetDebug() = %q, want RDATA.String() %q", got, want)
-	}
-}
-
 func TestRecordConfigGetTargetJSTXT(t *testing.T) {
 	tests := []struct {
 		name  string

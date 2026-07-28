@@ -22,7 +22,7 @@ func (s *sakuracloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 		return nil, errNoExist{domain}
 	}
 
-	existingRecords := make([]*models.RecordConfig, 0, len(item.Status.NS)+len(item.Settings.DNS.ResourceRecordSets))
+	existingRecords := make(models.Records, 0, len(item.Status.NS)+len(item.Settings.DNS.ResourceRecordSets))
 
 	for _, ns := range item.Status.NS {
 		// CommonServiceItem.Status.NS fields do not end with a dot.
@@ -35,20 +35,16 @@ func (s *sakuracloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 		//          "ns2.gslbN.sakura.ne.jp"
 		//        ]
 		//      },
-		rc := &models.RecordConfig{
-			Type:     "NS",
-			TTL:      defaultTTL,
-			Original: ns,
-		}
-		rc.SetLabel("@", domain)
-		if err := rc.PopulateFromString("NS", ns+".", domain); err != nil {
+		rc, err := dc.NewRecordConfig("@", defaultTTL, "NS", ns+".")
+		if err != nil {
 			return nil, fmt.Errorf("unparsable record received: %w", err)
 		}
+		rc.Original = ns
 		existingRecords = append(existingRecords, rc)
 	}
 
 	for _, dr := range item.Settings.DNS.ResourceRecordSets {
-		rc, err := toRc(domain, dr)
+		rc, err := toRc(dc, dr)
 		if err != nil {
 			return nil, err
 		}
