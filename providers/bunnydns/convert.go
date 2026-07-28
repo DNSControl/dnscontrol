@@ -67,10 +67,16 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 	}
 
 	switch r.Type {
-	case recordTypeSVCB, recordTypeHTTPS:
+	case recordTypeSVCB:
 		// In the case of SVCB/HTTPS records, the Target is part of the Value.
 		// After removing trailing dots for said target, we can add the params to the value.
-		r.Value = fmt.Sprintf("%s %s", r.Value, rc.SvcParams)
+		f := rc.AsSVCB()
+		r.Value = fmt.Sprintf("%s %s", r.Value, models.Svcbv2ValueToString(f.Value))
+	case recordTypeHTTPS:
+		// In the case of SVCB/HTTPS records, the Target is part of the Value.
+		// After removing trailing dots for said target, we can add the params to the value.
+		f := rc.AsHTTPS()
+		r.Value = fmt.Sprintf("%s %s", r.Value, models.Svcbv2ValueToString(f.Value))
 	case recordTypeSRV:
 		// SRV empty target is represented as "."
 		if r.Value == "" {
