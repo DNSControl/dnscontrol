@@ -319,7 +319,9 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		name = ""
 	}
 
-	data := rc.GetTargetField()
+	//data := rc.GetTargetField()
+	// TODO(tlim): If tests fail, revert this change.
+	data := rc.GetRDATA().String()
 
 	// Vultr does not use a period suffix for CNAME, NS, MX or SRV.
 	data = strings.TrimSuffix(data, ".")
@@ -360,7 +362,7 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		r.Data = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	case "SSHFP":
 		f := rc.AsSSHFP()
-		r.Data = fmt.Sprintf("%d %s %d", f.Algorithm, f.Type, f.FingerPrint)
+		r.Data = fmt.Sprintf("%d %d %s", f.Algorithm, f.Type, f.FingerPrint)
 	case "TXT":
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
