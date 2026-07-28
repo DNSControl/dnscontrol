@@ -31,9 +31,11 @@ func (api *rwthProvider) printRecConfig(rr models.RecordConfig) string {
 	typeStr := rr.Type
 
 	// the remaining line
-	target := rr.GetTargetField()
+	//target := rr.GetTargetField()
 	if rr.GetRDATA() != nil {
 		target = rr.GetRDATA().String()
+	} else {
+		panic("should not happen")
 	}
 
 	// comment
