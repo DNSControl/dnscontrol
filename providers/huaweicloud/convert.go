@@ -28,25 +28,26 @@ func getRRSetIDFromRecords(rcs models.Records) []string {
 	return slices.Compact(ids)
 }
 
-func nativeToRecords(n *model.ShowRecordSetByZoneResp, zoneName string) (models.Records, error) {
+func nativeToRecords(n *model.ShowRecordSetByZoneResp, dc *models.DomainConfig) (models.Records, error) {
 	if n.Name == nil || n.Type == nil || n.Records == nil || n.Ttl == nil {
 		return nil, fmt.Errorf("missing required fields in Huaweicloud's RRset: %+v", n)
 	}
 	var rcs models.Records
-	recName := *n.Name
+	label := dc.ToShort(*n.Name)
 	recType := *n.Type
+	ttl := uint32(*n.Ttl)
 
 	// Split into records
 	for _, value := range *n.Records {
-		rc := &models.RecordConfig{
-			TTL:      uint32(*n.Ttl),
-			Original: n,
-			Metadata: map[string]string{},
-		}
-		rc.SetLabelFromFQDN(recName, zoneName)
-		if err := rc.PopulateFromString(recType, value, zoneName); err != nil {
+		var rc *models.RecordConfig
+		var err error
+		rc, err = dc.NewRecordConfigParse(label, ttl, recType, value)
+		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from Huaweicloud: %w", err)
 		}
+
+		rc.Original = n
+
 		if n.Line != nil {
 			rc.Metadata[metaLine] = *n.Line
 		}
@@ -56,6 +57,7 @@ func nativeToRecords(n *model.ShowRecordSetByZoneResp, zoneName string) (models.
 		if n.Description != nil {
 			rc.Metadata[metaKey] = *n.Description
 		}
+
 		rcs = append(rcs, rc)
 	}
 
@@ -113,11 +115,7 @@ func recordsToNative(rcs models.Records, expectedKey models.RecordKey) (*model.S
 		if key != expectedKey {
 			continue
 		}
-		val := r.GetTargetCombined()
-		// special case for empty TXT records
-		if key.Type == "TXT" && len(val) == 0 {
-			val = "\"\""
-		}
+		val := r.GetRDATA().String()
 
 		resultVal = append(resultVal, val)
 		if resultTTL == 0 {
