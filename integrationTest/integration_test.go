@@ -566,7 +566,7 @@ func makeTests() []*TestGroup {
 			tc("TXT with semicolon ws", txt("foosc2", `wssemi ; colon`)),
 
 			tc("TXT interior ws", txt("foosp", "with spaces")),
-			// tc("TXT leading ws", txt("foowsb", " leadingspace")),
+			//c("TXT leading ws", txt("foowsb", " leadingspace")),
 			tc("TXT trailing ws", txt("foows1", "trailingws ")),
 
 			// Vultr syntax-checks TXT records with SPF contents.
@@ -710,7 +710,7 @@ func makeTests() []*TestGroup {
 				"AZURE_DNS",         // Removed because it is too slow
 				"AZURE_PRIVATE_DNS", // Removed because it is too slow
 				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
-				"CNR",               // Test beaks limits.
+				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
 				"DIGITALOCEAN", // No paging. Why bother?
@@ -839,7 +839,10 @@ func makeTests() []*TestGroup {
 				naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", "."),
 				naptr("test", 102, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", "."),
 			),
-			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")),
+			// AllowNoChanges: providers that audit-reject multiple NAPTRs at
+			// one label (e.g. GIGAHOST) skip "NAPTR second record" above, so
+			// this state may already be converged.
+			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")).AllowNoChanges(),
 			tc("NAPTR change order", naptr("test", 103, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change preference", naptr("test", 103, 20, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change flags", naptr("test", 103, 20, "A", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
@@ -927,7 +930,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DS",
 			requires(providers.CanUseDS),
-			not("CLOUDFLAREAPI"),
+			not("CLOUDFLAREAPI", "POWERDNS"), // PowerDNS: DS records are not supported for the apex domain.
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
@@ -1031,6 +1034,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DNSKEY",
 			requires(providers.CanUseDNSKEY),
+			not("POWERDNS"), // PowerDNS: DNSKEY records are only supported for the apex domain.
 			tc("Create DNSKEY record", dnskey("test", 257, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 1", dnskey("test", 256, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 2", dnskey("test", 256, 3, 13, "whjtMiJP9C86l0oTJUxemuYtQ0RIZePWt6QETC2kkKM=")),

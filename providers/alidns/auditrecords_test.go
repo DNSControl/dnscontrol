@@ -3,6 +3,7 @@ package alidns
 import (
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -29,9 +30,8 @@ func TestTargetConstraint(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc := &models.RecordConfig{Type: "CNAME"}
-			rc.SetLabel("a", "example.com")
-			rc.MustSetTarget(tt.target)
+			dc := models.MustNewDomainConfig("example.com")
+			rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, tt.target)
 
 			err := targetConstraint(rc)
 			if (err != nil) != tt.wantErr {
@@ -42,11 +42,10 @@ func TestTargetConstraint(t *testing.T) {
 }
 
 func TestAuditRecordsRejectsNonChineseIDNCNAMETarget(t *testing.T) {
-	rc := &models.RecordConfig{Type: "CNAME"}
-	rc.SetLabel("a", "example.com")
-	rc.MustSetTarget("xn--ndaaa.com.")
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, "xn--ndaaa.com.")
 
-	errs := AuditRecords([]*models.RecordConfig{rc})
+	errs := AuditRecords(models.Records{rc})
 	if len(errs) != 1 {
 		t.Fatalf("AuditRecords() returned %d errors, want 1", len(errs))
 	}

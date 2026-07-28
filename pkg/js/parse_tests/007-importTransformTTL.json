@@ -40,12 +40,12 @@
       "name": "inny",
       "records": [
         {
-          "comparablev3": "1.1.1.1",
+          "comparablev3": "4.4.4.101",
           "filepos": "[line:2:5]",
           "name": "bar.foo1.com",
           "name_unicode": "bar",
           "rdata": {
-            "Addr": "1.1.1.1"
+            "Addr": "4.4.4.101"
           },
           "target": "4.4.4.101",
           "ttl": 60,
@@ -53,12 +53,12 @@
           "typenum": 1
         },
         {
-          "comparablev3": "5.5.5.5",
+          "comparablev3": "6.6.6.3",
           "filepos": "[line:3:5]",
           "name": "foo.foo1.com",
           "name_unicode": "foo",
           "rdata": {
-            "Addr": "5.5.5.5"
+            "Addr": "6.6.6.3"
           },
           "target": "6.6.6.3",
           "ttl": 60,
@@ -87,12 +87,12 @@
           "typenum": 1
         },
         {
-          "comparablev3": "5.5.5.5",
+          "comparablev3": "7.7.7.7",
           "filepos": "[line:3:5]",
           "name": "foo.foo1",
           "name_unicode": "foo",
           "rdata": {
-            "Addr": "5.5.5.5"
+            "Addr": "7.7.7.7"
           },
           "target": "7.7.7.7",
           "ttl": 99,

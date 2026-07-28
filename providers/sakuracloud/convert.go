@@ -8,32 +8,32 @@ import (
 
 const defaultTTL = uint32(3600)
 
-func toRc(domain string, r domainRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      r.TTL,
-		Original: r,
+func toRc(dc *models.DomainConfig, r domainRecord) (*models.RecordConfig, error) {
+	ttl := r.TTL
+	if ttl == 0 {
+		ttl = defaultTTL
 	}
-	if r.TTL == 0 {
-		rc.TTL = defaultTTL
-	}
+	label := dc.LabelFromShort(r.Name)
 
-	rc.SetLabel(r.Name, domain)
-
+	var rc *models.RecordConfig
 	var err error
 	switch r.Type {
 	case "TXT":
 		// TXT records are stored verbatim; no quoting/escaping to parse.
-		err = rc.SetTargetTXT(r.RData)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.RData)
 	default:
-		err = rc.PopulateFromString(r.Type, r.RData, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.RData)
 	}
-	return rc, err
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+	return rc, nil
 }
 
 func toNative(rc *models.RecordConfig) domainRecord {
-	contents := rc.String()
-	contents = strings.ReplaceAll(contents, `"`, ``)
+	contentsOrig := rc.GetRDATA().String()
+	contents := strings.ReplaceAll(contentsOrig, `"`, ``)
 	rr := domainRecord{
 		Name:  rc.GetLabel(),
 		Type:  rc.Type,
@@ -51,7 +51,8 @@ func toNative(rc *models.RecordConfig) domainRecord {
 		// `0 issue "letsencrypt.org"`. The generic quote-stripping above
 		// produces `0 issue letsencrypt.org`, which the API rejects as
 		// malformed.
-		rr.RData = rc.GetTargetCombined()
+		rr.RData = contentsOrig
+		//rr.RData = rc.GetTargetCombined()
 	}
 	return rr
 }
