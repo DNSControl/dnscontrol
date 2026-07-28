@@ -198,14 +198,12 @@ func newInwxDsp(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 
 // makeNameserverRecordRequest is a helper function used to convert a RecordConfig to an INWX NS Record Request.
 func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinwx.NameserverRecordRequest {
-	content := rec.GetTargetField()
 
 	req := &goinwx.NameserverRecordRequest{
-		Domain:  domain,
-		Type:    rec.Type,
-		Content: content,
-		Name:    rec.GetLabel(),
-		TTL:     int(rec.TTL),
+		Domain: domain,
+		Type:   rec.Type,
+		Name:   rec.GetLabel(),
+		TTL:    int(rec.TTL),
 	}
 
 	switch rType := rec.Type; rType {
@@ -216,21 +214,35 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 	   Records with empty targets (i.e., records with target ".")
 	   are allowed.
 	*/
-	case "CNAME", "NS", "ALIAS":
+	case "CNAME":
+		f := rec.AsCNAME()
+		content := f.Target
+		req.Content = content[:len(content)-1]
+	case "NS":
+		f := rec.AsNS()
+		content := f.Ns
+		req.Content = content[:len(content)-1]
+	case "ALIAS":
+		f := rec.AsALIAS()
+		content := f.Target
 		req.Content = content[:len(content)-1]
 	case "MX":
-		req.Priority = int(rec.MxPreference)
+		f := rec.AsMX()
+		req.Priority = int(f.Preference)
+		content := f.Mx
 		if content == "." {
 			req.Content = content
 		} else {
 			req.Content = content[:len(content)-1]
 		}
 	case "SRV":
-		req.Priority = int(rec.SrvPriority)
+		f := rec.AsSRV()
+		req.Priority = int(f.Priority)
+		content := f.Target
 		if content == "." {
-			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content)
+			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content)
 		} else {
-			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content[:len(content)-1])
+			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content[:len(content)-1])
 		}
 	default:
 		req.Content = rec.GetRDATA().String()
@@ -260,7 +272,8 @@ func (api *inwxAPI) deleteRecord(RecordID string) error {
 
 // isNullMX checks if a record is a null MX record.
 func isNullMX(rec *models.RecordConfig) bool {
-	return rec.Type == "MX" && rec.MxPreference == 0 && rec.GetTargetField() == "."
+	f := rec.AsMX()
+	return rec.Type == "MX" && f.Preference == 0 && f.Mx == "."
 }
 
 // AutoDnssecToggle enables and disables AutoDNSSEC for INWX domains.
