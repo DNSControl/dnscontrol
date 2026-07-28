@@ -4,23 +4,19 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"golang.org/x/net/idna"
 )
 
 // nativeToRecord converts an Alibaba Cloud DNS record to a RecordConfig.
-func nativeToRecord(r *alidns.Record, domain string) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-
+func nativeToRecord(r *alidns.Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	label, err := idna.ToASCII(r.RR)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert label to ASCII: %w", err)
 	}
-	rc.SetLabel(label, domain)
+	label = dc.LabelFromShort(label)
 
 	// Normalize CNAME, MX, NS records with trailing dot to be consistent with FQDN format.
 	value := r.Value
@@ -30,11 +26,11 @@ func nativeToRecord(r *alidns.Record, domain string) (*models.RecordConfig, erro
 		}
 	}
 
+	ttl := uint32(r.TTL)
+	var rc *models.RecordConfig
 	switch r.Type {
 	case "MX":
-		if err := rc.SetTargetMX(uint16(r.Priority), value); err != nil {
-			return nil, fmt.Errorf("unparsable MX record received from ALIDNS: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, value)
 	case "SRV":
 		// SRV records in Alibaba Cloud: Value contains "priority weight port target"
 		// e.g., "1 1 5060 www.cloud-example.com."
@@ -48,27 +44,22 @@ func nativeToRecord(r *alidns.Record, domain string) (*models.RecordConfig, erro
 		if target != "" && target != "." && !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		// Reconstruct with normalized target and let PopulateFromString handle it
+		// Reconstruct with normalized target and let NewRecordConfigParse handle it.
 		srvValue := fmt.Sprintf("%s %s %s %s", parts[0], parts[1], parts[2], target)
-		if err := rc.PopulateFromString(r.Type, srvValue, domain); err != nil {
-			return nil, fmt.Errorf("unparsable SRV record received from ALIDNS: %w", err)
-		}
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, srvValue)
 	case "CAA":
 		// Alibaba Cloud CAA format: "0 issue \"letsencrypt.org\""
-		if err := rc.SetTargetCAAString(r.Value); err != nil {
-			return nil, fmt.Errorf("unparsable CAA record received from ALIDNS: %w", err)
-		}
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeCAA, r.Value)
 	case "TXT":
-		if err := rc.SetTargetTXT(r.Value); err != nil {
-			return nil, fmt.Errorf("unparsable TXT record received from ALIDNS: %w", err)
-		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
 	default:
-		rc.Type = r.Type
-		if err := rc.SetTarget(value); err != nil {
-			return nil, fmt.Errorf("unparsable record received from ALIDNS: %w", err)
-		}
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, value)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("unparsable %s record received from ALIDNS: %w", r.Type, err)
 	}
 
+	rc.Original = r
 	return rc, nil
 }
 
@@ -99,12 +90,6 @@ func recordToNativePriority(r *models.RecordConfig) int64 {
 }
 
 // nativeToRecordNS takes a NS record from DNS and returns a native RecordConfig struct.
-func nativeToRecordNS(ns string, origin string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type: "NS",
-		TTL:  600,
-	}
-	rc.SetLabel("@", origin)
-	rc.MustSetTarget(ns)
-	return rc
+func nativeToRecordNS(ns string, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	return dc.NewRecordConfig("@", 600, dnsv2.TypeNS, ns)
 }
