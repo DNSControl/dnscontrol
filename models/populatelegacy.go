@@ -110,8 +110,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
 		rc.SetTarget(rd.Certificate)
 	case dnsrdatav2.SOA:
-		rc.SetTarget(rd.Ns)
-		rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl = rd.Mbox, rd.Serial, rd.Refresh, rd.Retry, rd.Expire, rd.Minttl
+		// noop -- no legacy fields
 	case dnsrdatav2.SRV:
 		rc.SrvPriority, rc.SrvWeight, rc.SrvPort = rd.Priority, rd.Weight, rd.Port
 		rc.SetTarget(rd.Target)
@@ -122,7 +121,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
 		rc.SvcPriority = rd.Priority
 		rc.SetTarget(rd.Target)
-		rc.SvcParams = svcbv2ValueToString(rd.Value)
+		rc.SvcParams = Svcbv2ValueToString(rd.Value)
 
 	case dnsrdatav2.TLSA:
 		rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType = rd.Usage, rd.Selector, rd.MatchingType

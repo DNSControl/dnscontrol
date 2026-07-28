@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
@@ -42,27 +42,6 @@ func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error)
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
-	for _, rc := range actual {
-		if rc.Type == "SVCB" {
-			rc.SvcParams = strings.Join(strings.Fields(rc.SvcParams), " ")
-		}
-	}
-	for _, rc := range dc.Records {
-		if rc.Type != "SVCB" {
-			continue
-		}
-		fields := strings.Fields(rc.SvcParams)
-		params := make([]string, 0, len(fields))
-		for _, field := range fields {
-			key, value, _ := strings.Cut(field, "=")
-			if strings.EqualFold(strings.TrimSpace(key), "ech") && strings.Trim(value, `"`) == "IGNORE" {
-				continue
-			}
-			params = append(params, field)
-		}
-		rc.SvcParams = strings.Join(params, " ")
-	}
-
 	var aliasSkip *models.Correction
 	hasAlias := false
 	for _, rc := range dc.Records {
@@ -112,66 +91,72 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 			}
 		}
 	}
-	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+
+	changeset, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
+
+	var corrections []*models.Correction
+
 	if aliasSkip != nil {
 		corrections = append(corrections, aliasSkip)
 	}
 
 	buf := &bytes.Buffer{}
-	// Print a list of changes. Generate an actual change that is the zone
-	changes := false
+	// Accumulate every add/delete into a single "generate zone" API call. CNR
+	// has no in-place update, so a CHANGE is a delete of the old record string
+	// followed by an add of the new one.
 	var builder strings.Builder
 	params := map[string]any{}
 	delrridx := 0
 	addrridx := 0
 
-	for _, cre := range create {
-		changes = true
-		fmt.Fprintln(buf, cre)
-		newRecordString, err := n.createRecordString(cre.Desired, dc.Name)
+	addRR := func(rc *models.RecordConfig) error {
+		newRecordString, err := n.createRecordString(rc, dc.Name)
 		if err != nil {
-			return corrections, 0, err
+			return err
 		}
 		key := fmt.Sprintf("ADDRR%d", addrridx)
 		params[key] = newRecordString
 		fmt.Fprintf(&builder, "\033[32m+ %s = %s\033[0m\n", key, newRecordString)
 		addrridx++
+		return nil
 	}
-	for _, d := range del {
-		changes = true
-		fmt.Fprintln(buf, d)
+	delRR := func(rc *models.RecordConfig) {
 		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := d.Existing.Original.(string)
+		oldRecordString := rc.Original.(string)
 		params[key] = oldRecordString
 		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
 		delrridx++
-	}
-	for _, chng := range mod {
-		changes = true
-		fmt.Fprintln(buf, chng)
-		// old record deletion
-		key := fmt.Sprintf("DELRR%d", delrridx)
-		oldRecordString := chng.Existing.Original.(string)
-		params[key] = oldRecordString
-		fmt.Fprintf(&builder, "\033[31m- %s = %s\033[0m\n", key, oldRecordString)
-		delrridx++
-		// new record creation
-		newRecordString, err := n.createRecordString(chng.Desired, dc.Name)
-		if err != nil {
-			return corrections, 0, err
-		}
-		key = fmt.Sprintf("ADDRR%d", addrridx)
-		params[key] = newRecordString
-		fmt.Fprintf(&builder, "\033[32m+ %s = %s\033[0m\n", key, newRecordString)
-		addrridx++
 	}
 
-	if changes {
+	for _, change := range changeset {
+		switch change.Type {
+		case diff2.REPORT:
+			fmt.Fprintln(buf, change.MsgsJoined)
+		case diff2.CREATE:
+			fmt.Fprintln(buf, change.MsgsJoined)
+			if err := addRR(change.New[0]); err != nil {
+				return corrections, 0, err
+			}
+		case diff2.DELETE:
+			fmt.Fprintln(buf, change.MsgsJoined)
+			delRR(change.Old[0])
+		case diff2.CHANGE:
+			fmt.Fprintln(buf, change.MsgsJoined)
+			delRR(change.Old[0])
+			if err := addRR(change.New[0]); err != nil {
+				return corrections, 0, err
+			}
+		default:
+			panic(fmt.Sprintf("unhandled change type %v", change.Type))
+		}
+	}
+
+	// Every CREATE/DELETE/CHANGE adds at least one ADDRR/DELRR parameter; a
+	// non-empty params map therefore means there is a zone update to send.
+	if len(params) > 0 {
 		msg := fmt.Sprintf("GENERATE_ZONE: %s\n%s", dc.Name, buf.String())
 		if n.isDebugOn() {
 			msg = fmt.Sprintf("GENERATE_ZONE: %s\n%sPROVIDER CNR, API COMMAND PARAMETERS:\n%s", dc.Name, buf.String(), builder.String())
