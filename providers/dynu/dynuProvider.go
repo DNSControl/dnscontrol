@@ -380,7 +380,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(rc.SvcParams)
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value))
 	case "KEY":
 		// Target: "<flags> <protocol> <algorithm> <pubkey-base64>"
 		parts := strings.Fields(rc.GetTargetField())
@@ -483,7 +483,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(rc.SvcParams)
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value))
 	case "TLSA":
 		usage := int(rc.TlsaUsage)
 		selector := int(rc.TlsaSelector)
