@@ -160,12 +160,16 @@ func toRewriteEntry(dc *models.DomainConfig, rc *models.RecordConfig) (rewriteEn
 		Domain: rc.NameFQDN,
 	}
 	switch rc.Type {
-	case "A", "AAAA":
-		re.Answer = rc.GetTargetIP().String()
+	case "A":
+		re.Answer = rc.AsA().Addr.String()
+	case "AAAA":
+		re.Answer = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "ALIAS":
-		re.Answer = rc.GetTargetField()
-		re.Answer = dc.ToShort(re.Answer)
+	case "ALIAS":
+		re.Answer = dc.ToShort(rc.AsALIAS().Target)
+
+	case "CNAME":
+		re.Answer = dc.ToShort(rc.AsCNAME().Target)
 
 	case "ADGUARDHOME_A_PASSTHROUGH":
 		re.Answer = "A"
