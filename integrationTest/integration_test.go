@@ -710,7 +710,7 @@ func makeTests() []*TestGroup {
 				"AZURE_DNS",         // Removed because it is too slow
 				"AZURE_PRIVATE_DNS", // Removed because it is too slow
 				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
-				"CNR",               // Test beaks limits.
+				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
 				"DIGITALOCEAN", // No paging. Why bother?
