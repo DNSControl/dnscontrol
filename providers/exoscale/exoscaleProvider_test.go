@@ -18,19 +18,10 @@ func makeNativeRecord(rtype, name, content string, priority int64, ttl int64) *e
 	}
 }
 
-func testDC(t *testing.T) *models.DomainConfig {
-	t.Helper()
-	dc, err := models.NewDomainConfig("example.com")
-	if err != nil {
-		t.Fatal(err)
-	}
-	return dc
-}
-
 // TestNativeToRecord_ContentPopulated regression: rcontent was declared as "" and never
 // assigned from record.Content, so all records got empty content.
 func TestNativeToRecord_ContentPopulated(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	tests := []struct {
 		name       string
 		record     *egoscale.DNSDomainRecord
@@ -52,7 +43,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 		{
 			name:       "TXT",
 			record:     makeNativeRecord("TXT", "foo", "hello world", 0, 300),
-			wantTarget: "hello world",
+			wantTarget: `"hello world"`,
 			wantType:   "TXT",
 		},
 	}
@@ -69,7 +60,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 			if rc.Type != tt.wantType {
 				t.Errorf("type: got %q, want %q", rc.Type, tt.wantType)
 			}
-			if rc.GetTargetField() != tt.wantTarget {
+			if rc.GetRDATA().String() != tt.wantTarget {
 				t.Errorf("target: got %q, want %q", rc.GetTargetField(), tt.wantTarget)
 			}
 		})
@@ -79,7 +70,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 // TestNativeToRecord_SRVNoDoubleDot: API returns content as "weight port target"; we appended
 // a trailing dot unconditionally, causing double-dot when the API already returned one.
 func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	tests := []struct {
 		name    string
 		content string // as returned by the API: "weight port target"
@@ -109,7 +100,7 @@ func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
 
 // TestNativeToRecord_CNAMENoDoubleDot: same trailing-dot guard for CNAME.
 func TestNativeToRecord_CNAMENoDoubleDot(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	for _, content := range []string{"target.example.com", "target.example.com."} {
 		record := makeNativeRecord("CNAME", "foo", content, 0, 300)
 		rc, err := nativeToRecord(record, dc)
@@ -125,7 +116,7 @@ func TestNativeToRecord_CNAMENoDoubleDot(t *testing.T) {
 
 // TestNativeToRecord_SkippedTypes: SOA, NS, and TXT ALIAS mirrors should return nil.
 func TestNativeToRecord_SkippedTypes(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	skipped := []*egoscale.DNSDomainRecord{
 		makeNativeRecord("SOA", "@", "ns1.example.com", 0, 3600),
 		makeNativeRecord("NS", "@", "ns1.example.com.", 0, 3600),
@@ -145,7 +136,7 @@ func TestNativeToRecord_SkippedTypes(t *testing.T) {
 
 // TestAuditRecords_PTRRejected: API does not support PTR; provider must reject it.
 func TestAuditRecords_PTRRejected(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("4", 300, "PTR", "foo.example.com.")
 
 	errs := AuditRecords(models.Records{rc})
@@ -156,7 +147,7 @@ func TestAuditRecords_PTRRejected(t *testing.T) {
 
 // TestAuditRecords_EmptyTXTRejected: API rejects empty TXT values.
 func TestAuditRecords_EmptyTXTRejected(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("foo", 300, "TXT", "")
 
 	errs := AuditRecords(models.Records{rc})
@@ -167,7 +158,7 @@ func TestAuditRecords_EmptyTXTRejected(t *testing.T) {
 
 // TestAuditRecords_ValidRecordsPass: common record types should pass without errors.
 func TestAuditRecords_ValidRecordsPass(t *testing.T) {
-	dc := testDC(t)
+	dc := models.MustNewDomainConfig("example.com")
 	records := models.Records{
 		dc.MustNewRecordConfig("foo", 300, "A", "1.2.3.4"),
 		dc.MustNewRecordConfig("foo", 300, "TXT", "v=spf1 -all"),

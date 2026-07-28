@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
@@ -229,24 +228,21 @@ func (provider *exoscaleProvider) createRecordFunc(
 	recordConfig *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetRDATA().String()
 		name := recordConfig.GetLabel()
 		var prio int64
 
-		if recordConfig.Type == "MX" {
-			target = recordConfig.GetTargetField()
-			prio = int64(recordConfig.MxPreference)
-		}
-
-		if recordConfig.Type == "SRV" {
-			// API wants priority as a separate argument, here we will strip it from combined target.
-			sp := strings.Split(target, " ")
-			target = strings.Join(sp[1:], " ")
-			p, err := strconv.ParseInt(sp[0], 10, 64)
-			if err != nil {
-				return err
-			}
-			prio = p
+		var target string
+		switch recordConfig.Type {
+		case "MX":
+			f := recordConfig.AsMX()
+			target = f.Mx
+			prio = int64(f.Preference)
+		case "SRV":
+			f := recordConfig.AsSRV()
+			prio = int64(f.Priority)
+			target = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
+		default:
+			target = recordConfig.GetRDATA().String()
 		}
 
 		if recordConfig.Type == "NS" && (name == "@" || name == "") {
@@ -358,10 +354,10 @@ func removeOtherNS(domainConfig *models.DomainConfig) {
 	for _, recordConfig := range domainConfig.Records {
 		if recordConfig.Type == "NS" {
 			// apex NS inside exoscale are expected.
-			if recordConfig.GetLabelFQDN() == domainConfig.Name && defaultNSSUffix(recordConfig.GetTargetField()) {
+			if recordConfig.GetLabelFQDN() == domainConfig.Name && defaultNSSUffix(recordConfig.AsNS().Ns) {
 				continue
 			}
-			printer.Printf("Warning: exoscale.com(.io, .ch, .net) does not allow NS records to be modified. %s will not be added.\n", recordConfig.GetTargetField())
+			printer.Printf("Warning: exoscale.com(.io, .ch, .net) does not allow NS records to be modified. %s will not be added.\n", recordConfig.AsNS().Ns)
 			continue
 		}
 		recordConfigs = append(recordConfigs, recordConfig)
