@@ -59,6 +59,6 @@ func powerDNSSVCBRecord(rtype, params string) *models.RecordConfig {
 	if rtype == "SVCB" {
 		rc = dc.MustNewRecordConfig("auto", 0, dnsv2.TypeSVCB, uint16(1), ".", []svcbv2.Pair{})
 	}
-	rc.SvcParams = params
+	models.Svcbv2ValueToString(f.Value) = params
 	return rc
 }

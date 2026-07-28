@@ -61,7 +61,7 @@ func newPowerDNSSVCBAutoHintRecord(dc *models.DomainConfig, label string, ttl ui
 	if err != nil {
 		return nil, err
 	}
-	rc.SvcParams = strings.Join(fields[2:], " ")
+	models.Svcbv2ValueToString(f.Value) = strings.Join(fields[2:], " ")
 	return rc, nil
 }
 
