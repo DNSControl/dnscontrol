@@ -71,8 +71,10 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(rd.LuaPayload)
 
 	case privatetypesrdata.MIKROTIKFWD:
-		rc.SetTarget(rd.ForwardTo)
+		// no-op
 	case privatetypesrdata.MIKROTIKNXDOMAIN:
+		// no-op
+	case privatetypesrdata.MIKROTIKFORWARDER:
 		// no-op
 	case dnsrdatav2.MX:
 		rc.MxPreference = rd.Preference

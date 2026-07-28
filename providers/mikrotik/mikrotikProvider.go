@@ -199,7 +199,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	domain := dc.Name
 
 	if domain == ForwarderZone {
-		return p.getForwarderRecords()
+		return p.getForwarderRecords(dc)
 	}
 
 	nativeRecords, err := p.getAllRecords()
@@ -236,7 +236,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return records, nil
 }
 
-func (p *mikrotikProvider) getForwarderRecords() (models.Records, error) {
+func (p *mikrotikProvider) getForwarderRecords(dc *models.DomainConfig) (models.Records, error) {
 	fwds, err := p.getAllForwarders()
 	if err != nil {
 		return nil, fmt.Errorf("mikrotik: failed to list forwarders: %w", err)
@@ -247,7 +247,7 @@ func (p *mikrotikProvider) getForwarderRecords() (models.Records, error) {
 		if fwd.Disabled == "true" {
 			continue
 		}
-		records = append(records, forwarderToRecord(fwd))
+		records = append(records, forwarderToRecord(dc, fwd))
 	}
 	return records, nil
 }

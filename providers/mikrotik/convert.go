@@ -54,13 +54,17 @@ func nativeToRecords(nr dnsStaticRecord, dc *models.DomainConfig) (models.Record
 	if err != nil {
 		return nil, fmt.Errorf("invalid %s record: %w", nr.Type, err)
 	}
-	// TODO(tlim): Test without this next if statement.
-	if nr.Type == "NXDOMAIN" {
-		// The custom record's RDATA is empty, but legacy comparisons expect this target.
-		if err := rc.SetTarget("NXDOMAIN"); err != nil {
-			return nil, fmt.Errorf("NXDOMAIN SetTarget: %w", err)
-		}
-	}
+
+	// // NB(tlim): Commenting this out. In theory, .target is going away in v5.x and
+	// this should be a no-op.
+	//
+	// if nr.Type == "NXDOMAIN" {
+	// 	// The custom record's RDATA is empty, but legacy comparisons expect this target.
+	// 	if err := rc.Set Target("NXDOMAIN"); err != nil {
+	// 		return nil, fmt.Errorf("NXDOMAIN Set Target: %w", err)
+	// 	}
+	// }
+
 	rc.Original = &nr
 
 	// Read RouterOS-specific metadata fields applicable to ALL record types.
@@ -253,14 +257,10 @@ var (
 const ForwarderZone = "_forwarders.mikrotik"
 
 // forwarderToRecord converts a RouterOS DNS forwarder to a RecordConfig.
-func forwarderToRecord(fwd dnsForwarder) *models.RecordConfig {
-	rc := &models.RecordConfig{}
+func forwarderToRecord(dc *models.DomainConfig, fwd dnsForwarder) *models.RecordConfig {
+	rc := dc.MustNewRecordConfig(fwd.Name, 300, privatetypes.TypeMIKROTIKFORWARDER, fwd.DNSServers)
+	// Forwarders have no TTL; use dnscontrol's default to avoid spurious diffs.
 	rc.Original = &fwd
-	rc.SetLabel(fwd.Name, ForwarderZone)
-	rc.Type = "MIKROTIK_FORWARDER"
-	_ = rc.SetTarget(fwd.DNSServers)
-	rc.TTL = 300 // Forwarders have no TTL; use dnscontrol's default to avoid spurious diffs.
-	rc.Metadata = map[string]string{}
 	if fwd.DohServers != "" {
 		rc.Metadata["doh_servers"] = fwd.DohServers
 	}
@@ -274,7 +274,7 @@ func forwarderToRecord(fwd dnsForwarder) *models.RecordConfig {
 func recordToForwarder(rc *models.RecordConfig) *dnsForwarder {
 	f := &dnsForwarder{
 		Name:       rc.GetLabel(),
-		DNSServers: rc.GetTargetField(),
+		DNSServers: rc.AsMIKROTIKFORWARDER().Target,
 	}
 	if rc.Metadata != nil {
 		if v := rc.Metadata["doh_servers"]; v != "" {

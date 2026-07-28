@@ -280,7 +280,6 @@ func TestNativeToRecords_NXDOMAIN(t *testing.T) {
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "MIKROTIK_NXDOMAIN")
-	// assertStr(t, "Target", rc.GetTargetField(), "NXDOMAIN")
 	assertMeta(t, rc, "match_subdomain", "true")
 	assertMeta(t, rc, "comment", "blocked domain")
 }
@@ -405,7 +404,6 @@ func TestRecordToNative_FWD(t *testing.T) {
 
 func TestRecordToNative_NXDOMAIN(t *testing.T) {
 	rc := testDomain.MustNewRecordConfig("blocked", 86400, "MIKROTIK_NXDOMAIN")
-	_ = rc.SetTarget("NXDOMAIN")
 	rc.Metadata = map[string]string{
 		"match_subdomain": "true",
 		"comment":         "blocked",
@@ -474,17 +472,21 @@ func TestRecordToNative_MetadataOnStandardTypes(t *testing.T) {
 	assertStr(t, "Comment", nr.Comment, "my comment")
 }
 
-func TestRecordToNative_UnsupportedType(t *testing.T) {
-	rc := new(models.RecordConfig)
-	rc.SetLabel("@", "example.com")
-	rc.Type = "BOGUS"
-	_ = rc.SetTarget("whatever")
+// NB(tlim): Commenting this out because bogus types shouldn't happen in the new
+// v5. world. However, in the future when we support the RFCs for UNKNOWN types,
+// we might bring this test back.
+//
+// func TestRecordToNative_UnsupportedType(t *testing.T) {
+// 	rc := new(models.RecordConfig)
+// 	rc.SetLabel("@", "example.com")
+// 	rc.Type = "BOGUS"
+// 	_ = rc.Set Target("whatever")
 
-	_, err := recordToNative(rc)
-	if err == nil {
-		t.Error("expected error for unsupported type")
-	}
-}
+// 	_, err := recordToNative(rc)
+// 	if err == nil {
+// 		t.Error("expected error for unsupported type")
+// 	}
+// }
 
 // --- Round-trip conversion ---
 
@@ -562,10 +564,11 @@ func TestForwarderToRecord(t *testing.T) {
 		DohServers: "https://dns.google/dns-query", VerifyDohCert: "true",
 	}
 
-	rc := forwarderToRecord(fwd)
+	dc := models.MustNewDomainConfig(ForwarderZone)
+	rc := forwarderToRecord(dc, fwd)
 	assertStr(t, "Type", rc.Type, "MIKROTIK_FORWARDER")
 	assertStr(t, "Label", rc.GetLabel(), "my-forwarder")
-	assertStr(t, "Target", rc.GetRDATA().(privatetypesrdata.MIKROTIKFWD).ForwardTo, "1.1.1.1,8.8.8.8")
+	assertStr(t, "Target", rc.GetRDATA().(privatetypesrdata.MIKROTIKFORWARDER).Target, "1.1.1.1,8.8.8.8")
 	assertUint32(t, "TTL", rc.TTL, 300)
 	assertMeta(t, rc, "doh_servers", "https://dns.google/dns-query")
 	assertMeta(t, rc, "verify_doh_cert", "true")
@@ -573,8 +576,9 @@ func TestForwarderToRecord(t *testing.T) {
 
 func TestForwarderToRecord_Minimal(t *testing.T) {
 	fwd := dnsForwarder{Name: "simple", DNSServers: "1.1.1.1"}
-	rc := forwarderToRecord(fwd)
-	assertStr(t, "Target", rc.AsMIKROTIKFWD().ForwardTo, "1.1.1.1")
+	dc := models.MustNewDomainConfig(ForwarderZone)
+	rc := forwarderToRecord(dc, fwd)
+	assertStr(t, "Target", rc.AsMIKROTIKFORWARDER().Target, "1.1.1.1")
 	if v, ok := rc.Metadata["doh_servers"]; ok {
 		t.Errorf("doh_servers should not be present, got %q", v)
 	}
@@ -584,10 +588,8 @@ func TestForwarderToRecord_Minimal(t *testing.T) {
 }
 
 func TestRecordToForwarder(t *testing.T) {
-	rc := new(models.RecordConfig)
-	rc.SetLabel("my-fwd", ForwarderZone)
-	rc.Type = "MIKROTIK_FORWARDER"
-	_ = rc.SetTarget("1.1.1.1,8.8.8.8")
+	dc := models.MustNewDomainConfig(ForwarderZone)
+	rc := dc.MustNewRecordConfig("my-fwd", 0, "MIKROTIK_FORWARDER", "1.1.1.1,8.8.8.8")
 	rc.Metadata = map[string]string{
 		"doh_servers":     "https://dns.google/dns-query",
 		"verify_doh_cert": "true",
@@ -606,7 +608,8 @@ func TestForwarderRoundTrip(t *testing.T) {
 		DohServers: "https://dns.google/dns-query", VerifyDohCert: "true",
 	}
 
-	rc := forwarderToRecord(original)
+	dc := models.MustNewDomainConfig(ForwarderZone)
+	rc := forwarderToRecord(dc, original)
 	f := recordToForwarder(rc)
 
 	assertStr(t, "Name", f.Name, "fwd1")

@@ -178,6 +178,16 @@ types:
     fields: []
     test_data: []
 
+  - name: Mikrotik_Forwarder
+    codepoint: 65321
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: 1.1.1.1,8.8.8.8
+
   - name: Netlify
     codepoint: 65295
     fields: []
