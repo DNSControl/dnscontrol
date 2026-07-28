@@ -38,7 +38,7 @@ func powerDNSTargetCombined(rc *models.RecordConfig) string {
 		}
 		return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
 	}
-	return rc.GetTargetCombined()
+	return rc.GetRDATA().String()
 }
 
 // rejectPowerDNSSVCBAutoHintsUnsorted rejects PowerDNS auto hint records with
