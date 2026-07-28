@@ -162,7 +162,7 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 		if record.Type == "NS" && record.Name == "@" {
 			// NS records for the APEX should be handled differently
 			nameServers = append(nameServers, &models.Nameserver{
-				Name: strings.TrimSuffix(record.GetTargetField(), "."),
+				Name: strings.TrimSuffix(record.AsNS().Ns, "."),
 			})
 
 			zoneTTL = record.TTL
@@ -171,7 +171,7 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				Name:  record.Name,
 				TTL:   int64(record.TTL),
 				Type:  record.Type,
-				Value: record.GetTargetField(),
+				Value: record.GetRDATA().String(),
 			}
 
 			if resourceRecord.Name == "@" {
@@ -187,7 +187,7 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				// 	record.SrvPriority,
 				// 	record.SrvWeight,
 				// 	record.SrvPort,
-				// 	record.GetTargetField(),
+				// 	record.Get TargetField(),
 				// )
 				resourceRecord.Value = record.GetRDATA().String()
 
@@ -197,7 +197,7 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				// resourceRecord.Value = fmt.Sprintf("%d %s \"%s\"",
 				// 	record.CaaFlag,
 				// 	record.CaaTag,
-				// 	record.GetTargetField(),
+				// 	record.Get TargetField(),
 				// )
 				resourceRecord.Value = record.GetRDATA().String()
 			}
