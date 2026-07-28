@@ -42,32 +42,19 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		return nil, err
 	}
 
-	data := ""
-	if rc.Type == "TXT" {
-		data = rc.GetTargetTXTJoined()
-	} else {
-		data = rc.GetTargetField()
-	}
-
 	dnsR := &domainNameShopRecord{
-		ID:            0,
-		Host:          rc.GetLabel(),
-		TTL:           uint16(fixTTL(rc.TTL)),
-		Type:          rc.Type,
-		Data:          data,
-		Weight:        strconv.Itoa(int(rc.SrvWeight)),
-		Port:          strconv.Itoa(int(rc.SrvPort)),
-		ActualWeight:  rc.SrvWeight,
-		ActualPort:    rc.SrvPort,
-		CAAFlag:       uint64(int(rc.CaaFlag)),
-		ActualCAAFlag: strconv.Itoa(int(rc.CaaFlag)),
-		DomainID:      domainID,
+		ID:       0,
+		Host:     rc.GetLabel(),
+		TTL:      uint16(fixTTL(rc.TTL)),
+		Type:     rc.Type,
+		DomainID: domainID,
 	}
 
 	switch rc.Type {
 	case "CAA":
+		f := rc.AsCAA()
 		// Actual CAA FLAG
-		switch rc.CaaTag {
+		switch f.Tag {
 		case "issue":
 			dnsR.CAATag = "0"
 		case "issuewild":
@@ -75,12 +62,25 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		case "iodef":
 			dnsR.CAATag = "2"
 		}
+		dnsR.CAAFlag = uint64(int(f.Flag))
+		dnsR.ActualCAAFlag = strconv.Itoa(int(f.Flag))
+		dnsR.Data = f.Value
 	case "MX":
-		dnsR.Priority = strconv.Itoa(int(rc.MxPreference))
+		f := rc.AsMX()
+		dnsR.Priority = strconv.Itoa(int(f.Preference))
+		dnsR.Data = f.Mx
 	case "SRV":
-		dnsR.Priority = strconv.Itoa(int(rc.SrvPriority))
+		f := rc.AsSRV()
+		dnsR.Priority = strconv.Itoa(int(f.Priority))
+		dnsR.Weight = strconv.Itoa(int(f.Weight))
+		dnsR.Port = strconv.Itoa(int(f.Port))
+		dnsR.ActualWeight = f.Weight
+		dnsR.ActualPort = f.Port
+		dnsR.Data = f.Target
+	case "TXT":
+		dnsR.Data = rc.GetTargetTXTJoined()
 	default:
-		// pass through
+		dnsR.Data = rc.GetRDATA().String()
 	}
 
 	return dnsR, nil

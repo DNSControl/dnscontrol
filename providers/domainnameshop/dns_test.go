@@ -52,7 +52,7 @@ func TestToRecordConfig(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if got := rc.GetTargetCombined(); got != tc.wantTarget {
+			if got := rc.GetRDATA().String(); got != tc.wantTarget {
 				t.Errorf("target = %q, want %q", got, tc.wantTarget)
 			}
 			if rc.Original != &record {

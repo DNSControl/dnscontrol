@@ -31,14 +31,15 @@ func (api *domainNameShopProvider) GetZoneRecords(dc *models.DomainConfig) (mode
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (api *domainNameShopProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
+	// NB(tlim): Commenting this out. GetTargetTXTJoined() should be sufficient.
 	// Merge TXT strings to one string
-	for _, rc := range dc.Records {
-		if rc.HasFormatIdenticalToTXT() {
-			if err := rc.SetTargetTXT(rc.GetTargetTXTJoined()); err != nil {
-				return nil, 0, err
-			}
-		}
-	}
+	// for _, rc := range dc.Records {
+	// 	if rc.HasFormatIdenticalToTXT() {
+	// 		if err := rc.SetTargetTXT(rc.GetTargetTXTJoined()); err != nil {
+	// 			return nil, 0, err
+	// 		}
+	// 	}
+	// }
 
 	// Domainnameshop doesn't allow arbitrary TTLs they must be a multiple of 60.
 	for _, record := range dc.Records {
