@@ -146,7 +146,7 @@ func (p *fortigateProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 
 	// Convert native records to dnscontrol Records
 	for _, n := range resp.Results[0].DNSEntry {
-		rc, err := nativeToRecord(domain, n)
+		rc, err := nativeToRecord(dc, n)
 		if err != nil {
 			return nil, err
 		}
