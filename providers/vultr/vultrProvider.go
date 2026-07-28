@@ -327,10 +327,12 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 	priority := 0
 
 	if rc.Type == "MX" {
-		priority = int(rc.MxPreference)
+		f := rc.AsMX()
+		priority = int(f.Preference)
 	}
 	if rc.Type == "SRV" {
-		priority = int(rc.SrvPriority)
+		f := rc.AsSRV()
+		priority = int(f.Priority)
 	}
 
 	r := &govultr.DomainRecord{
@@ -351,11 +353,14 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		if data == "" {
 			data = "."
 		}
-		r.Data = fmt.Sprintf("%v %v %s", rc.SrvWeight, rc.SrvPort, data)
+		f := rc.AsSRV()
+		r.Data = fmt.Sprintf("%v %v %s", f.Weight, f.Port, data)
 	case "CAA":
-		r.Data = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		r.Data = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	case "SSHFP":
-		r.Data = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		f := rc.AsSSHFP()
+		r.Data = fmt.Sprintf("%d %s %d", f.Algorithm, f.FingerPrint, f.Type)
 	case "TXT":
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
