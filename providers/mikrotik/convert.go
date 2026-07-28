@@ -254,7 +254,7 @@ const ForwarderZone = "_forwarders.mikrotik"
 
 // forwarderToRecord converts a RouterOS DNS forwarder to a RecordConfig.
 func forwarderToRecord(fwd dnsForwarder) *models.RecordConfig {
-	rc := new(models.RecordConfig)
+	rc := &models.RecordConfig{}
 	rc.Original = &fwd
 	rc.SetLabel(fwd.Name, ForwarderZone)
 	rc.Type = "MIKROTIK_FORWARDER"
