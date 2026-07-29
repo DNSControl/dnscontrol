@@ -246,9 +246,9 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		// Linode is strict about not setting an MX record when a null MX record is present and about not setting a null
 		// MX record when an MX record is present. Therefore, we re-sort these specific changes so they always happen
 		// first/last.
-		if len(change.Old) > 0 && change.Old[0].Type == "MX" && change.Old[0].GetTargetCombined() == "0 ." {
+		if len(change.Old) > 0 && change.Old[0].Type == "MX" && change.Old[0].GetRDATA().String() == "0 ." {
 			prefixedCorrections[len(corrections)-1] = struct{}{}
-		} else if len(change.New) > 0 && change.New[0].Type == "MX" && change.New[0].GetTargetCombined() == "0 ." {
+		} else if len(change.New) > 0 && change.New[0].Type == "MX" && change.New[0].GetRDATA().String() == "0 ." {
 			postfixedCorrections[len(corrections)-1] = struct{}{}
 		}
 	}
