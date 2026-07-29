@@ -7,11 +7,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
-type debugInfo struct {
-	Sample *fgDNSRecord
-	Result string
-}
-
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
 func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
 	rtype := strings.ToUpper(n.Type)
@@ -139,8 +134,8 @@ func recordsToNative(recs models.Records) ([]*fgDNSRecord, []error) {
 
 		case "NS":
 			target := record.AsNS().String()
-			n.Hostname = target
-			n.CanonicalName = ""
+			n.Hostname = ""
+			n.CanonicalName = target
 
 		case "MX":
 			mx := record.AsMX()
