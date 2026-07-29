@@ -134,13 +134,13 @@ func recordsToNative(recs models.Records) ([]*fgDNSRecord, []error) {
 
 		case "NS":
 			target := record.AsNS().String()
-			n.Hostname = ""
-			n.CanonicalName = target
+			n.Hostname = target
+			n.CanonicalName = ""
 
 		case "MX":
 			mx := record.AsMX()
-			n.Hostname = mx.Mx
 			n.Preference = mx.Preference
+			n.Hostname = mx.Mx
 			n.CanonicalName = ""
 
 		default:
