@@ -368,6 +368,9 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		req.Name = ""
 		req.Target = f.Target
 
+	case "TXT":
+		req.Target = rc.GetTargetTXTJoined()
+
 	case "CNAME":
 		f := rc.AsCNAME()
 		req.Target = fixTarget(f.Target, dc.Name)
