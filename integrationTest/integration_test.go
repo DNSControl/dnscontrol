@@ -421,6 +421,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -906,7 +907,8 @@ func makeTests() []*TestGroup {
 				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
-			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
+			// The next TTL needs to fall in a different bucket than the previous one for LINODE
+			tc("Change TTL4400", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 4400)),
 		),
 
 		testgroup("SSHFP",

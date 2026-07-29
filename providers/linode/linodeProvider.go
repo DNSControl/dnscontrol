@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -174,6 +175,9 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		return nil, 0, err
 	}
 
+	prefixedCorrections := make(map[int]struct{})
+	postfixedCorrections := make(map[int]struct{})
+
 	var corrections []*models.Correction
 	for _, change := range changes {
 		switch change.Type {
@@ -204,6 +208,7 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		case diff2.DELETE:
 			id := change.Old[0].Original.(*domainRecord).ID
 			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				actualChangeCount--
 				continue
 			}
 			corrections = append(corrections, &models.Correction{
@@ -237,7 +242,30 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		default:
 			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
+
+		// Linode is strict about not setting an MX record when a null MX record is present and about not setting a null
+		// MX record when an MX record is present. Therefore, we re-sort these specific changes so they always happen
+		// first/last.
+		if len(change.Old) > 0 && change.Old[0].Type == "MX" && change.Old[0].GetTargetCombined() == "0 ." {
+			prefixedCorrections[len(corrections)-1] = struct{}{}
+		} else if len(change.New) > 0 && change.New[0].Type == "MX" && change.New[0].GetTargetCombined() == "0 ." {
+			postfixedCorrections[len(corrections)-1] = struct{}{}
+		}
 	}
+
+	sort.SliceStable(corrections, func(i, j int) bool {
+		_, iPrefixed := prefixedCorrections[i]
+		_, jPrefixed := prefixedCorrections[j]
+		if iPrefixed != jPrefixed {
+			return iPrefixed
+		}
+		_, iPostfixed := postfixedCorrections[i]
+		_, jPostfixed := postfixedCorrections[j]
+		if iPostfixed != jPostfixed {
+			return jPostfixed
+		}
+		return false
+	})
 
 	return corrections, actualChangeCount, nil
 }
@@ -257,9 +285,9 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, dc *models.DomainCo
 	}
 
 	// Linode always has read-only NS servers, but these are not mentioned in the API response
-	// https://github.com/linode/manager/blob/edd99dc4e1be5ab8190f243c3dbf8b830716255e/src/constants.js#L184
+	// https://github.com/linode/manager/blob/6503a875f7a4e82dd8335d4ce16fcbd8ae492e21/packages/manager/src/features/Domains/DomainDetail/DomainRecords/DomainRecordsUtils.ts#L59-L125
 	for _, name := range defaultNameServerNames {
-		rc, err := dc.NewRecordConfig("@", 0, "NS", name)
+		rc, err := dc.NewRecordConfig("@", 300, "NS", name+".")
 		if err != nil {
 			return nil, err
 		}
@@ -272,7 +300,7 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, dc *models.DomainCo
 }
 
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
-	label := r.Name
+	label := dc.LabelFromShort(r.Name)
 	ttl := r.TTLSec
 	var rc *models.RecordConfig
 	var err error
@@ -303,7 +331,7 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		Name:     rc.GetLabel(),
 		Target:   rc.GetTargetField(),
 		TTL:      int(rc.TTL),
-		Priority: 0,
+		Priority: nil,
 		Port:     int(rc.SrvPort),
 		Weight:   int(rc.SrvWeight),
 	}
@@ -318,7 +346,7 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "TLSA":
 		// Nothing special.
 	case "MX":
-		req.Priority = int(rc.MxPreference)
+		req.Priority = new(int(rc.MxPreference))
 		req.Target = fixTarget(req.Target, dc.Name)
 
 		// Linode doesn't use "." for a null MX record, it uses an empty name
@@ -326,7 +354,7 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 			req.Target = ""
 		}
 	case "SRV":
-		req.Priority = int(rc.SrvPriority)
+		req.Priority = new(int(rc.SrvPriority))
 
 		// From softlayer provider
 		// This is to support SRV, it doesn't work yet for Linode
