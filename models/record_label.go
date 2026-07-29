@@ -75,6 +75,9 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	if name == "" {
 		return "@"
 	}
+	if name == "@" {
+		return name
+	}
 	if strings.HasSuffix(name, ".") {
 		fmt.Printf("ERROR: LabelFromFQDNNoDot(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
 	}
