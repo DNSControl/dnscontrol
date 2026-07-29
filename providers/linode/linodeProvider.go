@@ -327,13 +327,9 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 
 func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest, error) {
 	req := &recordEditRequest{
-		Type:     rc.Type,
-		Name:     rc.GetLabel(),
-		Target:   rc.GetTargetField(),
-		TTL:      int(rc.TTL),
-		Priority: nil,
-		Port:     int(rc.SrvPort),
-		Weight:   int(rc.SrvWeight),
+		Type: rc.Type,
+		Name: rc.GetLabel(),
+		TTL:  int(rc.TTL),
 	}
 
 	// Linode doesn't use "@", it uses an empty name
@@ -342,39 +338,48 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 	}
 
 	// Linode uses the same property for MX and SRV priority
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "TLSA":
-		// Nothing special.
+	switch rc.Type {
 	case "MX":
-		req.Priority = new(int(rc.MxPreference))
-		req.Target = fixTarget(req.Target, dc.Name)
-
+		f := rc.AsMX()
+		req.Priority = new(int(f.Preference))
+		target := fixTarget(f.Mx, dc.Name)
 		// Linode doesn't use "." for a null MX record, it uses an empty name
-		if req.Target == "." {
-			req.Target = ""
+		if target == "." {
+			target = ""
 		}
+		req.Target = target
+
 	case "SRV":
-		req.Priority = new(int(rc.SrvPriority))
+		f := rc.AsSRV()
+		req.Priority = new(int(f.Priority))
+		req.Weight = int(f.Weight)
+		req.Port = int(f.Port)
 
 		// From softlayer provider
 		// This is to support SRV, it doesn't work yet for Linode
 		result := srvRegexp.FindStringSubmatch(req.Name)
-
 		if len(result) != 3 {
 			return nil, fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", req.Name)
 		}
-
 		serviceName, protocol := result[1], strings.ToLower(result[2])
-
 		req.Protocol = protocol
 		req.Service = serviceName
+
 		req.Name = ""
+		req.Target = f.Target
+
 	case "CNAME":
-		req.Target = fixTarget(req.Target, dc.Name)
+		f := rc.AsCNAME()
+		req.Target = fixTarget(f.Target, dc.Name)
+
 	case "CAA":
-		req.Tag = rc.CaaTag
+		f := rc.AsCAA()
+		req.Tag = f.Tag
+		req.Target = f.Value
+
 	default:
-		return nil, fmt.Errorf("linode.toReq rtype %q unimplemented", rc.Type)
+		req.Target = rc.GetRDATA().String()
+
 	}
 
 	return req, nil
