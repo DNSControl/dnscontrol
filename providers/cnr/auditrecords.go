@@ -19,9 +19,10 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-20
 
-	a.Add("DNAME", dnameHasWildcardLabel)               // Last verified 2026-02-10
+	a.Add("DNAME", dnameHasWildcardLabel) // Last verified 2026-02-10
+
 	a.Add("SVCB", func(rc *models.RecordConfig) error { // Last verified 2026-06-29
-		for param := range strings.FieldsSeq(rc.SvcParams) {
+		for param := range strings.FieldsSeq(models.Svcbv2ValueToString(rc.AsSVCB().Value)) {
 			key, value, _ := strings.Cut(param, "=")
 			key = strings.ToLower(strings.TrimSpace(key))
 			value = strings.Trim(value, `"`)
