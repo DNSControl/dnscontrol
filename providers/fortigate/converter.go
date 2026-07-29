@@ -1,9 +1,7 @@
 package fortigate
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -12,16 +10,6 @@ import (
 type debugInfo struct {
 	Sample *fgDNSRecord
 	Result string
-}
-
-func appendJSON(filename string, v *debugInfo) error {
-	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	return json.NewEncoder(f).Encode(*v)
 }
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
@@ -86,11 +74,6 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 	// Status → Metadata
 	if strings.ToLower(n.Status) != "enable" {
 		rc.Metadata["fortigate_status"] = "disable"
-	}
-
-	err = appendJSON("nativeToRecord-log.json", &debugInfo{Sample: &n, Result: rc.GetRDATA().String()})
-	if err != nil {
-		panic(err)
 	}
 
 	return rc, nil
