@@ -411,16 +411,57 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	case "CLOUD_WR":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeCLOUDNSWR, r.Target)
 	case "LOC":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
-			r.LocLatDeg, r.LocLatMin, r.LocLatSec, r.LocLatDir,
-			r.LocLongDeg, r.LocLongMin, r.LocLongSec, r.LocLongDir,
-			r.LocAltitude, r.LocSize, r.LocHPrecision, r.LocVPrecision)
+		latSec, err := parseFloat32(r.LocLatSec)
+		if err != nil {
+			return nil, err
+		}
+
+		longSec, err := parseFloat32(r.LocLongSec)
+		if err != nil {
+			return nil, err
+		}
+
+		altitude, err := parseFloat32(r.LocAltitude)
+		if err != nil {
+			return nil, err
+		}
+
+		size, err := parseFloat32(r.LocSize)
+		if err != nil {
+			return nil, err
+		}
+
+		hPrec, err := parseFloat32(r.LocHPrecision)
+		if err != nil {
+			return nil, err
+		}
+
+		vPrec, err := parseFloat32(r.LocVPrecision)
+		if err != nil {
+			return nil, err
+		}
+
+		rc, err = dc.NewRecordConfig(
+			label, ttl, dnsv2.TypeLOC,
+			r.LocLatDeg, r.LocLatMin, latSec, r.LocLatDir,
+			r.LocLongDeg, r.LocLongMin, longSec, r.LocLongDir,
+			altitude, size, hPrec, vPrec)
+
 	case "NAPTR":
 		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}
+
+	// Add metadata for GeoDNS
+	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
+	// but you can ask the support for others type of record and they enable it
+	// for your ClouDNS account.
+	if r.GeodnsCode != "" {
+		rc.Metadata[metaGeodnsCode] = r.GeodnsCode
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -434,6 +475,13 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	}
 
 	return rc, nil
+}
+
+// parseFloat32 parses s into a float32. This has an advantage over
+// NewRecordConfig because errors are detected earlier.
+func parseFloat32(s string) (float32, error) {
+	f, err := strconv.ParseFloat(s, 32)
+	return float32(f), err
 }
 
 func formatLocParam(param string) string {
@@ -520,7 +568,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["order"] = strconv.Itoa(int(rdnaptr.Order))
 		req["pref"] = strconv.Itoa(int(rdnaptr.Preference))
 		req["flag"] = rdnaptr.Flags
-		req["params"] = strconv.Itoa(int(rdnaptr.Preference))
+		req["params"] = rdnaptr.Service
 		req["regexp"] = rdnaptr.Regexp
 		req["replace"] = rdnaptr.Replacement
 	default:
