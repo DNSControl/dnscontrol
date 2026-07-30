@@ -356,8 +356,6 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 	case "TXT":
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
-		// TODO(tlim): If tests fail, revert this change.
-		//data := rc.GetTargetField()
 		r.Data = rc.GetRDATA().String()
 	}
 
