@@ -421,6 +421,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -906,7 +907,8 @@ func makeTests() []*TestGroup {
 				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
-			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
+			// The next TTL needs to fall in a different bucket than the previous one for LINODE
+			tc("Change TTL4400", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 4400)),
 		),
 
 		testgroup("SSHFP",
@@ -1581,9 +1583,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE main",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
@@ -1912,9 +1914,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE wilds",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),

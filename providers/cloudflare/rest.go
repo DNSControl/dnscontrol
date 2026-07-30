@@ -142,7 +142,7 @@ func cfSvcbData(rec *models.RecordConfig) *cfRecData {
 	return &cfRecData{
 		Priority: f.Priority,
 		Target:   cfTarget(f.Target),
-		Value:    rec.SvcParams,
+		Value:    models.Svcbv2ValueToString(f.Value),
 	}
 }
 

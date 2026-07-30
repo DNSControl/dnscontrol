@@ -9,7 +9,6 @@ import (
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
 func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
-
 	rtype := strings.ToUpper(n.Type)
 
 	var label string
@@ -44,34 +43,27 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 			return nil, fmt.Errorf("[FORTIGATE] CNAME record without canonical-name (id=%d)", n.ID)
 		}
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.CanonicalName)
-		if err != nil {
-			return nil, err
-		}
 
 	case "NS":
 		if n.Hostname == "" {
 			return nil, fmt.Errorf("[FORTIGATE] NS record missing hostname (id=%d)", n.ID)
 		}
-
 		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Hostname)
-		if err != nil {
-			return nil, err
-		}
 
 	case "MX":
 		if n.Hostname == "" {
 			return nil, fmt.Errorf("[FORTIGATE] MX record missing hostname (id=%d)", n.ID)
 		}
-
 		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Preference, n.Hostname)
-		if err != nil {
-			return nil, err
-		}
 
 	default:
 		// Not supported due to FortiGate limitations
 		return nil, fmt.Errorf("[FORTIGATE] Record type %q is not supported by fortigate provider", rtype)
 	}
+	if err != nil {
+		return nil, err
+	}
+
 	rc.Original = n
 
 	// Status → Metadata
@@ -138,26 +130,17 @@ func recordsToNative(recs models.Records) ([]*fgDNSRecord, []error) {
 
 		case "CNAME":
 			target := record.AsCNAME().String()
-			//if ascii, err := idna.ToASCII(target); err == nil {
-			//	target = ascii
-			//}
 			n.CanonicalName = target
 
 		case "NS":
 			target := record.AsNS().String()
-			//if ascii, err := idna.ToASCII(target); err == nil {
-			//	target = ascii
-			//}
 			n.Hostname = target
 			n.CanonicalName = ""
 
 		case "MX":
 			mx := record.AsMX()
-			//if ascii, err := idna.ToASCII(target); err == nil {
-			//	target = ascii
-			//}
-			n.Hostname = mx.Mx
 			n.Preference = mx.Preference
+			n.Hostname = mx.Mx
 			n.CanonicalName = ""
 
 		default:
