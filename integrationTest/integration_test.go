@@ -181,7 +181,7 @@ func makeTests() []*TestGroup {
 			tc("Change MX apex", mx("@", 5, "bar.com.")),
 			tc("Create MX", mx("testmx", 5, "foo.com.")),
 			tc("Change MX target", mx("testmx", 5, "bar.com.")),
-			tc("Change MX p", mx("testmx", 100, "bar.com.")),
+			tc("Change MX p", mx("testmx", 10, "bar.com.")),
 		),
 
 		testgroup("RP",

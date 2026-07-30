@@ -27,9 +27,12 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 	// ALIAS("@") to model apex CNAME flattening, which DNSPod represents
 	// as a CNAME record at "@".
 	// See https://docs.dnspod.com/dns/faq-dns-resolution/?lang=en.
+	// https://www.tencentcloud.com/document/product/1145/54764#2f681022-91ab-4a9e-ac3d-0a6c454d954e
+	// https://docs.dnspod.com/dns/cname-flattening/
+	// As a result, we can safely turn ALIAS records into CNAMEs.
 	rtype := *r.Type
-	if rtype == "CNAME" && *r.Name == "@" {
-		rtype = "ALIAS"
+	if rtype == "ALIAS" {
+		rtype = "CNAME"
 	}
 
 	var rc *models.RecordConfig
@@ -44,9 +47,23 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
-	case "ALIAS":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+		// TODO(tlim): A few ways that might fix
+		//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
+		//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
+
+		// Try this first:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+
+		// Try this if the other fails: (probably won't work)
+		//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+
+		// Or this?
+		//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
+		// You'll need to add this to imports above:
+		// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+
+	// case "ALIAS":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
 	}
@@ -116,6 +133,7 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	case dnsv2.TypeTXT:
 		f := rc.AsTXT()
 		val = f.String()
+
 	default:
 		val = rc.GetRDATA().String()
 	}
