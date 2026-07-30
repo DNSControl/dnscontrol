@@ -8,15 +8,16 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/fatih/color"
 	"github.com/nrdcg/goinwx"
 	"github.com/pquerna/otp/totp"
 	"golang.org/x/net/idna"
-
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 /*
@@ -244,6 +245,9 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 		} else {
 			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content[:len(content)-1])
 		}
+	case "TXT":
+		req.Content = rec.GetTargetTXTJoined()
+
 	default:
 		req.Content = rec.GetRDATA().String()
 	}
@@ -272,8 +276,11 @@ func (api *inwxAPI) deleteRecord(RecordID string) error {
 
 // isNullMX checks if a record is a null MX record.
 func isNullMX(rec *models.RecordConfig) bool {
+	if rec.TypeNum != dnsv2.TypeMX {
+		return false
+	}
 	f := rec.AsMX()
-	return rec.Type == "MX" && f.Preference == 0 && f.Mx == "."
+	return f.Preference == 0 && f.Mx == "."
 }
 
 // AutoDnssecToggle enables and disables AutoDNSSEC for INWX domains.
@@ -450,7 +457,7 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 		case "MX":
 			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
 		case "SRV":
-			rc, err = dc.NewRecordConfigParse(label, ttl, rType, fmt.Sprintf("%d %s", record.Priority, record.Content))
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content, nrc.Flags{SrvWeirdSplit})
 		case "TXT", "ALIAS":
 			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Content)
 		default:
