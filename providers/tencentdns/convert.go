@@ -170,6 +170,24 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 		f := rc.AsMX()
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
+
+	// TODO(tlim): Try this if unicode required for MX targets.
+	// You'll need to add this import: "golang.org/x/net/idna"
+	// u, err := idna.ToUnicode(val)
+	// if err == nil {
+	// 	val = u
+	// }
+
+	// TODO(tlim): Try this if unicode is required for CNAME targets.
+	// You'll need to add this import: "golang.org/x/net/idna"
+	// case dnsv2.TypeCNAME:
+	// 	f := rc.AsCNAME()
+	// 	val := f.Target
+	// 	u, err := idna.ToUnicode(val)
+	// 	if err == nil {
+	// 		val = u
+	// 	}
+
 	case dnsv2.TypeTXT:
 		f := rc.AsTXT()
 		val = f.String()
