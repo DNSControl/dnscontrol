@@ -180,3 +180,72 @@ func Test_whichZonesToProcess(t *testing.T) {
 		})
 	}
 }
+
+func Test_zoneWillBeCreated(t *testing.T) {
+	const provider = "cf"
+
+	tests := []struct {
+		name        string
+		corrections []*models.Correction
+		want        bool
+	}{
+		{
+			name:        "no populate corrections",
+			corrections: nil,
+			want:        false,
+		},
+		{
+			name:        "informational correction only (zone exists or not creatable)",
+			corrections: []*models.Correction{{Msg: "nothing to do"}},
+			want:        false,
+		},
+		{
+			name:        "pending zone creation (non-nil F)",
+			corrections: []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}},
+			want:        true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			zone := &models.DomainConfig{Name: "example.com"}
+			zone.StorePopulateCorrections(provider, tc.corrections)
+			if got := zoneWillBeCreated(zone, provider); got != tc.want {
+				t.Errorf("zoneWillBeCreated() = %v, want %v", got, tc.want)
+			}
+			// A different provider name must never report a pending creation.
+			if zoneWillBeCreated(zone, "other") {
+				t.Error("zoneWillBeCreated() reported a creation for an unrelated provider")
+			}
+		})
+	}
+}
+
+func Test_reportZonePendingCreation(t *testing.T) {
+	const provider = "cf"
+	pending := []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}}
+	none := []*models.Correction{{Msg: "nothing to do"}}
+
+	tests := []struct {
+		name              string
+		corrections       []*models.Correction
+		push              bool
+		populateOnPreview bool
+		want              bool
+	}{
+		{name: "preview, zone pending creation", corrections: pending, want: true},
+		{name: "push, zone pending creation", corrections: pending, push: true, want: false},
+		{name: "preview with --populate-on-preview creates the zone", corrections: pending, populateOnPreview: true, want: false},
+		{name: "preview, zone not pending creation", corrections: none, want: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			zone := &models.DomainConfig{Name: "example.com"}
+			zone.StorePopulateCorrections(provider, tc.corrections)
+			if got := reportZonePendingCreation(zone, provider, tc.push, tc.populateOnPreview); got != tc.want {
+				t.Errorf("reportZonePendingCreation() = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
