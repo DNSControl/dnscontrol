@@ -380,6 +380,8 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 
 // parses the ClouDNS format into our standard RecordConfig.
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
+	var err error
+
 	ttl_, err := strconv.ParseUint(r.TTL, 10, 32)
 	if err != nil {
 		return nil, err
@@ -453,6 +455,9 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}
+	if err != nil {
+		return nil, err
+	}
 
 	// Add metadata for GeoDNS
 	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
@@ -460,10 +465,6 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	// for your ClouDNS account.
 	if r.GeodnsCode != "" {
 		rc.Metadata[metaGeodnsCode] = r.GeodnsCode
-	}
-
-	if err != nil {
-		return nil, err
 	}
 
 	rc.Original = r
