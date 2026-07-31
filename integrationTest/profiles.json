@@ -27,6 +27,7 @@
     "context": "$AUTODNS_CONTEXT",
     "domain": "$AUTODNS_DOMAIN",
     "password": "$AUTODNS_PASSWORD",
+    "totp-key": "$AUTODNS_TOTP_SECRET",
     "username": "$AUTODNS_USERNAME"
   },
   "AXFRDDNS": {

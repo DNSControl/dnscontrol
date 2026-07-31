@@ -11,6 +11,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
+
+	"github.com/pquerna/otp/totp"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
@@ -39,6 +42,8 @@ type autoDNSProvider struct {
 	baseURL         url.URL
 	defaultHeaders  http.Header
 	includeChildren bool
+	totpValue       string
+	totpKey         string
 }
 
 func init() {
@@ -46,12 +51,20 @@ func init() {
 	const providerMaintainer = "@arnoschoon"
 	fns := providers.DspFuncs{
 		Initializer: func(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-			return newAutoDNSProvider(settings), nil
+			api, err := newAutoDNSProvider(settings)
+			if err != nil {
+				return nil, err
+			}
+			return api, nil
 		},
 		RecordAuditor: AuditRecords,
 	}
 	providers.RegisterRegistrarType(providerName, func(settings map[string]string) (providers.Registrar, error) {
-		return newAutoDNSProvider(settings), nil
+		api, err := newAutoDNSProvider(settings)
+		if err != nil {
+			return nil, err
+		}
+		return api, nil
 	}, features)
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterMaintainer(providerName, providerMaintainer)
@@ -81,6 +94,12 @@ func init() {
 				Required: true,
 			},
 			{
+				Key:    "totp-key",
+				Label:  "TOTP shared secret (optional)",
+				Help:   "Shared TOTP secret used to generate the 2FA token. Only needed if two factor authentication is enabled for the account.",
+				Secret: true,
+			},
+			{
 				Key:   "children",
 				Label: "Include sub-user zones",
 				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
@@ -89,7 +108,7 @@ func init() {
 	})
 }
 
-func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {
+func newAutoDNSProvider(settings map[string]string) (*autoDNSProvider, error) {
 	api := &autoDNSProvider{}
 
 	api.baseURL = url.URL{
@@ -112,7 +131,32 @@ func newAutoDNSProvider(settings map[string]string) *autoDNSProvider {
 	// (the same optional toggle the web UI offers). Opt-in via creds.json.
 	api.includeChildren = settings["children"] == "true"
 
-	return api
+	api.totpValue, api.totpKey = settings["totp"], settings["totp-key"]
+
+	if api.totpValue != "" && api.totpKey != "" {
+		return nil, errors.New("AUTODNS: totp and totp-key must not be specified at the same time")
+	}
+
+	if api.totpKey != "" {
+		if _, err := totp.GenerateCode(api.totpKey, time.Now()); err != nil {
+			return nil, fmt.Errorf("AUTODNS: unable to generate a 2FA token from totp-key: %w", err)
+		}
+	}
+
+	return api, nil
+}
+
+func (api *autoDNSProvider) otp() (string, error) {
+	if api.totpKey == "" {
+		return api.totpValue, nil
+	}
+
+	token, err := totp.GenerateCode(api.totpKey, time.Now())
+	if err != nil {
+		return "", fmt.Errorf("AUTODNS: unable to generate a 2FA token from totp-key: %w", err)
+	}
+
+	return token, nil
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
