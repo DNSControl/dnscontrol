@@ -943,20 +943,29 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 
 	label := dc.LabelFromFQDNNoDot(cr.Name)
 	ttl := uint32(cr.TTL)
-	nFlags := nrc.TARGET_IS_FQDN_NO_DOT
 
 	var rc *models.RecordConfig
 	var err error
 
 	switch rType := cr.Type; rType { // #rtype_variations
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content,
+			nrc.TARGET_IS_FQDN_NO_DOT)
 	case "SRV":
 		data := cr.Data.(map[string]any)
 		target := stringDefault(data["target"], "MISSING.TARGET")
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target,
+			nrc.TARGET_IS_FQDN_NO_DOT)
+	case "TXT":
+		// t := cr.Content
+		// if len(t) > 0 && (t[0] != '"' && t[len(t)-1] != '"') {
+		// 	t = `"` + t + `"`
+		// }
+		// rc, err = dc.NewRecordConfigParse(label, ttl, rType, t)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content, nFlags)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content,
+			nrc.TARGET_IS_FQDN_NO_DOT)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable %q record received from cloudflare: %w", cr.Type, err)
