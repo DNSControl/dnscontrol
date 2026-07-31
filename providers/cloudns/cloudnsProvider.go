@@ -448,6 +448,9 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 			r.LocLatDeg, r.LocLatMin, latSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, longSec, r.LocLongDir,
 			altitude, size, hPrec, vPrec)
+		if err != nil {
+			return nil, err
+		}
 
 	case "NAPTR":
 		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")

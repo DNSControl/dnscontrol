@@ -457,9 +457,11 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 		case "MX":
 			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
 		case "SRV":
-			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content, nrc.Flags{SrvWeirdSplit: true})
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content,
+				nrc.Flags{SrvWeirdSplit: true})
 		default:
-			rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content, nrc.Flags{TxtDontParse: true})
+			rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content,
+				nrc.Flags{TxtDontParse: true})
 		}
 		if err != nil {
 			return nil, fmt.Errorf("INWX: unparsable record received: %w", err)

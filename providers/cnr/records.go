@@ -186,7 +186,8 @@ func toRC(dc *models.DomainConfig, data map[string]string) (*models.RecordConfig
 		return nil, fmt.Errorf("invalid TTL value for domain %s: %s", dc.Name, data["TTL"])
 	}
 
-	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(data["NAME"]), uint32(ttl), data["TYPE"], data["CONTENT"], nrc.TARGET_IS_FQDN_NO_DOT)
+	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(data["NAME"]), uint32(ttl), data["TYPE"], data["CONTENT"],
+		nrc.Flags{TargetIsFqdnNoDot: true})
 	if err != nil {
 		return nil, fmt.Errorf("parse error: %w", err)
 	}
