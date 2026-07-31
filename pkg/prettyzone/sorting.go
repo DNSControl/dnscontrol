@@ -116,7 +116,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 		// pass through. String comparison is sufficient.
 	}
 	// fmt.Printf("DEBUG: Less %q < %q == %v\n", a.String(), b.String(), a.String() < b.String())
-	return a.String() < b.String()
+	return a.GetRDATA().String() < b.GetRDATA().String()
 }
 
 // LabelLess provides a "Less" function for two labels as needed for sorting. It
