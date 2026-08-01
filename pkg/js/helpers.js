@@ -1796,6 +1796,7 @@ function LOC_builder_push(value, dms) {
 // flatten: A list of domains to be flattened.
 // overhead1: Amout of "buffer room" to reserve on the first item in the spf chain.
 // txtMaxSize: The maximum size for each TXT string. Values over 255 will result in multiple strings (default: '255')
+// keepIgnoredRedirects: Keep redirect= modifiers that flattening moved into a record with an "all" mechanism, which RFC 7208 requires to be ignored. (default: false)
 
 function SPF_BUILDER(value) {
     if (!value.parts || value.parts.length < 2) {
@@ -1837,6 +1838,10 @@ function SPF_BUILDER(value) {
 
     if (value.txtMaxSize) {
         p.txtMaxSize = value.txtMaxSize;
+    }
+
+    if (value.keepIgnoredRedirects) {
+        p.keepIgnoredRedirects = 'true';
     }
 
     // Generate a TXT record with the metaparameters.
