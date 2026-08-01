@@ -350,7 +350,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 func debugRecords(note string, recs []*models.RecordConfig) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
-		printer.Printf("   %v: %s %s %d %s\n", k, v.GetLabel(), v.Type, v.TTL, v.String())
+		printer.Printf("   %v: %s %s %d %s\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())
 	}
 }
 

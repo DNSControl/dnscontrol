@@ -4,49 +4,36 @@ import (
 	"strconv"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
-func toRecordConfig(domain string, currentRecord *domainNameShopRecord) (*models.RecordConfig, error) {
-	name := dnsutilv1.AddOrigin(currentRecord.Host, domain)
-
+func toRecordConfig(dc *models.DomainConfig, currentRecord *domainNameShopRecord) (*models.RecordConfig, error) {
 	target := currentRecord.Data
-
-	t := &models.RecordConfig{
-		Type:         currentRecord.Type,
-		TTL:          fixTTL(uint32(currentRecord.TTL)),
-		MxPreference: uint16(currentRecord.ActualPriority),
-		SrvPriority:  uint16(currentRecord.ActualPriority),
-		SrvWeight:    uint16(currentRecord.ActualWeight),
-		SrvPort:      uint16(currentRecord.ActualPort),
-		Original:     currentRecord,
-		CaaTag:       currentRecord.CAATag,
-		CaaFlag:      uint8(currentRecord.CAAFlag),
-	}
-
-	if err := t.SetTarget(target); err != nil {
-		return nil, err
-	}
-	t.SetLabelFromFQDN(name, domain)
-
-	switch rtype := currentRecord.Type; rtype {
+	var rc *models.RecordConfig
+	var err error
+	switch currentRecord.Type {
 	case "TXT":
-		if err := t.SetTargetTXT(target); err != nil {
-			return nil, err
-		}
+		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, target)
+	case "MX":
+		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, currentRecord.ActualPriority, target)
+	case "SRV":
+		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, currentRecord.ActualPriority, currentRecord.ActualWeight, currentRecord.ActualPort, target)
 	case "CAA":
+		tag := "iodef"
 		switch currentRecord.CAATag {
 		case "0":
-			t.CaaTag = "issue"
+			tag = "issue"
 		case "1":
-			t.CaaTag = "issuewild"
-		default:
-			t.CaaTag = "iodef"
+			tag = "issuewild"
 		}
+		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, uint8(currentRecord.CAAFlag), tag, target)
 	default:
-		// nothing additional required
+		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, target)
 	}
-	return t, nil
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = currentRecord
+	return rc, nil
 }
 
 func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *models.RecordConfig) (*domainNameShopRecord, error) {
@@ -55,32 +42,19 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		return nil, err
 	}
 
-	data := ""
-	if rc.Type == "TXT" {
-		data = rc.GetTargetTXTJoined()
-	} else {
-		data = rc.GetTargetField()
-	}
-
 	dnsR := &domainNameShopRecord{
-		ID:            0,
-		Host:          rc.GetLabel(),
-		TTL:           uint16(fixTTL(rc.TTL)),
-		Type:          rc.Type,
-		Data:          data,
-		Weight:        strconv.Itoa(int(rc.SrvWeight)),
-		Port:          strconv.Itoa(int(rc.SrvPort)),
-		ActualWeight:  rc.SrvWeight,
-		ActualPort:    rc.SrvPort,
-		CAAFlag:       uint64(int(rc.CaaFlag)),
-		ActualCAAFlag: strconv.Itoa(int(rc.CaaFlag)),
-		DomainID:      domainID,
+		ID:       0,
+		Host:     rc.GetLabel(),
+		TTL:      uint16(fixTTL(rc.TTL)),
+		Type:     rc.Type,
+		DomainID: domainID,
 	}
 
 	switch rc.Type {
 	case "CAA":
+		f := rc.AsCAA()
 		// Actual CAA FLAG
-		switch rc.CaaTag {
+		switch f.Tag {
 		case "issue":
 			dnsR.CAATag = "0"
 		case "issuewild":
@@ -88,12 +62,25 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		case "iodef":
 			dnsR.CAATag = "2"
 		}
+		dnsR.CAAFlag = uint64(int(f.Flag))
+		dnsR.ActualCAAFlag = strconv.Itoa(int(f.Flag))
+		dnsR.Data = f.Value
 	case "MX":
-		dnsR.Priority = strconv.Itoa(int(rc.MxPreference))
+		f := rc.AsMX()
+		dnsR.Priority = strconv.Itoa(int(f.Preference))
+		dnsR.Data = f.Mx
 	case "SRV":
-		dnsR.Priority = strconv.Itoa(int(rc.SrvPriority))
+		f := rc.AsSRV()
+		dnsR.Priority = strconv.Itoa(int(f.Priority))
+		dnsR.Weight = strconv.Itoa(int(f.Weight))
+		dnsR.Port = strconv.Itoa(int(f.Port))
+		dnsR.ActualWeight = f.Weight
+		dnsR.ActualPort = f.Port
+		dnsR.Data = f.Target
+	case "TXT":
+		dnsR.Data = rc.GetTargetTXTJoined()
 	default:
-		// pass through
+		dnsR.Data = rc.GetRDATA().String()
 	}
 
 	return dnsR, nil

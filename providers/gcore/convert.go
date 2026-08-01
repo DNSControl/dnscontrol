@@ -89,7 +89,7 @@ func recordsToNative(rcs []*models.RecordConfig, expectedKey models.RecordKey) (
 				return nil, err
 			}
 			if !isRRSetFilterEqual {
-				return nil, fmt.Errorf("filter is not consistent between %s and %s in RRSet %s", resultRRSetMetaSourceRecord, r, expectedKey)
+				return nil, fmt.Errorf("filter is not consistent between %s and %s in RRSet %s", resultRRSetMetaSourceRecord.GetRDATA().String(), r.GetRDATA().String(), expectedKey)
 			}
 
 			isRRSetMetaEqual, err := isStructEqual(resultRRSetMeta, rrsetMeta)
@@ -97,7 +97,7 @@ func recordsToNative(rcs []*models.RecordConfig, expectedKey models.RecordKey) (
 				return nil, err
 			}
 			if !isRRSetMetaEqual {
-				return nil, fmt.Errorf("metadata is not consistent between %s and %s in RRSet %s", resultRRSetMetaSourceRecord, r, expectedKey)
+				return nil, fmt.Errorf("metadata is not consistent between %s and %s in RRSet %s", resultRRSetMetaSourceRecord.GetRDATA().String(), r.GetRDATA().String(), expectedKey)
 			}
 		}
 

@@ -18,6 +18,57 @@ Example:
 ```
 {% endcode %}
 
+### Two factor authentication
+
+If two-factor authentication has been enabled on your account you will also need to provide a valid TOTP code.
+This can also be done via an environment variable:
+
+{% code title="creds.json" %}
+```json
+{
+  "autodns": {
+    "TYPE": "AUTODNS",
+    "username": "autodns.service-account@example.com",
+    "password": "[***]",
+    "context": "33004",
+    "totp": "$AUTODNS_TOTP"
+  }
+}
+```
+{% endcode %}
+
+and then you can run
+
+```shell
+AUTODNS_TOTP=123456 dnscontrol preview
+```
+
+It is also possible to directly provide the shared TOTP secret using the key "totp-key" in `creds.json`. This secret is
+only available when first enabling two-factor authentication.
+
+**Security Warning**:
+* Anyone with access to this `creds.json` file will have *full* access to your AutoDNS account
+  and will be able to modify and delete your DNS entries.
+* Storing the shared secret together with the password weakens two factor authentication
+  because both factors are stored in a single place.
+
+{% code title="creds.json" %}
+```json
+{
+  "autodns": {
+    "TYPE": "AUTODNS",
+    "username": "autodns.service-account@example.com",
+    "password": "[***]",
+    "context": "33004",
+    "totp-key": "yourTOTPSharedSecret"
+  }
+}
+```
+{% endcode %}
+
+`totp` and `totp-key` must not be set at the same time. Omit both if the account does not use
+two factor authentication.
+
 ### Including sub-user zones
 
 By default DNSControl only sees zones owned directly by the configured user. If

@@ -186,7 +186,8 @@ func toRC(dc *models.DomainConfig, data map[string]string) (*models.RecordConfig
 		return nil, fmt.Errorf("invalid TTL value for domain %s: %s", dc.Name, data["TTL"])
 	}
 
-	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(data["NAME"]), uint32(ttl), data["TYPE"], data["CONTENT"], nrc.TARGET_IS_FQDN_NO_DOT)
+	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(data["NAME"]), uint32(ttl), data["TYPE"], data["CONTENT"],
+		nrc.Flags{TargetIsFqdnNoDot: true})
 	if err != nil {
 		return nil, fmt.Errorf("parse error: %w", err)
 	}
@@ -282,17 +283,7 @@ func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (str
 
 	switch rc.Type { // #rtype_variations
 	case "LOC":
-		// Use .String() returns the properly formatted LOC string
-		// via the dns library (e.g. "52 14 5.000 N 000 08 50.000 E 10.00m 0.00m 0.00m 0.00m")
-		parts := strings.Fields(rc.GetRDATA().String())
-		altitude, _ := strconv.ParseFloat(strings.TrimSuffix(parts[8], "m"), 64)
-		size, _ := strconv.ParseFloat(strings.TrimSuffix(parts[9], "m"), 64)
-		hp, _ := strconv.ParseFloat(strings.TrimSuffix(parts[10], "m"), 64)
-		vp, _ := strconv.ParseFloat(strings.TrimSuffix(parts[11], "m"), 64)
-		answer = fmt.Sprintf("%s %s %s %s %s %s %s %s %.2fm %.2fm %.2fm %.2fm",
-			parts[0], parts[1], parts[2], parts[3],
-			parts[4], parts[5], parts[6], parts[7],
-			altitude, size, hp, vp)
+		answer = rc.AsLOC().String()
 	case "SVCB", "HTTPS":
 		answer = rc.GetRDATA().String()
 		answer = strings.ReplaceAll(answer, `"`, ``)

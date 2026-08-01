@@ -47,6 +47,16 @@ func (rc *RecordConfig) ClearRDATA() {
 }
 
 func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
+	switch typeNum {
+
+	case dnsv2.TypeTXT:
+		// NewData expects quotes around TXT contents.
+		if len(contents) > 0 && (contents[0] != '"' && contents[len(contents)-1] != '"') {
+			contents = `"` + contents + `"`
+		}
+
+	}
+
 	rd2, err := dnsv2.NewData(typeNum, contents, origin+".")
 	if err != nil {
 		return nil, fmt.Errorf("NewData(%d, %q, %q) failed: %w", typeNum, contents, origin+".", err)

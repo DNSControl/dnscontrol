@@ -211,6 +211,10 @@ func (rc *RecordConfig) AsMG() dnsrdatav2.MG {
 	return rc.GetRDATA().(dnsrdatav2.MG)
 }
 
+func (rc *RecordConfig) AsMIKROTIKFORWARDER() privatetypesrdata.MIKROTIKFORWARDER {
+	return rc.GetRDATA().(privatetypesrdata.MIKROTIKFORWARDER)
+}
+
 func (rc *RecordConfig) AsMIKROTIKFWD() privatetypesrdata.MIKROTIKFWD {
 	return rc.GetRDATA().(privatetypesrdata.MIKROTIKFWD)
 }

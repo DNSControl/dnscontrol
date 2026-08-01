@@ -181,7 +181,7 @@ func makeTests() []*TestGroup {
 			tc("Change MX apex", mx("@", 5, "bar.com.")),
 			tc("Create MX", mx("testmx", 5, "foo.com.")),
 			tc("Change MX target", mx("testmx", 5, "bar.com.")),
-			tc("Change MX p", mx("testmx", 100, "bar.com.")),
+			tc("Change MX p", mx("testmx", 10, "bar.com.")),
 		),
 
 		testgroup("RP",
@@ -421,6 +421,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -906,7 +907,8 @@ func makeTests() []*TestGroup {
 				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
-			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
+			// The next TTL needs to fall in a different bucket than the previous one for LINODE
+			tc("Change TTL4400", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 4400)),
 		),
 
 		testgroup("SSHFP",
@@ -1581,9 +1583,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE main",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
@@ -1912,9 +1914,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE wilds",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
@@ -2177,11 +2179,11 @@ func makeTests() []*TestGroup {
 			only("OVH"),
 			tc("Create TXT",
 				txt("spf", "v=spf1 ip4:99.99.99.99 -all"),
-				txt("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
+				txt("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
 				txt("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com")),
 			tc("Update TXT",
 				txt("spf", "v=spf1 a mx -all"),
-				txt("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
+				txt("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
 				txt("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@example.com")),
 		),
 
@@ -2189,12 +2191,14 @@ func makeTests() []*TestGroup {
 			only("OVH"),
 			tc("Create native OVH records",
 				ovhspf("spf", "v=spf1 ip4:99.99.99.99 -all"),
-				ovhdkim("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
+				ovhdkim("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
 				ovhdmarc("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com")),
 			tc("Update native OVH records",
 				ovhspf("spf", "v=spf1 a mx -all"),
-				ovhdkim("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
+				ovhdkim("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
 				ovhdmarc("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@example.com")),
+			tc("Create native OVH DKIM record longer than 255 bytes",
+				ovhdkim("dkimbig._domainkey", "v=DKIM1; t=s; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtNHHaHjrlPU5hvNyp5LKkhINqUNo3rwvHP3RMYvBMdxs0W34SLMc52QSn+O8QN5P2rU9Hs3qiD5kaIjGfU77EwMnrUh0MhRgWPKED5R66/BXYh9tIv9aLBeGgrO8Tj1zvW2CO9HI9V5TcuEe8OKgY4EvtuBtlgG7DbM2fwm2VL9nbvM15hxQjAkDxfDNBLMXozsk86Fp9EzOwtUykRH1VoCusC0qYqmOMpPknDoJ2vJKZMm1Cpx0ICnsdWbmLVKPpgdBdj28jCXU/bm4jvXcSL9oGb3rBxVmpsgA+JHEZH2XMbDDzHjLnH7DsavP/Xth19KA/opQ4h6vFxAQOX+yzQIDAQAB")),
 		),
 
 		// CLOUDNS features
