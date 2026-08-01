@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"net/netip"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -84,7 +85,7 @@ func (c *adguardHomeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 			printer.Warnf("diff2 report message\n")
 			corr = &models.Correction{Msg: change.MsgsJoined}
 		case diff2.CREATE:
-			re, err := toRewriteEntry(dc.Name, change.New[0])
+			re, err := toRewriteEntry(dc, change.New[0])
 			if err != nil {
 				return nil, 0, err
 			}
@@ -96,11 +97,11 @@ func (c *adguardHomeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 			}
 
 		case diff2.CHANGE:
-			oldRe, err := toRewriteEntry(dc.Name, change.Old[0])
+			oldRe, err := toRewriteEntry(dc, change.Old[0])
 			if err != nil {
 				return nil, 0, err
 			}
-			newRe, err := toRewriteEntry(dc.Name, change.New[0])
+			newRe, err := toRewriteEntry(dc, change.New[0])
 			if err != nil {
 				return nil, 0, err
 			}
@@ -112,7 +113,7 @@ func (c *adguardHomeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig,
 			}
 
 		case diff2.DELETE:
-			re, err := toRewriteEntry(dc.Name, change.Old[0])
+			re, err := toRewriteEntry(dc, change.Old[0])
 			if err != nil {
 				return nil, 0, err
 			}
@@ -144,7 +145,7 @@ func (c *adguardHomeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 
 	existingRecords := make([]*models.RecordConfig, 0, len(records))
 	for _, r := range records {
-		newRec, err := toRc(domain, r)
+		newRec, err := toRc(dc, r)
 		if err != nil {
 			return nil, err
 		}
@@ -154,17 +155,21 @@ func (c *adguardHomeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 	return existingRecords, nil
 }
 
-func toRewriteEntry(domain string, rc *models.RecordConfig) (rewriteEntry, error) {
+func toRewriteEntry(dc *models.DomainConfig, rc *models.RecordConfig) (rewriteEntry, error) {
 	re := rewriteEntry{
 		Domain: rc.NameFQDN,
 	}
 	switch rc.Type {
-	case "A", "AAAA":
-		re.Answer = rc.GetTargetIP().String()
+	case "A":
+		re.Answer = rc.AsA().Addr.String()
+	case "AAAA":
+		re.Answer = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "ALIAS":
-		re.Answer = rc.GetTargetField()
-		re.Answer = dnsutilv1.TrimDomainName(re.Answer, domain)
+	case "ALIAS":
+		re.Answer = dc.ToShort(rc.AsALIAS().Target)
+
+	case "CNAME":
+		re.Answer = dc.ToShort(rc.AsCNAME().Target)
 
 	case "ADGUARDHOME_A_PASSTHROUGH":
 		re.Answer = "A"
@@ -179,40 +184,36 @@ func toRewriteEntry(domain string, rc *models.RecordConfig) (rewriteEntry, error
 	return re, nil
 }
 
-func toRc(domain string, r rewriteEntry) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      300,
-		Original: r,
-	}
-	rc.SetLabelFromFQDN(r.Domain, domain)
+func toRc(dc *models.DomainConfig, r rewriteEntry) (*models.RecordConfig, error) {
+	label := dc.LabelFromFQDNNoDot(r.Domain)
+	var rc *models.RecordConfig
+	var err error
 
-	addr, err := netip.ParseAddr(r.Answer)
-	if err != nil {
-		rc.SetTargetIP(addr)
+	if addr, parseErr := netip.ParseAddr(r.Answer); parseErr == nil {
+		rtype := dnsv2.TypeAAAA
 		if addr.Is4() {
-			rc.Type = "A"
-		} else {
-			rc.Type = "AAAA"
+			rtype = dnsv2.TypeA
 		}
-	} else if r.Answer == "A" {
-		rc.Type = "ADGUARDHOME_A_PASSTHROUGH"
-	} else if r.Answer == "AAAA" {
-		rc.Type = "ADGUARDHOME_AAAA_PASSTHROUGH"
+		rc, err = dc.NewRecordConfig(label, 300, rtype, addr)
 	} else {
-		answer := dnsutilv1.TrimDomainName(r.Answer, domain)
-		rc.SetTarget(answer)
-
-		if r.Domain == domain {
-			rc.Type = "ALIAS"
-		} else {
-			rc.Type = "CNAME"
+		switch r.Answer {
+		case "A":
+			rc, err = dc.NewRecordConfig(label, 300, privatetypes.TypeADGUARDHOMEAPASSTHROUGH, "")
+		case "AAAA":
+			rc, err = dc.NewRecordConfig(label, 300, privatetypes.TypeADGUARDHOMEAAAAPASSTHROUGH, "")
+		default:
+			answer := dc.ToShort(r.Answer)
+			if r.Domain == dc.Name {
+				rc, err = dc.NewRecordConfig(label, 300, privatetypes.TypeALIAS, answer)
+			} else {
+				rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeCNAME, answer)
+			}
 		}
 	}
-
-	if (rc.Type == "ADGUARDHOME_A_PASSTHROUGH" && r.Answer != "A") ||
-		(rc.Type == "ADGUARDHOME_AAAA_PASSTHROUGH" && r.Answer != "AAAA") {
-		return rc, errors.New("found invalid values for ADGUARDHOME_A_PASSTHROUGH or ADGUARDHOME_AAAA_PASSTHROUGH record")
+	if err != nil {
+		return nil, err
 	}
 
+	rc.Original = r
 	return rc, nil
 }

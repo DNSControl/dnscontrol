@@ -12,42 +12,42 @@ func Uint8(arg any) uint8 {
 		return v
 	case uint16:
 		if v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case int16:
 		if v < 0 || v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case uint32:
 		if v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case uint:
 		if v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case int:
 		if v < 0 || v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case float64:
 		if v < 0 || v > math.MaxUint8 {
-			panic(fmt.Sprintf("value %q overflows uint8", arg))
+			panic(fmt.Sprintf("value %v overflows uint8", arg))
 		}
 		return uint8(v)
 	case string:
 		ni, err := strconv.ParseUint(arg.(string), 10, 8)
 		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (uint8 wanted)", arg))
+			panic(fmt.Sprintf("value %v is not a number (uint8 wanted)", arg))
 		}
 		return uint8(ni)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected uint8", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected uint8", arg, arg))
 }
 
 func Uint16(arg any) uint16 {
@@ -58,41 +58,46 @@ func Uint16(arg any) uint16 {
 		return v
 	case int16:
 		if v < 0 {
-			panic(fmt.Sprintf("value %q underflows uint16", arg))
+			panic(fmt.Sprintf("value %v underflows uint16", arg))
 		}
 	case uint:
 		if v > math.MaxUint16 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
 		}
 		return uint16(v)
 	case uint32:
 		if v > math.MaxUint16 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
+		}
+		return uint16(v)
+	case uint64:
+		if v > math.MaxUint16 {
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
 		}
 		return uint16(v)
 	case int:
 		if v < 0 || v > math.MaxUint16 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
 		}
 		return uint16(v)
 	case int64:
 		if v < 0 || v > math.MaxUint16 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
 		}
 		return uint16(v)
 	case float64:
 		if v < 0 || v > math.MaxUint16 {
-			panic(fmt.Sprintf("value %q overflows uint16", arg))
+			panic(fmt.Sprintf("value %v overflows uint16", arg))
 		}
 		return uint16(v)
 	case string:
 		ni, err := strconv.ParseUint(arg.(string), 10, 16)
 		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (uint16 wanted)", arg))
+			panic(fmt.Sprintf("value %v is not a number (uint16 wanted)", arg))
 		}
 		return uint16(ni)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected uint16", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected uint16", arg, arg))
 }
 
 func Uint32(arg any) uint32 {
@@ -103,34 +108,34 @@ func Uint32(arg any) uint32 {
 		return uint32(v)
 	case int16:
 		if v < 0 {
-			panic(fmt.Sprintf("value %q underflows uint32", arg))
+			panic(fmt.Sprintf("value %v underflows uint32", arg))
 		}
 		return uint32(v)
 	case uint32:
 		return v
 	case uint:
 		if v > math.MaxUint32 {
-			panic(fmt.Sprintf("value %q overflows uint32", arg))
+			panic(fmt.Sprintf("value %v overflows uint32", arg))
 		}
 		return uint32(v)
 	case int:
 		if v < 0 || v > math.MaxUint32 {
-			panic(fmt.Sprintf("value %q overflows uint32", arg))
+			panic(fmt.Sprintf("value %v overflows uint32", arg))
 		}
 		return uint32(v)
 	case float64:
 		if v < 0 || v > math.MaxUint32 {
-			panic(fmt.Sprintf("value %q overflows uint32", arg))
+			panic(fmt.Sprintf("value %v overflows uint32", arg))
 		}
 		return uint32(v)
 	case string:
 		ni, err := strconv.ParseUint(arg.(string), 10, 32)
 		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (uint32 wanted)", arg))
+			panic(fmt.Sprintf("value %v is not a number (uint32 wanted)", arg))
 		}
 		return uint32(ni)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected uint32", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected uint32", arg, arg))
 }
 
 func Uint64(arg any) uint64 {
@@ -138,13 +143,13 @@ func Uint64(arg any) uint64 {
 	case string:
 		num, err := strconv.ParseUint(v, 10, 64)
 		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (uint64 wanted)", v))
+			panic(fmt.Sprintf("value %v is not a number (uint64 wanted)", v))
 		}
 		return uint64(num)
 	case uint64:
 		return uint64(v)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected uint64", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected uint64", arg, arg))
 }
 
 func Int64(arg any) int64 {
@@ -156,24 +161,33 @@ func Int64(arg any) int64 {
 	case string:
 		ni, err := strconv.ParseInt(arg.(string), 10, 64)
 		if err != nil {
-			panic(fmt.Sprintf("value %q is not a number (int64 wanted)", arg))
+			panic(fmt.Sprintf("value %v is not a number (int64 wanted)", arg))
 		}
 		return int64(ni)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected uint32", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected uint32", arg, arg))
 }
 
 func Float32(arg any) float32 {
 	switch v := arg.(type) {
 	case float32:
 		return v
+	case string:
+		f, err := strconv.ParseFloat(v, 32)
+		if err != nil {
+			panic(fmt.Sprintf("string to float parse error: %q err=%s", v, err))
+		}
+		if f < -math.MaxFloat32 || f > math.MaxFloat32 {
+			panic(fmt.Sprintf("value %q overflows float32", arg))
+		}
+		return float32(f)
 	case float64:
 		if v < -math.MaxFloat32 || v > math.MaxFloat32 {
-			panic(fmt.Sprintf("value %q overflows float32", arg))
+			panic(fmt.Sprintf("value %v overflows float32", arg))
 		}
 		return float32(v)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected float32", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected float32", arg, arg))
 }
 
 func Float64(arg any) float64 {
@@ -185,5 +199,5 @@ func Float64(arg any) float64 {
 	case int:
 		return float64(v)
 	}
-	panic(fmt.Sprintf("value %q is type %T, expected float64", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected float64", arg, arg))
 }

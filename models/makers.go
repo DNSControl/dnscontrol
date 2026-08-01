@@ -53,7 +53,11 @@ func MakeA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any)
 		return nil, fmt.Errorf("MakeA expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
 	target := args[0]
-	return dnsrdatav2.A{Addr: mustbe.IPv4(target)}, nil
+	ip, err := mustbe.IPv4(target)
+	if err != nil {
+		return nil, err
+	}
+	return dnsrdatav2.A{Addr: ip}, nil
 }
 
 func MakeALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -68,7 +72,11 @@ func MakeAAAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeAAAA expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.AAAA{Addr: mustbe.IPv6(args[0])}, nil
+	ip, err := mustbe.IPv6(args[0])
+	if err != nil {
+		return nil, err
+	}
+	return dnsrdatav2.AAAA{Addr: ip}, nil
 }
 
 func MakeCAA(origin string, metadata map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

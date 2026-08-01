@@ -32,7 +32,7 @@ func (s *scalewayProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			if string(r.Type) == "SOA" {
 				continue
 			}
-			rc, err := toRecordConfig(zone, r)
+			rc, err := toRecordConfig(dc, r)
 			if err != nil {
 				return nil, err
 			}

@@ -514,18 +514,18 @@ func recordToRC(dc *models.DomainConfig, rec Record) (*models.RecordConfig, erro
 		rtype = "TXT"
 	}
 
-	nFlags := nrc.Flags{TargetIsFqdnNoDot: true}
-	stFlags := nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true}
-
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, rec.Priority, rec.Data, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, rec.Priority, rec.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, rec.Priority, rec.Data, stFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, rec.Priority, rec.Data,
+			nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, rec.Data, nFlags)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, rec.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	}
 	if err != nil {
 		return nil, err

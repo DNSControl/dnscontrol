@@ -127,17 +127,17 @@ func (api *rwthProvider) updateRecord(id int, record models.RecordConfig) error 
 	return api.request("/update_record", "POST", req, nil)
 }
 
-func (api *rwthProvider) getAllRecords(domain string) ([]models.RecordConfig, error) {
-	zone, err := api.getZone(domain)
+func (api *rwthProvider) getAllRecords(dc *models.DomainConfig) (models.Records, error) {
+	zone, err := api.getZone(dc.Name)
 	if err != nil {
 		return nil, err
 	}
-	records := make([]models.RecordConfig, 0)
+	records := make(models.Records, 0)
 	response := []RecordReply{}
 	request := url.Values{}
 	request.Set("zone_id", strconv.Itoa(zone.ID))
 	if err := api.request("/list_records", "GET", request, &response); err != nil {
-		return nil, fmt.Errorf("failed fetching zone records for %q: %w", domain, err)
+		return nil, fmt.Errorf("failed fetching zone records for %q: %w", dc.Name, err)
 	}
 	for _, apiRecord := range response {
 		if checkIsLockedSystemAPIRecord(apiRecord) != nil {
@@ -148,7 +148,7 @@ func (api *rwthProvider) getAllRecords(domain string) ([]models.RecordConfig, er
 			return nil, err
 		}
 
-		recConfig, err := dnsrr.RRtoRC(dnsRec, domain) // and make it a RC
+		recConfig, err := dnsrr.RRv2toRC(dc, dnsRec) // and make it a RC
 		if err != nil {
 			return nil, err
 		}

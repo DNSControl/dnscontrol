@@ -3,7 +3,6 @@ package hostingde
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net" // Needed for communicating with provider API.
 	"strings"
 
@@ -136,7 +135,7 @@ type responseData struct {
 	TotalPages uint `json:"totalPages"`
 }
 
-func (r record) nativeToRecord(domain string) (*models.RecordConfig, error) {
+func (r record) nativeToRecord(dc *models.DomainConfig) (*models.RecordConfig, error) {
 	// normalize cname,mx,ns records with dots to be consistent with our config format.
 	if r.Type == "ALIAS" || r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
 		if r.Content != "." {
@@ -144,31 +143,28 @@ func (r record) nativeToRecord(domain string) (*models.RecordConfig, error) {
 		}
 	}
 
-	rc := &models.RecordConfig{
-		Type:         "",
-		TTL:          r.TTL,
-		MxPreference: r.Priority,
-		SrvPriority:  r.Priority,
-		Original:     r,
-	}
-	rc.SetLabelFromFQDN(r.Name, domain)
-
+	label := dc.ToShort(r.Name)
+	var rc *models.RecordConfig
 	var err error
+	ttl := r.TTL
 	switch r.Type {
 	case "ALIAS":
-		rc.Type = r.Type
-		err = rc.SetTarget(r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
 	case "NULLMX":
-		err = rc.PopulateFromString("MX", "0 .", domain)
+		rc, err = dc.NewRecordConfig(label, ttl, "MX", 0, ".")
 	case "MX":
-		err = rc.SetTargetMX(uint16(r.Priority), r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Priority, r.Content)
 	case "PTR":
-		rc.Type = r.Type
-		err = rc.SetTarget(r.Content + ".")
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content+".")
 	case "SRV":
-		err = rc.SetTargetSRVPriorityString(uint16(r.Priority), r.Content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
 	default:
-		err = rc.PopulateFromString(r.Type, r.Content, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
@@ -177,14 +173,15 @@ func recordToNative(rc *models.RecordConfig) *record {
 	record := &record{
 		Name:    rc.NameFQDN,
 		Type:    rc.Type,
-		Content: strings.TrimSuffix(rc.GetTargetCombined(), "."),
+		Content: strings.TrimSuffix(rc.GetRDATA().String(), "."),
 		TTL:     rc.TTL,
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "ALIAS", "CAA", "CNAME", "DNSKEY", "DS", "NS", "NSEC", "NSEC3", "NSEC3PARAM", "PTR", "RRSIG", "SSHFP", "TSLA":
-		// Nothing special.
+	switch rc.Type {
 	case "TXT":
+		// TODO(tlim): I think all of this can be replaced by:
+		// record.Content = rc.AsTXT().String()
+
 		// TODO(tlim): Move this to a function with unit tests.
 		txtStrings := make([]string, rc.GetTargetTXTSegmentCount())
 		copy(txtStrings, rc.GetTargetTXTSegmented())
@@ -196,17 +193,19 @@ func recordToNative(rc *models.RecordConfig) *record {
 
 		record.Content = strings.Join(txtStrings, " ")
 	case "MX":
-		record.Priority = rc.MxPreference
-		record.Content = strings.TrimSuffix(rc.GetTargetField(), ".")
+		mx := rc.AsMX()
+		record.Priority = mx.Preference
+		record.Content = strings.TrimSuffix(mx.Mx, ".")
 		if record.Content == "" {
 			record.Type = "NULLMX"
 			record.Priority = 10
 		}
 	case "SRV":
-		record.Priority = rc.SrvPriority
-		record.Content = fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, strings.TrimSuffix(rc.GetTargetField(), "."))
+		srv := rc.AsSRV()
+		record.Priority = srv.Priority
+		record.Content = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, strings.TrimSuffix(srv.Target, "."))
 	default:
-		log.Printf("hosting.de rtype %v unimplemented", rc.Type)
+		// no-op
 	}
 
 	return record

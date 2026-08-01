@@ -33,10 +33,10 @@ func (c Change) String() string {
 		fmt.Fprint(b, "    Hints=OnlyTTL\n", c.Key)
 	}
 	if len(c.Old) != 0 {
-		fmt.Fprintf(b, "    old=%v\n", c.Old)
+		fmt.Fprintf(b, "    old=%v\n", c.Old.StringEach())
 	}
 	if len(c.New) != 0 {
-		fmt.Fprintf(b, "    new=%v\n", c.New)
+		fmt.Fprintf(b, "    new=%v\n", c.New.StringEach())
 	}
 	fmt.Fprintf(b, "    msg=%q\n", c.Msgs)
 

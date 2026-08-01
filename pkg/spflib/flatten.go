@@ -121,10 +121,24 @@ func (s *SPFRecord) Flatten(spec string) *SPFRecord {
 			// flatten child recursively
 			flattenedChild := p.IncludeRecord.Flatten(spec)
 			// include their parts (skipping final all term)
-			newRec.Parts = append(newRec.Parts, flattenedChild.Parts[:len(flattenedChild.Parts)-1]...)
+			parts := flattenedChild.Parts
+			if n := len(parts); n > 0 && isAllMechanism(parts[n-1].Text) {
+				parts = parts[:n-1]
+			}
+			newRec.Parts = append(newRec.Parts, parts...)
 		}
 	}
 	return newRec
+}
+
+func isAllMechanism(text string) bool {
+	if text == "" {
+		return false
+	}
+	if qualifiers[text[0]] {
+		text = text[1:]
+	}
+	return strings.EqualFold(text, "all")
 }
 
 func matchesFlatSpec(spec, fqdn string) bool {

@@ -8,15 +8,16 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/fatih/color"
 	"github.com/nrdcg/goinwx"
 	"github.com/pquerna/otp/totp"
 	"golang.org/x/net/idna"
-
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 /*
@@ -198,14 +199,12 @@ func newInwxDsp(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 
 // makeNameserverRecordRequest is a helper function used to convert a RecordConfig to an INWX NS Record Request.
 func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinwx.NameserverRecordRequest {
-	content := rec.GetTargetField()
 
 	req := &goinwx.NameserverRecordRequest{
-		Domain:  domain,
-		Type:    rec.Type,
-		Content: content,
-		Name:    rec.GetLabel(),
-		TTL:     int(rec.TTL),
+		Domain: domain,
+		Type:   rec.Type,
+		Name:   rec.GetLabel(),
+		TTL:    int(rec.TTL),
 	}
 
 	switch rType := rec.Type; rType {
@@ -216,24 +215,41 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 	   Records with empty targets (i.e., records with target ".")
 	   are allowed.
 	*/
-	case "CNAME", "NS", "ALIAS":
+	case "CNAME":
+		f := rec.AsCNAME()
+		content := f.Target
+		req.Content = content[:len(content)-1]
+	case "NS":
+		f := rec.AsNS()
+		content := f.Ns
+		req.Content = content[:len(content)-1]
+	case "ALIAS":
+		f := rec.AsALIAS()
+		content := f.Target
 		req.Content = content[:len(content)-1]
 	case "MX":
-		req.Priority = int(rec.MxPreference)
+		f := rec.AsMX()
+		req.Priority = int(f.Preference)
+		content := f.Mx
 		if content == "." {
 			req.Content = content
 		} else {
 			req.Content = content[:len(content)-1]
 		}
 	case "SRV":
-		req.Priority = int(rec.SrvPriority)
+		f := rec.AsSRV()
+		req.Priority = int(f.Priority)
+		content := f.Target
 		if content == "." {
-			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content)
+			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content)
 		} else {
-			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content[:len(content)-1])
+			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content[:len(content)-1])
 		}
+	case "TXT":
+		req.Content = rec.GetTargetTXTJoined()
+
 	default:
-		req.Content = rec.GetTargetCombined()
+		req.Content = rec.GetRDATA().String()
 	}
 
 	return req
@@ -260,7 +276,11 @@ func (api *inwxAPI) deleteRecord(RecordID string) error {
 
 // isNullMX checks if a record is a null MX record.
 func isNullMX(rec *models.RecordConfig) bool {
-	return rec.Type == "MX" && rec.MxPreference == 0 && rec.GetTargetField() == "."
+	if rec.TypeNum != dnsv2.TypeMX {
+		return false
+	}
+	f := rec.AsMX()
+	return f.Preference == 0 && f.Mx == "."
 }
 
 // AutoDnssecToggle enables and disables AutoDNSSEC for INWX domains.
@@ -397,7 +417,7 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 		return nil, err
 	}
 
-	records := []*models.RecordConfig{}
+	records := models.Records{}
 
 	for _, record := range info.Records {
 		if record.Type == "SOA" {
@@ -429,23 +449,24 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 			}
 		}
 
-		rc := &models.RecordConfig{
-			TTL:      uint32(record.TTL),
-			Original: record,
-		}
-		rc.SetLabelFromFQDN(record.Name, domain)
+		label := dc.ToShort(record.Name)
+		ttl := uint32(record.TTL)
 
+		var rc *models.RecordConfig
 		switch rType := record.Type; rType {
 		case "MX":
-			err = rc.SetTargetMX(uint16(record.Priority), record.Content)
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
 		case "SRV":
-			err = rc.SetTargetSRVPriorityString(uint16(record.Priority), record.Content)
+			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content,
+				nrc.Flags{SrvWeirdSplit: true})
 		default:
-			err = rc.PopulateFromString(rType, record.Content, domain)
+			rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content,
+				nrc.Flags{TxtDontParse: true})
 		}
 		if err != nil {
 			return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
 		}
+		rc.Original = record
 
 		records = append(records, rc)
 	}

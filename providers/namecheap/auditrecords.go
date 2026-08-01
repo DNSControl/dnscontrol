@@ -15,5 +15,9 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes)
 
+	a.Add("TXT", rejectif.TxtIsEmpty)
+
+	a.Add("TXT", rejectif.TxtStartsOrEndsWithSpaces)
+
 	return a.Audit(records)
 }

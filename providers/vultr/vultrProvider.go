@@ -319,46 +319,44 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		name = ""
 	}
 
-	data := rc.GetTargetField()
-
-	// Vultr does not use a period suffix for CNAME, NS, MX or SRV.
-	data = strings.TrimSuffix(data, ".")
-
-	priority := 0
-
-	if rc.Type == "MX" {
-		priority = int(rc.MxPreference)
-	}
-	if rc.Type == "SRV" {
-		priority = int(rc.SrvPriority)
-	}
-
 	r := &govultr.DomainRecord{
-		ID:       vultrID,
-		Type:     rc.Type,
-		Name:     name,
-		Data:     data,
-		TTL:      int(rc.TTL),
-		Priority: priority,
+		ID:   vultrID,
+		Type: rc.Type,
+		Name: name,
+		TTL:  int(rc.TTL),
 	}
+
 	switch rtype := rc.Type; rtype { // #rtype_variations
+	case "CNAME":
+		r.Data = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case "NS":
+		r.Data = strings.TrimSuffix(rc.AsNS().Ns, ".")
 	case "MX":
-		if data == "" {
+		f := rc.AsMX()
+		r.Priority = int(f.Preference)
+		r.Data = strings.TrimSuffix(rc.AsMX().Mx, ".")
+		if r.Data == "" {
 			// Vultr represents a null MX (RFC 7505) as a literal ".".
 			r.Data = "."
 		}
 	case "SRV":
-		if data == "" {
-			data = "."
+		f := rc.AsSRV()
+		r.Priority = int(f.Priority)
+		target := strings.TrimSuffix(f.Target, ".")
+		if target == "" {
+			target = "."
 		}
-		r.Data = fmt.Sprintf("%v %v %s", rc.SrvWeight, rc.SrvPort, data)
+		r.Data = fmt.Sprintf("%v %v %s", f.Weight, f.Port, target)
 	case "CAA":
-		r.Data = fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		r.Data = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	case "SSHFP":
-		r.Data = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		f := rc.AsSSHFP()
+		r.Data = fmt.Sprintf("%d %d %s", f.Algorithm, f.Type, f.FingerPrint)
 	case "TXT":
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
+		r.Data = rc.GetRDATA().String()
 	}
 
 	return r

@@ -41,7 +41,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 }
 
 func nonNullValue(v *models.RecordConfig) error {
-	if len(v.GetTargetField()) != 0 {
+	if v.GetRDATA().String() == "" {
 		return fmt.Errorf("%s rtype value should be empty", v.Type)
 	}
 
