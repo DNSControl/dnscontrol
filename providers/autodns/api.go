@@ -43,6 +43,26 @@ var (
 	defaultRetryMax  = 4
 )
 
+const otpHeader = "X-Domainrobot-2FA-Token"
+
+// requestHeaders returns the headers for a single request. defaultHeaders is
+// shared between concurrent requests, so it is cloned rather than modified.
+func (api *autoDNSProvider) requestHeaders() (http.Header, error) {
+	token, err := api.otp()
+	if err != nil {
+		return nil, err
+	}
+
+	if token == "" {
+		return api.defaultHeaders, nil
+	}
+
+	headers := api.defaultHeaders.Clone()
+	headers.Set(otpHeader, token)
+
+	return headers, nil
+}
+
 func (api *autoDNSProvider) request(method string, requestPath string, data any) ([]byte, error) {
 	var retryCounter = 0
 
@@ -51,19 +71,27 @@ func (api *autoDNSProvider) request(method string, requestPath string, data any)
 	requestURL := api.baseURL
 	requestURL.Path = api.baseURL.Path + requestPath
 
-	request := &http.Request{
-		URL:    &requestURL,
-		Header: api.defaultHeaders,
-		Method: method,
-	}
-
+	var body []byte
 	if data != nil {
-		body, _ := json.Marshal(data)
-		buffer := bytes.NewBuffer(body)
-		request.Body = io.NopCloser(buffer)
+		body, _ = json.Marshal(data)
 	}
 
 	for {
+		headers, err := api.requestHeaders()
+		if err != nil {
+			return nil, err
+		}
+
+		request := &http.Request{
+			URL:    &requestURL,
+			Header: headers,
+			Method: method,
+		}
+
+		if data != nil {
+			request.Body = io.NopCloser(bytes.NewBuffer(body))
+		}
+
 		response, err := client.Do(request)
 		if err != nil {
 			return nil, err
@@ -196,7 +224,10 @@ func (api *autoDNSProvider) getZones() ([]string, error) {
 		},
 	}
 
-	rawCountZoneResponse, _ := api.request("POST", "zone/_search", countZoneRequest)
+	rawCountZoneResponse, err := api.request("POST", "zone/_search", countZoneRequest)
+	if err != nil {
+		return nil, err
+	}
 
 	var countZoneResponse JSONResponseDataZone
 	if err := json.Unmarshal(rawCountZoneResponse, &countZoneResponse); err != nil {

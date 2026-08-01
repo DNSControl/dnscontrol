@@ -43,52 +43,56 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 
 	switch rc.Type {
 	case "MX":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.MxPreference)
+		f := rc.AsMX()
+		r.Priority = intPtr(f.Preference)
+		r.Content = trimDot(f.Mx)
+		// r.Content = trimDot(rc.GetTargetField())
+		// r.Priority = intPtr(rc.MxPreference)
 	case "SRV":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.SrvPriority)
-		r.Weight = intPtr(rc.SrvWeight)
-		r.Port = intPtr(rc.SrvPort)
+		f := rc.AsSRV()
+		r.Priority = intPtr(f.Priority)
+		r.Weight = intPtr(f.Weight)
+		r.Port = intPtr(f.Port)
+		r.Content = trimDot(f.Target)
 	case "TXT":
 		r.Content = rc.GetTargetTXTJoined()
 	case "CNAME":
-		r.Content = trimDot(rc.GetTargetField())
+		f := rc.AsCNAME()
+		r.Content = trimDot(f.Target)
 	default:
 		r.Content = rc.GetTargetField()
+		// TODO(tlim): Try this instead.
+		//r.Content = rc.GetRDATA().String()
 	}
 
 	return r, nil
 }
 
 // toRecordConfig converts a WebSupport native record into a dnscontrol RecordConfig.
-func toRecordConfig(domain string, n nativeRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     n.Type,
-		TTL:      n.TTL,
-		Original: n,
-	}
-	rc.SetLabelFromFQDN(n.Name, domain)
-
+func toRecordConfig(dc *models.DomainConfig, n nativeRecord) (*models.RecordConfig, error) {
 	content := n.Content
 	if fqdnTypes[n.Type] {
 		content = ensureDot(content)
 	}
 
+	label := dc.LabelFromFQDNNoDot(n.Name)
+	ttl := n.TTL
+	var rc *models.RecordConfig
 	var err error
 	switch n.Type {
 	case "MX":
-		err = rc.SetTargetMX(derefInt(n.Priority), content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), content)
 	case "SRV":
-		err = rc.SetTargetSRV(derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
 	case "TXT":
-		err = rc.SetTargetTXT(n.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, n.Content)
 	default:
-		err = rc.SetTarget(content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, content)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("WEBSUPPORT: %s record %q: %w", n.Type, n.Name, err)
 	}
+	rc.Original = n
 	return rc, nil
 }
 

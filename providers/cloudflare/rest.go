@@ -10,7 +10,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/cloudflare/cloudflare-go"
 	"golang.org/x/net/idna"
 )
@@ -315,7 +314,7 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 
 	switch rec.Type {
 	case "TXT":
-		r.Content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+		r.Content = rec.GetRDATA().String()
 	case "SRV":
 		r.Data = cfSrvData(rec)
 		r.Name = rec.GetLabelFQDN()

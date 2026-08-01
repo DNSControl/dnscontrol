@@ -1,4 +1,4 @@
-# How to "Modernize" a provider
+t # How to "Modernize" a provider
 
 
 "Modernize" means adopting the new RecordConfig v3 structs, factories, etc.
@@ -26,7 +26,7 @@ ovhProvider.go:	if err := rec.PopulateFromString(rtype, r.Target, origin); err !
 
 ProTip: Run the intergration tests after each small change. That
 way if something breaks, you know it was the most recent change.
-
+G
 ProTip: Sometimes its useful to make the change in two steps. First, write
 code that calculates something the old and new ways, compare the results
 to make sure they're the same.

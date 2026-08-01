@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -111,12 +110,27 @@ func (c *ovhProvider) createRecordFunc(rc *models.RecordConfig, fqdn string) fun
 		if nativeType, ok := rc.Metadata["create_ovh_native_record"]; ok {
 			recordType = nativeType
 		}
+
+		var target string
+		switch recordType {
+		case "TXT", "DKIM", "DMARC":
+			// OVH stores and returns DKIM/DMARC targets as raw, unquoted,
+			// un-chunked text (see nativeToRecord). GetRDATA().String()
+			// would render values over 255 bytes as multiple quoted
+			// segments ("chunk1" "chunk2"), which OVH rejects once the
+			// outer quotes are stripped in adaptNativeRecord.
+			target = rc.GetTargetTXTJoined()
+		default:
+			target = rc.GetRDATA().String()
+		}
+
 		record := Record{
-			SubDomain: dnsutilv1.TrimDomainName(rc.GetLabelFQDN(), fqdn),
+			SubDomain: rc.GetLabel(),
 			FieldType: recordType,
-			Target:    rc.GetTargetCombined(),
+			Target:    target,
 			TTL:       rc.TTL,
 		}
+
 		if record.SubDomain == "@" {
 			record.SubDomain = ""
 		}
@@ -148,10 +162,20 @@ func (c *ovhProvider) updateRecordFunc(old *Record, rc *models.RecordConfig, fqd
 			recordType = old.FieldType
 		}
 
+		var target string
+		switch recordType {
+		case "TXT", "DKIM", "DMARC":
+			// See createRecordFunc: DKIM/DMARC must be sent as raw,
+			// unquoted, un-chunked text, matching what OVH returns.
+			target = rc.GetTargetTXTJoined()
+		default:
+			target = rc.GetRDATA().String()
+		}
+
 		record := Record{
 			SubDomain: rc.GetLabel(),
 			FieldType: recordType,
-			Target:    rc.GetTargetCombined(),
+			Target:    target,
 			TTL:       rc.TTL,
 			Zone:      fqdn,
 			ID:        old.ID,
@@ -180,11 +204,6 @@ func (c *ovhProvider) updateRecordFunc(old *Record, rc *models.RecordConfig, fqd
 
 // adaptNativeRecord adapts the record for native OVH types such as DMARC or DKIM.
 func adaptNativeRecord(r *Record) error {
-	// OVH needs DMARC and DKIM to be "unquoted"
-	if r.FieldType == "DMARC" || r.FieldType == "DKIM" {
-		// make sure target is fully unquoted to prevent "Invalid subfield found in DMARC" error
-		r.Target = models.StripQuotes(r.Target)
-	}
 	// DMARC record can be created only for subdomains starting with`_dmarc`
 	if r.FieldType == "DMARC" && !strings.HasPrefix(r.SubDomain, "_dmarc") {
 		return fmt.Errorf("native OVH DMARC record requires subdomain to always start with _dmarc, %s given", r.SubDomain)

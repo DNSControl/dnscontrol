@@ -148,22 +148,23 @@ func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfi
 	label := dc.LabelFromShort(r.Name)
 	ttl := uint32(r.TTL)
 
-	nFlags := nrc.Flags{TargetIsFqdnNoDot: true, SrvWeirdSplit: true}
-	npFlags := nrc.Flags{TargetIsFqdnNoDot: true}
-
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.RecordType; rtype {
 	case "CNAME":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.MXPriority, r.Value, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.MXPriority, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV", "HTTPS", "SVCB":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Value, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true, SrvWeirdSplit: true})
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value, npFlags)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable %s record received from vercel: %w", r.RecordType, err)
