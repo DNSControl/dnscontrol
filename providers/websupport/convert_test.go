@@ -92,7 +92,7 @@ func TestRoundTrip(t *testing.T) {
 			if err != nil {
 				t.Fatalf("toRecordConfig: %v", err)
 			}
-			if got, want := rc2.String(), tc.rc.String(); got != want {
+			if got, want := rc2.GetRDATA().String(), tc.rc.GetRDATA().String(); got != want {
 				t.Errorf("round-trip target = %q, want %q", got, want)
 			}
 			if rc2.Type != tc.rc.Type {
