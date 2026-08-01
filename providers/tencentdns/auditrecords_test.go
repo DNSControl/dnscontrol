@@ -51,13 +51,11 @@ func TestAuditRecordsValidatesWeight(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			rc := &models.RecordConfig{
-				Type: "A",
-				Metadata: map[string]string{
-					metaRecordWeight: tc.weight,
-				},
+			dc := models.MustNewDomainConfig("example.com")
+			rc := dc.MustNewRecordConfig("@", 0, "A", "1.2.3.4")
+			rc.Metadata = map[string]string{
+				metaRecordWeight: tc.weight,
 			}
-			rc.SetTarget("1.2.3.4")
 
 			errs := AuditRecords(models.Records{rc})
 			if tc.wantError {

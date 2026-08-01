@@ -7,35 +7,33 @@ import (
 )
 
 func makeRC(rtype, label, target string) *models.RecordConfig {
-	rc := &models.RecordConfig{Type: rtype}
-	rc.SetLabel(label, "example.com")
+	dc := models.MustNewDomainConfig("example.com")
 	switch rtype {
 	case "TXT":
-		_ = rc.SetTargetTXT(target)
+		return dc.MustNewRecordConfig(label, 0, rtype, target)
 	case "MX":
-		_ = rc.SetTargetMX(10, target)
+		return dc.MustNewRecordConfig(label, 0, rtype, 10, target)
 	case "SRV":
-		_ = rc.SetTargetSRV(0, 0, 443, target)
+		return dc.MustNewRecordConfig(label, 0, rtype, 0, 0, 443, target)
 	default:
-		_ = rc.SetTarget(target)
+		return dc.MustNewRecordConfig(label, 0, rtype, target)
 	}
-	return rc
 }
 
 func TestAuditRecords(t *testing.T) {
 	tests := []struct {
 		name      string
-		records   []*models.RecordConfig
+		records   models.Records
 		wantCount int
 	}{
 		{
 			name:      "empty",
-			records:   []*models.RecordConfig{},
+			records:   models.Records{},
 			wantCount: 0,
 		},
 		{
 			name: "supported types are fine",
-			records: []*models.RecordConfig{
+			records: models.Records{
 				makeRC("A", "@", "1.2.3.4"),
 				makeRC("AAAA", "@", "::1"),
 				makeRC("CNAME", "www", "example.net."),
@@ -47,17 +45,17 @@ func TestAuditRecords(t *testing.T) {
 		},
 		{
 			name:      "NS is rejected (API silently drops it)",
-			records:   []*models.RecordConfig{makeRC("NS", "deleg", "ns1.example.net.")},
+			records:   models.Records{makeRC("NS", "deleg", "ns1.example.net.")},
 			wantCount: 1,
 		},
 		{
 			name:      "empty TXT is rejected",
-			records:   []*models.RecordConfig{makeRC("TXT", "@", "")},
+			records:   models.Records{makeRC("TXT", "@", "")},
 			wantCount: 1,
 		},
 		{
 			name:      "SRV with null target is rejected",
-			records:   []*models.RecordConfig{makeRC("SRV", "_sip._tcp", ".")},
+			records:   models.Records{makeRC("SRV", "_sip._tcp", ".")},
 			wantCount: 1,
 		},
 	}

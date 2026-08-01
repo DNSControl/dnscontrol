@@ -128,6 +128,12 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		// no-op
 	case privatetypes.TypeLUA:
 		// no-op
+	case privatetypes.TypeMIKROTIKFORWARDER:
+		// no-op
+	case privatetypes.TypeMIKROTIKFWD:
+		// no-op
+	case privatetypes.TypeMIKROTIKNXDOMAIN:
+		// no-op
 	case privatetypes.TypeNETLIFY:
 		// no-op
 	case privatetypes.TypeNETLIFYV6:
@@ -210,14 +216,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 
-	case privatetypes.TypeMIKROTIKFWD:
-		rd, err := privatetypesrdata.MakeMIKROTIKFWD(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case privatetypes.TypeMIKROTIKNXDOMAIN:
-		rd, err := privatetypesrdata.MakeMIKROTIKNXDOMAIN(origin, nil, isEnabled)
-		errorChk(err)
-		rc.SetRDATA(rd)
 	case dnsv2.TypeMX:
 		rd, err := MakeMX(origin, nil, isEnabled, rc.MxPreference, rc.GetTargetField())
 		errorChk(err)

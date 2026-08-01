@@ -2,7 +2,6 @@ package powerdns
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -48,20 +47,39 @@ func toRecordConfig(dc *models.DomainConfig, r zones.Record, ttl int, name strin
 	return rc, nil
 }
 
+/*
+
+dnsv2 doesn't allow vendor-specifc SVCB values like "auto". Therefore, we store the real params string in Metadata and store no params in the SVCB value.
+
+*/
+
 func newPowerDNSSVCBAutoHintRecord(dc *models.DomainConfig, label string, ttl uint32, rtype, content string) (*models.RecordConfig, error) {
+	// fields := strings.Fields(content)
+	// if len(fields) < 2 {
+	// 	return nil, fmt.Errorf("could not parse PowerDNS SVCB record: %s", content)
+	// }
+	// priority, err := strconv.ParseUint(fields[0], 10, 16)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("could not parse PowerDNS SVCB priority %q: %w", fields[0], err)
+	// }
+	// rc, err := dc.NewRecordConfig(label, ttl, rtype, uint16(priority), fields[1], []svcbv2.Pair{})
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// rc.Metadata["powerdnsOriginalSVCBParams"] = strings.Join(fields[2:], " ")
+	// return rc, nil
+	//return dc.NewRecordConfigParse(label, ttl, rtype, content)
+
 	fields := strings.Fields(content)
 	if len(fields) < 2 {
 		return nil, fmt.Errorf("could not parse PowerDNS SVCB record: %s", content)
 	}
-	priority, err := strconv.ParseUint(fields[0], 10, 16)
-	if err != nil {
-		return nil, fmt.Errorf("could not parse PowerDNS SVCB priority %q: %w", fields[0], err)
-	}
-	rc, err := dc.NewRecordConfig(label, ttl, rtype, uint16(priority), fields[1], []svcbv2.Pair{})
+	rc, err := dc.NewRecordConfig(label, ttl, rtype, fields[0], fields[1], []svcbv2.Pair{})
 	if err != nil {
 		return nil, err
 	}
-	rc.SvcParams = strings.Join(fields[2:], " ")
+	rc.Metadata["powerdnsOriginalSVCBParams"] = strings.Join(fields[2:], " ")
+
 	return rc, nil
 }
 

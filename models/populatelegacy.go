@@ -50,6 +50,8 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(fmt.Sprintf("%s,%s", rd.When, rd.Then))
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
 		// no-op
+	case privatetypesrdata.CLOUDNSWR:
+		rc.SetTarget(rd.Target)
 	case dnsrdatav2.CNAME:
 		rc.SetTarget(rd.Target)
 
@@ -71,8 +73,10 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.SetTarget(rd.LuaPayload)
 
 	case privatetypesrdata.MIKROTIKFWD:
-		rc.SetTarget(rd.ForwardTo)
+		// no-op
 	case privatetypesrdata.MIKROTIKNXDOMAIN:
+		// no-op
+	case privatetypesrdata.MIKROTIKFORWARDER:
 		// no-op
 	case dnsrdatav2.MX:
 		rc.MxPreference = rd.Preference

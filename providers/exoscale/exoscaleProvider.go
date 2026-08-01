@@ -6,16 +6,15 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
-	egoscale "github.com/exoscale/egoscale/v3"
-	"github.com/exoscale/egoscale/v3/credentials"
-
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	egoscale "github.com/exoscale/egoscale/v3"
+	"github.com/exoscale/egoscale/v3/credentials"
 )
 
 type exoscaleProvider struct {
@@ -115,7 +114,7 @@ func (provider *exoscaleProvider) GetZoneRecords(domainConfig *models.DomainConf
 
 	existingRecords := make([]*models.RecordConfig, 0, len(records.DNSDomainRecords))
 	for i := range records.DNSDomainRecords {
-		recordConfig, err := nativeToRecord(&records.DNSDomainRecords[i], domainName)
+		recordConfig, err := nativeToRecord(&records.DNSDomainRecords[i], domainConfig)
 		if err != nil {
 			return nil, err
 		}
@@ -129,7 +128,7 @@ func (provider *exoscaleProvider) GetZoneRecords(domainConfig *models.DomainConf
 
 // nativeToRecord converts an Exoscale DNS record to a RecordConfig.
 // Returns nil, nil for record types that should be silently skipped (SOA, NS, TXT ALIAS mirrors).
-func nativeToRecord(record *egoscale.DNSDomainRecord, domainName string) (*models.RecordConfig, error) {
+func nativeToRecord(record *egoscale.DNSDomainRecord, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	recordContent := record.Content
 
 	if record.Type == "SOA" || record.Type == "NS" {
@@ -152,31 +151,24 @@ func nativeToRecord(record *egoscale.DNSDomainRecord, domainName string) (*model
 		return nil, nil
 	}
 
-	recordConfig := &models.RecordConfig{
-		Original: record,
-	}
-	if record.Ttl != 0 {
-		recordConfig.TTL = uint32(record.Ttl)
-	}
-	recordConfig.SetLabel(record.Name, domainName)
+	ttl := uint32(record.Ttl)
 
+	var recordConfig *models.RecordConfig
 	var err error
 	switch record.Type {
 	case "ALIAS", "URL":
-		recordConfig.Type = string(record.Type)
-		_ = recordConfig.SetTarget(recordContent)
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
 	case "MX":
-		var priority uint16
-		if record.Priority != 0 {
-			priority = uint16(record.Priority)
-		}
-		err = recordConfig.SetTargetMX(priority, recordContent)
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), record.Priority, recordContent)
+	case "TXT":
+		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
 	default:
-		err = recordConfig.PopulateFromString(string(record.Type), recordContent, domainName)
+		recordConfig, err = dc.NewRecordConfigParse(record.Name, ttl, string(record.Type), recordContent)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from exoscale: %w", err)
 	}
+	recordConfig.Original = record
 
 	return recordConfig, nil
 }
@@ -191,36 +183,41 @@ func (provider *exoscaleProvider) GetZoneRecordsCorrections(
 		return nil, 0, err
 	}
 
-	toReport, toCreate, toDelete, toUpdate, actualChangeCount, err := diff.NewCompat(domainConfig).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, domainConfig, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, deletionCorrelation := range toDelete {
-		record := deletionCorrelation.Existing.Original.(*egoscale.DNSDomainRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: deletionCorrelation.String(),
-			F:   provider.deleteRecordFunc(record.ID, domain.ID),
-		})
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, creationCorrelation := range toCreate {
-		recordConfig := creationCorrelation.Desired
-		corrections = append(corrections, &models.Correction{
-			Msg: creationCorrelation.String(),
-			F:   provider.createRecordFunc(recordConfig, domain.ID),
-		})
-	}
+		case diff2.CREATE:
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.createRecordFunc(change.New[0], domain.ID),
+			})
 
-	for _, updateCorrelation := range toUpdate {
-		oldc := updateCorrelation.Existing.Original.(*egoscale.DNSDomainRecord)
-		newc := updateCorrelation.Desired
-		corrections = append(corrections, &models.Correction{
-			Msg: updateCorrelation.String(),
-			F:   provider.updateRecordFunc(oldc, newc, domain.ID),
-		})
+		case diff2.DELETE:
+			record := change.Old[0].Original.(*egoscale.DNSDomainRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.deleteRecordFunc(record.ID, domain.ID),
+			})
+
+		case diff2.CHANGE:
+			oldc := change.Old[0].Original.(*egoscale.DNSDomainRecord)
+			newc := change.New[0]
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   provider.updateRecordFunc(oldc, newc, domain.ID),
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	return corrections, actualChangeCount, nil
@@ -231,27 +228,21 @@ func (provider *exoscaleProvider) createRecordFunc(
 	recordConfig *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetTargetCombined()
 		name := recordConfig.GetLabel()
 		var prio int64
 
-		if recordConfig.Type == "MX" {
-			target = recordConfig.GetTargetField()
-
-			if recordConfig.MxPreference != 0 {
-				prio = int64(recordConfig.MxPreference)
-			}
-		}
-
-		if recordConfig.Type == "SRV" {
-			// API wants priority as a separate argument, here we will strip it from combined target.
-			sp := strings.Split(target, " ")
-			target = strings.Join(sp[1:], " ")
-			p, err := strconv.ParseInt(sp[0], 10, 64)
-			if err != nil {
-				return err
-			}
-			prio = p
+		var target string
+		switch recordConfig.Type {
+		case "MX":
+			f := recordConfig.AsMX()
+			target = f.Mx
+			prio = int64(f.Preference)
+		case "SRV":
+			f := recordConfig.AsSRV()
+			prio = int64(f.Priority)
+			target = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
+		default:
+			target = recordConfig.GetRDATA().String()
 		}
 
 		if recordConfig.Type == "NS" && (name == "@" || name == "") {
@@ -265,9 +256,7 @@ func (provider *exoscaleProvider) createRecordFunc(
 			Priority: prio,
 		}
 
-		if recordConfig.TTL != 0 {
-			record.Ttl = int64(recordConfig.TTL)
-		}
+		record.Ttl = int64(recordConfig.TTL)
 
 		ctx := context.Background()
 		op, err := provider.client.CreateDNSDomainRecord(ctx, domainID, record)
@@ -298,41 +287,34 @@ func (provider *exoscaleProvider) deleteRecordFunc(recordID, domainID egoscale.U
 // Returns a function that can be invoked to update a record in a zone.
 func (provider *exoscaleProvider) updateRecordFunc(
 	record *egoscale.DNSDomainRecord,
-	recordConfig *models.RecordConfig,
+	rc *models.RecordConfig,
 	domainID egoscale.UUID) func() error {
 	return func() error {
-		target := recordConfig.GetTargetCombined()
-		name := recordConfig.GetLabel()
+		name := rc.GetLabel()
 
-		if recordConfig.Type == "MX" {
-			target = recordConfig.GetTargetField()
-
-			if recordConfig.MxPreference != 0 {
-				record.Priority = int64(recordConfig.MxPreference)
-			}
+		var target string
+		switch rc.Type {
+		case "MX":
+			mx := rc.GetRDATA().(dnsrdatav2.MX)
+			target = mx.Mx
+			record.Priority = int64(mx.Preference)
+		case "SRV":
+			// API wants priority as separate argument. The target contains the weight, port, target.
+			srv := rc.GetRDATA().(dnsrdatav2.SRV)
+			target = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, srv.Target)
+			record.Priority = int64(srv.Priority)
+		default:
+			target = rc.GetRDATA().String()
 		}
 
-		if recordConfig.Type == "SRV" {
-			// API wants priority as separate argument, here we will strip it from combined target.
-			sp := strings.Split(target, " ")
-			target = strings.Join(sp[1:], " ")
-			p, err := strconv.ParseInt(sp[0], 10, 64)
-			if err != nil {
-				return err
-			}
-			record.Priority = p
-		}
-
-		if recordConfig.Type == "NS" && (name == "@" || name == "") {
+		if rc.Type == "NS" && (name == "@" || name == "") {
 			name = "*"
 		}
 
 		record.Name = name
-		record.Type = egoscale.DNSDomainRecordType(recordConfig.Type)
+		record.Type = egoscale.DNSDomainRecordType(rc.Type)
 		record.Content = target
-		if recordConfig.TTL != 0 {
-			record.Ttl = int64(recordConfig.TTL)
-		}
+		record.Ttl = int64(rc.TTL)
 
 		ctx := context.Background()
 		op, err := provider.client.UpdateDNSDomainRecord(ctx, domainID, record.ID, egoscale.UpdateDNSDomainRecordRequest{
@@ -372,10 +354,10 @@ func removeOtherNS(domainConfig *models.DomainConfig) {
 	for _, recordConfig := range domainConfig.Records {
 		if recordConfig.Type == "NS" {
 			// apex NS inside exoscale are expected.
-			if recordConfig.GetLabelFQDN() == domainConfig.Name && defaultNSSUffix(recordConfig.GetTargetField()) {
+			if recordConfig.GetLabelFQDN() == domainConfig.Name && defaultNSSUffix(recordConfig.AsNS().Ns) {
 				continue
 			}
-			printer.Printf("Warning: exoscale.com(.io, .ch, .net) does not allow NS records to be modified. %s will not be added.\n", recordConfig.GetTargetField())
+			printer.Printf("Warning: exoscale.com(.io, .ch, .net) does not allow NS records to be modified. %s will not be added.\n", recordConfig.AsNS().Ns)
 			continue
 		}
 		recordConfigs = append(recordConfigs, recordConfig)

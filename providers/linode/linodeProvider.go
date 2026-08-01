@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
 
@@ -147,7 +147,7 @@ func (api *linodeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		return nil, fmt.Errorf("'%s' not a zone in Linode account", domain)
 	}
 
-	return api.getRecordsForDomain(domainID, domain)
+	return api.getRecordsForDomain(domainID, dc)
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -170,75 +170,107 @@ func (api *linodeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		return nil, 0, fmt.Errorf("'%s' not a zone in Linode account", dc.Name)
 	}
 
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		id := m.Existing.Original.(*domainRecord).ID
-		if id == 0 { // Skip ID 0, these are the default nameservers always present
-			continue
+	prefixedCorrections := make(map[int]struct{})
+	postfixedCorrections := make(map[int]struct{})
+
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+
+		case diff2.CREATE:
+			req, err := toReq(dc, change.New[0])
+			if err != nil {
+				return nil, 0, err
+			}
+			j, err := json.Marshal(req)
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s: %s", change.Msgs[0], string(j)),
+				F: func() error {
+					record, err := api.createRecord(domainID, req)
+					if err != nil {
+						return err
+					}
+					// TTL isn't saved when creating a record, so we will need to modify it immediately afterwards
+					return api.modifyRecord(domainID, record.ID, req)
+				},
+			})
+
+		case diff2.DELETE:
+			id := change.Old[0].Original.(*domainRecord).ID
+			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				actualChangeCount--
+				continue
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Linode ID: %d", change.Msgs[0], id),
+				F: func() error {
+					return api.deleteRecord(domainID, id)
+				},
+			})
+
+		case diff2.CHANGE:
+			id := change.Old[0].Original.(*domainRecord).ID
+			if id == 0 { // Skip ID 0, these are the default nameservers always present
+				actualChangeCount--
+				continue
+			}
+			req, err := toReq(dc, change.New[0])
+			if err != nil {
+				return nil, 0, err
+			}
+			j, err := json.Marshal(req)
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Linode ID: %d: %s", change.Msgs[0], id, string(j)),
+				F: func() error {
+					return api.modifyRecord(domainID, id, req)
+				},
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Linode ID: %d", m.String(), id),
-			F: func() error {
-				return api.deleteRecord(domainID, id)
-			},
+
+		// Linode is strict about not setting an MX record when a null MX record is present and about not setting a null
+		// MX record when an MX record is present. Therefore, we re-sort these specific changes so they always happen
+		// first/last.
+		if len(change.Old) > 0 && change.Old[0].Type == "MX" && change.Old[0].GetRDATA().String() == "0 ." {
+			prefixedCorrections[len(corrections)-1] = struct{}{}
+		} else if len(change.New) > 0 && change.New[0].Type == "MX" && change.New[0].GetRDATA().String() == "0 ." {
+			postfixedCorrections[len(corrections)-1] = struct{}{}
 		}
-		corrections = append(corrections, corr)
 	}
-	for _, m := range create {
-		req, err := toReq(dc, m.Desired)
-		if err != nil {
-			return nil, 0, err
+
+	sort.SliceStable(corrections, func(i, j int) bool {
+		_, iPrefixed := prefixedCorrections[i]
+		_, jPrefixed := prefixedCorrections[j]
+		if iPrefixed != jPrefixed {
+			return iPrefixed
 		}
-		j, err := json.Marshal(req)
-		if err != nil {
-			return nil, 0, err
+		_, iPostfixed := postfixedCorrections[i]
+		_, jPostfixed := postfixedCorrections[j]
+		if iPostfixed != jPostfixed {
+			return jPostfixed
 		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s: %s", m.String(), string(j)),
-			F: func() error {
-				record, err := api.createRecord(domainID, req)
-				if err != nil {
-					return err
-				}
-				// TTL isn't saved when creating a record, so we will need to modify it immediately afterwards
-				return api.modifyRecord(domainID, record.ID, req)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
-	for _, m := range modify {
-		id := m.Existing.Original.(*domainRecord).ID
-		if id == 0 { // Skip ID 0, these are the default nameservers always present
-			continue
-		}
-		req, err := toReq(dc, m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-		j, err := json.Marshal(req)
-		if err != nil {
-			return nil, 0, err
-		}
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Linode ID: %d: %s", m.String(), id, string(j)),
-			F: func() error {
-				return api.modifyRecord(domainID, id, req)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+		return false
+	})
 
 	return corrections, actualChangeCount, nil
 }
 
-func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (models.Records, error) {
+func (api *linodeProvider) getRecordsForDomain(domainID int, dc *models.DomainConfig) (models.Records, error) {
 	records, err := api.getRecords(domainID)
 	if err != nil {
 		return nil, err
@@ -246,23 +278,20 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (mod
 
 	existingRecords := make([]*models.RecordConfig, len(records), len(records)+len(defaultNameServerNames))
 	for i := range records {
-		existingRecords[i], err = toRc(domain, &records[i])
+		existingRecords[i], err = toRc(dc, &records[i])
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	// Linode always has read-only NS servers, but these are not mentioned in the API response
-	// https://github.com/linode/manager/blob/edd99dc4e1be5ab8190f243c3dbf8b830716255e/src/constants.js#L184
+	// https://github.com/linode/manager/blob/6503a875f7a4e82dd8335d4ce16fcbd8ae492e21/packages/manager/src/features/Domains/DomainDetail/DomainRecords/DomainRecordsUtils.ts#L59-L125
 	for _, name := range defaultNameServerNames {
-		rc := &models.RecordConfig{
-			Type:     "NS",
-			Original: &domainRecord{},
-		}
-		rc.SetLabelFromFQDN(domain, domain)
-		if err := rc.SetTarget(name); err != nil {
+		rc, err := dc.NewRecordConfig("@", 300, "NS", name+".")
+		if err != nil {
 			return nil, err
 		}
+		rc.Original = &domainRecord{}
 
 		existingRecords = append(existingRecords, rc)
 	}
@@ -270,41 +299,37 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, domain string) (mod
 	return existingRecords, nil
 }
 
-func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          r.TTLSec,
-		MxPreference: r.Priority,
-		SrvPriority:  r.Priority,
-		SrvWeight:    r.Weight,
-		SrvPort:      r.Port,
-		CaaTag:       r.Tag,
-		Original:     r,
-	}
-	rc.SetLabel(r.Name, domain)
-
+func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(r.Name)
+	ttl := r.TTLSec
+	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
-	case "CNAME", "MX", "NS", "SRV":
-		err = rc.SetTarget(dnsutilv1.AddOrigin(r.Target+".", domain))
+	case "CNAME", "NS":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, strings.TrimSuffix(r.Target, ".")+".")
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, strings.TrimSuffix(r.Target, ".")+".")
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Weight, r.Port, strings.TrimSuffix(r.Target, ".")+".")
 	case "CAA":
 		// Linode doesn't support CAA flags and just returns the tag and value separately
-		err = rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, 0, r.Tag, r.Target)
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Target)
 	default:
-		err = rc.PopulateFromString(r.Type, r.Target, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
 
 func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest, error) {
 	req := &recordEditRequest{
-		Type:     rc.Type,
-		Name:     rc.GetLabel(),
-		Target:   rc.GetTargetField(),
-		TTL:      int(rc.TTL),
-		Priority: 0,
-		Port:     int(rc.SrvPort),
-		Weight:   int(rc.SrvWeight),
+		Type: rc.Type,
+		Name: rc.GetLabel(),
+		TTL:  int(rc.TTL),
 	}
 
 	// Linode doesn't use "@", it uses an empty name
@@ -313,39 +338,51 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 	}
 
 	// Linode uses the same property for MX and SRV priority
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "TLSA":
-		// Nothing special.
+	switch rc.Type {
 	case "MX":
-		req.Priority = int(rc.MxPreference)
-		req.Target = fixTarget(req.Target, dc.Name)
-
+		f := rc.AsMX()
+		req.Priority = new(int(f.Preference))
+		target := fixTarget(f.Mx, dc.Name)
 		// Linode doesn't use "." for a null MX record, it uses an empty name
-		if req.Target == "." {
-			req.Target = ""
+		if target == "." {
+			target = ""
 		}
+		req.Target = target
+
 	case "SRV":
-		req.Priority = int(rc.SrvPriority)
+		f := rc.AsSRV()
+		req.Priority = new(int(f.Priority))
+		req.Weight = int(f.Weight)
+		req.Port = int(f.Port)
 
 		// From softlayer provider
 		// This is to support SRV, it doesn't work yet for Linode
 		result := srvRegexp.FindStringSubmatch(req.Name)
-
 		if len(result) != 3 {
 			return nil, fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", req.Name)
 		}
-
 		serviceName, protocol := result[1], strings.ToLower(result[2])
-
 		req.Protocol = protocol
 		req.Service = serviceName
+
 		req.Name = ""
+		req.Target = f.Target
+
+	case "TXT":
+		req.Target = rc.GetTargetTXTJoined()
+
 	case "CNAME":
-		req.Target = fixTarget(req.Target, dc.Name)
+		f := rc.AsCNAME()
+		req.Target = fixTarget(f.Target, dc.Name)
+
 	case "CAA":
-		req.Tag = rc.CaaTag
+		f := rc.AsCAA()
+		req.Tag = f.Tag
+		req.Target = f.Value
+
 	default:
-		return nil, fmt.Errorf("linode.toReq rtype %q unimplemented", rc.Type)
+		req.Target = rc.GetRDATA().String()
+
 	}
 
 	return req, nil

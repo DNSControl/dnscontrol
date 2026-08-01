@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -59,9 +59,12 @@ func (api *netcupProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
-		existingRecords[i] = toRecordConfig(domain, &records[i])
+		existingRecords[i], err = toRecordConfig(dc, &records[i])
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return existingRecords, nil
@@ -96,46 +99,49 @@ func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 	}
 	dc.Records = newRecords
 
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		req := m.Existing.Original.(*record)
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s", m.String(), req.ID),
-			F: func() error {
-				return api.deleteRecord(domain, req)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, m := range create {
-		req := fromRecordConfig(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				return api.createRecord(domain, req)
-			},
+		case diff2.CREATE:
+			req := fromRecordConfig(change.New[0])
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return api.createRecord(domain, req)
+				},
+			})
+
+		case diff2.DELETE:
+			req := change.Old[0].Original.(*record)
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Netcup ID: %s", change.Msgs[0], req.ID),
+				F: func() error {
+					return api.deleteRecord(domain, req)
+				},
+			})
+
+		case diff2.CHANGE:
+			id := change.Old[0].Original.(*record).ID
+			req := fromRecordConfig(change.New[0])
+			req.ID = id
+			corrections = append(corrections, &models.Correction{
+				Msg: fmt.Sprintf("%s, Netcup ID: %s: ", change.Msgs[0], id),
+				F: func() error {
+					return api.modifyRecord(domain, req)
+				},
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corrections = append(corrections, corr)
-	}
-	for _, m := range modify {
-		id := m.Existing.Original.(*record).ID
-		req := fromRecordConfig(m.Desired)
-		req.ID = id
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s: ", m.String(), id),
-			F: func() error {
-				return api.modifyRecord(domain, req)
-			},
-		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
