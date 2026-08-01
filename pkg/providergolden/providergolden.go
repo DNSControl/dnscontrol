@@ -28,12 +28,12 @@
 // inputs. It never contacts a provider's API and never rewrites an input file,
 // so gathering data from a live account stays a separate, explicit step.
 //
-// A golden line is the record's label, TTL, class, type and RDATA, with the TTL
-// omitted when it is zero, followed by the metadata when the record has any:
+// A golden line is the record's label, TTL, class, type and RDATA, followed by
+// the metadata when the record has any:
 //
 //	www 300 IN A 192.0.2.1
-//	@ IN MX 10 mail.example.com.
-//	fwd IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
+//	@ 3600 IN MX 10 mail.example.com.
+//	fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
 package providergolden
 
 import (
@@ -189,11 +189,8 @@ func formatRecord(rc *models.RecordConfig) string {
 
 	b.WriteString(rc.Name)
 	b.WriteByte(' ')
-	if rc.TTL != 0 {
-		b.WriteString(strconv.FormatUint(uint64(rc.TTL), 10))
-		b.WriteByte(' ')
-	}
-	b.WriteString("IN ")
+	b.WriteString(strconv.FormatUint(uint64(rc.TTL), 10))
+	b.WriteString(" IN ")
 	b.WriteString(rc.Type)
 	b.WriteByte(' ')
 	b.WriteString(rc.GetRDATA().String())
@@ -225,28 +222,20 @@ func parseRecords(dc *models.DomainConfig, text string) ([]*models.RecordConfig,
 }
 
 func parseRecord(dc *models.DomainConfig, line string) (*models.RecordConfig, error) {
-	line, metatext := cutMetadata(line)
+	record, metatext := cutMetadata(line)
 
-	name, rest, ok := strings.Cut(line, " ")
-	if !ok {
-		return nil, fmt.Errorf("%q: expected \"label [ttl] IN type rdata\"", line)
+	fields := strings.SplitN(record, " ", 5)
+	if len(fields) != 5 {
+		return nil, fmt.Errorf("%q: expected \"label ttl IN type rdata\"", line)
 	}
+	name, ttltext, class, rtype, rdata := fields[0], fields[1], fields[2], fields[3], fields[4]
 
-	var ttl uint64
-	if head, tail, ok := strings.Cut(rest, " "); ok {
-		if n, err := strconv.ParseUint(head, 10, 32); err == nil {
-			ttl, rest = n, tail
-		}
+	ttl, err := strconv.ParseUint(ttltext, 10, 32)
+	if err != nil {
+		return nil, fmt.Errorf("%q: %w", line, err)
 	}
-
-	class, rest, ok := strings.Cut(rest, " ")
-	if !ok || class != "IN" {
+	if class != "IN" {
 		return nil, fmt.Errorf("%q: expected class \"IN\"", line)
-	}
-
-	rtype, rdata, ok := strings.Cut(rest, " ")
-	if !ok {
-		return nil, fmt.Errorf("%q: expected rdata after the type", line)
 	}
 
 	rc, err := dc.NewRecordConfigParse(name, uint32(ttl), rtype, rdata)

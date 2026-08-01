@@ -24,9 +24,9 @@ func TestFormatRecord(t *testing.T) {
 			want: "www 300 IN A 192.0.2.1",
 		},
 		{
-			name: "zero TTL is omitted",
+			name: "zero TTL is included",
 			rc:   dc.MustNewRecordConfig("www", 0, "A", "192.0.2.1"),
-			want: "www IN A 192.0.2.1",
+			want: "www 0 IN A 192.0.2.1",
 		},
 		{
 			name: "MX at the apex",
@@ -62,7 +62,7 @@ func TestFormatRecord(t *testing.T) {
 func TestParseRecordsRoundTrip(t *testing.T) {
 	input := strings.Join([]string{
 		"@ 3600 IN A 192.0.2.1",
-		"www IN A 192.0.2.2",
+		"www 0 IN A 192.0.2.2",
 		"@ 3600 IN MX 10 mail.example.com.",
 		`@ 600 IN TXT "v=spf1 include:_spf.example.net -all"`,
 		`@ 600 IN CAA 0 issue "letsencrypt.org"`,
@@ -108,7 +108,10 @@ func TestParseRecordsRejectsMalformedInput(t *testing.T) {
 		name  string
 		input string
 	}{
-		{name: "no class", input: "www 300 A 192.0.2.1"},
+		{name: "no ttl", input: "www IN A 192.0.2.1"},
+		{name: "non-numeric ttl", input: "www abc IN A 192.0.2.1"},
+		{name: "wrong class", input: "www 300 CH A 192.0.2.1"},
+		{name: "too few fields", input: "www 300 A 192.0.2.1"},
 		{name: "no rdata", input: "www 300 IN A"},
 		{name: "unknown type", input: "www 300 IN NOSUCHTYPE 192.0.2.1"},
 		{name: "unterminated metadata", input: `www 300 IN A 192.0.2.1 ; wildcard="no`},

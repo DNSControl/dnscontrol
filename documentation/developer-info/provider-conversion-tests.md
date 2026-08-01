@@ -78,13 +78,13 @@ code does today, including bugs.
 
 ## The golden format
 
-One line per record: the label, TTL, class, type and RDATA, with the TTL omitted
-when it is zero, followed by the record's metadata when it has any:
+One line per record: the label, TTL, class, type and RDATA, followed by the
+record's metadata when it has any:
 
 ```
 www 300 IN A 192.0.2.1
-@ IN MX 10 mail.example.com.
-fwd IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
+@ 3600 IN MX 10 mail.example.com.
+fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
 ```
 
 `CheckToNative` writes its golden as JSON, since a native record has no
