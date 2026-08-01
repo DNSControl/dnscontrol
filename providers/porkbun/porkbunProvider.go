@@ -452,6 +452,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	case "HTTPS":
 		fallthrough
 	case "SVCB":
+		f := rc.AsSVCB()
 		req["content"] = fmt.Sprintf("%d %s %s",
 			rc.SvcPriority, rc.GetTargetField(), models.Svcbv2ValueToString(f.Value))
 	case "SSHFP":

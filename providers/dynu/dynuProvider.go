@@ -372,10 +372,11 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.CPU = cpu
 		req.OperatingSystem = os
 	case "HTTPS":
-		svcPrio := int(rc.SvcPriority)
+		f := rc.AsHTTPS()
+		svcPrio := int(f.Priority)
 		req.SvcPriority = &svcPrio
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
-		target := strings.TrimSuffix(rc.GetTargetField(), ".")
+		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
@@ -476,9 +477,10 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.FingerPrintType = &fptype
 		req.FingerPrint = hexToBase64(rc.GetTargetField())
 	case "SVCB":
-		svcPrio := int(rc.SvcPriority)
+		f := rc.AsSVCB()
+		svcPrio := int(f.Priority)
 		req.SvcPriority = &svcPrio
-		target := strings.TrimSuffix(rc.GetTargetField(), ".")
+		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
