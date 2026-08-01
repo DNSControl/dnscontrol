@@ -2191,6 +2191,8 @@ func makeTests() []*TestGroup {
 				ovhspf("spf", "v=spf1 a mx -all"),
 				ovhdkim("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
 				ovhdmarc("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@example.com")),
+			tc("Create native OVH DKIM record longer than 255 bytes",
+				ovhdkim("dkimbig._domainkey", "v=DKIM1; t=s; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtNHHaHjrlPU5hvNyp5LKkhINqUNo3rwvHP3RMYvBMdxs0W34SLMc52QSn+O8QN5P2rU9Hs3qiD5kaIjGfU77EwMnrUh0MhRgWPKED5R66/BXYh9tIv9aLBeGgrO8Tj1zvW2CO9HI9V5TcuEe8OKgY4EvtuBtlgG7DbM2fwm2VL9nbvM15hxQjAkDxfDNBLMXozsk86Fp9EzOwtUykRH1VoCusC0qYqmOMpPknDoJ2vJKZMm1Cpx0ICnsdWbmLVKPpgdBdj28jCXU/bm4jvXcSL9oGb3rBxVmpsgA+JHEZH2XMbDDzHjLnH7DsavP/Xth19KA/opQ4h6vFxAQOX+yzQIDAQAB")),
 		),
 
 		// CLOUDNS features
