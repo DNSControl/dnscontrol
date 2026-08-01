@@ -943,20 +943,24 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 
 	label := dc.LabelFromFQDNNoDot(cr.Name)
 	ttl := uint32(cr.TTL)
-	nFlags := nrc.TARGET_IS_FQDN_NO_DOT
 
 	var rc *models.RecordConfig
 	var err error
 
 	switch rType := cr.Type; rType { // #rtype_variations
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV":
 		data := cr.Data.(map[string]any)
 		target := stringDefault(data["target"], "MISSING.TARGET")
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "TXT":
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content, nFlags)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable %q record received from cloudflare: %w", cr.Type, err)
@@ -965,7 +969,6 @@ func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudfla
 	// Save a pointer to the original cr so that "push" can refer to it for IDs, etc.
 	rc.Original = cr
 
-	//if cr.Type == "A" || cr.Type == "AAAA" || cr.Type == "CNAME" {
 	if rc.TypeNum == dnsv2.TypeA || rc.TypeNum == dnsv2.TypeAAAA || rc.TypeNum == dnsv2.TypeCNAME {
 		if cr.Proxied != nil {
 			if *(cr.Proxied) {

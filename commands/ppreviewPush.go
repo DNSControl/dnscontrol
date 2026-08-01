@@ -345,7 +345,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 		out.PrintfIf(fullMode, "Concurrently gathering: %q\n", zone.UniqueName)
 		go func(zone *models.DomainConfig, args PPreviewArgs, zcache *CmdZoneCache) {
 			start := time.Now()
-			err := oneZone(zone, args)
+			err := oneZone(zone, args, push)
 			if err != nil {
 				concurrentErrors.Store(true)
 			}
@@ -363,7 +363,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 	out.Printf("SERIALLY gathering records of %d zone(s)\n", len(zonesSerial))
 	for _, zone := range zonesSerial {
 		out.Printf("Serially Gathering: %q\n", zone.UniqueName)
-		if err := oneZone(zone, args); err != nil {
+		if err := oneZone(zone, args, push); err != nil {
 			anyErrors = true
 		}
 	}
@@ -572,7 +572,7 @@ func oneZonePopulate(zone *models.DomainConfig, zc *CmdZoneCache) error {
 	return errors.Join(errs...)
 }
 
-func oneZone(zone *models.DomainConfig, args PPreviewArgs) error {
+func oneZone(zone *models.DomainConfig, args PPreviewArgs, push bool) error {
 	var errs []error
 	// Fix the parent zone's delegation: (if able/needed)
 	delegationCorrections, dcCount, err := generateDelegationCorrections(zone, zone.DNSProviderInstances, zone.RegistrarInstance)
@@ -583,6 +583,17 @@ func oneZone(zone *models.DomainConfig, args PPreviewArgs) error {
 	// Loop over the (selected) providers configured for that zone:
 	providersToProcess := whichProvidersToProcess(zone.DNSProviderInstances, args.Providers)
 	for _, provider := range providersToProcess {
+		// If Phase 1 found the zone missing and queued a creation correction
+		// that this run will not execute, fetching records for the not-yet-
+		// created zone would fail with a raw provider error and a non-zero
+		// exit. Report that the zone will be created on push instead.
+		if reportZonePendingCreation(zone, provider.Name, push, args.PopulateOnPreview) {
+			zone.StoreCorrections(provider.Name, []*models.Correction{{
+				Msg: fmt.Sprintf("Zone %q does not yet exist at provider %q. It will be created when you run `dnscontrol push`.", zone.Name, provider.Name),
+			}})
+			continue
+		}
+
 		// Update the zone's records at the provider:
 		zoneCor, rep, actualChangeCount, err := generateZoneCorrections(zone, provider)
 		zone.StoreCorrections(provider.Name, rep)
@@ -747,6 +758,30 @@ func writeReport(report string, reportItems []*ReportItem) error {
 		return err
 	}
 	return nil
+}
+
+// zoneWillBeCreated reports whether Phase 1 found the zone missing at the named
+// provider and queued a creation correction for it. Such corrections carry a
+// non-nil F that runs EnsureZoneExists, and only execute during push.
+func zoneWillBeCreated(zone *models.DomainConfig, providerName string) bool {
+	for _, c := range zone.GetPopulateCorrections(providerName) {
+		if c.F != nil {
+			return true
+		}
+	}
+	return false
+}
+
+// reportZonePendingCreation reports whether oneZone should emit an
+// informational "will be created on push" correction instead of fetching
+// records. That applies only when the zone is queued for creation and this run
+// does not actually create it: push runs the creation, and so does preview with
+// --populate-on-preview, in which case the real record diff should be shown.
+func reportZonePendingCreation(zone *models.DomainConfig, providerName string, push, populateOnPreview bool) bool {
+	if push || populateOnPreview {
+		return false
+	}
+	return zoneWillBeCreated(zone, providerName)
 }
 
 func generatePopulateCorrections(provider *models.DNSProviderInstance, dc *models.DomainConfig, zcache *CmdZoneCache) ([]*models.Correction, error) {

@@ -313,19 +313,21 @@ func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, 
 	label := dc.LabelFromShort(r.Name)
 	ttl := uint32(r.TTL)
 
-	nFlags := nrc.TARGET_IS_FQDN_NO_DOT
-
 	var rc *models.RecordConfig
 	var err error
 	switch rtype := r.Type; rtype {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(r.Priority), r.Data, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(r.Priority), r.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), r.Data, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), r.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(r.Flags), r.Tag, r.Data, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(r.Flags), r.Tag, r.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	default:
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Data, nFlags)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	}
 	if err != nil {
 		return nil, err

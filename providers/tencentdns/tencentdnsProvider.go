@@ -22,10 +22,10 @@ const (
 )
 
 var features = providers.DocumentationNotes{
-	providers.CanUseAlias:            providers.Can("DNSPod doesn't natively support the ALIAS record type."),
+	providers.CanUseAlias:            providers.Can("Enable CNAME flattening for ALIAS to work at the apex. See https://docs.dnspod.com/dns/cname-flattening/"),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanUseCAA:              providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
+	providers.CanUsePTR:              providers.Cannot(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.DocCreateDomains:       providers.Can(),
 	providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
@@ -179,7 +179,7 @@ func (p *tencentdnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 		if *r.Status != "ENABLE" {
 			continue
 		}
-		rc, err := nativeToRecord(r, dc.Name)
+		rc, err := nativeToRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}

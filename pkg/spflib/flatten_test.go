@@ -1,11 +1,22 @@
 package spflib
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
 	"testing"
 )
+
+type fakeResolver map[string]string
+
+func (r fakeResolver) GetSPF(name string) (string, error) {
+	spf, ok := r[name]
+	if !ok {
+		return "", fmt.Errorf("%s has no SPF record", name)
+	}
+	return spf, nil
+}
 
 func TestFlatten(t *testing.T) {
 	res, err := NewCache("testdata-dns1.json")
@@ -29,6 +40,91 @@ func TestFlatten(t *testing.T) {
 	t.Log(rec.Print())
 	rec = rec.Flatten("mailgun.org")
 	t.Log(rec.Print())
+}
+
+func TestFlattenTrailingAll(t *testing.T) {
+	tests := []struct {
+		description string
+		dnsres      fakeResolver
+		input       string
+		want        string
+	}{
+		{
+			description: "include of a redirect-only target keeps the last netblock",
+			dnsres: fakeResolver{
+				"aspmx.googlemail.com": "v=spf1 redirect=_spf.google.com",
+				"_spf.google.com":      "v=spf1 ip4:74.125.0.0/16 ip4:209.85.128.0/17 ip6:2001:4860:4864::/56 ip6:2404:6800:4864::/56 ip6:2607:f8b0:4864::/56 ip6:2800:3f0:4864::/56 ip6:2a00:1450:4864::/56 ip6:2c0f:fb50:4864::/56 ~all",
+			},
+			input: "v=spf1 include:aspmx.googlemail.com -all",
+			want:  "v=spf1 ip4:74.125.0.0/16 ip4:209.85.128.0/17 ip6:2001:4860:4864::/56 ip6:2404:6800:4864::/56 ip6:2607:f8b0:4864::/56 ip6:2800:3f0:4864::/56 ip6:2a00:1450:4864::/56 ip6:2c0f:fb50:4864::/56 -all",
+		},
+		{
+			description: "include with no all keeps its last term",
+			dnsres:      fakeResolver{"spf-00123c01.pphosted.com": "v=spf1 ip4:67.231.153.0/24 ip4:67.231.145.0/24 ip4:67.231.149.0/24 ip4:67.231.152.48 ip4:67.231.148.205 ip4:67.231.152.182"},
+			input:       "v=spf1 include:spf-00123c01.pphosted.com -all",
+			want:        "v=spf1 ip4:67.231.153.0/24 ip4:67.231.145.0/24 ip4:67.231.149.0/24 ip4:67.231.152.48 ip4:67.231.148.205 ip4:67.231.152.182 -all",
+		},
+		{
+			description: "include ending in ~all drops the all",
+			dnsres:      fakeResolver{"example.net": "v=spf1 ip4:1.2.3.4 ip4:5.6.7.8 ~all"},
+			input:       "v=spf1 include:example.net -all",
+			want:        "v=spf1 ip4:1.2.3.4 ip4:5.6.7.8 -all",
+		},
+		{
+			description: "include ending in -all drops the all",
+			dnsres:      fakeResolver{"example.net": "v=spf1 ip4:1.2.3.4 -all"},
+			input:       "v=spf1 include:example.net -all",
+			want:        "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "include ending in ?all drops the all",
+			dnsres:      fakeResolver{"example.net": "v=spf1 ip4:1.2.3.4 ?all"},
+			input:       "v=spf1 include:example.net -all",
+			want:        "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "include ending in unqualified all drops the all",
+			dnsres:      fakeResolver{"example.net": "v=spf1 ip4:1.2.3.4 all"},
+			input:       "v=spf1 include:example.net -all",
+			want:        "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "include ending in -ALL drops the all",
+			dnsres:      fakeResolver{"example.net": "v=spf1 ip4:1.2.3.4 -ALL"},
+			input:       "v=spf1 include:example.net -all",
+			want:        "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "nested include with no all keeps its last term",
+			dnsres: fakeResolver{
+				"a.example.net": "v=spf1 include:b.example.net ip4:1.2.3.4",
+				"b.example.net": "v=spf1 ip4:5.6.7.8 -all",
+			},
+			input: "v=spf1 include:a.example.net -all",
+			want:  "v=spf1 ip4:5.6.7.8 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "include of a target that only includes a no-mail domain",
+			dnsres: fakeResolver{
+				"a.example.net": "v=spf1 include:b.example.net",
+				"b.example.net": "v=spf1 -all",
+			},
+			input: "v=spf1 include:a.example.net -all",
+			want:  "v=spf1 -all",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.description, func(t *testing.T) {
+			rec, err := Parse(test.input, test.dnsres)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := rec.Flatten("*").TXT(); got != test.want {
+				t.Errorf("got %s want %s", got, test.want)
+			}
+		})
+	}
 }
 
 // each test is array of strings.

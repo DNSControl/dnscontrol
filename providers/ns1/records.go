@@ -186,7 +186,6 @@ func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error
 
 		label := dc.LabelFromFQDNNoDot(zr.Domain)
 		ttl := uint32(zr.TTL)
-		npFlags := nrc.TXT_DONT_PARSE
 
 		var rec *models.RecordConfig
 		var err error
@@ -218,7 +217,8 @@ func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error
 			continue
 		default:
 			// NS1 returns TXT values as plain strings, not RFC1035 quoted presentation.
-			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans, npFlags)
+			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans,
+				nrc.Flags{TxtDontParse: true})
 		}
 		if err != nil {
 			return nil, fmt.Errorf("unparsable %s record received from ns1: %w", zr.Type, err)

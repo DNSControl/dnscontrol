@@ -453,7 +453,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		fallthrough
 	case "SVCB":
 		req["content"] = fmt.Sprintf("%d %s %s",
-			rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
+			rc.SvcPriority, rc.GetTargetField(), models.Svcbv2ValueToString(f.Value))
 	case "SSHFP":
 		req["content"] = fmt.Sprintf("%v %v %s",
 			rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())

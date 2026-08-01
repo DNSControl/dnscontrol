@@ -10,7 +10,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/cloudflare/cloudflare-go"
 	"golang.org/x/net/idna"
 )
@@ -142,7 +141,7 @@ func cfSvcbData(rec *models.RecordConfig) *cfRecData {
 	return &cfRecData{
 		Priority: f.Priority,
 		Target:   cfTarget(f.Target),
-		Value:    rec.SvcParams,
+		Value:    models.Svcbv2ValueToString(f.Value),
 	}
 }
 
@@ -315,7 +314,7 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 
 	switch rec.Type {
 	case "TXT":
-		r.Content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+		r.Content = rec.GetRDATA().String()
 	case "SRV":
 		r.Data = cfSrvData(rec)
 		r.Name = rec.GetLabelFQDN()

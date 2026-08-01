@@ -4,51 +4,74 @@ import (
 	"fmt"
 	"strconv"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
-func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(*r.TTL),
-		Original: r,
-		Metadata: map[string]string{},
-	}
+func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(*r.Name)
+	ttl := uint32(*r.TTL)
+	metadata := map[string]string{}
 	if r.Line != nil && *r.Line != "" {
-		rc.Metadata[metaRecordLine] = *r.Line
+		metadata[metaRecordLine] = *r.Line
 	}
 	if r.LineId != nil && *r.LineId != "" {
-		rc.Metadata[metaRecordLineID] = *r.LineId
+		metadata[metaRecordLineID] = *r.LineId
 	}
 	if r.Weight != nil {
-		rc.Metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
-	}
-	rc.SetLabel(*r.Name, domainName)
-
-	val := *r.Value
-	switch *r.Type {
-	case "A", "AAAA", "CNAME", "NS", "PTR", "TXT", "CAA", "SRV":
-	case "MX":
-		if r.MX != nil {
-			val = fmt.Sprintf("%d %s", *r.MX, *r.Value)
-		}
-	default:
-		return nil, fmt.Errorf("unsupported record type: %s", *r.Type)
+		metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
 	}
 
 	// DNSPod does not have a native ALIAS record type. DNSControl uses
 	// ALIAS("@") to model apex CNAME flattening, which DNSPod represents
 	// as a CNAME record at "@".
 	// See https://docs.dnspod.com/dns/faq-dns-resolution/?lang=en.
+	// https://www.tencentcloud.com/document/product/1145/54764#2f681022-91ab-4a9e-ac3d-0a6c454d954e
+	// https://docs.dnspod.com/dns/cname-flattening/
+	// As a result, we can safely turn ALIAS records into CNAMEs.
 	rtype := *r.Type
-	if rtype == "CNAME" && *r.Name == "@" {
-		rtype = "ALIAS"
+	if rtype == "ALIAS" {
+		rtype = "CNAME"
 	}
 
-	if err := rc.PopulateFromStringFunc(rtype, val, domainName, txtutil.ParseQuoted); err != nil {
+	var rc *models.RecordConfig
+	var err error
+	val := *r.Value
+	switch rtype {
+	case "MX":
+		p := uint64(0)
+		if r.MX != nil {
+			p = *r.MX
+		}
+		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
+	case "TXT":
+		// TODO(tlim): A few ways that might fix
+		//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
+		//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
+
+		// Try this first:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+
+		// Try this if the other fails: (probably won't work)
+		//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+
+		// Or this?
+		//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
+		// You'll need to add this to imports above:
+		// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+
+	// case "ALIAS":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+	}
+	if err != nil {
 		return nil, err
 	}
+	rc.Original = r
+	rc.Metadata = metadata
 
 	return rc, nil
 }
@@ -101,11 +124,20 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 		req.Weight = new(weight)
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
+	var val string
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		val = f.Mx
+		req.MX = new(uint64(f.Preference))
+	case dnsv2.TypeTXT:
+		f := rc.AsTXT()
+		val = f.String()
+
+	default:
+		val = rc.GetRDATA().String()
 	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 
@@ -132,11 +164,37 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 		req.Weight = new(uint64(0))
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
+	var val string
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		val = f.Mx
+		req.MX = new(uint64(f.Preference))
+
+	// TODO(tlim): Try this if unicode required for MX targets.
+	// You'll need to add this import: "golang.org/x/net/idna"
+	// u, err := idna.ToUnicode(val)
+	// if err == nil {
+	// 	val = u
+	// }
+
+	// TODO(tlim): Try this if unicode is required for CNAME targets.
+	// You'll need to add this import: "golang.org/x/net/idna"
+	// case dnsv2.TypeCNAME:
+	// 	f := rc.AsCNAME()
+	// 	val := f.Target
+	// 	u, err := idna.ToUnicode(val)
+	// 	if err == nil {
+	// 		val = u
+	// 	}
+
+	case dnsv2.TypeTXT:
+		f := rc.AsTXT()
+		val = f.String()
+	default:
+		val = rc.GetRDATA().String()
 	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 

@@ -547,6 +547,15 @@ func (rc *RecordConfig) IsTTLSignificant() bool {
 // Records is a list of *RecordConfig.
 type Records []*RecordConfig
 
+// StringEach returns a list of strings, one for each RecordConfig in recs.
+func (recs Records) StringEach() []string {
+	r := make([]string, 0, len(recs))
+	for _, rc := range recs {
+		r = append(r, rc.GetRDATA().String())
+	}
+	return r
+}
+
 // HasRecordTypeName returns True if there is a record with this rtype and name.
 func (recs Records) HasRecordTypeName(rtype, name string) bool {
 	for _, r := range recs {

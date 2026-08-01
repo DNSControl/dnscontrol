@@ -21,7 +21,7 @@ func (c *websupportProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	recs := make(models.Records, 0, len(nativeRecs))
 	for _, n := range nativeRecs {
-		rc, err := toRecordConfig(dc.Name, n)
+		rc, err := toRecordConfig(dc, n)
 		if err != nil {
 			return nil, err
 		}
