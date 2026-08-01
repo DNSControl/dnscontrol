@@ -1,0 +1,106 @@
+[
+  {
+    "content": "192.0.2.1",
+    "id": "201",
+    "name": "example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "A"
+  },
+  {
+    "content": "192.0.2.2",
+    "id": "202",
+    "name": "www.example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "A"
+  },
+  {
+    "content": "2001:db8::1",
+    "id": "203",
+    "name": "www.example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "AAAA"
+  },
+  {
+    "content": "www.example.com",
+    "id": "204",
+    "name": "alias.example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "CNAME"
+  },
+  {
+    "content": "mail.example.com",
+    "id": "205",
+    "name": "example.com",
+    "prio": "10",
+    "ttl": "3600",
+    "type": "MX"
+  },
+  {
+    "content": "v=spf1 include:_spf.example.net -all",
+    "id": "206",
+    "name": "example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "TXT"
+  },
+  {
+    "content": "ns1.example.net",
+    "id": "207",
+    "name": "sub.example.com",
+    "prio": "0",
+    "ttl": "86400",
+    "type": "NS"
+  },
+  {
+    "content": "0 issue \"letsencrypt.org\"",
+    "id": "208",
+    "name": "example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "CAA"
+  },
+  {
+    "content": "20 5060 sip.example.com.",
+    "id": "209",
+    "name": "_sip._tcp.example.com",
+    "prio": "10",
+    "ttl": "600",
+    "type": "SRV"
+  },
+  {
+    "content": "3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "id": "210",
+    "name": "_25._tcp.mail.example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "TLSA"
+  },
+  {
+    "content": "1 2 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "id": "211",
+    "name": "example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "SSHFP"
+  },
+  {
+    "content": "1 . alpn=h3,h2 ipv4hint=192.0.2.1",
+    "id": "212",
+    "name": "example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "HTTPS"
+  },
+  {
+    "content": "16 svc.example.net. port=8443 alpn=h2",
+    "id": "213",
+    "name": "_8443._foo.example.com",
+    "prio": "0",
+    "ttl": "600",
+    "type": "SVCB"
+  }
+]

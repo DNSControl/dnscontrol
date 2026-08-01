@@ -1,0 +1,9 @@
+@ 3600 IN A 192.0.2.1
+www 300 IN A 192.0.2.2
+www 300 IN AAAA 2001:db8::1
+alias 300 IN CNAME www.example.com.
+@ 3600 IN MX 10 mail.example.com.
+@ 3600 IN TXT "v=spf1 include:_spf.example.net -all"
+sub 86400 IN NS ns1.example.net.
+_sip._tcp 300 IN SRV 10 20 5060 sip.example.com.
+@ 3600 IN CAA 0 issue "letsencrypt.org"

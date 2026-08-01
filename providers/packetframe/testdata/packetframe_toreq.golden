@@ -1,0 +1,83 @@
+[
+  {
+    "id": "",
+    "type": "A",
+    "label": "@",
+    "value": "192.0.2.1",
+    "ttl": 3600,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "A",
+    "label": "www",
+    "value": "192.0.2.2",
+    "ttl": 300,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "AAAA",
+    "label": "www",
+    "value": "2001:db8::1",
+    "ttl": 300,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "CNAME",
+    "label": "alias",
+    "value": "www.example.com.",
+    "ttl": 300,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "MX",
+    "label": "@",
+    "value": "10 mail.example.com.",
+    "ttl": 3600,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "TXT",
+    "label": "@",
+    "value": "v=spf1 include:_spf.example.net -all",
+    "ttl": 3600,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "NS",
+    "label": "sub",
+    "value": "ns1.example.net.",
+    "ttl": 86400,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "SRV",
+    "label": "_sip._tcp",
+    "value": "10 20 5060 sip.example.com.",
+    "ttl": 300,
+    "proxy": false,
+    "zone": "zone-1"
+  },
+  {
+    "id": "",
+    "type": "CAA",
+    "label": "@",
+    "value": "0 issue \"letsencrypt.org\"",
+    "ttl": 3600,
+    "proxy": false,
+    "zone": "zone-1"
+  }
+]
