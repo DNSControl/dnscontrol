@@ -421,6 +421,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -710,7 +711,7 @@ func makeTests() []*TestGroup {
 				"AZURE_DNS",         // Removed because it is too slow
 				"AZURE_PRIVATE_DNS", // Removed because it is too slow
 				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
-				"CNR",               // Test beaks limits.
+				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
 				"DIGITALOCEAN", // No paging. Why bother?
@@ -839,7 +840,10 @@ func makeTests() []*TestGroup {
 				naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", "."),
 				naptr("test", 102, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", "."),
 			),
-			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")),
+			// AllowNoChanges: providers that audit-reject multiple NAPTRs at
+			// one label (e.g. GIGAHOST) skip "NAPTR second record" above, so
+			// this state may already be converged.
+			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")).AllowNoChanges(),
 			tc("NAPTR change order", naptr("test", 103, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change preference", naptr("test", 103, 20, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change flags", naptr("test", 103, 20, "A", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
@@ -903,7 +907,8 @@ func makeTests() []*TestGroup {
 				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
-			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
+			// The next TTL needs to fall in a different bucket than the previous one for LINODE
+			tc("Change TTL4400", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 4400)),
 		),
 
 		testgroup("SSHFP",
@@ -927,7 +932,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DS",
 			requires(providers.CanUseDS),
-			not("CLOUDFLAREAPI"),
+			not("CLOUDFLAREAPI", "POWERDNS"), // PowerDNS: DS records are not supported for the apex domain.
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
@@ -1031,6 +1036,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DNSKEY",
 			requires(providers.CanUseDNSKEY),
+			not("POWERDNS"), // PowerDNS: DNSKEY records are only supported for the apex domain.
 			tc("Create DNSKEY record", dnskey("test", 257, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 1", dnskey("test", 256, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 2", dnskey("test", 256, 3, 13, "whjtMiJP9C86l0oTJUxemuYtQ0RIZePWt6QETC2kkKM=")),
@@ -1577,9 +1583,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE main",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
@@ -1908,9 +1914,9 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE wilds",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),

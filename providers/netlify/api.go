@@ -14,7 +14,7 @@ type dnsRecord struct {
 	Type      string `json:"type,omitempty"`
 	TTL       int64  `json:"ttl,omitempty"`
 	Priority  int64  `json:"priority,omitempty"`
-	Flag      int64  `json:"flag,omitempty"`
+	Flag      uint8  `json:"flag,omitempty"`
 	Weight    uint16 `json:"weight,omitempty"`
 	Port      uint16 `json:"port,omitempty"`
 	Tag       string `json:"tag,omitempty"`

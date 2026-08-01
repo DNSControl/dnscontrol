@@ -75,6 +75,9 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 	if name == "" {
 		return "@"
 	}
+	if name == "@" {
+		return name
+	}
 	if strings.HasSuffix(name, ".") {
 		fmt.Printf("ERROR: LabelFromFQDNNoDot(%v) called WRONG. Maybe you want LabelFromFQDNWithDot?\n", name)
 	}
@@ -102,6 +105,7 @@ func (dc *DomainConfig) LabelFromFQDNNoDot(name string) string {
 // Name is assumed to end with the zone name (which is what most APIs return).
 func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 	if name == "" {
+		fmt.Printf("ERROR: LabelFromFQDNWithDot(%v) called WRONG. Maybe you want LabelFromShort?\n", name)
 		return "IMPOSSIBLE"
 	}
 	if !strings.HasSuffix(name, ".") {

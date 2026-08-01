@@ -167,6 +167,15 @@ func Float32(arg any) float32 {
 	switch v := arg.(type) {
 	case float32:
 		return v
+	case string:
+		f, err := strconv.ParseFloat(v, 32)
+		if err != nil {
+			panic(fmt.Sprintf("string to float parse error: %q err=%s", v, err))
+		}
+		if f < -math.MaxFloat32 || f > math.MaxFloat32 {
+			panic(fmt.Sprintf("value %q overflows float32", arg))
+		}
+		return float32(f)
 	case float64:
 		if v < -math.MaxFloat32 || v > math.MaxFloat32 {
 			panic(fmt.Sprintf("value %q overflows float32", arg))

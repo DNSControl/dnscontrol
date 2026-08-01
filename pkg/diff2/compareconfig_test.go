@@ -31,8 +31,8 @@ func (cc *CompareConfig) String() string {
 	}
 	fmt.Fprintf(b, "labelMap: len=%d %v\n", len(cc.labelMap), cc.labelMap)
 	fmt.Fprintf(b, "keyMap:   len=%d %v\n", len(cc.keyMap), cc.keyMap)
-	fmt.Fprintf(b, "existing: %q\n", cc.existing)
-	fmt.Fprintf(b, "desired: %q\n", cc.desired)
+	fmt.Fprintf(b, "existing: %q\n", cc.existing.StringEach())
+	fmt.Fprintf(b, "desired: %q\n", cc.desired.StringEach())
 	fmt.Fprintf(b, "origin: %v\n", cc.origin)
 	fmt.Fprintf(b, "compFn: %v\n", cc.compareableFunc)
 

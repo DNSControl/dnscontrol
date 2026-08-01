@@ -175,7 +175,7 @@ func (cc *CompareConfig) verifyCNAMEAssertions() {
 func mkCompareBlobs(rc *models.RecordConfig, f func(*models.RecordConfig) string) (string, string) {
 	comp := rc.ComparableV3
 	if comp == "" {
-		panic(fmt.Sprintf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc))
+		panic(fmt.Sprintf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc.GetRDATA().String()))
 	}
 
 	// If the custom function exists, add its output

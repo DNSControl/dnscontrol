@@ -100,9 +100,11 @@ func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig,
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, r.Priority, r.Answer)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeSRV, r.Priority, r.Answer, nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
+		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeSRV, r.Priority, r.Answer,
+			nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer, nrc.TXT_DONT_PARSE)
+		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer,
+			nrc.Flags{TxtDontParse: true})
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)

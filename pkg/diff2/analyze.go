@@ -236,13 +236,13 @@ func humanDiff(a, b targetConfig) string {
 	if a.comparableNoTTL != b.comparableNoTTL {
 		// The recorddata is different:
 		//return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
-		return fmt.Sprintf("(%s ttl=%d) -> (%s ttl=%d)", a.rec.String(), a.rec.TTL, b.rec.String(), b.rec.TTL)
+		return fmt.Sprintf("(%s ttl=%d) -> (%s ttl=%d)", a.rec.GetRDATA().String(), a.rec.TTL, b.rec.GetRDATA().String(), b.rec.TTL)
 	}
 
 	// Just the TTLs are different:
 	return fmt.Sprintf("ttl=(%d->%d) %s",
 		a.rec.TTL, b.rec.TTL,
-		a.rec.String())
+		a.rec.GetRDATA().String())
 }
 
 // diffTargets is the real workhorse of the diff2 system.  All the setup has been complete,
