@@ -55,7 +55,22 @@ git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | ta
 ### Automated (recommended)
 
 The manual dance below (empty PR → wait for tests → merge → tag) is now done by
-a single GitHub Actions run — no local CLI needed:
+creating an empty "release" PR, then a single GitHub Actions run.
+
+#### Create an empty PR for the release
+
+git fetch origin main
+git checkout main
+git config remote.origin.prune true ; git config fetch.prune true
+git pull --rebase --ff-only --prune
+git reset --hard origin/main
+git checkout -b "release_$VERSION"
+git commit --allow-empty -m "Release $VERSION"
+git push
+gh pr create --base main --title "Release $VERSION" --body ""
+```
+
+#### Start the release automation
 
 1. Go to **Actions → "RELEASE: Make release candidate" → Run workflow**.
 2. In the **"Use workflow from"** dropdown, choose the branch to release from
