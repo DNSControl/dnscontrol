@@ -419,6 +419,7 @@ func (p *dnscaleProvider) deleteRecord(zoneID, recordID string) error {
 func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, error) {
 	// Extract label from full record name
 	domain := dc.Name
+
 	name := strings.TrimSuffix(r.Name, ".")
 	domainWithDot := domain + "."
 	if before, ok := strings.CutSuffix(r.Name, domainWithDot); ok {
@@ -430,6 +431,12 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 	if name == "" {
 		name = "@"
 	}
+	label := dc.LabelFromShort(name)
+
+	// TODO(tom): The above code can probably be replaced with the following line, but I haven't tested it yet.
+	//label := dc.LabelFromFQDNWithDot(r.Name)
+	// And if that doesn't work... try this:
+	//label := dc.LabelFromFQDNNoDot(r.Name)
 
 	content := r.Content
 	ttl := uint32(r.TTL)
@@ -438,7 +445,7 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 
 	switch r.Type {
 	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(name, ttl, r.Type, content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
 	case "CNAME", "NS", "PTR", "ALIAS":
 		// TODO(tlim): Test without this "if". It may no longer be needed.
 
@@ -446,10 +453,10 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 		if !strings.HasSuffix(content, ".") {
 			content = content + "."
 		}
-		rc, err = dc.NewRecordConfig(name, ttl, r.Type, content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
 	case "MX":
 		// TODO(tlim): Test replacing this with simply:
-		// rc, err = dc.NewRecordConfigParse(name, ttl, r.Type, content)
+		// rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
 
 		// DNScale API returns MX as "priority target" in content field
 		// If priority field is 0, parse it from content
@@ -467,10 +474,10 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(name, ttl, r.Type, priority, target)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, priority, target)
 	case "TXT":
 		// DNScale returns TXT content without surrounding quotes
-		rc, err = dc.NewRecordConfig(name, ttl, r.Type, content)
+		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
 	case "SRV":
 		// DNScale API returns SRV as "priority weight port target"
 
@@ -499,16 +506,16 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 		// if !strings.HasSuffix(target, ".") {
 		// 	target = target + "."
 		// }
-		// rc, err = dc.NewRecordConfig(name, ttl, r.Type, uint16(priority), uint16(weight), uint16(port), target)
+		// rc, err = dc.NewRecordConfig(label, ttl, r.Type, uint16(priority), uint16(weight), uint16(port), target)
 
 		// NEW:
 		if !strings.HasSuffix(content, ".") {
 			content = content + "."
 		}
-		rc, err = dc.NewRecordConfigParse(name, ttl, r.Type, content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
 
 	default:
-		rc, err = dc.NewRecordConfigParse(name, ttl, r.Type, content)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
 	}
 	if err != nil {
 		return nil, err
