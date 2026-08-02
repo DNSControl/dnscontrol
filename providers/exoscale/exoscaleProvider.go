@@ -151,19 +151,20 @@ func nativeToRecord(record *egoscale.DNSDomainRecord, dc *models.DomainConfig) (
 		return nil, nil
 	}
 
+	label := dc.LabelFromShort(record.Name)
 	ttl := uint32(record.Ttl)
 
 	var recordConfig *models.RecordConfig
 	var err error
 	switch record.Type {
 	case "ALIAS", "URL":
-		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, string(record.Type), recordContent)
 	case "MX":
-		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), record.Priority, recordContent)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, string(record.Type), record.Priority, recordContent)
 	case "TXT":
-		recordConfig, err = dc.NewRecordConfig(record.Name, ttl, string(record.Type), recordContent)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, string(record.Type), recordContent)
 	default:
-		recordConfig, err = dc.NewRecordConfigParse(record.Name, ttl, string(record.Type), recordContent)
+		recordConfig, err = dc.NewRecordConfigParse(label, ttl, string(record.Type), recordContent)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from exoscale: %w", err)

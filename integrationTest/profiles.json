@@ -131,7 +131,7 @@
   },
   "DNSIMPLE": {
     "TYPE": "DNSIMPLE",
-    "baseurl": "https://api.sandbox.dnsimple.com",
+    "baseurl": "$DNSIMPLE_BASEURL",
     "domain": "$DNSIMPLE_DOMAIN",
     "token": "$DNSIMPLE_TOKEN"
   },
