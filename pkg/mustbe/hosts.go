@@ -69,7 +69,8 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	// Or, perhaps this was used before I decided to change the signatures of
 	// the Make*() functions to include isEnabled, after which I should have
 	// removed the origin=="." code.
-	// In the future we should unify around one way of doing this.
+	// In the future we should eliminate the origin=".".
+
 	if origin == "." && name == "" {
 		// if isEnabled.TargetIsFqdnNoDot && name == "" {
 		return "."
