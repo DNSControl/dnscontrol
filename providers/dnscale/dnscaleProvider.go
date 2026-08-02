@@ -527,7 +527,7 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 		name = "@"
 	}
 
-	content := rc.GetTargetField()
+	var content string
 	priority := 0
 
 	switch rc.Type {
@@ -535,8 +535,9 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 		// Remove trailing dot for DNScale API
 		content = strings.TrimSuffix(content, ".")
 	case "MX":
-		priority = int(rc.MxPreference)
-		content = strings.TrimSuffix(content, ".")
+		f := rc.AsMX()
+		priority = int(f.Preference)
+		content = strings.TrimSuffix(f.Mx, ".")
 	case "SRV":
 		// TODO(tlim): Remove commented out code if new code works.
 		// DNScale API expects full content: "priority weight port target"
@@ -560,13 +561,15 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 		content = rc.GetRDATA().String()
 	case "HTTPS", "SVCB":
-		// Use GetTargetCombined() which formats SVCB/HTTPS records correctly via miekg/dns
+		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns
 		// DNScale API requires selective quote handling for SVCB params:
 		// - alpn="h2,h3" must become alpn=h2,h3 (quotes stripped)
 		// - ech="base64..." must keep quotes (required for base64 values)
 		content = stripSvcbQuotesExceptEch(rc.GetRDATA().String())
 	case "TXT":
 		content = rc.GetTargetTXTJoined()
+	default:
+		content = rc.GetRDATA().String()
 	}
 
 	return Record{
