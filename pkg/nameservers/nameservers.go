@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
@@ -69,7 +70,8 @@ func AddNSRecords(dc *models.DomainConfig) {
 		}
 	}
 	for _, ns := range dc.Nameservers {
-		rc, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeNS, ns.Name)
+		rc, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeNS, ns.Name,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 		if err != nil {
 			panic("Should not happen: " + err.Error())
 		}
