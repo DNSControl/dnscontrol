@@ -15,7 +15,7 @@ func TestToRecordConfig(t *testing.T) {
 	record := netnodPrimaryDNS.Record{
 		Content: "simple",
 	}
-	recordConfig, err := toRecordConfig(dc, record, 120, "test", "TXT")
+	recordConfig, err := toRecordConfig(dc, record, 120, "test.example.com.", "TXT")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "test.example.com", recordConfig.NameFQDN)
@@ -27,7 +27,7 @@ func TestToRecordConfig(t *testing.T) {
 	largeRecord := netnodPrimaryDNS.Record{
 		Content: largeContent,
 	}
-	recordConfig, err = toRecordConfig(dc, largeRecord, 5, "large", "TXT")
+	recordConfig, err = toRecordConfig(dc, largeRecord, 5, "large.example.com.", "TXT")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "large.example.com", recordConfig.NameFQDN)
@@ -39,7 +39,7 @@ func TestToRecordConfig(t *testing.T) {
 	luaRecord := netnodPrimaryDNS.Record{
 		Content: "TXT \"return 'Hello, world!'\"",
 	}
-	recordConfig, err = toRecordConfig(dc, luaRecord, 3600, "script", "LUA")
+	recordConfig, err = toRecordConfig(dc, luaRecord, 3600, "script.example.com.", "LUA")
 
 	assert.NoError(t, err)
 	assert.Equal(t, "script.example.com", recordConfig.NameFQDN)
