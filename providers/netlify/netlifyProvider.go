@@ -105,45 +105,61 @@ func (n *netlifyProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	cleanRecords := make(models.Records, 0)
 
 	for _, r := range records {
-		if r.Type == "SOA" {
-			continue
-		}
-
-		label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
-		ttl := uint32(r.TTL)
-
-		if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" {
-			r.Value = dnsutil.Canonical(r.Value)
-		}
-
-		var rec *models.RecordConfig
-		switch rtype := r.Type; rtype {
-		case "NETLIFY", "NETLIFYv6": // transparently ignore
-			continue
-		case "MX":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value)
-		case "SRV":
-			parts := strings.Fields(r.Value)
-			if len(parts) == 3 {
-				r.Value += "."
-			}
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value)
-		case "TXT":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
-		case "CAA":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value)
-		default:
-			rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value)
-		}
-
+		rec, err := toRecordConfig(dc, r)
 		if err != nil {
-			return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+			return nil, err
 		}
-		rec.Original = r
+		if rec == nil {
+			continue
+		}
+
 		cleanRecords = append(cleanRecords, rec)
 	}
 
 	return cleanRecords, nil
+}
+
+// toRecordConfig converts a Netlify record to a RecordConfig. It returns nil for
+// SOA records and for the NETLIFY and NETLIFYv6 pseudo-types, which are ignored.
+func toRecordConfig(dc *models.DomainConfig, r *dnsRecord) (*models.RecordConfig, error) {
+	if r.Type == "SOA" {
+		return nil, nil
+	}
+
+	label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
+	ttl := uint32(r.TTL)
+
+	if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" {
+		r.Value = dnsutil.Canonical(r.Value)
+	}
+
+	var rec *models.RecordConfig
+	var err error
+	switch rtype := r.Type; rtype {
+	case "NETLIFY", "NETLIFYv6": // transparently ignore
+		return nil, nil
+	case "MX":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value)
+	case "SRV":
+		parts := strings.Fields(r.Value)
+		if len(parts) == 3 {
+			r.Value += "."
+		}
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value)
+	case "TXT":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
+	case "CAA":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value)
+	default:
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+	}
+	rec.Original = r
+
+	return rec, nil
 }
 
 // ListZones returns all DNS zones managed by this provider.
