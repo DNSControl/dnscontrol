@@ -20,12 +20,16 @@ func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.R
 	for _, value := range n.Records {
 		var rc *models.RecordConfig
 		var err error
+
+		label := dc.LabelFromShort(n.Subname)
+		ttl := n.TTL
+
 		if n.Type == "TXT" {
 			// deSEC returns TXT data as raw text, matching the provider's
 			// historical behavior.
-			rc, err = dc.NewRecordConfig(n.Subname, n.TTL, dnsv2.TypeTXT, value)
+			rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, value)
 		} else {
-			rc, err = dc.NewRecordConfigParse(n.Subname, n.TTL, n.Type, value)
+			rc, err = dc.NewRecordConfigParse(label, ttl, n.Type, value)
 		}
 		if err != nil {
 			panic(fmt.Errorf("unparsable record received from deSEC: %w", err))
