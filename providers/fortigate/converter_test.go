@@ -17,10 +17,10 @@ func TestNativeToRecord(t *testing.T) {
 		wantLabel  string
 		wantTarget string
 	}{
-		// {"A", fgDNSRecord{Type: "A", Hostname: "www", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "www", "192.0.2.1"},
-		// {"A", fgDNSRecord{Type: "A", Hostname: "@", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
-		// {"A", fgDNSRecord{Type: "A", Hostname: "example.com.", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
-		// {"CNAME", fgDNSRecord{Type: "CNAME", Hostname: "www", CanonicalName: "target.example.net.", TTL: 300, Status: "enable"}, "www", "target.example.net."},
+		{"A", fgDNSRecord{Type: "A", Hostname: "www", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "www", "192.0.2.1"},
+		{"A", fgDNSRecord{Type: "A", Hostname: "@", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
+		{"A", fgDNSRecord{Type: "A", Hostname: "example.com.", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
+		{"CNAME", fgDNSRecord{Type: "CNAME", Hostname: "www", CanonicalName: "target.example.net.", TTL: 300, Status: "enable"}, "www", "target.example.net."},
 		{"MX", fgDNSRecord{Type: "MX", Hostname: "mail.example.com.", Preference: 10, TTL: 300, Status: "disable"}, "@", "10 mail.example.com."},
 	}
 	for _, tc := range tests {
