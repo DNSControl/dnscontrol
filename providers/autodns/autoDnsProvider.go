@@ -304,7 +304,7 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		existingRecords = append(existingRecords, addressRecord)
 
 		if zone.IncludeWwwForMain {
-			prefixedAddressRecord, err := dc.NewRecordConfig("www", ttl, dnsv2.TypeA, zone.MainRecord.Value)
+			prefixedAddressRecord, err := dc.NewRecordConfig(dc.LabelFromShort("www"), ttl, dnsv2.TypeA, zone.MainRecord.Value)
 			if err != nil {
 				return nil, err
 			}
