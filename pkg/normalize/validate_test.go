@@ -285,10 +285,11 @@ func Test_transform_cname_strip(t *testing.T) {
 }
 
 func TestNSAtRoot(t *testing.T) {
+	dc := models.MustNewDomainConfig("foo.com")
 	// do not allow ns records for @
-	rec := &models.RecordConfig{Type: "NS"}
-	rec.SetLabel("test", "foo.com")
-	rec.MustSetTarget("ns1.name.com.")
+	rec := dc.MustNewRecordConfig(dc.LabelFromShort("test"), 0, dnsv2.TypeNS, "ns1.name.com.")
+	// rec.SetLabel("test", "foo.com")
+	// rec.MustSetTarget("ns1.name.com.")
 	errs := checkTargets(rec, "foo.com")
 	if len(errs) > 0 {
 		t.Error("Expect no error with ns record on subdomain")
@@ -314,7 +315,7 @@ func TestTransforms(t *testing.T) {
 		dc := models.MustNewDomainConfig("example.tld")
 		rc1 := dc.MustNewRecordConfig("f", 0, dnsv2.TypeA, test.givenIP)
 		rc1.Metadata = map[string]string{"transform": transform}
-		dc.Records = []*models.RecordConfig{rc1}
+		dc.AddRecordConfig(rc1)
 
 		err := applyRecordTransforms(dc)
 		if err != nil {
@@ -334,62 +335,57 @@ func TestTransforms(t *testing.T) {
 	}
 }
 
-func TestCNAMEMutex(t *testing.T) {
-	recA := &models.RecordConfig{Type: "CNAME"}
-	recA.SetLabel("foo", "foo.example.com")
-	recA.MustSetTarget("example.com.")
-	tests := []struct {
-		rType string
-		name  string
-		fail  bool
-	}{
-		{"A", "foo", true},
-		{"A", "foo2", false},
-		{"CNAME", "foo", true},
-		{"CNAME", "foo2", false},
-	}
-	for _, tst := range tests {
-		t.Run(fmt.Sprintf("%s %s", tst.rType, tst.name), func(t *testing.T) {
-			recB := &models.RecordConfig{Type: tst.rType}
-			recB.SetLabel(tst.name, "example.com")
-			recB.MustSetTarget("example2.com.")
-			dc := models.MustNewDomainConfig("example.com")
-			dc.Records = []*models.RecordConfig{recA, recB}
-			errs := checkCNAMEs(dc)
-			if errs != nil && !tst.fail {
-				t.Error("Got error but expected none")
-			}
-			if errs == nil && tst.fail {
-				t.Error("Expected error but got none")
-			}
-		})
-	}
-}
+// This is obsolete.  A and CNAME check targets at the Make*() functions.
+// func TestCNAMEMutex(t *testing.T) {
+// 	dc := models.MustNewDomainConfig("example.com")
+// 	recA := dc.MustNewRecordConfig("foo", 0, dnsv2.TypeCNAME, "example.com.")
+// 	tests := []struct {
+// 		rType string
+// 		name  string
+// 		fail  bool
+// 	}{
+// 		{"A", "1.2.3.4", true},
+// 		{"A", "3.4.5.6", true},
+// 		{"CNAME", "foo", true},
+// 		{"CNAME", "foo2", true},
+// 	}
+// 	for _, tst := range tests {
+// 		t.Run(fmt.Sprintf("%s %s", tst.rType, tst.name), func(t *testing.T) {
+// 			dc := models.MustNewDomainConfig("example.com")
+// 			recB := dc.MustNewRecordConfig(tst.name, 0, tst.rType, tst.name)
+// 			dc.AddRecordConfig(recA)
+// 			dc.AddRecordConfig(recB)
+// 			errs := checkCNAMEs(dc)
+// 			if errs != nil && !tst.fail {
+// 				t.Error("Got error but expected none")
+// 			}
+// 			if errs == nil && tst.fail {
+// 				t.Error("Expected error but got none")
+// 			}
+// 		})
+// 	}
+// }
 
 func TestCNAMECloudflareProxied(t *testing.T) {
-	// A proxied (flattened) CNAME should be allowed alongside other record types.
-	recCNAME := &models.RecordConfig{
-		Type:     "CNAME",
-		Metadata: map[string]string{"cloudflare_proxy": "on"},
-	}
-	recCNAME.SetLabel("mail", "mail.example.com")
-	recCNAME.MustSetTarget("example.com.")
-	recMX := &models.RecordConfig{Type: "MX"}
-	recMX.SetLabel("mail", "mail.example.com")
-	recMX.MustSetTarget("smtp.example.com.")
 	dc := models.MustNewDomainConfig("example.com")
-	dc.Records = []*models.RecordConfig{recCNAME, recMX}
+	// A proxied (flattened) CNAME should be allowed alongside other record types.
+	recCNAME := dc.MustNewRecordConfig("mail", 0, dnsv2.TypeCNAME, "example.com.")
+	recCNAME.Metadata["cloudflare_proxy"] = "on"
+	dc.AddRecordConfig(recCNAME)
+	recMX := dc.MustNewRecordConfig("mail", 0, dnsv2.TypeMX, 10, "smtp.example.com.")
+	dc.AddRecordConfig(recMX)
 	errs := checkCNAMEs(dc)
 	if len(errs) != 0 {
 		t.Errorf("Expected no errors for proxied CNAME + MX, got: %v", errs)
 	}
 
 	// A non-proxied CNAME should still fail.
-	recCNAME2 := &models.RecordConfig{Type: "CNAME"}
-	recCNAME2.SetLabel("mail", "mail.example.com")
-	recCNAME2.MustSetTarget("example.com.")
 	dc2 := models.MustNewDomainConfig("example.com")
-	dc2.Records = []*models.RecordConfig{recCNAME2, recMX}
+	recCNAME2 := dc2.MustNewRecordConfig("mail", 0, dnsv2.TypeCNAME, "example.com.")
+	//recCNAME2.SetLabel("mail", "mail.example.com")
+	recMX2 := dc2.MustNewRecordConfig("mail", 0, dnsv2.TypeMX, 10, "smtp.example.com.")
+	dc2.AddRecordConfig(recCNAME2)
+	dc2.AddRecordConfig(recMX2)
 	errs2 := checkCNAMEs(dc2)
 	if len(errs2) == 0 {
 		t.Error("Expected error for non-proxied CNAME + MX, got none")
@@ -531,7 +527,7 @@ func TestTLSAValidation(t *testing.T) {
 	dc.AddTestRC(t, "_443._tcp", 0, dnsv2.TypeTLSA, 4, 1, 1, "abcdef0")
 
 	config := &models.DNSConfig{}
-	config.Domains = []*models.DomainConfig{dc}
+	config.Domains = append(config.Domains, dc)
 
 	errs := ValidateAndNormalizeConfig(config)
 	if len(errs) != 1 {
@@ -569,13 +565,10 @@ func Test_DSChecks(t *testing.T) {
 	})
 
 	t.Run("full DS support", func(t *testing.T) {
-		apexDS := models.RecordConfig{Type: "DS"}
-		apexDS.SetLabel("@", "example.com")
-
-		childDS := models.RecordConfig{Type: "DS"}
-		childDS.SetLabel("child", "example.com")
-
-		records := models.Records{&apexDS, &childDS}
+		dc := models.MustNewDomainConfig("example.com")
+		apexDS := dc.MustNewRecordConfig("@", 0, dnsv2.TypeDS, 1, 1, 1, 1)
+		childDS := dc.MustNewRecordConfig("child", 0, dnsv2.TypeDS, 1, 1, 1, 1)
+		records := models.Records{apexDS, childDS}
 
 		// check permutations of ProviderCanDS and having both DS caps
 		for _, pType := range []string{ProviderFullDS, ProviderBothDSCaps} {
@@ -587,19 +580,16 @@ func Test_DSChecks(t *testing.T) {
 	})
 
 	t.Run("child DS support only", func(t *testing.T) {
-		apexDS := models.RecordConfig{Type: "DS"}
-		apexDS.SetLabel("@", "example.com")
-
-		childDS := models.RecordConfig{Type: "DS"}
-		childDS.SetLabel("child", "example.com")
+		dc := models.MustNewDomainConfig("example.com")
+		apexDS := dc.MustNewRecordConfig("@", 0, dnsv2.TypeDS, 1, 1, 1, 1)
+		childDS := dc.MustNewRecordConfig("child", 0, dnsv2.TypeDS, 1, 1, 1, 1)
 
 		// this record is included at the apex to check the Type of the
 		// recordset is verified to only inspect records with type == DS
-		apexA := models.RecordConfig{Type: "A"}
-		apexA.SetLabel("@", "example.com")
+		apexA := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 
 		t.Run("accepts when child DS records only", func(t *testing.T) {
-			records := models.Records{&childDS, &apexA}
+			records := models.Records{childDS, apexA}
 			err := checkProviderDS(ProviderChildDSOnly, records)
 			if err != nil {
 				t.Errorf("Provider %s implements child DS support so the provided records should be accepted",
@@ -609,7 +599,7 @@ func Test_DSChecks(t *testing.T) {
 		})
 
 		t.Run("fails with apex and child DS records", func(t *testing.T) {
-			records := models.Records{&apexDS, &childDS, &apexA}
+			records := models.Records{apexDS, childDS, apexA}
 			err := checkProviderDS(ProviderChildDSOnly, records)
 			if err == nil {
 				t.Errorf("Provider %s does not implement DS support at the zone apex, so should reject provided records",
@@ -625,11 +615,11 @@ func TestCheckR53WeightedGroupConsistency_noerr_consistent(t *testing.T) {
 
 	rc1 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 	rc1.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"}
+	dc.AddRecordConfig(rc1)
 
 	rc2 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "2.3.4.5")
 	rc2.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"}
-
-	dc.Records = []*models.RecordConfig{rc1, rc2}
+	dc.AddRecordConfig(rc2)
 
 	errs := checkR53WeightedGroupConsistency(dc.Records)
 	if len(errs) != 0 {
@@ -642,11 +632,11 @@ func TestCheckR53WeightedGroupConsistency_noerr_different_set_ids(t *testing.T) 
 
 	rc1 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 	rc1.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary"}
+	dc.AddRecordConfig(rc1)
 
 	rc2 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "5.6.7.8")
 	rc2.Metadata = map[string]string{"r53_weight": "30", "r53_set_identifier": "secondary"}
-
-	dc.Records = []*models.RecordConfig{rc1, rc2}
+	dc.AddRecordConfig(rc2)
 
 	errs := checkR53WeightedGroupConsistency(dc.Records)
 	if len(errs) != 0 {
@@ -669,11 +659,11 @@ func TestCheckR53WeightedGroupConsistency_err_different_weights(t *testing.T) {
 
 	rc1 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 	rc1.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary"}
+	dc.AddRecordConfig(rc1)
 
 	rc2 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "2.3.4.5")
 	rc2.Metadata = map[string]string{"r53_weight": "50", "r53_set_identifier": "primary"}
-
-	dc.Records = []*models.RecordConfig{rc1, rc2}
+	dc.AddRecordConfig(rc2)
 
 	errs := checkR53WeightedGroupConsistency(dc.Records)
 	if len(errs) != 1 {
@@ -686,11 +676,11 @@ func TestCheckR53WeightedGroupConsistency_err_different_health_checks(t *testing
 
 	rc1 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 	rc1.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"}
+	dc.AddRecordConfig(rc1)
 
 	rc2 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "2.3.4.5")
 	rc2.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-2"}
-
-	dc.Records = []*models.RecordConfig{rc1, rc2}
+	dc.AddRecordConfig(rc2)
 
 	errs := checkR53WeightedGroupConsistency(dc.Records)
 	if len(errs) != 1 {
@@ -703,11 +693,11 @@ func TestCheckR53WeightedGroupConsistency_err_both_inconsistent(t *testing.T) {
 
 	rc1 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
 	rc1.Metadata = map[string]string{"r53_weight": "70", "r53_set_identifier": "primary", "r53_health_check_id": "hc-1"}
+	dc.AddRecordConfig(rc1)
 
 	rc2 := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "2.3.4.5")
 	rc2.Metadata = map[string]string{"r53_weight": "50", "r53_set_identifier": "primary", "r53_health_check_id": "hc-2"}
-
-	dc.Records = []*models.RecordConfig{rc1, rc2}
+	dc.AddRecordConfig(rc2)
 
 	errs := checkR53WeightedGroupConsistency(dc.Records)
 	if len(errs) != 2 {

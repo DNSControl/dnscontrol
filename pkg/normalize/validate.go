@@ -9,12 +9,12 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
-	dnsv1 "github.com/miekg/dns"
 )
 
 // Returns false if target does not validate.
@@ -241,13 +241,14 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	case "SRV":
 		check(checkTarget(target))
 	case "LUA":
-		upper := strings.ToUpper(rec.LuaRType)
+		f := rec.AsLUA()
+		upper := strings.ToUpper(f.LuaType)
 		if upper == "" {
 			check(errors.New("LUA records must specify an emitted rtype"))
 			break
 		}
-		if _, ok := dnsv1.StringToType[upper]; !ok {
-			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", rec.LuaRType))
+		if _, ok := dnsv2.StringToType[upper]; !ok {
+			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", f.LuaType))
 		}
 		rec.LuaRType = upper
 	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
@@ -489,8 +490,9 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			case "CAA":
 				// Per: https://www.iana.org/assignments/pkix-parameters/pkix-parameters.xhtml#caa-properties excluding reserved tags
 				allowedTags := []string{"issue", "issuewild", "iodef", "contactemail", "contactphone", "issuemail", "issuevmc"}
-				if !slices.Contains(allowedTags, rec.CaaTag) {
-					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", rec.CaaTag))
+				f := rec.AsCAA()
+				if !slices.Contains(allowedTags, f.Tag) {
+					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", f.Tag))
 				}
 			case "OPENPGPKEY":
 				target := rec.GetTargetField()
@@ -502,30 +504,33 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					}
 				}
 			case "TLSA":
-				if rec.TlsaUsage > 3 {
+				f := rec.AsTLSA()
+				if f.Usage > 3 {
+					f := rec.AsTLSA()
 					errs = append(errs, fmt.Errorf("TLSA Usage %d is invalid in record %s (domain %s)",
-						rec.TlsaUsage, rec.GetLabel(), domain.Name))
+						f.Usage, rec.GetLabel(), domain.Name))
 				}
-				if rec.TlsaSelector > 1 {
+				if f.Selector > 1 {
 					errs = append(errs, fmt.Errorf("TLSA Selector %d is invalid in record %s (domain %s)",
-						rec.TlsaSelector, rec.GetLabel(), domain.Name))
+						f.Selector, rec.GetLabel(), domain.Name))
 				}
-				if rec.TlsaMatchingType > 2 {
+				if f.MatchingType > 2 {
 					errs = append(errs, fmt.Errorf("TLSA MatchingType %d is invalid in record %s (domain %s)",
-						rec.TlsaMatchingType, rec.GetLabel(), domain.Name))
+						f.MatchingType, rec.GetLabel(), domain.Name))
 				}
 			case "SMIMEA":
-				if rec.SmimeaUsage > 3 {
+				f := rec.AsSMIMEA()
+				if f.Usage > 3 {
 					errs = append(errs, fmt.Errorf("SMIMEA Usage %d is invalid in record %s (domain %s)",
-						rec.SmimeaUsage, rec.GetLabel(), domain.Name))
+						f.Usage, rec.GetLabel(), domain.Name))
 				}
-				if rec.SmimeaSelector > 1 {
+				if f.Selector > 1 {
 					errs = append(errs, fmt.Errorf("SMIMEA Selector %d is invalid in record %s (domain %s)",
-						rec.SmimeaSelector, rec.GetLabel(), domain.Name))
+						f.Selector, rec.GetLabel(), domain.Name))
 				}
-				if rec.SmimeaMatchingType > 2 {
+				if f.MatchingType > 2 {
 					errs = append(errs, fmt.Errorf("SMIMEA MatchingType %d is invalid in record %s (domain %s)",
-						rec.SmimeaMatchingType, rec.GetLabel(), domain.Name))
+						f.MatchingType, rec.GetLabel(), domain.Name))
 				}
 			}
 
@@ -705,7 +710,7 @@ func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
 }
 
 func checkDuplicates(records []*models.RecordConfig) (errs []error) {
-	seen := map[string]*models.RecordConfig{}
+	seen := make(map[string]*models.RecordConfig)
 	for _, r := range records {
 		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
 

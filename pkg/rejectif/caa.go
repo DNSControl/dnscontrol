@@ -11,7 +11,7 @@ import (
 
 // CaaFlagIsNonZero identifies CAA records where tag is no zero.
 func CaaFlagIsNonZero(rc *models.RecordConfig) error {
-	if rc.CaaFlag != 0 {
+	if rc.AsCAA().Flag != 0 {
 		return errors.New("caa flag is non-zero")
 	}
 	return nil
@@ -29,7 +29,7 @@ func CaaTargetContainsWhitespace(rc *models.RecordConfig) error {
 
 // CaaHasEmptyTag detects CAA records with empty tags.
 func CaaHasEmptyTag(rc *models.RecordConfig) error {
-	if rc.CaaTag == "" {
+	if rc.AsCAA().Tag == "" {
 		return errors.New("caa has empty tag")
 	}
 	return nil
@@ -37,7 +37,7 @@ func CaaHasEmptyTag(rc *models.RecordConfig) error {
 
 // CaaHasEmptyTarget detects CAA records with empty targets.
 func CaaHasEmptyTarget(rc *models.RecordConfig) error {
-	if rc.GetTargetField() == "" {
+	if rc.AsCAA().Value == "" {
 		return errors.New("caa has empty target")
 	}
 	return nil
