@@ -169,32 +169,29 @@ func MakeLOC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 		}, nil
 	}
 
-	rc := &RecordConfig{}
-	// TODO(tlim): Recfactor SetLOCParams to produce its results outside of an RC.
-	rc.SetLOCParams(
-		mustbe.Uint8(args[0]),
-		mustbe.Uint8(args[1]),
-		mustbe.Float32(args[2]),
-		mustbe.RawString(args[3]),
-		mustbe.Uint8(args[4]),
-		mustbe.Uint8(args[5]),
-		mustbe.Float32(args[6]),
-		mustbe.RawString(args[7]),
-		mustbe.Float64(args[8]),
-		mustbe.Float32(args[9]),
-		mustbe.Float32(args[10]),
-		mustbe.Float32(args[11]),
-	)
+	a0 := mustbe.Uint8(args[0])
+	a1 := mustbe.Uint8(args[1])
+	a2 := mustbe.Float32(args[2])
+	a3 := mustbe.RawString(args[3])
+	a4 := mustbe.Uint8(args[4])
+	a5 := mustbe.Uint8(args[5])
+	a6 := mustbe.Float32(args[6])
+	a7 := mustbe.RawString(args[7])
+	a8 := mustbe.Float64(args[8])
+	a9 := mustbe.Float32(args[9])
+	a10 := mustbe.Float32(args[10])
+	a11 := mustbe.Float32(args[11])
+	// TODO(tlim): Add bounds checking. Then uncomment the lines in 045-loc.js that test that.
 
-	return dnsrdatav2.LOC{
-		Version:   rc.LocVersion,
-		Size:      rc.LocSize,
-		HorizPre:  rc.LocHorizPre,
-		VertPre:   rc.LocVertPre,
-		Latitude:  rc.LocLatitude,
-		Longitude: rc.LocLongitude,
-		Altitude:  rc.LocAltitude,
-	}, nil
+	// The 12-item version needs to be turned into the 7-item packed version.
+	// The easiest way to do that is to let dnsv2 do it for us.
+	// It is a little extra parsing, but why re-invent the wheel?
+	x := fmt.Sprintf("%d %d %.2f %s %d %d %.2f %s %.2f %.2f %0.2f %0.2f ", a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+	y := fmt.Sprintf("0=%d 1=%d 2=%.2f 3=%s 4=%d 5=%d 6=%.2f 7=%s 8=%.2f 9=%.2f 10=%0.2f 11=%0.2f ", a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+	fmt.Printf("DEBUG: loc y=%q\n", y)
+	rd, err := dnsv2.NewData(dnsv2.TypeLOC, x, origin)
+
+	return rd, err
 }
 
 func MakeMIKROTIKFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

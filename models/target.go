@@ -6,9 +6,9 @@ import (
 	"net/netip"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
-	dnsv1 "github.com/miekg/dns"
 )
 
 /* .target is kind of a mess.
@@ -77,7 +77,7 @@ func (rc *RecordConfig) GetTargetCombined() string {
 	}
 
 	// Pseudo records:
-	if _, ok := dnsv1.StringToType[rc.Type]; !ok {
+	if _, ok := dnsv2.StringToType[rc.Type]; !ok {
 		switch rc.Type { // #rtype_variations
 		case "LUA":
 			return rc.luaCombined()
@@ -120,7 +120,8 @@ func (rc *RecordConfig) zoneFileQuoted() string {
 	}
 
 	if rc.GetRDATA() == nil {
-		panic("something is really wrong")
+		rc.RecomputeV3Fields("")
+		//panic("something is really wrong")
 	}
 	return rc.GetRDATA().String()
 

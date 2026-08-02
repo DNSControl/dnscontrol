@@ -20,6 +20,7 @@
           "loclongitude": 1891505648,
           "locsize": 51,
           "name": "loctest1",
+          "name_unicode": "loctest1",
           "rdata": {
             "Altitude": 9997600,
             "HorizPre": 0,
@@ -41,6 +42,7 @@
           "loclongitude": 1891505648,
           "locsize": 51,
           "name": "loctest2.ssub",
+          "name_unicode": "loctest2.ssub",
           "rdata": {
             "Altitude": 9997600,
             "HorizPre": 0,

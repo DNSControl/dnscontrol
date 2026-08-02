@@ -10,7 +10,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/jinzhu/copier"
-	dnsv1 "github.com/miekg/dns"
 	"github.com/qdm12/reprint"
 )
 
@@ -330,132 +329,132 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 	return rc.GetTargetCombined()
 }
 
-// ToRR converts a RecordConfig to a dns.RR.
-func (rc *RecordConfig) xToRR() dnsv1.RR {
-	// Function is not valid on pseudo-types.
-	rdtype, ok := dnsv1.StringToType[rc.Type]
-	if !ok {
-		log.Fatalf("No such DNS type as (%#v)\n", rc.Type)
-	}
+// // ToRR converts a RecordConfig to a dns.RR.
+// func (rc *RecordConfig) xToRR() dnsv1.RR {
+// 	// Function is not valid on pseudo-types.
+// 	rdtype, ok := dnsv1.StringToType[rc.Type]
+// 	if !ok {
+// 		log.Fatalf("No such DNS type as (%#v)\n", rc.Type)
+// 	}
 
-	// Magically create an RR of the correct type.
-	rr := dnsv1.TypeToRR[rdtype]()
+// 	// Magically create an RR of the correct type.
+// 	rr := dnsv1.TypeToRR[rdtype]()
 
-	// Fill in the header.
-	rr.Header().Name = rc.NameFQDN + "."
-	rr.Header().Rrtype = rdtype
-	rr.Header().Class = dnsv1.ClassINET
-	rr.Header().Ttl = rc.TTL
-	if rc.TTL == 0 {
-		rr.Header().Ttl = DefaultTTL
-	}
+// 	// Fill in the header.
+// 	rr.Header().Name = rc.NameFQDN + "."
+// 	rr.Header().Rrtype = rdtype
+// 	rr.Header().Class = dnsv1.ClassINET
+// 	rr.Header().Ttl = rc.TTL
+// 	if rc.TTL == 0 {
+// 		rr.Header().Ttl = DefaultTTL
+// 	}
 
-	// Fill in the data.
-	switch rdtype { // #rtype_variations
-	case dnsv1.TypeA:
-		addr := rc.GetTargetIP()
-		if s := addr.AsSlice(); len(s) == 4 {
-			rr.(*dnsv1.A).A = s
-		}
-	case dnsv1.TypeAAAA:
-		addr := rc.GetTargetIP()
-		if s := addr.AsSlice(); len(s) == 16 {
-			rr.(*dnsv1.AAAA).AAAA = s
-		}
-	case dnsv1.TypeCAA:
-		rr.(*dnsv1.CAA).Flag = rc.CaaFlag
-		rr.(*dnsv1.CAA).Tag = rc.CaaTag
-		rr.(*dnsv1.CAA).Value = rc.GetTargetField()
-	case dnsv1.TypeCNAME:
-		rr.(*dnsv1.CNAME).Target = rc.GetTargetField()
-	case dnsv1.TypeDHCID:
-		rr.(*dnsv1.DHCID).Digest = rc.GetTargetField()
-	case dnsv1.TypeDNAME:
-		rr.(*dnsv1.DNAME).Target = rc.GetTargetField()
-	case dnsv1.TypeDS:
-		rr.(*dnsv1.DS).KeyTag = rc.DsKeyTag
-		rr.(*dnsv1.DS).Algorithm = rc.DsAlgorithm
-		rr.(*dnsv1.DS).DigestType = rc.DsDigestType
-		rr.(*dnsv1.DS).Digest = rc.DsDigest
-	case dnsv1.TypeDNSKEY:
-		rr.(*dnsv1.DNSKEY).Flags = rc.DnskeyFlags
-		rr.(*dnsv1.DNSKEY).Protocol = rc.DnskeyProtocol
-		rr.(*dnsv1.DNSKEY).Algorithm = rc.DnskeyAlgorithm
-		rr.(*dnsv1.DNSKEY).PublicKey = rc.DnskeyPublicKey
-	case dnsv1.TypeHTTPS:
-		rr.(*dnsv1.HTTPS).Priority = rc.SvcPriority
-		rr.(*dnsv1.HTTPS).Target = rc.GetTargetField()
-		// rr.(*dnsv1.HTTPS).Value = rc.GetSVCBValue()
-	case dnsv1.TypeLOC:
-		// fmt.Printf("ToRR long: %d, lat:%d, sz: %d, hz:%d, vt:%d\n", rc.LocLongitude, rc.LocLatitude, rc.LocSize, rc.LocHorizPre, rc.LocVertPre)
-		// fmt.Printf("ToRR rc: %+v\n", *rc)
-		rr.(*dnsv1.LOC).Version = rc.LocVersion
-		rr.(*dnsv1.LOC).Longitude = rc.LocLongitude
-		rr.(*dnsv1.LOC).Latitude = rc.LocLatitude
-		rr.(*dnsv1.LOC).Altitude = rc.LocAltitude
-		rr.(*dnsv1.LOC).Size = rc.LocSize
-		rr.(*dnsv1.LOC).HorizPre = rc.LocHorizPre
-		rr.(*dnsv1.LOC).VertPre = rc.LocVertPre
-	case dnsv1.TypeMX:
-		rr.(*dnsv1.MX).Preference = rc.MxPreference
-		rr.(*dnsv1.MX).Mx = rc.GetTargetField()
-	case dnsv1.TypeNAPTR:
-		rr.(*dnsv1.NAPTR).Order = rc.NaptrOrder
-		rr.(*dnsv1.NAPTR).Preference = rc.NaptrPreference
-		rr.(*dnsv1.NAPTR).Flags = rc.NaptrFlags
-		rr.(*dnsv1.NAPTR).Service = rc.NaptrService
-		rr.(*dnsv1.NAPTR).Regexp = rc.NaptrRegexp
-		rr.(*dnsv1.NAPTR).Replacement = rc.GetTargetField()
-	case dnsv1.TypeNS:
-		rr.(*dnsv1.NS).Ns = rc.GetTargetField()
-	case dnsv1.TypeOPENPGPKEY:
-		rr.(*dnsv1.OPENPGPKEY).PublicKey = rc.GetTargetField()
-	case dnsv1.TypePTR:
-		rr.(*dnsv1.PTR).Ptr = rc.GetTargetField()
-	case dnsv1.TypeSMIMEA:
-		rr.(*dnsv1.SMIMEA).Usage = rc.SmimeaUsage
-		rr.(*dnsv1.SMIMEA).MatchingType = rc.SmimeaMatchingType
-		rr.(*dnsv1.SMIMEA).Selector = rc.SmimeaSelector
-		rr.(*dnsv1.SMIMEA).Certificate = rc.GetTargetField()
-	case dnsv1.TypeSOA:
-		f := rc.AsSOA()
-		rr.(*dnsv1.SOA).Ns = f.Ns
-		rr.(*dnsv1.SOA).Mbox = f.Mbox
-		rr.(*dnsv1.SOA).Serial = f.Serial
-		rr.(*dnsv1.SOA).Refresh = f.Refresh
-		rr.(*dnsv1.SOA).Retry = f.Retry
-		rr.(*dnsv1.SOA).Expire = f.Expire
-		rr.(*dnsv1.SOA).Minttl = f.Minttl
-	case dnsv1.TypeSPF:
-		rr.(*dnsv1.SPF).Txt = rc.GetTargetTXTSegmented()
-	case dnsv1.TypeSRV:
-		rr.(*dnsv1.SRV).Priority = rc.SrvPriority
-		rr.(*dnsv1.SRV).Weight = rc.SrvWeight
-		rr.(*dnsv1.SRV).Port = rc.SrvPort
-		rr.(*dnsv1.SRV).Target = rc.GetTargetField()
-	case dnsv1.TypeSSHFP:
-		rr.(*dnsv1.SSHFP).Algorithm = rc.SshfpAlgorithm
-		rr.(*dnsv1.SSHFP).Type = rc.SshfpFingerprint
-		rr.(*dnsv1.SSHFP).FingerPrint = rc.GetTargetField()
-	case dnsv1.TypeSVCB:
-		rr.(*dnsv1.SVCB).Priority = rc.SvcPriority
-		rr.(*dnsv1.SVCB).Target = rc.GetTargetField()
-		// rr.(*dnsv1.SVCB).Value = rc.GetSVCBValue()
-	case dnsv1.TypeTLSA:
-		rr.(*dnsv1.TLSA).Usage = rc.TlsaUsage
-		rr.(*dnsv1.TLSA).MatchingType = rc.TlsaMatchingType
-		rr.(*dnsv1.TLSA).Selector = rc.TlsaSelector
-		rr.(*dnsv1.TLSA).Certificate = rc.GetTargetField()
-	case dnsv1.TypeTXT:
-		rr.(*dnsv1.TXT).Txt = rc.GetTargetTXTSegmented()
-	default:
-		panic(fmt.Sprintf("ToRR: Unimplemented rtype %v", rc.Type))
-		// We panic so that we quickly find any switch statements
-		// that have not been updated for a new RR type.
-	}
+// 	// Fill in the data.
+// 	switch rdtype { // #rtype_variations
+// 	case dnsv1.TypeA:
+// 		addr := rc.GetTargetIP()
+// 		if s := addr.AsSlice(); len(s) == 4 {
+// 			rr.(*dnsv1.A).A = s
+// 		}
+// 	case dnsv1.TypeAAAA:
+// 		addr := rc.GetTargetIP()
+// 		if s := addr.AsSlice(); len(s) == 16 {
+// 			rr.(*dnsv1.AAAA).AAAA = s
+// 		}
+// 	case dnsv1.TypeCAA:
+// 		rr.(*dnsv1.CAA).Flag = rc.CaaFlag
+// 		rr.(*dnsv1.CAA).Tag = rc.CaaTag
+// 		rr.(*dnsv1.CAA).Value = rc.GetTargetField()
+// 	case dnsv1.TypeCNAME:
+// 		rr.(*dnsv1.CNAME).Target = rc.GetTargetField()
+// 	case dnsv1.TypeDHCID:
+// 		rr.(*dnsv1.DHCID).Digest = rc.GetTargetField()
+// 	case dnsv1.TypeDNAME:
+// 		rr.(*dnsv1.DNAME).Target = rc.GetTargetField()
+// 	case dnsv1.TypeDS:
+// 		rr.(*dnsv1.DS).KeyTag = rc.DsKeyTag
+// 		rr.(*dnsv1.DS).Algorithm = rc.DsAlgorithm
+// 		rr.(*dnsv1.DS).DigestType = rc.DsDigestType
+// 		rr.(*dnsv1.DS).Digest = rc.DsDigest
+// 	case dnsv1.TypeDNSKEY:
+// 		rr.(*dnsv1.DNSKEY).Flags = rc.DnskeyFlags
+// 		rr.(*dnsv1.DNSKEY).Protocol = rc.DnskeyProtocol
+// 		rr.(*dnsv1.DNSKEY).Algorithm = rc.DnskeyAlgorithm
+// 		rr.(*dnsv1.DNSKEY).PublicKey = rc.DnskeyPublicKey
+// 	case dnsv1.TypeHTTPS:
+// 		rr.(*dnsv1.HTTPS).Priority = rc.SvcPriority
+// 		rr.(*dnsv1.HTTPS).Target = rc.GetTargetField()
+// 		// rr.(*dnsv1.HTTPS).Value = rc.GetSVCBValue()
+// 	case dnsv1.TypeLOC:
+// 		// fmt.Printf("ToRR long: %d, lat:%d, sz: %d, hz:%d, vt:%d\n", rc.LocLongitude, rc.LocLatitude, rc.LocSize, rc.LocHorizPre, rc.LocVertPre)
+// 		// fmt.Printf("ToRR rc: %+v\n", *rc)
+// 		rr.(*dnsv1.LOC).Version = rc.LocVersion
+// 		rr.(*dnsv1.LOC).Longitude = rc.LocLongitude
+// 		rr.(*dnsv1.LOC).Latitude = rc.LocLatitude
+// 		rr.(*dnsv1.LOC).Altitude = rc.LocAltitude
+// 		rr.(*dnsv1.LOC).Size = rc.LocSize
+// 		rr.(*dnsv1.LOC).HorizPre = rc.LocHorizPre
+// 		rr.(*dnsv1.LOC).VertPre = rc.LocVertPre
+// 	case dnsv1.TypeMX:
+// 		rr.(*dnsv1.MX).Preference = rc.MxPreference
+// 		rr.(*dnsv1.MX).Mx = rc.GetTargetField()
+// 	case dnsv1.TypeNAPTR:
+// 		rr.(*dnsv1.NAPTR).Order = rc.NaptrOrder
+// 		rr.(*dnsv1.NAPTR).Preference = rc.NaptrPreference
+// 		rr.(*dnsv1.NAPTR).Flags = rc.NaptrFlags
+// 		rr.(*dnsv1.NAPTR).Service = rc.NaptrService
+// 		rr.(*dnsv1.NAPTR).Regexp = rc.NaptrRegexp
+// 		rr.(*dnsv1.NAPTR).Replacement = rc.GetTargetField()
+// 	case dnsv1.TypeNS:
+// 		rr.(*dnsv1.NS).Ns = rc.GetTargetField()
+// 	case dnsv1.TypeOPENPGPKEY:
+// 		rr.(*dnsv1.OPENPGPKEY).PublicKey = rc.GetTargetField()
+// 	case dnsv1.TypePTR:
+// 		rr.(*dnsv1.PTR).Ptr = rc.GetTargetField()
+// 	case dnsv1.TypeSMIMEA:
+// 		rr.(*dnsv1.SMIMEA).Usage = rc.SmimeaUsage
+// 		rr.(*dnsv1.SMIMEA).MatchingType = rc.SmimeaMatchingType
+// 		rr.(*dnsv1.SMIMEA).Selector = rc.SmimeaSelector
+// 		rr.(*dnsv1.SMIMEA).Certificate = rc.GetTargetField()
+// 	case dnsv1.TypeSOA:
+// 		f := rc.AsSOA()
+// 		rr.(*dnsv1.SOA).Ns = f.Ns
+// 		rr.(*dnsv1.SOA).Mbox = f.Mbox
+// 		rr.(*dnsv1.SOA).Serial = f.Serial
+// 		rr.(*dnsv1.SOA).Refresh = f.Refresh
+// 		rr.(*dnsv1.SOA).Retry = f.Retry
+// 		rr.(*dnsv1.SOA).Expire = f.Expire
+// 		rr.(*dnsv1.SOA).Minttl = f.Minttl
+// 	case dnsv1.TypeSPF:
+// 		rr.(*dnsv1.SPF).Txt = rc.GetTargetTXTSegmented()
+// 	case dnsv1.TypeSRV:
+// 		rr.(*dnsv1.SRV).Priority = rc.SrvPriority
+// 		rr.(*dnsv1.SRV).Weight = rc.SrvWeight
+// 		rr.(*dnsv1.SRV).Port = rc.SrvPort
+// 		rr.(*dnsv1.SRV).Target = rc.GetTargetField()
+// 	case dnsv1.TypeSSHFP:
+// 		rr.(*dnsv1.SSHFP).Algorithm = rc.SshfpAlgorithm
+// 		rr.(*dnsv1.SSHFP).Type = rc.SshfpFingerprint
+// 		rr.(*dnsv1.SSHFP).FingerPrint = rc.GetTargetField()
+// 	case dnsv1.TypeSVCB:
+// 		rr.(*dnsv1.SVCB).Priority = rc.SvcPriority
+// 		rr.(*dnsv1.SVCB).Target = rc.GetTargetField()
+// 		// rr.(*dnsv1.SVCB).Value = rc.GetSVCBValue()
+// 	case dnsv1.TypeTLSA:
+// 		rr.(*dnsv1.TLSA).Usage = rc.TlsaUsage
+// 		rr.(*dnsv1.TLSA).MatchingType = rc.TlsaMatchingType
+// 		rr.(*dnsv1.TLSA).Selector = rc.TlsaSelector
+// 		rr.(*dnsv1.TLSA).Certificate = rc.GetTargetField()
+// 	case dnsv1.TypeTXT:
+// 		rr.(*dnsv1.TXT).Txt = rc.GetTargetTXTSegmented()
+// 	default:
+// 		panic(fmt.Sprintf("ToRR: Unimplemented rtype %v", rc.Type))
+// 		// We panic so that we quickly find any switch statements
+// 		// that have not been updated for a new RR type.
+// 	}
 
-	return rr
-}
+// 	return rr
+// }
 
 // ToRRv2 converts a RecordConfig to a dnsv2.RR.
 func (rc *RecordConfig) ToRRv2() dnsv2.RR {
