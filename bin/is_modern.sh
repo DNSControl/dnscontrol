@@ -33,5 +33,8 @@ grep -n --color --include='*.go' -r -E 'SetTargetCAA\(|SetTargetCAAStrings\(|Set
 echo '========== Step 8. Old Fields'
 grep -n --color --include='*.go' --exclude=populatelegacy.go -r -E '\.(MxPreference|SrvPriority|SrvWeight|SrvPort|CaaTag|CaaFlag|DsKeyTag|DsAlgorithm|DsDigestType|DsDigest|DnskeyFlags|DnskeyProtocol|DnskeyAlgorithm|DnskeyPublicKey|LocVersion|LocSize|LocHorizPre|LocVertPre|LocLatitude|LocLongitude|LocAltitude|NaptrOrder|NaptrPreference|NaptrFlags|NaptrService|NaptrRegexp|SmimeaUsage|SmimeaSelector|SmimeaMatchingType|SshfpAlgorithm|SshfpFingerprint|SoaMbox|SoaSerial|SoaRefresh|SoaRetry|SoaExpire|SoaMinttl|SvcPriority|SvcParams|TlsaUsage|TlsaSelector|TlsaMatchingType)' *
 
-# echo '========== Step 9. Should Be Metadata Fields'
+echo '========== Step 9. GetTargetField'
+grep -n --color --include='*.go' -r -E 'GetTargetField\(' * *
+
+# echo '========== Step 10. Should Be Metadata Fields'
 # grep -n --color --include='*.go' -r -E '\.(LuaType|R53Alias|AzureAlias|AnswerType|UnknownTypeName)' *
