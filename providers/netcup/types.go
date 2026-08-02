@@ -144,6 +144,8 @@ func fromRecordConfig(rc *models.RecordConfig) *record {
 		ncRec.Destination = strconv.Itoa(int(f.Usage)) + " " + strconv.Itoa(int(f.Selector)) + " " + strconv.Itoa(int(f.MatchingType)) + " " + f.Certificate
 		// TODO(tlim): Try this instead:
 		//ncRec.Destination = f.String()
+	case "TXT":
+		ncRec.Destination = rc.GetTargetTXTJoined()
 	default:
 		ncRec.Destination = rc.GetRDATA().String()
 	}

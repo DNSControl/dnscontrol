@@ -5,7 +5,6 @@ package desec
 import (
 	"fmt"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
@@ -18,15 +17,10 @@ func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.R
 	// n.Records rather than having many resourceRecord's.
 	// We must split them out into individual records, one for each value.
 	for _, value := range n.Records {
-		var rc *models.RecordConfig
-		var err error
-		if n.Type == "TXT" {
-			// deSEC returns TXT data as raw text, matching the provider's
-			// historical behavior.
-			rc, err = dc.NewRecordConfig(n.Subname, n.TTL, dnsv2.TypeTXT, value)
-		} else {
-			rc, err = dc.NewRecordConfigParse(n.Subname, n.TTL, n.Type, value)
-		}
+		label := dc.LabelFromShort(n.Subname)
+		ttl := n.TTL
+
+		rc, err := dc.NewRecordConfigParse(label, ttl, n.Type, value)
 		if err != nil {
 			panic(fmt.Errorf("unparsable record received from deSEC: %w", err))
 		}

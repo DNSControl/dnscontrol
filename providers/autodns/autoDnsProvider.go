@@ -202,48 +202,43 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 	var zoneTTL uint32
 	var resourceRecords []*ResourceRecord
 
-	for _, record := range recs {
-		if record.Type == "NS" && record.Name == "@" {
+	for _, rc := range recs {
+		if rc.Type == "NS" && rc.Name == "@" {
 			// NS records for the APEX should be handled differently
 			nameServers = append(nameServers, &models.Nameserver{
-				Name: strings.TrimSuffix(record.AsNS().Ns, "."),
+				Name: strings.TrimSuffix(rc.AsNS().Ns, "."),
 			})
 
-			zoneTTL = record.TTL
+			zoneTTL = rc.TTL
 		} else {
+			name := rc.Name
+			if name == "@" {
+				name = ""
+			}
+
 			resourceRecord := &ResourceRecord{
-				Name:  record.Name,
-				TTL:   int64(record.TTL),
-				Type:  record.Type,
-				Value: record.GetRDATA().String(),
+				Name: name,
+				TTL:  int64(rc.TTL),
+				Type: rc.Type,
 			}
 
-			if resourceRecord.Name == "@" {
-				resourceRecord.Name = ""
-			}
+			switch rc.TypeNum {
+			case dnsv2.TypeMX:
+				f := rc.AsMX()
+				resourceRecord.Pref = int32(f.Preference)
+				resourceRecord.Value = rc.GetRDATA().String()
+				// If that doesn't work, try:
+				//resourceRecord.Pref = int32(f.Preference)
+				//resourceRecord.Value = f.Mx
 
-			if record.Type == "MX" {
-				resourceRecord.Pref = int32(record.MxPreference)
-			}
+			case dnsv2.TypeSRV:
+				resourceRecord.Value = rc.GetRDATA().String()
 
-			if record.Type == "SRV" {
-				// resourceRecord.Value = fmt.Sprintf("%d %d %d %s",
-				// 	record.SrvPriority,
-				// 	record.SrvWeight,
-				// 	record.SrvPort,
-				// 	record.Get TargetField(),
-				// )
-				resourceRecord.Value = record.GetRDATA().String()
+			case dnsv2.TypeCAA:
+				resourceRecord.Value = rc.GetRDATA().String()
 
-			}
-
-			if record.Type == "CAA" {
-				// resourceRecord.Value = fmt.Sprintf("%d %s \"%s\"",
-				// 	record.CaaFlag,
-				// 	record.CaaTag,
-				// 	record.Get TargetField(),
-				// )
-				resourceRecord.Value = record.GetRDATA().String()
+			default:
+				resourceRecord.Value = rc.GetRDATA().String()
 			}
 
 			resourceRecords = append(resourceRecords, resourceRecord)
@@ -309,7 +304,7 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		existingRecords = append(existingRecords, addressRecord)
 
 		if zone.IncludeWwwForMain {
-			prefixedAddressRecord, err := dc.NewRecordConfig("www", ttl, dnsv2.TypeA, zone.MainRecord.Value)
+			prefixedAddressRecord, err := dc.NewRecordConfig(dc.LabelFromShort("www"), ttl, dnsv2.TypeA, zone.MainRecord.Value)
 			if err != nil {
 				return nil, err
 			}

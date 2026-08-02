@@ -7,16 +7,19 @@ import (
 )
 
 func toRecordConfig(dc *models.DomainConfig, currentRecord *domainNameShopRecord) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(currentRecord.Host)
+	ttl := fixTTL(uint32(currentRecord.TTL))
 	target := currentRecord.Data
+
 	var rc *models.RecordConfig
 	var err error
 	switch currentRecord.Type {
 	case "TXT":
-		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, target)
+		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
 	case "MX":
-		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, currentRecord.ActualPriority, target)
+		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, currentRecord.ActualPriority, target)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, currentRecord.ActualPriority, currentRecord.ActualWeight, currentRecord.ActualPort, target)
+		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, currentRecord.ActualPriority, currentRecord.ActualWeight, currentRecord.ActualPort, target)
 	case "CAA":
 		tag := "iodef"
 		switch currentRecord.CAATag {
@@ -25,14 +28,16 @@ func toRecordConfig(dc *models.DomainConfig, currentRecord *domainNameShopRecord
 		case "1":
 			tag = "issuewild"
 		}
-		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, uint8(currentRecord.CAAFlag), tag, target)
+		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, uint8(currentRecord.CAAFlag), tag, target)
 	default:
-		rc, err = dc.NewRecordConfig(currentRecord.Host, fixTTL(uint32(currentRecord.TTL)), currentRecord.Type, target)
+		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
 	}
 	if err != nil {
 		return nil, err
 	}
+
 	rc.Original = currentRecord
+
 	return rc, nil
 }
 
