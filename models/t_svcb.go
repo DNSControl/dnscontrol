@@ -24,11 +24,11 @@ func (rc *RecordConfig) targetCombinedSVCBRaw() string {
 // 	return legacySetTargetArgs(rc, dnsv2.TypeSVCB, priority, target, params)
 // }
 
-// SetTargetSVCBString is like SetTargetSVCB but accepts one big string and the origin so parsing can be done using miekg/dns.
-// Deprecated. Use models.NewRecordConfigParse() instead.
-func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
-	return legacySetTargetParse(rc, dnsv2.TypeSVCB, contents)
-}
+// // SetTargetSVCBString is like SetTargetSVCB but accepts one big string and the origin so parsing can be done using miekg/dns.
+// // Deprecated. Use models.NewRecordConfigParse() instead.
+// func (rc *RecordConfig) SetTargetSVCBString(origin, contents string) error {
+// 	return legacySetTargetParse(rc, dnsv2.TypeSVCB, contents)
+// }
 
 // GetSVCBValue returns the SVCB Key/Values as a list of Key/Values.
 // Used to construct dnsv.RR of type SVCB or HTTPS. (This is legacy code that should go away eventualy).
