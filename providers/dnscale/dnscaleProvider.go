@@ -12,10 +12,8 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -539,8 +537,8 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 	var content string
 	priority := 0
 
-	switch rc.TypeNum {
-	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.TypePTR, privatetypes.TypeALIAS:
+	switch rc.Type {
+	case "CNAME", "NS", "PTR", "ALIAS":
 		// Remove trailing dot for DNScale API
 		content = strings.TrimSuffix(content, ".")
 	case "MX":
@@ -557,25 +555,25 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 		// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
 		content = rc.GetRDATA().String()
 
-	case dnsv2.TypeCAA:
+	case "CAA":
 		// TODO(tlim): Remove commented out code if new code works.
 		//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
 		content = rc.GetRDATA().String()
-	case dnsv2.TypeTLSA:
+	case "TLSA":
 		// TODO(tlim): Remove commented out code if new code works.
 		//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 		content = rc.GetRDATA().String()
-	case dnsv2.TypeSSHFP:
+	case "SSHFP":
 		// TODO(tlim): Remove commented out code if new code works.
 		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 		content = rc.GetRDATA().String()
-	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
-		// Use GetTargetCombined() which formats SVCB/HTTPS records correctly via miekg/dns
+	case "HTTPS", "SVCB":
+		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns
 		// DNScale API requires selective quote handling for SVCB params:
 		// - alpn="h2,h3" must become alpn=h2,h3 (quotes stripped)
 		// - ech="base64..." must keep quotes (required for base64 values)
 		content = stripSvcbQuotesExceptEch(rc.GetRDATA().String())
-	case dnsv2.TypeTXT:
+	case "TXT":
 		content = rc.GetTargetTXTJoined()
 	default:
 		content = rc.GetRDATA().String()
