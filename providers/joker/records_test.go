@@ -294,11 +294,11 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "MX" {
 					t.Errorf("Type = %v, want MX", records[0].Type)
 				}
-				if records[0].MxPreference != 10 {
-					t.Errorf("MxPreference = %v, want 10", records[0].MxPreference)
+				if records[0].AsMX().Preference != 10 {
+					t.Errorf("MxPreference = %v, want 10", records[0].AsMX().Preference)
 				}
-				if records[0].GetTargetField() != "mail.example.com." {
-					t.Errorf("Target = %v, want mail.example.com.", records[0].GetTargetField())
+				if records[0].AsMX().Mx != "mail.example.com." {
+					t.Errorf("Target = %v, want mail.example.com.", records[0].AsMX().Mx)
 				}
 			},
 		},
@@ -350,17 +350,17 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "SRV" {
 					t.Errorf("Type = %v, want SRV", records[0].Type)
 				}
-				if records[0].SrvPriority != 10 {
-					t.Errorf("SrvPriority = %v, want 10", records[0].SrvPriority)
+				if records[0].AsSRV().Priority != 10 {
+					t.Errorf("SrvPriority = %v, want 10", records[0].AsSRV().Priority)
 				}
-				if records[0].SrvWeight != 20 {
-					t.Errorf("SrvWeight = %v, want 20", records[0].SrvWeight)
+				if records[0].AsSRV().Weight != 20 {
+					t.Errorf("SrvWeight = %v, want 20", records[0].AsSRV().Weight)
 				}
-				if records[0].SrvPort != 5060 {
-					t.Errorf("SrvPort = %v, want 5060", records[0].SrvPort)
+				if records[0].AsSRV().Port != 5060 {
+					t.Errorf("SrvPort = %v, want 5060", records[0].AsSRV().Port)
 				}
-				if records[0].GetTargetField() != "sip.example.com." {
-					t.Errorf("Target = %v, want sip.example.com.", records[0].GetTargetField())
+				if records[0].AsSRV().Target != "sip.example.com." {
+					t.Errorf("Target = %v, want sip.example.com.", records[0].AsSRV().Target)
 				}
 			},
 		},
@@ -372,14 +372,14 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "CAA" {
 					t.Errorf("Type = %v, want CAA", records[0].Type)
 				}
-				if records[0].CaaFlag != 0 {
-					t.Errorf("CaaFlag = %v, want 0", records[0].CaaFlag)
+				if records[0].AsCAA().Flag != 0 {
+					t.Errorf("CaaFlag = %v, want 0", records[0].AsCAA().Flag)
 				}
-				if records[0].CaaTag != "issue" {
-					t.Errorf("CaaTag = %v, want issue", records[0].CaaTag)
+				if records[0].AsCAA().Tag != "issue" {
+					t.Errorf("CaaTag = %v, want issue", records[0].AsCAA().Tag)
 				}
-				if records[0].GetTargetField() != "letsencrypt.org" {
-					t.Errorf("Target = %v, want letsencrypt.org", records[0].GetTargetField())
+				if records[0].AsCAA().Value != "letsencrypt.org" {
+					t.Errorf("Target = %v, want letsencrypt.org", records[0].AsCAA().Value)
 				}
 				if records[0].TTL != 303 {
 					t.Errorf("TTL = %v, want 303", records[0].TTL)
@@ -394,23 +394,23 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "NAPTR" {
 					t.Errorf("Type = %v, want NAPTR", records[0].Type)
 				}
-				if records[0].NaptrOrder != 100 {
-					t.Errorf("NaptrOrder = %v, want 100", records[0].NaptrOrder)
+				if records[0].AsNAPTR().Order != 100 {
+					t.Errorf("NaptrOrder = %v, want 100", records[0].AsNAPTR().Order)
 				}
-				if records[0].NaptrPreference != 50 {
-					t.Errorf("NaptrPreference = %v, want 50", records[0].NaptrPreference)
+				if records[0].AsNAPTR().Preference != 50 {
+					t.Errorf("NaptrPreference = %v, want 50", records[0].AsNAPTR().Preference)
 				}
-				if records[0].NaptrFlags != "u" {
-					t.Errorf("NaptrFlags = %v, want u", records[0].NaptrFlags)
+				if records[0].AsNAPTR().Flags != "u" {
+					t.Errorf("NaptrFlags = %v, want u", records[0].AsNAPTR().Flags)
 				}
-				if records[0].NaptrService != "sip+E2U" {
-					t.Errorf("NaptrService = %v, want sip+E2U", records[0].NaptrService)
+				if records[0].AsNAPTR().Service != "sip+E2U" {
+					t.Errorf("NaptrService = %v, want sip+E2U", records[0].AsNAPTR().Service)
 				}
-				if records[0].NaptrRegexp != "!^.*$!sip:info@example.com!" {
-					t.Errorf("NaptrRegexp = %v, want !^.*$!sip:info@example.com!", records[0].NaptrRegexp)
+				if records[0].AsNAPTR().Regexp != "!^.*$!sip:info@example.com!" {
+					t.Errorf("NaptrRegexp = %v, want !^.*$!sip:info@example.com!", records[0].AsNAPTR().Regexp)
 				}
-				if records[0].GetTargetField() != "target.example.com." {
-					t.Errorf("Target = %v, want target.example.com.", records[0].GetTargetField())
+				if records[0].AsNAPTR().Replacement != "target.example.com." {
+					t.Errorf("NaptrReplacement = %v, want target.example.com.", records[0].AsNAPTR().Replacement)
 				}
 				if records[0].TTL != 315 {
 					t.Errorf("TTL = %v, want 315", records[0].TTL)

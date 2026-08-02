@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	"codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -112,34 +111,31 @@ func (n *netlifyProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
 		ttl := uint32(r.TTL)
 
-		if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" {
-			r.Value = dnsutil.Canonical(r.Value)
-		}
-
 		var rec *models.RecordConfig
 		switch rtype := r.Type; rtype {
 		case "NETLIFY", "NETLIFYv6": // transparently ignore
 			continue
 		case "MX":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value)
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value,
+				nrc.Flags{TargetIsFqdnNoDot: true})
 		case "SRV":
-			parts := strings.Fields(r.Value)
-			if len(parts) == 3 {
-				r.Value += "."
-			}
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value)
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value,
+				nrc.Flags{TargetIsFqdnNoDot: true})
 		case "TXT":
 			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
 		case "CAA":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value)
+			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value,
+				nrc.Flags{TargetIsFqdnNoDot: true})
 		default:
-			rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value)
+			rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value,
+				nrc.Flags{TargetIsFqdnNoDot: true})
 		}
-
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
 		}
+
 		rec.Original = r
+
 		cleanRecords = append(cleanRecords, rec)
 	}
 

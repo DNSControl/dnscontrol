@@ -52,7 +52,6 @@ func toNative(rc *models.RecordConfig) domainRecord {
 		// produces `0 issue letsencrypt.org`, which the API rejects as
 		// malformed.
 		rr.RData = contentsOrig
-		//rr.RData = rc.GetTargetCombined()
 	}
 	return rr
 }

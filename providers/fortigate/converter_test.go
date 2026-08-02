@@ -1,7 +1,6 @@
 package fortigate
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -22,7 +21,7 @@ func TestNativeToRecord(t *testing.T) {
 		{"A", fgDNSRecord{Type: "A", Hostname: "@", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
 		{"A", fgDNSRecord{Type: "A", Hostname: "example.com.", IP: "192.0.2.1", TTL: 300, Status: "enable"}, "@", "192.0.2.1"},
 		{"CNAME", fgDNSRecord{Type: "CNAME", Hostname: "www", CanonicalName: "target.example.net.", TTL: 300, Status: "enable"}, "www", "target.example.net."},
-		{"MX", fgDNSRecord{Type: "MX", Hostname: "mail.example.net.", Preference: 10, TTL: 300, Status: "disable"}, "@", "10 mail.example.net."},
+		{"MX", fgDNSRecord{Type: "MX", Hostname: "mail.example.com.", Preference: 10, TTL: 300, Status: "disable"}, "@", "10 mail.example.com."},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -79,10 +78,6 @@ func TestNativeToRecord_Gen(t *testing.T) {
 			if got := rc.GetRDATA().String(); got != tc.wantTarget {
 				t.Errorf("target = %q, want %q", got, tc.wantTarget)
 			}
-			fmt.Printf("DEBUG: label = %q\n", rc.GetLabel())
-			//if got := rc.GetLabel(); got != tc.wantLabel {
-			//	t.Errorf("label = %q, want %q", got, tc.wantLabel)
-			//}
 		})
 	}
 }
