@@ -238,15 +238,18 @@ func (c *gigahostProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 
 // nativeToRecordConfig converts a Gigahost record into a RecordConfig.
 func nativeToRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(r.RecordName)
+	ttl := r.RecordTTL.Value
+
 	var rc *models.RecordConfig
 	var err error
 	switch r.RecordType {
 	case "MX":
-		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordPrio.Value, addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.RecordPrio.Value, addDot(r.RecordValue))
 	case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
 		// Gigahost stores hostname targets inconsistently (some with a trailing
 		// dot, some without); RecordConfig targets are always FQDNs.
-		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, addDot(r.RecordValue))
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, addDot(r.RecordValue))
 	case "TXT":
 		val := r.RecordValue
 		// The API returns >255-octet TXT values in the RFC1035 chunked form
@@ -260,14 +263,16 @@ func nativeToRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordCon
 				val = decoded
 			}
 		}
-		rc, err = dc.NewRecordConfig(r.RecordName, r.RecordTTL.Value, r.RecordType, val)
+		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, val)
 	default:
-		rc, err = dc.NewRecordConfigParse(r.RecordName, r.RecordTTL.Value, r.RecordType, r.RecordValue)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.RecordType, r.RecordValue)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("gigahost: unparsable %s record %q: %w", r.RecordType, r.RecordValue, err)
 	}
+
 	rc.Original = r
+
 	return rc, nil
 }
 
