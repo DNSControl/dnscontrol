@@ -442,8 +442,7 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 			return nil, err
 		}
 
-		rc, err = dc.NewRecordConfig(
-			label, ttl, dnsv2.TypeLOC,
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
 			r.LocLatDeg, r.LocLatMin, latSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, longSec, r.LocLongDir,
 			altitude, size, hPrec, vPrec)
