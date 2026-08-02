@@ -247,6 +247,7 @@ func makeTests() []*TestGroup {
 		// weirdest edge-case we've ever seen.
 
 		testgroup("Attl",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
@@ -254,6 +255,7 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("TTL",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("NETCUP"),  // NETCUP does not support TTLs.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
