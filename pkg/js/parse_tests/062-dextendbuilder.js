@@ -10,7 +10,6 @@ D("domain.tld", REG, DnsProvider(DNS), );
 
 D("sub.domain.tld", REG, DnsProvider(DNS), );
 
-
 // Should match domain.tld
 D_EXTEND("domain.tld",
     // loctest1

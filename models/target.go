@@ -110,28 +110,15 @@ func (rc *RecordConfig) GetTargetCombined() string {
 
 // zoneFileQuoted returns the rData as would be quoted in a zonefile.
 func (rc *RecordConfig) zoneFileQuoted() string {
-	// We cheat by converting to a dns.RR and use the String() function.
-	// This combines all the data for us, and even does proper quoting.
-	// Sadly String() always includes a header, which we must strip out.
-	// TODO(tlim): Request the dns project add a function that returns
-	// the string without the header.
 	if rc.Type == "NAPTR" && rc.GetTargetField() == "" {
 		rc.MustSetTarget(".")
 	}
 
+	// TODO(tlim): Figure out why this is needed.
 	if rc.GetRDATA() == nil {
 		rc.RecomputeV3Fields("")
-		//panic("something is really wrong")
 	}
 	return rc.GetRDATA().String()
-
-	// rr := rc.ToRR()
-	// header := rr.Header().String()
-	// full := rr.String()
-	// if !strings.HasPrefix(full, header) {
-	// 	panic("assertion failed. dns.Hdr.String() behavior has changed in an incompatible way")
-	// }
-	// return full[len(header):]
 }
 
 func (rc *RecordConfig) luaCombined() string {
@@ -152,14 +139,6 @@ func (rc *RecordConfig) luaTypeUpper() string {
 		return ""
 	}
 	return strings.ToUpper(rc.LuaRType)
-}
-
-// GetTargetRFC1035Quoted returns the target as it would be in an
-// RFC1035-style zonefile.
-// Do not use this function if RecordConfig might be a pseudo-rtype
-// such as R53_ALIAS.  Use GetTargetCombined() instead.
-func (rc *RecordConfig) GetTargetRFC1035Quoted() string {
-	return rc.zoneFileQuoted()
 }
 
 // GetTargetDebug returns a string with the various fields spelled out.
