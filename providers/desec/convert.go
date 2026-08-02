@@ -24,6 +24,7 @@ func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.R
 
 		rc, err := dc.NewRecordConfigParse(label, ttl, n.Type, value,
 			nrc.Flags{TxtDontParse: true})
+		// TODO(tlim): If txt records fail, remove the nrc.Flags.
 		if err != nil {
 			panic(fmt.Errorf("unparsable record received from deSEC: %w", err))
 		}
