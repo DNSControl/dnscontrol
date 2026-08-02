@@ -45,7 +45,7 @@ func TestNativeToRecordsPreservesRawTXT(t *testing.T) {
 
 	records := nativeToRecords(resourceRecord{
 		Subname: "@",
-		Records: []string{`"quoted" text`},
+		Records: []string{`\"quoted\" text`},
 		TTL:     300,
 		Type:    "TXT",
 	}, dc)

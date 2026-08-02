@@ -132,23 +132,26 @@ func toRecordConfig(dc *models.DomainConfig, record *recordResponseDataEntry) *m
 		recordType = "ALIAS"
 	}
 
+	label := dc.LabelFromShort(record.Name)
+	ttl := uint32(record.TTL)
+
 	var rc *models.RecordConfig
 	var err error
 	switch recordType {
 	case "MX":
-		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.MxLevel, record.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.MxLevel, record.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.Priority, record.Weight, record.Port, record.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.Priority, record.Weight, record.Port, record.Value)
 	case "CAA":
 		value, unquoteErr := strconv.Unquote(record.Value)
 		if unquoteErr != nil {
 			panic(unquoteErr)
 		}
-		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.IssuerCritical, record.CaaType, value)
+		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.IssuerCritical, record.CaaType, value)
 	case "ALIAS":
-		rc, err = dc.NewRecordConfig(record.Name, uint32(record.TTL), recordType, record.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.Value)
 	default:
-		rc, err = dc.NewRecordConfigParse(record.Name, uint32(record.TTL), recordType, record.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, recordType, record.Value)
 	}
 
 	if err != nil {

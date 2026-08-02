@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
@@ -443,8 +442,7 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 			return nil, err
 		}
 
-		rc, err = dc.NewRecordConfig(
-			label, ttl, dnsv2.TypeLOC,
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
 			r.LocLatDeg, r.LocLatMin, latSec, r.LocLatDir,
 			r.LocLongDeg, r.LocLongMin, longSec, r.LocLongDir,
 			altitude, size, hPrec, vPrec)
@@ -499,16 +497,18 @@ func formatLocParam(param string) string {
 
 // toReq takes a RecordConfig and turns it into the native format used by the API.
 func toReq(rc *models.RecordConfig) (requestParams, error) {
-	req := requestParams{
-		"record-type": rc.Type,
-		"host":        rc.GetLabel(),
-		"record":      rc.GetTargetField(),
-		"ttl":         strconv.Itoa(int(rc.TTL)),
+
+	host := rc.GetLabel()
+	// ClouDNS doesn't use "@", it uses an empty name
+	if host == "@" {
+		host = ""
 	}
 
-	// ClouDNS doesn't use "@", it uses an empty name
-	if req["host"] == "@" {
-		req["host"] = ""
+	req := requestParams{
+		"record-type": rc.Type,
+		"host":        host,
+		"ttl":         strconv.Itoa(int(rc.TTL)),
+		"record":      rc.GetRDATA().String(),
 	}
 
 	// Add metadata for GeoDNS
@@ -520,39 +520,39 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["geodns-code"] = geodnsCodeFromMetadataValue
 	}
 
-	rd := rc.GetRDATA()
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "ALIAS", "CNAME", "DNAME":
-		// Nothing special.
+	switch rc.Type {
 	case "CLOUDNS_WR":
 		req["record-type"] = "WR"
 	case "MX":
-		req["priority"] = strconv.Itoa(int(rd.(dnsrdatav2.MX).Preference))
+		f := rc.AsMX()
+		req["priority"] = strconv.Itoa(int(f.Preference))
+		req["record"] = f.Mx
 	case "SRV":
-		rdsrv := rd.(dnsrdatav2.SRV)
-		req["priority"] = strconv.Itoa(int(rdsrv.Priority))
-		req["weight"] = strconv.Itoa(int(rdsrv.Weight))
-		req["port"] = strconv.Itoa(int(rdsrv.Port))
+		f := rc.AsSRV()
+		req["priority"] = strconv.Itoa(int(f.Priority))
+		req["weight"] = strconv.Itoa(int(f.Weight))
+		req["port"] = strconv.Itoa(int(f.Port))
+		req["record"] = f.Target
 	case "CAA":
-		rdcaa := rd.(dnsrdatav2.CAA)
-		req["caa_flag"] = strconv.Itoa(int(rdcaa.Flag))
-		req["caa_type"] = rdcaa.Tag
-		req["caa_value"] = rdcaa.Value
+		f := rc.AsCAA()
+		req["caa_flag"] = strconv.Itoa(int(f.Flag))
+		req["caa_type"] = f.Tag
+		req["caa_value"] = f.Value
 	case "TLSA":
-		rdtlsa := rd.(dnsrdatav2.TLSA)
-		req["tlsa_usage"] = strconv.Itoa(int(rdtlsa.Usage))
-		req["tlsa_selector"] = strconv.Itoa(int(rdtlsa.Selector))
-		req["tlsa_matching_type"] = strconv.Itoa(int(rdtlsa.MatchingType))
+		f := rc.AsTLSA()
+		req["tlsa_usage"] = strconv.Itoa(int(f.Usage))
+		req["tlsa_selector"] = strconv.Itoa(int(f.Selector))
+		req["tlsa_matching_type"] = strconv.Itoa(int(f.MatchingType))
 	case "SSHFP":
-		rdsshfp := rd.(dnsrdatav2.SSHFP)
-		req["algorithm"] = strconv.Itoa(int(rdsshfp.Algorithm))
-		req["fptype"] = strconv.Itoa(int(rdsshfp.Type))
+		f := rc.AsSSHFP()
+		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
+		req["fptype"] = strconv.Itoa(int(f.Type))
 	case "DS":
-		rdds := rd.(dnsrdatav2.DS)
-		req["key-tag"] = strconv.Itoa(int(rdds.KeyTag))
-		req["algorithm"] = strconv.Itoa(int(rdds.Algorithm))
-		req["digest-type"] = strconv.Itoa(int(rdds.DigestType))
-		req["record"] = rdds.Digest
+		f := rc.AsDS()
+		req["key-tag"] = strconv.Itoa(int(f.KeyTag))
+		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
+		req["digest-type"] = strconv.Itoa(int(f.DigestType))
+		req["record"] = f.Digest
 	case "LOC":
 		parts := strings.Fields(rc.GetRDATA().String())
 		req["lat-deg"] = parts[0]
@@ -568,15 +568,13 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["h-precision"] = formatLocParam(parts[10])
 		req["v-precision"] = formatLocParam(parts[11])
 	case "NAPTR":
-		rdnaptr := rd.(dnsrdatav2.NAPTR)
-		req["order"] = strconv.Itoa(int(rdnaptr.Order))
-		req["pref"] = strconv.Itoa(int(rdnaptr.Preference))
-		req["flag"] = rdnaptr.Flags
-		req["params"] = rdnaptr.Service
-		req["regexp"] = rdnaptr.Regexp
-		req["replace"] = rdnaptr.Replacement
-	default:
-		return nil, fmt.Errorf("ClouDNS.toReq rtype %q unimplemented", rc.Type)
+		f := rc.AsNAPTR()
+		req["order"] = strconv.Itoa(int(f.Order))
+		req["pref"] = strconv.Itoa(int(f.Preference))
+		req["flag"] = f.Flags
+		req["params"] = f.Service
+		req["regexp"] = f.Regexp
+		req["replace"] = f.Replacement
 	}
 
 	return req, nil

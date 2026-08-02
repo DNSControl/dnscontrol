@@ -28,6 +28,9 @@ import (
 //   - The reason for not storing the short or "@" version is that "preview" output becomes ambiguous. Explicit is better than implicit.
 //   - Wildcards ("@") are rejected since they are not valid in targets. That's why this is called TargetHost and not Host.
 //
+// * origin == ".":
+//   - This is a special flag for TargetIsFqdnNoDot mode.
+//
 // * Examples: (assume $origin = "domain.com")
 //   - `@` -> $origin
 //   - `foo.$origin.` -> `foo.$origin.`
@@ -35,9 +38,9 @@ import (
 //   - `other.com.` -> `other.com.`
 //   - `short` -> `short.$origin`
 func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
-	// Check for programmer error.
-	if strings.HasSuffix(origin, ".") {
-		panic("mustbe.Host must NOT be called with an origin ending with .")
+	// Check for programmer error. Origin shouldn't end in ".", unless it == "." which is a special mode.
+	if origin != "." && strings.HasSuffix(origin, ".") {
+		panic(fmt.Sprintf("mustbe.Host must NOT be called with an origin ending with . (origin=%q)", origin))
 	}
 
 	var name string
@@ -58,6 +61,20 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 		return name
 	}
 
+	// TODO(tlim):
+	// origin == "." is a special flag that means the same thing as
+	// isEnabled.TargetIsFqdnNoDot == true.
+	// I'm not sure why we have two ways to signal this mode. Too much late-night
+	// coding, I suspect.
+	// Or, perhaps this was written before I decided to change the signatures of
+	// the Make*() functions to include isEnabled, after which I should have
+	// removed the origin=="." code.
+	// In the future we should eliminate the origin=".".
+
+	if origin == "." && name == "" {
+		return "."
+	}
+
 	// Special symbols:
 	switch name {
 	case "@", "":
@@ -68,9 +85,11 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	name = domaintags.EfficientToASCII(name)
 
 	if isEnabled.TargetIsFqdnNoDot {
+		// The dot is unexpected but we'll allow it.
 		if name[len(name)-1] == '.' {
 			return name
 		}
+		// Add the dot.
 		return name + "."
 	}
 

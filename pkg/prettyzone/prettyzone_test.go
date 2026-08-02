@@ -235,9 +235,9 @@ func TestWriteZoneFileSrv(t *testing.T) {
 var testdataZFSRV = `$TTL 300
 @                IN SRV   10 10 5050 foo.com.
                  IN SRV   10 10 5050 foo.com.
+                 IN SRV   10 10 9999 foo.com.
                  IN SRV   10 20 5050 foo.com.
                  IN SRV   20 10 5050 foo.com.
-                 IN SRV   10 10 9999 foo.com.
 `
 
 func TestWriteZoneFilePtr(t *testing.T) {

@@ -245,7 +245,7 @@ func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		}
 
 		for _, r := range rrSet.Records {
-			rc, err := dc.NewRecordConfigParse(rrSet.Name, ttl, string(rrSet.Type), r.Value)
+			rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(rrSet.Name), ttl, string(rrSet.Type), r.Value)
 			if err != nil {
 				return nil, err
 			}

@@ -174,8 +174,8 @@ func deduplicateNameServerTargets(newRecs models.Records) models.Records {
 	dedupedMap := make(map[string]bool)
 	var deduped models.Records
 	for _, rec := range newRecs {
-		if !dedupedMap[rec.GetTargetField()] {
-			dedupedMap[rec.GetTargetField()] = true
+		if !dedupedMap[rec.AsNS().Ns] {
+			dedupedMap[rec.AsNS().Ns] = true
 			deduped = append(deduped, rec)
 		}
 	}

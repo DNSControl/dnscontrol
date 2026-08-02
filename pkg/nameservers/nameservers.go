@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
@@ -68,12 +69,10 @@ func AddNSRecords(dc *models.DomainConfig) {
 		}
 	}
 	for _, ns := range dc.Nameservers {
-		rc := &models.RecordConfig{
-			Type:     "NS",
-			Metadata: map[string]string{},
-			TTL:      ttl,
+		rc, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeNS, ns.Name)
+		if err != nil {
+			panic("Should not happen: " + err.Error())
 		}
-		rc.SetLabel("@", dc.Name)
 		t := ns.Name
 		if !strings.HasSuffix(t, ".") {
 			t += "."

@@ -16,11 +16,6 @@ func RRtoRC(rr dnsv1.RR, origin string) (models.RecordConfig, error) {
 	return helperRRtoRC(rr, origin, false)
 }
 
-//// RRtoRCTxtBug converts dns.RR to models.RecordConfig. Compensates for the backslash bug in github.com/miekg/dns/issues/1384.
-//func RRtoRCTxtBug(rr dnsv1.RR, origin string) (models.RecordConfig, error) {
-//	return helperRRtoRC(rr, origin, true)
-//}
-
 // helperRRtoRC converts dns.RR to models.RecordConfig. If fixBug is true, replaces `\\` to `\` in TXT records to compensate for github.com/miekg/dns/issues/1384.
 func helperRRtoRC(rr dnsv1.RR, origin string, fixBug bool) (models.RecordConfig, error) {
 	// Convert's dns.RR into DNSControl's models.RecordConfig struct.

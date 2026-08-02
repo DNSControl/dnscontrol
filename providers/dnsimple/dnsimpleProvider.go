@@ -11,11 +11,12 @@ import (
 	"strings"
 	"sync"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
 	"golang.org/x/oauth2"
 )
@@ -154,34 +155,36 @@ func qualifySVCBTarget(content string) string {
 }
 
 func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.RecordConfig, error) {
-	if r.Name == "" {
-		r.Name = "@"
-	}
-
-	if r.Type == "CNAME" || r.Type == "ALIAS" || r.Type == "NS" {
-		r.Content += "."
-	} else if r.Type == "MX" && r.Content != "." {
-		r.Content += "."
-	} else if r.Type == "SVCB" || r.Type == "HTTPS" {
-		r.Content = qualifySVCBTarget(r.Content)
-	}
+	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
 
 	var rec *models.RecordConfig
 	var err error
+
 	switch r.Type {
 	case "ALIAS", "URL":
-		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Content)
+		rec, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "MX":
-		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Priority, r.Content)
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV":
-		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Content,
+			nrc.Flags{SrvWeirdSplit: true})
+	case "SVCB", "HTTPS":
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, qualifySVCBTarget(r.Content),
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	default:
-		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, r.Content)
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+
 	}
 	if err != nil {
 		return nil, err
 	}
+
 	rec.Original = r
+
 	return rec, nil
 }
 
@@ -527,7 +530,7 @@ func (c *dnsimpleProvider) recordUpdate(old *dnsimpleapi.ZoneRecord, rc *models.
 	// priority:0 from the PATCH payload. Without an explicit priority,
 	// the API keeps the old (non-zero) priority and rejects the update.
 	// Work around this by deleting and recreating the record.
-	if rc.Type == "MX" && rc.GetTargetField() == "." {
+	if rc.TypeNum == dnsv2.TypeMX && rc.AsMX().Mx == "." {
 		if err := c.recordDelete(old.ID, domainName); err != nil {
 			return err
 		}
@@ -613,12 +616,12 @@ func newProvider(m map[string]string, _ json.RawMessage) (*dnsimpleProvider, err
 func removeOtherApexNS(dc *models.DomainConfig) {
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
-		if rec.Type == "NS" {
+		if rec.TypeNum == dnsv2.TypeNS {
 			// apex NS inside dnsimple are expected.
 			// We ignore them, warning as needed.
 			// Child delegations are supported so we allow non-apex NS records.
 			if rec.GetLabelFQDN() == dc.Name {
-				if !isDnsimpleNameServerDomain(rec.GetTargetField()) {
+				if !isDnsimpleNameServerDomain(rec.AsNS().Ns) {
 					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.GetTargetField())
 				}
 				continue
@@ -630,14 +633,13 @@ func removeOtherApexNS(dc *models.DomainConfig) {
 }
 
 // Returns the correct combined content for all special record types, Target for everything else
-// Using RecordConfig.GetTargetCombined returns priority in the string, which we do not allow.
+// Using RecordConfig.GetRDATA().String() returns priority in the string, which we do not allow.
+// NB(tlim): For SRV this returns the fields in the order weight, port, target.
+// The priority is not included in the string, but is returned separately by
+// getTargetRecordPriority.
 func getTargetRecordContent(rc *models.RecordConfig) string {
-	switch rtype := rc.Type; rtype {
-	// case "CAA":
-	// 	return rc.GetRDATA().String()
-	// case "DS":
-	// 	return rc.GetRDATA().String()
-	case "HTTPS":
+	switch rc.TypeNum {
+	case dnsv2.TypeHTTPS:
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
 		f := rc.AsHTTPS()
@@ -649,7 +651,7 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
 		return fmt.Sprintf("%d %s", f.Priority, target)
-	case "SVCB":
+	case dnsv2.TypeSVCB:
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
 		f := rc.AsSVCB()
@@ -661,32 +663,25 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
 		return fmt.Sprintf("%d %s", f.Priority, target)
-	case "MX":
+	case dnsv2.TypeMX:
 		return rc.AsMX().Mx
-	// case "NAPTR":
-	// 	return fmt.Sprintf(`%d %d "%s" "%s" "%s" %s`,
-	// 		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp,
-	// 		rc.GetTargetField())
-	// case "SSHFP":
-	// 	return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-	// case "SRV":
-	// 	return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
-	// case "TLSA":
-	// 	return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
-	case "TXT":
-		return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+	case dnsv2.TypeSRV:
+		f := rc.AsSRV()
+		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
+	case dnsv2.TypeTXT:
+		return rc.AsTXT().String()
 	}
 	return rc.GetRDATA().String()
 }
 
 // Returns the correct priority for the record type, 0 for records without priority.
 func getTargetRecordPriority(rc *models.RecordConfig) int {
-	switch rtype := rc.Type; rtype {
-	case "MX":
-		return int(rc.MxPreference)
-	case "SRV":
-		return int(rc.SrvPriority)
-	case "NAPTR":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		return int(rc.AsMX().Preference)
+	case dnsv2.TypeSRV:
+		return int(rc.AsSRV().Priority)
+	case dnsv2.TypeNAPTR:
 		// Neither order nor preference
 		return 0
 	default:

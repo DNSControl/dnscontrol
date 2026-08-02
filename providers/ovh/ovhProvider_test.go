@@ -55,7 +55,7 @@ func Test_getOVHEndpoint(t *testing.T) {
 }
 
 func Test_nativeToRecord(t *testing.T) {
-	dc := &models.DomainConfig{Name: "dnscontrol.ovh"}
+	dc := models.MustNewDomainConfig("dnscontrol.ovh")
 
 	tests := []struct {
 		name       string

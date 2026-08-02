@@ -10,7 +10,7 @@ import (
 
 // SrvHasNullTarget detects SRV records that has a null target.
 func SrvHasNullTarget(rc *models.RecordConfig) error {
-	if rc.GetTargetField() == "." {
+	if rc.AsSRV().Target == "." {
 		return errors.New("srv has empty target") // Same msg as SrvHasEmptyTarget to make testing easier.
 	}
 	return nil
@@ -18,7 +18,7 @@ func SrvHasNullTarget(rc *models.RecordConfig) error {
 
 // SrvHasEmptyTarget detects SRV records with empty targets.
 func SrvHasEmptyTarget(rc *models.RecordConfig) error {
-	if rc.GetTargetField() == "" {
+	if rc.AsSRV().Target == "" {
 		return errors.New("srv has empty target")
 	}
 	return nil
@@ -26,7 +26,7 @@ func SrvHasEmptyTarget(rc *models.RecordConfig) error {
 
 // SrvHasZeroPort detects SRV records with port set to zero.
 func SrvHasZeroPort(rc *models.RecordConfig) error {
-	if rc.SrvPort == 0 {
+	if rc.AsSRV().Port == 0 {
 		return errors.New("srv has zero port")
 	}
 	return nil
