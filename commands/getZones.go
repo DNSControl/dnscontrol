@@ -367,7 +367,7 @@ func GetZone(args GetZoneArgs) error {
 				if rec.HasFormatIdenticalToTXT() {
 					content = rec.GetTargetTXTJoined()
 				} else {
-					content = rec.GetTargetCombinedFunc(nil)
+					content = rec.GetRDATA().String()
 				}
 				fmt.Fprintf(w, "%s\t%s\t%d\tIN\t%s\t%s%s\n",
 					rec.NameFQDN, rec.Name, rec.TTL, ty, content, providerMeta)
@@ -465,19 +465,23 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 	case "CAA":
 		return makeCaa(rec, ttlop)
 	case "DS":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.DsKeyTag, rec.DsAlgorithm, rec.DsDigestType, rec.DsDigest)
+		f := rec.AsDS()
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
 	case "DNSKEY":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.DnskeyFlags, rec.DnskeyProtocol, rec.DnskeyAlgorithm, rec.DnskeyPublicKey)
+		f := rec.AsDNSKEY()
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Flags, f.Protocol, f.Algorithm, f.PublicKey)
 	case "MX":
-		target = fmt.Sprintf(`%d, "%s"`, rec.MxPreference, rec.GetTargetField())
+		f := rec.AsMX()
+		target = fmt.Sprintf(`%d, "%s"`, f.Preference, f.Mx)
 	case "NAPTR":
+		f := rec.AsNAPTR()
 		target = fmt.Sprintf(`%d, %d, %s, %s, %s, %s`,
-			rec.NaptrOrder,                   // 1
-			rec.NaptrPreference,              // 10
-			jsonQuoted(rec.NaptrFlags),       // U
-			jsonQuoted(rec.NaptrService),     // E2U+sip
-			jsonQuoted(rec.NaptrRegexp),      // regex
-			jsonQuoted(rec.GetTargetField()), // .
+			f.Order,                   // 1
+			f.Preference,              // 10
+			jsonQuoted(f.Flags),       // U
+			jsonQuoted(f.Service),     // E2U+sip
+			jsonQuoted(f.Regexp),      // regex
+			jsonQuoted(f.Replacement), // .
 		)
 	case "SMIMEA":
 		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SmimeaUsage, rec.SmimeaSelector, rec.SmimeaMatchingType, rec.GetTargetField())
