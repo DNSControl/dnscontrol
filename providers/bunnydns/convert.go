@@ -44,7 +44,6 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 		r.Priority = rd.Priority
 		r.Value = rd.Target
 	case recordTypeTLSA:
-		//r.Value = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 		r.Value = rc.GetRDATA().String()
 	case recordTypePullZone:
 		// When creating Pull Zone records, the API expects an integer PullZoneId field,

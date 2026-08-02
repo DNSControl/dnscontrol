@@ -36,7 +36,7 @@ func labelConstraint(rc *models.RecordConfig) error {
 // targetConstraint detects target values that contain non-ASCII characters except Chinese characters.
 // This applies to CNAME, MX, NS, SRV targets.
 func targetConstraint(rc *models.RecordConfig) error {
-	target, err := idna.ToUnicode(rc.GetTargetField())
+	target, err := idna.ToUnicode(rc.AsCNAME().Target)
 	if err != nil {
 		target = rc.GetTargetField()
 	}

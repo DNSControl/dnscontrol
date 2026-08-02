@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
@@ -330,14 +329,14 @@ func (api *jokerProvider) recordsToZoneFormat(_ string, records models.Records) 
 			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
 			lines = append(lines, line)
 		case "CNAME":
-			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
+			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.AsCNAME().Target, rc.TTL)
 			lines = append(lines, line)
 		case "NS":
-			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
+			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.AsNS().Ns, rc.TTL)
 			lines = append(lines, line)
 		case "MX":
-			rdmx := rc.GetRDATA().(dnsrdatav2.MX)
-			line := fmt.Sprintf("%s %s %d %s %d", label, rc.Type, rdmx.Preference, rdmx.Mx, rc.TTL)
+			f := rc.AsMX()
+			line := fmt.Sprintf("%s %s %d %s %d", label, rc.Type, f.Preference, f.Mx, rc.TTL)
 			lines = append(lines, line)
 		case "TXT":
 			// Fix TXT record escaping - escape backslashes first, then quotes
@@ -353,23 +352,22 @@ func (api *jokerProvider) recordsToZoneFormat(_ string, records models.Records) 
 
 			lines = append(lines, line)
 		case "SRV":
-			// target := fmt.Sprintf("%s:%d", rc.GetTargetField(), rc.SrvPort)
-			// priority := fmt.Sprintf("%d/%d", rc.SrvPriority, rc.SrvWeight)
-			srv := rc.GetRDATA().(dnsrdatav2.SRV)
-			target := fmt.Sprintf("%s:%d", srv.Target, srv.Port)
-			priority := fmt.Sprintf("%d/%d", srv.Priority, srv.Weight)
-			// TODO(tlim): If the above works, remove the commented out old code.
+			f := rc.AsSRV()
+			target := fmt.Sprintf("%s:%d", f.Target, f.Port)
+			priority := fmt.Sprintf("%d/%d", f.Priority, f.Weight)
 			line := fmt.Sprintf("%s %s %s %s %d", label, rc.Type, priority, target, rc.TTL)
 			lines = append(lines, line)
 		case "CAA":
-			line := fmt.Sprintf("%s %s %d %s \"%s\" %d", label, rc.Type, rc.CaaFlag, rc.CaaTag, rc.GetTargetField(), rc.TTL)
+			f := rc.AsCAA()
+			line := fmt.Sprintf("%s %s %d %s \"%s\" %d", label, rc.Type, f.Flag, f.Tag, f.Value, rc.TTL)
 			lines = append(lines, line)
 		case "NAPTR":
 			// NAPTR format for Joker: order/preference replacement ttl 0 0 "flags" "service" "regex"
-			priority := fmt.Sprintf("%d/%d", rc.NaptrOrder, rc.NaptrPreference)
+			f := rc.AsNAPTR()
+			priority := fmt.Sprintf("%d/%d", f.Order, f.Preference)
 			line := fmt.Sprintf("%s %s %s %s %d 0 0 \"%s\" \"%s\" \"%s\"",
-				label, rc.Type, priority, rc.GetTargetField(), rc.TTL,
-				rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp)
+				label, rc.Type, priority, f.Replacement, rc.TTL,
+				f.Flags, f.Service, f.Regexp)
 			lines = append(lines, line)
 		}
 	}

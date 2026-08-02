@@ -122,7 +122,7 @@ func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 	}
 
 	// These other possibilities all indicate the function was called wrong.
-	fmt.Printf("ERROR: LabelFromFQDNWithDot(%v) called WRONG\n", name)
+	fmt.Printf("ERROR: LabelFromFQDNWithDot(%v) called on WRONG domain (%q)\n", name, dc.Name)
 	if newName == "" {
 		return "@"
 	}

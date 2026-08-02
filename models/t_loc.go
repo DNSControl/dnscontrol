@@ -4,15 +4,8 @@ import (
 	"math"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	dnsv1 "github.com/miekg/dns"
 )
-
-// // SetTargetLOC sets the LOC fields from the rr.LOC type properties.
-// Deprecated. Use models.NewRecordConfig() instead.
-// func (rc *RecordConfig) SetTargetLOC(ver uint8, lat uint32, lon uint32, alt uint32, siz uint8, hzp uint8, vtp uint8) error {
-// 	return legacySetTargetArgs(rc, dnsv2.TypeLOC, ver, lat, lon, alt, siz, hzp, vtp)
-// }
 
 // SetLOCParams is an intermediate function which passes the 12 input parameters
 // for further processing to the LOC native 7 input binary format:
@@ -24,14 +17,6 @@ func (rc *RecordConfig) SetLOCParams(d1 uint8, m1 uint8, s1 float32, ns string,
 	err := rc.calculateLOCFields(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
 
 	return err
-}
-
-// SetTargetLOCString is like SetTargetLOC but accepts one big string and origin
-// Normally this is used when we receive a record string from provider records
-// because e.g. the provider API passed rc.PopulateFromString().
-// Deprecated. Use models.NewRecordConfigParse() instead.
-func (rc *RecordConfig) SetTargetLOCString(origin string, contents string) error {
-	return legacySetTargetParse(rc, dnsv2.TypeLOC, contents)
 }
 
 // calculateLOCFields converts from 12 user inputs to the LOC 7 binary fields.

@@ -64,29 +64,29 @@ func nativeToRecord(r *alidns.Record, dc *models.DomainConfig) (*models.RecordCo
 }
 
 // recordToNativeContent converts a RecordConfig to the Value format expected by Alibaba Cloud DNS API.
-func recordToNativeContent(r *models.RecordConfig) string {
-	switch r.Type {
-	case "SRV":
-		return fmt.Sprintf("%d %d %d %s", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField())
-	case "CAA":
-		return fmt.Sprintf("%d %s \"%s\"", r.CaaFlag, r.CaaTag, r.GetTargetField())
-	case "TXT":
-		return r.GetTargetTXTJoined()
-	default:
-		return r.GetTargetField()
+func recordToNativeContent(rc *models.RecordConfig) string {
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		return rc.AsMX().Mx
+	case dnsv2.TypeSRV:
+		return rc.AsSRV().String()
+	case dnsv2.TypeCAA:
+		return rc.AsCAA().String()
+	case dnsv2.TypeTXT:
+		return rc.GetTargetTXTJoined()
 	}
+	return rc.GetRDATA().String()
 }
 
 // recordToNativePriority returns the priority value for MX and SRV records.
-func recordToNativePriority(r *models.RecordConfig) int64 {
-	switch r.Type {
-	case "MX":
-		return int64(r.MxPreference)
-	case "SRV":
-		return int64(r.SrvPriority)
-	default:
-		return 0
+func recordToNativePriority(rc *models.RecordConfig) int64 {
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		return int64(rc.AsMX().Preference)
+	case dnsv2.TypeSRV:
+		return int64(rc.AsSRV().Priority)
 	}
+	return 0
 }
 
 // nativeToRecordNS takes a NS record from DNS and returns a native RecordConfig struct.
