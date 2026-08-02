@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -159,21 +160,29 @@ func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.
 
 	var rec *models.RecordConfig
 	var err error
-	switch rtype := r.Type; rtype {
+
+	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
+
+	switch r.Type {
 	case "ALIAS", "URL":
-		rec, err = dc.NewRecordConfig(label, ttl, rtype, r.Content,
+		rec, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content,
 			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "MX":
-		rec, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Content,
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Content,
 			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SRV":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Content,
+			nrc.Flags{SrvWeirdSplit: true})
+		// If that doesn't work, try this:
+		//rec, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	case "SVCB", "HTTPS":
 		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, qualifySVCBTarget(r.Content),
 			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "SRV":
-		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	default:
 		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Content,
 			nrc.Flags{TargetIsFqdnNoDot: true})
+
 	}
 	if err != nil {
 		return nil, err
@@ -526,7 +535,7 @@ func (c *dnsimpleProvider) recordUpdate(old *dnsimpleapi.ZoneRecord, rc *models.
 	// priority:0 from the PATCH payload. Without an explicit priority,
 	// the API keeps the old (non-zero) priority and rejects the update.
 	// Work around this by deleting and recreating the record.
-	if rc.Type == "MX" && rc.GetTargetField() == "." {
+	if rc.TypeNum == dnsv2.TypeMX && rc.AsMX().Mx == "." {
 		if err := c.recordDelete(old.ID, domainName); err != nil {
 			return err
 		}
@@ -612,12 +621,12 @@ func newProvider(m map[string]string, _ json.RawMessage) (*dnsimpleProvider, err
 func removeOtherApexNS(dc *models.DomainConfig) {
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
-		if rec.Type == "NS" {
+		if rec.TypeNum == dnsv2.TypeNS {
 			// apex NS inside dnsimple are expected.
 			// We ignore them, warning as needed.
 			// Child delegations are supported so we allow non-apex NS records.
 			if rec.GetLabelFQDN() == dc.Name {
-				if !isDnsimpleNameServerDomain(rec.GetTargetField()) {
+				if !isDnsimpleNameServerDomain(rec.AsNS().Ns) {
 					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.GetTargetField())
 				}
 				continue
@@ -629,14 +638,13 @@ func removeOtherApexNS(dc *models.DomainConfig) {
 }
 
 // Returns the correct combined content for all special record types, Target for everything else
-// Using RecordConfig.GetTargetCombined returns priority in the string, which we do not allow.
+// Using RecordConfig.GetRDATA().String() returns priority in the string, which we do not allow.
+// NB(tlim): For SRV this returns the fields in the order weight, port, target.
+// The priority is not included in the string, but is returned separately by
+// getTargetRecordPriority.
 func getTargetRecordContent(rc *models.RecordConfig) string {
-	switch rtype := rc.Type; rtype {
-	// case "CAA":
-	// 	return rc.GetRDATA().String()
-	// case "DS":
-	// 	return rc.GetRDATA().String()
-	case "HTTPS":
+	switch rc.TypeNum {
+	case dnsv2.TypeHTTPS:
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
 		f := rc.AsHTTPS()
@@ -648,7 +656,7 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
 		return fmt.Sprintf("%d %s", f.Priority, target)
-	case "SVCB":
+	case dnsv2.TypeSVCB:
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
 		f := rc.AsSVCB()
@@ -660,38 +668,29 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
 		return fmt.Sprintf("%d %s", f.Priority, target)
-	case "MX":
+	case dnsv2.TypeSRV:
+		f := rc.AsSRV()
+		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
+	case dnsv2.TypeMX:
 		return rc.AsMX().Mx
-	// case "NAPTR":
-	// 	return fmt.Sprintf(`%d %d "%s" "%s" "%s" %s`,
-	// 		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp,
-	// 		rc.GetTargetField())
-	// case "SSHFP":
-	// 	return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		//return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
 		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
-	// case "TLSA":
-	// 	return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
-	case "TXT":
+	case dnsv2.TypeTXT:
 		return rc.AsTXT().String()
-		// If that doesn't work, try:
-		// return txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
-		// If that doesn't work, revert to the original:
-		// return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
 	}
 	return rc.GetRDATA().String()
 }
 
 // Returns the correct priority for the record type, 0 for records without priority.
 func getTargetRecordPriority(rc *models.RecordConfig) int {
-	switch rtype := rc.Type; rtype {
-	case "MX":
-		return int(rc.MxPreference)
-	case "SRV":
-		return int(rc.SrvPriority)
-	case "NAPTR":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
+		return int(rc.AsMX().Preference)
+	case dnsv2.TypeSRV:
+		return int(rc.AsSRV().Priority)
+	case dnsv2.TypeNAPTR:
 		// Neither order nor preference
 		return 0
 	default:
