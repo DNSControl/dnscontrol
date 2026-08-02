@@ -13,9 +13,9 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
 	"golang.org/x/oauth2"
 )
@@ -154,34 +154,33 @@ func qualifySVCBTarget(content string) string {
 }
 
 func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.RecordConfig, error) {
-	if r.Name == "" {
-		r.Name = "@"
-	}
-
-	if r.Type == "CNAME" || r.Type == "ALIAS" || r.Type == "NS" {
-		r.Content += "."
-	} else if r.Type == "MX" && r.Content != "." {
-		r.Content += "."
-	} else if r.Type == "SVCB" || r.Type == "HTTPS" {
-		r.Content = qualifySVCBTarget(r.Content)
-	}
+	label := dc.LabelFromShort(r.Name)
+	ttl := uint32(r.TTL)
 
 	var rec *models.RecordConfig
 	var err error
-	switch r.Type {
+	switch rtype := r.Type; rtype {
 	case "ALIAS", "URL":
-		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Content)
+		rec, err = dc.NewRecordConfig(label, ttl, rtype, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "MX":
-		rec, err = dc.NewRecordConfig(r.Name, uint32(r.TTL), r.Type, r.Priority, r.Content)
+		rec, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SVCB", "HTTPS":
+		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, qualifySVCBTarget(r.Content),
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "SRV":
-		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
+		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	default:
-		rec, err = dc.NewRecordConfigParse(r.Name, uint32(r.TTL), r.Type, r.Content)
+		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	}
 	if err != nil {
 		return nil, err
 	}
+
 	rec.Original = r
+
 	return rec, nil
 }
 
@@ -669,12 +668,18 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 	// 		rc.GetTargetField())
 	// case "SSHFP":
 	// 	return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-	// case "SRV":
-	// 	return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	case "SRV":
+		f := rc.AsSRV()
+		//return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
 	// case "TLSA":
 	// 	return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 	case "TXT":
-		return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+		return rc.AsTXT().String()
+		// If that doesn't work, try:
+		// return txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
+		// If that doesn't work, revert to the original:
+		// return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
 	}
 	return rc.GetRDATA().String()
 }

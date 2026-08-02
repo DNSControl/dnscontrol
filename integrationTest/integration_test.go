@@ -722,6 +722,7 @@ func makeTests() []*TestGroup {
 				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
+				"DNSIMPLE",     // Daily update quota.
 				"DIGITALOCEAN", // No paging. Why bother?
 				"FORTIGATE",    // No paging
 				"GANDI_V5",     // Their API is so damn slow. We'll add it back as needed.
@@ -745,6 +746,7 @@ func makeTests() []*TestGroup {
 				// "CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
 				// "CSCGLOBAL",         // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",             // Skip due to daily update limits.
+				// "DNSIMPLE",         // Daily update quota.
 				// "GANDI_V5",          // Their API is so damn slow. We'll add it back as needed.
 				// "GCLOUD",
 				"ORACLE",
@@ -762,6 +764,7 @@ func makeTests() []*TestGroup {
 				// "CLOUDFLAREAPI",     // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
 				// "CSCGLOBAL", // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",     // Skip due to daily update limits.
+				// "DNSIMPLE", // Daily update quota.
 				// "GANDI_V5",  // Their API is so damn slow. We'll add it back as needed.
 				"GCLOUD",
 				// "HEDNS",     // No paging done. No need to test.
