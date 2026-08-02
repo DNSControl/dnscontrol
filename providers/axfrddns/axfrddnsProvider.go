@@ -218,17 +218,17 @@ func readKey(raw string, kind string) (*Key, error) {
 	var algo string
 	switch arr[0] {
 	case "hmac-md5", "md5":
-		algo = dnsv1.HmacMD5
+		algo = dnsv2.HmacMD5
 	case "hmac-sha1", "sha1":
-		algo = dnsv1.HmacSHA1
+		algo = dnsv2.HmacSHA1
 	case "hmac-sha224", "sha224":
-		algo = dnsv1.HmacSHA224
+		algo = dnsv2.HmacSHA224
 	case "hmac-sha256", "sha256":
-		algo = dnsv1.HmacSHA256
+		algo = dnsv2.HmacSHA256
 	case "hmac-sha384", "sha384":
-		algo = dnsv1.HmacSHA384
+		algo = dnsv2.HmacSHA384
 	case "hmac-sha512", "sha512":
-		algo = dnsv1.HmacSHA512
+		algo = dnsv2.HmacSHA512
 	default:
 		return nil, fmt.Errorf("unknown algorithm (%s) in AXFRDDNS.TSIG", kind)
 	}
@@ -246,6 +246,7 @@ func (c *axfrddnsProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 }
 
 func (c *axfrddnsProvider) getAxfrConnection() (*dnsv1.Transfer, error) {
+	// TODO(tlim): Convert to dnsv2. The dnsv1.Transfer type is not compatible with dnsv2.Conn.
 	var con net.Conn
 	var err error
 	switch c.transferMode {
