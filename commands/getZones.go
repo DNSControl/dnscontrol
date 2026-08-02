@@ -367,7 +367,7 @@ func GetZone(args GetZoneArgs) error {
 				if rec.HasFormatIdenticalToTXT() {
 					content = rec.GetTargetTXTJoined()
 				} else {
-					content = rec.GetTargetCombinedFunc(nil)
+					content = rec.GetRDATA().String()
 				}
 				fmt.Fprintf(w, "%s\t%s\t%d\tIN\t%s\t%s%s\n",
 					rec.NameFQDN, rec.Name, rec.TTL, ty, content, providerMeta)
