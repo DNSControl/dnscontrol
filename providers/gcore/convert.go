@@ -15,7 +15,7 @@ import (
 // nativeToRecord takes a DNS record from G-Core and returns a native RecordConfig struct.
 func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
 	var rcs []*models.RecordConfig
-	recName := dc.ToShort(n.Name)
+	recName := dc.LabelFromShort(n.Name)
 	recType := n.Type
 
 	// Split G-Core's RRset into individual records
@@ -24,6 +24,7 @@ func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.R
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from G-Core: %w", err)
 		}
+
 		var rc *models.RecordConfig
 		switch recType {
 		case "CAA": // G-Core API don't need quotes around CAA with whitespace

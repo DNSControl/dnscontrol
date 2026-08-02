@@ -316,9 +316,7 @@ func toSRVRecords(result *nc.DomainSRVGetRecordsResult, dc *models.DomainConfig)
 	var records models.Records
 	for _, srvRecord := range result.Records {
 		label := dc.LabelFromShort(srvRecord.Service + srvRecord.Protocol)
-		record, err := dc.NewRecordConfig(
-			label,
-			0,
+		record, err := dc.NewRecordConfig(label, 0,
 			dnsv2.TypeSRV,
 			srvRecord.Priority,
 			srvRecord.Weight,
