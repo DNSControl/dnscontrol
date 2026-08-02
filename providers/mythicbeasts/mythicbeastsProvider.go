@@ -164,7 +164,15 @@ func (n *mythicBeastsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig
 						case *dnsv2.SSHFP:
 							// "Hex strings [for SSHFP] must be in lower-case", per Mythic Beasts API docs.
 							// miekg's DNS outputs uppercase: https://git hub.com/miekg/dns/blob/48f38ebef989eedc6b57f1869ae849ccc8f5fe29/types.go#L988
-							fmt.Fprintf(&b, "%s %d %d %s\n", rr.Header().String(), rr.Algorithm, rr.Type, strings.ToLower(rr.FingerPrint))
+							h := rr.Header()
+							fmt.Fprintf(&b, "%s %d IN SSHFP %d %d %s\n", h.Name, h.TTL,
+								rr.Algorithm, rr.Type, strings.ToLower(rr.FingerPrint))
+						case *dnsv2.TLSA:
+							//fmt.Fprintf(&b, "%v\n", strings.ToLower(rr.String()))
+							h := rr.Header()
+							// MythicBeasts is case-sentitive about "IN" and the certificate (must be lowercase).
+							fmt.Fprintf(&b, "%s %d IN TLSA %d %d %d %s\n", h.Name, h.TTL,
+								rr.Usage, rr.Selector, rr.MatchingType, strings.ToLower(rr.Certificate))
 						default:
 							fmt.Fprintf(&b, "%v\n", rr.String())
 						}
