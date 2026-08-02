@@ -300,6 +300,11 @@
     "customer-number": "$NETCUP_CUSTOMER_NUMBER",
     "domain": "$NETCUP_DOMAIN"
   },
+  "NEXDNS": {
+    "TYPE": "NEXDNS",
+    "api_token": "$NEXDNS_API_TOKEN",
+    "domain": "$NEXDNS_DOMAIN"
+  },
   "NETLIFY": {
     "TYPE": "NETLIFY",
     "domain": "$NETLIFY_DOMAIN",

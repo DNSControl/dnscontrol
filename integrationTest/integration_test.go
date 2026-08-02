@@ -500,6 +500,7 @@ func makeTests() []*TestGroup {
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NAMECHEAP",         // cannot handle single NS at apex but does handle dual
 				"NETCUP",            // NS records not currently supported.
+				"NEXDNS",            // The apex NS records follow the zone's nameserver group and are not editable.
 				"PORKBUN",           // Record ignored.
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
@@ -1992,7 +1993,7 @@ func makeTests() []*TestGroup {
 			),
 			tc("Create some records",
 				a("foo", "1.1.1.1"),
-				a("foo", "10.10.10.10"),
+				a("foo", "9.9.9.9"),
 				aaaa("foo", "2003:dd:d7ff::fe71:aaaa"),
 				mx("foo", 10, "aspmx.l.google.com."),
 				mx("foo", 20, "alt1.aspmx.l.google.com."),

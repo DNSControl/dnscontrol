@@ -171,6 +171,7 @@
 * [Netcup](provider/netcup.md)
 * [Netlify](provider/netlify.md)
 * [Netnod](provider/netnod.md)
+* [NexDNS](provider/nexdns.md)
 * [NS1](provider/ns1.md)
 * [OpenWrt](provider/openwrt.md)
 * [OpenSRS](provider/opensrs.md)

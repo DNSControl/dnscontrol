@@ -46,6 +46,7 @@ providers/netbird @yzqzss
 providers/netcup @kordianbruck
 providers/netlify @SphericalKat
 providers/netnod @Netnod
+providers/nexdns @nexdns
 providers/ns1 @costasd
 # providers/opensrs NEEDS VOLUNTEER
 providers/openwrt @huskyistaken

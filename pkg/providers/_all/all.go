@@ -48,6 +48,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/mythicbeasts"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/namecheap"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/namedotcom"
+	_ "github.com/DNSControl/dnscontrol/v4/providers/nexdns"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/netbird"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/netcup"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/netlify"

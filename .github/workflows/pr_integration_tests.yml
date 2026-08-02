@@ -136,6 +136,7 @@ jobs:
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
+      NEXDNS_DOMAIN: ${{ vars.NEXDNS_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
       OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
@@ -245,6 +246,8 @@ jobs:
       #
       NETNOD_APIKEY: ${{ secrets.NETNOD_APIKEY }}
       NETNOD_APIURL: ${{ secrets.NETNOD_APIURL }}
+      #
+      NEXDNS_API_TOKEN: ${{ secrets.NEXDNS_API_TOKEN }}
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
       #
