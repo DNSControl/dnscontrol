@@ -161,9 +161,6 @@ func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.
 	var rec *models.RecordConfig
 	var err error
 
-	label := dc.LabelFromShort(r.Name)
-	ttl := uint32(r.TTL)
-
 	switch r.Type {
 	case "ALIAS", "URL":
 		rec, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content,
@@ -174,13 +171,11 @@ func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.
 	case "SRV":
 		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Content,
 			nrc.Flags{SrvWeirdSplit: true})
-		// If that doesn't work, try this:
-		//rec, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	case "SVCB", "HTTPS":
-		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, qualifySVCBTarget(r.Content),
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, qualifySVCBTarget(r.Content),
 			nrc.Flags{TargetIsFqdnNoDot: true})
 	default:
-		rec, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Content,
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content,
 			nrc.Flags{TargetIsFqdnNoDot: true})
 
 	}
@@ -668,14 +663,10 @@ func getTargetRecordContent(rc *models.RecordConfig) string {
 			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
 		}
 		return fmt.Sprintf("%d %s", f.Priority, target)
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
-		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
 	case dnsv2.TypeMX:
 		return rc.AsMX().Mx
 	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
-		//return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
 		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
 	case dnsv2.TypeTXT:
 		return rc.AsTXT().String()

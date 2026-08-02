@@ -64,15 +64,14 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	// TODO(tlim):
 	// origin == "." is a special flag that means the same thing as
 	// isEnabled.TargetIsFqdnNoDot == true.
-	// I'm not sure why we have to ways to signal this mode. Too much late-night
+	// I'm not sure why we have two ways to signal this mode. Too much late-night
 	// coding, I suspect.
-	// Or, perhaps this was used before I decided to change the signatures of
+	// Or, perhaps this was written before I decided to change the signatures of
 	// the Make*() functions to include isEnabled, after which I should have
 	// removed the origin=="." code.
 	// In the future we should eliminate the origin=".".
 
 	if origin == "." && name == "" {
-		// if isEnabled.TargetIsFqdnNoDot && name == "" {
 		return "."
 	}
 
