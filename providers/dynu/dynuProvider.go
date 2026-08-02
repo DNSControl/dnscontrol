@@ -220,8 +220,8 @@ func toRc(r *dynuRecord, dc *models.DomainConfig) (*models.RecordConfig, error) 
 		if target == "" {
 			target = "."
 		}
-		rdata := fmt.Sprintf("%d %s", intOrZero(r.SvcPriority), target)
-		if ps := svcParamsToString(r.SvcParams); ps != "" {
+		rdata := fmt.Sprintf("%d %s", intOrZero(r.SvcPriority), target) // ignore:legacyfield
+		if ps := svcParamsToString(r.SvcParams); ps != "" {             // ignore:legacyfield
 			rdata += " " + ps
 		}
 		rc, err = dc.NewRecordConfigParse(label, ttl, r.RecordType, rdata)
@@ -268,7 +268,8 @@ func toRc(r *dynuRecord, dc *models.DomainConfig) (*models.RecordConfig, error) 
 		if naptrReplacement == "" {
 			naptrReplacement = "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, intOrZero(r.Order), intOrZero(r.Preference), r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR,
+			intOrZero(r.Order), intOrZero(r.Preference), r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement)) // ignore:legacyfield
 	case "NS":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, ensureTrailingDot(r.Host))
 	case "OPENPGPKEY":
@@ -338,62 +339,87 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.IPv6Address = rc.AsAAAA().String()
 	case "AFSDB":
 		// Target: "<subtype> <hostname>."
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 2 {
-			st, _ := strconv.Atoi(parts[0])
-			req.SubType = &st
-			req.Host = strings.TrimSuffix(parts[1], ".")
-		}
+
+		// parts := strings.Fields(rc.GetTargetField())
+		// if len(parts) >= 2 {
+		// 	st, _ := strconv.Atoi(parts[0])
+		// 	req.SubType = &st
+		// 	req.Host = strings.TrimSuffix(parts[1], ".")
+		// }
+
+		f := rc.AsAFSDB()
+		req.SubType = new(int(f.Subtype))
+		req.Host = strings.TrimSuffix(f.Hostname, ".")
 	case "CAA":
-		flags := int(rc.CaaFlag)
+		f := rc.AsCAA()
+		flags := int(f.Flag)
 		req.Flags = &flags
-		req.Tag = rc.CaaTag
-		req.Value = rc.GetTargetField()
+		req.Tag = f.Tag
+		req.Value = f.Value
 	case "CERT":
+
 		// Target: "<type> <keytag> <algorithm> <cert-base64>"
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 4 {
-			ct := parseCERTType(parts[0])
-			kt, _ := strconv.Atoi(parts[1])
-			algo, _ := strconv.Atoi(parts[2])
-			req.CertificateType = &ct
-			req.KeyTag = &kt
-			req.Algorithm = &algo
-			req.Certificate = parts[3]
-		}
+		// parts := strings.Fields(rc.GetTargetField())
+		// if len(parts) >= 4 {
+		// 	ct := parseCERTType(parts[0])
+		// 	kt, _ := strconv.Atoi(parts[1])
+		// 	algo, _ := strconv.Atoi(parts[2])
+		// 	req.CertificateType = &ct
+		// 	req.KeyTag = &kt
+		// 	req.Algorithm = &algo
+		// 	req.Certificate = parts[3]
+		// }
+
+		f := rc.AsCERT()
+		req.CertificateType = new(int(f.Type))
+		req.KeyTag = new(int(f.KeyTag))
+		req.Algorithm = new(int(f.Algorithm))
+		req.Certificate = f.Certificate
+
 	case "CNAME", "NS", "PTR", "DNAME":
-		req.Host = strings.TrimSuffix(rc.GetTargetField(), ".")
+		req.Host = strings.TrimSuffix(rc.GetRDATA().String(), ".")
 	case "DHCID":
 		// Target is the base64-encoded DHCID data (zone-file format == API format).
-		req.RecordData = rc.GetTargetField()
+		req.RecordData = rc.AsDHCID().Digest
 	case "HINFO":
+
 		// Target: "<"cpu"> <"os">" — parse the two quoted character-strings.
-		cpu, os := parseCharStrings(rc.GetTargetField())
-		req.CPU = cpu
-		req.OperatingSystem = os
+		// cpu, os := parseCharStrings(rc.GetTargetField())
+		// req.CPU = cpu
+		// req.OperatingSystem = os
+
+		req.CPU = rc.AsHINFO().Cpu
+		req.OperatingSystem = rc.AsHINFO().Os
 	case "HTTPS":
 		f := rc.AsHTTPS()
-		svcPrio := int(f.Priority)
-		req.SvcPriority = &svcPrio
+		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
 		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value))
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
 	case "KEY":
 		// Target: "<flags> <protocol> <algorithm> <pubkey-base64>"
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 4 {
-			f, _ := strconv.Atoi(parts[0])
-			proto, _ := strconv.Atoi(parts[1])
-			algo, _ := strconv.Atoi(parts[2])
-			req.Flags = &f
-			req.KeyProtocol = &proto
-			req.Algorithm = &algo
-			req.PublicKey = parts[3]
-		}
+
+		// parts := strings.Fields(rc.GetTargetField())
+		// if len(parts) >= 4 {
+		// 	f, _ := strconv.Atoi(parts[0])
+		// 	proto, _ := strconv.Atoi(parts[1])
+		// 	algo, _ := strconv.Atoi(parts[2])
+		// 	req.Flags = &f
+		// 	req.KeyProtocol = &proto
+		// 	req.Algorithm = &algo
+		// 	req.PublicKey = parts[3]
+		// }
+
+		f := rc.AsKEY()
+		req.Flags = new(int(f.Flags))
+		req.KeyProtocol = new(int(f.Protocol))
+		req.Algorithm = new(int(f.Algorithm))
+		req.PublicKey = f.PublicKey
+
 	case "LOC":
 		// Convert DNSControl's packed binary LOC fields to Dynu's decimal-degree format.
 		// The packed values are integer arc-milliseconds. We compute total ms first
@@ -402,22 +428,23 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// rounds to the correct integer millisecond (e.g. 71°06'18.000" rather than
 		// 71°06'17.999" when the float64 representation of 71.105 is slightly below exact).
 		const locMsPerDegree = 3600000.0
-		latHemi, latDeg, latMin, latSec := models.ReverseLatitude(rc.LocLatitude)
+		f := rc.AsLOC()
+		latHemi, latDeg, latMin, latSec := models.ReverseLatitude(f.Latitude)
 		latMs := float64(latDeg)*locMsPerDegree + float64(latMin)*60000 + latSec*1000
 		lat := (latMs + 0.5) / locMsPerDegree
 		if latHemi == "S" {
 			lat = -lat
 		}
-		lonHemi, lonDeg, lonMin, lonSec := models.ReverseLongitude(rc.LocLongitude)
+		lonHemi, lonDeg, lonMin, lonSec := models.ReverseLongitude(f.Longitude)
 		lonMs := float64(lonDeg)*locMsPerDegree + float64(lonMin)*60000 + lonSec*1000
 		lon := (lonMs + 0.5) / locMsPerDegree
 		if lonHemi == "W" {
 			lon = -lon
 		}
-		alt := models.ReverseAltitude(rc.LocAltitude)
-		size := models.ReverseENotationInt(rc.LocSize)
-		horizPre := models.ReverseENotationInt(rc.LocHorizPre)
-		vertPre := models.ReverseENotationInt(rc.LocVertPre)
+		alt := models.ReverseAltitude(f.Altitude)
+		size := models.ReverseENotationInt(f.Size)
+		horizPre := models.ReverseENotationInt(f.HorizPre)
+		vertPre := models.ReverseENotationInt(f.VertPre)
 		req.Latitude = &lat
 		req.Longitude = &lon
 		req.Altitude = &alt
@@ -425,19 +452,21 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.HorizontalPrecision = &horizPre
 		req.VerticalPrecision = &vertPre
 	case "MX":
-		req.Host = strings.TrimSuffix(rc.GetTargetField(), ".")
-		pref := int(rc.MxPreference)
+		f := rc.AsMX()
+		req.Host = strings.TrimSuffix(f.Mx, ".")
+		pref := int(f.Preference)
 		req.Priority = &pref
 	case "NAPTR":
-		order := int(rc.NaptrOrder)
-		pref := int(rc.NaptrPreference)
+		f := rc.AsNAPTR()
+		order := int(f.Order)
+		pref := int(f.Preference)
 		req.Order = &order
 		req.Preference = &pref
-		req.NaptrFlags = rc.NaptrFlags
-		req.Services = rc.NaptrService
-		req.RegExp = rc.NaptrRegexp
+		req.NaptrFlags = f.Flags // ignore:legacyfield
+		req.Services = f.Service
+		req.RegExp = f.Regexp
 		// Preserve "." as-is (null replacement); strip trailing dot from real FQDNs.
-		naptrTarget := rc.GetTargetField()
+		naptrTarget := f.Service
 		if naptrTarget != "." {
 			naptrTarget = strings.TrimSuffix(naptrTarget, ".")
 		}
@@ -450,62 +479,81 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.MailBox = rd.Mbox
 		req.TxtDomainName = rd.Txt
 	case "SMIMEA":
-		usage := int(rc.SmimeaUsage)
-		selector := int(rc.SmimeaSelector)
-		mtype := int(rc.SmimeaMatchingType)
+
+		// usage := int(rc.SmimeaUsage)
+		// selector := int(rc.SmimeaSelector)
+		// mtype := int(rc.SmimeaMatchingType)
+		// req.CertificateUsage = &usage
+		// req.Selector = &selector
+		// req.MatchingType = &mtype
+		// req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
+
+		f := rc.AsSMIMEA()
+		usage := int(f.Usage)
+		selector := int(f.Selector)
+		mtype := int(f.MatchingType)
 		req.CertificateUsage = &usage
 		req.Selector = &selector
 		req.MatchingType = &mtype
-		req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
+		req.CertificateAssociatedData = hexToBase64(f.Certificate)
 	case "SRV":
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
-		srvTarget := strings.TrimSuffix(rc.GetTargetField(), ".")
+		f := rc.AsSRV()
+		srvTarget := strings.TrimSuffix(f.Target, ".")
 		if srvTarget == "" {
 			srvTarget = "."
 		}
 		req.Host = srvTarget
-		prio := int(rc.SrvPriority)
-		weight := int(rc.SrvWeight)
-		port := int(rc.SrvPort)
+		prio := int(f.Priority)
+		weight := int(f.Weight)
+		port := int(f.Port)
 		req.Priority = &prio
 		req.Weight = &weight
 		req.Port = &port
 	case "SSHFP":
-		algo := int(rc.SshfpAlgorithm)
-		fptype := int(rc.SshfpFingerprint)
+		f := rc.AsSSHFP()
+		algo := int(f.Algorithm)
+		fptype := int(f.Type)
 		req.Algorithm = &algo
 		req.FingerPrintType = &fptype
-		req.FingerPrint = hexToBase64(rc.GetTargetField())
+		req.FingerPrint = hexToBase64(f.FingerPrint)
 	case "SVCB":
 		f := rc.AsSVCB()
-		svcPrio := int(f.Priority)
-		req.SvcPriority = &svcPrio
+		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
 		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value))
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
 	case "TLSA":
-		usage := int(rc.TlsaUsage)
-		selector := int(rc.TlsaSelector)
-		mtype := int(rc.TlsaMatchingType)
+		f := rc.AsTLSA()
+		usage := int(f.Usage)
+		selector := int(f.Selector)
+		mtype := int(f.MatchingType)
 		req.CertificateUsage = &usage
 		req.Selector = &selector
 		req.MatchingType = &mtype
-		req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
+		req.CertificateAssociatedData = hexToBase64(f.Certificate)
 	case "TXT":
 		req.TextData = rc.GetTargetTXTJoined()
 	case "URI":
 		// Target: "<priority> <weight> "<target-uri>""
-		parts := strings.SplitN(strings.TrimSpace(rc.GetTargetField()), " ", 3)
-		if len(parts) >= 3 {
-			prio, _ := strconv.Atoi(parts[0])
-			wgt, _ := strconv.Atoi(parts[1])
-			req.Priority = &prio
-			req.Weight = &wgt
-			req.TargetURI = strings.Trim(parts[2], "\"")
-		}
+
+		// parts := strings.SplitN(strings.TrimSpace(rc.GetTargetField()), " ", 3)
+		// if len(parts) >= 3 {
+		// 	prio, _ := strconv.Atoi(parts[0])
+		// 	wgt, _ := strconv.Atoi(parts[1])
+		// 	req.Priority = &prio
+		// 	req.Weight = &wgt
+		// 	req.TargetURI = strings.Trim(parts[2], "\"")
+		// }
+
+		f := rc.AsURI()
+		req.Priority = new(int(f.Priority))
+		req.Weight = new(int(f.Weight))
+		req.TargetURI = strings.Trim(f.Target, "\"")
+
 	}
 	return req
 }
@@ -621,57 +669,57 @@ func extractRdata(content, rtype string) string {
 	return ""
 }
 
-// parseCharStrings splits a string containing one or two DNS character-strings
-// (optionally quoted) and returns the first two values.
-// Used for HINFO: "X86-64" "Linux" → ("X86-64", "Linux").
-func parseCharStrings(s string) (first, second string) {
-	s = strings.TrimSpace(s)
-	var parts []string
-	for len(s) > 0 {
-		s = strings.TrimLeft(s, " \t")
-		if len(s) == 0 {
-			break
-		}
-		if s[0] == '"' {
-			end := strings.Index(s[1:], "\"")
-			if end < 0 {
-				parts = append(parts, s[1:])
-				break
-			}
-			parts = append(parts, s[1:end+1])
-			s = s[end+2:]
-		} else {
-			idx := strings.IndexAny(s, " \t")
-			if idx < 0 {
-				parts = append(parts, s)
-				break
-			}
-			parts = append(parts, s[:idx])
-			s = s[idx:]
-		}
-	}
-	if len(parts) >= 1 {
-		first = parts[0]
-	}
-	if len(parts) >= 2 {
-		second = parts[1]
-	}
-	return
-}
+// // parseCharStrings splits a string containing one or two DNS character-strings
+// // (optionally quoted) and returns the first two values.
+// // Used for HINFO: "X86-64" "Linux" → ("X86-64", "Linux").
+// func parseCharStrings(s string) (first, second string) {
+// 	s = strings.TrimSpace(s)
+// 	var parts []string
+// 	for len(s) > 0 {
+// 		s = strings.TrimLeft(s, " \t")
+// 		if len(s) == 0 {
+// 			break
+// 		}
+// 		if s[0] == '"' {
+// 			end := strings.Index(s[1:], "\"")
+// 			if end < 0 {
+// 				parts = append(parts, s[1:])
+// 				break
+// 			}
+// 			parts = append(parts, s[1:end+1])
+// 			s = s[end+2:]
+// 		} else {
+// 			idx := strings.IndexAny(s, " \t")
+// 			if idx < 0 {
+// 				parts = append(parts, s)
+// 				break
+// 			}
+// 			parts = append(parts, s[:idx])
+// 			s = s[idx:]
+// 		}
+// 	}
+// 	if len(parts) >= 1 {
+// 		first = parts[0]
+// 	}
+// 	if len(parts) >= 2 {
+// 		second = parts[1]
+// 	}
+// 	return
+// }
 
-// parseCERTType converts a CERT type name or number string to its integer value.
-func parseCERTType(s string) int {
-	named := map[string]int{
-		"PKIX": 1, "SPKI": 2, "PGP": 3, "IPKIX": 4,
-		"ISPKI": 5, "IPGP": 6, "ACPKIX": 7, "IACPKIX": 8,
-		"URI": 253, "OID": 254,
-	}
-	if v, ok := named[strings.ToUpper(s)]; ok {
-		return v
-	}
-	v, _ := strconv.Atoi(s)
-	return v
-}
+// // parseCERTType converts a CERT type name or number string to its integer value.
+// func parseCERTType(s string) int {
+// 	named := map[string]int{
+// 		"PKIX": 1, "SPKI": 2, "PGP": 3, "IPKIX": 4,
+// 		"ISPKI": 5, "IPGP": 6, "ACPKIX": 7, "IACPKIX": 8,
+// 		"URI": 253, "OID": 254,
+// 	}
+// 	if v, ok := named[strings.ToUpper(s)]; ok {
+// 		return v
+// 	}
+// 	v, _ := strconv.Atoi(s)
+// 	return v
+// }
 
 // parseLOCRdata parses a LOC record rdata string (the part after the type label)
 // into the 12 parameters required by models.RecordConfig.SetLOCParams.
