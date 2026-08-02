@@ -37,13 +37,30 @@ Rename them to match the test you are about to add, and read them before
 committing: they contain whatever your zone contained during the run.
 
 {% hint style="warning" %}
+The domain the test passes to `CheckToRC` and `CheckToNative` has to be the zone
+the data was recorded against, and nothing enforces it. Native records carry
+labels as the API returned them, so a fixture recorded against `realzone.net`
+replayed by a test that says `example.com` produces a golden whose labels are
+still fully qualified:
+
+```
+www.realzone.net 300 IN A 192.0.2.1
+realzone.net 3600 IN MX 10 mail.example.org.
+```
+
+`LabelFromFQDNNoDot` and its siblings print `ERROR: ... called WRONG` when this
+happens, but they return the name lowercased rather than shortened and the test
+passes, so `-update` writes that golden and it becomes the baseline. Set the
+domain before recording the golden, not after.
+{% endhint %}
+
+{% hint style="warning" %}
 `Original` is recorded as it stands once the provider has built the zone, which
-is not always what the API sent. `providers/netlify` canonicalizes a CNAME, MX
-or NS value in place before storing the record in `Original`, so a recorded
-native carries a trailing dot the API did not send, and a golden replayed from
-it never exercises the canonicalization. Check the recorded natives against the
-API's own responses when a provider's converter writes to the record it was
-given.
+is not always what the API sent. A converter that canonicalizes a value in place
+before storing the record in `Original` records a native that already carries
+the canonicalization, and a golden replayed from it never exercises the line
+that applies it. Check the recorded natives against the API's own responses when
+a provider's converter writes to the record it was given.
 {% endhint %}
 
 Without `-record` nothing is collected, no file is written and the provider is
