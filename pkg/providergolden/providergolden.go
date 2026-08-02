@@ -28,6 +28,10 @@
 // inputs. It never contacts a provider's API and never rewrites an input file,
 // so gathering data from a live account stays a separate, explicit step.
 //
+// That step is Recorder, which collects both kinds of input from a provider as
+// it is used. The integration tests wrap their provider in one when they are
+// given "-record <dir>".
+//
 // A golden line is the record's label, TTL, class, type and RDATA, followed by
 // the metadata when the record has any:
 //

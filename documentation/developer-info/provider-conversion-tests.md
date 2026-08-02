@@ -16,10 +16,44 @@ skipped, never failed.
 
 ### 1. Record the data
 
-Collect the native records your provider's API returns for a test zone and store
-them as a JSON array in `providers/<provider>/testdata/`. The file name starts
-with the provider's name in lower case and continues with the function under
-test:
+The integration tests already drive every conversion a provider has, so the
+easiest way to collect the data is to record an integration run. Add `-record`
+and a directory to the command you normally use:
+
+```shell
+go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
+  -args -verbose -profile CLOUDFLAREAPI -record providers/cloudflare/testdata
+```
+
+That writes two files named after the profile:
+
+- `cloudflareapi.records` — every record the tests asked the provider to store,
+  which is what a `CheckToNative` function is given.
+- `cloudflareapi.json` — the native record each returned record came from, read
+  from `RecordConfig.Original`. That is what a `CheckToRC` function is given. It
+  is written only for providers that fill `Original` in.
+
+Rename them to match the test you are about to add, and read them before
+committing: they contain whatever your zone contained during the run.
+
+{% hint style="warning" %}
+`Original` is recorded as it stands once the provider has built the zone, which
+is not always what the API sent. `providers/netlify` canonicalizes a CNAME, MX
+or NS value in place before storing the record in `Original`, so a recorded
+native carries a trailing dot the API did not send, and a golden replayed from
+it never exercises the canonicalization. Check the recorded natives against the
+API's own responses when a provider's converter writes to the record it was
+given.
+{% endhint %}
+
+Without `-record` nothing is collected, no file is written and the provider is
+not wrapped, so a normal run is unchanged. Under `-record` the provider is
+wrapped in a `models.DNSProvider`, which is all the integration tests ask of it
+today. A test that type-asserts a provider to an optional interface such as
+`ZoneCreator` would need the wrapper to forward that interface too.
+
+Data can also be collected by hand. The `.json` file is a JSON array of the
+native records your provider's API returns:
 
 ```json
 [

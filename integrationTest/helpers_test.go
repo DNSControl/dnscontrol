@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/providers/cloudflare"
 )
@@ -17,11 +18,16 @@ import (
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
+	recordFlag           = flag.String("record", "", "Directory to write the record conversion inputs seen during the run to")
 	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
 	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
 	enableCFTags         = flag.Bool("cftags", false, "enable CF tag tests (requires paid plan, default false)")
 )
+
+// recorder accumulates the conversion inputs of every provider call made by
+// this run, and is written out when -record names a directory.
+var recorder = providergolden.NewRecorder()
 
 func init() {
 	testing.Init()
@@ -124,5 +130,22 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		}
 	}
 
+	if *recordFlag != "" {
+		t.Cleanup(func() { writeRecording(t) })
+		return providergolden.Record(provider, recorder), cfg["domain"], cfg
+	}
+
 	return provider, cfg["domain"], cfg
+}
+
+// writeRecording writes everything recorded so far to the -record directory,
+// named after the profile under test.
+func writeRecording(t *testing.T) {
+	written, err := recorder.WriteTo(*recordFlag, strings.ToLower(*profileFlag))
+	for _, path := range written {
+		t.Logf("Recorded %s", path)
+	}
+	if err != nil {
+		t.Error(err)
+	}
 }
