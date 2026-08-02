@@ -119,17 +119,18 @@ func (rc *RecordConfig) zoneFileQuoted() string {
 		rc.MustSetTarget(".")
 	}
 
-	if rc.GetRDATA() != nil {
-		return rc.GetRDATA().String()
+	if rc.GetRDATA() == nil {
+		panic("something is really wrong")
 	}
+	return rc.GetRDATA().String()
 
-	rr := rc.ToRR()
-	header := rr.Header().String()
-	full := rr.String()
-	if !strings.HasPrefix(full, header) {
-		panic("assertion failed. dns.Hdr.String() behavior has changed in an incompatible way")
-	}
-	return full[len(header):]
+	// rr := rc.ToRR()
+	// header := rr.Header().String()
+	// full := rr.String()
+	// if !strings.HasPrefix(full, header) {
+	// 	panic("assertion failed. dns.Hdr.String() behavior has changed in an incompatible way")
+	// }
+	// return full[len(header):]
 }
 
 func (rc *RecordConfig) luaCombined() string {

@@ -20,7 +20,7 @@ func (rc *RecordConfig) targetCombinedSVCBRaw() string {
 
 // GetSVCBValue returns the SVCB Key/Values as a list of Key/Values.
 // Used to construct dnsv.RR of type SVCB or HTTPS. (This is legacy code that should go away eventualy).
-func (rc *RecordConfig) GetSVCBValue() []dnsv1.SVCBKeyValue {
+func (rc *RecordConfig) xGetSVCBValue() []dnsv1.SVCBKeyValue {
 	var s string
 	if rc.GetRDATA() != nil {
 		s = fmt.Sprintf("%s %s %s", rc.NameFQDN, rc.Type, rc.GetRDATA().String())
@@ -91,43 +91,43 @@ func Svcbv2ValueToString(pairs []svcbv2.Pair) string {
 	return sb.String()
 }
 
-// convertSVCBv1v2 converts dnsv1's struct to dnsv2's struct. It hasn't been tested extensively.
-func convertSVCBv1v2(params []dnsv1.SVCBKeyValue) ([]svcbv2.Pair, error) {
-	var value []svcbv2.Pair
-	for _, kvV1 := range params {
-		kV1 := kvV1.Key().String()
-		keyCodeV2 := svcbv2.StringToKey(kV1)
-		vV1 := kvV1.String()
-		if len(vV1) > 2 && vV1[0] == '"' && vV1[len(vV1)-1] == '"' {
-			panic("V has quotes")
-		}
+// // convertSVCBv1v2 converts dnsv1's struct to dnsv2's struct. It hasn't been tested extensively.
+// func convertSVCBv1v2(params []dnsv1.SVCBKeyValue) ([]svcbv2.Pair, error) {
+// 	var value []svcbv2.Pair
+// 	for _, kvV1 := range params {
+// 		kV1 := kvV1.Key().String()
+// 		keyCodeV2 := svcbv2.StringToKey(kV1)
+// 		vV1 := kvV1.String()
+// 		if len(vV1) > 2 && vV1[0] == '"' && vV1[len(vV1)-1] == '"' {
+// 			panic("V has quotes")
+// 		}
 
-		pairFn := svcbv2.KeyToPair(keyCodeV2)
-		if pairFn == nil {
-			return nil, fmt.Errorf("failed to lookup svc key: %s", kV1)
-		}
-		pair := pairFn()
-		if svcbv2.PairToKey(pair) != keyCodeV2 {
-			return nil, fmt.Errorf("key constant is not in sync: %v", keyCodeV2)
-		}
-		err := svcbv2.Parse(pair, vV1, "")
-		if err != nil {
-			return nil, fmt.Errorf("failed to parse svc pair: %s", kV1)
-		}
+// 		pairFn := svcbv2.KeyToPair(keyCodeV2)
+// 		if pairFn == nil {
+// 			return nil, fmt.Errorf("failed to lookup svc key: %s", kV1)
+// 		}
+// 		pair := pairFn()
+// 		if svcbv2.PairToKey(pair) != keyCodeV2 {
+// 			return nil, fmt.Errorf("key constant is not in sync: %v", keyCodeV2)
+// 		}
+// 		err := svcbv2.Parse(pair, vV1, "")
+// 		if err != nil {
+// 			return nil, fmt.Errorf("failed to parse svc pair: %s", kV1)
+// 		}
 
-		vV2 := pair.String()
-		if len(vV2) > 2 && vV2[0] == '"' && vV2[len(vV2)-1] == '"' {
-			panic("V2 has quotes")
-		}
-		if vV1 != vV2 {
-			panic(fmt.Sprintf("conversion from v1 to v2 is not stable: key=%s v1=%s v2=%s", kV1, vV1, vV2))
-		}
+// 		vV2 := pair.String()
+// 		if len(vV2) > 2 && vV2[0] == '"' && vV2[len(vV2)-1] == '"' {
+// 			panic("V2 has quotes")
+// 		}
+// 		if vV1 != vV2 {
+// 			panic(fmt.Sprintf("conversion from v1 to v2 is not stable: key=%s v1=%s v2=%s", kV1, vV1, vV2))
+// 		}
 
-		value = append(value, pair)
-	}
+// 		value = append(value, pair)
+// 	}
 
-	return value, nil
-}
+// 	return value, nil
+// }
 
 // SVCBHydrateDesiredEchIgnore finds any ECH=IGNORE parameters (stored as
 // ECH=1000) and substitute the existing ECH value instead.

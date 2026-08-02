@@ -331,7 +331,7 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 }
 
 // ToRR converts a RecordConfig to a dns.RR.
-func (rc *RecordConfig) ToRR() dnsv1.RR {
+func (rc *RecordConfig) xToRR() dnsv1.RR {
 	// Function is not valid on pseudo-types.
 	rdtype, ok := dnsv1.StringToType[rc.Type]
 	if !ok {
@@ -385,7 +385,7 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 	case dnsv1.TypeHTTPS:
 		rr.(*dnsv1.HTTPS).Priority = rc.SvcPriority
 		rr.(*dnsv1.HTTPS).Target = rc.GetTargetField()
-		rr.(*dnsv1.HTTPS).Value = rc.GetSVCBValue()
+		// rr.(*dnsv1.HTTPS).Value = rc.GetSVCBValue()
 	case dnsv1.TypeLOC:
 		// fmt.Printf("ToRR long: %d, lat:%d, sz: %d, hz:%d, vt:%d\n", rc.LocLongitude, rc.LocLatitude, rc.LocSize, rc.LocHorizPre, rc.LocVertPre)
 		// fmt.Printf("ToRR rc: %+v\n", *rc)
@@ -440,7 +440,7 @@ func (rc *RecordConfig) ToRR() dnsv1.RR {
 	case dnsv1.TypeSVCB:
 		rr.(*dnsv1.SVCB).Priority = rc.SvcPriority
 		rr.(*dnsv1.SVCB).Target = rc.GetTargetField()
-		rr.(*dnsv1.SVCB).Value = rc.GetSVCBValue()
+		// rr.(*dnsv1.SVCB).Value = rc.GetSVCBValue()
 	case dnsv1.TypeTLSA:
 		rr.(*dnsv1.TLSA).Usage = rc.TlsaUsage
 		rr.(*dnsv1.TLSA).MatchingType = rc.TlsaMatchingType

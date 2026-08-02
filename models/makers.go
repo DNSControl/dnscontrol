@@ -17,7 +17,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	dnsv1 "github.com/miekg/dns"
 )
 
 func init() {
@@ -352,12 +351,12 @@ func MakeSVCB(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	}
 
 	switch v := params.(type) {
-	case []dnsv1.SVCBKeyValue:
-		pv2, err := convertSVCBv1v2(v) // This hasn't been tested much.
-		if err != nil {
-			panic("BUG: Failed to convert SVCB parameters from v1 to v2: " + err.Error())
-		}
-		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, isEnabled, target), Value: pv2}, nil
+	// case []dnsv1.SVCBKeyValue:
+	// 	pv2, err := convertSVCBv1v2(v) // This hasn't been tested much.
+	// 	if err != nil {
+	// 		panic("BUG: Failed to convert SVCB parameters from v1 to v2: " + err.Error())
+	// 	}
+	// 	return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, isEnabled, target), Value: pv2}, nil
 	case []svcbv2.Pair:
 		return dnsrdatav2.SVCB{Priority: mustbe.Uint16(priority), Target: mustbe.TargetHost(origin, isEnabled, target), Value: v}, nil
 	case string:

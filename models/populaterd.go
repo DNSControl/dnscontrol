@@ -246,7 +246,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeRP:
-		//rd, err = MakeRP(origin, rc.F.(dnsv1.RP).Mbox, rc.F.(dnsv1.RP).Txt)
 		// RP is native to RecordConfigV3. No FixUP is needed or possible.
 	case privatetypes.TypeR53ALIAS:
 		rd, err := privatetypesrdata.MakeR53ALIAS(origin, nil, isEnabled,
