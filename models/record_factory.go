@@ -179,85 +179,18 @@ func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd d
 	return rc, nil
 }
 
-// func newRecordConfigHelperRC(rc *RecordConfig, typeName string, contents string, origin string) error {
-// 	typeNum, err := dnsutilv2.StringToType(typeName)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	rc.TypeNum = typeNum
-// 	rc.Type = typeName
+func legacySetTargetArgsTXT(rc *RecordConfig, args ...any) error {
 
-// 	rd, err := MyNewData(typeNum, contents, origin)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	rc.SetRDATA(rd)
-// 	rc.FixUp(origin) // Add .ComparableV3
-// 	err = backfill(rc)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
-func legacySetTargetArgs(rc *RecordConfig, typeNum uint16, args ...any) error {
-	typeStr := dnsutilv2.TypeToString(typeNum)
-
-	// Make sure .Type isn't already set to something else.
-	if rc.Type != "" && rc.Type != typeStr {
-		return fmt.Errorf("legacySetTargetArgs(%s) called with .Type set to %s", typeStr, rc.Type)
-	}
-
-	rc.TypeNum = typeNum
-	rc.Type = typeStr
+	rc.TypeNum = dnsv2.TypeTXT
+	rc.Type = "TXT"
 
 	if rc.Metadata == nil {
 		rc.Metadata = map[string]string{}
 	}
 
-	f, ok := privatetypes.TypeToMakeRDATA[typeNum]
-	if !ok {
-		fmt.Printf("NewRecordConfig: failed TypeToMakeRDATA[%d] == nil", typeNum)
-		return fmt.Errorf("legacySetTargetArgs: failed TypeToMakeRDATA[%d] == nil", typeNum)
-	}
-	rd, err := f("", nil, nrc.Flags{}, args...)
+	rd, err := MakeTXT("", nil, nrc.Flags{}, args...)
 	if err != nil {
 		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
-	}
-	rc.SetRDATA(rd)
-
-	return nil
-}
-
-func legacySetTargetParse(rc *RecordConfig, typeNum uint16, contents string) error {
-	typeStr := dnsutilv2.TypeToString(typeNum)
-
-	// Make sure .Type isn't already set to something else.
-	if rc.Type != "" && rc.Type != typeStr {
-		return fmt.Errorf("legacySetTargetArgs(%s) called with .Type set to %s", typeStr, rc.Type)
-	}
-
-	rc.TypeNum = typeNum
-	rc.Type = typeStr
-
-	if rc.Metadata == nil {
-		rc.Metadata = map[string]string{}
-	}
-
-	var err error
-	switch rc.TypeNum {
-	case dnsv2.TypeNAPTR:
-		// NS1 (maybe others) produce a flag that is unquoted.  `U` instead of `"U"`.
-		// Maybe we should move this into the NS1 provider.
-		contents, err = naptrAssureQuotedFields(contents)
-		if err != nil {
-			return err
-		}
-	}
-
-	rd, err := MyNewData(typeNum, contents, "")
-	if err != nil {
-		return err
 	}
 	rc.SetRDATA(rd)
 
