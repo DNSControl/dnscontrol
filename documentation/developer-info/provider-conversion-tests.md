@@ -135,7 +135,10 @@ of DNS records rather than native records, so it reads a `.records` file:
 
 ```go
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "netlify_toreq", testDomain, toReq)
+	providergolden.CheckToNative(t, "netlify_toreq", testDomain,
+		func(rc *models.RecordConfig) (*dnsRecordCreate, error) {
+			return toReq(rc), nil
+		})
 }
 ```
 

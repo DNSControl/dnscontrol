@@ -119,7 +119,7 @@ func TestdataDir(p models.DNSProvider) (string, error) {
 }
 
 // ResolveDir returns dir as an absolute path, resolving a relative dir against
-// the module root rather than the directory the test binary happens to run in.
+// the module root.
 func ResolveDir(dir string) (string, error) {
 	if filepath.IsAbs(dir) {
 		return dir, nil
