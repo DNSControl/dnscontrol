@@ -8,7 +8,7 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("CLOUDFLAREAPI")
 
 func TestNativeToRecordGolden(t *testing.T) {
 	c := &cloudflareProvider{}

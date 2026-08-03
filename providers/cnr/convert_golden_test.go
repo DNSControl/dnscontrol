@@ -7,7 +7,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("CNR")
 
 func TestCreateRecordStringGolden(t *testing.T) {
 	providergolden.CheckToNative(t, "cnr_createrecordstring", testDomain,

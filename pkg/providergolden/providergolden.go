@@ -5,8 +5,10 @@
 // test names the recorded data and adapts the provider's function to a uniform
 // signature:
 //
+//	var testDomain = providergolden.Domain("WEBSUPPORT")
+//
 //	func TestToRecordConfig(t *testing.T) {
-//		providergolden.CheckToRC(t, "websupport_torecordconfig", "example.com",
+//		providergolden.CheckToRC(t, "websupport_torecordconfig", testDomain,
 //			func(dc *models.DomainConfig, n nativeRecord) ([]*models.RecordConfig, error) {
 //				rc, err := toRecordConfig(dc, n)
 //				return []*models.RecordConfig{rc}, err
@@ -30,7 +32,7 @@
 //
 // That step is Recorder, which collects both kinds of input from a provider as
 // it is used. The integration tests wrap their provider in one when they are
-// given "-record <dir>".
+// given "-record", and write what it collected to TestdataDir.
 //
 // A golden line is the record's label, TTL, class, type and RDATA, followed by
 // the metadata when the record has any:
@@ -61,6 +63,17 @@ import (
 var update = flag.Bool("update", false, "rewrite the provider conversion golden files")
 
 const testdataDir = "testdata"
+
+// Domain returns the zone the data for provider was recorded against: the value
+// of the provider's <PROVIDER>_DOMAIN environment variable, or "example.com"
+// when that is unset. It is the variable the integration tests take their test
+// zone from, so a recording and the test that replays it agree by default.
+func Domain(provider string) string {
+	if domain := os.Getenv(provider + "_DOMAIN"); domain != "" {
+		return domain
+	}
+	return "example.com"
+}
 
 // CheckToRC replays the native records recorded in testdata/<name>.json through
 // convert and compares the records it returns with testdata/<name>.golden.

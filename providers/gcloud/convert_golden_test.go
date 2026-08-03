@@ -8,7 +8,7 @@ import (
 	gdns "google.golang.org/api/dns/v1"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("GCLOUD")
 
 func TestNativeToRecordGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "gcloud_nativetorecord", testDomain,

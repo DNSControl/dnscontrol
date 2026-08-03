@@ -8,7 +8,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("AZURE_PRIVATE_DNS")
 
 func TestNativeToRecordsGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "azureprivatedns_nativetorecords", testDomain,

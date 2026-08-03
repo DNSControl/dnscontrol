@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"maps"
 	"os"
+	"path"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"sync"
@@ -95,6 +97,44 @@ func (r *Recorder) WriteTo(dir, name string) ([]string, error) {
 	}
 
 	return written, errors.Join(r.errs...)
+}
+
+// TestdataDir returns the testdata directory that belongs to p:
+// providers/<package>/testdata under the module root, where <package> is the
+// package p is implemented in.
+func TestdataDir(p models.DNSProvider) (string, error) {
+	t := reflect.TypeOf(p)
+	for t != nil && t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t == nil || t.PkgPath() == "" {
+		return "", fmt.Errorf("cannot derive a testdata directory from provider type %T", p)
+	}
+
+	root, err := moduleRoot()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(root, "providers", path.Base(t.PkgPath()), testdataDir), nil
+}
+
+// moduleRoot returns the directory of the nearest go.mod at or above the
+// working directory.
+func moduleRoot() (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+			return dir, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", errors.New("no go.mod above the working directory")
+		}
+		dir = parent
+	}
 }
 
 // writeFile writes data to <dir>/<filename> and returns the path, creating dir

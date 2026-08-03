@@ -18,7 +18,8 @@ import (
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
-	recordFlag           = flag.String("record", "", "Directory to write the record conversion inputs seen during the run to")
+	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run to the provider's testdata directory")
+	recordDirFlag        = flag.String("recorddir", "", "Directory to record into, and implies -record (default: the provider's testdata directory)")
 	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
 	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
@@ -26,7 +27,7 @@ var (
 )
 
 // recorder accumulates the conversion inputs of every provider call made by
-// this run, and is written out when -record names a directory.
+// this run, and is written out when -record is given.
 var recorder = providergolden.NewRecorder()
 
 func init() {
@@ -130,18 +131,34 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		}
 	}
 
-	if *recordFlag != "" {
-		t.Cleanup(func() { writeRecording(t) })
+	if *recordFlag || *recordDirFlag != "" {
+		if flag.NArg() != 0 {
+			t.Fatalf("unexpected argument %q; the recording directory is set with -recorddir", flag.Arg(0))
+		}
+		dir, err := recordingDir(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() { writeRecording(t, dir) })
 		return providergolden.Record(provider, recorder), cfg["domain"], cfg
 	}
 
 	return provider, cfg["domain"], cfg
 }
 
-// writeRecording writes everything recorded so far to the -record directory,
-// named after the profile under test.
-func writeRecording(t *testing.T) {
-	written, err := recorder.WriteTo(*recordFlag, strings.ToLower(*profileFlag))
+// recordingDir is where a recording of p is written: -recorddir when it is
+// given, and otherwise p's own testdata directory.
+func recordingDir(p providers.DNSServiceProvider) (string, error) {
+	if *recordDirFlag != "" {
+		return *recordDirFlag, nil
+	}
+	return providergolden.TestdataDir(p)
+}
+
+// writeRecording writes everything recorded so far to dir, named after the
+// profile under test.
+func writeRecording(t *testing.T, dir string) {
+	written, err := recorder.WriteTo(dir, strings.ToLower(*profileFlag))
 	for _, path := range written {
 		t.Logf("Recorded %s", path)
 	}

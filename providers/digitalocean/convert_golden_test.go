@@ -8,7 +8,7 @@ import (
 	"github.com/digitalocean/godo"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("DIGITALOCEAN")
 
 func TestToRcGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "digitalocean_torc", testDomain,

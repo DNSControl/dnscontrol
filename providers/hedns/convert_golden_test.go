@@ -7,7 +7,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("HEDNS")
 
 func TestRecordToRCGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "hedns_recordtorc", testDomain,

@@ -8,7 +8,7 @@ import (
 	"github.com/namedotcom/go/namecom"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("NAMEDOTCOM")
 
 func TestToRecordGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "namedotcom_torecord", testDomain,

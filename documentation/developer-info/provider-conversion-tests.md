@@ -18,14 +18,25 @@ skipped, never failed.
 
 The integration tests already drive every conversion a provider has, so the
 easiest way to collect the data is to record an integration run. Add `-record`
-and a directory to the command you normally use:
+to the command you normally use:
 
 ```shell
 go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
-  -args -verbose -profile CLOUDFLAREAPI -record providers/cloudflare/testdata
+  -args -verbose -profile CLOUDFLAREAPI -record
 ```
 
-That writes two files named after the profile:
+The recording goes to `providers/<package>/testdata`, the testdata directory of
+the package the provider under test is implemented in, so `CLOUDFLAREAPI` writes
+to `providers/cloudflare/testdata`. Use `-recorddir` to write somewhere else.
+`go test` runs a test binary in its own package directory, so a relative
+`-recorddir` is relative to `integrationTest/` and needs a `../` prefix:
+
+```shell
+go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
+  -args -verbose -profile CLOUDFLAREAPI -recorddir ../providers/cloudflare/testdata
+```
+
+Either way two files are written, named after the profile:
 
 - `cloudflareapi.records` — every record the tests asked the provider to store,
   which is what a `CheckToNative` function is given.
@@ -38,10 +49,13 @@ committing: they contain whatever your zone contained during the run.
 
 {% hint style="warning" %}
 The domain the test passes to `CheckToRC` and `CheckToNative` has to be the zone
-the data was recorded against, and nothing enforces it. Native records carry
-labels as the API returned them, so a fixture recorded against `realzone.net`
-replayed by a test that says `example.com` produces a golden whose labels are
-still fully qualified:
+the data was recorded against, and nothing enforces it. `providergolden.Domain`
+takes it from the same `<PROVIDER>_DOMAIN` variable the integration tests use, so
+a recording and the test that replays it agree as long as that variable holds the
+zone the data came from. Where they disagree, native records carry labels as the
+API returned them, so a fixture recorded against `realzone.net` replayed by a
+test that says `example.com` produces a golden whose labels are still fully
+qualified:
 
 ```
 www.realzone.net 300 IN A 192.0.2.1
@@ -52,6 +66,11 @@ realzone.net 3600 IN MX 10 mail.example.org.
 happens, but they return the name lowercased rather than shortened and the test
 passes, so `-update` writes that golden and it becomes the baseline. Set the
 domain before recording the golden, not after.
+
+A golden recorded against a zone other than `example.com` only matches while
+`<PROVIDER>_DOMAIN` still names that zone, so it does not match in a checkout
+that does not set it. Record from `example.com` when the golden is to be
+committed.
 {% endhint %}
 
 {% hint style="warning" %}
@@ -96,8 +115,10 @@ The test adapts your conversion function to a uniform signature. That adapter is
 the only code you write:
 
 ```go
+var testDomain = providergolden.Domain("WEBSUPPORT")
+
 func TestToRecordConfigGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "websupport_torecordconfig", "example.com",
+	providergolden.CheckToRC(t, "websupport_torecordconfig", testDomain,
 		func(dc *models.DomainConfig, native nativeRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRecordConfig(dc, native)
 			return []*models.RecordConfig{rc}, err
@@ -105,13 +126,17 @@ func TestToRecordConfigGolden(t *testing.T) {
 }
 ```
 
+`providergolden.Domain` returns `$WEBSUPPORT_DOMAIN`, or `example.com` when that
+is unset, so the same test replays a recording of your own zone and the
+committed fixtures.
+
 Use `CheckToNative` for the other direction: `toNative`, `toReq`,
 `recordToCreateRequest`, or whatever your provider calls it. Its input is a list
 of DNS records rather than native records, so it reads a `.records` file:
 
 ```go
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "porkbun_toreq", "example.com", toReq)
+	providergolden.CheckToNative(t, "porkbun_toreq", testDomain, toReq)
 }
 ```
 

@@ -7,7 +7,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("CLOUDNS")
 
 func TestToRcGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "cloudns_torc", testDomain,

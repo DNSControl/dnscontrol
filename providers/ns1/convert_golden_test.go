@@ -8,7 +8,7 @@ import (
 	"gopkg.in/ns1/ns1-go.v2/rest/model/dns"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("NS1")
 
 func TestConvertGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "ns1_convert", testDomain,

@@ -7,7 +7,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("NETLIFY")
 
 func TestToRecordConfigGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "netlify_torecordconfig", testDomain,

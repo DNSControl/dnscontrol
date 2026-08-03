@@ -9,7 +9,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-const testDomain = "example.com"
+var testDomain = providergolden.Domain("ROUTE53")
 
 func TestNativeToRecordsGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "route53_nativetorecords", testDomain,

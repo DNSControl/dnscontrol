@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -229,5 +230,18 @@ func TestRecordObservesTheConversionsAndReturnsWhatTheProviderReturned(t *testin
 	}
 	if want := "www 300 IN A 192.0.2.1\n"; string(records) != want {
 		t.Errorf("example.records = %q, want %q", records, want)
+	}
+}
+
+func TestTestdataDirIsTheProvidersOwnTestdataDirectory(t *testing.T) {
+	dir, err := TestdataDir(&fakeProvider{})
+	if err != nil {
+		t.Fatalf("TestdataDir() error: %v", err)
+	}
+	if !filepath.IsAbs(dir) {
+		t.Errorf("TestdataDir() = %q, want an absolute path", dir)
+	}
+	if want := filepath.Join("providers", "providergolden", testdataDir); !strings.HasSuffix(dir, want) {
+		t.Errorf("TestdataDir() = %q, want a path ending in %q", dir, want)
 	}
 }

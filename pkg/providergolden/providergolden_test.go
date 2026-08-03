@@ -9,6 +9,20 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
+func TestDomainReadsTheProvidersDomainVariable(t *testing.T) {
+	t.Setenv("VERCEL_DOMAIN", "recorded.example.net")
+	if got := Domain("VERCEL"); got != "recorded.example.net" {
+		t.Errorf("Domain() = %q, want %q", got, "recorded.example.net")
+	}
+}
+
+func TestDomainFallsBackToExampleCom(t *testing.T) {
+	t.Setenv("VERCEL_DOMAIN", "")
+	if got := Domain("VERCEL"); got != "example.com" {
+		t.Errorf("Domain() = %q, want %q", got, "example.com")
+	}
+}
+
 func TestFormatRecord(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 
