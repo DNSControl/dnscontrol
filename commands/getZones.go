@@ -484,7 +484,8 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 			jsonQuoted(f.Replacement), // .
 		)
 	case "SMIMEA":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SmimeaUsage, rec.SmimeaSelector, rec.SmimeaMatchingType, rec.GetTargetField())
+		f := rec.AsSMIMEA()
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "SSHFP":
 		target = fmt.Sprintf(`%d, %d, "%s"`, rec.SshfpAlgorithm, rec.SshfpFingerprint, rec.GetTargetField())
 	case "SOA":

@@ -189,9 +189,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case dnsv2.TypeDNSKEY:
-		rd, err := MakeDNSKEY(origin, nil, isEnabled, rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeDS:
 		rd, err := MakeDS(origin, nil, isEnabled, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
 		errorChk(err)
@@ -212,9 +210,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeLOC:
-		rd, err := MakeLOC(origin, nil, isEnabled, rc.LocVersion, rc.LocSize, rc.LocHorizPre, rc.LocVertPre, rc.LocLatitude, rc.LocLongitude, rc.LocAltitude)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeMX:
 		rd, err := MakeMX(origin, nil, isEnabled, rc.MxPreference, rc.GetTargetField())
@@ -258,9 +254,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeSMIMEA:
-		rd, err := MakeSMIMEA(origin, nil, isEnabled, rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeSOA:
 		// no op -- legacy fields have been eliminated
 	case dnsv2.TypeSRV:
