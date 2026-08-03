@@ -118,6 +118,19 @@ func TestdataDir(p models.DNSProvider) (string, error) {
 	return filepath.Join(root, "providers", path.Base(t.PkgPath()), testdataDir), nil
 }
 
+// ResolveDir returns dir as an absolute path, resolving a relative dir against
+// the module root rather than the directory the test binary happens to run in.
+func ResolveDir(dir string) (string, error) {
+	if filepath.IsAbs(dir) {
+		return dir, nil
+	}
+	root, err := moduleRoot()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(root, dir), nil
+}
+
 // moduleRoot returns the directory of the nearest go.mod at or above the
 // working directory.
 func moduleRoot() (string, error) {

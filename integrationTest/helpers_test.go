@@ -45,6 +45,10 @@ func panicOnErr(err error) {
 }
 
 func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string]string) {
+	if flag.NArg() != 0 {
+		t.Fatalf("unexpected argument %q; the recording directory is set with -recorddir", flag.Arg(0))
+	}
+
 	if *providerFlag == "" && *profileFlag == "" {
 		t.Log("No -provider or -profile specified")
 		return nil, "", nil
@@ -132,9 +136,6 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 	}
 
 	if *recordFlag || *recordDirFlag != "" {
-		if flag.NArg() != 0 {
-			t.Fatalf("unexpected argument %q; the recording directory is set with -recorddir", flag.Arg(0))
-		}
 		dir, err := recordingDir(provider)
 		if err != nil {
 			t.Fatal(err)
@@ -150,7 +151,7 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 // given, and otherwise p's own testdata directory.
 func recordingDir(p providers.DNSServiceProvider) (string, error) {
 	if *recordDirFlag != "" {
-		return *recordDirFlag, nil
+		return providergolden.ResolveDir(*recordDirFlag)
 	}
 	return providergolden.TestdataDir(p)
 }

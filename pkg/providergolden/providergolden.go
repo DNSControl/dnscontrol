@@ -5,12 +5,12 @@
 // test names the recorded data and adapts the provider's function to a uniform
 // signature:
 //
-//	var testDomain = providergolden.Domain("WEBSUPPORT")
+//	var testDomain = providergolden.Domain("NETLIFY")
 //
 //	func TestToRecordConfig(t *testing.T) {
-//		providergolden.CheckToRC(t, "websupport_torecordconfig", testDomain,
-//			func(dc *models.DomainConfig, n nativeRecord) ([]*models.RecordConfig, error) {
-//				rc, err := toRecordConfig(dc, n)
+//		providergolden.CheckToRC(t, "netlify_torecordconfig", testDomain,
+//			func(dc *models.DomainConfig, n dnsRecord) ([]*models.RecordConfig, error) {
+//				rc, err := toRecordConfig(dc, &n)
 //				return []*models.RecordConfig{rc}, err
 //			})
 //	}

@@ -245,3 +245,37 @@ func TestTestdataDirIsTheProvidersOwnTestdataDirectory(t *testing.T) {
 		t.Errorf("TestdataDir() = %q, want a path ending in %q", dir, want)
 	}
 }
+
+func TestResolveDirIsRelativeToTheModuleRoot(t *testing.T) {
+	rel := filepath.Join("providers", "bind", testdataDir)
+
+	dir, err := ResolveDir(rel)
+	if err != nil {
+		t.Fatalf("ResolveDir(%q) error: %v", rel, err)
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dir == filepath.Join(wd, rel) {
+		t.Errorf("ResolveDir(%q) = %q, want a path under the module root, not the working directory", rel, dir)
+	}
+
+	root := strings.TrimSuffix(dir, string(filepath.Separator)+rel)
+	if _, err := os.Stat(filepath.Join(root, "go.mod")); err != nil {
+		t.Errorf("ResolveDir(%q) = %q, want a path under the directory holding go.mod: %v", rel, dir, err)
+	}
+}
+
+func TestResolveDirKeepsAnAbsolutePath(t *testing.T) {
+	want := t.TempDir()
+
+	dir, err := ResolveDir(want)
+	if err != nil {
+		t.Fatalf("ResolveDir(%q) error: %v", want, err)
+	}
+	if dir != want {
+		t.Errorf("ResolveDir(%q) = %q, want %q", want, dir, want)
+	}
+}

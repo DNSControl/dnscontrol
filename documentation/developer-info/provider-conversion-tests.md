@@ -27,13 +27,12 @@ go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
 
 The recording goes to `providers/<package>/testdata`, the testdata directory of
 the package the provider under test is implemented in, so `CLOUDFLAREAPI` writes
-to `providers/cloudflare/testdata`. Use `-recorddir` to write somewhere else.
-`go test` runs a test binary in its own package directory, so a relative
-`-recorddir` is relative to `integrationTest/` and needs a `../` prefix:
+to `providers/cloudflare/testdata`. Use `-recorddir` to write somewhere else. A
+relative `-recorddir` is relative to the top of the repository:
 
 ```shell
 go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
-  -args -verbose -profile CLOUDFLAREAPI -recorddir ../providers/cloudflare/testdata
+  -args -verbose -profile CLOUDFLAREAPI -recorddir providers/cloudflare/testdata
 ```
 
 Either way two files are written, named after the profile:
@@ -115,18 +114,18 @@ The test adapts your conversion function to a uniform signature. That adapter is
 the only code you write:
 
 ```go
-var testDomain = providergolden.Domain("WEBSUPPORT")
+var testDomain = providergolden.Domain("NETLIFY")
 
 func TestToRecordConfigGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "websupport_torecordconfig", testDomain,
-		func(dc *models.DomainConfig, native nativeRecord) ([]*models.RecordConfig, error) {
-			rc, err := toRecordConfig(dc, native)
+	providergolden.CheckToRC(t, "netlify_torecordconfig", testDomain,
+		func(dc *models.DomainConfig, native dnsRecord) ([]*models.RecordConfig, error) {
+			rc, err := toRecordConfig(dc, &native)
 			return []*models.RecordConfig{rc}, err
 		})
 }
 ```
 
-`providergolden.Domain` returns `$WEBSUPPORT_DOMAIN`, or `example.com` when that
+`providergolden.Domain` returns `$NETLIFY_DOMAIN`, or `example.com` when that
 is unset, so the same test replays a recording of your own zone and the
 committed fixtures.
 
@@ -136,7 +135,7 @@ of DNS records rather than native records, so it reads a `.records` file:
 
 ```go
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "porkbun_toreq", testDomain, toReq)
+	providergolden.CheckToNative(t, "netlify_toreq", testDomain, toReq)
 }
 ```
 
@@ -146,7 +145,7 @@ usual way to write one is to copy it and add whatever else you want covered.
 ### 3. Generate the golden files
 
 ```shell
-go test ./providers/websupport/ -update
+go test ./providers/netlify/ -update
 ```
 
 Read the generated files before committing them. `-update` records whatever the
