@@ -75,7 +75,7 @@ require (
 )
 
 require (
-	codeberg.org/miekg/dns v0.6.86
+	codeberg.org/miekg/dns v0.6.87
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
@@ -98,8 +98,8 @@ require (
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/oracle/oci-go-sdk/v65 v65.122.0
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.37
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1457+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.149
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1458+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.150
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/urfave/cli/v3 v3.10.1
