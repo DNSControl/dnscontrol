@@ -6,9 +6,9 @@ import (
 	"net/netip"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
-	dnsv1 "github.com/miekg/dns"
 )
 
 /* .target is kind of a mess.
@@ -77,7 +77,7 @@ func (rc *RecordConfig) GetTargetCombined() string {
 	}
 
 	// Pseudo records:
-	if _, ok := dnsv1.StringToType[rc.Type]; !ok {
+	if _, ok := dnsv2.StringToType[rc.Type]; !ok {
 		switch rc.Type { // #rtype_variations
 		case "LUA":
 			return rc.luaCombined()
@@ -110,26 +110,15 @@ func (rc *RecordConfig) GetTargetCombined() string {
 
 // zoneFileQuoted returns the rData as would be quoted in a zonefile.
 func (rc *RecordConfig) zoneFileQuoted() string {
-	// We cheat by converting to a dns.RR and use the String() function.
-	// This combines all the data for us, and even does proper quoting.
-	// Sadly String() always includes a header, which we must strip out.
-	// TODO(tlim): Request the dns project add a function that returns
-	// the string without the header.
 	if rc.Type == "NAPTR" && rc.GetTargetField() == "" {
 		rc.MustSetTarget(".")
 	}
 
-	if rc.GetRDATA() != nil {
-		return rc.GetRDATA().String()
+	// TODO(tlim): Figure out why this is needed.
+	if rc.GetRDATA() == nil {
+		rc.RecomputeV3Fields("")
 	}
-
-	rr := rc.ToRR()
-	header := rr.Header().String()
-	full := rr.String()
-	if !strings.HasPrefix(full, header) {
-		panic("assertion failed. dns.Hdr.String() behavior has changed in an incompatible way")
-	}
-	return full[len(header):]
+	return rc.GetRDATA().String()
 }
 
 func (rc *RecordConfig) luaCombined() string {
@@ -150,14 +139,6 @@ func (rc *RecordConfig) luaTypeUpper() string {
 		return ""
 	}
 	return strings.ToUpper(rc.LuaRType)
-}
-
-// GetTargetRFC1035Quoted returns the target as it would be in an
-// RFC1035-style zonefile.
-// Do not use this function if RecordConfig might be a pseudo-rtype
-// such as R53_ALIAS.  Use GetTargetCombined() instead.
-func (rc *RecordConfig) GetTargetRFC1035Quoted() string {
-	return rc.zoneFileQuoted()
 }
 
 // GetTargetDebug returns a string with the various fields spelled out.

@@ -52,6 +52,9 @@ func TestTargetHost(t *testing.T) {
 		//{"f1", "domain.com", "", "domain.com.", ""}, // shouldn't happen.
 		{"f2", "domain.com", "42", "42.domain.com.", "42."},
 		{"f3", "domain.com", 99, "99.domain.com.", "99."},
+		// NullMX and NullSRV:
+		{"null", "example.com", ".", ".", "."},
+		{"null2", "", ".", ".", "."},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

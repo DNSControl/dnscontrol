@@ -247,6 +247,7 @@ func makeTests() []*TestGroup {
 		// weirdest edge-case we've ever seen.
 
 		testgroup("Attl",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
@@ -254,6 +255,7 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("TTL",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("NETCUP"),  // NETCUP does not support TTLs.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
@@ -722,6 +724,7 @@ func makeTests() []*TestGroup {
 				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
+				"DNSIMPLE",     // Daily update quota.
 				"DIGITALOCEAN", // No paging. Why bother?
 				"FORTIGATE",    // No paging
 				"GANDI_V5",     // Their API is so damn slow. We'll add it back as needed.
@@ -745,6 +748,7 @@ func makeTests() []*TestGroup {
 				// "CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
 				// "CSCGLOBAL",         // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",             // Skip due to daily update limits.
+				// "DNSIMPLE",         // Daily update quota.
 				// "GANDI_V5",          // Their API is so damn slow. We'll add it back as needed.
 				// "GCLOUD",
 				"ORACLE",
@@ -762,6 +766,7 @@ func makeTests() []*TestGroup {
 				// "CLOUDFLAREAPI",     // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
 				// "CSCGLOBAL", // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",     // Skip due to daily update limits.
+				// "DNSIMPLE", // Daily update quota.
 				// "GANDI_V5",  // Their API is so damn slow. We'll add it back as needed.
 				"GCLOUD",
 				// "HEDNS",     // No paging done. No need to test.

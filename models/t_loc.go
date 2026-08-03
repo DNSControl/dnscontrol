@@ -2,159 +2,24 @@ package models
 
 import (
 	"math"
-	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	dnsv1 "github.com/miekg/dns"
 )
-
-// // SetTargetLOC sets the LOC fields from the rr.LOC type properties.
-// Deprecated. Use models.NewRecordConfig() instead.
-// func (rc *RecordConfig) SetTargetLOC(ver uint8, lat uint32, lon uint32, alt uint32, siz uint8, hzp uint8, vtp uint8) error {
-// 	return legacySetTargetArgs(rc, dnsv2.TypeLOC, ver, lat, lon, alt, siz, hzp, vtp)
-// }
-
-// SetLOCParams is an intermediate function which passes the 12 input parameters
-// for further processing to the LOC native 7 input binary format:
-// LocVersion (0), LocLatitude, LocLongitude, LocAltitude, LocSize, LocVertPre, LocHorizPre.
-// Deprecated. Use models.NewRecordConfig() instead.
-func (rc *RecordConfig) SetLOCParams(d1 uint8, m1 uint8, s1 float32, ns string,
-	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
-) error {
-	err := rc.calculateLOCFields(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
-
-	return err
-}
-
-// SetTargetLOCString is like SetTargetLOC but accepts one big string and origin
-// Normally this is used when we receive a record string from provider records
-// because e.g. the provider API passed rc.PopulateFromString().
-// Deprecated. Use models.NewRecordConfigParse() instead.
-func (rc *RecordConfig) SetTargetLOCString(origin string, contents string) error {
-	return legacySetTargetParse(rc, dnsv2.TypeLOC, contents)
-}
-
-// calculateLOCFields converts from 12 user inputs to the LOC 7 binary fields.
-// NB(tlim): this should be refactored to return an dnsrdatav2.LOC{} instead of saving the results to RecordConfig.
-func (rc *RecordConfig) calculateLOCFields(d1 uint8, m1 uint8, s1 float32, ns string,
-	d2 uint8, m2 uint8, s2 float32, ew string, al float64, sz float32, hp float32, vp float32,
-) error {
-	// Crazy hairy shit happens here.
-	// We already got the useful "string" version earlier. ¯\_(ツ)_/¯ code golf...
-	lat := uint32(d1)*dnsv1.LOC_DEGREES + uint32(m1)*dnsv1.LOC_HOURS + uint32(s1*1000)
-	lon := uint32(d2)*dnsv1.LOC_DEGREES + uint32(m2)*dnsv1.LOC_HOURS + uint32(s2*1000)
-	if strings.ToUpper(ns) == "N" {
-		rc.LocLatitude = dnsv1.LOC_EQUATOR + lat
-	} else { // "S"
-		rc.LocLatitude = dnsv1.LOC_EQUATOR - lat
-	}
-	if strings.ToUpper(ew) == "E" {
-		rc.LocLongitude = dnsv1.LOC_PRIMEMERIDIAN + lon
-	} else { // "W"
-		rc.LocLongitude = dnsv1.LOC_PRIMEMERIDIAN - lon
-	}
-	// Altitude
-	altitude := (float64(al) + dnsv1.LOC_ALTITUDEBASE) * 100
-	clampedAltitude := math.Min(math.Max(0, altitude), float64(math.MaxUint32))
-	rc.LocAltitude = uint32(math.Round(clampedAltitude))
-
-	var err error
-	// Size
-	rc.LocSize, err = getENotationInt(sz)
-	if err != nil {
-		return err
-	}
-	// Horizontal Precision
-	rc.LocHorizPre, err = getENotationInt(hp)
-	if err != nil {
-		return err
-	}
-	// Vertical Precision
-	rc.LocVertPre, err = getENotationInt(vp)
-	if err != nil {
-		return err
-	}
-	// if hp != 0 {
-	// } else {
-	// 	rc.LocHorizPre = 22 // 1e6 10,000m default
-	// }
-	// if vp != 0 {
-	// } else {
-	// 	rc.LocVertPre = 19 // 1e3 10m default
-	// }
-
-	return nil
-}
-
-// getENotationInt produces a mantissa_exponent 4bits:4bits into a uint8.
-func getENotationInt(x float32) (uint8, error) {
-	/*
-	   9000000000cm = 9e9 == 153 (9^4 + 9) or 9<<4 + 9
-	   800000000cm = 8e8 == 136 (8^4 + 8) or 8<<4 + 8
-	   70000000cm = 7e7 == 119 (7^4 + 7) or 7<<4 + 7
-	   6000000cm = 6e6 == 102 (6^4 + 6) or 6<<4 + 6
-	   1000000cm = 1e6 == 22 (1^4 + 6) or 1<<4 + 6
-	   500000cm = 5e5 == 85 (5^4 + 5) or 5<<4 + 5
-	   40000cm = 4e4 == 68 (4^4 + 4) or 4<<4 + 4
-	   3000cm = 3e3 == 51 (3^4 + 3) or 3<<4 + 3
-	   1000cm = 1e3 == 19 (1^4 + 3) or 1<<4 + 1
-	   200cm = 2e2 == 34 (2^4 + 2) or 2<<4 + 2
-	   100cm = 1e2 == 18 (1^4 + 2) or 1<<4 + 2
-	   10cm = 1e1 == 17 (1^4 + 1) or 1<<4 + 1
-	   1cm = 1e0 == 16 (1^4 + 0) or 0<<4 + 0
-	   0cm = 0e0 == 0
-	*/
-	if x <= 0 {
-		// Zero (and out-of-range negative size/precision inputs) encode as 0;
-		// log10 of a non-positive number is undefined.
-		return 0, nil // both mantissa and exponent will be zero
-	}
-
-	// get cm value
-	num := float64(x) * 100
-
-	// Get exponent (base 10)
-	exp := int(math.Floor(math.Log10(num)))
-
-	// Normalize the mantissa
-	mantissa := num / math.Pow(10, float64(exp))
-
-	// Adjust mantissa and exponent to fit into 4-bit ranges (0-15)
-	for mantissa < 1 && exp > 0 {
-		mantissa *= 10
-		exp--
-	}
-
-	// Truncate the mantissa (integer value) and ensure it's within 4 bits
-	mantissaInt := min(int(math.Floor(mantissa)), 9) // Cap mantissa at 9
-
-	// Ensure exponent is within 4 bits
-	if exp < 0 {
-		exp = 0 // Cap negative exponents at 0
-	} else if exp > 9 {
-		exp = 9 // Cap exponent at 9
-	}
-
-	// Pack mantissa and exponent into a single uint8
-	packedValue := uint8((mantissaInt << 4) | (exp & 0x0F))
-
-	return packedValue, nil
-}
 
 // ReverseLatitude takes the packed latitude and returns the hemisphere, degrees, minutes, and seconds.
 func ReverseLatitude(lat uint32) (string, uint8, uint8, float64) {
 	var hemisphere string
-	if lat >= dnsv1.LOC_EQUATOR {
+	if lat >= dnsv2.LOCEquator {
 		hemisphere = "N"
-		lat = lat - dnsv1.LOC_EQUATOR
+		lat = lat - dnsv2.LOCEquator
 	} else {
 		hemisphere = "S"
-		lat = dnsv1.LOC_EQUATOR - lat
+		lat = dnsv2.LOCEquator - lat
 	}
-	degrees := uint8(lat / dnsv1.LOC_DEGREES)
-	lat -= uint32(degrees) * dnsv1.LOC_DEGREES
-	minutes := uint8(lat / dnsv1.LOC_HOURS)
-	lat -= uint32(minutes) * dnsv1.LOC_HOURS
+	degrees := uint8(lat / dnsv2.LOCDegrees)
+	lat -= uint32(degrees) * dnsv2.LOCDegrees
+	minutes := uint8(lat / dnsv2.LOCHours)
+	lat -= uint32(minutes) * dnsv2.LOCHours
 	seconds := float64(lat) / 1000
 
 	return hemisphere, degrees, minutes, seconds
@@ -163,17 +28,17 @@ func ReverseLatitude(lat uint32) (string, uint8, uint8, float64) {
 // ReverseLongitude takes the packed longitude and returns the hemisphere, degrees, minutes, and seconds.
 func ReverseLongitude(lon uint32) (string, uint8, uint8, float64) {
 	var hemisphere string
-	if lon >= dnsv1.LOC_PRIMEMERIDIAN {
+	if lon >= dnsv2.LOCPrimemeridian {
 		hemisphere = "E"
-		lon = lon - dnsv1.LOC_PRIMEMERIDIAN
+		lon = lon - dnsv2.LOCPrimemeridian
 	} else {
 		hemisphere = "W"
-		lon = dnsv1.LOC_PRIMEMERIDIAN - lon
+		lon = dnsv2.LOCPrimemeridian - lon
 	}
-	degrees := uint8(lon / dnsv1.LOC_DEGREES)
-	lon -= uint32(degrees) * dnsv1.LOC_DEGREES
-	minutes := uint8(lon / dnsv1.LOC_HOURS)
-	lon -= uint32(minutes) * dnsv1.LOC_HOURS
+	degrees := uint8(lon / dnsv2.LOCDegrees)
+	lon -= uint32(degrees) * dnsv2.LOCDegrees
+	minutes := uint8(lon / dnsv2.LOCHours)
+	lon -= uint32(minutes) * dnsv2.LOCHours
 	seconds := float64(lon) / 1000
 
 	return hemisphere, degrees, minutes, seconds

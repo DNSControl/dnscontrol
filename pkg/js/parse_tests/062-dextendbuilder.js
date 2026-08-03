@@ -10,7 +10,6 @@ D("domain.tld", REG, DnsProvider(DNS), );
 
 D("sub.domain.tld", REG, DnsProvider(DNS), );
 
-
 // Should match domain.tld
 D_EXTEND("domain.tld",
     // loctest1
@@ -19,6 +18,6 @@ D_EXTEND("domain.tld",
 
 // Should match domain.tld
 D_EXTEND("ssub.domain.tld",
-    // loctest1.ssub
+    // loctest2.ssub
     LOC("loctest2", 42, 21, 54, "N", 71, 6, 18, "W", -24, 30, 0, 0),
 );

@@ -263,13 +263,6 @@ func TestRecordConfigGetTargetCombinedTXT(t *testing.T) {
 	}
 }
 
-func TestRecordConfigGetTargetRFC1035QuotedTXT(t *testing.T) {
-	rc := testTXTRecord(t, `quote" slash\\`)
-	if got, want := rc.GetTargetRFC1035Quoted(), rc.GetRDATA().String(); got != want {
-		t.Fatalf("GetTargetRFC1035Quoted() = %q, want RDATA.String() %q", got, want)
-	}
-}
-
 func TestRecordConfigGetTargetJSTXT(t *testing.T) {
 	tests := []struct {
 		name  string

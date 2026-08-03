@@ -38,7 +38,7 @@ func TestToRecordConfig(t *testing.T) {
 			if got := rc.GetLabel(); got != tc.wantLabel {
 				t.Errorf("label = %q, want %q", got, tc.wantLabel)
 			}
-			if got := rc.GetTargetCombined(); got != tc.wantTarget {
+			if got := rc.GetRDATA().String(); got != tc.wantTarget {
 				t.Errorf("target = %q, want %q", got, tc.wantTarget)
 			}
 			original, ok := rc.Original.(dnsimpleapi.ZoneRecord)

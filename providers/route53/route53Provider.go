@@ -561,9 +561,7 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 	var results models.Records
 	if set.AliasTarget != nil {
 
-		rc, err := dc.NewRecordConfig(
-			dc.LabelFromFQDNNoDot(unescape(set.Name)),
-			300,
+		rc, err := dc.NewRecordConfig(dc.LabelFromFQDNNoDot(unescape(set.Name)), 300,
 			privatetypes.TypeR53ALIAS,
 			string(set.Type),
 			aws.ToString(set.AliasTarget.DNSName),
@@ -621,8 +619,7 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 				// Using nrc.TARGET_IS_FQDN_NO_DOT will work, but will be extra
 				// work for all other records.
 
-				rc, err := dc.NewRecordConfigParse(
-					dc.LabelFromFQDNNoDot(unescape(set.Name)),
+				rc, err := dc.NewRecordConfigParse(dc.LabelFromFQDNNoDot(unescape(set.Name)),
 					uint32(aws.ToInt64(set.TTL)),
 					rtypeString,
 					val,

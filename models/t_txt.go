@@ -6,7 +6,6 @@ import (
 	"strings"
 	"unicode"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
@@ -33,7 +32,7 @@ func (rc *RecordConfig) SetTargetTXT(s string) error {
 		rc.SetRDATA(privatetypesrdata.LUA{LuaType: rc.LuaRType, LuaPayload: s})
 		return rc.SetTarget(s)
 	}
-	return legacySetTargetArgs(rc, dnsv2.TypeTXT, s)
+	return legacySetTargetArgsTXT(rc, s)
 }
 
 // SetTargetTXTs joins the supplied TXT fields and stores canonical 255-octet segments.

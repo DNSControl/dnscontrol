@@ -62,12 +62,12 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.DS:
 		rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest = rd.KeyTag, rd.Algorithm, rd.DigestType, rd.Digest
 	case dnsrdatav2.DNSKEY:
-		rc.DnskeyFlags, rc.DnskeyProtocol, rc.DnskeyAlgorithm, rc.DnskeyPublicKey = rd.Flags, rd.Protocol, rd.Algorithm, rd.PublicKey
+		// no-op
 	case privatetypesrdata.FRAME:
 		rc.SetTarget(rd.Target)
 
 	case dnsrdatav2.LOC:
-		rc.LocVersion, rc.LocLatitude, rc.LocLongitude, rc.LocAltitude, rc.LocSize, rc.LocHorizPre, rc.LocVertPre = rd.Version, rd.Latitude, rd.Longitude, rd.Altitude, rd.Size, rd.HorizPre, rd.VertPre
+		// no-op
 	case privatetypesrdata.LUA:
 		rc.LuaRType = rd.LuaType
 		rc.SetTarget(rd.LuaPayload)
@@ -111,8 +111,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
 
 	case dnsrdatav2.SMIMEA:
-		rc.SmimeaUsage, rc.SmimeaSelector, rc.SmimeaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
-		rc.SetTarget(rd.Certificate)
+		// no-op
 	case dnsrdatav2.SOA:
 		// noop -- no legacy fields
 	case dnsrdatav2.SRV:

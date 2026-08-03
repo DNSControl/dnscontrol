@@ -38,14 +38,12 @@ func (z *ZoneGenData) Less(i, j int) bool {
 	}
 
 	// sub-sort within type:
-	switch a.Type { // #rtype_variations
+	switch a.Type {
 	case "A":
 		ta2, tb2 := a.GetTargetIP(), b.GetTargetIP()
-		if !ta2.Is4() || !tb2.Is4() {
-			log.Fatalf("should not happen: Invalid IPv4 address: %s %s",
-				a.GetTargetIP().String(), b.GetTargetIP().String())
+		if ta2.Is4() && tb2.Is4() {
+			return bytes.Compare(ta2.AsSlice(), tb2.AsSlice()) == -1
 		}
-		return bytes.Compare(ta2.AsSlice(), tb2.AsSlice()) == -1
 	case "AAAA":
 		ta2, tb2 := a.GetTargetIP(), b.GetTargetIP()
 		if !ta2.Is6() || !tb2.Is6() {
@@ -55,65 +53,79 @@ func (z *ZoneGenData) Less(i, j int) bool {
 		return ta2.Compare(tb2) == -1
 	case "MX":
 		// sort by priority. If they are equal, sort by Mx.
-		if a.MxPreference == b.MxPreference {
-			return a.GetTargetField() < b.GetTargetField()
+		fa := a.AsMX()
+		fb := b.AsMX()
+		if fa.Preference != fb.Preference {
+			return fa.Preference < fb.Preference
 		}
-		return a.MxPreference < b.MxPreference
+		return fa.Mx < fb.Mx
 	case "SRV":
-		// ta2, tb2 := a.(*dns.SRV), b.(*dns.SRV)
-		pa, pb := a.SrvPort, b.SrvPort
+		fa := a.AsSRV()
+		fb := b.AsSRV()
+		pa, pb := fa.Priority, fb.Priority
 		if pa != pb {
 			return pa < pb
 		}
-		pa, pb = a.SrvPriority, b.SrvPriority
-		if pa != pb {
-			return pa < pb
+		wa, wb := fa.Weight, fb.Weight
+		if wa != wb {
+			return wa < wb
 		}
-		pa, pb = a.SrvWeight, b.SrvWeight
-		if pa != pb {
-			return pa < pb
+		ppa, ppb := fa.Port, fb.Port
+		if ppa != ppb {
+			return ppa < ppb
 		}
+		return fa.Target < fb.Target
 	case "SVCB", "HTTPS":
-		// sort by priority. If they are equal, sort by record.
-		if a.SvcPriority == b.SvcPriority {
-			return a.GetTargetField() < b.GetTargetField()
+		fa := a.AsSVCB()
+		fb := b.AsSVCB()
+		// sort by priority. If they are equal, sort by ASCII
+		if fa.Priority != fb.Priority {
+			return fa.Priority < fb.Priority
 		}
-		return a.SvcPriority < b.SvcPriority
+		if fa.Target != fb.Target {
+			return fa.Target < fb.Target
+		}
 	case "PTR":
-		// ta2, tb2 := a.(*dns.PTR), b.(*dns.PTR)
-		pa, pb := a.GetTargetField(), b.GetTargetField()
+		fa := a.AsPTR()
+		fb := b.AsPTR()
+		// TODO(tlim): Sort by fancy host sort.
+		pa, pb := fa.Ptr, fb.Ptr
 		if pa != pb {
 			return pa < pb
 		}
 	case "CAA":
 		// ta2, tb2 := a.(*dns.CAA), b.(*dns.CAA)
 		// sort by tag
-		pa, pb := a.CaaTag, b.CaaTag
+		fa := a.AsCAA()
+		fb := b.AsCAA()
+		pa, pb := fa.Tag, fb.Tag
 		if pa != pb {
 			return pa < pb
 		}
 		// then flag
-		fa, fb := a.CaaFlag, b.CaaFlag
-		if fa != fb {
+		flaga, flagb := fa.Flag, fb.Flag
+		if flaga != flagb {
 			// flag set goes before ones without flag set
-			return fa > fb
+			return flaga > flagb
 		}
 	case "DS":
-		pa, pb := a.DsKeyTag, b.DsKeyTag
+		fa := a.AsDS()
+		fb := b.AsDS()
+		pa, pb := fa.KeyTag, fb.KeyTag
 		if pa != pb {
 			return pa < pb
 		}
 	case "DNSKEY":
-		pa, pb := a.DnskeyFlags, b.DnskeyFlags
+		fa := a.AsDNSKEY()
+		fb := b.AsDNSKEY()
+		flga, flgb := fa.Flags, fb.Flags
+		if flga != flgb {
+			return flga < flgb
+		}
+		pa, pb := fa.Protocol, fb.Protocol
 		if pa != pb {
 			return pa < pb
 		}
-		fa, fb := a.DnskeyProtocol, b.DnskeyProtocol
-		if fa != fb {
-			return fa < fb
-		}
-	default:
-		// pass through. String comparison is sufficient.
 	}
 	// fmt.Printf("DEBUG: Less %q < %q == %v\n", a.String(), b.String(), a.String() < b.String())
 	return a.GetRDATA().String() < b.GetRDATA().String()
