@@ -15,10 +15,6 @@
         {
           "comparablev3": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
           "filepos": "[line:16:5]",
-          "localtitude": 9997600,
-          "loclatitude": 2299997648,
-          "loclongitude": 1891505648,
-          "locsize": 51,
           "name": "loctest1",
           "name_unicode": "loctest1",
           "rdata": {
@@ -37,10 +33,6 @@
         {
           "comparablev3": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
           "filepos": "[line:22:5]",
-          "localtitude": 9997600,
-          "loclatitude": 2299997648,
-          "loclongitude": 1891505648,
-          "locsize": 51,
           "name": "loctest2.ssub",
           "name_unicode": "loctest2.ssub",
           "rdata": {

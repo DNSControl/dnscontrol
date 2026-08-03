@@ -7,10 +7,6 @@
       "records": [
         {
           "comparablev3": "257 3 13 AABBCCDD",
-          "dnskeyalgorithm": 13,
-          "dnskeyflags": 257,
-          "dnskeyprotocol": 3,
-          "dnskeypublickey": "AABBCCDD",
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",

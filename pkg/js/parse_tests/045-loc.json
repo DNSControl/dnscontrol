@@ -8,10 +8,6 @@
         {
           "comparablev3": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
           "filepos": "[line:3:5]",
-          "localtitude": 9997600,
-          "loclatitude": 2299997648,
-          "loclongitude": 1891505648,
-          "locsize": 51,
           "name": "@",
           "name_unicode": "@",
           "rdata": {
@@ -30,12 +26,6 @@
         {
           "comparablev3": "42 21 43.950 N 71 05 6.340 W -24.01m 1m 200m 10m",
           "filepos": "[line:4:5]",
-          "localtitude": 9997599,
-          "lochorizpre": 36,
-          "loclatitude": 2299987598,
-          "loclongitude": 1891577308,
-          "locsize": 18,
-          "locvertpre": 19,
           "name": "a",
           "name_unicode": "a",
           "rdata": {
@@ -54,9 +44,6 @@
         {
           "comparablev3": "52 14 5.000 N 00 08 50.000 E 10.33m 0.00m 0.00m 0.00m",
           "filepos": "[line:5:5]",
-          "localtitude": 10001033,
-          "loclatitude": 2335528648,
-          "loclongitude": 2148013648,
           "name": "b",
           "name_unicode": "b",
           "rdata": {
@@ -75,9 +62,6 @@
         {
           "comparablev3": "51 30 3.030 N 00 07 28.650 W 6m 0.00m 0.00m 0.00m",
           "filepos": "[line:23:5]",
-          "localtitude": 10000600,
-          "loclatitude": 2332886678,
-          "loclongitude": 2147034998,
           "name": "big-ben",
           "name_unicode": "big-ben",
           "rdata": {
@@ -96,9 +80,6 @@
         {
           "comparablev3": "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m",
           "filepos": "[line:6:5]",
-          "localtitude": 10001000,
-          "loclatitude": 2031844648,
-          "loclongitude": 2565228648,
           "name": "c",
           "name_unicode": "c",
           "rdata": {
@@ -117,10 +98,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m",
           "filepos": "[line:7:5]",
-          "localtitude": 9995600,
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 37,
           "name": "d",
           "name_unicode": "d",
           "rdata": {
@@ -139,10 +116,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W 42849672.95m 2000m 0.00m 0.00m",
           "filepos": "[line:8:5]",
-          "localtitude": 4294967295,
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 37,
           "name": "d-alt-highest",
           "name_unicode": "d-alt-highest",
           "rdata": {
@@ -161,9 +134,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W -100000m 2000m 0.00m 0.00m",
           "filepos": "[line:9:5]",
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 37,
           "name": "d-alt-lowest",
           "name_unicode": "d-alt-lowest",
           "rdata": {
@@ -182,11 +152,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 1m 90000000m 0.00m",
           "filepos": "[line:12:5]",
-          "localtitude": 10000000,
-          "lochorizpre": 153,
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 18,
           "name": "d-horizprecision-hi",
           "name_unicode": "d-horizprecision-hi",
           "rdata": {
@@ -205,10 +170,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 90000000m 0.00m 0.00m",
           "filepos": "[line:17:5]",
-          "localtitude": 10000000,
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 153,
           "name": "d-size-hi",
           "name_unicode": "d-size-hi",
           "rdata": {
@@ -227,11 +188,6 @@
         {
           "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 1m 0.00m 90000000m",
           "filepos": "[line:18:5]",
-          "localtitude": 10000000,
-          "loclatitude": 2299972408,
-          "loclongitude": 1891832028,
-          "locsize": 18,
-          "locvertpre": 153,
           "name": "d-vertprecision-hi",
           "name_unicode": "d-vertprecision-hi",
           "rdata": {
@@ -250,9 +206,6 @@
         {
           "comparablev3": "25 14 24.000 S 153 09 0.000 E 3m 0.00m 0.00m 0.00m",
           "filepos": "[line:60:5]",
-          "localtitude": 10000300,
-          "loclatitude": 2056619648,
-          "loclongitude": 2698823648,
           "name": "fraser-island",
           "name_unicode": "fraser-island",
           "rdata": {
@@ -271,9 +224,6 @@
         {
           "comparablev3": "53 20 40.000 N 06 17 20.000 W 300m 0.00m 0.00m 0.00m",
           "filepos": "[line:85:5]",
-          "localtitude": 10030000,
-          "loclatitude": 2339523648,
-          "loclongitude": 2124843648,
           "name": "guinness-brewery",
           "name_unicode": "guinness-brewery",
           "rdata": {
@@ -292,9 +242,6 @@
         {
           "comparablev3": "21 30 0.000 N 158 00 0.000 W 920m 0.00m 0.00m 0.00m",
           "filepos": "[line:70:5]",
-          "localtitude": 10092000,
-          "loclatitude": 2224883648,
-          "loclongitude": 1578683648,
           "name": "hawaii",
           "name_unicode": "hawaii",
           "rdata": {
@@ -313,9 +260,6 @@
         {
           "comparablev3": "44 27 38.000 N 110 49 41.000 W 2240m 0.00m 0.00m 0.00m",
           "filepos": "[line:75:5]",
-          "localtitude": 10224000,
-          "loclatitude": 2307541648,
-          "loclongitude": 1748502648,
           "name": "old-faithful",
           "name_unicode": "old-faithful",
           "rdata": {
@@ -334,9 +278,6 @@
         {
           "comparablev3": "33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m",
           "filepos": "[line:36:5]",
-          "localtitude": 10000400,
-          "loclatitude": 2025592648,
-          "loclongitude": 2691854648,
           "name": "opera-house",
           "name_unicode": "opera-house",
           "rdata": {
@@ -355,9 +296,6 @@
         {
           "comparablev3": "33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m",
           "filepos": "[line:42:5]",
-          "localtitude": 10000400,
-          "loclatitude": 2025592648,
-          "loclongitude": 2691854648,
           "name": "opera-house2",
           "name_unicode": "opera-house2",
           "rdata": {
@@ -376,9 +314,6 @@
         {
           "comparablev3": "33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m",
           "filepos": "[line:48:5]",
-          "localtitude": 10000400,
-          "loclatitude": 2025592648,
-          "loclongitude": 2691854648,
           "name": "opera-house3",
           "name_unicode": "opera-house3",
           "rdata": {
@@ -397,9 +332,6 @@
         {
           "comparablev3": "33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m",
           "filepos": "[line:54:5]",
-          "localtitude": 10000400,
-          "loclatitude": 2025592648,
-          "loclongitude": 2691854648,
           "name": "opera-house4",
           "name_unicode": "opera-house4",
           "rdata": {
@@ -418,9 +350,6 @@
         {
           "comparablev3": "54 12 38.000 N 02 22 13.000 W 300m 0.00m 0.00m 0.00m",
           "filepos": "[line:80:5]",
-          "localtitude": 10030000,
-          "loclatitude": 2342641648,
-          "loclongitude": 2138950648,
           "name": "ribblehead-viaduct",
           "name_unicode": "ribblehead-viaduct",
           "rdata": {
@@ -439,9 +368,6 @@
         {
           "comparablev3": "42 00 0.000 S 147 00 0.000 E 3m 0.00m 0.00m 0.00m",
           "filepos": "[line:65:5]",
-          "localtitude": 10000300,
-          "loclatitude": 1996283648,
-          "loclongitude": 2676683648,
           "name": "tasmania",
           "name_unicode": "tasmania",
           "rdata": {
@@ -460,9 +386,6 @@
         {
           "comparablev3": "38 53 51.940 N 77 02 11.580 W 19m 0.00m 0.00m 0.00m",
           "filepos": "[line:29:5]",
-          "localtitude": 10001900,
-          "loclatitude": 2287515588,
-          "loclongitude": 1870152068,
           "name": "white-house",
           "name_unicode": "white-house",
           "rdata": {
