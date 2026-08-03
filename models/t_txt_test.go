@@ -216,53 +216,6 @@ func TestRecordConfigGetTargetIPTXT(t *testing.T) {
 	rc.GetTargetIP()
 }
 
-func TestRecordConfigGetTargetCombinedFuncTXT(t *testing.T) {
-	tests := []struct {
-		name     string
-		value    string
-		encodeFn func(string) string
-		want     string
-	}{
-		{name: "nil encoder", value: "raw text", encodeFn: nil, want: "raw text"},
-		{
-			name:     "custom encoder",
-			value:    "raw text",
-			encodeFn: func(s string) string { return "encoded[" + s + "]" },
-			want:     "encoded[raw text]",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rc := testTXTRecord(t, tt.value)
-			if got := rc.GetTargetCombinedFunc(tt.encodeFn); got != tt.want {
-				t.Fatalf("GetTargetCombinedFunc() = %q, want %q", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestRecordConfigGetTargetCombinedTXT(t *testing.T) {
-	tests := []struct {
-		name  string
-		value string
-		want  string
-	}{
-		{name: "empty", value: "", want: `""`},
-		{name: "one segment", value: "one", want: `"one"`},
-		{name: "multiple segments", value: strings.Repeat("a", 255) + "b", want: `"` + strings.Repeat("a", 255) + `" "b"`},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rc := testTXTRecord(t, tt.value)
-			if got := rc.GetTargetCombined(); got != tt.want {
-				t.Fatalf("GetTargetCombined() = %q, want %q", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestRecordConfigGetTargetJSTXT(t *testing.T) {
 	tests := []struct {
 		name  string

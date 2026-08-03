@@ -122,18 +122,8 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 			typeStr = rr.UnknownTypeName
 		}
 
-		// the remaining line
-		//target := rr.GetRDATA().String()
-		var target string
-		switch rr.Type {
-		case "TXT":
-			target = rr.AsTXT().String()
-		case "CF_WORKER_ROUTE":
-			// TODO(tlim): Once CF_WORKER_ROUTE is fully supported, this can be: target = rr.GetRDATA().String()
-			target = rr.GetTargetCombined()
-		default:
-			target = rr.GetRDATA().String()
-		}
+		// target
+		target := rr.GetRDATA().String()
 
 		// comment
 		comment := ""

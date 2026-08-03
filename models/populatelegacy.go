@@ -47,7 +47,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.CaaTag = rd.Tag
 		rc.SetTarget(rd.Value)
 	case privatetypesrdata.CFWORKERROUTE:
-		rc.SetTarget(fmt.Sprintf("%s,%s", rd.When, rd.Then))
+		// no-op
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
 		// no-op
 	case privatetypesrdata.CLOUDNSWR:

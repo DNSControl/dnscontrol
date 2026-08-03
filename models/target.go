@@ -6,7 +6,6 @@ import (
 	"net/netip"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
@@ -47,78 +46,6 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 
 	ip, _ := netip.ParseAddr(rc.target)
 	return ip
-}
-
-// GetTargetCombinedFunc returns all the rdata fields of a RecordConfig as one
-// string. How TXT records are encoded is defined by encodeFn.  If encodeFn is
-// nil the TXT data is returned unaltered.
-func (rc *RecordConfig) GetTargetCombinedFunc(encodeFn func(s string) string) string {
-	if rc.Type == "TXT" || rc.Type == "LUA" {
-		if encodeFn == nil {
-			return rc.GetTargetField()
-		}
-		return encodeFn(rc.GetTargetField())
-	}
-	return rc.GetTargetCombined()
-}
-
-// GetTargetCombined returns a string with the various fields combined.
-// For example, an MX record might output `10 mx10.example.tld`.
-func (rc *RecordConfig) GetTargetCombined() string {
-	// TXT presentation must split the value into quoted, 255-octet
-	// character-strings (this is the form providers send to their APIs, e.g.
-	// PowerDNS). The stored rdata is the raw text (the single source of truth),
-	// so quote/chunk it here.
-	if rc.Type == "TXT" {
-		return txtutil.EncodeQuoted(rc.GetTargetTXTJoined())
-	}
-	if rc.GetRDATA() != nil {
-		return rc.GetRDATA().String()
-	}
-
-	// Pseudo records:
-	if _, ok := dnsv2.StringToType[rc.Type]; !ok {
-		switch rc.Type { // #rtype_variations
-		case "LUA":
-			return rc.luaCombined()
-		case "R53_ALIAS":
-			return rc.GetRDATA().String()
-		case "AZURE_ALIAS":
-			// Differentiate between multiple AZURE_ALIASs on the same label.
-			return fmt.Sprintf("%s atype=%s", rc.target, rc.AzureAlias["type"])
-		case "AKAMAITLC":
-			return fmt.Sprintf("%s %s", rc.AnswerType, rc.target)
-		default:
-			// Just return the target.
-			return rc.target
-		}
-	}
-
-	// Everything else
-	switch rc.Type {
-	case "UNKNOWN":
-		return fmt.Sprintf("rtype=%s rdata=%s", rc.UnknownTypeName, rc.target)
-	case "TXT":
-		return rc.zoneFileQuoted()
-	case "SOA":
-		panic("SOA converted")
-		// return fmt.Sprintf("%s %v %d %d %d %d %d", rc.target, rc.SoaMbox, rc.SoaSerial, rc.SoaRefresh, rc.SoaRetry, rc.SoaExpire, rc.SoaMinttl)
-	}
-
-	return rc.zoneFileQuoted()
-}
-
-// zoneFileQuoted returns the rData as would be quoted in a zonefile.
-func (rc *RecordConfig) zoneFileQuoted() string {
-	if rc.Type == "NAPTR" && rc.GetTargetField() == "" {
-		rc.MustSetTarget(".")
-	}
-
-	// TODO(tlim): Figure out why this is needed.
-	if rc.GetRDATA() == nil {
-		rc.RecomputeV3Fields("")
-	}
-	return rc.GetRDATA().String()
 }
 
 func (rc *RecordConfig) luaCombined() string {
@@ -182,7 +109,7 @@ func (rc *RecordConfig) GetTargetJS() string {
 		// SRV(priority, weight, port, target)
 		return fmt.Sprintf("%d, %d, %d, %q", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.target)
 	default:
-		return fmt.Sprintf("%q", rc.GetTargetCombined())
+		return fmt.Sprintf("%q", rc.GetRDATA().String())
 	}
 }
 

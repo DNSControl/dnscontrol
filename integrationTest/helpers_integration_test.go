@@ -40,6 +40,12 @@ var globalDCN *domaintags.DomainNameVarieties
 // Default TTL used in integration tests.
 var defaultTTL = uint32(300)
 
+// Helper functions to perform substitutions
+
+func fillTemplate(s string) string {
+	return strings.Replace(s, "**current-domain**", globalDC.Name, 1)
+}
+
 // Helper constants/funcs for the HEDNS Dynamic DNS testing:
 
 func hednsDynamicA(name, target, status string) *models.RecordConfig {
@@ -163,7 +169,6 @@ func testPermitted(p string, f TestGroup) error {
 
 // makeChanges runs one set of DNS record tests. Returns true on success.
 func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.DomainConfig, tst *TestCase, desc string, expectChanges bool, origConfig map[string]string, domainMeta map[string]string) bool {
-	domainName := dc.Name
 
 	return t.Run(desc+":"+tst.Desc, func(t *testing.T) {
 		dom, _ := dc.Copy()
@@ -178,17 +183,6 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 
 		for _, r := range tst.Records {
 			rc := models.RecordConfig(*r)
-
-			if strings.Contains(rc.GetTargetField(), "**current-domain**") {
-				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**current-domain**", domainName, 1))
-				rc.ClearRDATA()
-				rc.ComparableV3 = ""
-			}
-			if strings.Contains(rc.GetLabelFQDN(), "**current-domain**") {
-				rc.SetLabelFromFQDN(strings.Replace(rc.GetLabelFQDN(), "**current-domain**", domainName, 1), domainName)
-				rc.ClearRDATA()
-				rc.ComparableV3 = ""
-			}
 
 			if strings.Contains(rc.GetTargetField(), "**subscription-id**") {
 				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**subscription-id**", origConfig["SubscriptionID"], 1))
@@ -460,6 +454,7 @@ func cfSingleRedirect(name string, code any, when, then string) *models.RecordCo
 }
 
 func cfWorkerRoute(pattern, target string) *models.RecordConfig {
+	pattern = fillTemplate(pattern)
 	r, err := globalDC.NewRecordConfig("@", 1, privatetypes.TypeCFWORKERROUTE, pattern, target)
 	panicOnErr(err)
 	return r
@@ -496,6 +491,7 @@ func mikrotikNxdomain(name string) *models.RecordConfig {
 }
 
 func cname(name, target string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, dnsv2.TypeCNAME, target)
 	panicOnErr(err)
 	return r
@@ -571,6 +567,7 @@ func manyA(namePattern, target string, n int) []*models.RecordConfig {
 }
 
 func mx(name string, prio uint16, target string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, dnsv2.TypeMX, prio, target)
 	panicOnErr(err)
 	return r
