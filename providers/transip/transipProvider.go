@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -270,21 +271,16 @@ func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.Rec
 
 // removeDomainNameserversFromDomainRecords removes the nameserver records from the dc.Records which are already defined as the Domain nameservers.
 func removeDomainNameserversFromDomainRecords(dc *models.DomainConfig) {
-	nameserverLookup := map[string]any{}
+	var nsList []string
 	for _, nameserver := range dc.Nameservers {
-		nameserverLookup[nameserver.Name] = nil
+		nsList = append(nsList, nameserver.Name+".")
 	}
 
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
-
-		dotLessNameFQDN := strings.TrimRight(rec.GetTargetField(), ".")
-		_, recordInDCNameservers := nameserverLookup[dotLessNameFQDN]
-
-		if rec.Type == "NS" && recordInDCNameservers {
+		if rec.Type == "NS" && slices.Contains(nsList, rec.AsNS().Ns) {
 			continue
 		}
-
 		newList = append(newList, rec)
 	}
 	dc.Records = newList

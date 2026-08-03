@@ -47,7 +47,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 }
 
 func rejectifCaaTargetContainsUnsupportedFields(rc *models.RecordConfig) error {
-	target := rc.GetTargetField()
+	target := rc.AsCAA().Value
 	if !strings.Contains(target, ";") {
 		return nil
 	}

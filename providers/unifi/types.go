@@ -141,28 +141,28 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 
 	switch rc.Type {
 	case "A":
-		m["value"] = rc.GetTargetField()
+		m["value"] = rc.AsA().Addr.String()
 		// A records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
 	case "AAAA":
-		m["value"] = rc.GetTargetField()
+		m["value"] = rc.AsAAAA().Addr.String()
 		// AAAA records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
 	case "CNAME":
-		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		m["value"] = strings.TrimSuffix(rc.AsCNAME().Target, ".")
 		// CNAME records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
 	case "NS":
-		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		m["value"] = strings.TrimSuffix(rc.AsNS().Ns, ".")
 		// NS records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
@@ -170,8 +170,8 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 
 	case "MX":
 		// MX records: only enabled, key, record_type, value, priority allowed
-		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
-		m["priority"] = int(rc.MxPreference)
+		m["value"] = strings.TrimSuffix(rc.AsMX().Mx, ".")
+		m["priority"] = int(rc.AsMX().Preference)
 
 	case "TXT":
 		// TXT records: only enabled, key, record_type, value allowed
@@ -179,7 +179,7 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 
 	case "SRV":
 		// SRV records: enabled, key, record_type, value, priority, weight, port allowed
-		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		m["value"] = strings.TrimSuffix(rc.AsSRV().Target, ".")
 		m["priority"] = int(rc.SrvPriority)
 		m["weight"] = int(rc.SrvWeight)
 		m["port"] = int(rc.SrvPort)
@@ -300,26 +300,28 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 	switch rc.Type {
 	case "A":
 		r.Type = NewAPITypeA
-		r.IPv4Address = rc.GetTargetField()
+		r.IPv4Address = rc.AsA().Addr.String()
 
 	case "AAAA":
 		r.Type = NewAPITypeAAAA
-		r.IPv6Address = rc.GetTargetField()
+		r.IPv6Address = rc.AsAAAA().Addr.String()
 
 	case "CNAME":
 		r.Type = NewAPITypeCNAME
-		r.TargetDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
+		r.TargetDomain = strings.TrimSuffix(rc.AsCNAME().Target, ".")
 
 	case "MX":
+		f := rc.AsMX()
 		r.Type = NewAPITypeMX
-		r.Priority = int(rc.MxPreference)
-		r.MailServerDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
+		r.Priority = int(f.Preference)
+		r.MailServerDomain = strings.TrimSuffix(f.Mx, ".")
 
 	case "TXT":
 		r.Type = NewAPITypeTXT
 		r.Text = rc.GetTargetTXTJoined()
 
 	case "SRV":
+		f := rc.AsSRV()
 		r.Type = NewAPITypeSRV
 		// The new API wants the "_service._proto.name" label split apart, e.g.
 		// "_sip._tcp.example.com" => service="_sip", protocol="_tcp",
@@ -331,10 +333,10 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 		r.Service = labels[0]
 		r.Protocol = labels[1]
 		r.Domain = labels[2]
-		r.Priority = int(rc.SrvPriority)
-		r.Weight = int(rc.SrvWeight)
-		r.Port = int(rc.SrvPort)
-		r.ServerDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
+		r.Priority = int(f.Priority)
+		r.Weight = int(f.Weight)
+		r.Port = int(f.Port)
+		r.ServerDomain = strings.TrimSuffix(f.Target, ".")
 
 	default:
 		return nil, fmt.Errorf("unsupported record type for new API: %s", rc.Type)
