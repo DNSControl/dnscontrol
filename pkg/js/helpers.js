@@ -1283,24 +1283,6 @@ function GIDINET_PREMIUM_NS() {
 
 // CUSTOM, PROVIDER SPECIFIC RECORD TYPES
 
-function _validateCloudflareRedirect(value) {
-    if (!_.isString(value)) {
-        return false;
-    }
-    return value.indexOf(',') === -1;
-}
-
-var CF_WORKER_ROUTE = recordBuilder('CF_WORKER_ROUTE', {
-    args: [
-        ['pattern', _validateCloudflareRedirect],
-        ['script', _validateCloudflareRedirect],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = '@';
-        record.target = args.pattern + ',' + args.script;
-    },
-});
-
 var ADGUARDHOME_A_PASSTHROUGH = recordBuilder('ADGUARDHOME_A_PASSTHROUGH');
 
 var ADGUARDHOME_AAAA_PASSTHROUGH = recordBuilder(
@@ -2375,6 +2357,7 @@ var CF_SINGLE_REDIRECT = rawrecordBuilder(
     true
 );
 var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
+var CF_WORKER_ROUTE = rawrecordBuilder('CF_WORKER_ROUTE', true);
 var CNAME = rawrecordBuilder('CNAME');
 var DHCID = rawrecordBuilder('DHCID');
 var DNAME = rawrecordBuilder('DNAME');

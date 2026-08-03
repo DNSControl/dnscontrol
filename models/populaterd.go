@@ -175,10 +175,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case privatetypes.TypeCFWORKERROUTE:
-		part := strings.SplitN(rc.GetTargetField(), ",", 2)
-		rd, err := privatetypesrdata.MakeCFWORKERROUTE(origin, nil, isEnabled, part[0], part[1])
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeDHCID:
 		rd, err := MakeDHCID(origin, nil, isEnabled, rc.GetTargetField())

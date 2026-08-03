@@ -381,7 +381,7 @@ Jump to a table:
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ❔ | ❌ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
-| [`DESEC`](desec.md) | ✅ | ✅ | ✅ |
+| [`DESEC`](desec.md) | ✅ | ✅ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ❔ | ❌ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ❔ | ❌ |

@@ -14,7 +14,7 @@ import (
 // in the legacy recordBuilder (pkg/js/helpers.js).
 var subdomainExcludedTypes = map[string]bool{
 	"CLOUDFLAREAPI_SINGLE_REDIRECT": true,
-	"CF_WORKER_ROUTE":               true,
+	"CF_WORKER_ROUTE":               true, // Probably works either way. Test to find out.
 	"ADGUARDHOME_A_PASSTHROUGH":     true,
 	"ADGUARDHOME_AAAA_PASSTHROUGH":  true,
 	"MIKROTIK_FWD":                  true,

@@ -325,7 +325,7 @@ func (rc *RecordConfig) ToComparableNoTTL() string {
 		return rc.targetCombinedSVCBRaw()
 
 	}
-	return rc.GetTargetCombined()
+	return rc.GetRDATA().String()
 }
 
 // ToRRv2 converts a RecordConfig to a dnsv2.RR.

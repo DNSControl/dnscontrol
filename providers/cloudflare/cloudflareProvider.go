@@ -665,14 +665,6 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 			if !c.manageSingleRedirects {
 				return errors.New("you must add 'manage_single_redirects: true' metadata to cloudflare provider to use CLOUDFLAREAPI_SINGLE_REDIRECT records")
 			}
-		case "CF_WORKER_ROUTE":
-			// CF_WORKER_ROUTE record types. Encode target as $PATTERN,$SCRIPT
-			parts := strings.Split(rec.GetTargetField(), ",")
-			if len(parts) != 2 {
-				return errors.New("invalid data specified for cloudflare worker record")
-			}
-			rec.TTL = 1
-			rec.Type = "CF_WORKER_ROUTE"
 		}
 	}
 

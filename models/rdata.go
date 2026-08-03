@@ -74,8 +74,8 @@ func (rc *RecordConfig) validateRDATA() {
 		return
 	}
 
-	//        Good: `rdata.A` or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
-	//         Bad: `*rdata.A` or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//        Good: `rdata.A`   or `privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
+	//         Bad: `*rdata.A`  or `*privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	//  Really Bad: `**rdata.A` or `**privatetypesrdata.CLOUDFLARE_WORKER_ROUTER`
 	if reflect.TypeOf(rd).Kind() != reflect.Pointer {
 		return
