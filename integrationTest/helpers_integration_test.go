@@ -391,12 +391,14 @@ func aaaa(name, target string) *models.RecordConfig {
 }
 
 func alias(name, target string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeALIAS, target)
 	panicOnErr(err)
 	return r
 }
 
 func azureAlias(name, aliasType, target string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeAZUREALIAS, aliasType, target)
 	panicOnErr(err)
 	return r
@@ -574,6 +576,7 @@ func mx(name string, prio uint16, target string) *models.RecordConfig {
 }
 
 func ns(name, target string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, dnsv2.TypeNS, target)
 	panicOnErr(err)
 	return r
@@ -598,6 +601,7 @@ func ptr(name, target string) *models.RecordConfig {
 }
 
 func r53alias(name, aliasType, target, evalTargetHealth string) *models.RecordConfig {
+	target = fillTemplate(target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeR53ALIAS, aliasType, target, evalTargetHealth)
 	panicOnErr(err)
 	return r
