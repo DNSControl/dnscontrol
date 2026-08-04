@@ -118,3 +118,11 @@ func TxtStartsOrEndsWithSpaces(rc *models.RecordConfig) error {
 	}
 	return nil
 }
+
+// CaaTargetHasSemicolon returns an error if a CAA record's target contains a semicolon.
+func CaaTargetHasSemicolon(rc *models.RecordConfig) error {
+	if rc.Type == "CAA" && strings.Contains(rc.GetTargetField(), ";") {
+		return fmt.Errorf("CAA record target contains semicolon: %s", rc.GetTargetField())
+	}
+	return nil
+}

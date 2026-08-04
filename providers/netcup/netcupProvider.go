@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
@@ -103,36 +104,50 @@ func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 	// Start corrections with the reports
 	corrections := diff.GenerateMessageCorrections(toReport)
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		req := m.Existing.Original.(*record)
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s", m.String(), req.ID),
-			F: func() error {
-				return api.deleteRecord(domain, req)
-			},
-		}
-		corrections = append(corrections, corr)
+	var recordsToUpdate []record
+	var correctionMsgs []string
+
+	// Collect all deletions
+	for _, d := range del {
+		req := d.Existing.Original.(*record)
+		req.Delete = true // Mark for deletion
+		recordsToUpdate = append(recordsToUpdate, *req)
+		correctionMsgs = append(correctionMsgs, fmt.Sprintf("%s, Netcup ID: %s", d.String(), req.ID))
 	}
 
-	for _, m := range create {
-		req := fromRecordConfig(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				return api.createRecord(domain, req)
-			},
-		}
-		corrections = append(corrections, corr)
+	// Collect all creations
+	for _, c := range create {
+		req := fromRecordConfig(c.Desired)
+		req.Delete = false // Mark for creation
+		recordsToUpdate = append(recordsToUpdate, *req)
+		correctionMsgs = append(correctionMsgs, c.String())
 	}
+
+	// Collect all modifications
 	for _, m := range modify {
-		id := m.Existing.Original.(*record).ID
 		req := fromRecordConfig(m.Desired)
-		req.ID = id
+		req.ID = m.Existing.Original.(*record).ID // Preserve original ID for modification
+		req.Delete = false                        // Mark for modification
+		recordsToUpdate = append(recordsToUpdate, *req)
+		correctionMsgs = append(correctionMsgs, fmt.Sprintf("%s, Netcup ID: %s", m.String(), req.ID))
+	}
+
+	if len(recordsToUpdate) > 0 {
 		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s: ", m.String(), id),
+			Msg: strings.Join(correctionMsgs, "\n"),
 			F: func() error {
-				return api.modifyRecord(domain, req)
+				data := paramUpdateRecords{
+					Key:            api.credentials.apikey,
+					SessionID:      api.credentials.sessionID,
+					CustomerNumber: api.credentials.customernumber,
+					DomainName:     domain,
+					RecordSet:      records{Records: recordsToUpdate},
+				}
+				_, err := api.get("updateDnsRecords", data)
+				if err != nil {
+					return fmt.Errorf("error while trying to update records in bulk: %w", err)
+				}
+				return nil
 			},
 		}
 		corrections = append(corrections, corr)
