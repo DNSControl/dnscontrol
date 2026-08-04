@@ -140,7 +140,11 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		if err != nil {
 			t.Fatal(err)
 		}
-		t.Cleanup(func() { writeRecording(t, dir) })
+		name, err := providergolden.ProviderName(provider)
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() { writeRecording(t, dir, name) })
 		return providergolden.Record(provider, recorder), cfg["domain"], cfg
 	}
 
@@ -157,9 +161,9 @@ func recordingDir(p providers.DNSServiceProvider) (string, error) {
 }
 
 // writeRecording writes everything recorded so far to dir, named after the
-// profile under test.
-func writeRecording(t *testing.T, dir string) {
-	written, err := recorder.WriteTo(dir, strings.ToLower(*profileFlag))
+// provider under test.
+func writeRecording(t *testing.T, dir, name string) {
+	written, err := recorder.WriteTo(dir, name)
 	for _, path := range written {
 		t.Logf("Recorded %s", path)
 	}

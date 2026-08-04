@@ -35,16 +35,18 @@ go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
   -args -verbose -profile CLOUDFLAREAPI -recorddir providers/cloudflare/testdata
 ```
 
-Either way two files are written, named after the profile:
+Either way two files are written, named after the provider's package:
 
-- `cloudflareapi.records` — every record the tests asked the provider to store,
+- `cloudflare.records` — every record the tests asked the provider to store,
   which is what a `CheckToNative` function is given.
-- `cloudflareapi.json` — the native record each returned record came from, read
+- `cloudflare.json` — the native record each returned record came from, read
   from `RecordConfig.Original`. That is what a `CheckToRC` function is given. It
   is written only for providers that fill `Original` in.
 
-Rename them to match the test you are about to add, and read them before
-committing: they contain whatever your zone contained during the run.
+Those are the names the tests read, so there is nothing to rename. One recording
+feeds every test the provider has: a provider with two `CheckToNative` functions
+replays the same `.records` file through both. Read the files before committing
+them, though: they contain whatever your zone contained during the run.
 
 {% hint style="warning" %}
 The domain the test passes to `CheckToRC` and `CheckToNative` has to be the zone
@@ -87,8 +89,10 @@ wrapped in a `models.DNSProvider`, which is all the integration tests ask of it
 today. A test that type-asserts a provider to an optional interface such as
 `ZoneCreator` would need the wrapper to forward that interface too.
 
-Data can also be collected by hand. The `.json` file is a JSON array of the
-native records your provider's API returns:
+Data can also be collected by hand. It goes in `providers/<package>/testdata`
+under the package's own name, `providers/netlify/testdata/netlify.json` and
+`providers/netlify/testdata/netlify.records`. The `.json` file is a JSON array
+of the native records your provider's API returns:
 
 ```json
 [
@@ -124,6 +128,11 @@ func TestToRecordConfigGolden(t *testing.T) {
 		})
 }
 ```
+
+The name is the golden file's, `netlify_torecordconfig.golden`, so name it after
+the function under test. The recorded input is `netlify.json`, found from the
+directory the test runs in rather than from that name, so several tests can
+replay one recording.
 
 `providergolden.Domain` returns `$NETLIFY_DOMAIN`, or `example.com` when that
 is unset, so the same test replays a recording of your own zone and the

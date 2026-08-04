@@ -62,6 +62,9 @@ func (r *Recorder) Observe(desired, existing models.Records) {
 
 // WriteTo writes what has been observed to dir as <name>.records and
 // <name>.json, sorted so that two runs of the same tests produce the same file.
+// name is the provider the recording is of, as ProviderName returns it, which
+// is the name CheckToRC and CheckToNative look for.
+//
 // A file is not written when nothing of that kind was observed: a provider that
 // does not fill in RecordConfig.Original produces no <name>.json. WriteTo
 // returns the paths it wrote.
@@ -73,7 +76,7 @@ func (r *Recorder) WriteTo(dir, name string) ([]string, error) {
 
 	if len(r.records) != 0 {
 		text := strings.Join(slices.Sorted(maps.Keys(r.records)), "\n") + "\n"
-		path, err := writeFile(dir, name+".records", []byte(text))
+		path, err := writeFile(dir, name+recordsExt, []byte(text))
 		if err != nil {
 			return written, err
 		}
@@ -89,7 +92,7 @@ func (r *Recorder) WriteTo(dir, name string) ([]string, error) {
 		if err != nil {
 			return written, err
 		}
-		path, err := writeFile(dir, name+".json", append(text, '\n'))
+		path, err := writeFile(dir, name+nativesExt, append(text, '\n'))
 		if err != nil {
 			return written, err
 		}
@@ -99,23 +102,35 @@ func (r *Recorder) WriteTo(dir, name string) ([]string, error) {
 	return written, errors.Join(r.errs...)
 }
 
-// TestdataDir returns the testdata directory that belongs to p:
-// providers/<package>/testdata under the module root, where <package> is the
-// package p is implemented in.
-func TestdataDir(p models.DNSProvider) (string, error) {
+// ProviderName returns the name a recording of p is written under: the package
+// p is implemented in. CheckToRC and CheckToNative take the same name from the
+// directory they run in, so a recording lands where the provider's own tests
+// look for it.
+func ProviderName(p models.DNSProvider) (string, error) {
 	t := reflect.TypeOf(p)
 	for t != nil && t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 	if t == nil || t.PkgPath() == "" {
-		return "", fmt.Errorf("cannot derive a testdata directory from provider type %T", p)
+		return "", fmt.Errorf("cannot derive a provider name from provider type %T", p)
+	}
+	return path.Base(t.PkgPath()), nil
+}
+
+// TestdataDir returns the testdata directory that belongs to p:
+// providers/<package>/testdata under the module root, where <package> is the
+// package p is implemented in.
+func TestdataDir(p models.DNSProvider) (string, error) {
+	name, err := ProviderName(p)
+	if err != nil {
+		return "", err
 	}
 
 	root, err := moduleRoot()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(root, "providers", path.Base(t.PkgPath()), testdataDir), nil
+	return filepath.Join(root, "providers", name, testdataDir), nil
 }
 
 // ResolveDir returns dir as an absolute path, resolving a relative dir against

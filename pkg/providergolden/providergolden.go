@@ -15,12 +15,17 @@
 //			})
 //	}
 //
-// The data lives in the provider's testdata directory and is named after the
-// provider and the function under test:
+// The data lives in the provider's testdata directory. A recording covers the
+// whole provider, so the input files are named after it, and the golden file is
+// named after the test that produced it:
 //
-//	testdata/<name>.json     native records, as the provider's API returns them
-//	testdata/<name>.records  DNS records, in the golden line format below
-//	testdata/<name>.golden   the expected output
+//	testdata/<provider>.json     native records, as the provider's API returns them
+//	testdata/<provider>.records  DNS records, in the golden line format below
+//	testdata/<name>.golden       the expected output
+//
+// <provider> is the directory the test is running in, which is the same name
+// the integration tests record under, so a recording needs no renaming and one
+// recording feeds every test the provider has.
 //
 // CheckToRC reads the .json file, CheckToNative reads the .records file, and
 // both write the .golden file. A provider with no recorded data is skipped, so
@@ -62,7 +67,14 @@ import (
 
 var update = flag.Bool("update", false, "rewrite the provider conversion golden files")
 
-const testdataDir = "testdata"
+const (
+	testdataDir = "testdata"
+
+	// Extensions of the two kinds of recorded input, written by Recorder and
+	// read by CheckToRC and CheckToNative.
+	nativesExt = ".json"
+	recordsExt = ".records"
+)
 
 // Domain returns the zone the data for provider was recorded against: the value
 // of the provider's <PROVIDER>_DOMAIN environment variable, or "example.com"
@@ -75,22 +87,28 @@ func Domain(provider string) string {
 	return "example.com"
 }
 
-// CheckToRC replays the native records recorded in testdata/<name>.json through
-// convert and compares the records it returns with testdata/<name>.golden.
+// CheckToRC replays the native records recorded in testdata/<provider>.json
+// through convert and compares the records it returns with
+// testdata/<name>.golden.
 func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error)) {
 	t.Helper()
 
-	data, ok, err := loadInput(testdataDir, name+".json")
+	input, err := inputFile(nativesExt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	data, ok, err := loadInput(testdataDir, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !ok {
-		t.Skipf("%s has no recorded data yet", name)
+		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
 	}
 
 	var natives []N
 	if err := json.Unmarshal(data, &natives); err != nil {
-		t.Fatalf("%s.json: %v", name, err)
+		t.Fatalf("%s: %v", input, err)
 	}
 
 	dc := models.MustNewDomainConfig(domain)
@@ -98,7 +116,7 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 	for i, native := range natives {
 		recs, err := convert(dc, native)
 		if err != nil {
-			t.Fatalf("%s.json: record %d: %v", name, i, err)
+			t.Fatalf("%s: record %d: %v", input, i, err)
 		}
 		for _, rc := range recs {
 			if rc == nil {
@@ -112,29 +130,35 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 	report(t, testdataDir, name, []byte(b.String()))
 }
 
-// CheckToNative replays the records recorded in testdata/<name>.records through
-// convert and compares the native records it returns with testdata/<name>.golden.
+// CheckToNative replays the records recorded in testdata/<provider>.records
+// through convert and compares the native records it returns with
+// testdata/<name>.golden.
 func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *models.RecordConfig) (N, error)) {
 	t.Helper()
 
-	data, ok, err := loadInput(testdataDir, name+".records")
+	input, err := inputFile(recordsExt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	data, ok, err := loadInput(testdataDir, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !ok {
-		t.Skipf("%s has no recorded data yet", name)
+		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
 	}
 
 	recs, err := parseRecords(models.MustNewDomainConfig(domain), string(data))
 	if err != nil {
-		t.Fatalf("%s.records: %v", name, err)
+		t.Fatalf("%s: %v", input, err)
 	}
 
 	natives := make([]N, 0, len(recs))
 	for i, rc := range recs {
 		native, err := convert(rc)
 		if err != nil {
-			t.Fatalf("%s.records: record %d: %v", name, i, err)
+			t.Fatalf("%s: record %d: %v", input, i, err)
 		}
 		natives = append(natives, native)
 	}
@@ -145,6 +169,17 @@ func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *mo
 	}
 
 	report(t, testdataDir, name, append(got, '\n'))
+}
+
+// inputFile returns the recorded input file with extension ext that belongs to
+// the provider under test: the directory the test is running in is the
+// provider's package directory, and a recording is named after it.
+func inputFile(ext string) (string, error) {
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Base(wd) + ext, nil
 }
 
 // loadInput reads a recorded input file. ok is false when the file does not

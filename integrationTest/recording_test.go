@@ -7,7 +7,25 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
+
+func TestARecordingIsNamedAfterTheProvidersPackageNotItsType(t *testing.T) {
+	provider, err := providers.CreateDNSProvider("GANDI_V5", map[string]string{"token": "not used"}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	name, err := providergolden.ProviderName(provider)
+	if err != nil {
+		t.Fatalf("ProviderName() error: %v", err)
+	}
+	if name != "gandiv5" {
+		t.Errorf("ProviderName() = %q, want %q", name, "gandiv5")
+	}
+}
 
 func TestRecordingDirResolvesRecordDirFromTheModuleRoot(t *testing.T) {
 	rel := filepath.Join("providers", "bind", "testdata")

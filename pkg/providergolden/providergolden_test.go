@@ -142,6 +142,57 @@ func TestParseRecordsRejectsMalformedInput(t *testing.T) {
 	}
 }
 
+func TestInputFileIsNamedAfterTheProvidersDirectory(t *testing.T) {
+	dir := filepath.Join(t.TempDir(), "cloudns")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	t.Chdir(dir)
+
+	for ext, want := range map[string]string{nativesExt: "cloudns.json", recordsExt: "cloudns.records"} {
+		got, err := inputFile(ext)
+		if err != nil {
+			t.Fatalf("inputFile(%q) error: %v", ext, err)
+		}
+		if got != want {
+			t.Errorf("inputFile(%q) = %q, want %q", ext, got, want)
+		}
+	}
+}
+
+func TestRecordedInputsAreNamedAfterTheirProvider(t *testing.T) {
+	root, err := moduleRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	dirs, err := filepath.Glob(filepath.Join(root, "providers", "*", testdataDir))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(dirs) == 0 {
+		t.Fatal("no provider has a testdata directory")
+	}
+
+	for _, dir := range dirs {
+		provider := filepath.Base(filepath.Dir(dir))
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, entry := range entries {
+			ext := filepath.Ext(entry.Name())
+			if ext != nativesExt && ext != recordsExt {
+				continue
+			}
+			if want := provider + ext; entry.Name() != want {
+				t.Errorf("providers/%s/%s holds %s, want %s: a recorded input is named after its provider, not after a test",
+					provider, testdataDir, entry.Name(), want)
+			}
+		}
+	}
+}
+
 func TestLoadInputReportsMissingFileAsNotEnrolled(t *testing.T) {
 	_, ok, err := loadInput(t.TempDir(), "absent.json")
 	if err != nil {

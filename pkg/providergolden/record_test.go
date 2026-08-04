@@ -233,6 +233,48 @@ func TestRecordObservesTheConversionsAndReturnsWhatTheProviderReturned(t *testin
 	}
 }
 
+func TestProviderNameIsThePackageTheProviderIsIn(t *testing.T) {
+	name, err := ProviderName(&fakeProvider{})
+	if err != nil {
+		t.Fatalf("ProviderName() error: %v", err)
+	}
+	if name != "providergolden" {
+		t.Errorf("ProviderName() = %q, want %q", name, "providergolden")
+	}
+}
+
+func TestARecordingIsNamedTheWayTheChecksReadIt(t *testing.T) {
+	name, err := ProviderName(&fakeProvider{})
+	if err != nil {
+		t.Fatalf("ProviderName() error: %v", err)
+	}
+
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "A", "192.0.2.1")
+	rc.Original = fakeNative{Name: "www", Type: "A"}
+
+	rec := NewRecorder()
+	rec.Observe(models.Records{rc}, models.Records{rc})
+
+	packageDir := filepath.Join(t.TempDir(), name)
+	if _, err := rec.WriteTo(filepath.Join(packageDir, testdataDir), name); err != nil {
+		t.Fatalf("WriteTo() error: %v", err)
+	}
+
+	t.Chdir(packageDir)
+	for _, ext := range []string{nativesExt, recordsExt} {
+		input, err := inputFile(ext)
+		if err != nil {
+			t.Fatalf("inputFile(%q) error: %v", ext, err)
+		}
+		if _, ok, err := loadInput(testdataDir, input); err != nil {
+			t.Fatalf("loadInput(%q) error: %v", input, err)
+		} else if !ok {
+			t.Errorf("the recording is not readable as %s", filepath.Join(testdataDir, input))
+		}
+	}
+}
+
 func TestTestdataDirIsTheProvidersOwnTestdataDirectory(t *testing.T) {
 	dir, err := TestdataDir(&fakeProvider{})
 	if err != nil {
