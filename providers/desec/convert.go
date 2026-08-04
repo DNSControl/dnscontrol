@@ -55,6 +55,9 @@ func recordsToNative(rcs []*models.RecordConfig) []resourceRecord {
 				Records: []string{r.GetRDATA().String()},
 			}
 			keys[key] = &zr
+			if r.Type == "DS" || r.Type == "DNSKEY" {
+				zr.Subname = ""
+			}
 		} else {
 			zr.Records = append(zr.Records, r.GetRDATA().String())
 
