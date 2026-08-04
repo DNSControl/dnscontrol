@@ -393,22 +393,22 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+".")) // ignore:oldfields
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+"."))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+".")) // ignore:oldfields
 	case "ALIAS":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
 	case "CNAME", "DNAME", "NS", "PTR":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, dc.ToFqdnWithDot(r.Target+"."))
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue) // ignore:oldfields
 	case "TLSA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target) // ignore:oldfields
 	case "SSHFP":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target) // ignore:oldfields
 	case "DS":
 		// SshfpAlgorithm and DS algorithm both use the API's "algorithm" field.
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target) // ignore:oldfields
 	case "CLOUD_WR":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeCLOUDNSWR, r.Target)
 	case "LOC":
@@ -422,12 +422,12 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 			return nil, err
 		}
 
-		altitude, err := parseFloat32(r.LocAltitude)
+		altitude, err := parseFloat32(r.LocAltitude) // ignore:oldfields
 		if err != nil {
 			return nil, err
 		}
 
-		size, err := parseFloat32(r.LocSize)
+		size, err := parseFloat32(r.LocSize) // ignore:oldfields
 		if err != nil {
 			return nil, err
 		}
@@ -452,7 +452,7 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 
 	case "NAPTR":
 		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target) // ignore:oldfields
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}
@@ -508,21 +508,21 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		"record-type": rc.Type,
 		"host":        host,
 		"ttl":         strconv.Itoa(int(rc.TTL)),
-		"record":      rc.GetRDATA().String(),
 	}
 
 	// Add metadata for GeoDNS
 	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
 	// but you can ask the support for others type of record and they enable it
 	// for your ClouDNS account.
-	geodnsCodeFromMetadataValue, geodnsCodeFromMetadataExist := rc.Metadata[metaGeodnsCode]
-	if geodnsCodeFromMetadataExist {
+	if geodnsCodeFromMetadataValue, ok := rc.Metadata[metaGeodnsCode]; ok {
 		req["geodns-code"] = geodnsCodeFromMetadataValue
 	}
 
 	switch rc.Type {
 	case "CLOUDNS_WR":
+		f := rc.AsCLOUDNSWR()
 		req["record-type"] = "WR"
+		req["record"] = f.Target
 	case "MX":
 		f := rc.AsMX()
 		req["priority"] = strconv.Itoa(int(f.Preference))
@@ -538,15 +538,18 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["caa_flag"] = strconv.Itoa(int(f.Flag))
 		req["caa_type"] = f.Tag
 		req["caa_value"] = f.Value
+		req["record"] = rc.GetRDATA().String()
 	case "TLSA":
 		f := rc.AsTLSA()
 		req["tlsa_usage"] = strconv.Itoa(int(f.Usage))
 		req["tlsa_selector"] = strconv.Itoa(int(f.Selector))
 		req["tlsa_matching_type"] = strconv.Itoa(int(f.MatchingType))
+		req["record"] = f.Certificate
 	case "SSHFP":
 		f := rc.AsSSHFP()
 		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
 		req["fptype"] = strconv.Itoa(int(f.Type))
+		req["record"] = f.FingerPrint
 	case "DS":
 		f := rc.AsDS()
 		req["key-tag"] = strconv.Itoa(int(f.KeyTag))
@@ -567,6 +570,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["size"] = formatLocParam(parts[9])
 		req["h-precision"] = formatLocParam(parts[10])
 		req["v-precision"] = formatLocParam(parts[11])
+		req["record"] = rc.GetRDATA().String()
 	case "NAPTR":
 		f := rc.AsNAPTR()
 		req["order"] = strconv.Itoa(int(f.Order))
@@ -575,6 +579,11 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["params"] = f.Service
 		req["regexp"] = f.Regexp
 		req["replace"] = f.Replacement
+		req["record"] = rc.GetRDATA().String()
+	case "TXT":
+		req["record"] = rc.GetTargetTXTJoined()
+	default:
+		req["record"] = rc.GetRDATA().String()
 	}
 
 	return req, nil

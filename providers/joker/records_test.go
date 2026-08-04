@@ -216,8 +216,8 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].GetLabelFQDN() != "www.example.com" {
 					t.Errorf("Label = %v, want www.example.com", records[0].GetLabelFQDN())
 				}
-				if records[0].GetTargetField() != "1.2.3.4" {
-					t.Errorf("Target = %v, want 1.2.3.4", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "1.2.3.4" {
+					t.Errorf("Target = %v, want 1.2.3.4", records[0].GetRDATA().String())
 				}
 				if records[0].TTL != 300 {
 					t.Errorf("TTL = %v, want 300", records[0].TTL)
@@ -232,8 +232,8 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].GetLabelFQDN() != "example.com" {
 					t.Errorf("Label = %v, want example.com", records[0].GetLabelFQDN())
 				}
-				if records[0].GetTargetField() != "127.0.0.1" {
-					t.Errorf("Target = %v, want 127.0.0.1", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "127.0.0.1" {
+					t.Errorf("Target = %v, want 127.0.0.1", records[0].GetRDATA().String())
 				}
 			},
 		},
@@ -245,8 +245,8 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "AAAA" {
 					t.Errorf("Type = %v, want AAAA", records[0].Type)
 				}
-				if records[0].GetTargetField() != "2001:db8::1" {
-					t.Errorf("Target = %v, want 2001:db8::1", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "2001:db8::1" {
+					t.Errorf("Target = %v, want 2001:db8::1", records[0].AsAAAA().Addr.String())
 				}
 			},
 		},
@@ -258,8 +258,8 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "CNAME" {
 					t.Errorf("Type = %v, want CNAME", records[0].Type)
 				}
-				if records[0].GetTargetField() != "example.com." {
-					t.Errorf("Target = %v, want example.com.", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "example.com." {
+					t.Errorf("Target = %v, want example.com.", records[0].GetRDATA().String())
 				}
 			},
 		},
@@ -268,8 +268,8 @@ func TestParseZoneRecords(t *testing.T) {
 			zoneData:  `mail CNAME 0 target.example.com 300`,
 			wantCount: 1,
 			validate: func(t *testing.T, records models.Records) {
-				if records[0].GetTargetField() != "target.example.com." {
-					t.Errorf("Target = %v, want target.example.com.", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "target.example.com." {
+					t.Errorf("Target = %v, want target.example.com.", records[0].GetRDATA().String())
 				}
 			},
 		},
@@ -281,8 +281,8 @@ func TestParseZoneRecords(t *testing.T) {
 				if records[0].Type != "NS" {
 					t.Errorf("Type = %v, want NS", records[0].Type)
 				}
-				if records[0].GetTargetField() != "ns1.example.com." {
-					t.Errorf("Target = %v, want ns1.example.com.", records[0].GetTargetField())
+				if records[0].GetRDATA().String() != "ns1.example.com." {
+					t.Errorf("Target = %v, want ns1.example.com.", records[0].GetRDATA().String())
 				}
 			},
 		},
@@ -311,8 +311,8 @@ func TestParseZoneRecords(t *testing.T) {
 					t.Errorf("Type = %v, want TXT", records[0].Type)
 				}
 				want := "v=spf1 include:_spf.google.com ~all"
-				if records[0].GetTargetField() != want {
-					t.Errorf("Target = %v, want %v", records[0].GetTargetField(), want)
+				if records[0].GetTargetTXTJoined() != want {
+					t.Errorf("Target = %v, want %v", records[0].GetTargetTXTJoined(), want)
 				}
 				wantTTL := uint32(301)
 				if records[0].TTL != wantTTL {
@@ -326,8 +326,8 @@ func TestParseZoneRecords(t *testing.T) {
 			wantCount: 1,
 			validate: func(t *testing.T, records models.Records) {
 				want := "value with \\\"escaped\\\" quotes"
-				if records[0].GetTargetField() != want {
-					t.Errorf("Target = %v, want %v", records[0].GetTargetField(), want)
+				if records[0].GetTargetTXTJoined() != want {
+					t.Errorf("Target = %v, want %v", records[0].GetTargetTXTJoined(), want)
 				}
 			},
 		},
@@ -337,8 +337,8 @@ func TestParseZoneRecords(t *testing.T) {
 			wantCount: 1,
 			validate: func(t *testing.T, records models.Records) {
 				want := "path\\\\to\\\\file"
-				if records[0].GetTargetField() != want {
-					t.Errorf("Target = %v, want %v", records[0].GetTargetField(), want)
+				if records[0].GetTargetTXTJoined() != want {
+					t.Errorf("Target = %v, want %v", records[0].GetTargetTXTJoined(), want)
 				}
 			},
 		},

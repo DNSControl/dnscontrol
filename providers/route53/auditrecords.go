@@ -27,7 +27,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 // rejectifTargetEqualsLabel rejects an ALIAS that would create a loop.
 func rejectifTargetEqualsLabel(rc *models.RecordConfig) error {
 	// TODO(tlim): auditrecords.go shouldn't be used to validate data. This kind of validation should be moved to pkg/normalize/validate.go.
-	if (rc.GetLabelFQDN() + ".") == rc.GetTargetField() {
+	if (rc.GetLabelFQDN() + ".") == rc.AsR53ALIAS().Target {
 		return errors.New("alias target loop")
 	}
 	return nil

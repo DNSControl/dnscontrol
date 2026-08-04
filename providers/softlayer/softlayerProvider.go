@@ -209,9 +209,13 @@ func (s *softlayerProvider) getExistingRecords(dc *models.DomainConfig, resource
 }
 
 func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domain *datatypes.Dns_Domain) func() error {
-	ttl, preference, domainID := verifyMinTTL(int(desired.TTL)), int(desired.MxPreference), *domain.Id
-	weight, priority, port := int(desired.SrvWeight), int(desired.SrvPriority), int(desired.SrvPort)
-	host, data, newType := desired.GetLabel(), desired.GetTargetField(), desired.Type
+
+	ttl := verifyMinTTL(int(desired.TTL))
+	domainID := *domain.Id
+
+	host := desired.GetLabel()
+	newType := desired.Type
+
 	var err error
 
 	srvRegexp := regexp.MustCompile(`^_(?P<Service>\w+)\.\_(?P<Protocol>\w+)$`)
@@ -221,7 +225,6 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 			DomainId: &domainID,
 			Ttl:      &ttl,
 			Type:     &newType,
-			Data:     &data,
 			Host:     &host,
 		}
 
@@ -229,36 +232,38 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 		case "MX":
 			service := services.GetDnsDomainResourceRecordMxTypeService(s.Session)
 
-			newRecord.MxPriority = &preference
+			f := desired.AsMX()
+			newRecord.MxPriority = new(int(f.Preference))
+			newRecord.Data = new(f.Mx)
 
 			newMx := datatypes.Dns_Domain_ResourceRecord_MxType{
 				Dns_Domain_ResourceRecord: newRecord,
 			}
-
 			_, err = service.CreateObject(&newMx)
 
 		case "SRV":
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)
-			result := srvRegexp.FindStringSubmatch(host)
 
+			result := srvRegexp.FindStringSubmatch(host)
 			if len(result) != 3 {
 				return fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", host)
 			}
-
 			serviceName, protocol := result[1], strings.ToLower(result[2])
 
+			f := desired.AsSRV()
+			newRecord.Data = new(f.Target)
 			newSrv := datatypes.Dns_Domain_ResourceRecord_SrvType{
 				Dns_Domain_ResourceRecord: newRecord,
 				Service:                   &serviceName,
-				Port:                      &port,
-				Priority:                  &priority,
+				Port:                      new(int(f.Port)),
+				Priority:                  new(int(f.Priority)),
 				Protocol:                  &protocol,
-				Weight:                    &weight,
+				Weight:                    new(int(f.Weight)),
 			}
-
 			_, err = service.CreateObject(&newSrv)
 
 		default:
+			newRecord.Data = new(desired.GetRDATA().String())
 			service := services.GetDnsDomainResourceRecordService(s.Session)
 			_, err = service.CreateObject(&newRecord)
 		}
@@ -297,7 +302,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.AsMX().Mx
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true
@@ -329,7 +334,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.AsSRV().Target
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true
@@ -374,7 +379,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.GetRDATA().String()
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true

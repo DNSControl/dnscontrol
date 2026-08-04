@@ -185,7 +185,7 @@ func porkbunURLForwardingMetadata(recordType string, metadata map[string]string)
 	return t, includePath, wildcard
 }
 
-func normalizeURLForwardingRecord(record *models.RecordConfig, origin string) {
+func normalizeURLForwardingRecord(record *models.RecordConfig, _ string) {
 	if !isURLForwardingType(record.Type) {
 		return
 	}

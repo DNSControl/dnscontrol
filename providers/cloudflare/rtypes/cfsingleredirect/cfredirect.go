@@ -20,7 +20,7 @@ func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subd
 	return builderCFREDIRECThelper(dc, 302, args, subdomain)
 }
 
-func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any, subdomain string) (models.Records, error) {
+func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any, _ string) (models.Records, error) {
 	// Convert old-style patterns to new-style rules:
 	prWhen := mustbe.RawString(args[1])
 	prThen := mustbe.RawString(args[2])

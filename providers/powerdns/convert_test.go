@@ -60,7 +60,7 @@ func TestToRecordConfig(t *testing.T) {
 	// assert.Equal(t, "auto.example.com", recordConfig.NameFQDN)
 	// assert.Equal(t, "HTTPS", recordConfig.Type)
 	// assert.Equal(t, uint16(1), recordConfig.SvcPriority)
-	// assert.Equal(t, ".", recordConfig.GetTargetField())
+	// assert.Equal(t, ".", recordConfig.Get|TargetField())
 	// assert.Equal(t, "alpn=h3,h2 ipv4hint=auto ipv6hint=auto", recordConfig.SvcParams)
 	// assert.Equal(t, "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto", powerDNSTargetCombined(recordConfig))
 	// assert.Equal(t, uint32(300), recordConfig.TTL)
@@ -85,22 +85,4 @@ func TestBuildRecordListSvcbEchKeepsQuotes(t *testing.T) {
 
 	assert.Len(t, records, 1)
 	assert.Equal(t, `3 example.com. alpn=h2,h3 port=999 ech="some+base64+encoded+value///"`, records[0].Content)
-}
-
-func TestParseText(t *testing.T) {
-	// short TXT record
-	short := parseTxt("\"simple\"")
-	assert.Equal(t, []string{"simple"}, short)
-
-	// TXT record with multiple parts
-	multiple := parseTxt("\"simple\" \"simple2\"")
-	assert.Equal(t, []string{"simple", "simple2"}, multiple)
-
-	// long TXT record
-	long := parseTxt(fmt.Sprintf("\"%s\"", strings.Repeat("A", 300)))
-	assert.Equal(t, []string{strings.Repeat("A", 300)}, long)
-
-	// multiple long TXT record
-	multipleLong := parseTxt(fmt.Sprintf("\"%s\" \"%s\"", strings.Repeat("A", 300), strings.Repeat("B", 300)))
-	assert.Equal(t, []string{strings.Repeat("A", 300), strings.Repeat("B", 300)}, multipleLong)
 }

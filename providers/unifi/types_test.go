@@ -18,10 +18,6 @@ func TestLegacyToRecord(t *testing.T) {
 		wantLabel  string
 		wantTTL    uint32
 		wantTarget string
-		wantMX     uint16
-		wantSrvPri uint16
-		wantSrvWgt uint16
-		wantSrvPrt uint16
 	}{
 		{
 			name:       "A",
@@ -61,8 +57,7 @@ func TestLegacyToRecord(t *testing.T) {
 			wantType:   "MX",
 			wantLabel:  "@",
 			wantTTL:    300,
-			wantTarget: "mail.example.com.",
-			wantMX:     10,
+			wantTarget: "10 mail.example.com.",
 		},
 		{
 			name:       "TXT",
@@ -70,7 +65,7 @@ func TestLegacyToRecord(t *testing.T) {
 			wantType:   "TXT",
 			wantLabel:  "@",
 			wantTTL:    300,
-			wantTarget: "v=spf1 -all",
+			wantTarget: `"v=spf1 -all"`,
 		},
 		{
 			name:       "SRV",
@@ -78,10 +73,7 @@ func TestLegacyToRecord(t *testing.T) {
 			wantType:   "SRV",
 			wantLabel:  "_sip._tcp",
 			wantTTL:    300,
-			wantTarget: "sip.example.com.",
-			wantSrvPri: 1,
-			wantSrvWgt: 5,
-			wantSrvPrt: 5060,
+			wantTarget: "1 5 5060 sip.example.com.",
 		},
 		{
 			name:       "TTL 0 defaults to 300",
@@ -108,15 +100,8 @@ func TestLegacyToRecord(t *testing.T) {
 			if rc.TTL != tt.wantTTL {
 				t.Errorf("TTL = %d, want %d", rc.TTL, tt.wantTTL)
 			}
-			if got := rc.GetTargetField(); got != tt.wantTarget {
+			if got := rc.GetRDATA().String(); got != tt.wantTarget {
 				t.Errorf("target = %q, want %q", got, tt.wantTarget)
-			}
-			if rc.MxPreference != tt.wantMX {
-				t.Errorf("MxPreference = %d, want %d", rc.MxPreference, tt.wantMX)
-			}
-			if rc.SrvPriority != tt.wantSrvPri || rc.SrvWeight != tt.wantSrvWgt || rc.SrvPort != tt.wantSrvPrt {
-				t.Errorf("SRV = (%d,%d,%d), want (%d,%d,%d)",
-					rc.SrvPriority, rc.SrvWeight, rc.SrvPort, tt.wantSrvPri, tt.wantSrvWgt, tt.wantSrvPrt)
 			}
 			// The raw provider record must be retained for later ID lookups.
 			if rc.Original != tt.in {
@@ -141,10 +126,6 @@ func TestNewToRecord(t *testing.T) {
 		wantLabel  string
 		wantTTL    uint32
 		wantTarget string
-		wantMX     uint16
-		wantSrvPri uint16
-		wantSrvWgt uint16
-		wantSrvPrt uint16
 	}{
 		{
 			name:       "A",
@@ -176,8 +157,7 @@ func TestNewToRecord(t *testing.T) {
 			wantType:   "MX",
 			wantLabel:  "@",
 			wantTTL:    300,
-			wantTarget: "mail.example.com.",
-			wantMX:     10,
+			wantTarget: "10 mail.example.com.",
 		},
 		{
 			name:       "TXT",
@@ -185,7 +165,7 @@ func TestNewToRecord(t *testing.T) {
 			wantType:   "TXT",
 			wantLabel:  "@",
 			wantTTL:    300,
-			wantTarget: "v=spf1 -all",
+			wantTarget: `"v=spf1 -all"`,
 		},
 		{
 			name:       "SRV",
@@ -193,10 +173,7 @@ func TestNewToRecord(t *testing.T) {
 			wantType:   "SRV",
 			wantLabel:  "_sip._tcp",
 			wantTTL:    300,
-			wantTarget: "sip.example.com.",
-			wantSrvPri: 1,
-			wantSrvWgt: 5,
-			wantSrvPrt: 5060,
+			wantTarget: "1 5 5060 sip.example.com.",
 		},
 		{
 			name:       "TTL 0 defaults to 300",
@@ -223,15 +200,8 @@ func TestNewToRecord(t *testing.T) {
 			if rc.TTL != tt.wantTTL {
 				t.Errorf("TTL = %d, want %d", rc.TTL, tt.wantTTL)
 			}
-			if got := rc.GetTargetField(); got != tt.wantTarget {
+			if got := rc.GetRDATA().String(); got != tt.wantTarget {
 				t.Errorf("target = %q, want %q", got, tt.wantTarget)
-			}
-			if rc.MxPreference != tt.wantMX {
-				t.Errorf("MxPreference = %d, want %d", rc.MxPreference, tt.wantMX)
-			}
-			if rc.SrvPriority != tt.wantSrvPri || rc.SrvWeight != tt.wantSrvWgt || rc.SrvPort != tt.wantSrvPrt {
-				t.Errorf("SRV = (%d,%d,%d), want (%d,%d,%d)",
-					rc.SrvPriority, rc.SrvWeight, rc.SrvPort, tt.wantSrvPri, tt.wantSrvWgt, tt.wantSrvPrt)
 			}
 			if rc.Original != tt.in {
 				t.Errorf("Original not preserved")

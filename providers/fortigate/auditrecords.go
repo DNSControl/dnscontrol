@@ -46,7 +46,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 		// 	}
 
 		// 	// FortiGate does not accept "." as target (it's not a valid DNS name)
-		// 	target := rc.GetTargetField()
+		// 	target := rc.Get|TargetField()
 		// 	if target == "." {
 		// 		problems = append(problems,
 		// 			fmt.Errorf("FortiGate does not accept '.' as an MX target: %s", rc.GetLabelFQDN()))

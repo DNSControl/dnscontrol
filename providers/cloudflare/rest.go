@@ -179,26 +179,30 @@ func cfNaptrData(rec *models.RecordConfig) *cfNaptrRecData {
 }
 
 func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID string, msg string) []*models.Correction {
-	content := rec.GetTargetField()
-	if rec.Metadata[metaOriginalIP] != "" {
-		content = rec.Metadata[metaOriginalIP]
-	}
+	var content string
 	prio := ""
 	priorityNum := uint16(0)
 	switch rec.Type {
 	case "MX":
-		priorityNum = rec.AsMX().Preference
+		f := rec.AsMX()
+		priorityNum = f.Preference
 		prio = fmt.Sprintf(" %d ", priorityNum)
+		content = f.Mx
 	case "TXT":
 		content = rec.GetRDATA().String()
 	case "DS":
 		content = rec.GetRDATA().String()
+	default:
+		content = rec.GetRDATA().String()
+	}
+	if rec.Metadata[metaOriginalIP] != "" {
+		content = rec.Metadata[metaOriginalIP]
 	}
 	if msg == "" {
 		msg = fmt.Sprintf("CREATE record: %s %s %d%s %s", rec.GetLabel(), rec.Type, rec.TTL, prio, content)
 	}
 	if rec.Metadata[metaProxy] == "on" || rec.Metadata[metaProxy] == "full" {
-		msg = msg + fmt.Sprintf("\nACTIVATE PROXY for new record %s %s %d %s", rec.GetLabel(), rec.Type, rec.TTL, rec.GetTargetField())
+		msg = msg + fmt.Sprintf("\nACTIVATE PROXY for new record %s %s %d %s", rec.GetLabel(), rec.Type, rec.TTL, rec.GetRDATA().String())
 	}
 	if rec.Metadata[metaCNAMEFlatten] == "on" {
 		msg = msg + fmt.Sprintf("\nENABLE CNAME FLATTENING for new record %s %s", rec.GetLabel(), rec.Type)
@@ -278,25 +282,13 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	if domainID == "" || recID == "" {
 		return errors.New("cannot modify record if domain or record id are empty")
 	}
-	priority := uint16(0)
-	if rec.TypeNum == dnsv2.TypeMX {
-		priority = rec.AsMX().Preference
-	}
 
 	r := cloudflare.UpdateDNSRecordParams{
-		ID:       recID,
-		Proxied:  &proxied,
-		Name:     rec.GetLabel(),
-		Type:     rec.Type,
-		Content:  rec.GetTargetField(),
-		Priority: &priority,
-		TTL:      int(rec.TTL),
-	}
-
-	// Handle CNAME flattening setting
-	if rec.Type == "CNAME" {
-		flatten := rec.Metadata[metaCNAMEFlatten] == "on"
-		r.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
+		ID:      recID,
+		Proxied: new(proxied),
+		Name:    rec.GetLabel(),
+		Type:    rec.Type,
+		TTL:     int(rec.TTL),
 	}
 
 	// Set comment if specified (nil keeps current, "" empties it, value sets it)
@@ -315,9 +307,19 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	switch rec.Type {
 	case "TXT":
 		r.Content = rec.GetRDATA().String()
+	case "MX":
+		f := rec.AsMX()
+		r.Priority = new(f.Preference)
+		r.Content = f.Mx
+	case "CNAME":
+		// Handle CNAME flattening setting
+		flatten := rec.Metadata[metaCNAMEFlatten] == "on"
+		r.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
+		r.Content = rec.AsCNAME().Target
 	case "SRV":
 		r.Data = cfSrvData(rec)
 		r.Name = rec.GetLabelFQDN()
+		r.Content = rec.GetRDATA().String()
 	case "CAA":
 		r.Data = cfCaaData(rec)
 		r.Name = rec.GetLabelFQDN()
@@ -325,9 +327,11 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	case "TLSA":
 		r.Data = cfTlsaData(rec)
 		r.Name = rec.GetLabelFQDN()
+		r.Content = rec.GetRDATA().String()
 	case "SSHFP":
 		r.Data = cfSshfpData(rec)
 		r.Name = rec.GetLabelFQDN()
+		r.Content = rec.GetRDATA().String()
 	case "DNSKEY":
 		r.Data = cfDnskeyData(rec)
 		r.Content = ""
@@ -337,11 +341,17 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	case "NAPTR":
 		r.Data = cfNaptrData(rec)
 		r.Name = rec.GetLabelFQDN()
+		r.Content = rec.GetRDATA().String()
 	case "HTTPS", "SVCB":
 		r.Data = cfSvcbData(rec)
+		r.Content = rec.GetRDATA().String()
 	case "LOC":
 		r.Data = cfLocData(rec)
+		r.Content = rec.GetRDATA().String()
+	default:
+		r.Content = rec.GetRDATA().String()
 	}
+
 	_, err := c.cfClient.UpdateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(domainID), r)
 	return err
 }

@@ -105,11 +105,12 @@ func recordsToNative(rcs []*models.RecordConfig, expectedKey models.RecordKey) (
 		var rr dnssdk.ResourceRecord
 		switch key.Type {
 		case "CAA": // G-Core API don't need quotes around CAA with whitespace
+			f := r.AsCAA()
 			rr = dnssdk.ResourceRecord{
 				Content: []any{
-					int64(r.CaaFlag),
-					r.CaaTag,
-					r.GetTargetField(),
+					int64(f.Flag),
+					f.Tag,
+					f.Value,
 				},
 				Meta:    recordMeta,
 				Enabled: true,

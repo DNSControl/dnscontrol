@@ -245,41 +245,47 @@ func toRecordConfig(dc *models.DomainConfig, record *Record) (*models.RecordConf
 	return recordConfig, nil
 }
 
-func toRecord(recordConfig *models.RecordConfig) Record {
+func toRecord(rc *models.RecordConfig) Record {
 	record := &Record{
-		Type:    recordConfig.Type,
-		Name:    recordConfig.NameFQDN,
-		Content: removeTrailingDot(recordConfig.GetTargetField()),
-		TTL:     int(recordConfig.TTL),
+		Type: rc.Type,
+		Name: rc.NameFQDN,
+		TTL:  int(rc.TTL),
 	}
 
-	switch rtype := recordConfig.Type; rtype {
+	switch rtype := rc.Type; rtype {
 	case "SRV":
-		if record.Content == "" {
-			record.Content = "."
+		f := rc.AsSRV()
+		record.Priority = parsePriority(int(f.Priority))
+		t := removeTrailingDot(f.Target)
+		if t == "" {
+			t = "."
 		}
-		record.Priority = parsePriority(int(recordConfig.SrvPriority))
-		record.Content = fmt.Sprintf("%d %d %s", recordConfig.SrvWeight, recordConfig.SrvPort, record.Content)
+		record.Content = fmt.Sprintf("%d %d %s", f.Weight, f.Port, t)
 	case "NAPTR", "SSHFP", "TLSA", "CAA":
-		record.Content = recordConfig.GetRDATA().String()
+		record.Content = rc.GetRDATA().String()
 	case "TXT":
-		record.Content = addEscapeChars(record.Content)
+		//record.Content = addEscapeChars(record.Content)
+		record.Content = rc.AsTXT().String()
 	case "DS":
-		record.Content = fmt.Sprintf("%d %d %d %s", recordConfig.DsKeyTag, recordConfig.DsAlgorithm,
-			recordConfig.DsDigestType, strings.ToUpper(recordConfig.DsDigest))
+		f := rc.AsDS()
+		record.Content = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, strings.ToUpper(f.Digest))
 	case "MX":
-		if record.Content == "" {
-			record.Content = "."
-			record.Priority = 0
-		} else {
-			record.Priority = parsePriority(int(recordConfig.MxPreference))
-		}
+		f := rc.AsMX()
 		// Workaround for 0 prio and 'omitempty' restrictions on json marshalling
-		if record.Priority == 0 {
+		if f.Preference == 0 {
 			record.Priority = -1
+		} else {
+			record.Priority = int(f.Preference)
 		}
+		target := removeTrailingDot(f.Mx)
+		if target == "" {
+			target = "."
+			record.Priority = 0
+		}
+		record.Content = target
+
 	case "LOC":
-		parts := strings.Fields(recordConfig.GetRDATA().String())
+		parts := strings.Fields(rc.GetRDATA().String())
 		degrees1, _ := strconv.ParseUint(parts[0], 10, 32)
 		minutes1, _ := strconv.ParseUint(parts[1], 10, 32)
 		degrees2, _ := strconv.ParseUint(parts[4], 10, 32)
@@ -292,6 +298,14 @@ func toRecord(recordConfig *models.RecordConfig) Record {
 			degrees1, minutes1, parts[2], parts[3], degrees2, minutes2,
 			parts[6], parts[7], altitude, size, hp, vp,
 		)
+	case "CNAME":
+		record.Content = removeTrailingDot(rc.AsCNAME().Target)
+
+	case "A", "AAAA":
+		record.Content = rc.GetRDATA().String()
+
+	default:
+		record.Content = removeTrailingDot(rc.GetRDATA().String())
 	}
 
 	return *record

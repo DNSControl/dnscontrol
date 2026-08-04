@@ -223,7 +223,8 @@ func (a *edgeDNSProvider) rcToRs(records []*models.RecordConfig) (*dns.RecordBod
 
 	for _, r := range records {
 		if r.Type == "AKAMAITLC" {
-			akaRecord.Target = append(akaRecord.Target, r.AnswerType+" "+r.GetTargetField())
+			f := r.AsAKAMAITLC()
+			akaRecord.Target = append(akaRecord.Target, r.AnswerType+" "+f.Target)
 		} else {
 			akaRecord.Target = append(akaRecord.Target, r.GetRDATA().String())
 		}

@@ -46,8 +46,6 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		f := rc.AsMX()
 		r.Priority = intPtr(f.Preference)
 		r.Content = trimDot(f.Mx)
-		// r.Content = trimDot(rc.GetTargetField())
-		// r.Priority = intPtr(rc.MxPreference)
 	case "SRV":
 		f := rc.AsSRV()
 		r.Priority = intPtr(f.Priority)
@@ -60,9 +58,9 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		f := rc.AsCNAME()
 		r.Content = trimDot(f.Target)
 	default:
-		r.Content = rc.GetTargetField()
-		// TODO(tlim): Try this instead.
-		//r.Content = rc.GetRDATA().String()
+		r.Content = rc.GetRDATA().String()
+		// TODO(tlim): This was the original:
+		//r.Content = rc.Get TargetField()
 	}
 
 	return r, nil

@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
@@ -48,7 +49,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 	return func(rc *models.RecordConfig) error {
 		m := maxLength
-		if len(rc.GetTargetField()) > m {
+		if len(rc.AsCAA().Value) > m {
 			return fmt.Errorf("CAA record longer than %d octets (chars)", m)
 		}
 		return nil
@@ -58,8 +59,8 @@ func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 // rejectifNsPointsToOrigin audits NS records that point to the origin.
 func rejectifNsPointsToOrigin(rc *models.RecordConfig) error {
 	originFQDN := strings.TrimPrefix(rc.GetLabelFQDN(), rc.GetLabel()+".") + "."
-	if originFQDN == rc.GetTargetField() {
-		return fmt.Errorf("NS record points to the origin: %s", rc.GetTargetField())
+	if originFQDN == rc.AsNS().Ns {
+		return fmt.Errorf("NS record points to the origin: %s", rc.AsNS().Ns)
 	}
 	return nil
 }
@@ -80,10 +81,26 @@ func hasLabelExample(domain string) error {
 //   - example
 //   - exampleN, where N is a numerical character
 func rejectifTargetHasExample(rc *models.RecordConfig) error {
-	if rc.TypeNum == dnsv2.TypeHTTPS || rc.TypeNum == dnsv2.TypeSVCB {
-		return hasLabelExample(rc.AsSVCB().Target)
+	var target string
+	switch rc.TypeNum {
+	case privatetypes.TypeALIAS:
+		target = rc.AsALIAS().Target
+	case dnsv2.TypeCNAME:
+		target = rc.AsCNAME().Target
+	case dnsv2.TypeHTTPS:
+		target = rc.AsHTTPS().Target
+	case dnsv2.TypeMX:
+		target = rc.AsMX().Mx
+	case dnsv2.TypeNS:
+		target = rc.AsNS().Ns
+	case dnsv2.TypePTR:
+		target = rc.AsPTR().Ptr
+	case dnsv2.TypeSRV:
+		target = rc.AsSRV().Target
+	case dnsv2.TypeSVCB:
+		target = rc.AsSVCB().Target
 	}
-	return hasLabelExample(rc.GetTargetField())
+	return hasLabelExample(target)
 }
 
 // rejectifLabelHasExample returns a function that audits owner names

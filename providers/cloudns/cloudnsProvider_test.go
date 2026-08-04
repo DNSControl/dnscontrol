@@ -44,7 +44,7 @@ func TestToRcConvertsCloudWRToCloudnsWR(t *testing.T) {
 		ID:     "123",
 		Type:   "CLOUD_WR",
 		Host:   "www",
-		Target: "https://example.com",
+		Target: "\"https://example.com\"",
 		TTL:    "3600",
 	}
 
@@ -56,8 +56,10 @@ func TestToRcConvertsCloudWRToCloudnsWR(t *testing.T) {
 	if rc.Type != "CLOUDNS_WR" {
 		t.Errorf("expected type CLOUDNS_WR, got %s", rc.Type)
 	}
-	if rc.GetTargetField() != r.Target {
-		t.Errorf("expected target %q, got %q", r.Target, rc.GetTargetField())
+	gotTarget := rc.AsCLOUDNSWR().Target
+	wantTarget := r.Target
+	if gotTarget != wantTarget {
+		t.Errorf("wanted target %s, got %s", wantTarget, gotTarget)
 	}
 }
 

@@ -165,42 +165,51 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 	// Get the target in the format expected by Infomaniak API
 	var target string
 	switch rc.Type {
-	case "A", "AAAA":
-		target = rc.GetTargetField()
+	// case "A":
+	// 	target = rc.AsA().Addr.String()
+	// case "AAAA":
+	// 	target = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "NS", "DNAME":
-		// Remove trailing dot for the API
-		target = strings.TrimSuffix(rc.GetTargetField(), ".")
+	case "CNAME":
+		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case "NS":
+		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
+	case "DNAME":
+		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
 	case "MX":
 		// Format: "priority target" (without trailing dot)
-		target = fmt.Sprintf("%d %s", rc.MxPreference, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsMX()
+		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
 	case "TXT":
-		target = rc.GetTargetField()
+		target = rc.GetTargetTXTJoined()
 
 	case "SRV":
 		// Format: "priority weight port target" (without trailing dot)
-		target = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsSRV()
+		target = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, strings.TrimSuffix(f.Target, "."))
 
-	case "CAA":
-		// Format: "flags tag value"
-		target = fmt.Sprintf("%d %s %s", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+	// case "CAA":
+	// 	// Format: "flags tag value"
+	// 	target = rc.GetRDATA().String()
 
-	case "DS":
-		// Format: "keytag algorithm digesttype digest"
-		target = fmt.Sprintf("%d %d %d %s", rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+	// case "DS":
+	// 	// Format: "keytag algorithm digesttype digest"
+	// 	target = rc.GetRDATA().String()
 
-	case "SSHFP":
-		// Format: "algorithm fingerprint_type fingerprint"
-		target = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+	// case "SSHFP":
+	// 	// Format: "algorithm fingerprint_type fingerprint"
+	// 	target = rc.GetRDATA().String()
 
-	case "TLSA":
-		// Format: "usage selector matching_type certificate"
-		target = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	// case "TLSA":
+	// 	// Format: "usage selector matching_type certificate"
+	// 	target = rc.GetRDATA().String()
+
+	// TODO(): If tests pass, removed the above comments.
 
 	default:
-		target = rc.GetTargetField()
+		target = rc.GetRDATA().String()
 	}
 
 	return &dnsRecordCreate{

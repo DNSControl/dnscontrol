@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/netip"
 	"os"
 	"slices"
 	"strconv"
@@ -482,7 +481,7 @@ func checkNSModifications(dc *models.DomainConfig) {
 
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == punyRoot {
-			if strings.HasSuffix(rec.GetTargetField(), ".ns.cloudflare.com.") {
+			if strings.HasSuffix(rec.AsNS().Ns, ".ns.cloudflare.com.") {
 				continue
 			}
 		}
@@ -668,7 +667,7 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		}
 	}
 
-	// look for ip conversions and transform records
+	// lookfor ip conversions and transform records
 	for _, rec := range dc.Records {
 		// Only transform A records
 		if rec.Type != "A" {
@@ -678,10 +677,7 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		if rec.Metadata[metaProxy] != "full" {
 			continue
 		}
-		ip, err := netip.ParseAddr(rec.GetTargetField())
-		if err != nil {
-			return fmt.Errorf("%s is not a valid ip address", rec.GetTargetField())
-		}
+		ip := rec.AsA().Addr
 		newIP, err := transform.IP(ip, c.ipConversions)
 		if err != nil {
 			return err

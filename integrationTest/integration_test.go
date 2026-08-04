@@ -720,6 +720,7 @@ func makeTests() []*TestGroup {
 			not(
 				"AZURE_DNS",         // Removed because it is too slow
 				"AZURE_PRIVATE_DNS", // Removed because it is too slow
+				"CLOUDNS",           // Removed because it is too slow
 				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
 				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
@@ -745,6 +746,7 @@ func makeTests() []*TestGroup {
 			only(
 				// "AZURE_DNS",         // Removed because it is too slow
 				// "AZURE_PRIVATE_DNS", // Removed because it is too slow
+				// "CLOUDNS",           // Removed because it is too slow
 				// "CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
 				// "CSCGLOBAL",         // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",             // Skip due to daily update limits.
@@ -763,6 +765,7 @@ func makeTests() []*TestGroup {
 				// "AKAMAIEDGEDNS",     // No paging done. No need to test.
 				// "AZURE_DNS",         // Too slow
 				// "AZURE_PRIVATE_DNS", // Too slow
+				// "CLOUDNS",           // Removed because it is too slow
 				// "CLOUDFLAREAPI",     // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
 				// "CSCGLOBAL", // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",     // Skip due to daily update limits.
@@ -2225,22 +2228,28 @@ func makeTests() []*TestGroup {
 
 		// CLOUDNS features
 
-		testgroup("CLOUDNS geodns tests",
-			only("CLOUDNS"),
-			tc("Add record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "US",
-			})),
-			tc("Update record with default geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "DEFAULT",
-			})),
-			tc("Update record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "BR",
-			})),
-			tc("Delete metadata from record", a("@", "1.2.3.4")),
-			tc("Update a record with the value DEFAULT after removing the metadata should do nothing", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "DEFAULT",
-			})).ExpectNoChanges(),
-		),
+		// NB(tlim): This is disabled because we don't have access to an account
+		// with this feature. Neither Free nor Premium include it.
+		//
+		// You know your account has geodns enabled if this outputs: "1"
+		// curl -X POST https://api.cloudns.net/dns/is-geodns-available.json -d "auth-id=YOUR_ID" -d "auth-password=YOUR_PASSWORD" | jq .
+		//
+		// testgroup("CLOUDNS geodns tests",
+		// 	only("CLOUDNS"),
+		// 	tc("Add record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "US",
+		// 	})),
+		// 	tc("Update record with default geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "DEFAULT",
+		// 	})),
+		// 	tc("Update record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "BR",
+		// 	})),
+		// 	tc("Delete metadata from record", a("@", "1.2.3.4")),
+		// 	tc("Update a record with the value DEFAULT after removing the metadata should do nothing", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "DEFAULT",
+		// 	})).ExpectNoChanges(),
+		// ),
 
 		// PORKBUN features
 

@@ -373,7 +373,7 @@ func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
 		// TXT records are the one place where DO combines many items into one field.
 		r.Data = rc.GetTargetTXTJoined()
 	default:
-		r.Data = rc.GetTargetField() // DO uses the target field only for a single value
+		r.Data = rc.GetRDATA().String() // DO uses the target field only for a single value
 	}
 
 	return r

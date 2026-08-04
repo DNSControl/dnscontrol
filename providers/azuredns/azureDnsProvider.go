@@ -598,15 +598,15 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
+			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.AsA().Addr.String())})
 		case "AAAA":
-			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
+			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.AsAAAA().Addr.String())})
 		case "CNAME":
-			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
+			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.AsCNAME().Target)}
 		case "NS":
-			recordSet.Properties.NsRecords = append(recordSet.Properties.NsRecords, &adns.NsRecord{Nsdname: new(rec.GetTargetField())})
+			recordSet.Properties.NsRecords = append(recordSet.Properties.NsRecords, &adns.NsRecord{Nsdname: new(rec.AsNS().Ns)})
 		case "PTR":
-			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
+			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.AsPTR().Ptr)})
 		case "TXT":
 			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "". Therefore we skip this.
 			if rec.GetTargetTXTSegmentCount() != 1 || rec.GetTargetTXTSegmented()[0] != "" {
@@ -627,7 +627,7 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(f.Value), Tag: new(f.Tag), Flags: new(int32(f.Flag))})
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
 			recordSet.Type = new(rec.AzureAlias["type"])
-			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(rec.GetTargetField())})
+			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(rec.AsAZUREALIAS().Target)})
 
 		default:
 			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
@@ -703,8 +703,8 @@ func deduplicateNameServerTargets(newRecs models.Records) models.Records {
 	dedupedMap := make(map[string]bool)
 	var deduped models.Records
 	for _, rec := range newRecs {
-		if !dedupedMap[rec.GetTargetField()] {
-			dedupedMap[rec.GetTargetField()] = true
+		if !dedupedMap[rec.AsNS().Ns] {
+			dedupedMap[rec.AsNS().Ns] = true
 			deduped = append(deduped, rec)
 		}
 	}

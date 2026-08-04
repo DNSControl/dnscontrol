@@ -38,7 +38,6 @@ func toRecordConfig(dc *models.DomainConfig, r *domain.Record) (*models.RecordCo
 	switch rtype {
 	case "TXT":
 		// Scaleway returns the TXT value wrapped in quotes (BIND-style).
-		// SetTargetTXT expects the unquoted single-string value.
 		unq, unquoteErr := unquoteTXT(data)
 		if unquoteErr != nil {
 			return nil, unquoteErr

@@ -131,15 +131,18 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 	for _, r := range recs {
 		switch r.Type {
 		case "MX":
-			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
+			f := r.AsMX()
+			//rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
+			rec.AddAnswer(&dns.Answer{Rdata: []string{strconv.FormatInt(int64(f.Preference), 10), f.Mx}})
 		case "TXT":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{r.GetTargetTXTJoined()}})
 		case "CAA":
+			f := r.AsCAA()
 			rec.AddAnswer(&dns.Answer{
 				Rdata: []string{
-					strconv.FormatUint(uint64(r.CaaFlag), 10),
-					r.CaaTag,
-					r.GetTargetField(),
+					strconv.FormatUint(uint64(f.Flag), 10),
+					f.Tag,
+					f.Value,
 				},
 			})
 		case "SRV":
