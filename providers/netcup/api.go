@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io" // Added log import
+	"io"
 	"net/http"
 	"time"
 )
