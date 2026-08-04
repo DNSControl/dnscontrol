@@ -124,8 +124,11 @@ func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 			continue
 		case diff2.DELETE:
 			native := inst.Old[0].Original.(*record)
-			// For deletion, we only need the ID and to set deleterecord to true.
-			recordsToUpdate = append(recordsToUpdate, record{ID: native.ID, Delete: true})
+			// For deletion, we must send the original record and set the delete flag.
+			// The API validates other fields even on deletion, so we make a copy and modify it.
+			recToDelete := *native
+			recToDelete.Delete = true
+			recordsToUpdate = append(recordsToUpdate, recToDelete)
 			msgs = append(msgs, inst.MsgsJoined)
 		case diff2.CREATE:
 			rec := fromRecordConfig(inst.New[0])

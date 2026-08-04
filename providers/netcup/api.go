@@ -91,8 +91,8 @@ func (api *netcupProvider) get(action string, params any) (json.RawMessage, erro
 	}
 
 	// Check for any errors and log them
-	if respData.StatusCode != 2000 && (action == "") {
-		return nil, fmt.Errorf("netcup API error: %v\n%v", reqParam, respData)
+	if respData.StatusCode != 2000 {
+		return nil, fmt.Errorf("netcup API error on action '%s', status code %d. Full response: %s", action, respData.StatusCode, string(bodyString))
 	}
 	// Add delay to respect rate limit (180 requests/minute = 3 requests/second = ~333ms per request)
 	time.Sleep(334 * time.Millisecond)
