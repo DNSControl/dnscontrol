@@ -192,8 +192,7 @@ func (c *cloudnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	}
 
 	// Start corrections with the reports
-	// corrections := diff.GenerateMessageCorrections(reportMsgs)
-	var corrections []*models.Correction
+	corrections := diff.GenerateMessageCorrections(reportMsgs)
 	corrections = append(corrections, dnssecFixes...)
 
 	// Deletes first so changing type works etc.

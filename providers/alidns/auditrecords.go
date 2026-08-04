@@ -50,11 +50,10 @@ func targetConstraint(rc *models.RecordConfig) error {
 	default:
 		target = rc.GetRDATA().String()
 	}
-	t, err := idna.ToUnicode(target)
-	if err != nil {
+	if t, err := idna.ToUnicode(target); err != nil {
 		target = t
 	}
-	if !isValidAliDNSString(t) {
+	if !isValidAliDNSString(target) {
 		return errors.New("target contains non-ASCII characters (only Chinese is allowed)")
 	}
 	return nil

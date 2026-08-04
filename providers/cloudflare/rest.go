@@ -180,9 +180,6 @@ func cfNaptrData(rec *models.RecordConfig) *cfNaptrRecData {
 
 func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID string, msg string) []*models.Correction {
 	var content string
-	if rec.Metadata[metaOriginalIP] != "" {
-		content = rec.Metadata[metaOriginalIP]
-	}
 	prio := ""
 	priorityNum := uint16(0)
 	switch rec.Type {
@@ -197,6 +194,9 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 		content = rec.GetRDATA().String()
 	default:
 		content = rec.GetRDATA().String()
+	}
+	if rec.Metadata[metaOriginalIP] != "" {
+		content = rec.Metadata[metaOriginalIP]
 	}
 	if msg == "" {
 		msg = fmt.Sprintf("CREATE record: %s %s %d%s %s", rec.GetLabel(), rec.Type, rec.TTL, prio, content)

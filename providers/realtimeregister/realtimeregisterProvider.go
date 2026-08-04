@@ -277,12 +277,12 @@ func toRecord(rc *models.RecordConfig) Record {
 		} else {
 			record.Priority = int(f.Preference)
 		}
-		t := removeTrailingDot(f.Mx)
-		if t == "" {
-			t = "."
+		target := removeTrailingDot(f.Mx)
+		if target == "" {
+			target = "."
 			record.Priority = 0
 		}
-		record.Content = removeTrailingDot(f.Mx)
+		record.Content = target
 
 	case "LOC":
 		parts := strings.Fields(rc.GetRDATA().String())
