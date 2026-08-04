@@ -250,6 +250,7 @@ func makeTests() []*TestGroup {
 			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not("NETCUP"),  // NETCUP does not support custom TTLs.
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
 			tc("Change TTL", ttl(a("testa", "1.1.1.1"), 999)),
 		),
@@ -926,6 +927,7 @@ func makeTests() []*TestGroup {
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
 			not(
+				"NETCUP",    // NETCUP does not support per record TTL
 				"OPENWRT",   // OpenWRT does not support per record TTL
 				"NAMECHEAP", // Namecheap does not support per record TTL
 				"UNIFI",     // Per record TTLs not supported.
