@@ -20,9 +20,7 @@ func toRecordConfig(dc *models.DomainConfig, r zones.Record, ttl int, name strin
 	case "TXT":
 		// PowerDNS API accepts long TXTs without requiring to split them.
 		// The API then returns them as they initially came in, e.g. "averylooooooo[...]oooooongstring" or "string" "string"
-		// So we need to strip away " and split into multiple string
-		// We can't use SetTargetRFC1035Quoted, it would split the long strings into multiple parts
-		rc, err = dc.NewRecordConfig(label, uint32(ttl), dnsv2.TypeTXT, strings.Join(parseTxt(r.Content), ""))
+		rc, err = dc.NewRecordConfigParse(label, uint32(ttl), dnsv2.TypeTXT, r.Content)
 	case "LUA":
 		luaType, payload := models.ParseLuaContent(r.Content)
 		var value string
@@ -81,11 +79,4 @@ func newPowerDNSSVCBAutoHintRecord(dc *models.DomainConfig, label string, ttl ui
 	rc.Metadata["powerdnsOriginalSVCBParams"] = strings.Join(fields[2:], " ")
 
 	return rc, nil
-}
-
-func parseTxt(content string) (result []string) {
-	for r := range strings.SplitSeq(content, "\" ") {
-		result = append(result, strings.Trim(r, "\""))
-	}
-	return
 }

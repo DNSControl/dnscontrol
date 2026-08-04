@@ -38,9 +38,9 @@ func powerDNSTargetCombined(rc *models.RecordConfig) string {
 	if recordHasPowerDNSSVCBAutoHints(rc) {
 		f := rc.AsSVCB()
 		if models.Svcbv2ValueToString(f.Value) == "" {
-			return fmt.Sprintf("%d %s", rc.SvcPriority, rc.Metadata[powerdnsOriginalSVCBParams])
+			return fmt.Sprintf("%d %s", f.Priority, rc.Metadata[powerdnsOriginalSVCBParams])
 		}
-		return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.GetTargetField(), models.Svcbv2ValueToString(f.Value))
+		return fmt.Sprintf("%d %s %s", f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
 	}
 	return rc.GetRDATA().String()
 }

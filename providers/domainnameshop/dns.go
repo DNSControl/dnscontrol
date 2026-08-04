@@ -35,7 +35,7 @@ func (api *domainNameShopProvider) GetZoneRecordsCorrections(dc *models.DomainCo
 	// Merge TXT strings to one string
 	// for _, rc := range dc.Records {
 	// 	if rc.HasFormatIdenticalToTXT() {
-	// 		if err := rc.SetTargetTXT(rc.GetTargetTXTJoined()); err != nil {
+	// 		if err := rc.Set|TargetTXT(rc.GetTargetTXTJoined()); err != nil {
 	// 			return nil, 0, err
 	// 		}
 	// 	}

@@ -296,8 +296,8 @@ func TestIpRewriting(t *testing.T) {
 	}
 	for i, tst := range tests {
 		rec := dc.Records[i]
-		if rec.GetTargetField() != tst.Expected {
-			t.Fatalf("At index %d, expected target of %s, but found %s.", i, tst.Expected, rec.GetTargetField())
+		if rec.AsA().String() != tst.Expected {
+			t.Fatalf("At index %d, expected target of %s, but found %s.", i, tst.Expected, rec.AsA().String())
 		}
 		if tst.Proxy == "full" && tst.Given != tst.Expected && rec.Metadata[metaOriginalIP] != tst.Given {
 			t.Fatalf("At index %d, expected original_ip to be set", i)

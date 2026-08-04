@@ -61,7 +61,7 @@ func TestNativeToRecord_ContentPopulated(t *testing.T) {
 				t.Errorf("type: got %q, want %q", rc.Type, tt.wantType)
 			}
 			if rc.GetRDATA().String() != tt.wantTarget {
-				t.Errorf("target: got %q, want %q", rc.GetTargetField(), tt.wantTarget)
+				t.Errorf("target: got %q, want %q", rc.GetRDATA().String(), tt.wantTarget)
 			}
 		})
 	}

@@ -624,7 +624,7 @@ func svcParamsToString(params []svcParam) string {
 }
 
 // // locRdata builds the LOC rdata string (rdata-only, no owner/TTL) from Dynu's
-// // decimal-degree and metre fields so it can be passed to SetTargetLOCString.
+// // decimal-degree and metre fields so it can be passed to Set|TargetLOCString.
 // func locRdata(lat, lon, alt, size, horizPre, vertPre float64) string {
 // 	latD, latM, latS, latHemi := ddToDMS(lat, "N", "S")
 // 	lonD, lonM, lonS, lonHemi := ddToDMS(lon, "E", "W")

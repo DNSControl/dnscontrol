@@ -252,7 +252,7 @@ func (o *oracleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exis
 			continue
 		}
 
-		recNS := rec.GetTargetField()
+		recNS := rec.AsNS().Ns
 		if rec.GetLabel() == "@" && strings.HasSuffix(recNS, "dns.oraclecloud.com.") {
 			printer.Warnf("Oracle Cloud does not allow changes to built-in apex NS records. Ignoring change to %s...\n", recNS)
 			continue

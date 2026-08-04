@@ -474,13 +474,13 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
+			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.AsA().Addr.String())})
 		case "AAAA":
-			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
+			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.AsAAAA().Addr.String())})
 		case "CNAME":
-			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
+			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.AsCNAME().Target)}
 		case "PTR":
-			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
+			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.AsPTR().Ptr)})
 		case "TXT":
 			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "".
 			if rec.GetTargetTXTJoined() != "" {

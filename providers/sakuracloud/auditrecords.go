@@ -49,7 +49,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 	return func(rc *models.RecordConfig) error {
 		m := maxLength
-		if len(rc.GetTargetField()) > m {
+		if len(rc.AsCAA().Value) > m {
 			return fmt.Errorf("CAA record longer than %d octets (chars)", m)
 		}
 		return nil
@@ -59,8 +59,8 @@ func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 // rejectifNsPointsToOrigin audits NS records that point to the origin.
 func rejectifNsPointsToOrigin(rc *models.RecordConfig) error {
 	originFQDN := strings.TrimPrefix(rc.GetLabelFQDN(), rc.GetLabel()+".") + "."
-	if originFQDN == rc.GetTargetField() {
-		return fmt.Errorf("NS record points to the origin: %s", rc.GetTargetField())
+	if originFQDN == rc.AsNS().Ns {
+		return fmt.Errorf("NS record points to the origin: %s", rc.AsNS().Ns)
 	}
 	return nil
 }

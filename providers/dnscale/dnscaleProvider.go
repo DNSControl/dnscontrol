@@ -485,7 +485,7 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 
 		// OLD:
 
-		// // SetTargetSRV expects priority, weight, port, target separately
+		// // Set|TargetSRV expects priority, weight, port, target separately
 		// parts := strings.Fields(content)
 		// if len(parts) != 4 {
 		// 	return nil, fmt.Errorf("SRV value does not contain 4 fields: (%q)", content)
@@ -548,7 +548,7 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 	case "SRV":
 		// TODO(tlim): Remove commented out code if new code works.
 		// DNScale API expects full content: "priority weight port target"
-		// target := rc.GetTargetField()
+		// target := rc.Get|TargetField()
 		// if !strings.HasSuffix(target, ".") {
 		// 	target = target + "."
 		// }
@@ -557,15 +557,15 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 
 	case "CAA":
 		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
 		content = rc.GetRDATA().String()
 	case "TLSA":
 		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+		//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
 		content = rc.GetRDATA().String()
 	case "SSHFP":
 		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
 		content = rc.GetRDATA().String()
 	case "HTTPS", "SVCB":
 		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns

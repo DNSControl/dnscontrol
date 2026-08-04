@@ -269,8 +269,8 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 			rec.TTL = 2147483647
 		}
 		// if rec.Type == "NS" && rec.GetLabel() == "@" {
-		// 	if !strings.HasSuffix(rec.GetTargetField(), ".loopia.se.") {
-		// 		printer.Warnf("Loopia does not support changing apex NS records. Ignoring %s\n", rec.GetTargetField())
+		// 	if !strings.HasSuffix(rec.Get|TargetField(), ".loopia.se.") {
+		// 		printer.Warnf("Loopia does not support changing apex NS records. Ignoring %s\n", rec.Get|TargetField())
 		// 	}
 		// 	continue
 		// }

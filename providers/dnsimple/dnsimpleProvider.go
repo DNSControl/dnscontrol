@@ -622,7 +622,7 @@ func removeOtherApexNS(dc *models.DomainConfig) {
 			// Child delegations are supported so we allow non-apex NS records.
 			if rec.GetLabelFQDN() == dc.Name {
 				if !isDnsimpleNameServerDomain(rec.AsNS().Ns) {
-					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.GetTargetField())
+					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.AsNS().Ns)
 				}
 				continue
 			}

@@ -113,9 +113,9 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSPZ, r.LinkName)
 	case "BUNNY_DNS_RDR":
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSRDR)
-		if err == nil {
-			err = rc.SetTarget(r.Value)
-		}
+		// if err == nil {
+		// 	err = rc.Set|Target(r.Value)
+		// }
 	case "CAA":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeCAA, r.Flags, r.Tag, recordValue)
 	case "MX":

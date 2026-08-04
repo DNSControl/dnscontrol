@@ -123,21 +123,23 @@ func toNative(rc *models.RecordConfig) (nativeRecord, string, error) {
 	case "CNAME":
 		recType = "cname"
 		r.Cname = rc.NameFQDN
-		r.Target = rc.GetTargetField()
+		r.Target = rc.AsCNAME().Target
 
 	case "SRV":
+		f := rc.AsSRV()
 		recType = "srvhost"
 		r.Srv = rc.NameFQDN
-		r.Priority = string(strconv.Itoa(int(rc.SrvPriority)))
-		r.Weight = strconv.Itoa(int(rc.SrvWeight))
-		r.Port = strconv.Itoa(int(rc.SrvPort))
-		r.Target = rc.GetTargetField()
+		r.Priority = string(strconv.Itoa(int(f.Priority)))
+		r.Weight = strconv.Itoa(int(f.Weight))
+		r.Port = strconv.Itoa(int(f.Port))
+		r.Target = f.Target
 
 	case "MX":
+		f := rc.AsMX()
 		recType = "mxhost"
 		r.Domain = rc.NameFQDN
-		r.Pref = strconv.Itoa(int(rc.MxPreference))
-		r.Relay = rc.GetTargetField()
+		r.Pref = strconv.Itoa(int(f.Preference))
+		r.Relay = f.Mx
 
 	default:
 		err = fmt.Errorf("unhandled record type: %s", rc.Type)

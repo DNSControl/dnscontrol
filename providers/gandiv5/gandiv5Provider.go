@@ -233,8 +233,8 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 			rec.TTL = 2592000
 		}
 		if rec.Type == "NS" && rec.GetLabel() == "@" {
-			if !strings.HasSuffix(rec.GetTargetField(), ".gandi.net.") {
-				printer.Warnf("Gandi does not support changing apex NS records. Ignoring %s\n", rec.GetTargetField())
+			if !strings.HasSuffix(rec.AsNS().Ns, ".gandi.net.") {
+				printer.Warnf("Gandi does not support changing apex NS records. Ignoring %s\n", rec.AsNS().Ns)
 			}
 			continue
 		}
