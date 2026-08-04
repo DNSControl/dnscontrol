@@ -1,0 +1,2695 @@
+[
+  {
+    "etag": "030a7e18-9465-448c-9617-885c393283d5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "0742834c-c612-4db4-927e-7ab0ebdb81e1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo765",
+    "name": "foo765",
+    "properties": {
+      "fqdn": "foo765.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "0759b3c8-8672-43fe-9859-417e7b7ad4bb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/xn--o-0gab",
+    "name": "xn--o-0gab",
+    "properties": {
+      "cnameRecord": {
+        "cname": "xn--ndaaa.xn--vhquv."
+      },
+      "fqdn": "xn--o-0gab.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "0aac6018-8923-44b8-9506-5a3ace26d591",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "0bc87dc1-4cbd-4973-8731-d546c98867e0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "asimple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "0e62875d-dca1-4403-81ab-e15f3ab40a6e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "decoy.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "0ff294fe-14b6-4ea1-ac8f-a933a43ca717",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/testaaaa",
+    "name": "testaaaa",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2607:f8b0:4006:820::2006"
+        }
+      ],
+      "fqdn": "testaaaa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "110fdba7-92e2-42bf-9f96-0ca2508d92c3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 7,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "12dc1a72-efe7-4283-8d81-2932a2fa4e50",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 7,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 62
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "13815f9f-755f-4c5d-aee2-86d81438ae19",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/dyndns-city2",
+    "name": "dyndns-city2",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "91.42.1.2"
+        }
+      ],
+      "fqdn": "dyndns-city2.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "14193254-c9ef-4190-9572-ee81a8771f9e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "4.5.6.7"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "14aabe2f-9065-4860-bc68-ec7a18c90a63",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/PTR/4",
+    "name": "4",
+    "properties": {
+      "fqdn": "4.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ptrRecords": [
+        {
+          "ptrdname": "foo.com."
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/PTR"
+  },
+  {
+    "etag": "167e43d6-c9d1-4318-a649-b0fca773e755",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "cnameRecord": {
+        "cname": "dnscontroltest-azurep.com."
+      },
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "16bbec2e-7198-4890-9878-63c946060cb6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "dnscontroltest-azurep.com.",
+          "preference": 2
+        },
+        {
+          "exchange": "www.dnscontroltest-azurep.com.",
+          "preference": 8
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "171cdd10-cc99-43fe-b326-51d7cdb215ed",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "cnameRecord": {
+        "cname": "foo.dnscontroltest-azurep.com."
+      },
+      "fqdn": "testcname.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "178de07d-d751-4dcd-b18c-0ef53ba9d50a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "12.12.12.12"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "187a05a7-b34d-4aff-a009-c0837fa5bed9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foodq",
+    "name": "foodq",
+    "properties": {
+      "fqdn": "foodq.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "in\"side"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "19e0eddd-9fa1-45cd-8d05-05dadd145c5e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "1c2e53fc-4a75-4134-8c1e-a4fecaa2f615",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "cnameRecord": {
+        "cname": "redact1.acm-validations.aws."
+      },
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "1e8ff0b7-be2a-45fc-8147-b6a1627af4e1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "cnameRecord": {
+        "cname": "google.com."
+      },
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "262a6ce1-11a9-45c6-86d7-09b06ae5f712",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "28ef3841-a746-44e2-bc8c-767cb6d2f6b4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "2900dcd3-f819-4972-9a16-a870378a24c7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "290361db-c025-4b21-a94c-cb627e23d14d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/mail",
+    "name": "mail",
+    "properties": {
+      "cnameRecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "fqdn": "mail.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "29725299-ae0f-40af-8708-29484634a302",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo255",
+    "name": "foo255",
+    "properties": {
+      "fqdn": "foo255.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "29e65e32-a5d4-4de6-94c8-dcd777e13f0b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo510",
+    "name": "foo510",
+    "properties": {
+      "fqdn": "foo510.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "2c6d549e-dbe0-497e-a0dd-c9818b2ef364",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "2e25b743-6832-4046-86e7-63322b1fa1de",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 400
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "2eacbaa5-71df-4e0b-a7eb-b6a3b0f198cb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "dnscontroltest-azurep.com.",
+          "preference": 8
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "34ecbba2-f64c-428f-9770-700fe92994dd",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foosp",
+    "name": "foosp",
+    "properties": {
+      "fqdn": "foosp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "with spaces"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "351acbb6-a847-4ed8-99ea-34f89a33dd14",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "14.14.14.14"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "351c4a3d-5c7e-422e-8e27-fe047971fc3e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "35c1ef29-7e04-4c84-b973-efc7ce0d1148",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        },
+        {
+          "exchange": "bar.com.",
+          "preference": 100
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "3ae7e20c-cc7f-4fee-9ee1-175b56f985f9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/bar",
+    "name": "bar",
+    "properties": {
+      "fqdn": "bar.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "3aff2810-d4d6-4539-bc69-c1c786b1fc00",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "3cbf81fa-3516-49c9-9266-1133f247eaef",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "fqdn": "bar.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "3ce2894b-86d5-4b9c-804d-bb9f890e1525",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "3d773a5f-7eb1-4cad-8ecf-584bbccba7da",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foobt",
+    "name": "foobt",
+    "properties": {
+      "fqdn": "foobt.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "blah`blah"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "3dca4291-7539-4eaa-a079-6ef6e084aeb8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "cnameRecord": {
+        "cname": "google2.com."
+      },
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "3deaf9f7-d36e-4271-8d99-39019a65c744",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "3e03fc4f-f2df-41d4-bfa0-e93300150e5b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testignore",
+    "name": "testignore",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "testignore.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "3ef1355b-e771-4ec6-a158-ee4741a26a2b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "43458b48-dbb7-4d38-9f91-78cc70c2c078",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 1000
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "4393f21a-6247-4512-9fbb-1738f7bd0371",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "43d0f490-781d-49cf-8106-75d6f9ea6012",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "44275b2c-3409-4fa5-8af0-0468f92f3223",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/final",
+    "name": "final",
+    "properties": {
+      "fqdn": "final.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "TestDNSProviders was successful!"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "44ea2911-9517-4577-aca4-2868abcd6e52",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/bar",
+    "name": "bar",
+    "properties": {
+      "cnameRecord": {
+        "cname": "redact2.acm-validations.aws."
+      },
+      "fqdn": "bar.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "463974d7-657d-4991-9235-753071dfcd3e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/xn--ndaaa",
+    "name": "xn--ndaaa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "xn--ndaaa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "4a090bfb-80f3-4d7b-a359-7096e49b3ef0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "5053e458-4ffd-4c9d-8bf7-d724c81390b5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/*",
+    "name": "*",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "fqdn": "*.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "53a8a993-5467-400c-877a-e2a1e8fbf831",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/fooosbs1",
+    "name": "fooosbs1",
+    "properties": {
+      "fqdn": "fooosbs1.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "1back\\slash"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "56df164d-a0fb-4725-b7e4-76e7a4b67afb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 70,
+          "priority": 5,
+          "target": "foo2.com.",
+          "weight": 60
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "58549e34-140d-43c4-a6e2-bb3449df909f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/testaaaa",
+    "name": "testaaaa",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2607:f8b0:4006:820::2013"
+        }
+      ],
+      "fqdn": "testaaaa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "59304b83-0a2c-48d9-8e42-10fba0fa0c9d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/final",
+    "name": "final",
+    "properties": {
+      "fqdn": "final.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "TestDNSProviders was successful!"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "5aa93682-660d-4eb5-ad84-0a8bf9a5dd8b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo256",
+    "name": "foo256",
+    "properties": {
+      "fqdn": "foo256.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+            "C"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "5b21892b-8f5e-4eac-b95b-fbe6f8966232",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "cnameRecord": {
+        "cname": "www.yahoo.com."
+      },
+      "fqdn": "testcname.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "5f9336ef-05c9-4cb3-9aee-cae5ae4abb07",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "mx.google.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "606434df-1718-4e2c-95d3-d0e88496365f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foosc1",
+    "name": "foosc1",
+    "properties": {
+      "fqdn": "foosc1.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "semi;colon"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "6277e8d5-1887-4328-ab88-62e57ecc049d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/mail.bat",
+    "name": "mail.bat",
+    "properties": {
+      "cnameRecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "fqdn": "mail.bat.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "6279cc8b-b36a-4e67-903b-16f6e0645401",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/bar.bat",
+    "name": "bar.bat",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "fqdn": "bar.bat.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "681ab898-5d9d-4fdd-98ad-d7fc75bd38a4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "68d2365b-c7d5-4854-b06a-790a7333dc3a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 500
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "694f3604-6a96-49b8-98c2-2dc2e3b38ce0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 70,
+          "priority": 5,
+          "target": "foo2.com.",
+          "weight": 60
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo3.com.",
+          "weight": 65
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "69c91057-9da3-427f-aa13-67beb14767ab",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "69e7497e-bfca-41fd-bd7f-6c27f7cb7ecb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "bar.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "6aa2ed1a-8f7a-4710-a8dc-271dedccd425",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 700
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "6b3332ac-894b-4947-a7e0-eb76406edbee",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo.bat",
+    "name": "foo.bat",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "fqdn": "foo.bat.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "6b98106e-37b7-48fd-811c-0ed2a29e91c5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foows1",
+    "name": "foows1",
+    "properties": {
+      "fqdn": "foows1.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "trailingws "
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "6ba37f13-88ec-4550-9907-0973794a3f4b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.dnscontroltest-azurep.com.",
+          "preference": 10
+        },
+        {
+          "exchange": "bar.dnscontroltest-azurep.com.",
+          "preference": 20
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "6d594969-ba52-413b-a613-9a6f3eac161f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "6d8cf506-c36b-4aea-972f-902dbca91c2a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "testa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "6d90ff87-5086-4954-9e8f-71dcd543d8ba",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "aspmx.l.google.com.",
+          "preference": 10
+        },
+        {
+          "exchange": "alt1.aspmx.l.google.com.",
+          "preference": 20
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "6f1d5435-d5a9-4379-a526-e6c02a2f2101",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "13.13.13.13"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "70cf54ec-8f1f-493e-a61e-782d390e29a7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7446664b-a87b-4d1b-8c13-b0066dbffa01",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "767fe507-5f81-40d5-a1d0-93f78b69d717",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "fqdn": "foodqs.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "in\"ter\"ior"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "781a3ca8-8092-439a-9050-6e6701df1565",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "fqdn": "bar.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7d5a652c-5233-4465-ab46-13353534e119",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/dyndns-city1",
+    "name": "dyndns-city1",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "91.42.1.1"
+        }
+      ],
+      "fqdn": "dyndns-city1.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7d97f8f6-b677-4a35-aaae-cd990dd4e5ba",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7e2ef842-d3cd-4344-ba63-1aa1e0ad63ce",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 400
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7f573462-1243-4c8d-8170-04732e6d1164",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/xn--fiq228c",
+    "name": "xn--fiq228c",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "xn--fiq228c.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "7feecabb-b2e2-4536-83d4-9e1d5415e207",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "83735ef1-5da1-4ac7-972f-152296f3ded3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "fqdn": "foodqs.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "right\""
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "84031b86-fec8-48db-9e15-7b05c77ae374",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "8657697f-8b5d-442e-9687-efc0d93fae1f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo509",
+    "name": "foo509",
+    "properties": {
+      "fqdn": "foo509.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "86c22a43-5ba2-4585-8d33-569e9712fc64",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/fooosbs2",
+    "name": "fooosbs2",
+    "properties": {
+      "fqdn": "fooosbs2.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "2back\\\\slash"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "8a34c8a1-bac0-4766-9a40-1c876f68626b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo764",
+    "name": "foo764",
+    "properties": {
+      "fqdn": "foo764.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "8a3acd95-9664-45a0-8246-93ac1f66ade7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "8cbcf6a0-d574-4500-a84a-57c7a8695d1a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo254",
+    "name": "foo254",
+    "properties": {
+      "fqdn": "foo254.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "8d1ef927-dbce-4029-b662-520654a5043a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/testaaaa",
+    "name": "testaaaa",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2607:f8b0:4006:820::2013"
+        }
+      ],
+      "fqdn": "testaaaa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "8f95ec46-6770-4bcd-ace3-51e03d6665fd",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/fooosbs4",
+    "name": "fooosbs4",
+    "properties": {
+      "fqdn": "fooosbs4.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "4back\\\\\\\\slash"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "90be613e-dc0c-42b6-a16b-958b39725b81",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "decoy.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "91fbbfb8-7eef-4d14-8c3b-fef3c0a85e8f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "ttl": 4400
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "934a85cc-a23e-4866-a792-2ae55d639218",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/testtxt",
+    "name": "testtxt",
+    "properties": {
+      "fqdn": "testtxt.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "93c39805-a514-483d-8d76-006c6ceea7ec",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.2"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "96345a68-8d87-46ea-8021-f1a7ca8e4e66",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "testa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 999
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "9739a769-cb05-486b-98a6-ec37313331e9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "fqdn": "nmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "979cd46a-3e71-474d-ac73-247cf98699ba",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/xn--ndaaa",
+    "name": "xn--ndaaa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "xn--ndaaa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "97a9155f-7d6c-4030-9f69-daddc8da7eec",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "fqdn": "decoy.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "97b81228-273d-42da-9fc4-e1ebddc57f99",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "98990076-ffca-4f0c-acf3-bf465ccca281",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "98af893e-4274-4f4c-aa25-ae1df4e63181",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        },
+        {
+          "exchange": "bar.com.",
+          "preference": 100
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "99cc9871-9963-4c66-b8bb-feb551626517",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "fqdn": "testa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "99ff9a42-7222-4caa-b649-32a02e02a95c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "9acae91d-ecfb-4e1f-a3eb-b5df0f58afaa",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "fqdn": "foodqs.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "\"left"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "9c737b2c-3514-4124-9c6b-f01f7c61a0b2",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "9e011e71-8f9c-48d2-8237-122dc44c5dca",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/zzz",
+    "name": "zzz",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        },
+        {
+          "ipv4Address": "4.4.4.4"
+        }
+      ],
+      "fqdn": "zzz.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "9e089e91-b86a-4c7e-9c84-a3945f296663",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foosc2",
+    "name": "foosc2",
+    "properties": {
+      "fqdn": "foosc2.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "wssemi ; colon"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "a17f9520-c820-4810-8a61-dc0130aec25c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testdefined",
+    "name": "testdefined",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "9.9.9.9"
+        }
+      ],
+      "fqdn": "testdefined.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "a1b536b9-7d65-4028-a6d5-bf7487896af7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "a3a6a866-07b7-43e9-b327-a4c43af10d85",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/mail",
+    "name": "mail",
+    "properties": {
+      "cnameRecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "fqdn": "mail.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "a742e48f-affb-4bf2-85c4-9904283d8e04",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo0",
+    "name": "foo0",
+    "properties": {
+      "fqdn": "foo0.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": []
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "aac802d1-13ae-4526-8f55-510c3b8d881e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.9"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "abf5cc29-6c03-4e18-a62c-c4d22ebdef5c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/PTR/4",
+    "name": "4",
+    "properties": {
+      "fqdn": "4.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ptrRecords": [
+        {
+          "ptrdname": "bar.com."
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/PTR"
+  },
+  {
+    "etag": "ae7236b5-6961-4530-8696-aa3c5a98b920",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/foo",
+    "name": "foo",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:aaaa"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "b203c211-b9cd-4af9-9198-f3125e9002a3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/testtxt",
+    "name": "testtxt",
+    "properties": {
+      "fqdn": "testtxt.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "changed"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "b6a31683-06c9-4ca7-bcc8-876d2c23a222",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "cnameRecord": {
+        "cname": "www.google.com."
+      },
+      "fqdn": "testcname.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "b8a9a556-098e-46ee-89a1-fa451e0c6d21",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/dyndns-city1",
+    "name": "dyndns-city1",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:ce77"
+        }
+      ],
+      "fqdn": "dyndns-city1.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "bae3a6b3-6d4f-44ec-950e-0cf22e141731",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "10.10.10.10"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "be505cd3-0f02-4448-8a9b-96e88bef7141",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "c0ea8f87-34d1-4ea5-8cfb-e51bf90a5d6f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/zzz",
+    "name": "zzz",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:cccc"
+        }
+      ],
+      "fqdn": "zzz.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "c89ecc13-83ce-4c68-a673-a12b3cab5dc8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "cb19e79e-3839-4a21-a09d-c57f3937c379",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/AAAA/dyndns-city2",
+    "name": "dyndns-city2",
+    "properties": {
+      "aaaaRecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:ce78"
+        }
+      ],
+      "fqdn": "dyndns-city2.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/AAAA"
+  },
+  {
+    "etag": "cb7336cf-0f7e-45ee-b4fd-e3d630c41336",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "cca88309-a741-44fb-aba9-8c566447e1cf",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "4.4.4.4"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "ccb67ac5-198d-41cf-b854-0a2107b90ac0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "cfdfef30-ef88-4696-9362-3c68306561a5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "d04fc66f-72eb-429f-8ce2-207f62647895",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": ".",
+          "weight": 65
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "d11329f2-698a-4bf9-9575-2bacaf5726c2",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "d22c0a8f-db90-44b6-82b3-962271265b74",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo3.com.",
+          "weight": 65
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "d36db796-6326-41a0-ba90-dc6749da2c01",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "d3c03fa6-5503-49b5-bb5c-86b6ca0603c7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo511",
+    "name": "foo511",
+    "properties": {
+      "fqdn": "foo511.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+            "F"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "d41d1793-3053-480f-a0ac-098863c5ca99",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "d42078bd-5d01-46fa-a49b-c6aa98e59d44",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "fqdn": "nmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "nmx.dnscontroltest-azurep.com.",
+          "preference": 3
+        },
+        {
+          "exchange": "www.dnscontroltest-azurep.com.",
+          "preference": 9
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "d49b5e02-357c-4307-af1d-8a87d2bc1b80",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testdefined",
+    "name": "testdefined",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "fqdn": "testdefined.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "d58236f0-5fd9-4bc0-8f86-2b855fb9a70e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "dad98e66-8c2f-4321-8c55-7f5d708ee3c5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "ttl": 333
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  },
+  {
+    "etag": "dd88ba3d-d868-4fa8-8438-bd5ce7554806",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/fooosbs3",
+    "name": "fooosbs3",
+    "properties": {
+      "fqdn": "fooosbs3.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "3back\\\\\\slash"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "df110d6a-8e01-4ba2-8dc2-4e39e98c8323",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "e00dc9a8-384c-41f4-b25b-6529242f50f1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo.bat",
+    "name": "foo.bat",
+    "properties": {
+      "fqdn": "foo.bat.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "e0a79c59-84d1-4b2a-98ee-7b26ba8a9a0d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/www",
+    "name": "www",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "www.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "e7836d34-a89c-4deb-bd66-e4d48fbfdca4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/nmx",
+    "name": "nmx",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.3"
+        }
+      ],
+      "fqdn": "nmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "e7b8d18e-c4c8-4696-a457-c7e2e593f737",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "11.11.11.11"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "e7f4ffa2-18ef-48b1-9ff2-b2c964749a01",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "fqdn": "foo.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "eab980fe-329e-40d8-be41-60323dae702a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/CNAME/a",
+    "name": "a",
+    "properties": {
+      "cnameRecord": {
+        "cname": "xn--ndaaa.com."
+      },
+      "fqdn": "a.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/CNAME"
+  },
+  {
+    "etag": "eb694a2e-801b-4817-800c-c7e92b6723bb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "fqdn": "testa.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 333
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "eb946374-6b2b-40f7-94b4-df61b90b006a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/A/@",
+    "name": "@",
+    "properties": {
+      "aRecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 666
+    },
+    "type": "Microsoft.Network/privateDnsZones/A"
+  },
+  {
+    "etag": "eca5b299-edf0-474b-9551-d3e9dd33388f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foo766",
+    "name": "foo766",
+    "properties": {
+      "fqdn": "foo766.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "J"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "f164801c-c850-4ca2-8f78-6dd96bcccc97",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "fqdn": "testmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 100
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "f1d7c82e-6db1-4205-8803-9ec30af65259",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "fqdn": "nmx.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "f770b212-4897-4078-89fc-9eb903fa30a4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/TXT/foosq",
+    "name": "foosq",
+    "properties": {
+      "fqdn": "foosq.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "ttl": 300,
+      "txtRecords": [
+        {
+          "value": [
+            "quo'te"
+          ]
+        }
+      ]
+    },
+    "type": "Microsoft.Network/privateDnsZones/TXT"
+  },
+  {
+    "etag": "f7b6e81b-903a-4dba-aa3f-1a2973ef46fd",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/MX/@",
+    "name": "@",
+    "properties": {
+      "fqdn": "dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "mxRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/MX"
+  },
+  {
+    "etag": "fe95a8ca-77c8-45f9-84c4-772d63c538d9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/privateDnsZones/dnscontroltest-azurep.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "fqdn": "_sip._tcp.dnscontroltest-azurep.com.",
+      "isAutoRegistered": false,
+      "srvRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 72,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 62
+        }
+      ],
+      "ttl": 300
+    },
+    "type": "Microsoft.Network/privateDnsZones/SRV"
+  }
+]

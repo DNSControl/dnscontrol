@@ -1,0 +1,884 @@
+[
+  {
+    "name": "*",
+    "expire": 300,
+    "type": "A",
+    "content": "3.3.3.3"
+  },
+  {
+    "name": "@",
+    "expire": 1000,
+    "type": "A",
+    "content": "8.8.8.8"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "A",
+    "content": "2.3.4.5"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "A",
+    "content": "4.4.4.4"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "ALIAS",
+    "content": "foo.com."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "ALIAS",
+    "content": "foo.dnscontrol.nl."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "ALIAS",
+    "content": "foo2.com."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "0 issue \"letsencrypt.org\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "0 issuewild \";\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "0 issuewild \"example.com\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "0 issuewild \"letsencrypt.org\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "CAA",
+    "content": "128 issue \"letsencrypt.org\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 bar.com."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 foo.com."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "NS",
+    "content": "ns0.transip.net."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "NS",
+    "content": "ns1.transip.nl."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "NS",
+    "content": "ns2.transip.eu."
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "SSHFP",
+    "content": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "SSHFP",
+    "content": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "SSHFP",
+    "content": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC"
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"asimple\""
+  },
+  {
+    "name": "@",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"simple\""
+  },
+  {
+    "name": "@",
+    "expire": 500,
+    "type": "A",
+    "content": "8.8.8.8"
+  },
+  {
+    "name": "@",
+    "expire": 666,
+    "type": "A",
+    "content": "8.8.8.8"
+  },
+  {
+    "name": "_443._tcp",
+    "expire": 300,
+    "type": "TLSA",
+    "content": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "name": "_443._tcp",
+    "expire": 300,
+    "type": "TLSA",
+    "content": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "name": "_443._tcp",
+    "expire": 300,
+    "type": "TLSA",
+    "content": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
+  },
+  {
+    "name": "_443._tcp",
+    "expire": 300,
+    "type": "TLSA",
+    "content": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "name": "_443._tcp",
+    "expire": 300,
+    "type": "TLSA",
+    "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "15 65 75 ."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "15 65 75 foo3.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "15 65 75 foo4.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "5 6 7 foo.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "5 60 70 foo2.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "52 6 7 foo.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "52 62 7 foo.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 300,
+    "type": "SRV",
+    "content": "52 62 72 foo.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 333,
+    "type": "SRV",
+    "content": "5 6 7 foo.com."
+  },
+  {
+    "name": "_sip._tcp",
+    "expire": 4400,
+    "type": "SRV",
+    "content": "5 6 7 foo.com."
+  },
+  {
+    "name": "a",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "xn--ndaaa.com."
+  },
+  {
+    "name": "bar",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "bar",
+    "expire": 300,
+    "type": "A",
+    "content": "5.5.5.5"
+  },
+  {
+    "name": "bar",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "redact2.acm-validations.aws."
+  },
+  {
+    "name": "bar",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 bar.com."
+  },
+  {
+    "name": "bar.bat",
+    "expire": 300,
+    "type": "A",
+    "content": "5.5.5.5"
+  },
+  {
+    "name": "decoy",
+    "expire": 300,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "decoy",
+    "expire": 300,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "decoy",
+    "expire": 300,
+    "type": "A",
+    "content": "3.3.3.3"
+  },
+  {
+    "name": "dyndns-city1",
+    "expire": 300,
+    "type": "A",
+    "content": "91.42.1.1"
+  },
+  {
+    "name": "dyndns-city1",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2003:dd:d7ff::fe71:ce77"
+  },
+  {
+    "name": "dyndns-city2",
+    "expire": 300,
+    "type": "A",
+    "content": "91.42.1.2"
+  },
+  {
+    "name": "dyndns-city2",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2003:dd:d7ff::fe71:ce78"
+  },
+  {
+    "name": "final",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"TestDNSProviders was successful!\""
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "10.10.10.10"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "11.11.11.11"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "12.12.12.12"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "13.13.13.13"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "14.14.14.14"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "2.3.4.5"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "3.4.5.6"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "4.5.6.7"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "A",
+    "content": "8.8.8.8"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2003:dd:d7ff::fe71:aaaa"
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "dnscontrol.nl."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "google.com."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "google2.com."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "redact1.acm-validations.aws."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "10 aspmx.l.google.com."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "10 foo.dnscontrol.nl."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "20 alt1.aspmx.l.google.com."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "20 bar.dnscontrol.nl."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 mx.google.com."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "MX",
+    "content": "8 dnscontrol.nl."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "NS",
+    "content": "dnscontrol.nl."
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"simple\""
+  },
+  {
+    "name": "foo",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"v=spf1 ip4:99.99.99.99 -all\""
+  },
+  {
+    "name": "foo.bat",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "foo.bat",
+    "expire": 300,
+    "type": "A",
+    "content": "2.3.4.5"
+  },
+  {
+    "name": "foo.bat",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"simple\""
+  },
+  {
+    "name": "foo0",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"\""
+  },
+  {
+    "name": "foo254",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+  },
+  {
+    "name": "foo255",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\""
+  },
+  {
+    "name": "foo256",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\""
+  },
+  {
+    "name": "foo509",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\""
+  },
+  {
+    "name": "foo510",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\""
+  },
+  {
+    "name": "foo511",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\""
+  },
+  {
+    "name": "foo764",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\""
+  },
+  {
+    "name": "foo765",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\""
+  },
+  {
+    "name": "foo766",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\""
+  },
+  {
+    "name": "foosc1",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"semi;colon\""
+  },
+  {
+    "name": "foosc2",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"wssemi ; colon\""
+  },
+  {
+    "name": "foosp",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"with spaces\""
+  },
+  {
+    "name": "foosq",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"quo'te\""
+  },
+  {
+    "name": "foows1",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"trailingws \""
+  },
+  {
+    "name": "mail",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "ghs.googlehosted.com."
+  },
+  {
+    "name": "mail.bat",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "ghs.googlehosted.com."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com."
+  },
+  {
+    "name": "test",
+    "expire": 300,
+    "type": "NAPTR",
+    "content": "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "name": "testa",
+    "expire": 300,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "testa",
+    "expire": 300,
+    "type": "A",
+    "content": "3.3.3.3"
+  },
+  {
+    "name": "testa",
+    "expire": 333,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "testa",
+    "expire": 999,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "testaaaa",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2607:f8b0:4006:820::2006"
+  },
+  {
+    "name": "testaaaa",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2607:f8b0:4006:820::2013"
+  },
+  {
+    "name": "testcname",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "foo.dnscontrol.nl."
+  },
+  {
+    "name": "testcname",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "www.google.com."
+  },
+  {
+    "name": "testcname",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "www.yahoo.com."
+  },
+  {
+    "name": "testdefined",
+    "expire": 300,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "testdefined",
+    "expire": 300,
+    "type": "A",
+    "content": "9.9.9.9"
+  },
+  {
+    "name": "testignore",
+    "expire": 300,
+    "type": "A",
+    "content": "8.8.8.8"
+  },
+  {
+    "name": "testmx",
+    "expire": 300,
+    "type": "MX",
+    "content": "100 bar.com."
+  },
+  {
+    "name": "testmx",
+    "expire": 300,
+    "type": "MX",
+    "content": "100 foo.com."
+  },
+  {
+    "name": "testmx",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 bar.com."
+  },
+  {
+    "name": "testmx",
+    "expire": 300,
+    "type": "MX",
+    "content": "5 foo.com."
+  },
+  {
+    "name": "testtxt",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"changed\""
+  },
+  {
+    "name": "testtxt",
+    "expire": 300,
+    "type": "TXT",
+    "content": "\"simple\""
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "1.1.1.1"
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "3.3.3.3"
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "5.5.5.5"
+  },
+  {
+    "name": "www",
+    "expire": 300,
+    "type": "A",
+    "content": "5.6.7.8"
+  },
+  {
+    "name": "www",
+    "expire": 400,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "www",
+    "expire": 400,
+    "type": "A",
+    "content": "5.6.7.8"
+  },
+  {
+    "name": "www",
+    "expire": 700,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "www",
+    "expire": 700,
+    "type": "A",
+    "content": "5.6.7.8"
+  },
+  {
+    "name": "xn--fiq228c",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "xn--ndaaa",
+    "expire": 300,
+    "type": "A",
+    "content": "1.2.3.4"
+  },
+  {
+    "name": "xn--ndaaa",
+    "expire": 300,
+    "type": "A",
+    "content": "2.2.2.2"
+  },
+  {
+    "name": "xn--o-0gab",
+    "expire": 300,
+    "type": "CNAME",
+    "content": "xn--ndaaa.xn--vhquv."
+  },
+  {
+    "name": "xyz",
+    "expire": 300,
+    "type": "NS",
+    "content": "ns1.foo.com."
+  },
+  {
+    "name": "xyz",
+    "expire": 300,
+    "type": "NS",
+    "content": "ns2.foo.com."
+  },
+  {
+    "name": "zzz",
+    "expire": 300,
+    "type": "A",
+    "content": "3.3.3.3"
+  },
+  {
+    "name": "zzz",
+    "expire": 300,
+    "type": "A",
+    "content": "4.4.4.4"
+  },
+  {
+    "name": "zzz",
+    "expire": 300,
+    "type": "AAAA",
+    "content": "2003:dd:d7ff::fe71:cccc"
+  }
+]

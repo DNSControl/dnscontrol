@@ -1,0 +1,3296 @@
+[
+  {
+    "etag": "006d7dbf-713c-44d6-8590-56924d1e3756",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "www.google.com."
+      },
+      "TTL": 300,
+      "fqdn": "testcname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "032593f9-af02-4766-a5d0-317eb5903e21",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "nmx.dnscontrol-azure.com.",
+          "preference": 3
+        },
+        {
+          "exchange": "www.dnscontrol-azure.com.",
+          "preference": 9
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "nmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "03a1d16e-a5d1-49a9-b3a1-5ba23001ce58",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/fooosbs4",
+    "name": "fooosbs4",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "4back\\\\\\\\slash"
+          ]
+        }
+      ],
+      "fqdn": "fooosbs4.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "03c84041-78a1-4605-8777-f751d61cbb0f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "13.13.13.13"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "04921f0e-c615-481f-936d-f67f52bdf912",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "TTL": 400,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "0623d75d-550f-4605-9d8a-48739f98f487",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/dyndns-city1",
+    "name": "dyndns-city1",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:ce77"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dyndns-city1.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "083b1d1f-2102-4ff4-bcae-954f9932a7b5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "092a88cf-2ead-456f-b6a6-f841572eebc1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/bar",
+    "name": "bar",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "redact2.acm-validations.aws."
+      },
+      "TTL": 300,
+      "fqdn": "bar.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "0c7e7b1a-bd2a-4375-aee0-887bc9afcea2",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foosq",
+    "name": "foosq",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "quo'te"
+          ]
+        }
+      ],
+      "fqdn": "foosq.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "0e00361c-d680-41e2-acba-91f7d912cdf3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issuewild",
+          "value": "letsencrypt.org"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "0fc47ddf-59de-4721-b129-1deab8655f63",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "13f3b5f2-5395-465e-af5b-048882bdbc42",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "166b2f8f-9438-45b4-a6e0-8a6f284e4393",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/testtxt",
+    "name": "testtxt",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ],
+      "fqdn": "testtxt.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "16ac828d-e961-48c9-9b01-3ac436d6894e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "174e5441-6e55-453a-b2ca-9e1d9636d8b9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "4.5.6.7"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "17d33bb1-bb64-4008-857c-7d03b7ced7b3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/xyz",
+    "name": "xyz",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns1.foo.com."
+        },
+        {
+          "nsdname": "ns2.foo.com."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "xyz.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "1824b381-fc8e-4dcf-a274-df58240427bc",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "aspmx.l.google.com.",
+          "preference": 10
+        },
+        {
+          "exchange": "alt1.aspmx.l.google.com.",
+          "preference": 20
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "2033beb1-0cf4-4b07-93b0-fc2296aa4759",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 7,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "28e1d30e-ebf1-4e58-b719-72665b90ad8e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "TTL": 400,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "2db6ac39-8c7f-432b-a5d3-b7972ad98ec8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/foo",
+    "name": "foo",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:aaaa"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "2e4adfb5-d107-4f0d-aedd-84bebe61962d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/@",
+    "name": "@",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns1-06.azure-dns.com."
+        },
+        {
+          "nsdname": "ns2-06.azure-dns.net."
+        },
+        {
+          "nsdname": "ns3-06.azure-dns.org."
+        },
+        {
+          "nsdname": "ns4-06.azure-dns.info."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "308605a5-a130-4612-9325-ed1e2bc8f7db",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 100
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "31b78d1f-9ad0-4345-9afa-01772950c78a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issue",
+          "value": "letsencrypt.org"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "31fdff14-55d7-4b2f-ab37-6e3266a3c105",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/mail",
+    "name": "mail",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "TTL": 300,
+      "fqdn": "mail.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "32b1afcd-7e0e-42ac-a8e4-a66023a483b0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issue",
+          "value": "letsencrypt.org"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "3483e868-586c-4f3e-9cff-acd5fe1df4f1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "bar.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "34f5b594-281e-44f3-90e0-6db9c26ba95b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "37132b08-41ef-491c-9767-41ca46b5c30f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/quux.cname",
+    "name": "quux.cname",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "google2.com."
+      },
+      "TTL": 300,
+      "fqdn": "quux.cname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "37c99337-afb4-4c68-a84a-ceb9fa0ae0d6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo.bat",
+    "name": "foo.bat",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ],
+      "fqdn": "foo.bat.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "3b6bf745-4e7a-4a44-bb9a-2eb660262d99",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testignore",
+    "name": "testignore",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testignore.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "3bfcc64d-f8e8-4744-8b06-00d7aefb208d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testdefined",
+    "name": "testdefined",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "9.9.9.9"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testdefined.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "3d15b8e2-a63a-4cb8-855c-45ad3f863f59",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/xn--ndaaa",
+    "name": "xn--ndaaa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "xn--ndaaa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "3f767f93-129a-49ca-8c1e-e5d194a10d15",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testdefined",
+    "name": "testdefined",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testdefined.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "3f859e3a-295b-4158-9fb0-76c853ed41d6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.9"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "40e04672-156f-4308-aae9-51724778baf1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/@",
+    "name": "@",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "41d09d12-9dfc-4f2f-a328-1b79024b815d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "nmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "43276e19-65ee-4a60-b81e-c45832dd2fba",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/dyndns-city1",
+    "name": "dyndns-city1",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "91.42.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dyndns-city1.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "43de370e-0a90-41c0-ac19-d116d82a236c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "44dd6c89-7a66-45ec-b114-aef9be4f6dd9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/@",
+    "name": "@",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns1-06.azure-dns.com."
+        },
+        {
+          "nsdname": "ns2-06.azure-dns.net."
+        },
+        {
+          "nsdname": "ns3-06.azure-dns.org."
+        },
+        {
+          "nsdname": "ns4-06.azure-dns.info."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "45e6994e-a6d3-44bf-b6bb-d27a3907d1b1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "45f0e54e-314c-4738-9efd-ef6d5f525af1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "46c51cc9-66c8-498d-ad43-62fdce71903d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "46d80471-fe87-44a3-9000-8363e8f64837",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 70,
+          "priority": 5,
+          "target": "foo2.com.",
+          "weight": 60
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "470487ea-f3eb-45f4-aeb0-7694f74122b6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "dnscontrol-azure.com."
+      },
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "4866f067-9c76-433f-9904-7c4a5bfb2339",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 70,
+          "priority": 5,
+          "target": "foo2.com.",
+          "weight": 60
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo3.com.",
+          "weight": 65
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "49ac40fe-f821-46a1-a85f-c65cfcfdef66",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issuewild",
+          "value": ";"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "4a3d4cbe-8f06-46a8-91b9-1df0a2d5f321",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "TTL": 333,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "4be455e6-057e-4fbb-bbfe-99ab6e1a3156",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.dnscontrol-azure.com.",
+          "preference": 10
+        },
+        {
+          "exchange": "bar.dnscontrol-azure.com.",
+          "preference": 20
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "4c177305-6be0-4326-b0c0-c12f5a249fe9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/nmx",
+    "name": "nmx",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "nmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "4d89f53a-b402-46e7-a344-3f563c47f01b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "bar.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "4de60e8b-e139-40a8-82de-acddff3b4770",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 128,
+          "tag": "issue",
+          "value": "letsencrypt.org"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "4e3818a0-06e1-44aa-b227-d45c67fd7d52",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/fooosbs2",
+    "name": "fooosbs2",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "2back\\\\slash"
+          ]
+        }
+      ],
+      "fqdn": "fooosbs2.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "4e4ec56c-315b-492a-ac84-7c3cd454572d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/*",
+    "name": "*",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "*.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "5074fbc3-af7c-4956-92e2-cc8877034e1d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/xn--fiq228c",
+    "name": "xn--fiq228c",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "xn--fiq228c.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "50d4032d-ce5c-47e9-9e1f-18a6574e58f3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 1000,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "52e3751f-b786-4b30-9e80-b660c3d1e401",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/mail.bat",
+    "name": "mail.bat",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "TTL": 300,
+      "fqdn": "mail.bat.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "54cd0a08-d707-488c-a003-f0385af30adf",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foosc2",
+    "name": "foosc2",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "wssemi ; colon"
+          ]
+        }
+      ],
+      "fqdn": "foosc2.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "57f6fc33-cad0-4220-9544-a280ca466833",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foobt",
+    "name": "foobt",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "blah`blah"
+          ]
+        }
+      ],
+      "fqdn": "foobt.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "5b25c58d-c9bd-43a6-9d67-c0f9d3f43335",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "5c86ca9b-ace9-4ed7-9cf9-2b3ce9d4712f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 999,
+      "fqdn": "testa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "5cb588c7-d64d-4413-ac1f-412bf8d86fbb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/dyndns-city2",
+    "name": "dyndns-city2",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:ce78"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dyndns-city2.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "5dd67475-de66-4962-88b4-d4b2abd03284",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.bat",
+    "name": "foo.bat",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.bat.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "5ee54e46-b8b7-4f01-ab73-5a9e21f4349a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foosp",
+    "name": "foosp",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "with spaces"
+          ]
+        }
+      ],
+      "fqdn": "foosp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "5ef658fb-2f01-4acc-bf55-9ce761b1d8d1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "5fe2ec36-9730-4204-8ff8-ee5fd1d04049",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foows1",
+    "name": "foows1",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "trailingws "
+          ]
+        }
+      ],
+      "fqdn": "foows1.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "607a878c-b2b8-4f8e-8706-bef67d8e91d0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a",
+    "name": "foo.a",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "610e5ec5-8e45-4174-8648-08b21a0c7997",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "10.10.10.10"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "63c56950-5c0e-4a7e-81c8-f186d82ade99",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "65ccfcc6-81ab-4094-97b9-d0f7ffa32647",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/a",
+    "name": "a",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "xn--ndaaa.com."
+      },
+      "TTL": 300,
+      "fqdn": "a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "6609c693-9412-4a3a-9a79-b2fcf1c12e9b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/quux.a",
+    "name": "quux.a",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "quux.a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "6746ec08-385b-4514-af3a-135b38c2a831",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "decoy.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "6776ee0a-d6ed-4300-ad50-45b7e87e7751",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/PTR/4",
+    "name": "4",
+    "properties": {
+      "PTRRecords": [
+        {
+          "ptrdname": "foo.com."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "4.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/PTR"
+  },
+  {
+    "etag": "6866379f-eb1f-4f4e-8413-c293afe82eea",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo0",
+    "name": "foo0",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [],
+      "fqdn": "foo0.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "699ef80c-5376-4e48-8281-294ec1088466",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "6c0255de-5f60-4e8f-8d4f-f0f3a4a66e2d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "6e55c9e2-46a2-4a13-bb9b-bd1bd6965904",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/bar.cname",
+    "name": "bar.cname",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.cname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/quux.cname"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "6eaf5944-3bae-440d-be3e-5fa8dbaa16a6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "6eb382ef-2d08-4e15-a81a-c29f39d2b489",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foosc1",
+    "name": "foosc1",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "semi;colon"
+          ]
+        }
+      ],
+      "fqdn": "foosc1.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "6f141bc2-6b79-48c7-854e-85498f528c05",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo511",
+    "name": "foo511",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+            "F"
+          ]
+        }
+      ],
+      "fqdn": "foo511.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "706cdb02-0fe2-42c4-9cac-e37a7a557c42",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/xyz",
+    "name": "xyz",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns2.foo.com."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "xyz.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "7180350e-01da-417d-90fa-a5676d252fbb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/mail",
+    "name": "mail",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "ghs.googlehosted.com."
+      },
+      "TTL": 300,
+      "fqdn": "mail.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "71f56eb0-4663-4e59-ac53-ee767c0fdd9e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/@",
+    "name": "@",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns1-06.azure-dns.com."
+        },
+        {
+          "nsdname": "ns1.foo.com."
+        },
+        {
+          "nsdname": "ns2-06.azure-dns.net."
+        },
+        {
+          "nsdname": "ns3-06.azure-dns.org."
+        },
+        {
+          "nsdname": "ns4-06.azure-dns.info."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "73496939-3bb5-4c8d-b237-1650f5b37aab",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "73713d69-628a-418c-b9ee-f9c6e4c8e834",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/nmx",
+    "name": "nmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "nmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "741e638f-b434-4737-9b9e-f841965c746b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/xn--ndaaa",
+    "name": "xn--ndaaa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "xn--ndaaa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "74dd2e7d-b8f0-43ca-a10a-c80c37df8814",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "google.com."
+      },
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "756cab9a-d511-4e13-abfc-0d7555f67cf9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 72,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 62
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "7806452c-3f80-4d66-a1cb-3d32aead13b4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": ".",
+          "weight": 65
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "7864726a-740e-4512-86d7-94465a1fd7e9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "792c80ee-5cb5-4aab-8cb5-8720273e34ea",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/bar",
+    "name": "bar",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "bar.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "7b68324b-84d0-46b2-9864-a1b16642b369",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo764",
+    "name": "foo764",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ]
+        }
+      ],
+      "fqdn": "foo764.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "7b8de8fb-0123-4e4f-904a-29f8151feecc",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issuewild",
+          "value": "example.com"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "7f7f9548-d8dd-4d8a-82c2-ee613056357e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 333,
+      "fqdn": "testa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "809fbf6a-3920-49be-84e1-d52defbe44f6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "right\""
+          ]
+        }
+      ],
+      "fqdn": "foodqs.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "84a0ea6f-b3d6-4e45-bfb2-2cc0c8f0d8a0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/fooosbs1",
+    "name": "fooosbs1",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "1back\\slash"
+          ]
+        }
+      ],
+      "fqdn": "fooosbs1.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "84ef777a-5634-4f1a-9e98-194a06b63f55",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "asimple"
+          ]
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "858d1483-c063-457f-b8aa-72777a685904",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/zzz",
+    "name": "zzz",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2003:dd:d7ff::fe71:cccc"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "zzz.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "863bf10d-d8cc-4505-a0ff-094d424e71d4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar.a",
+    "name": "bar.a",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/quux.a"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "870f8b7f-beee-4f27-890e-22b74290c4ac",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/final",
+    "name": "final",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "TestDNSProviders was successful!"
+          ]
+        }
+      ],
+      "fqdn": "final.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "8717bc2d-08d7-4731-9c5b-37439d66214e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo3.com.",
+          "weight": 65
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "8ab8a2a3-6a4c-4cdf-b2c6-9ca4ee0ce54c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar.a",
+    "name": "bar.a",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "8af797cf-2624-4350-a984-dcbaf6864029",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        },
+        {
+          "port": 7,
+          "priority": 52,
+          "target": "foo.com.",
+          "weight": 62
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "8b9bedcc-6bb0-486e-8bc2-7969a883dff0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ]
+        }
+      ],
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "8d110e52-546b-4329-bfc8-c0edb6d14634",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/@",
+    "name": "@",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "ns1-06.azure-dns.com."
+        },
+        {
+          "nsdname": "ns1.foo.com."
+        },
+        {
+          "nsdname": "ns2-06.azure-dns.net."
+        },
+        {
+          "nsdname": "ns2.foo.com."
+        },
+        {
+          "nsdname": "ns3-06.azure-dns.org."
+        },
+        {
+          "nsdname": "ns4-06.azure-dns.info."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "8fd89301-67c1-453a-9396-34f48fd1469b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo765",
+    "name": "foo765",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ]
+        }
+      ],
+      "fqdn": "foo765.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "90dcf4f5-91b4-455c-b702-2eb196fdcc18",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo509",
+    "name": "foo509",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ]
+        }
+      ],
+      "fqdn": "foo509.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "980749f7-6121-4c35-8ae7-2a5de01db15d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/@",
+    "name": "@",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "991ea4ea-aed8-415a-b2ff-4235ddf9fddf",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "9aa78597-69c0-4ecb-a985-baaf3307bf9e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ],
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "9ad69faf-ba9d-4bfc-a5fb-6822faee24f9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "9ae4d583-be39-4736-b31b-0c438f203ab5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname",
+    "name": "foo.cname",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "google.com."
+      },
+      "TTL": 300,
+      "fqdn": "foo.cname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "9b6bd2f1-77da-4b9a-a025-a02fafd8900a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "TTL": 4400,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "9c696917-4706-4beb-8fed-d2cafeda7112",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/dyndns-city2",
+    "name": "dyndns-city2",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "91.42.1.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dyndns-city2.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "9ed4710c-7533-4da3-9ad5-81b9584722ea",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/zzz",
+    "name": "zzz",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        },
+        {
+          "ipv4Address": "4.4.4.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "zzz.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "9f0e7d18-b878-4a82-b1bc-380932072b80",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "a112205e-f5e4-43d1-9a51-49b649e21fc6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "a2e6f8b0-5dbb-4c99-a0a1-a16651ac670b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar",
+    "name": "bar",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "bar.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "a398d31c-a921-4b53-8089-e8b6f928cad4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "a3ab7226-22b2-49f5-955e-ee5a59864c0f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/xn--o-0gab",
+    "name": "xn--o-0gab",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "xn--ndaaa.xn--vhquv."
+      },
+      "TTL": 300,
+      "fqdn": "xn--o-0gab.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "a546f7ef-8fff-4d57-a1f7-381221d16398",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/@",
+    "name": "@",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "dnscontrol-azure.com.",
+          "preference": 2
+        },
+        {
+          "exchange": "www.dnscontrol-azure.com.",
+          "preference": 8
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "a5c51055-4775-45b3-be45-a525c0fd9da6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "a724928d-e2d3-4520-b2d6-cf9947e8481d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        },
+        {
+          "exchange": "bar.com.",
+          "preference": 100
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "a76345ca-8ac1-4f55-b07f-388dbfa68b57",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        },
+        {
+          "exchange": "bar.com.",
+          "preference": 100
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "a87c41d4-849c-49ad-9088-ea778b9ff8d8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo510",
+    "name": "foo510",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ]
+        }
+      ],
+      "fqdn": "foo510.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "a8e3e914-6539-4465-b51c-ba2443f9848d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "mx.google.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "a99cdd08-cccf-42e4-88a9-5536b3e8dced",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "aa4d877b-1240-43f4-b772-da9a3e2469a6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "google2.com."
+      },
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "aae88a1e-83ec-4952-8637-45bfb78f82ad",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "ac5ee001-5808-422c-b586-7a409a387b2e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar.a",
+    "name": "bar.a",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.a.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "ae05f736-593c-4cd5-b69e-461b4749e158",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "b0afce8a-c8ba-480f-a0ec-b6352d8d7ad3",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/final",
+    "name": "final",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "TestDNSProviders was successful!"
+          ]
+        }
+      ],
+      "fqdn": "final.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "b6f3b572-7081-44b9-b821-49df85f6a8d9",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "b91782f3-132e-4c78-8869-ff85b9cbfdf0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "\"left"
+          ]
+        }
+      ],
+      "fqdn": "foodqs.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "ba758ff4-039c-4068-a280-33f2df343ccf",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        },
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "bc82c9b5-bd3f-44f3-8223-22841d5448a1",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CAA/@",
+    "name": "@",
+    "properties": {
+      "TTL": 300,
+      "caaRecords": [
+        {
+          "flags": 0,
+          "tag": "issue",
+          "value": "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+        }
+      ],
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CAA"
+  },
+  {
+    "etag": "bd057333-4b6d-419a-9070-8d06e1510c4c",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/bar.bat",
+    "name": "bar.bat",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "5.5.5.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "bar.bat.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c02d37e4-7140-4e50-960b-9aad1de550c2",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/NS/foo",
+    "name": "foo",
+    "properties": {
+      "NSRecords": [
+        {
+          "nsdname": "dnscontrol-azure.com."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/NS"
+  },
+  {
+    "etag": "c02ec9f0-3d35-404f-90cd-ae0af4b324a8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "12.12.12.12"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c122bf60-1a4d-4b77-b41d-fc8917a776fa",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        },
+        {
+          "port": 75,
+          "priority": 15,
+          "target": "foo4.com.",
+          "weight": 65
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "c19760c6-8726-4f4f-9e18-3013436ef15b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foodqs",
+    "name": "foodqs",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "in\"ter\"ior"
+          ]
+        }
+      ],
+      "fqdn": "foodqs.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "c1c0a750-2182-4b1b-9171-13700f88defe",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c2ae4251-1da4-42e9-bd2f-397d708542fe",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c305b1ec-39e4-40a1-ad6f-7e81f17e4bee",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c4615e99-74c0-4b68-a92b-dc87d60497c0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "14.14.14.14"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "c47ec558-c138-440e-ba40-086fb6571247",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/fooosbs3",
+    "name": "fooosbs3",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "3back\\\\\\slash"
+          ]
+        }
+      ],
+      "fqdn": "fooosbs3.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "c54ac915-04a9-4a05-94ab-e801c50f9162",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo766",
+    "name": "foo766",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+            "J"
+          ]
+        }
+      ],
+      "fqdn": "foo766.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "c9700cc1-b912-4808-ad5f-c9ade644cec7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "11.11.11.11"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "ca576907-0e06-4e6f-a3fb-34ebf3a66ad8",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foodq",
+    "name": "foodq",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "in\"side"
+          ]
+        }
+      ],
+      "fqdn": "foodq.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "cac9beff-6f7c-4157-baef-8734c1ee745e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "decoy.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "cb2f1235-6650-4460-9e2d-40d3909bbc86",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "cbdbaea3-ac3e-49dc-ae87-223154365e1d",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo",
+    "name": "foo",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "simple"
+          ]
+        }
+      ],
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "cc55a634-996f-48d5-a979-c0ef4616f513",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/testa",
+    "name": "testa",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "cc99f5ab-c7fe-4134-8ce1-be74972dd508",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo",
+    "name": "foo",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "redact1.acm-validations.aws."
+      },
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "cd6532b0-3b3e-4a64-afe2-3b146493ac7f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/PTR/4",
+    "name": "4",
+    "properties": {
+      "PTRRecords": [
+        {
+          "ptrdname": "bar.com."
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "4.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/PTR"
+  },
+  {
+    "etag": "cf948876-b45d-411b-8c43-cb41458bfbcc",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/SRV/_sip._tcp",
+    "name": "_sip._tcp",
+    "properties": {
+      "SRVRecords": [
+        {
+          "port": 7,
+          "priority": 5,
+          "target": "foo.com.",
+          "weight": 6
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "_sip._tcp.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/SRV"
+  },
+  {
+    "etag": "d2f64605-5fa0-4fa1-b3ba-3fcf54e7dd29",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo256",
+    "name": "foo256",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+            "C"
+          ]
+        }
+      ],
+      "fqdn": "foo256.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "d5c70ae4-6f4e-465a-be36-45efab4434b2",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 500,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "d63728e3-b68a-498b-a7db-6b28c89a632b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/foo",
+    "name": "foo",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "dnscontrol-azure.com.",
+          "preference": 8
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "d836202a-4b8b-4896-83ad-fda516439e38",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/testmx",
+    "name": "testmx",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "bar.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testmx.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "da12c3c4-eb93-40aa-94ce-7ce0664ae2f4",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo254",
+    "name": "foo254",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ]
+        }
+      ],
+      "fqdn": "foo254.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "da297e8e-a038-435e-904e-34e6f8192cb6",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/bar.cname",
+    "name": "bar.cname",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.cname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "dcfb1b70-d4bb-45c4-a816-2e9bebab658a",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/testaaaa",
+    "name": "testaaaa",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2607:f8b0:4006:820::2013"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testaaaa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "dd8c5a5a-59fe-4f43-8f69-3e9732fecb5e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/testtxt",
+    "name": "testtxt",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "changed"
+          ]
+        }
+      ],
+      "fqdn": "testtxt.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "e1b8d67d-f07f-45fe-99f2-a541c0ef9b61",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/bar.cname",
+    "name": "bar.cname",
+    "properties": {
+      "TTL": 300,
+      "fqdn": "bar.cname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {
+        "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
+      }
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "e1fa0ca4-8235-4a42-b1c9-c963020fe54e",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "8.8.8.8"
+        }
+      ],
+      "TTL": 666,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "e6f91837-a7c3-438b-8f9f-ca57d192eda0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/@",
+    "name": "@",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": "foo.com.",
+          "preference": 5
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "e7f76dcc-c5f1-4b6c-8ba6-3b136d671c77",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        },
+        {
+          "ipv4Address": "3.4.5.6"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "ea300ee9-303c-4f38-b720-95e0b688baeb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/MX/@",
+    "name": "@",
+    "properties": {
+      "MXRecords": [
+        {
+          "exchange": ".",
+          "preference": 0
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/MX"
+  },
+  {
+    "etag": "eefea8d9-665d-4d08-ace8-278e9b52cff7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/decoy",
+    "name": "decoy",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "3.3.3.3"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "decoy.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "f248b583-75e9-4648-a5f8-b2cfc808bdc7",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/@",
+    "name": "@",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "4.4.4.4"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "f3d0603b-1834-4e1a-a2d6-a35eeed5e95f",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/TXT/foo255",
+    "name": "foo255",
+    "properties": {
+      "TTL": 300,
+      "TXTRecords": [
+        {
+          "value": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ]
+        }
+      ],
+      "fqdn": "foo255.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/TXT"
+  },
+  {
+    "etag": "f4295c49-c5c8-4785-a448-b86ada0d9ff5",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/AAAA/testaaaa",
+    "name": "testaaaa",
+    "properties": {
+      "AAAARecords": [
+        {
+          "ipv6Address": "2607:f8b0:4006:820::2006"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "testaaaa.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/AAAA"
+  },
+  {
+    "etag": "f530b16e-5e40-4321-8907-6405256cc92b",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.1.1.1"
+        },
+        {
+          "ipv4Address": "2.2.2.2"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "f5328651-0cab-4709-bb88-3e950c84ee61",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/www",
+    "name": "www",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "1.2.3.4"
+        },
+        {
+          "ipv4Address": "5.6.7.8"
+        }
+      ],
+      "TTL": 700,
+      "fqdn": "www.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "f8fd9c90-5ab6-4f4e-87c4-61bca5694ed0",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "foo.dnscontrol-azure.com."
+      },
+      "TTL": 300,
+      "fqdn": "testcname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  },
+  {
+    "etag": "fd4829dc-6cf2-4479-8fa6-fe8e7fe49afb",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo",
+    "name": "foo",
+    "properties": {
+      "ARecords": [
+        {
+          "ipv4Address": "2.3.4.5"
+        }
+      ],
+      "TTL": 300,
+      "fqdn": "foo.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/A"
+  },
+  {
+    "etag": "fe10e26d-a234-4425-a28a-b1e9fa1dd969",
+    "id": "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/testcname",
+    "name": "testcname",
+    "properties": {
+      "CNAMERecord": {
+        "cname": "www.yahoo.com."
+      },
+      "TTL": 300,
+      "fqdn": "testcname.dnscontrol-azure.com.",
+      "provisioningState": "Succeeded",
+      "targetResource": {}
+    },
+    "type": "Microsoft.Network/dnszones/CNAME"
+  }
+]
