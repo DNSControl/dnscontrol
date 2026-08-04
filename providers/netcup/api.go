@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log" // Added log import
+	"io" // Added log import
 	"net/http"
 	"time"
 )
@@ -79,7 +78,6 @@ func (api *netcupProvider) get(action string, params any) (json.RawMessage, erro
 	}
 
 	bodyString, _ := io.ReadAll(resp.Body)
-	log.Printf("Netcup API Response (Action: %s): %s\n", action, string(bodyString)) // Added logging
 
 	respData := &response{}
 	err = json.Unmarshal(bodyString, &respData)
@@ -93,7 +91,7 @@ func (api *netcupProvider) get(action string, params any) (json.RawMessage, erro
 	}
 
 	// Check for any errors and log them
-	if respData.StatusCode != 2000 { // Removed `&& (action == "")`
+	if respData.StatusCode != 2000 && (action == "") {
 		return nil, fmt.Errorf("netcup API error: %v\n%v", reqParam, respData)
 	}
 	// Add delay to respect rate limit (180 requests/minute = 3 requests/second = ~333ms per request)
