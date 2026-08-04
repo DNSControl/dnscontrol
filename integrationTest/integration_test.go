@@ -2230,6 +2230,9 @@ func makeTests() []*TestGroup {
 		// NB(tlim): This is disabled because we don't have access to an account
 		// with this feature. Neither Free nor Premium include it.
 		//
+		// You know your account has geodns enabled if this outputs: "1"
+		// curl -X POST https://api.cloudns.net/dns/is-geodns-available.json -d "auth-id=YOUR_ID" -d "auth-password=YOUR_PASSWORD" | jq .
+		//
 		// testgroup("CLOUDNS geodns tests",
 		// 	only("CLOUDNS"),
 		// 	tc("Add record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
