@@ -349,14 +349,14 @@ func (api *inwxAPI) GetZoneRecordsCorrections(dc *models.DomainConfig, foundReco
 				// changing to or from a Null MX has to be deleted then create
 				deletes = append(deletes, &models.Correction{
 					Msg: color.RedString("- DELETE %s %s %s ttl=%d", oldRec.GetLabelFQDN(), oldRec.Type,
-						oldRec.ToComparableNoTTL(), oldRec.TTL),
+						oldRec.ComparableV3, oldRec.TTL),
 					F: func() error {
 						return api.deleteRecord(oldRec.Original.(goinwx.NameserverRecord).ID)
 					},
 				})
 				deferred = append(deferred, &models.Correction{
 					Msg: color.GreenString("+ CREATE %s %s %s ttl=%d", newRec.GetLabelFQDN(), newRec.Type,
-						newRec.ToComparableNoTTL(), newRec.TTL),
+						newRec.ComparableV3, newRec.TTL),
 					F: func() error {
 						return api.createRecord(dc.Name, newRec)
 					},

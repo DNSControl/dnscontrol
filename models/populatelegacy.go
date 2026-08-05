@@ -115,9 +115,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.SSHFP:
 		// no-op
 	case dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
-		rc.SvcPriority = rd.Priority
-		rc.SetTarget(rd.Target)
-		rc.SvcParams = Svcbv2ValueToString(rd.Value)
+		// no-op
 
 	case dnsrdatav2.TLSA:
 		// no-op

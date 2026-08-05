@@ -194,13 +194,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeHTTPS:
-		rd, err := MakeHTTPS(origin, nil, isEnabled, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
-		if err != nil {
-			s := fmt.Sprintf("BUG: FixUp: MakeHTTPS failed for record %s IN %s %s: %v", rc.NameFQDN, rc.Type, rc.GetTargetField(), err)
-			fmt.Println(s)
-			panic(s)
-		}
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeLOC:
 		// no-op
@@ -251,9 +245,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case dnsv2.TypeSSHFP:
 		// no-op
 	case dnsv2.TypeSVCB:
-		rd, err := MakeSVCB(origin, nil, isEnabled, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeTLSA:
 		// no-op

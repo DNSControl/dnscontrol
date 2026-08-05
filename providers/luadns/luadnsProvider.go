@@ -308,11 +308,8 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 		case "TXT":
 			r.Content = rec.GetTargetTXTJoined()
 		case "HTTPS":
-			content := fmt.Sprintf("%d %s %s", rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
-			if rec.SvcParams == "" {
-				content = content[:len(content)-1]
-			}
-			r.Content = content
+			f := rec.AsHTTPS()
+			r.Content = f.String()
 		default:
 			r.Content = rec.GetRDATA().String()
 		}

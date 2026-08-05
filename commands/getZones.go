@@ -496,8 +496,12 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 	case "SRV":
 		f := rec.AsSRV()
 		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Priority, f.Weight, f.Port, f.Target)
-	case "SVCB", "HTTPS":
-		target = fmt.Sprintf(`%d, "%s", "%s"`, rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
+	case "SVCB":
+		f := rec.AsSVCB()
+		target = fmt.Sprintf(`%d, "%s", "%s"`, f.Priority, f.Target, f.Value)
+	case "HTTPS":
+		f := rec.AsHTTPS()
+		target = fmt.Sprintf(`%d, "%s", "%s"`, f.Priority, f.Target, f.Value)
 	case "TLSA":
 		f := rec.AsTLSA()
 		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Usage, f.Selector, f.MatchingType, f.Certificate)

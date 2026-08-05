@@ -176,11 +176,19 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				strconv.Itoa(int(f.DigestType)),
 				f.Digest,
 			}})
-		case "SVCB", "HTTPS":
+		case "SVCB":
+			f := r.AsSVCB()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.SvcPriority)),
-				r.GetTargetField(),
-				r.SvcParams,
+				strconv.Itoa(int(f.Priority)),
+				f.Target,
+				models.Svcbv2ValueToString(f.Value),
+			}})
+		case "HTTPS":
+			f := r.AsHTTPS()
+			rec.AddAnswer(&dns.Answer{Rdata: []string{
+				strconv.Itoa(int(f.Priority)),
+				f.Target,
+				models.Svcbv2ValueToString(f.Value),
 			}})
 		case "TLSA":
 			f := r.AsTLSA()

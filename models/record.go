@@ -8,7 +8,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	"github.com/qdm12/reprint"
 )
@@ -72,43 +71,8 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target string // If a name, must end with "."
-	// MxPreference uint16 `json:"mxpreference,omitempty"`
-	// SrvPriority  uint16 `json:"srvpriority,omitempty"`
-	// SrvWeight    uint16 `json:"srvweight,omitempty"`
-	// SrvPort      uint16 `json:"srvport,omitempty"`
-	// CaaTag       string `json:"caatag,omitempty"`
-	// CaaFlag      uint8  `json:"caaflag,omitempty"`
-	// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-	// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-	// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-	// DsDigest     string `json:"dsdigest,omitempty"`
-	// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
-	// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
-	// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
-	// LocVersion         uint8             `json:"locversion,omitempty"`
-	// LocSize            uint8             `json:"locsize,omitempty"`
-	// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
-	// LocVertPre         uint8             `json:"locvertpre,omitempty"`
-	// LocLatitude        uint32            `json:"loclatitude,omitempty"`
-	// LocLongitude       uint32            `json:"loclongitude,omitempty"`
-	// LocAltitude        uint32            `json:"localtitude,omitempty"`
-	LuaRType string `json:"luartype,omitempty"`
-	// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-	// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-	// NaptrFlags      string `json:"naptrflags,omitempty"`
-	// NaptrService    string `json:"naptrservice,omitempty"`
-	// NaptrRegexp     string `json:"naptrregexp,omitempty"`
-	// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
-	// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
-	// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-	// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-	// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-	SvcPriority uint16 `json:"svcpriority,omitempty"`
-	SvcParams   string `json:"svcparams,omitempty"`
-	// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-	// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-	// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+	target          string            // If a name, must end with "."
+	LuaRType        string            `json:"luartype,omitempty"`
 	R53Alias        map[string]string `json:"r53_alias,omitempty"`
 	AzureAlias      map[string]string `json:"azure_alias,omitempty"`
 	AnswerType      string            `json:"answer_type,omitempty"`
@@ -299,33 +263,6 @@ func (rc *RecordConfig) GetLabel() string {
 // It will not end with ".".
 func (rc *RecordConfig) GetLabelFQDN() string {
 	return rc.NameFQDN
-}
-
-// ToComparableNoTTL returns a comparison string. If you need to compare two
-// RecordConfigs, you can simply compare the string returned by this function.
-// The comparison includes all fields except TTL and any provider-specific
-// metafields.  Provider-specific metafields like CF_PROXY are not the same as
-// pseudo-records like ANAME or R53_ALIAS.
-func (rc *RecordConfig) ToComparableNoTTL() string {
-	if rc.ComparableV3 != "" {
-		return rc.ComparableV3
-	}
-
-	switch rc.Type {
-	case "SOA":
-		panic("should not be reached because SOA has a .ComparableV3")
-	case "TXT":
-		return txtutil.EncodeSingle(rc.GetTargetField())
-	case "LUA":
-		return rc.luaCombined()
-	case "UNKNOWN":
-		return fmt.Sprintf("rtype=%s rdata=%s", rc.UnknownTypeName, rc.target)
-	case "HTTPS", "SVCB":
-		//panic("unused ToComparableNoTTL for SVCB/HTTPS. Should be using .ComparableV3 instead")
-		return rc.targetCombinedSVCBRaw()
-
-	}
-	return rc.GetRDATA().String()
 }
 
 // ToRRv2 converts a RecordConfig to a dnsv2.RR.

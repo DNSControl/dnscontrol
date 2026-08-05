@@ -9,13 +9,6 @@ import (
 	svcbv2 "codeberg.org/miekg/dns/svcb"
 )
 
-func (rc *RecordConfig) targetCombinedSVCBRaw() string {
-	if rc.SvcParams == "" {
-		return fmt.Sprintf("%d %s", rc.SvcPriority, rc.target)
-	}
-	return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.target, rc.SvcParams)
-}
-
 // stringToSvcbv2Values converts a string to a SVCB value list.
 // TODO(tlim): THIS NEEDS A UNIT TEST!
 func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error) {
