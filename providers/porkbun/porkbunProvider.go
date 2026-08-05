@@ -423,10 +423,9 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	}
 
 	req := requestParams{
-		"type":    rc.Type,
-		"name":    rc.GetLabel(),
-		"content": rc.GetTargetField(),
-		"ttl":     strconv.Itoa(int(rc.TTL)),
+		"type": rc.Type,
+		"name": rc.GetLabel(),
+		"ttl":  strconv.Itoa(int(rc.TTL)),
 	}
 
 	// porkbun doesn't use "@", it uses an empty name
@@ -440,26 +439,31 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	case "TXT":
 		req["content"] = rc.GetTargetTXTJoined()
 	case "MX":
-		req["prio"] = strconv.Itoa(int(rc.MxPreference))
+		f := rc.AsMX()
+		req["prio"] = strconv.Itoa(int(f.Preference))
+		req["content"] = f.Mx
 	case "SRV":
-		req["prio"] = strconv.Itoa(int(rc.SrvPriority))
-		req["content"] = fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+		f := rc.AsSRV()
+		req["prio"] = strconv.Itoa(int(f.Priority))
+		req["content"] = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
 	case "CAA":
-		req["content"] = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		req["content"] = fmt.Sprintf("%d %s \"%s\"", f.Flag, f.Tag, f.Value)
 	case "TLSA":
+		f := rc.AsTLSA()
 		req["content"] = fmt.Sprintf("%d %d %d %s",
-			rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+			f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "HTTPS":
 		fallthrough
 	case "SVCB":
 		f := rc.AsSVCB()
 		req["content"] = fmt.Sprintf("%d %s %s",
-			rc.SvcPriority, rc.GetTargetField(), models.Svcbv2ValueToString(f.Value))
+			f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
 	case "SSHFP":
-		req["content"] = fmt.Sprintf("%v %v %s",
-			rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		req["content"] = rc.AsSSHFP().String()
 	default:
-		return nil, fmt.Errorf("porkbun.toReq rtype %q unimplemented", rc.Type)
+		req["content"] = rc.GetRDATA().String()
+		//return nil, fmt.Errorf("porkbun.toReq rtype %q unimplemented", rc.Type)
 	}
 
 	return req, nil

@@ -284,8 +284,7 @@ func (s *softlayerProvider) deleteRecordFunc(resID int) func() error {
 }
 
 func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_ResourceRecord, desired *models.RecordConfig) func() error {
-	ttl, preference := verifyMinTTL(int(desired.TTL)), int(desired.MxPreference)
-	priority, weight, port := int(desired.SrvPriority), int(desired.SrvWeight), int(desired.SrvPort)
+	ttl := verifyMinTTL(int(desired.TTL))
 
 	return func() error {
 		changes := false
@@ -293,6 +292,8 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 
 		switch desired.Type {
 		case "MX":
+			df := desired.AsMX()
+			preference := int(df.Preference)
 			service := services.GetDnsDomainResourceRecordMxTypeService(s.Session)
 			updated := datatypes.Dns_Domain_ResourceRecord_MxType{}
 
@@ -325,6 +326,8 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 			_, err = service.Id(*existing.Id).EditObject(&updated)
 
 		case "SRV":
+			df := desired.AsSRV()
+			priority, weight, port := int(df.Priority), int(df.Weight), int(df.Port)
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)
 			updated := datatypes.Dns_Domain_ResourceRecord_SrvType{}
 

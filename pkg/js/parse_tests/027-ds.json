@@ -7,10 +7,6 @@
       "records": [
         {
           "comparablev3": "1 1 1 FFFF",
-          "dsalgorithm": 1,
-          "dsdigest": "FFFF",
-          "dsdigesttype": 1,
-          "dskeytag": 1,
           "filepos": "[line:3:5]",
           "name": "@",
           "name_unicode": "@",
@@ -26,10 +22,6 @@
         },
         {
           "comparablev3": "1000 13 2 AABBCCDDEEFF",
-          "dsalgorithm": 13,
-          "dsdigest": "AABBCCDDEEFF",
-          "dsdigesttype": 2,
-          "dskeytag": 1000,
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",

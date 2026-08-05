@@ -6,8 +6,6 @@
       "name": "foo.com",
       "records": [
         {
-          "caaflag": 128,
-          "caatag": "iodef",
           "comparablev3": "128 iodef \"https://example.com\"",
           "filepos": "[line:12:5]",
           "meta": {
@@ -20,14 +18,11 @@
             "Tag": "iodef",
             "Value": "https://example.com"
           },
-          "target": "https://example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
         },
         {
-          "caaflag": 128,
-          "caatag": "iodef",
           "comparablev3": "128 iodef \"mailto:test@example.com\"",
           "filepos": "[line:8:5]",
           "meta": {
@@ -40,13 +35,11 @@
             "Tag": "iodef",
             "Value": "mailto:test@example.com"
           },
-          "target": "mailto:test@example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
         },
         {
-          "caatag": "iodef",
           "comparablev3": "0 iodef \"http://example.com\"",
           "filepos": "[line:10:5]",
           "name": "@",
@@ -56,13 +49,11 @@
             "Tag": "iodef",
             "Value": "http://example.com"
           },
-          "target": "http://example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
         },
         {
-          "caatag": "issue",
           "comparablev3": "0 issue \"letsencrypt.org\"",
           "filepos": "[line:3:5]",
           "name": "@",
@@ -72,13 +63,11 @@
             "Tag": "issue",
             "Value": "letsencrypt.org"
           },
-          "target": "letsencrypt.org",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
         },
         {
-          "caatag": "issuewild",
           "comparablev3": "0 issuewild \";\"",
           "filepos": "[line:5:5]",
           "name": "@",
@@ -88,7 +77,6 @@
             "Tag": "issuewild",
             "Value": ";"
           },
-          "target": ";",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257

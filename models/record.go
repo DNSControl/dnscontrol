@@ -8,7 +8,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/jinzhu/copier"
 	"github.com/qdm12/reprint"
 )
@@ -72,47 +71,12 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target       string // If a name, must end with "."
-	MxPreference uint16 `json:"mxpreference,omitempty"`
-	SrvPriority  uint16 `json:"srvpriority,omitempty"`
-	SrvWeight    uint16 `json:"srvweight,omitempty"`
-	SrvPort      uint16 `json:"srvport,omitempty"`
-	CaaTag       string `json:"caatag,omitempty"`
-	CaaFlag      uint8  `json:"caaflag,omitempty"`
-	DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-	DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-	DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-	DsDigest     string `json:"dsdigest,omitempty"`
-	// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
-	// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
-	// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
-	// LocVersion         uint8             `json:"locversion,omitempty"`
-	// LocSize            uint8             `json:"locsize,omitempty"`
-	// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
-	// LocVertPre         uint8             `json:"locvertpre,omitempty"`
-	// LocLatitude        uint32            `json:"loclatitude,omitempty"`
-	// LocLongitude       uint32            `json:"loclongitude,omitempty"`
-	// LocAltitude        uint32            `json:"localtitude,omitempty"`
-	LuaRType        string `json:"luartype,omitempty"`
-	NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-	NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-	NaptrFlags      string `json:"naptrflags,omitempty"`
-	NaptrService    string `json:"naptrservice,omitempty"`
-	NaptrRegexp     string `json:"naptrregexp,omitempty"`
-	// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
-	// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
-	// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-	SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-	SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-	SvcPriority      uint16            `json:"svcpriority,omitempty"`
-	SvcParams        string            `json:"svcparams,omitempty"`
-	TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-	TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-	TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-	R53Alias         map[string]string `json:"r53_alias,omitempty"`
-	AzureAlias       map[string]string `json:"azure_alias,omitempty"`
-	AnswerType       string            `json:"answer_type,omitempty"`
-	UnknownTypeName  string            `json:"unknown_type_name,omitempty"`
+	target          string            // If a name, must end with "."
+	LuaRType        string            `json:"luartype,omitempty"`
+	R53Alias        map[string]string `json:"r53_alias,omitempty"`
+	AzureAlias      map[string]string `json:"azure_alias,omitempty"`
+	AnswerType      string            `json:"answer_type,omitempty"`
+	UnknownTypeName string            `json:"unknown_type_name,omitempty"`
 }
 
 // MarshalJSON marshals RecordConfig.
@@ -150,47 +114,47 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		Original  any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
 		Args      []any             `json:"args,omitempty"`
 
-		MxPreference       uint16            `json:"mxpreference,omitempty"`
-		SrvPriority        uint16            `json:"srvpriority,omitempty"`
-		SrvWeight          uint16            `json:"srvweight,omitempty"`
-		SrvPort            uint16            `json:"srvport,omitempty"`
-		CaaTag             string            `json:"caatag,omitempty"`
-		CaaFlag            uint8             `json:"caaflag,omitempty"`
-		DsKeyTag           uint16            `json:"dskeytag,omitempty"`
-		DsAlgorithm        uint8             `json:"dsalgorithm,omitempty"`
-		DsDigestType       uint8             `json:"dsdigesttype,omitempty"`
-		DsDigest           string            `json:"dsdigest,omitempty"`
-		DnskeyFlags        uint16            `json:"dnskeyflags,omitempty"`
-		DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
-		DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
-		DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
-		LocVersion         uint8             `json:"locversion,omitempty"`
-		LocSize            uint8             `json:"locsize,omitempty"`
-		LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
-		LocVertPre         uint8             `json:"locvertpre,omitempty"`
-		LocLatitude        uint32            `json:"loclatitude,omitempty"`
-		LocLongitude       uint32            `json:"loclongitude,omitempty"`
-		LocAltitude        uint32            `json:"localtitude,omitempty"`
-		LuaRType           string            `json:"luartype,omitempty"`
-		NaptrOrder         uint16            `json:"naptrorder,omitempty"`
-		NaptrPreference    uint16            `json:"naptrpreference,omitempty"`
-		NaptrFlags         string            `json:"naptrflags,omitempty"`
-		NaptrService       string            `json:"naptrservice,omitempty"`
-		NaptrRegexp        string            `json:"naptrregexp,omitempty"`
-		SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
-		SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
-		SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-		SshfpAlgorithm     uint8             `json:"sshfpalgorithm,omitempty"`
-		SshfpFingerprint   uint8             `json:"sshfpfingerprint,omitempty"`
-		SvcPriority        uint16            `json:"svcpriority,omitempty"`
-		SvcParams          string            `json:"svcparams,omitempty"`
-		TlsaUsage          uint8             `json:"tlsausage,omitempty"`
-		TlsaSelector       uint8             `json:"tlsaselector,omitempty"`
-		TlsaMatchingType   uint8             `json:"tlsamatchingtype,omitempty"`
-		R53Alias           map[string]string `json:"r53_alias,omitempty"`
-		AzureAlias         map[string]string `json:"azure_alias,omitempty"`
-		AnswerType         string            `json:"answer_type,omitempty"`
-		UnknownTypeName    string            `json:"unknown_type_name,omitempty"`
+		// MxPreference       uint16            `json:"mxpreference,omitempty"`
+		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
+		// SrvWeight    uint16 `json:"srvweight,omitempty"`
+		// SrvPort      uint16 `json:"srvport,omitempty"`
+		CaaTag       string `json:"caatag,omitempty"`
+		CaaFlag      uint8  `json:"caaflag,omitempty"`
+		DsKeyTag     uint16 `json:"dskeytag,omitempty"`
+		DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
+		DsDigestType uint8  `json:"dsdigesttype,omitempty"`
+		DsDigest     string `json:"dsdigest,omitempty"`
+		DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
+		// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
+		// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
+		// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
+		// LocVersion         uint8             `json:"locversion,omitempty"`
+		// LocSize            uint8             `json:"locsize,omitempty"`
+		// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
+		// LocVertPre         uint8             `json:"locvertpre,omitempty"`
+		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
+		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
+		// LocAltitude        uint32            `json:"localtitude,omitempty"`
+		LuaRType string `json:"luartype,omitempty"`
+		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
+		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
+		// NaptrFlags      string `json:"naptrflags,omitempty"`
+		// NaptrService    string `json:"naptrservice,omitempty"`
+		// NaptrRegexp     string `json:"naptrregexp,omitempty"`
+		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
+		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
+		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
+		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
+		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
+		SvcPriority uint16 `json:"svcpriority,omitempty"`
+		SvcParams   string `json:"svcparams,omitempty"`
+		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
+		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
+		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+		R53Alias        map[string]string `json:"r53_alias,omitempty"`
+		AzureAlias      map[string]string `json:"azure_alias,omitempty"`
+		AnswerType      string            `json:"answer_type,omitempty"`
+		UnknownTypeName string            `json:"unknown_type_name,omitempty"`
 
 		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
 
@@ -301,33 +265,6 @@ func (rc *RecordConfig) GetLabelFQDN() string {
 	return rc.NameFQDN
 }
 
-// ToComparableNoTTL returns a comparison string. If you need to compare two
-// RecordConfigs, you can simply compare the string returned by this function.
-// The comparison includes all fields except TTL and any provider-specific
-// metafields.  Provider-specific metafields like CF_PROXY are not the same as
-// pseudo-records like ANAME or R53_ALIAS.
-func (rc *RecordConfig) ToComparableNoTTL() string {
-	if rc.ComparableV3 != "" {
-		return rc.ComparableV3
-	}
-
-	switch rc.Type {
-	case "SOA":
-		panic("should not be reached because SOA has a .ComparableV3")
-	case "TXT":
-		return txtutil.EncodeSingle(rc.GetTargetField())
-	case "LUA":
-		return rc.luaCombined()
-	case "UNKNOWN":
-		return fmt.Sprintf("rtype=%s rdata=%s", rc.UnknownTypeName, rc.target)
-	case "HTTPS", "SVCB":
-		//panic("unused ToComparableNoTTL for SVCB/HTTPS. Should be using .ComparableV3 instead")
-		return rc.targetCombinedSVCBRaw()
-
-	}
-	return rc.GetRDATA().String()
-}
-
 // ToRRv2 converts a RecordConfig to a dnsv2.RR.
 func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 	// Function is only valid on defined types.
@@ -361,13 +298,29 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 }
 
 // GetDependencies returns the FQDNs on which this record dependents.
+// For example, some providers won't create a CNAME until the target already exists.
+// DNSControl will assure that the target exists before the CNAME is created if
+// this function returns the target name when called on a CNAME record.
+// The reverse is true for deletions. DNSControl will delete the records for
+// rc.GetDependencies() before deleting the rc.
 func (rc *RecordConfig) GetDependencies() []string {
 	switch rc.Type {
-	// #rtype_variations
-	case "NS", "SRV", "CNAME", "DNAME", "MX", "ALIAS", "AZURE_ALIAS", "R53_ALIAS":
-		return []string{
-			rc.target,
-		}
+	case "NS":
+		return []string{rc.AsNS().Ns}
+	case "SRV":
+		return []string{rc.AsSRV().Target}
+	case "CNAME":
+		return []string{rc.AsCNAME().Target}
+	case "DNAME":
+		return []string{rc.AsDNAME().Target}
+	case "MX":
+		return []string{rc.AsMX().Mx}
+	case "ALIAS":
+		return []string{rc.AsALIAS().Target}
+	case "AZURE_ALIAS":
+		return []string{rc.AsAZUREALIAS().Target}
+	case "R53_ALIAS":
+		return []string{rc.AsR53ALIAS().Target}
 	}
 
 	return []string{}

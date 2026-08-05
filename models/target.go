@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 /* .target is kind of a mess.
@@ -46,26 +45,6 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 
 	ip, _ := netip.ParseAddr(rc.target)
 	return ip
-}
-
-func (rc *RecordConfig) luaCombined() string {
-	rtype := rc.luaTypeUpper()
-	payload := rc.target
-	if rtype == "" {
-		return payload
-	}
-	payload = txtutil.EncodeQuoted(payload)
-	if payload == "" {
-		return rtype
-	}
-	return fmt.Sprintf("%s %s", rtype, payload)
-}
-
-func (rc *RecordConfig) luaTypeUpper() string {
-	if rc.LuaRType == "" {
-		return ""
-	}
-	return strings.ToUpper(rc.LuaRType)
 }
 
 // GetTargetDebug returns a string with the various fields spelled out.
@@ -107,7 +86,8 @@ func (rc *RecordConfig) GetTargetJS() string {
 		return fmt.Sprintf("%q, %q, %d, %d, %d, %d", f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
 	case "SRV":
 		// SRV(priority, weight, port, target)
-		return fmt.Sprintf("%d, %d, %d, %q", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.target)
+		f := rc.AsSRV()
+		return fmt.Sprintf("%d, %d, %d, %q", f.Priority, f.Weight, f.Port, f.Target)
 	default:
 		return fmt.Sprintf("%q", rc.GetRDATA().String())
 	}

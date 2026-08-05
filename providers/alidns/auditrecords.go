@@ -50,7 +50,7 @@ func targetConstraint(rc *models.RecordConfig) error {
 	default:
 		target = rc.GetRDATA().String()
 	}
-	if t, err := idna.ToUnicode(target); err != nil {
+	if t, err := idna.ToUnicode(target); err == nil {
 		target = t
 	}
 	if !isValidAliDNSString(target) {

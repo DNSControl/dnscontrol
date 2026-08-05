@@ -55,7 +55,7 @@ func TestDualProviders(t *testing.T) {
 	// reset, the AddNSRecords() below appends a second copy of them, producing
 	// duplicate NS records that ByRecordSet providers (ROUTE53, GCLOUD, ...)
 	// reject ("Duplicate Resource Record" / "already exists").
-	dc.Records = []*models.RecordConfig{}
+	dc.Records = models.Records{}
 	nsList, _ := models.ToNameservers([]string{"ns1.example.com", "ns2.example.com"})
 	dc.Nameservers = append(dc.Nameservers, nsList...)
 	nameservers.AddNSRecords(dc)
@@ -82,7 +82,7 @@ func TestDualProviders(t *testing.T) {
 	}
 
 	t.Log("Removing test nameservers")
-	dc.Records = []*models.RecordConfig{}
+	dc.Records = models.Records{}
 	n := 0
 	for _, ns := range dc.Nameservers {
 		if ns.Name == "ns1.example.com" || ns.Name == "ns2.example.com" {
@@ -178,7 +178,7 @@ func TestDuplicateNameservers(t *testing.T) {
 	}
 
 	t.Log("Clearing everything")
-	dc.Records = []*models.RecordConfig{}
+	dc.Records = models.Records{}
 	n := 0
 	for _, ns := range dc.Nameservers {
 		if ns.Name == "ns1.example.com" || ns.Name == "ns2.example.com" {
@@ -192,7 +192,7 @@ func TestDuplicateNameservers(t *testing.T) {
 	run(0, "Clearing everything", true)
 
 	// add bogus nameservers and duplicate nameservers
-	dc.Records = []*models.RecordConfig{}
+	dc.Records = models.Records{}
 	nsList, _ := models.ToNameservers([]string{"ns1.example.com"})
 	dc.Nameservers = append(dc.Nameservers, dc.Nameservers...)
 	dc.Nameservers = append(dc.Nameservers, nsList...)
@@ -205,7 +205,7 @@ func TestDuplicateNameservers(t *testing.T) {
 	run(0, "Expect no corrections on second run, but found %d.", false)
 
 	t.Log("Removing test nameservers")
-	dc.Records = []*models.RecordConfig{}
+	dc.Records = models.Records{}
 	n = 0
 	for _, ns := range dc.Nameservers {
 		if ns.Name == "ns1.example.com" || ns.Name == "ns2.example.com" {

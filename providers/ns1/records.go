@@ -146,35 +146,57 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				},
 			})
 		case "SRV":
-			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
-		case "NAPTR":
+			f := r.AsSRV()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.NaptrOrder)),
-				strconv.Itoa(int(r.NaptrPreference)),
-				r.NaptrFlags,
-				r.NaptrService,
-				r.NaptrRegexp,
-				r.GetTargetField(),
+				strconv.FormatInt(int64(f.Priority), 10),
+				strconv.FormatInt(int64(f.Weight), 10),
+				strconv.FormatInt(int64(f.Port), 10),
+				f.Target}})
+			// If that doesn't work, try this:
+			// f := r.AsSRV()
+			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", f.Priority, f.Weight, f.Port, f.Target))})
+			//
+			// Here's the original for comparison:
+			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
+		case "NAPTR":
+			f := r.AsNAPTR()
+			rec.AddAnswer(&dns.Answer{Rdata: []string{
+				strconv.Itoa(int(f.Order)),
+				strconv.Itoa(int(f.Preference)),
+				f.Flags,
+				f.Service,
+				f.Regexp,
+				f.Replacement,
 			}})
 		case "DS":
+			f := r.AsDS()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.DsKeyTag)),
-				strconv.Itoa(int(r.DsAlgorithm)),
-				strconv.Itoa(int(r.DsDigestType)),
-				r.DsDigest,
+				strconv.Itoa(int(f.KeyTag)),
+				strconv.Itoa(int(f.Algorithm)),
+				strconv.Itoa(int(f.DigestType)),
+				f.Digest,
 			}})
-		case "SVCB", "HTTPS":
+		case "SVCB":
+			f := r.AsSVCB()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.SvcPriority)),
-				r.GetTargetField(),
-				r.SvcParams,
+				strconv.Itoa(int(f.Priority)),
+				f.Target,
+				models.Svcbv2ValueToString(f.Value),
+			}})
+		case "HTTPS":
+			f := r.AsHTTPS()
+			rec.AddAnswer(&dns.Answer{Rdata: []string{
+				strconv.Itoa(int(f.Priority)),
+				f.Target,
+				models.Svcbv2ValueToString(f.Value),
 			}})
 		case "TLSA":
+			f := r.AsTLSA()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.TlsaUsage)),
-				strconv.Itoa(int(r.TlsaSelector)),
-				strconv.Itoa(int(r.TlsaMatchingType)),
-				r.GetTargetField(),
+				strconv.Itoa(int(f.Usage)),
+				strconv.Itoa(int(f.Selector)),
+				strconv.Itoa(int(f.MatchingType)),
+				f.Certificate,
 			}})
 		default:
 			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetTargetField())})

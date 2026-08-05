@@ -35,9 +35,10 @@ func checkIPv6(label string) error {
 
 // make sure target is valid reference for cnames, mx, etc.
 func checkTarget(target string) error {
-	if target == "@" {
-		return nil
-	}
+	// In V5, the target shouldn't be "@". It should be $origin+"."
+	// if target == "@" {
+	// 	return nil
+	// }
 	if target == "" {
 		return errors.New("empty target (\"\"). Did you mean \"@\" instead?")
 	}
@@ -188,10 +189,10 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	}
 
 	label := rec.GetLabel()
-	target := rec.GetTargetField()
+	// target := rec.GetTargetField()
 	check := func(e error) {
 		if e != nil {
-			err := fmt.Errorf("%s: %s %s.%s: %s", rec.FilePos, rec.Type, rec.GetLabel(), domain, e.Error())
+			err := fmt.Errorf("%s: %s %s: %s", rec.FilePos, rec.Type, rec.GetLabelFQDN(), e.Error())
 			if _, ok := e.(Warning); ok {
 				err = Warning{err}
 			}
@@ -200,37 +201,38 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	}
 	switch rec.Type { // #rtype_variations
 	case "A":
-		check(checkIPv4(target))
+		check(checkIPv4(rec.AsA().String()))
 	case "AAAA":
-		check(checkIPv6(target))
+		check(checkIPv6(rec.AsAAAA().String()))
 	case "ALIAS":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsALIAS().Target))
 	case "CNAME":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsCNAME().Target))
 		if label == "@" {
 			check(errors.New("cannot create CNAME record for bare domain"))
 		}
 		labelFQDN := nameutil.ToFqdnNoDot(label, domain)
-		targetFQDN := nameutil.ToFqdnNoDot(target, domain)
+		targetFQDN := nameutil.ToFqdnNoDot(rec.AsCNAME().Target, domain)
 		if labelFQDN == targetFQDN {
 			check(errors.New("CNAME loop (target points at itself)"))
 		}
 	case "DNAME":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsDNAME().Target))
 	case "LOC":
 	case "MX":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsMX().Mx))
 	case "NAPTR":
+		target := rec.AsNAPTR().Replacement
 		if target != "" {
 			check(checkTarget(target))
 		}
 	case "NS":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsNS().Ns))
 		if label == "@" {
 			check(errors.New("cannot create NS record for bare domain. Use NAMESERVER instead"))
 		}
 	case "PTR":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsPTR().Ptr))
 	case "SOA":
 		f := rec.AsSOA()
 		check(checkSoa(f.Expire, f.Minttl, f.Refresh, f.Retry, f.Mbox))
@@ -239,7 +241,7 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 			check(errors.New("SOA record is only valid for bare domain"))
 		}
 	case "SRV":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsSRV().Target))
 	case "LUA":
 		f := rec.AsLUA()
 		upper := strings.ToUpper(f.LuaType)

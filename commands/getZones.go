@@ -487,17 +487,24 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		f := rec.AsSMIMEA()
 		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "SSHFP":
-		target = fmt.Sprintf(`%d, %d, "%s"`, rec.SshfpAlgorithm, rec.SshfpFingerprint, rec.GetTargetField())
+		f := rec.AsSSHFP()
+		target = fmt.Sprintf(`%d, %d, "%s"`, f.Algorithm, f.Type, f.FingerPrint)
 	case "SOA":
 		f := rec.AsSOA()
 		rec.Type = "//SOA"
 		target = fmt.Sprintf(`"%s", "%s", %d, %d, %d, %d`, f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
 	case "SRV":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SrvPriority, rec.SrvWeight, rec.SrvPort, rec.GetTargetField())
-	case "SVCB", "HTTPS":
-		target = fmt.Sprintf(`%d, "%s", "%s"`, rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
+		f := rec.AsSRV()
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Priority, f.Weight, f.Port, f.Target)
+	case "SVCB":
+		f := rec.AsSVCB()
+		target = fmt.Sprintf(`%d, "%s", "%s"`, f.Priority, f.Target, f.Value)
+	case "HTTPS":
+		f := rec.AsHTTPS()
+		target = fmt.Sprintf(`%d, "%s", "%s"`, f.Priority, f.Target, f.Value)
 	case "TLSA":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.TlsaUsage, rec.TlsaSelector, rec.TlsaMatchingType, rec.GetTargetField())
+		f := rec.AsTLSA()
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
 	case "TXT":
 		target = jsonQuoted(rec.GetTargetTXTJoined())
 		// TODO(tlim): If this is an SPF record, generate a SPF_BUILDER().
@@ -543,11 +550,12 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 }
 
 func makeCaa(rec *models.RecordConfig, ttlop string) string {
+	f := rec.AsCAA()
 	var target string
-	if rec.CaaFlag == 128 {
-		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, rec.CaaTag, rec.GetTargetField())
+	if f.Flag == 128 {
+		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, f.Tag, f.Value)
 	} else {
-		target = fmt.Sprintf(`"%s", "%s"`, rec.CaaTag, rec.GetTargetField())
+		target = fmt.Sprintf(`"%s", "%s"`, f.Tag, f.Value)
 	}
 	return fmt.Sprintf(`%s("%s", %s%s)`, rec.Type, rec.Name, target, ttlop)
 

@@ -43,9 +43,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		// no-op
 
 	case dnsrdatav2.CAA:
-		rc.CaaFlag = rd.Flag
-		rc.CaaTag = rd.Tag
-		rc.SetTarget(rd.Value)
+		// no-op
 	case privatetypesrdata.CFWORKERROUTE:
 		// no-op
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
@@ -60,7 +58,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.DNAME:
 		rc.SetTarget(rd.Target)
 	case dnsrdatav2.DS:
-		rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest = rd.KeyTag, rd.Algorithm, rd.DigestType, rd.Digest
+		// no-op
 	case dnsrdatav2.DNSKEY:
 		// no-op
 	case privatetypesrdata.FRAME:
@@ -79,12 +77,10 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.MIKROTIKFORWARDER:
 		// no-op
 	case dnsrdatav2.MX:
-		rc.MxPreference = rd.Preference
-		rc.SetTarget(rd.Mx)
+		// no-op
 
 	case dnsrdatav2.NAPTR:
-		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp = rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp
-		rc.SetTarget(rd.Replacement)
+		// no-op
 
 	case dnsrdatav2.NS:
 		rc.SetTarget(rd.Ns)
@@ -113,22 +109,16 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.SMIMEA:
 		// no-op
 	case dnsrdatav2.SOA:
-		// noop -- no legacy fields
+		// no-op
 	case dnsrdatav2.SRV:
-		rc.SrvPriority, rc.SrvWeight, rc.SrvPort = rd.Priority, rd.Weight, rd.Port
-		rc.SetTarget(rd.Target)
+		// no-op
 	case dnsrdatav2.SSHFP:
-		rc.SshfpAlgorithm = rd.Algorithm
-		rc.SshfpFingerprint = rd.Type // Yes, all these years we've been storing things in the wrong field.
-		rc.SetTarget(rd.FingerPrint)
+		// no-op
 	case dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
-		rc.SvcPriority = rd.Priority
-		rc.SetTarget(rd.Target)
-		rc.SvcParams = Svcbv2ValueToString(rd.Value)
+		// no-op
 
 	case dnsrdatav2.TLSA:
-		rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType = rd.Usage, rd.Selector, rd.MatchingType
-		rc.SetTarget(rd.Certificate)
+		// no-op
 	case dnsrdatav2.TXT:
 		// TXT stores its value only in .rdata (the single source of truth).
 		// The TXT accessors (GetTargetField/GetTargetTXTJoined/...) read it

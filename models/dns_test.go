@@ -1,23 +1,8 @@
 package models
 
-import "testing"
-
-func TestSvcbAutoHintsTargetCombined(t *testing.T) {
-	experiment := RecordConfig{
-		Type:        "HTTPS",
-		Name:        "foo",
-		NameFQDN:    "foo.example.com",
-		SvcPriority: 1,
-		SvcParams:   "alpn=h3,h2 ipv4hint=auto ipv6hint=auto",
-		TTL:         300,
-	}
-	experiment.MustSetTarget(".")
-
-	expected := "1 . alpn=h3,h2 ipv4hint=auto ipv6hint=auto"
-	if found := experiment.ToComparableNoTTL(); found != expected {
-		t.Errorf("ToComparableNoTTL expected (%#v) got (%#v)\n", expected, found)
-	}
-}
+import (
+	"testing"
+)
 
 func TestDowncase(t *testing.T) {
 	dc, err := NewDomainConfig("example.com")
