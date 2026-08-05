@@ -361,6 +361,11 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 }
 
 // GetDependencies returns the FQDNs on which this record dependents.
+// For example, some providers won't create a CNAME until the target already exists.
+// DNSControl will assure that the target exists before the CNAME is created if
+// this function returns the target name when called on a CNAME record.
+// The reverse is true for deletions. DNSControl will delete the records for
+// rc.GetDependencies() before deleting the rc.
 func (rc *RecordConfig) GetDependencies() []string {
 	switch rc.Type {
 	case "NS":
