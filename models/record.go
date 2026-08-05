@@ -74,9 +74,9 @@ type RecordConfig struct {
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
 	target string // If a name, must end with "."
 	// MxPreference uint16 `json:"mxpreference,omitempty"`
-	SrvPriority  uint16 `json:"srvpriority,omitempty"`
-	SrvWeight    uint16 `json:"srvweight,omitempty"`
-	SrvPort      uint16 `json:"srvport,omitempty"`
+	// SrvPriority  uint16 `json:"srvpriority,omitempty"`
+	// SrvWeight    uint16 `json:"srvweight,omitempty"`
+	// SrvPort      uint16 `json:"srvport,omitempty"`
 	CaaTag       string `json:"caatag,omitempty"`
 	CaaFlag      uint8  `json:"caaflag,omitempty"`
 	DsKeyTag     uint16 `json:"dskeytag,omitempty"`
@@ -151,9 +151,9 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		Args      []any             `json:"args,omitempty"`
 
 		// MxPreference       uint16            `json:"mxpreference,omitempty"`
-		SrvPriority  uint16 `json:"srvpriority,omitempty"`
-		SrvWeight    uint16 `json:"srvweight,omitempty"`
-		SrvPort      uint16 `json:"srvport,omitempty"`
+		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
+		// SrvWeight    uint16 `json:"srvweight,omitempty"`
+		// SrvPort      uint16 `json:"srvport,omitempty"`
 		CaaTag       string `json:"caatag,omitempty"`
 		CaaFlag      uint8  `json:"caaflag,omitempty"`
 		DsKeyTag     uint16 `json:"dskeytag,omitempty"`

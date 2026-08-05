@@ -146,7 +146,18 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				},
 			})
 		case "SRV":
-			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
+			f := r.AsSRV()
+			rec.AddAnswer(&dns.Answer{Rdata: []string{
+				strconv.FormatInt(int64(f.Priority), 10),
+				strconv.FormatInt(int64(f.Weight), 10),
+				strconv.FormatInt(int64(f.Port), 10),
+				f.Target}})
+			// If that doesn't work, try this:
+			// f := r.AsSRV()
+			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", f.Priority, f.Weight, f.Port, f.Target))})
+			//
+			// Here's the original for comparison:
+			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
 		case "NAPTR":
 			f := r.AsNAPTR()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{

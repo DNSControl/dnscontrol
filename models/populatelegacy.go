@@ -111,10 +111,9 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case dnsrdatav2.SMIMEA:
 		// no-op
 	case dnsrdatav2.SOA:
-		// noop -- no legacy fields
+		// no-op
 	case dnsrdatav2.SRV:
-		rc.SrvPriority, rc.SrvWeight, rc.SrvPort = rd.Priority, rd.Weight, rd.Port
-		rc.SetTarget(rd.Target)
+		// no-op
 	case dnsrdatav2.SSHFP:
 		rc.SshfpAlgorithm = rd.Algorithm
 		rc.SshfpFingerprint = rd.Type // Yes, all these years we've been storing things in the wrong field.

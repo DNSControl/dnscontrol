@@ -249,11 +249,9 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case dnsv2.TypeSMIMEA:
 		// no-op
 	case dnsv2.TypeSOA:
-		// no op -- legacy fields have been eliminated
+		// no-op
 	case dnsv2.TypeSRV:
-		rd, err := MakeSRV(origin, nil, isEnabled, rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeSSHFP:
 		rd, err := MakeSSHFP(origin, nil, isEnabled, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 		errorChk(err)

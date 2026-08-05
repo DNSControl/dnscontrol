@@ -345,13 +345,14 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 			recServiceAndProtocol := strings.SplitAfterN(rc.GetLabel(), ".", 2)
 			recService, recProtocol := recServiceAndProtocol[0], recServiceAndProtocol[1]
 
+			f := rc.AsSRV()
 			rec := nc.DomainSRVRecord{
 				Service:  recService,
 				Protocol: recProtocol,
-				Priority: int(rc.SrvPriority),
-				Port:     int(rc.SrvPort),
-				Target:   rc.GetTargetField(),
-				Weight:   int(rc.SrvWeight),
+				Priority: int(f.Priority),
+				Port:     int(f.Port),
+				Target:   f.Target,
+				Weight:   int(f.Weight),
 			}
 
 			srvRecs = append(srvRecs, rec)

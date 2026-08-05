@@ -107,7 +107,8 @@ func (rc *RecordConfig) GetTargetJS() string {
 		return fmt.Sprintf("%q, %q, %d, %d, %d, %d", f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
 	case "SRV":
 		// SRV(priority, weight, port, target)
-		return fmt.Sprintf("%d, %d, %d, %q", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.target)
+		f := rc.AsSRV()
+		return fmt.Sprintf("%d, %d, %d, %q", f.Priority, f.Weight, f.Port, f.Target)
 	default:
 		return fmt.Sprintf("%q", rc.GetRDATA().String())
 	}
