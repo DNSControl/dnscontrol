@@ -23,7 +23,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -47,7 +46,6 @@
             "Target": "foo.com.",
             "ZoneID": "ERERTFGFGF"
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -70,7 +68,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -93,7 +90,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -117,7 +113,6 @@
             "Target": "foo.com.",
             "ZoneID": "Z2FTEDLFRTF"
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -140,7 +135,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -163,7 +157,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -186,7 +179,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -209,7 +201,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -232,7 +223,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -255,7 +245,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -278,7 +267,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -301,7 +289,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -324,7 +311,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -347,7 +333,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -370,7 +355,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -393,7 +377,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -416,7 +399,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -439,7 +421,6 @@
             "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298

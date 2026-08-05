@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
 /* .target is kind of a mess.
@@ -115,5 +116,20 @@ func (rc *RecordConfig) MustSetTarget(target string) {
 // SetTargetIP sets the target to an IP, verifying this is an appropriate rtype.
 func (rc *RecordConfig) SetTargetIP(ip netip.Addr) error {
 	// TODO(tlim): Verify the rtype is appropriate for an IP.
-	return rc.SetTarget(ip.String())
+	//return rc.SetTarget(ip.String())
+	switch rc.Type {
+	case "A":
+		rd, err := MakeA("", nil, nrc.Flags{}, ip)
+		if err != nil {
+			return err
+		}
+		rc.SetRDATA(rd)
+	case "AAAA":
+		rd, err := MakeAAAA("", nil, nrc.Flags{}, ip)
+		if err != nil {
+			return err
+		}
+		rc.SetRDATA(rd)
+	}
+	return fmt.Errorf("invalid IP %v", ip)
 }

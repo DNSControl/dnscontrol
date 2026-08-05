@@ -479,9 +479,9 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			// 		rec.RecomputeV3Fields(domain.Name)
 			// 	}
 			case "A", "AAAA":
-				if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
-					errs = append(errs, err)
-				}
+				//if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
+				//	errs = append(errs, err)
+				//}
 			case "PTR":
 				var err error
 				var name string
