@@ -1060,7 +1060,6 @@ func makeTests() []*TestGroup {
 
 		testgroup("DNSKEY",
 			requires(providers.CanUseDNSKEY),
-			not("POWERDNS"), // PowerDNS: DNSKEY records are only supported for the apex domain.
 			tc("Create DNSKEY record", dnskey("test", 257, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 1", dnskey("test", 256, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 2", dnskey("test", 256, 3, 13, "whjtMiJP9C86l0oTJUxemuYtQ0RIZePWt6QETC2kkKM=")),
