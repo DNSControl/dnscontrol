@@ -169,11 +169,12 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				f.Replacement,
 			}})
 		case "DS":
+			f := r.AsDS()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.DsKeyTag)),
-				strconv.Itoa(int(r.DsAlgorithm)),
-				strconv.Itoa(int(r.DsDigestType)),
-				r.DsDigest,
+				strconv.Itoa(int(f.KeyTag)),
+				strconv.Itoa(int(f.Algorithm)),
+				strconv.Itoa(int(f.DigestType)),
+				f.Digest,
 			}})
 		case "SVCB", "HTTPS":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
@@ -182,11 +183,12 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				r.SvcParams,
 			}})
 		case "TLSA":
+			f := r.AsTLSA()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.TlsaUsage)),
-				strconv.Itoa(int(r.TlsaSelector)),
-				strconv.Itoa(int(r.TlsaMatchingType)),
-				r.GetTargetField(),
+				strconv.Itoa(int(f.Usage)),
+				strconv.Itoa(int(f.Selector)),
+				strconv.Itoa(int(f.MatchingType)),
+				f.Certificate,
 			}})
 		default:
 			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetTargetField())})

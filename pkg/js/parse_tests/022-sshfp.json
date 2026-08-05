@@ -15,9 +15,6 @@
             "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
             "Type": 1
           },
-          "sshfpalgorithm": 1,
-          "sshfpfingerprint": 1,
-          "target": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -32,9 +29,6 @@
             "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
             "Type": 2
           },
-          "sshfpalgorithm": 1,
-          "sshfpfingerprint": 2,
-          "target": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -49,9 +43,6 @@
             "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
             "Type": 1
           },
-          "sshfpalgorithm": 2,
-          "sshfpfingerprint": 1,
-          "target": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -66,9 +57,6 @@
             "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
             "Type": 2
           },
-          "sshfpalgorithm": 2,
-          "sshfpfingerprint": 2,
-          "target": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -83,9 +71,6 @@
             "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
             "Type": 1
           },
-          "sshfpalgorithm": 3,
-          "sshfpfingerprint": 1,
-          "target": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -100,9 +85,6 @@
             "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
             "Type": 2
           },
-          "sshfpalgorithm": 3,
-          "sshfpfingerprint": 2,
-          "target": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -117,9 +99,6 @@
             "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
             "Type": 1
           },
-          "sshfpalgorithm": 4,
-          "sshfpfingerprint": 1,
-          "target": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44
@@ -134,9 +113,6 @@
             "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
             "Type": 2
           },
-          "sshfpalgorithm": 4,
-          "sshfpfingerprint": 2,
-          "target": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "ttl": 300,
           "type": "SSHFP",
           "typenum": 44

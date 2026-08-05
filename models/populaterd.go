@@ -167,9 +167,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeCAA:
-		rd, err := MakeCAA(origin, nil, isEnabled, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeCNAME:
 		rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
 		errorChk(err)
@@ -188,9 +186,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case dnsv2.TypeDNSKEY:
 		// no-op
 	case dnsv2.TypeDS:
-		rd, err := MakeDS(origin, nil, isEnabled, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case privatetypes.TypeFRAME:
 		rd, err := privatetypesrdata.MakeFRAME(origin, nil, isEnabled, rc.GetTargetField())
@@ -253,18 +249,14 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	case dnsv2.TypeSRV:
 		// no-op
 	case dnsv2.TypeSSHFP:
-		rd, err := MakeSSHFP(origin, nil, isEnabled, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeSVCB:
 		rd, err := MakeSVCB(origin, nil, isEnabled, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
 		errorChk(err)
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeTLSA:
-		rd, err := MakeTLSA(origin, nil, isEnabled, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 	case dnsv2.TypeTXT:
 		rd, err := MakeTXT(origin, nil, isEnabled, rc.GetTargetField())
 		errorChk(err)

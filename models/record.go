@@ -77,12 +77,12 @@ type RecordConfig struct {
 	// SrvPriority  uint16 `json:"srvpriority,omitempty"`
 	// SrvWeight    uint16 `json:"srvweight,omitempty"`
 	// SrvPort      uint16 `json:"srvport,omitempty"`
-	CaaTag       string `json:"caatag,omitempty"`
-	CaaFlag      uint8  `json:"caaflag,omitempty"`
-	DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-	DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-	DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-	DsDigest     string `json:"dsdigest,omitempty"`
+	// CaaTag       string `json:"caatag,omitempty"`
+	// CaaFlag      uint8  `json:"caaflag,omitempty"`
+	// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
+	// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
+	// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
+	// DsDigest     string `json:"dsdigest,omitempty"`
 	// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
 	// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
 	// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
@@ -102,17 +102,17 @@ type RecordConfig struct {
 	// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
 	// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
 	// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-	SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-	SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-	SvcPriority      uint16            `json:"svcpriority,omitempty"`
-	SvcParams        string            `json:"svcparams,omitempty"`
-	TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-	TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-	TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-	R53Alias         map[string]string `json:"r53_alias,omitempty"`
-	AzureAlias       map[string]string `json:"azure_alias,omitempty"`
-	AnswerType       string            `json:"answer_type,omitempty"`
-	UnknownTypeName  string            `json:"unknown_type_name,omitempty"`
+	// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
+	// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
+	SvcPriority uint16 `json:"svcpriority,omitempty"`
+	SvcParams   string `json:"svcparams,omitempty"`
+	// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
+	// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
+	// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+	R53Alias        map[string]string `json:"r53_alias,omitempty"`
+	AzureAlias      map[string]string `json:"azure_alias,omitempty"`
+	AnswerType      string            `json:"answer_type,omitempty"`
+	UnknownTypeName string            `json:"unknown_type_name,omitempty"`
 }
 
 // MarshalJSON marshals RecordConfig.
@@ -180,17 +180,17 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
 		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
 		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-		SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-		SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-		SvcPriority      uint16            `json:"svcpriority,omitempty"`
-		SvcParams        string            `json:"svcparams,omitempty"`
-		TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-		TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-		TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-		R53Alias         map[string]string `json:"r53_alias,omitempty"`
-		AzureAlias       map[string]string `json:"azure_alias,omitempty"`
-		AnswerType       string            `json:"answer_type,omitempty"`
-		UnknownTypeName  string            `json:"unknown_type_name,omitempty"`
+		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
+		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
+		SvcPriority uint16 `json:"svcpriority,omitempty"`
+		SvcParams   string `json:"svcparams,omitempty"`
+		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
+		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
+		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+		R53Alias        map[string]string `json:"r53_alias,omitempty"`
+		AzureAlias      map[string]string `json:"azure_alias,omitempty"`
+		AnswerType      string            `json:"answer_type,omitempty"`
+		UnknownTypeName string            `json:"unknown_type_name,omitempty"`
 
 		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
 
