@@ -72,8 +72,8 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target       string // If a name, must end with "."
-	MxPreference uint16 `json:"mxpreference,omitempty"`
+	target string // If a name, must end with "."
+	// MxPreference uint16 `json:"mxpreference,omitempty"`
 	SrvPriority  uint16 `json:"srvpriority,omitempty"`
 	SrvWeight    uint16 `json:"srvweight,omitempty"`
 	SrvPort      uint16 `json:"srvport,omitempty"`

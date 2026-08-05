@@ -79,8 +79,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.MIKROTIKFORWARDER:
 		// no-op
 	case dnsrdatav2.MX:
-		rc.MxPreference = rd.Preference
-		rc.SetTarget(rd.Mx)
+		// no-op
 
 	case dnsrdatav2.NAPTR:
 		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp = rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp

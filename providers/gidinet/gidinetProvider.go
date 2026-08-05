@@ -312,32 +312,39 @@ func toGidinetRecord(domain string, rc *models.RecordConfig) *DNSRecord {
 
 	switch rc.Type {
 	case "MX":
-		rec.Priority = int(rc.MxPreference)
+		f := rc.AsMX()
+		rec.Priority = int(f.Preference)
 		// Remove trailing dot from target
-		target := rc.GetTargetField()
+		target := f.Mx
 		rec.Data = strings.TrimSuffix(target, ".")
 
 	case "SRV":
 		// SRV Data format: priority weight port target (with trailing dot per Gidinet spec)
 		// The Priority field is only for MX records
+		f := rc.AsSRV()
 		rec.Priority = 0
-		target := rc.GetTargetField()
+		target := f.Target
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rec.Data = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
+		rec.Data = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, target)
 
-	case "CNAME", "NS":
+	case "CNAME":
 		// Remove trailing dot from target
-		target := rc.GetTargetField()
+		target := rc.AsCNAME().Target
+		rec.Data = strings.TrimSuffix(target, ".")
+
+	case "NS":
+		// Remove trailing dot from target
+		target := rc.AsNS().Ns
 		rec.Data = strings.TrimSuffix(target, ".")
 
 	case "TXT":
 		// Chunk long TXT values into quoted segments for the API
 		rec.Data = chunkTXT(rc.GetTargetTXTJoined())
 
-	default: // A, AAAA, etc.
-		rec.Data = rc.GetTargetField()
+	default:
+		rec.Data = rc.GetRDATA().String()
 	}
 
 	return rec

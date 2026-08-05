@@ -210,9 +210,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		// no-op
 
 	case dnsv2.TypeMX:
-		rd, err := MakeMX(origin, nil, isEnabled, rc.MxPreference, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeNS:
 		rd, err := MakeNS(origin, nil, isEnabled, rc.GetTargetField())
