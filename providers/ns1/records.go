@@ -148,13 +148,14 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 		case "SRV":
 			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
 		case "NAPTR":
+			f := r.AsNAPTR()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(r.NaptrOrder)),
-				strconv.Itoa(int(r.NaptrPreference)),
-				r.NaptrFlags,
-				r.NaptrService,
-				r.NaptrRegexp,
-				r.GetTargetField(),
+				strconv.Itoa(int(f.Order)),
+				strconv.Itoa(int(f.Preference)),
+				f.Flags,
+				f.Service,
+				f.Regexp,
+				f.Replacement,
 			}})
 		case "DS":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{

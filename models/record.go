@@ -93,12 +93,12 @@ type RecordConfig struct {
 	// LocLatitude        uint32            `json:"loclatitude,omitempty"`
 	// LocLongitude       uint32            `json:"loclongitude,omitempty"`
 	// LocAltitude        uint32            `json:"localtitude,omitempty"`
-	LuaRType        string `json:"luartype,omitempty"`
-	NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-	NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-	NaptrFlags      string `json:"naptrflags,omitempty"`
-	NaptrService    string `json:"naptrservice,omitempty"`
-	NaptrRegexp     string `json:"naptrregexp,omitempty"`
+	LuaRType string `json:"luartype,omitempty"`
+	// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
+	// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
+	// NaptrFlags      string `json:"naptrflags,omitempty"`
+	// NaptrService    string `json:"naptrservice,omitempty"`
+	// NaptrRegexp     string `json:"naptrregexp,omitempty"`
 	// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
 	// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
 	// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
@@ -171,12 +171,12 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
 		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
 		// LocAltitude        uint32            `json:"localtitude,omitempty"`
-		LuaRType        string `json:"luartype,omitempty"`
-		NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-		NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-		NaptrFlags      string `json:"naptrflags,omitempty"`
-		NaptrService    string `json:"naptrservice,omitempty"`
-		NaptrRegexp     string `json:"naptrregexp,omitempty"`
+		LuaRType string `json:"luartype,omitempty"`
+		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
+		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
+		// NaptrFlags      string `json:"naptrflags,omitempty"`
+		// NaptrService    string `json:"naptrservice,omitempty"`
+		// NaptrRegexp     string `json:"naptrregexp,omitempty"`
 		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
 		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
 		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`

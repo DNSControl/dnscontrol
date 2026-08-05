@@ -217,9 +217,7 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case dnsv2.TypeNAPTR:
-		rd, err := MakeNAPTR(origin, nil, isEnabled, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// no-op
 
 	case dnsv2.TypeOPENPGPKEY:
 		rd, err := MakeOPENPGPKEY(origin, nil, isEnabled, rc.GetTargetField())

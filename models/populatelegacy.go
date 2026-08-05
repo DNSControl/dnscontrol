@@ -82,8 +82,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		// no-op
 
 	case dnsrdatav2.NAPTR:
-		rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp = rd.Order, rd.Preference, rd.Flags, rd.Service, rd.Regexp
-		rc.SetTarget(rd.Replacement)
+		// no-op
 
 	case dnsrdatav2.NS:
 		rc.SetTarget(rd.Ns)
