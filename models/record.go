@@ -363,11 +363,22 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 // GetDependencies returns the FQDNs on which this record dependents.
 func (rc *RecordConfig) GetDependencies() []string {
 	switch rc.Type {
-	// #rtype_variations
-	case "NS", "SRV", "CNAME", "DNAME", "MX", "ALIAS", "AZURE_ALIAS", "R53_ALIAS":
-		return []string{
-			rc.target,
-		}
+	case "NS":
+		return []string{rc.AsNS().Ns}
+	case "SRV":
+		return []string{rc.AsSRV().Target}
+	case "CNAME":
+		return []string{rc.AsCNAME().Target}
+	case "DNAME":
+		return []string{rc.AsDNAME().Target}
+	case "MX":
+		return []string{rc.AsMX().Mx}
+	case "ALIAS":
+		return []string{rc.AsALIAS().Target}
+	case "AZURE_ALIAS":
+		return []string{rc.AsAZUREALIAS().Target}
+	case "R53_ALIAS":
+		return []string{rc.AsR53ALIAS().Target}
 	}
 
 	return []string{}
