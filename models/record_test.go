@@ -285,7 +285,7 @@ func Test_makeLabelNameUnicode(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.tname, func(t *testing.T) {
-			got := makeLabelNameUnicode(tt.name)
+			got, _ := makeLabelNameUnicode(tt.name)
 			// TODO: update the condition below to compare got with tt.want.
 			if got != tt.want {
 				t.Errorf("makeNameUnicode(%q) = %v, want %v", tt.name, got, tt.want)

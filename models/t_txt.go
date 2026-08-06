@@ -2,11 +2,14 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"unicode"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
@@ -33,6 +36,24 @@ func (rc *RecordConfig) SetTargetTXT(s string) error {
 		return rc.SetTarget(s)
 	}
 	return legacySetTargetArgsTXT(rc, s)
+}
+
+func legacySetTargetArgsTXT(rc *RecordConfig, args ...any) error {
+
+	rc.TypeNum = dnsv2.TypeTXT
+	rc.Type = "TXT"
+
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
+
+	rd, err := MakeTXT("", nil, nrc.Flags{}, args...)
+	if err != nil {
+		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
+	}
+	rc.SetRDATA(rd)
+
+	return nil
 }
 
 // SetTargetTXTs joins the supplied TXT fields and stores canonical 255-octet segments.

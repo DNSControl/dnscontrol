@@ -182,6 +182,7 @@ func (dc *DomainConfig) Punycode() error {
 			return err
 		}
 		if t != rec.GetLabelFQDN() {
+			// Assert this function is no longer needed.
 			panic(fmt.Sprintf("Punycode LABEL %q %q", t, rec.GetLabelFQDN()))
 		}
 		// rec.SetLabelFromFQDN(t, dc.Name)
@@ -198,6 +199,7 @@ func (dc *DomainConfig) Punycode() error {
 			//	return err
 			//}
 			if t != rec.GetTargetField() {
+				// Assert this function is no longer needed.
 				panic(fmt.Sprintf(": Punycode TARGET %q %q", t, rec.GetTargetField()))
 			}
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH", "BUNNY_DNS_PZ", "MIKROTIK_FWD", "MIKROTIK_NXDOMAIN", "MIKROTIK_FORWARDER":
@@ -209,6 +211,7 @@ func (dc *DomainConfig) Punycode() error {
 			rec.SetTarget(rec.GetTargetField())
 			roundtrip := rec.GetTargetField()
 			if orig != roundtrip {
+				// Assert this function is no longer needed.
 				panic(fmt.Sprintf("Punycode RTT %q %q", orig, roundtrip))
 			}
 
