@@ -1281,12 +1281,6 @@ function GIDINET_PREMIUM_NS() {
 
 // CUSTOM, PROVIDER SPECIFIC RECORD TYPES
 
-var ADGUARDHOME_A_PASSTHROUGH = recordBuilder('ADGUARDHOME_A_PASSTHROUGH');
-
-var ADGUARDHOME_AAAA_PASSTHROUGH = recordBuilder(
-    'ADGUARDHOME_AAAA_PASSTHROUGH'
-);
-
 var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
 /**
  * @deprecated Please use URL or URL301 instead
@@ -2344,6 +2338,10 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 var A = rawrecordBuilder('A');
 var AAAA = rawrecordBuilder('AAAA');
+var ADGUARDHOME_A_PASSTHROUGH = rawrecordBuilder('ADGUARDHOME_A_PASSTHROUGH');
+var ADGUARDHOME_AAAA_PASSTHROUGH = rawrecordBuilder(
+    'ADGUARDHOME_AAAA_PASSTHROUGH'
+);
 var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
 var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
 var ALIAS = rawrecordBuilder('ALIAS');
