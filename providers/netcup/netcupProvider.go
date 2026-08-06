@@ -93,7 +93,10 @@ func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 
 	// Create a copy of the desired state for diffing.
 	// This is to avoid side-effects on the original DomainConfig.
-	dcForDiff := *dc
+	dcForDiff, err := dc.Copy()
+	if err != nil {
+		return nil, 0, err
+	}
 	// We filter out unsupported record types (NS) and zero out the TTL
 	// as it is not supported by the provider.
 	desiredRecords := make(models.Records, 0, len(dc.Records))
@@ -107,7 +110,7 @@ func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 	}
 	dcForDiff.Records = desiredRecords
 
-	instructions, actualChangeCount, err := diff2.ByRecord(existingRecords, &dcForDiff, nil)
+	instructions, actualChangeCount, err := diff2.ByRecord(existingRecords, dcForDiff, nil)
 	if err != nil {
 		return nil, 0, err
 	}
