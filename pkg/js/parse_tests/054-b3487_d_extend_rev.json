@@ -20,6 +20,7 @@
           "rdata": {
             "Ptr": "example.site.com."
           },
+          "target": "example.site.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -32,6 +33,7 @@
           "rdata": {
             "Ptr": "example2.site.com."
           },
+          "target": "example2.site.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -45,6 +47,7 @@
             "Ptr": "ip-10-6-119-0.example.com."
           },
           "subdomain": "119",
+          "target": "ip-10-6-119-0.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -58,6 +61,7 @@
             "Ptr": "ip-10-6-119-1.example.com."
           },
           "subdomain": "119",
+          "target": "ip-10-6-119-1.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -71,6 +75,7 @@
             "Ptr": "ip-10-6-119-2.example.com."
           },
           "subdomain": "119",
+          "target": "ip-10-6-119-2.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -84,6 +89,7 @@
             "Ptr": "ip-10-6-119-3.example.com."
           },
           "subdomain": "119",
+          "target": "ip-10-6-119-3.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -97,6 +103,7 @@
             "Ptr": "ip-10-6-200-50.example.com."
           },
           "subdomain": "200",
+          "target": "ip-10-6-200-50.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -110,6 +117,7 @@
             "Ptr": "ip-10-6-200-51.example.com."
           },
           "subdomain": "200",
+          "target": "ip-10-6-200-51.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -123,6 +131,7 @@
             "Ptr": "ip-10-6-200-52.example.com."
           },
           "subdomain": "200",
+          "target": "ip-10-6-200-52.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -136,6 +145,7 @@
             "Ptr": "ip-10-6-200-53.example.com."
           },
           "subdomain": "200",
+          "target": "ip-10-6-200-53.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -149,6 +159,7 @@
             "Ptr": "ip-10-6-220-20.example.com."
           },
           "subdomain": "220",
+          "target": "ip-10-6-220-20.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -162,6 +173,7 @@
             "Ptr": "ip-10-6-230-30.example.com."
           },
           "subdomain": "230",
+          "target": "ip-10-6-230-30.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12

@@ -20,6 +20,7 @@
           "rdata": {
             "Ptr": "foo.example.com."
           },
+          "target": "foo.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -32,6 +33,7 @@
           "rdata": {
             "Ptr": "bar.example.com."
           },
+          "target": "bar.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -47,6 +49,7 @@
           "rdata": {
             "Ptr": "baz.example.com."
           },
+          "target": "baz.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -60,6 +63,7 @@
             "Ptr": "silly.example.com."
           },
           "subdomain": "4",
+          "target": "silly.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -73,6 +77,7 @@
             "Ptr": "willy.example.com."
           },
           "subdomain": "5",
+          "target": "willy.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -86,6 +91,7 @@
             "Ptr": "billy.example.com."
           },
           "subdomain": "6",
+          "target": "billy.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -98,6 +104,7 @@
           "rdata": {
             "Ptr": "my.example.com."
           },
+          "target": "my.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -110,6 +117,7 @@
           "rdata": {
             "Ptr": "fair.example.com."
           },
+          "target": "fair.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -125,6 +133,7 @@
           "rdata": {
             "Ptr": "lady.example.com."
           },
+          "target": "lady.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12

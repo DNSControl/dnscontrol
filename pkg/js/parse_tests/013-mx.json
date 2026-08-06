@@ -14,6 +14,7 @@
             "Mx": "foo.com.",
             "Preference": 15
           },
+          "target": "foo.com.",
           "ttl": 300,
           "type": "MX",
           "typenum": 15

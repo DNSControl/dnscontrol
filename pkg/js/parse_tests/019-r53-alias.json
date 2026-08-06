@@ -46,6 +46,7 @@
             "Target": "foo.com.",
             "ZoneID": "ERERTFGFGF"
           },
+          "target": "ERERTFGFGF",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298
@@ -113,6 +114,7 @@
             "Target": "foo.com.",
             "ZoneID": "Z2FTEDLFRTF"
           },
+          "target": "Z2FTEDLFRTF",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298

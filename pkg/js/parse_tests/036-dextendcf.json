@@ -24,6 +24,7 @@
             "Then": "test-worker",
             "When": "test3.foo.com"
           },
+          "target": "test-worker",
           "ttl": 300,
           "type": "CF_WORKER_ROUTE",
           "typenum": 65288
@@ -41,6 +42,7 @@
             "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
             "SRWhen": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
           },
+          "target": "concat(\"https://goo.com\", http.request.uri.path)",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -58,6 +60,7 @@
             "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
             "SRWhen": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
           },
+          "target": "concat(\"https://goo.com\", http.request.uri.path)",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289

@@ -16,6 +16,7 @@
             "DigestType": 1,
             "KeyTag": 1
           },
+          "target": "FFFF",
           "ttl": 300,
           "type": "DS",
           "typenum": 43
@@ -31,6 +32,7 @@
             "DigestType": 2,
             "KeyTag": 1000
           },
+          "target": "AABBCCDDEEFF",
           "ttl": 300,
           "type": "DS",
           "typenum": 43

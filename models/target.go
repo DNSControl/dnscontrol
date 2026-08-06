@@ -22,8 +22,13 @@ func (rc *RecordConfig) GetTargetField() string {
 		// is not populated for TXT.
 		return rc.GetTargetTXTJoined()
 	}
-	if rc.rdata != nil && (rc.Type == "A" || rc.Type == "AAAA" || rc.Type == "CNAME" || rc.Type == "NS") {
-		return rc.GetRDATA().String()
+	if rc.rdata != nil {
+		// Return the last field. Not perfect, but good enough until we get rid of this function.
+		fx, err := RDtoFieldsStrings(rc.GetRDATA())
+		if err != nil {
+			return rc.GetRDATA().String()
+		}
+		return fx[len(fx)-1]
 	}
 	return rc.target
 }

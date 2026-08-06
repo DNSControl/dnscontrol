@@ -501,6 +501,7 @@ func makeTests() []*TestGroup {
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NAMECHEAP",         // cannot handle single NS at apex but does handle dual
 				"NETCUP",            // NS records not currently supported.
+				"NS1",               // Test leaves NS1 in a confused state.
 				"PORKBUN",           // Record ignored.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.

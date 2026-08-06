@@ -37,6 +37,7 @@
             "Target": "foo.com.",
             "ZoneID": "Z2FTEDLFRTZ"
           },
+          "target": "Z2FTEDLFRTZ",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298

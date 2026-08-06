@@ -20,6 +20,7 @@
             "AliasType": "AAAA",
             "Target": "foo.com."
           },
+          "target": "foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286
@@ -39,6 +40,7 @@
             "AliasType": "A",
             "Target": "foo.com."
           },
+          "target": "foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286
@@ -58,6 +60,7 @@
             "AliasType": "CNAME",
             "Target": "foo.com."
           },
+          "target": "foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286

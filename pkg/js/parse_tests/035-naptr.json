@@ -18,6 +18,7 @@
             "Replacement": "example",
             "Service": "E2U+sip"
           },
+          "target": "example",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -35,6 +36,7 @@
             "Replacement": "example",
             "Service": "E2U+email"
           },
+          "target": "example",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -52,6 +54,7 @@
             "Replacement": ".",
             "Service": "E2U+email"
           },
+          "target": ".",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -69,6 +72,7 @@
             "Replacement": ".",
             "Service": "E2U+email"
           },
+          "target": ".",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
