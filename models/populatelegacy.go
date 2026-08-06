@@ -64,6 +64,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.AKAMAICDN:
 	case privatetypesrdata.ALIAS:
 	case privatetypesrdata.BUNNYDNSPZ:
+	case privatetypesrdata.BUNNYDNSRDR:
 	case privatetypesrdata.CFWORKERROUTE:
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
 	case privatetypesrdata.CLOUDNSWR:

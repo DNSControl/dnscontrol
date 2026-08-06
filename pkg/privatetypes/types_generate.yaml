@@ -81,8 +81,13 @@ types:
 
   - name: Bunny_Dns_Rdr
     codepoint: 65320
-    fields: []
-    test_data: []
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: https://example.com
 
   - name: Cf_Worker_Route
     codepoint: 65288
@@ -225,7 +230,7 @@ types:
     test_data:
       - name: "plain"
         values:
-          Target: http://example.com
+          Location: http://example.com
 
   - name: R53_Alias
     codepoint: 65298

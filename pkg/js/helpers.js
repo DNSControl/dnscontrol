@@ -1258,22 +1258,6 @@ function GIDINET_PREMIUM_NS() {
     ];
 }
 
-// CUSTOM, PROVIDER SPECIFIC RECORD TYPES
-
-var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
-/**
- * @deprecated Please use URL or URL301 instead
- */
-var PORKBUN_URLFWD = recordBuilder('PORKBUN_URLFWD');
-var BUNNY_DNS_RDR = recordBuilder('BUNNY_DNS_RDR');
-
-var BUNNY_DNS_PZ = recordBuilder('BUNNY_DNS_PZ', {
-    args: [['name', _.isString], ['pullZoneId']],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.target = String(args.pullZoneId);
-    },
-});
 // LOC_BUILDER_DD takes an object:
 // label: The DNS label for the LOC record. (default: '@')
 // x: Decimal X coordinate.
@@ -2306,6 +2290,8 @@ var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
 var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
 var ALIAS = rawrecordBuilder('ALIAS');
 var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
+var BUNNY_DNS_PZ = rawrecordBuilder('BUNNY_DNS_PZ');
+var BUNNY_DNS_RDR = rawrecordBuilder('BUNNY_DNS_RDR');
 var CAA = rawrecordBuilder('CAA');
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
 var CF_SINGLE_REDIRECT = rawrecordBuilder(
@@ -2314,6 +2300,7 @@ var CF_SINGLE_REDIRECT = rawrecordBuilder(
 );
 var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var CF_WORKER_ROUTE = rawrecordBuilder('CF_WORKER_ROUTE', true);
+var CLOUDNS_WR = rawrecordBuilder('CLOUDNS_WR');
 var CNAME = rawrecordBuilder('CNAME');
 var DHCID = rawrecordBuilder('DHCID');
 var DNAME = rawrecordBuilder('DNAME');
@@ -2334,6 +2321,10 @@ var MX = rawrecordBuilder('MX');
 var NAPTR = rawrecordBuilder('NAPTR');
 var NS = rawrecordBuilder('NS');
 var OPENPGPKEY = rawrecordBuilder('OPENPGPKEY');
+/**
+ * @deprecated Please use URL or URL301 instead
+ */
+var PORKBUN_URLFWD = rawrecordBuilder('PORKBUN_URLFWD');
 var PTR = rawrecordBuilder('PTR');
 var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
 var RP = rawrecordBuilder('RP');

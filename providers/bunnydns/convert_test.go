@@ -21,6 +21,37 @@ func TestFromRecordConfigPullZone(t *testing.T) {
 	}
 }
 
+func TestFromRecordConfigRedirect(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("go", 0, privatetypes.TypeBUNNYDNSRDR, "https://example.com")
+
+	rec, err := fromRecordConfig(rc)
+	if err != nil {
+		t.Fatalf("fromRecordConfig returned error: %v", err)
+	}
+	if rec.Value != "https://example.com" {
+		t.Fatalf("expected redirect value; got=%q", rec.Value)
+	}
+}
+
+func TestToRecordConfigRedirect(t *testing.T) {
+	rec := &record{
+		Type:  recordTypeRedirect,
+		Name:  "go",
+		TTL:   300,
+		Value: "https://example.com",
+	}
+
+	dc := models.MustNewDomainConfig("example.com")
+	rc, err := toRecordConfig(dc, rec)
+	if err != nil {
+		t.Fatalf("toRecordConfig returned error: %v", err)
+	}
+	if got := rc.AsBUNNYDNSRDR().Target; got != "https://example.com" {
+		t.Fatalf("redirect target = %q, want https://example.com", got)
+	}
+}
+
 func TestToRecordConfigPullZoneLinkName(t *testing.T) {
 	rec := &record{
 		Type:     recordTypePullZone,

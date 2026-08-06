@@ -51,6 +51,10 @@ func (rc *RecordConfig) AsBUNNYDNSPZ() privatetypesrdata.BUNNYDNSPZ {
 	return rc.GetRDATA().(privatetypesrdata.BUNNYDNSPZ)
 }
 
+func (rc *RecordConfig) AsBUNNYDNSRDR() privatetypesrdata.BUNNYDNSRDR {
+	return rc.GetRDATA().(privatetypesrdata.BUNNYDNSRDR)
+}
+
 func (rc *RecordConfig) AsCAA() dnsrdatav2.CAA {
 	return rc.GetRDATA().(dnsrdatav2.CAA)
 }

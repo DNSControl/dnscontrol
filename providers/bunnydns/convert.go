@@ -54,6 +54,8 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 		}
 		r.PullZoneID = rdata.PullZoneID
 		r.Value = ""
+	case recordTypeRedirect:
+		r.Value = rc.AsBUNNYDNSRDR().Target
 	default:
 		r.Value = rc.GetRDATA().String()
 	}
@@ -112,10 +114,7 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 		}
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSPZ, r.LinkName)
 	case "BUNNY_DNS_RDR":
-		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSRDR)
-		// if err == nil {
-		// 	err = rc.Set|Target(r.Value)
-		// }
+		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSRDR, recordValue)
 	case "CAA":
 		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeCAA, r.Flags, r.Tag, recordValue)
 	case "MX":

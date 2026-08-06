@@ -13,7 +13,7 @@ func TestPorkbunUrlfwd_Plain(t *testing.T) {
 	y := &PORKBUNURLFWD{
 		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
 		PORKBUNURLFWD: privatetypesrdata.PORKBUNURLFWD{
-			Location: "",
+			Location: "http://example.com",
 		},
 	}
 	rry, err := dnsv2.New(y.String())
