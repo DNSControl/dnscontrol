@@ -475,29 +475,8 @@ function validateR53AliasType(value) {
     );
 }
 
-function isStringOrArray(x) {
-    return _.isString(x) || _.isArray(x);
-}
-
 // AUTOSPLIT is deprecated. It is now a no-op.
 var AUTOSPLIT = {};
-
-var LUA = recordBuilder('LUA', {
-    args: [
-        ['name', _.isString],
-        ['rtype', _.isString],
-        ['target', isStringOrArray],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.luartype = args.rtype.toUpperCase();
-        if (_.isString(args.target)) {
-            record.target = args.target;
-        } else {
-            record.target = args.target.join('');
-        }
-    },
-});
 
 // Parses coordinates of the form 41°24'12.2"N 2°10'26.5"E
 function parseDMSCoordinatesString(inputString) {
@@ -2362,6 +2341,7 @@ var DS = rawrecordBuilder('DS');
 var FRAME = rawrecordBuilder('FRAME');
 var HTTPS = rawrecordBuilder('HTTPS');
 var LOC = rawrecordBuilder('LOC');
+var LUA = rawrecordBuilder('LUA');
 var MX = rawrecordBuilder('MX');
 var NAPTR = rawrecordBuilder('NAPTR');
 var NS = rawrecordBuilder('NS');

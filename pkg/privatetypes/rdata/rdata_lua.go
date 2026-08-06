@@ -34,7 +34,7 @@ func MakeLUA(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv
 		return nil, fmt.Errorf("LUA expects 2 arguments, got %d: %+v", len(args), args)
 	}
 	return LUA{
-		LuaType:    mustbe.RawString(args[0]),
+		LuaType:    mustbe.ToUpperRawString(args[0]),
 		LuaPayload: mustbe.RawString(args[1]),
 	}, nil
 }

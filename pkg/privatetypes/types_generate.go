@@ -57,17 +57,18 @@ type TypeInfo struct {
 }
 
 var typeInfo = map[string]TypeInfo{
-	"RawString":  {GoType: "string", IsString: true},
-	"TargetHost": {GoType: "string", IsString: true, NeedsOrigin: true},
-	"BoolString": {GoType: "string", IsString: true},
-	"Bool":       {GoType: "bool"},
-	"Uint8":      {GoType: "uint8"},
-	"Uint16":     {GoType: "uint16"},
-	"Uint32":     {GoType: "uint32"},
-	"Uint64":     {GoType: "uint64"},
-	"Int64":      {GoType: "int64"},
-	"IPv4":       {GoType: "netip.Addr", NeedsNetip: true},
-	"IPv6":       {GoType: "netip.Addr", NeedsNetip: true},
+	"RawString":        {GoType: "string", IsString: true},
+	"ToUpperRawString": {GoType: "string", IsString: true},
+	"TargetHost":       {GoType: "string", IsString: true, NeedsOrigin: true},
+	"BoolString":       {GoType: "string", IsString: true},
+	"Bool":             {GoType: "bool"},
+	"Uint8":            {GoType: "uint8"},
+	"Uint16":           {GoType: "uint16"},
+	"Uint32":           {GoType: "uint32"},
+	"Uint64":           {GoType: "uint64"},
+	"Int64":            {GoType: "int64"},
+	"IPv4":             {GoType: "netip.Addr", NeedsNetip: true},
+	"IPv6":             {GoType: "netip.Addr", NeedsNetip: true},
 }
 
 func info(typeName string) TypeInfo {
@@ -142,7 +143,7 @@ func needsNrc(fields []FieldDef) bool {
 // needsTxtutil returns true if any field requires txtutil functions.
 func needsTxtutil(fields []FieldDef) bool {
 	for _, f := range fields {
-		if f.Type == "RawString" {
+		if f.Type == "RawString" || f.Type == "ToUpperRawString" {
 			return true
 		}
 	}
@@ -554,7 +555,7 @@ func generateRdataFile(t *TypeDef) error {
 		for _, f := range append(t.Fields, t.OptionalFields...) {
 			// Special-case behaviors requested by generator requirements.
 			switch f.Type {
-			case "RawString":
+			case "RawString", "ToUpperRawString":
 				fmt.Fprintf(&buf, "\tparts = append(parts, txtutil.ZoneifyString(rd.%s))\n", f.Name)
 			case "TargetHost":
 				fmt.Fprintf(&buf, "\tparts = append(parts, rd.%s)\n", f.Name)
