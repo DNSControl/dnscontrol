@@ -20,114 +20,60 @@ import (
 func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	// Hack to back-fill legacy fields. This will go away eventually.
 	switch rd := rc.GetRDATA().(type) {
-	case privatetypesrdata.ADGUARDHOMEAPASSTHROUGH:
-		//rc.SetTarget(rd.Target)
-	case privatetypesrdata.ADGUARDHOMEAAAAPASSTHROUGH:
-		//rc.SetTarget(rd.Target)
-	case privatetypesrdata.AKAMAICDN:
-		//rc.SetTarget(rd.Target)
+
 	case privatetypesrdata.AKAMAITLC:
 		rc.AnswerType = rd.AnswerType
-		//rc.SetTarget(rd.Target)
-	case privatetypesrdata.ALIAS:
-		//rc.SetTarget(rd.Target)
 	case privatetypesrdata.AZUREALIAS:
-		//rc.SetTarget(rd.Target)
 		rc.AzureAlias = map[string]string{"type": rd.AliasType}
-	case dnsrdatav2.A:
-		//rc.SetTargetIP(rd.Addr)
-	case dnsrdatav2.AAAA:
-		//rc.SetTargetIP(rd.Addr)
-
-	case privatetypesrdata.BUNNYDNSPZ:
-		// no-op
-
-	case dnsrdatav2.CAA:
-		// no-op
-	case privatetypesrdata.CFWORKERROUTE:
-		// no-op
-	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
-		// no-op
-	case privatetypesrdata.CLOUDNSWR:
-		//rc.SetTarget(rd.Target)
-	case dnsrdatav2.CNAME:
-		//rc.SetTarget(rd.Target)
-
-	case dnsrdatav2.DHCID:
-		//rc.SetTarget(rd.Digest)
-	case dnsrdatav2.DNAME:
-		//rc.SetTarget(rd.Target)
-	case dnsrdatav2.DS:
-		// no-op
-	case dnsrdatav2.DNSKEY:
-		// no-op
-	case privatetypesrdata.FRAME:
-		//rc.SetTarget(rd.Target)
-
-	case dnsrdatav2.LOC:
-		// no-op
 	case privatetypesrdata.LUA:
 		rc.LuaRType = rd.LuaType
-		//rc.SetTarget(rd.LuaPayload)
-
-	case privatetypesrdata.MIKROTIKFWD:
-		// no-op
-	case privatetypesrdata.MIKROTIKNXDOMAIN:
-		// no-op
-	case privatetypesrdata.MIKROTIKFORWARDER:
-		// no-op
-	case dnsrdatav2.MX:
-		// no-op
-
-	case dnsrdatav2.NAPTR:
-		// no-op
-
-	case dnsrdatav2.NS:
-		//rc.SetTarget(rd.Ns)
-
-	case dnsrdatav2.OPENPGPKEY:
-		//rc.SetTarget(rd.PublicKey)
-
-	case privatetypesrdata.PORKBUNURLFWD:
-		//rc.SetTarget(rd.Location)
-	case dnsrdatav2.PTR:
-		//rc.SetTarget(rd.Ptr)
-
-	case dnsrdatav2.RP:
-		// noop -- no legacy fields
 	case privatetypesrdata.R53ALIAS:
 		if rc.R53Alias == nil {
 			rc.R53Alias = map[string]string{}
 		}
 		rc.R53Alias["type"] = rd.AliasType
-		//rc.SetTarget(rd.Target)
 		if rd.ZoneID != "" {
 			rc.R53Alias["zone_id"] = rd.ZoneID
 		}
 		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
 
+	case dnsrdatav2.A:
+	case dnsrdatav2.AAAA:
+	case dnsrdatav2.CAA:
+	case dnsrdatav2.CNAME:
+	case dnsrdatav2.DHCID:
+	case dnsrdatav2.DNAME:
+	case dnsrdatav2.DNSKEY:
+	case dnsrdatav2.DS:
+	case dnsrdatav2.LOC:
+	case dnsrdatav2.MX:
+	case dnsrdatav2.NAPTR:
+	case dnsrdatav2.NS:
+	case dnsrdatav2.OPENPGPKEY:
+	case dnsrdatav2.PTR:
+	case dnsrdatav2.RP:
 	case dnsrdatav2.SMIMEA:
-		// no-op
 	case dnsrdatav2.SOA:
-		// no-op
 	case dnsrdatav2.SRV:
-		// no-op
 	case dnsrdatav2.SSHFP:
-		// no-op
 	case dnsrdatav2.SVCB: // There is no dnsrdatav2.HTTPS
-		// no-op
-
 	case dnsrdatav2.TLSA:
-		// no-op
 	case dnsrdatav2.TXT:
-		// TXT stores its value only in .rdata (the single source of truth).
-		// The TXT accessors (GetTargetField/GetTargetTXTJoined/...) read it
-		// from there; there is no legacy .target back-fill.
-
-	case privatetypesrdata.URL:
-		//rc.SetTarget(rd.Location)
+	case privatetypesrdata.ADGUARDHOMEAAAAPASSTHROUGH:
+	case privatetypesrdata.ADGUARDHOMEAPASSTHROUGH:
+	case privatetypesrdata.AKAMAICDN:
+	case privatetypesrdata.ALIAS:
+	case privatetypesrdata.BUNNYDNSPZ:
+	case privatetypesrdata.CFWORKERROUTE:
+	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
+	case privatetypesrdata.CLOUDNSWR:
+	case privatetypesrdata.FRAME:
+	case privatetypesrdata.MIKROTIKFORWARDER:
+	case privatetypesrdata.MIKROTIKFWD:
+	case privatetypesrdata.MIKROTIKNXDOMAIN:
+	case privatetypesrdata.PORKBUNURLFWD:
 	case privatetypesrdata.URL301:
-		//rc.SetTarget(rd.Location)
+	case privatetypesrdata.URL:
 
 	default:
 		return fmt.Errorf("assertion failed: copyRDtoLegacyFields has not implemented type %T", rd)
