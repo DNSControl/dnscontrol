@@ -555,7 +555,15 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		for _, rec := range domain.Records {
 			if rec.Type == "IMPORT_TRANSFORM" {
 				suffixstrip := rec.Metadata["transform_suffixstrip"]
-				table, err := transform.DecodeTransformTable(rec.Metadata["transform_table"])
+				transformTable := rec.Metadata["transform_table"]
+				ttl := rec.TTL
+				if rec.GetRDATA() != nil {
+					rd := rec.AsIMPORTTRANSFORM()
+					transformTable = rd.TransformTable
+					ttl = uint32(rd.TTL)
+					suffixstrip = rd.SuffixStrip
+				}
+				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
 					errs = append(errs, err)
 					continue
@@ -565,7 +573,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", rec.GetTargetField())
 					errs = append(errs, err)
 				}
-				err = importTransform(c, domain, table, rec.TTL, suffixstrip)
+				err = importTransform(c, domain, table, ttl, suffixstrip)
 				if err != nil {
 					errs = append(errs, err)
 				}

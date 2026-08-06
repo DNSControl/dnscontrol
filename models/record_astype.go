@@ -159,6 +159,10 @@ func (rc *RecordConfig) AsHTTPS() dnsrdatav2.SVCB {
 	return rc.GetRDATA().(dnsrdatav2.SVCB)
 }
 
+func (rc *RecordConfig) AsIMPORTTRANSFORM() privatetypesrdata.IMPORTTRANSFORM {
+	return rc.GetRDATA().(privatetypesrdata.IMPORTTRANSFORM)
+}
+
 func (rc *RecordConfig) AsIPN() dnsrdatav2.IPN {
 	return rc.GetRDATA().(dnsrdatav2.IPN)
 }

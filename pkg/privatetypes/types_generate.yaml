@@ -150,6 +150,25 @@ types:
         values:
           Target: example.com.
 
+  - name: Import_Transform
+    codepoint: 65322
+    fields:
+      - name: TransformTable
+        type: RawString
+      - name: TTL
+        type: Uint16
+      - name: SuffixStrip
+        type: RawString
+      - name: TargetDomain
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          TransformTable: 1.1.1.0 ~ 1.1.1.100 ~ 4.4.4.100 ~
+          SuffixStrip: com
+          TargetDomain: example.com
+          TTL: 123
+
   - name: Lua
     codepoint: 65292
     fields:

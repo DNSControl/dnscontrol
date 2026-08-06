@@ -68,6 +68,7 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:
 	case privatetypesrdata.CLOUDNSWR:
 	case privatetypesrdata.FRAME:
+	case privatetypesrdata.IMPORTTRANSFORM:
 	case privatetypesrdata.MIKROTIKFORWARDER:
 	case privatetypesrdata.MIKROTIKFWD:
 	case privatetypesrdata.MIKROTIKNXDOMAIN:

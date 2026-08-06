@@ -884,32 +884,30 @@ function IGNORE_TARGET(target, rType) {
 }
 
 // IMPORT_TRANSFORM(translation_table, domain, ttl)
-var IMPORT_TRANSFORM = recordBuilder('IMPORT_TRANSFORM', {
-    args: [['translation_table'], ['domain'], ['ttl', _.isNumber]],
-    transform: function (record, args, modifiers) {
-        record.name = '@';
-        record.target = args.domain;
-        record.meta['transform_table'] = format_tt(args.translation_table);
-        record.ttl = args.ttl;
-    },
-});
+function importTransformOptions(record, processedArgs) {
+    return [
+        processedArgs[0],
+        processedArgs[1],
+        processedArgs[3],
+        processedArgs.length === 5 ? processedArgs[4] : '',
+        processedArgs[2],
+    ];
+}
+
+var importTransformRawBuilder = rawrecordBuilder(
+    'IMPORT_TRANSFORM',
+    true,
+    importTransformOptions
+);
+function importTransformBuilder(translation_table) {
+    arguments[0] = format_tt(translation_table);
+    return importTransformRawBuilder.apply(null, arguments);
+}
+
+var IMPORT_TRANSFORM = importTransformBuilder;
 
 // IMPORT_TRANSFORM_STRIP(translation_table, domain, ttl, suffixstrip)
-var IMPORT_TRANSFORM_STRIP = recordBuilder('IMPORT_TRANSFORM', {
-    args: [
-        ['translation_table'],
-        ['domain'],
-        ['ttl', _.isNumber],
-        ['suffixstrip'],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = '@';
-        record.target = args.domain;
-        record.meta['transform_table'] = format_tt(args.translation_table);
-        record.ttl = args.ttl;
-        record.meta['transform_suffixstrip'] = args.suffixstrip;
-    },
-});
+var IMPORT_TRANSFORM_STRIP = importTransformBuilder;
 
 // PURGE()
 function PURGE(d) {
