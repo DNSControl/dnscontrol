@@ -22,7 +22,6 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	switch rd := rc.GetRDATA().(type) {
 
 	case privatetypesrdata.AKAMAITLC:
-		rc.AnswerType = rd.AnswerType
 	case privatetypesrdata.AZUREALIAS:
 		rc.AzureAlias = map[string]string{"type": rd.AliasType}
 	case privatetypesrdata.LUA:
