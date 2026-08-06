@@ -1,0 +1,44 @@
+{
+  "registrars": [],
+  "dns_providers": [],
+  "domains": [
+    {
+      "name": "example.com",
+      "uniquename": "example.com",
+      "registrar": "reg",
+      "dnsProviders": {},
+      "records": [
+        {
+          "type": "ADGUARDHOME_A_PASSTHROUGH",
+          "typenum": 65280,
+          "comparablev3": "\"\"",
+          "ttl": 300,
+          "name": "a",
+          "name_unicode": "a",
+          "meta": {
+            "orig_custom_type": "ADGUARDHOME_A_PASSTHROUGH"
+          },
+          "filepos": "[line:2:5]",
+          "rdata": {
+            "Target": ""
+          }
+        },
+        {
+          "type": "ADGUARDHOME_AAAA_PASSTHROUGH",
+          "typenum": 65281,
+          "comparablev3": "\"\"",
+          "ttl": 300,
+          "name": "aaaa",
+          "name_unicode": "aaaa",
+          "meta": {
+            "orig_custom_type": "ADGUARDHOME_AAAA_PASSTHROUGH"
+          },
+          "filepos": "[line:3:5]",
+          "rdata": {
+            "Target": ""
+          }
+        }
+      ]
+    }
+  ]
+}

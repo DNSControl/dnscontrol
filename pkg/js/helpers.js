@@ -1267,25 +1267,6 @@ var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
 var PORKBUN_URLFWD = recordBuilder('PORKBUN_URLFWD');
 var BUNNY_DNS_RDR = recordBuilder('BUNNY_DNS_RDR');
 
-// MIKROTIK_FWD(name, target, modifiers...)
-// RouterOS conditional DNS forwarding entry.
-var MIKROTIK_FWD = recordBuilder('MIKROTIK_FWD');
-
-// MIKROTIK_NXDOMAIN(name, modifiers...)
-// RouterOS NXDOMAIN entry — returns NXDOMAIN for matching queries (DNS blackholing).
-var MIKROTIK_NXDOMAIN = recordBuilder('MIKROTIK_NXDOMAIN', {
-    args: [['name', _.isString]],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.target = 'NXDOMAIN';
-    },
-});
-
-// MIKROTIK_FORWARDER(name, dns_servers, modifiers...)
-// RouterOS named DNS forwarder (/ip/dns/forwarders).
-// Use in the synthetic zone "_forwarders.mikrotik".
-var MIKROTIK_FORWARDER = recordBuilder('MIKROTIK_FORWARDER');
-
 var BUNNY_DNS_PZ = recordBuilder('BUNNY_DNS_PZ', {
     args: [['name', _.isString], ['pullZoneId']],
     transform: function (record, args, modifiers) {
@@ -2342,6 +2323,13 @@ var FRAME = rawrecordBuilder('FRAME');
 var HTTPS = rawrecordBuilder('HTTPS');
 var LOC = rawrecordBuilder('LOC');
 var LUA = rawrecordBuilder('LUA');
+// RouterOS named DNS forwarder (/ip/dns/forwarders).
+// Use in the synthetic zone "_forwarders.mikrotik".
+var MIKROTIK_FORWARDER = rawrecordBuilder('MIKROTIK_FORWARDER');
+// RouterOS conditional DNS forwarding entry.
+var MIKROTIK_FWD = rawrecordBuilder('MIKROTIK_FWD');
+// RouterOS NXDOMAIN entry — returns NXDOMAIN for matching queries (DNS blackholing).
+var MIKROTIK_NXDOMAIN = rawrecordBuilder('MIKROTIK_NXDOMAIN');
 var MX = rawrecordBuilder('MX');
 var NAPTR = rawrecordBuilder('NAPTR');
 var NS = rawrecordBuilder('NS');

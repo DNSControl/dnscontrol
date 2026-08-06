@@ -28,6 +28,9 @@ func (rc *RecordConfig) GetTargetField() string {
 		if err != nil {
 			return rc.GetRDATA().String()
 		}
+		if len(fx) == 0 {
+			return ""
+		}
 		return fx[len(fx)-1]
 	}
 	return rc.target

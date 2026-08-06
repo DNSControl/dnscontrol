@@ -1,0 +1,50 @@
+{
+  "registrars": [],
+  "dns_providers": [],
+  "domains": [
+    {
+      "name": "example.com",
+      "uniquename": "example.com",
+      "registrar": "reg",
+      "dnsProviders": {},
+      "records": [
+        {
+          "type": "LUA",
+          "typenum": 65292,
+          "comparablev3": "TXT \"; return 'ok'\"",
+          "ttl": 30,
+          "name": "_diag",
+          "name_unicode": "_diag",
+          "meta": {
+            "orig_custom_type": "LUA"
+          },
+          "filepos": "[line:5:5]",
+          "luartype": "TXT",
+          "rdata": {
+            "LuaType": "TXT",
+            "LuaPayload": "; return 'ok'"
+          },
+          "target": "; return 'ok'"
+        },
+        {
+          "type": "LUA",
+          "typenum": 65292,
+          "comparablev3": "A \"return_127_0_0_1\"",
+          "ttl": 60,
+          "name": "app",
+          "name_unicode": "app",
+          "meta": {
+            "orig_custom_type": "LUA"
+          },
+          "filepos": "[line:4:5]",
+          "luartype": "A",
+          "rdata": {
+            "LuaType": "A",
+            "LuaPayload": "return_127_0_0_1"
+          },
+          "target": "return_127_0_0_1"
+        }
+      ]
+    }
+  ]
+}
