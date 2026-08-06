@@ -113,10 +113,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	// These record types have no fields in RecordConfig (other than .rdata) to backfill.
 
 	case privatetypes.TypeAKAMAITLC:
-		rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, isEnabled, rc.AnswerType, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-
 	case dnsv2.TypeCAA:
 	case dnsv2.TypeDNSKEY:
 	case dnsv2.TypeDS:
