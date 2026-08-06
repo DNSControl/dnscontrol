@@ -1,7 +1,6 @@
 package models
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/netip"
 	"strings"
@@ -16,7 +15,7 @@ Not the best design, but we're stuck with it until we re-do RecordConfig, possib
 */
 
 // GetTargetField returns the target. There may be other fields, but they are
-// not included. For example, the .MxPreference field of an MX record isn't included.
+// not included. For example, the Preference field of an MX record isn't included.
 func (rc *RecordConfig) GetTargetField() string {
 	if rc.Type == "TXT" {
 		// TXT stores its value in .rdata (the single source of truth); .target
@@ -58,41 +57,51 @@ func (rc *RecordConfig) GetTargetDebug() string {
 	return content.String()
 }
 
-// GetTargetJS returns the target as a JavaScript literal, as documented in
-// documentation/language-reference/domain-modifiers/*.md. Each parameter is
-// quoted, unless it is an integer or boolean.  We can't use GetTargetCombined()
-// because it is not designed for JavaScript and may include unquoted
-// parameters, which would break the JavaScript.  Instead, we must quote each
-// parameter separately. This doesn't support all types and needs to be improved.
-// FIXME(tlim): This duplicates code in commands/getZones.go:formatDsl().
-//
-//	We should extract the common logic into a function they can both use.
-func (rc *RecordConfig) GetTargetJS() string {
-	if rc.Type == "TXT" {
-		encoded, err := json.Marshal(rc.GetTargetTXTSegmented())
-		if err != nil {
-			panic(err) // strings are always JSON-marshalable
-		}
-		return string(encoded)
-	}
-	if rc.Type == "LUA" {
-		return fmt.Sprintf("%q", rc.GetTargetField())
-	}
-	switch rc.Type {
-	case "A", "AAAA", "AKAMAICDN", "CNAME", "DHCID", "NS", "OPENPGPKEY", "PTR":
-		return fmt.Sprintf("%q", rc.target)
-	case "SOA":
-		// SOA(ns, mbox, refresh, retry, expire, minttl)
-		f := rc.AsSOA()
-		return fmt.Sprintf("%q, %q, %d, %d, %d, %d", f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
-	case "SRV":
-		// SRV(priority, weight, port, target)
-		f := rc.AsSRV()
-		return fmt.Sprintf("%d, %d, %d, %q", f.Priority, f.Weight, f.Port, f.Target)
-	default:
-		return fmt.Sprintf("%q", rc.GetRDATA().String())
-	}
-}
+//// GetTargetJS returns the target as a JavaScript literal, as documented in
+//// documentation/language-reference/domain-modifiers/*.md. Each parameter is
+//// quoted, unless it is an integer or boolean.  We can't use .String()
+//// because it is not designed for JavaScript and may include unquoted
+//// parameters, which would break the JavaScript.  Instead, we must quote each
+//// parameter separately. This doesn't support all types and needs to be improved.
+//// FIXME(tlim): This duplicates code in commands/getZones.go:formatDsl().
+////
+////	We should extract the common logic into a function they can both use.
+//func (rc *RecordConfig) GetTargetJS() string {
+//	//	if rc.Type == "TXT" {
+//	//		encoded, err := json.Marshal(rc.GetTargetTXTSegmented())
+//	//		if err != nil {
+//	//			panic(err) // strings are always JSON-marshalable
+//	//		}
+//	//		return string(encoded)
+//	//	}
+//	if rc.Type == "LUA" {
+//		return fmt.Sprintf("%q", rc.GetTargetField())
+//	}
+//	switch rc.Type {
+//	// case "A", "AAAA", "AKAMAICDN", "CNAME", "DHCID", "NS", "OPENPGPKEY", "PTR":
+//	//
+//	//	return fmt.Sprintf("%q", rc.target)
+//	//
+//	// case "SOA":
+//	//
+//	//	// SOA(ns, mbox, refresh, retry, expire, minttl)
+//	//	f := rc.AsSOA()
+//	//	return fmt.Sprintf("%q, %q, %d, %d, %d, %d", f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
+//	//
+//	// case "SRV":
+//	//
+//	//	// SRV(priority, weight, port, target)
+//	//	f := rc.AsSRV()
+//	//	return fmt.Sprintf("%d, %d, %d, %q", f.Priority, f.Weight, f.Port, f.Target)
+//	//
+//	// default:
+//	//
+//	//		return fmt.Sprintf("%q", rc.GetRDATA().String())
+//	//	}
+//	}
+//	s, _ := RDtoFieldsJS(rc.GetRDATA())
+//	return strings.Join(s, ", ")
+//}
 
 // SetTarget sets the target, assuming that the rtype is appropriate.
 func (rc *RecordConfig) SetTarget(target string) error {

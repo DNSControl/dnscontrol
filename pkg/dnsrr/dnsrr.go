@@ -27,7 +27,6 @@ func RRv2toRC(dc *models.DomainConfig, rr dnsv2.RR) (*models.RecordConfig, error
 		// DNSControl stores a TXT value as a single string, so join the
 		// parser's 255-octet chunks. The patched dns library (codeberg.org/miekg/dns)
 		// unescapes backslashes correctly, so no further fix-up is needed
-		// (previously we compensated for github.com/miekg/dns/issues/1384 here).
 		rd = dnsrdatav2.TXT{Txt: []string{strings.Join(v.Txt, "")}}
 	case dnsrdatav2.TLSA:
 		// TLSA is a special case because we need to normalize the certificate data to uppercase.

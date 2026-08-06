@@ -109,15 +109,15 @@ types:
       - name: SRThen
         type: RawString
     runtimeFields:
-      - name: SRRRulesetID
+      - name: RT_SRRRulesetID
         type: RawString
         structtag: "json:\"sr_rulesetid,omitempty\""
         comment: "ID of the ruleset containing this rule (populated by API)"
-      - name: SRRRulesetRuleID
+      - name: RT_SRRRulesetRuleID
         type: RawString
         structtag: "json:\"sr_rulesetruleid,omitempty\""
         comment: "ID of this rule within the ruleset (populated by API)"
-#      - name: SRDisplay
+#      - name: RT_SRDisplay
 #        type: RawString
 #        structtag: "json:\"sr_display,omitempty\""
 #        comment: "How is this displayed to the user (SetTarget) for CF_SINGLE_REDIRECT"

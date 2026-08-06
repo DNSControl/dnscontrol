@@ -407,7 +407,7 @@ func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordCon
 	case "CF_WORKER_ROUTE":
 		idTxt = oldrec.Original.(cloudflare.WorkerRoute).ID
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
-		idTxt = oldrec.AsCLOUDFLAREAPISINGLEREDIRECT().SRRRulesetID
+		idTxt = oldrec.AsCLOUDFLAREAPISINGLEREDIRECT().RT_SRRRulesetID
 	default:
 		idTxt = oldrec.Original.(cloudflare.DNSRecord).ID
 	}

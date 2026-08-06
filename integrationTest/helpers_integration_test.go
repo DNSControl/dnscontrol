@@ -559,7 +559,7 @@ func loc(name string, d1 uint8, m1 uint8, s1 float32, ns string,
 }
 
 func manyA(namePattern, target string, n int) []*models.RecordConfig {
-	recs := []*models.RecordConfig{}
+	recs := models.Records{}
 	for i := range n {
 		r, err := globalDC.NewRecordConfig(fmt.Sprintf(namePattern, i), defaultTTL, dnsv2.TypeA, target)
 		panicOnErr(err)
