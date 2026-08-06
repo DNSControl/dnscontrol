@@ -71,12 +71,9 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target          string            // If a name, must end with "."
-	LuaRType        string            `json:"luartype,omitempty"`
-	R53Alias        map[string]string `json:"r53_alias,omitempty"`
-	AzureAlias      map[string]string `json:"azure_alias,omitempty"`
-	AnswerType      string            `json:"answer_type,omitempty"`
-	UnknownTypeName string            `json:"unknown_type_name,omitempty"`
+	target          string // If a name, must end with "."
+	AnswerType      string `json:"answer_type,omitempty"`
+	UnknownTypeName string `json:"unknown_type_name,omitempty"`
 }
 
 // MarshalJSON marshals RecordConfig.
@@ -135,7 +132,6 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
 		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
 		// LocAltitude        uint32            `json:"localtitude,omitempty"`
-		LuaRType string `json:"luartype,omitempty"`
 		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
 		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
 		// NaptrFlags      string `json:"naptrflags,omitempty"`
@@ -151,10 +147,8 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
 		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
 		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-		R53Alias        map[string]string `json:"r53_alias,omitempty"`
-		AzureAlias      map[string]string `json:"azure_alias,omitempty"`
-		AnswerType      string            `json:"answer_type,omitempty"`
-		UnknownTypeName string            `json:"unknown_type_name,omitempty"`
+		AnswerType      string `json:"answer_type,omitempty"`
+		UnknownTypeName string `json:"unknown_type_name,omitempty"`
 
 		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
 
@@ -339,17 +333,16 @@ func (rk *RecordKey) String() string {
 // Key converts a RecordConfig into a RecordKey.
 func (rc *RecordConfig) Key() RecordKey {
 	t := rc.Type
-	if rc.R53Alias != nil {
-		if v, ok := rc.R53Alias["type"]; ok {
+	if rc.GetRDATA() != nil {
+		switch rc.Type {
+		case "R53_ALIAS":
 			// Route53 aliases append their alias type, so that records for the same
 			// label with different alias types are considered separate.
-			t = fmt.Sprintf("%s_%s", t, v)
-		}
-	} else if rc.AzureAlias != nil {
-		if v, ok := rc.AzureAlias["type"]; ok {
+			t = fmt.Sprintf("%s_%s", t, rc.AsR53ALIAS().AliasType)
+		case "AZURE_ALIAS":
 			// Azure aliases append their alias type, so that records for the same
 			// label with different alias types are considered separate.
-			t = fmt.Sprintf("%s_%s", t, v)
+			t = fmt.Sprintf("%s_%s", t, rc.AsAZUREALIAS().AliasType)
 		}
 	}
 	// Route 53 weighted/failover routing: records with different

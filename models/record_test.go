@@ -3,6 +3,8 @@ package models
 import (
 	"reflect"
 	"testing"
+
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestHasRecordTypeName(t *testing.T) {
@@ -33,16 +35,12 @@ func TestKey(t *testing.T) {
 			RecordKey{Type: "A", NameFQDN: "example.com"},
 		},
 		{
-			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com"},
-			RecordKey{Type: "R53_ALIAS", NameFQDN: "example.com"},
-		},
-		{
-			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", R53Alias: map[string]string{"foo": "bar"}},
-			RecordKey{Type: "R53_ALIAS", NameFQDN: "example.com"},
-		},
-		{
-			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", R53Alias: map[string]string{"type": "AAAA"}},
+			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.R53ALIAS{AliasType: "AAAA"}},
 			RecordKey{Type: "R53_ALIAS_AAAA", NameFQDN: "example.com"},
+		},
+		{
+			RecordConfig{Type: "AZURE_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.AZUREALIAS{AliasType: "CNAME"}},
+			RecordKey{Type: "AZURE_ALIAS_CNAME", NameFQDN: "example.com"},
 		},
 	}
 	for i, test := range tests {
@@ -88,8 +86,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 		TlsaUsage        uint8
 		TlsaSelector     uint8
 		TlsaMatchingType uint8
-		R53Alias         map[string]string
-		AzureAlias       map[string]string
 		Original         any
 	}
 	tests := []struct {
@@ -134,8 +130,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				TlsaUsage:        1,
 				TlsaSelector:     2,
 				TlsaMatchingType: 3,
-				R53Alias:         map[string]string{"a": "eh", "b": "bee"},
-				AzureAlias:       map[string]string{"az": "az", "ure": "your"},
 				// Original         any,
 			},
 			want: &RecordConfig{
@@ -166,8 +160,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				// TlsaUsage:        1,
 				// TlsaSelector:     2,
 				// TlsaMatchingType: 3,
-				R53Alias:   map[string]string{"a": "eh", "b": "bee"},
-				AzureAlias: map[string]string{"az": "az", "ure": "your"},
 				// Original         any,
 			},
 		},
@@ -175,16 +167,14 @@ func TestRecordConfig_Copy(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := &RecordConfig{
-				Type:       tt.fields.Type,
-				Name:       tt.fields.Name,
-				SubDomain:  tt.fields.SubDomain,
-				NameFQDN:   tt.fields.NameFQDN,
-				target:     tt.fields.target,
-				TTL:        tt.fields.TTL,
-				Metadata:   tt.fields.Metadata,
-				R53Alias:   tt.fields.R53Alias,
-				AzureAlias: tt.fields.AzureAlias,
-				Original:   tt.fields.Original,
+				Type:      tt.fields.Type,
+				Name:      tt.fields.Name,
+				SubDomain: tt.fields.SubDomain,
+				NameFQDN:  tt.fields.NameFQDN,
+				target:    tt.fields.target,
+				TTL:       tt.fields.TTL,
+				Metadata:  tt.fields.Metadata,
+				Original:  tt.fields.Original,
 			}
 			got, err := rc.Copy()
 			if (err != nil) != tt.wantErr {

@@ -252,7 +252,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		if _, ok := dnsv2.StringToType[upper]; !ok {
 			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", f.LuaType))
 		}
-		rec.LuaRType = upper
 	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
 	default:
 		if rec.Metadata["orig_custom_type"] != "" {

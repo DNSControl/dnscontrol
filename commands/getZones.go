@@ -478,7 +478,7 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		target = jsonQuoted(rec.GetTargetTXTJoined())
 		// TODO(tlim): If this is an SPF record, generate a SPF_BUILDER().
 	case "LUA":
-		target = fmt.Sprintf("%q, %s", rec.LuaRType, jsonQuoted(rec.GetTargetTXTJoined()))
+		target = fmt.Sprintf("%q, %s", rec.AsLUA().LuaType, jsonQuoted(rec.GetTargetTXTJoined()))
 	case "NS":
 		// NS records at the apex should be NAMESERVER() records.
 		// DnsControl uses the API to get this info. NAMESERVER() is just
@@ -530,13 +530,13 @@ func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
 	f := rec.AsR53ALIAS()
 	items := []string{
 		`"` + rec.Name + `"`,
-		`"` + rec.R53Alias["type"] + `"`,
+		`"` + f.AliasType + `"`,
 		`"` + f.Target + `"`,
 	}
-	if z, ok := rec.R53Alias["zone_id"]; ok {
-		items = append(items, `R53_ZONE("`+z+`")`)
+	if f.ZoneID != "" {
+		items = append(items, `R53_ZONE("`+f.ZoneID+`")`)
 	}
-	if e, ok := rec.R53Alias["evaluate_target_health"]; ok && e == "true" {
+	if f.EvalTargetHealth == "true" {
 		items = append(items, "R53_EVALUATE_TARGET_HEALTH(true)")
 	}
 	if ttl != 0 {

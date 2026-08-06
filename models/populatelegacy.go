@@ -24,18 +24,8 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.AKAMAITLC:
 		rc.AnswerType = rd.AnswerType
 	case privatetypesrdata.AZUREALIAS:
-		rc.AzureAlias = map[string]string{"type": rd.AliasType}
 	case privatetypesrdata.LUA:
-		rc.LuaRType = rd.LuaType
 	case privatetypesrdata.R53ALIAS:
-		if rc.R53Alias == nil {
-			rc.R53Alias = map[string]string{}
-		}
-		rc.R53Alias["type"] = rd.AliasType
-		if rd.ZoneID != "" {
-			rc.R53Alias["zone_id"] = rd.ZoneID
-		}
-		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
 
 	case dnsrdatav2.A:
 	case dnsrdatav2.AAAA:

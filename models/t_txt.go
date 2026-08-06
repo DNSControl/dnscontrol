@@ -28,12 +28,14 @@ func (rc *RecordConfig) HasFormatIdenticalToTXT() bool {
 // SetTargetTXT sets the TXT fields when there is 1 string.
 //
 // LUA records reuse the TXT accessors (their payload is a TXT-format string).
-// When .Type is "LUA" the value is stored as a LUA rdata (using the already-set
-// .LuaRType) rather than a TXT rdata.
+// When .Type is "LUA", preserve its emitted record type while replacing the
+// payload in its RDATA.
 func (rc *RecordConfig) SetTargetTXT(s string) error {
 	if rc.Type == "LUA" {
-		rc.SetRDATA(privatetypesrdata.LUA{LuaType: rc.LuaRType, LuaPayload: s})
-		return rc.SetTarget(s)
+		rd := rc.AsLUA()
+		rd.LuaPayload = s
+		rc.SetRDATA(rd)
+		return nil
 	}
 	return legacySetTargetArgsTXT(rc, s)
 }
