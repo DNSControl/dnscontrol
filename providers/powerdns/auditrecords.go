@@ -11,6 +11,7 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
+	a.Add("DNSKEY", rejectif.DnskeyNotAtApex)
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-11
 	a.Add("TXT", rejectif.TxtHasBackslash)    // Last verified 2023-11-11
 	a.Add("HTTPS", rejectPowerDNSSVCBAutoHintsUnsorted)
