@@ -22,7 +22,7 @@ func (rc *RecordConfig) GetTargetField() string {
 		// is not populated for TXT.
 		return rc.GetTargetTXTJoined()
 	}
-	if rc.rdata != nil && (rc.Type == "A" || rc.Type == "AAAA" || rc.Type == "CNAME" || rc.Type == "NX") {
+	if rc.rdata != nil && (rc.Type == "A" || rc.Type == "AAAA" || rc.Type == "CNAME" || rc.Type == "NS") {
 		return rc.GetRDATA().String()
 	}
 	return rc.target
