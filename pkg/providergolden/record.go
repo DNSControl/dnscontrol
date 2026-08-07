@@ -44,7 +44,7 @@ func (r *Recorder) Observe(desired, existing models.Records) {
 	defer r.mu.Unlock()
 
 	for _, rc := range desired {
-		r.records[formatRecord(rc)] = true
+		r.records[rc.StringWithMeta()] = true
 	}
 
 	for _, rc := range existing {

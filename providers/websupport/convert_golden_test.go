@@ -18,3 +18,11 @@ func TestToRecordConfigGolden(t *testing.T) {
 func TestToNativeGolden(t *testing.T) {
 	providergolden.CheckToNative(t, "websupport_tonative", testDomain, toNative)
 }
+
+func TestConversionRoundTrip(t *testing.T) {
+	providergolden.CheckRoundTrip(t, testDomain, toNative,
+		func(dc *models.DomainConfig, native nativeRecord) ([]*models.RecordConfig, error) {
+			rc, err := toRecordConfig(dc, native)
+			return []*models.RecordConfig{rc}, err
+		})
+}

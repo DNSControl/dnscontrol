@@ -15,6 +15,10 @@
 //			})
 //	}
 //
+// When both conversion directions use the same native type, CheckRoundTrip
+// verifies that converting a recorded RecordConfig to the native type and back
+// preserves its StringWithMeta representation.
+//
 // The data lives in the provider's testdata directory. A recording covers the
 // whole provider, so the input files are named after it, and the golden file is
 // named after the test that produced it:
@@ -53,10 +57,8 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
-	"maps"
 	"os"
 	"path/filepath"
-	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -122,7 +124,7 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 			if rc == nil {
 				continue
 			}
-			b.WriteString(formatRecord(rc))
+			b.WriteString(rc.StringWithMeta())
 			b.WriteByte('\n')
 		}
 	}
@@ -169,6 +171,66 @@ func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *mo
 	}
 
 	report(t, testdataDir, name, append(got, '\n'))
+}
+
+// CheckRoundTrip replays the records in testdata/<provider>.records through
+// both provider conversion functions and verifies that their DNSControl
+// representation is unchanged.
+func CheckRoundTrip[N any](t *testing.T, domain string,
+	toNative func(rc *models.RecordConfig) (N, error),
+	toRC func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error),
+) {
+	t.Helper()
+
+	input, err := inputFile(recordsExt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	data, ok, err := loadInput(testdataDir, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
+	}
+
+	dc := models.MustNewDomainConfig(domain)
+	recs, err := parseRecords(dc, string(data))
+	if err != nil {
+		t.Fatalf("%s: %v", input, err)
+	}
+
+	for i, before := range recs {
+		native, err := toNative(before)
+		if err != nil {
+			t.Fatalf("%s: record %d: convert to native: %v", input, i, err)
+		}
+		after, err := toRC(dc, native)
+		if err != nil {
+			t.Fatalf("%s: record %d: convert back to RecordConfig: %v", input, i, err)
+		}
+
+		after = nonNilRecords(after)
+		if len(after) != 1 {
+			t.Errorf("%s: record %d: round trip returned %d records, want 1", input, i, len(after))
+			continue
+		}
+		if want, got := before.StringWithMeta(), after[0].StringWithMeta(); got != want {
+			t.Errorf("%s: record %d changed in round trip\nwant: %s\n got: %s", input, i, want, got)
+		}
+	}
+}
+
+func nonNilRecords(recs []*models.RecordConfig) []*models.RecordConfig {
+	n := 0
+	for _, rc := range recs {
+		if rc != nil {
+			recs[n] = rc
+			n++
+		}
+	}
+	return recs[:n]
 }
 
 // inputFile returns the recorded input file with extension ext that belongs to
@@ -233,28 +295,6 @@ func compareGolden(dir, name string, got []byte, update bool) (skip, diff string
 	}
 
 	return "", cmp.Diff(strings.Split(string(want), "\n"), strings.Split(string(got), "\n")), nil
-}
-
-// formatRecord renders rc as one line of a golden file.
-func formatRecord(rc *models.RecordConfig) string {
-	var b strings.Builder
-
-	b.WriteString(rc.Name)
-	b.WriteByte(' ')
-	b.WriteString(strconv.FormatUint(uint64(rc.TTL), 10))
-	b.WriteString(" IN ")
-	b.WriteString(rc.Type)
-	b.WriteByte(' ')
-	b.WriteString(rc.GetRDATA().String())
-
-	if len(rc.Metadata) != 0 {
-		b.WriteString(" ;")
-		for _, k := range slices.Sorted(maps.Keys(rc.Metadata)) {
-			fmt.Fprintf(&b, " %s=%s", k, strconv.Quote(rc.Metadata[k]))
-		}
-	}
-
-	return b.String()
 }
 
 // parseRecords parses the golden line format. Blank lines are ignored.
