@@ -28,8 +28,8 @@ type CLOUDFLAREAPISINGLEREDIRECT struct {
 	// Code                 uint16
 	// SRWhen               string
 	// SRThen               string
-	// SRRRulesetID         string	// Runtime
-	// SRRRulesetRuleID     string	// Runtime
+	// RT_SRRRulesetID      string	// Runtime
+	// RT_SRRRulesetRuleID  string	// Runtime
 }
 
 // Typer interface.
@@ -49,10 +49,10 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Clone() dnsv2.RR {
 	return &CLOUDFLAREAPISINGLEREDIRECT{
 		Hdr: rr.Hdr,
 		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
-			SRName:           rr.SRName,
-			Code:             rr.Code,
-			SRWhen:           rr.SRWhen,
-			SRThen:           rr.SRThen,
+			SRName:              rr.SRName,
+			Code:                rr.Code,
+			SRWhen:              rr.SRWhen,
+			SRThen:              rr.SRThen,
 			RT_SRRRulesetID:     rr.RT_SRRRulesetID,
 			RT_SRRRulesetRuleID: rr.RT_SRRRulesetRuleID,
 		}}
