@@ -1,48 +1,48 @@
 {
-  "registrars": [],
   "dns_providers": [],
   "domains": [
     {
-      "name": "example.com",
-      "uniquename": "example.com",
-      "registrar": "reg",
       "dnsProviders": {},
+      "name": "example.com",
       "records": [
         {
-          "type": "LUA",
-          "typenum": 65292,
           "comparablev3": "TXT \"; return 'ok'\"",
-          "ttl": 30,
+          "filepos": "[line:5:5]",
+          "meta": {
+            "orig_custom_type": "LUA"
+          },
           "name": "_diag",
           "name_unicode": "_diag",
-          "meta": {
-            "orig_custom_type": "LUA"
-          },
-          "filepos": "[line:5:5]",
           "rdata": {
-            "LuaType": "TXT",
-            "LuaPayload": "; return 'ok'"
+            "LuaPayload": "; return 'ok'",
+            "LuaType": "TXT"
           },
-          "target": "; return 'ok'"
+          "target": "; return 'ok'",
+          "ttl": 30,
+          "type": "LUA",
+          "typenum": 65292
         },
         {
-          "type": "LUA",
-          "typenum": 65292,
           "comparablev3": "A \"return_127_0_0_1\"",
-          "ttl": 60,
-          "name": "app",
-          "name_unicode": "app",
+          "filepos": "[line:4:5]",
           "meta": {
             "orig_custom_type": "LUA"
           },
-          "filepos": "[line:4:5]",
+          "name": "app",
+          "name_unicode": "app",
           "rdata": {
-            "LuaType": "A",
-            "LuaPayload": "return_127_0_0_1"
+            "LuaPayload": "return_127_0_0_1",
+            "LuaType": "A"
           },
-          "target": "return_127_0_0_1"
+          "target": "return_127_0_0_1",
+          "ttl": 60,
+          "type": "LUA",
+          "typenum": 65292
         }
-      ]
+      ],
+      "registrar": "reg",
+      "uniquename": "example.com"
     }
-  ]
+  ],
+  "registrars": []
 }

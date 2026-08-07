@@ -1,375 +1,375 @@
 {
-  "registrars": [],
   "dns_providers": [],
   "domains": [
     {
-      "name": "foo.com",
-      "uniquename": "foo.com",
-      "registrar": "none",
       "dnsProviders": {},
+      "name": "foo.com",
       "records": [
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "AAAA foo.com. \"\" \"\"",
-          "ttl": 300,
-          "name": "aaaatest",
-          "name_unicode": "aaaatest",
+          "filepos": "[line:6:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
-          "filepos": "[line:6:5]",
+          "name": "aaaatest",
+          "name_unicode": "aaaatest",
           "rdata": {
             "AliasType": "AAAA",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "AAAA foo.com. false ERERTFGFGF",
-          "ttl": 300,
-          "name": "aaaatest",
-          "name_unicode": "aaaatest",
+          "filepos": "[line:7:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
-          "filepos": "[line:7:5]",
+          "name": "aaaatest",
+          "name_unicode": "aaaatest",
           "rdata": {
             "AliasType": "AAAA",
-            "Target": "foo.com.",
             "EvalTargetHealth": "false",
+            "Target": "foo.com.",
             "ZoneID": "ERERTFGFGF"
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "A foo.com. false \"\"",
-          "ttl": 300,
+          "filepos": "[line:5:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "aevaltargethealthtest",
           "name_unicode": "aevaltargethealthtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:5:5]",
           "rdata": {
             "AliasType": "A",
-            "Target": "foo.com.",
             "EvalTargetHealth": "false",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "A foo.com. \"\" \"\"",
-          "ttl": 300,
-          "name": "atest",
-          "name_unicode": "atest",
+          "filepos": "[line:3:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
-          "filepos": "[line:3:5]",
+          "name": "atest",
+          "name_unicode": "atest",
           "rdata": {
             "AliasType": "A",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "A foo.com. false Z2FTEDLFRTF",
-          "ttl": 300,
-          "name": "atest",
-          "name_unicode": "atest",
+          "filepos": "[line:4:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
-          "filepos": "[line:4:5]",
+          "name": "atest",
+          "name_unicode": "atest",
           "rdata": {
             "AliasType": "A",
-            "Target": "foo.com.",
             "EvalTargetHealth": "false",
+            "Target": "foo.com.",
             "ZoneID": "Z2FTEDLFRTF"
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "CAA foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:13:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "caatest",
           "name_unicode": "caatest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:13:5]",
           "rdata": {
             "AliasType": "CAA",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "CNAME foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:8:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "cnametest",
           "name_unicode": "cnametest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:8:5]",
           "rdata": {
             "AliasType": "CNAME",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "DS foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:16:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "dstest",
           "name_unicode": "dstest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:16:5]",
           "rdata": {
             "AliasType": "DS",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "HTTPS foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:20:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "httpstest",
           "name_unicode": "httpstest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:20:5]",
           "rdata": {
             "AliasType": "HTTPS",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "MX foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:2:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "mxtest",
           "name_unicode": "mxtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:2:5]",
           "rdata": {
             "AliasType": "MX",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "NAPTR foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:14:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "naptrtest",
           "name_unicode": "naptrtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:14:5]",
           "rdata": {
             "AliasType": "NAPTR",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "PTR foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:9:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "ptrtest",
           "name_unicode": "ptrtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:9:5]",
           "rdata": {
             "AliasType": "PTR",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "SOA foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:15:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "soatest",
           "name_unicode": "soatest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:15:5]",
           "rdata": {
             "AliasType": "SOA",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "SPF foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:12:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "spftest",
           "name_unicode": "spftest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:12:5]",
           "rdata": {
             "AliasType": "SPF",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "SRV foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:11:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "srvtest",
           "name_unicode": "srvtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:11:5]",
           "rdata": {
             "AliasType": "SRV",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "SSHFP foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:18:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "sshfptest",
           "name_unicode": "sshfptest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:18:5]",
           "rdata": {
             "AliasType": "SSHFP",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "SVCB foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:19:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "svcbtest",
           "name_unicode": "svcbtest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:19:5]",
           "rdata": {
             "AliasType": "SVCB",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "TLSA foo.com. \"\" \"\"",
-          "ttl": 300,
+          "filepos": "[line:17:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
           "name": "tlsatest",
           "name_unicode": "tlsatest",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
-          "filepos": "[line:17:5]",
           "rdata": {
             "AliasType": "TLSA",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         },
         {
-          "type": "R53_ALIAS",
-          "typenum": 65298,
           "comparablev3": "TXT foo.com. \"\" \"\"",
-          "ttl": 300,
-          "name": "txttest",
-          "name_unicode": "txttest",
+          "filepos": "[line:10:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
-          "filepos": "[line:10:5]",
+          "name": "txttest",
+          "name_unicode": "txttest",
           "rdata": {
             "AliasType": "TXT",
-            "Target": "foo.com.",
             "EvalTargetHealth": "",
+            "Target": "foo.com.",
             "ZoneID": ""
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
         }
-      ]
+      ],
+      "registrar": "none",
+      "uniquename": "foo.com"
     }
-  ]
+  ],
+  "registrars": []
 }
