@@ -9,14 +9,7 @@ if [ -x node_modules/.bin/prettier ]; then
 fi
 
 echo ========== bin/fmtjson
-bin/fmtjson $(find \
-	dist \
-	commands/test_data \
-        integrationTest pkg \
-	documentation/assets  \
-	-type f -name "*.json" \
-	! -name "package-lock.json" \
-	-print)
+bin/fmtjson-all.sh
 
 # dnsconfig.js-compatible files:
 echo ========== fmt parse_tests
