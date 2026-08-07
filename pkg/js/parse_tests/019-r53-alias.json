@@ -13,10 +13,6 @@
           },
           "name": "aaaatest",
           "name_unicode": "aaaatest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "AAAA"
-          },
           "rdata": {
             "AliasType": "AAAA",
             "EvalTargetHealth": "",
@@ -36,11 +32,6 @@
           },
           "name": "aaaatest",
           "name_unicode": "aaaatest",
-          "r53_alias": {
-            "evaluate_target_health": "false",
-            "type": "AAAA",
-            "zone_id": "ERERTFGFGF"
-          },
           "rdata": {
             "AliasType": "AAAA",
             "EvalTargetHealth": "false",
@@ -60,10 +51,6 @@
           },
           "name": "aevaltargethealthtest",
           "name_unicode": "aevaltargethealthtest",
-          "r53_alias": {
-            "evaluate_target_health": "false",
-            "type": "A"
-          },
           "rdata": {
             "AliasType": "A",
             "EvalTargetHealth": "false",
@@ -83,10 +70,6 @@
           },
           "name": "atest",
           "name_unicode": "atest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "A"
-          },
           "rdata": {
             "AliasType": "A",
             "EvalTargetHealth": "",
@@ -106,11 +89,6 @@
           },
           "name": "atest",
           "name_unicode": "atest",
-          "r53_alias": {
-            "evaluate_target_health": "false",
-            "type": "A",
-            "zone_id": "Z2FTEDLFRTF"
-          },
           "rdata": {
             "AliasType": "A",
             "EvalTargetHealth": "false",
@@ -130,10 +108,6 @@
           },
           "name": "caatest",
           "name_unicode": "caatest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "CAA"
-          },
           "rdata": {
             "AliasType": "CAA",
             "EvalTargetHealth": "",
@@ -153,10 +127,6 @@
           },
           "name": "cnametest",
           "name_unicode": "cnametest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "CNAME"
-          },
           "rdata": {
             "AliasType": "CNAME",
             "EvalTargetHealth": "",
@@ -176,10 +146,6 @@
           },
           "name": "dstest",
           "name_unicode": "dstest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "DS"
-          },
           "rdata": {
             "AliasType": "DS",
             "EvalTargetHealth": "",
@@ -199,10 +165,6 @@
           },
           "name": "httpstest",
           "name_unicode": "httpstest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "HTTPS"
-          },
           "rdata": {
             "AliasType": "HTTPS",
             "EvalTargetHealth": "",
@@ -222,10 +184,6 @@
           },
           "name": "mxtest",
           "name_unicode": "mxtest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "MX"
-          },
           "rdata": {
             "AliasType": "MX",
             "EvalTargetHealth": "",
@@ -245,10 +203,6 @@
           },
           "name": "naptrtest",
           "name_unicode": "naptrtest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "NAPTR"
-          },
           "rdata": {
             "AliasType": "NAPTR",
             "EvalTargetHealth": "",
@@ -268,10 +222,6 @@
           },
           "name": "ptrtest",
           "name_unicode": "ptrtest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "PTR"
-          },
           "rdata": {
             "AliasType": "PTR",
             "EvalTargetHealth": "",
@@ -291,10 +241,6 @@
           },
           "name": "soatest",
           "name_unicode": "soatest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "SOA"
-          },
           "rdata": {
             "AliasType": "SOA",
             "EvalTargetHealth": "",
@@ -314,10 +260,6 @@
           },
           "name": "spftest",
           "name_unicode": "spftest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "SPF"
-          },
           "rdata": {
             "AliasType": "SPF",
             "EvalTargetHealth": "",
@@ -337,10 +279,6 @@
           },
           "name": "srvtest",
           "name_unicode": "srvtest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "SRV"
-          },
           "rdata": {
             "AliasType": "SRV",
             "EvalTargetHealth": "",
@@ -360,10 +298,6 @@
           },
           "name": "sshfptest",
           "name_unicode": "sshfptest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "SSHFP"
-          },
           "rdata": {
             "AliasType": "SSHFP",
             "EvalTargetHealth": "",
@@ -383,10 +317,6 @@
           },
           "name": "svcbtest",
           "name_unicode": "svcbtest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "SVCB"
-          },
           "rdata": {
             "AliasType": "SVCB",
             "EvalTargetHealth": "",
@@ -406,10 +336,6 @@
           },
           "name": "tlsatest",
           "name_unicode": "tlsatest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "TLSA"
-          },
           "rdata": {
             "AliasType": "TLSA",
             "EvalTargetHealth": "",
@@ -429,10 +355,6 @@
           },
           "name": "txttest",
           "name_unicode": "txttest",
-          "r53_alias": {
-            "evaluate_target_health": "",
-            "type": "TXT"
-          },
           "rdata": {
             "AliasType": "TXT",
             "EvalTargetHealth": "",

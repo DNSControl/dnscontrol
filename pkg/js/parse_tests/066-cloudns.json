@@ -1,0 +1,30 @@
+{
+  "dns_providers": [],
+  "domains": [
+    {
+      "dnsProviders": {},
+      "name": "example.com",
+      "records": [
+        {
+          "comparablev3": "\"https://example.com\"",
+          "filepos": "[line:1:25]",
+          "meta": {
+            "orig_custom_type": "CLOUDNS_WR"
+          },
+          "name": "www",
+          "name_unicode": "www",
+          "rdata": {
+            "Target": "https://example.com"
+          },
+          "target": "https://example.com",
+          "ttl": 300,
+          "type": "CLOUDNS_WR",
+          "typenum": 65290
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "example.com"
+    }
+  ],
+  "registrars": []
+}

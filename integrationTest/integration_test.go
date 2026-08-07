@@ -250,6 +250,7 @@ func makeTests() []*TestGroup {
 			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not("NETCUP"),  // NETCUP does not support custom TTLs.
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
 			tc("Change TTL", ttl(a("testa", "1.1.1.1"), 999)),
 		),
@@ -500,6 +501,7 @@ func makeTests() []*TestGroup {
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NAMECHEAP",         // cannot handle single NS at apex but does handle dual
 				"NETCUP",            // NS records not currently supported.
+				"NS1",               // Test leaves NS1 in a confused state.
 				"PORKBUN",           // Record ignored.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
@@ -926,6 +928,7 @@ func makeTests() []*TestGroup {
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
 			not(
+				"NETCUP",    // NETCUP does not support per record TTL
 				"OPENWRT",   // OpenWRT does not support per record TTL
 				"NAMECHEAP", // Namecheap does not support per record TTL
 				"UNIFI",     // Per record TTLs not supported.
@@ -1060,8 +1063,6 @@ func makeTests() []*TestGroup {
 
 		testgroup("DNSKEY",
 			requires(providers.CanUseDNSKEY),
-			not("DESEC"),    // DESEC: DNSKEY records are only supported for the apex domain.
-			not("POWERDNS"), // PowerDNS: DNSKEY records are only supported for the apex domain.
 			tc("Create DNSKEY record", dnskey("test", 257, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 1", dnskey("test", 256, 3, 13, "fRnjbeUVyKvz1bDx2lPmu3KY1k64T358t8kP6Hjveos=")),
 			tc("Modify DNSKEY record 2", dnskey("test", 256, 3, 13, "whjtMiJP9C86l0oTJUxemuYtQ0RIZePWt6QETC2kkKM=")),

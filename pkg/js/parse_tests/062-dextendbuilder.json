@@ -26,6 +26,7 @@
             "Version": 0,
             "VertPre": 0
           },
+          "target": "9997600",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -44,6 +45,7 @@
             "Version": 0,
             "VertPre": 0
           },
+          "target": "9997600",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29

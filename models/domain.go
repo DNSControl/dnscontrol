@@ -181,7 +181,11 @@ func (dc *DomainConfig) Punycode() error {
 		if err != nil {
 			return err
 		}
-		rec.SetLabelFromFQDN(t, dc.Name)
+		if t != rec.GetLabelFQDN() {
+			// Assert this function is no longer needed.
+			panic(fmt.Sprintf("Punycode LABEL %q %q", t, rec.GetLabelFQDN()))
+		}
+		// rec.SetLabelFromFQDN(t, dc.Name)
 
 		// Set the target:
 		switch rec.Type { // #rtype_variations
@@ -191,13 +195,26 @@ func (dc *DomainConfig) Punycode() error {
 			if err != nil {
 				return err
 			}
-			if err := rec.SetTarget(t); err != nil {
-				return err
+			//if err := rec.SetTarget(t); err != nil {
+			//	return err
+			//}
+			if t != rec.GetTargetField() {
+				// Assert this function is no longer needed.
+				panic(fmt.Sprintf(": Punycode TARGET %q %q", t, rec.GetTargetField()))
 			}
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH", "BUNNY_DNS_PZ", "MIKROTIK_FWD", "MIKROTIK_NXDOMAIN", "MIKROTIK_FORWARDER":
-			if err := rec.SetTarget(rec.GetTargetField()); err != nil {
-				return err
+			//if err := rec.SetTarget(rec.GetTargetField()); err != nil {
+			//	return err
+			//}
+
+			orig := rec.GetTargetField()
+			rec.SetTarget(rec.GetTargetField())
+			roundtrip := rec.GetTargetField()
+			if orig != roundtrip {
+				// Assert this function is no longer needed.
+				panic(fmt.Sprintf("Punycode RTT %q %q", orig, roundtrip))
 			}
+
 		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC",
 			"LUA", "NAPTR", "OPENPGPKEY", "RP", "SMIMEA", "SOA", "SSHFP", "SVCB",
 			"TXT", "TLSA", "AZURE_ALIAS":

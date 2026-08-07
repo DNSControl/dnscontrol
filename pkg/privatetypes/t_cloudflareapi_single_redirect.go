@@ -28,8 +28,8 @@ type CLOUDFLAREAPISINGLEREDIRECT struct {
 	// Code                 uint16
 	// SRWhen               string
 	// SRThen               string
-	// SRRRulesetID         string	// Runtime
-	// SRRRulesetRuleID     string	// Runtime
+	// RT_SRRRulesetID      string	// Runtime
+	// RT_SRRRulesetRuleID  string	// Runtime
 }
 
 // Typer interface.
@@ -43,18 +43,18 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Len() int {
 	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) Data() dnsv2.RDATA {
-	return privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{SRName: rr.SRName, Code: rr.Code, SRWhen: rr.SRWhen, SRThen: rr.SRThen, SRRRulesetID: rr.SRRRulesetID, SRRRulesetRuleID: rr.SRRRulesetRuleID}
+	return privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{SRName: rr.SRName, Code: rr.Code, SRWhen: rr.SRWhen, SRThen: rr.SRThen, RT_SRRRulesetID: rr.RT_SRRRulesetID, RT_SRRRulesetRuleID: rr.RT_SRRRulesetRuleID}
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) Clone() dnsv2.RR {
 	return &CLOUDFLAREAPISINGLEREDIRECT{
 		Hdr: rr.Hdr,
 		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
-			SRName:           rr.SRName,
-			Code:             rr.Code,
-			SRWhen:           rr.SRWhen,
-			SRThen:           rr.SRThen,
-			SRRRulesetID:     rr.SRRRulesetID,
-			SRRRulesetRuleID: rr.SRRRulesetRuleID,
+			SRName:              rr.SRName,
+			Code:                rr.Code,
+			SRWhen:              rr.SRWhen,
+			SRThen:              rr.SRThen,
+			RT_SRRRulesetID:     rr.RT_SRRRulesetID,
+			RT_SRRRulesetRuleID: rr.RT_SRRRulesetRuleID,
 		}}
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) String() string {

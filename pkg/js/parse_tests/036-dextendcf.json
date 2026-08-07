@@ -24,6 +24,7 @@
             "Then": "test-worker",
             "When": "test3.foo.com"
           },
+          "target": "test-worker",
           "ttl": 300,
           "type": "CF_WORKER_ROUTE",
           "typenum": 65288
@@ -35,12 +36,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "301,test1.foo.com,https://goo.com/$1",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
             "SRWhen": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
           },
+          "target": "concat(\"https://goo.com\", http.request.uri.path)",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -52,12 +54,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "302,test2.foo.com,https://goo.com/$1",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
             "SRWhen": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
           },
+          "target": "concat(\"https://goo.com\", http.request.uri.path)",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289

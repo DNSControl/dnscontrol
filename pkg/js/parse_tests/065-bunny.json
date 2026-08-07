@@ -1,0 +1,46 @@
+{
+  "dns_providers": [],
+  "domains": [
+    {
+      "dnsProviders": {},
+      "name": "example.com",
+      "records": [
+        {
+          "comparablev3": "12345",
+          "filepos": "[line:4:5]",
+          "meta": {
+            "orig_custom_type": "BUNNY_DNS_PZ"
+          },
+          "name": "cdn",
+          "name_unicode": "cdn",
+          "rdata": {
+            "PullZoneID": 12345
+          },
+          "target": "12345",
+          "ttl": 300,
+          "type": "BUNNY_DNS_PZ",
+          "typenum": 65287
+        },
+        {
+          "comparablev3": "\"https://example.com\"",
+          "filepos": "[line:5:5]",
+          "meta": {
+            "orig_custom_type": "BUNNY_DNS_RDR"
+          },
+          "name": "go",
+          "name_unicode": "go",
+          "rdata": {
+            "Target": "https://example.com"
+          },
+          "target": "https://example.com",
+          "ttl": 300,
+          "type": "BUNNY_DNS_RDR",
+          "typenum": 65320
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "example.com"
+    }
+  ],
+  "registrars": []
+}

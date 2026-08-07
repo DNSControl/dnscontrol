@@ -11,7 +11,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
 	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-
 	"github.com/urfave/cli/v3"
 )
 
@@ -331,6 +330,8 @@ func GetZone(args GetZoneArgs) error {
 		case "tsv":
 			for _, rec := range recs {
 				providerMeta := ""
+
+				// Cloudflare metadata
 				if cp, ok := rec.Metadata["cloudflare_proxy"]; ok {
 					if cp == "true" {
 						providerMeta += ",cloudflare_proxy=true"
@@ -347,6 +348,7 @@ func GetZone(args GetZoneArgs) error {
 				if tags := rec.Metadata["cloudflare_tags"]; tags != "" {
 					providerMeta += ",cloudflare_tags=" + tags
 				}
+
 				// HEDNS metadata
 				if dyn, ok := rec.Metadata["hedns_dynamic"]; ok && dyn == "on" {
 					providerMeta += ",hedns_dynamic=on"
@@ -354,6 +356,7 @@ func GetZone(args GetZoneArgs) error {
 						providerMeta += ",hedns_ddns_key=" + key
 					}
 				}
+
 				if providerMeta != "" {
 					providerMeta = "\t" + providerMeta[1:] // Remove leading comma, add tab
 				}
@@ -391,7 +394,6 @@ func jsonQuoted(i string) string {
 }
 
 func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
-	target := rec.GetRDATA().String()
 
 	ttl := uint32(0)
 	ttlop := ""
@@ -461,64 +463,33 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		}
 	}
 
-	switch rec.Type { // #rtype_variations
+	fj, _ := models.RDtoFieldsJS(rec.GetRDATA())
+
+	var target string
+	switch rec.Type {
 	case "CAA":
 		return makeCaa(rec, ttlop)
-	case "DS":
-		f := rec.AsDS()
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
-	case "DNSKEY":
-		f := rec.AsDNSKEY()
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Flags, f.Protocol, f.Algorithm, f.PublicKey)
-	case "MX":
-		f := rec.AsMX()
-		target = fmt.Sprintf(`%d, "%s"`, f.Preference, f.Mx)
-	case "NAPTR":
-		f := rec.AsNAPTR()
-		target = fmt.Sprintf(`%d, %d, %s, %s, %s, %s`,
-			f.Order,                   // 1
-			f.Preference,              // 10
-			jsonQuoted(f.Flags),       // U
-			jsonQuoted(f.Service),     // E2U+sip
-			jsonQuoted(f.Regexp),      // regex
-			jsonQuoted(f.Replacement), // .
-		)
-	case "SMIMEA":
-		f := rec.AsSMIMEA()
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
-	case "SSHFP":
-		target = fmt.Sprintf(`%d, %d, "%s"`, rec.SshfpAlgorithm, rec.SshfpFingerprint, rec.GetTargetField())
 	case "SOA":
-		f := rec.AsSOA()
 		rec.Type = "//SOA"
-		target = fmt.Sprintf(`"%s", "%s", %d, %d, %d, %d`, f.Ns, f.Mbox, f.Refresh, f.Retry, f.Expire, f.Minttl)
-	case "SRV":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SrvPriority, rec.SrvWeight, rec.SrvPort, rec.GetTargetField())
-	case "SVCB", "HTTPS":
-		target = fmt.Sprintf(`%d, "%s", "%s"`, rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
-	case "TLSA":
-		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.TlsaUsage, rec.TlsaSelector, rec.TlsaMatchingType, rec.GetTargetField())
+		noserial := append(fj[:2], fj[3:]...)
+		target = strings.Join(noserial, ", ")
+		// f.Serial is not included in the SOA() function because DNSControl controls that field.
 	case "TXT":
 		target = jsonQuoted(rec.GetTargetTXTJoined())
 		// TODO(tlim): If this is an SPF record, generate a SPF_BUILDER().
 	case "LUA":
-		target = fmt.Sprintf("%q, %s", rec.LuaRType, jsonQuoted(rec.GetTargetTXTJoined()))
+		target = fmt.Sprintf("%q, %s", rec.AsLUA().LuaType, jsonQuoted(rec.GetTargetTXTJoined()))
 	case "NS":
 		// NS records at the apex should be NAMESERVER() records.
 		// DnsControl uses the API to get this info. NAMESERVER() is just
 		// to override that when needed.
 		if rec.Name == "@" {
-			return fmt.Sprintf(`//NAMESERVER("%s")`, target)
+			return fmt.Sprintf(`//NAMESERVER("%s")`, rec.AsNS().Ns)
 		}
-		target = `"` + target + `"`
-	case "MIKROTIK_FWD":
-		target = `"` + target + `"`
-	case "MIKROTIK_NXDOMAIN":
-		// NXDOMAIN has no target — emit only name + optional metadata + TTL
-		return fmt.Sprintf(`MIKROTIK_NXDOMAIN("%s"%s%s)`, rec.Name, mtmeta, ttlop)
+		target = `"` + rec.AsNS().Ns + `"`
 	case "MIKROTIK_FORWARDER":
 		// Forwarder: target is dns-servers, metadata has doh_servers/verify_doh_cert
-		target = `"` + target + `"`
+		target = `"` + rec.GetRDATA().String() + `"`
 		if rec.Metadata != nil {
 			var fwdParts []string
 			if v := rec.Metadata["doh_servers"]; v != "" {
@@ -536,18 +507,19 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 	case "UNKNOWN":
 		return makeUknown(rec, ttl)
 	default:
-		target = `"` + target + `"`
+		target = strings.Join(fj, ", ")
 	}
 
 	return fmt.Sprintf(`%s("%s", %s%s%s%s%s%s%s%s)`, rec.Type, rec.Name, target, cfproxy, cfflatten, cfcomment, cftags, mtmeta, hednsDynamic, ttlop)
 }
 
 func makeCaa(rec *models.RecordConfig, ttlop string) string {
+	f := rec.AsCAA()
 	var target string
-	if rec.CaaFlag == 128 {
-		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, rec.CaaTag, rec.GetTargetField())
+	if f.Flag == 128 {
+		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, f.Tag, f.Value)
 	} else {
-		target = fmt.Sprintf(`"%s", "%s"`, rec.CaaTag, rec.GetTargetField())
+		target = fmt.Sprintf(`"%s", "%s"`, f.Tag, f.Value)
 	}
 	return fmt.Sprintf(`%s("%s", %s%s)`, rec.Type, rec.Name, target, ttlop)
 
@@ -555,15 +527,16 @@ func makeCaa(rec *models.RecordConfig, ttlop string) string {
 }
 
 func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
+	f := rec.AsR53ALIAS()
 	items := []string{
 		`"` + rec.Name + `"`,
-		`"` + rec.R53Alias["type"] + `"`,
-		`"` + rec.GetTargetField() + `"`,
+		`"` + f.AliasType + `"`,
+		`"` + f.Target + `"`,
 	}
-	if z, ok := rec.R53Alias["zone_id"]; ok {
-		items = append(items, `R53_ZONE("`+z+`")`)
+	if f.ZoneID != "" {
+		items = append(items, `R53_ZONE("`+f.ZoneID+`")`)
 	}
-	if e, ok := rec.R53Alias["evaluate_target_health"]; ok && e == "true" {
+	if f.EvalTargetHealth == "true" {
 		items = append(items, "R53_EVALUATE_TARGET_HEALTH(true)")
 	}
 	if ttl != 0 {
@@ -573,5 +546,5 @@ func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
 }
 
 func makeUknown(rc *models.RecordConfig, ttl uint32) string {
-	return fmt.Sprintf(`// %s("%s", TTL(%d))`, rc.UnknownTypeName, rc.GetTargetField(), ttl)
+	return fmt.Sprintf(`// %s("%s", TTL(%d))`, rc.UnknownTypeName, rc.GetRDATA().String(), ttl)
 }

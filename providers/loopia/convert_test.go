@@ -38,10 +38,8 @@ func TestNativeToRecord_1(t *testing.T) {
 		t.Errorf("nativeToRecord produced unexpected type")
 	} else if rc.TTL != 300 {
 		t.Errorf("nativeToRecord produced unexpected TTL")
-	} else if rc.GetRDATA().String() != "1.2.3.4" {
+	} else if rc.AsA().String() != "1.2.3.4" {
 		t.Errorf("nativeToRecord produced unexpected Rdata")
-	} else if rc.SrvPriority != 0 {
-		t.Errorf("nativeToRecord produced unexpected Priority")
 	}
 
 	if err != nil {

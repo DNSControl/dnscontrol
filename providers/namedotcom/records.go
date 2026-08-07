@@ -158,12 +158,14 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 	case dnsv2.TypeTXT:
 		answer = rc.GetTargetTXTJoined()
 	case dnsv2.TypeMX:
-		priority = uint32(rc.AsMX().Preference)
+		f := rc.AsMX()
+		priority = uint32(f.Preference)
+		answer = f.Mx
 	case dnsv2.TypeSRV:
 		// SRV records with empty targets are not supported (as of 2019-11-05, the API returns 'Parameter Value Error - Invalid Srv Format'
-		priority = uint32(rc.SrvPriority)
-		srv := rc.AsSRV()
-		answer = fmt.Sprintf("%d %d %v", srv.Weight, srv.Port, srv.Target)
+		f := rc.AsSRV()
+		priority = uint32(f.Priority)
+		answer = fmt.Sprintf("%d %d %v", f.Weight, f.Port, f.Target)
 	}
 
 	record := &namecom.Record{

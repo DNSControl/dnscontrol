@@ -216,29 +216,6 @@ func TestRecordConfigGetTargetIPTXT(t *testing.T) {
 	rc.GetTargetIP()
 }
 
-func TestRecordConfigGetTargetJSTXT(t *testing.T) {
-	tests := []struct {
-		name  string
-		value string
-		want  string
-	}{
-		{name: "empty", value: "", want: `[""]`},
-		{name: "plain", value: "one", want: `["one"]`},
-		{name: "JSON escapes", value: "<txt>&\n", want: `["\u003ctxt\u003e\u0026\n"]`},
-		{name: "long255", value: strings.Repeat("a", 255), want: `["` + strings.Repeat("a", 255) + `"]`},
-		{name: "long256", value: strings.Repeat("a", 255) + "b", want: `["` + strings.Repeat("a", 255) + `","b"]`},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rc := testTXTRecord(t, tt.value)
-			if got := rc.GetTargetJS(); got != tt.want {
-				t.Fatalf("GetTargetJS() = %s, want JSON string %s", got, tt.want)
-			}
-		})
-	}
-}
-
 func equalStrings(a, b []string) bool {
 	if len(a) != len(b) {
 		return false

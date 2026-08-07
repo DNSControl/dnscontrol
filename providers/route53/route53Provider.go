@@ -414,12 +414,12 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 	// update zone_id to current zone.id if not specified by the user
 	for _, want := range dc.Records {
-		if want.Type == "R53_ALIAS" && want.R53Alias["zone_id"] == "" {
-			want.R53Alias["zone_id"] = getZoneID(zone, want)
-			// The zone_id was just filled in, but the cached RDATA/ComparableV3
-			// were computed (with an empty zone_id) when the record was built.
-			// Refresh them so the diff engine doesn't report a spurious change.
-			want.RecomputeV3Fields(dc.Name)
+		if want.Type == "R53_ALIAS" {
+			f := want.AsR53ALIAS()
+			if f.ZoneID == "" {
+				f.ZoneID = getZoneID(zone, want)
+				want.SetRDATA(f)
+			}
 		}
 	}
 
@@ -683,14 +683,15 @@ func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.
 }
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
-	target := r.AsR53ALIAS().Target
+	f := r.AsR53ALIAS()
+	target := f.Target
 	zoneID := getZoneID(zone, r)
-	evalTargetHealth, err := strconv.ParseBool(r.R53Alias["evaluate_target_health"])
+	evalTargetHealth, err := strconv.ParseBool(f.EvalTargetHealth)
 	if err != nil {
 		evalTargetHealth = false
 	}
 	rrset := &r53Types.ResourceRecordSet{
-		Type: r53Types.RRType(r.R53Alias["type"]),
+		Type: r53Types.RRType(f.AliasType),
 		AliasTarget: &r53Types.AliasTarget{
 			DNSName:              &target,
 			HostedZoneId:         aws.String(zoneID),
@@ -701,7 +702,7 @@ func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.Re
 }
 
 func getZoneID(zone r53Types.HostedZone, r *models.RecordConfig) string {
-	zoneID := r.R53Alias["zone_id"]
+	zoneID := r.AsR53ALIAS().ZoneID
 	if zoneID == "" {
 		zoneID = aws.ToString(zone.Id)
 	}

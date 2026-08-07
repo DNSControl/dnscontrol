@@ -184,16 +184,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 		for _, r := range tst.Records {
 			rc := models.RecordConfig(*r)
 
-			if strings.Contains(rc.GetTargetField(), "**subscription-id**") {
-				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**subscription-id**", origConfig["SubscriptionID"], 1))
-				rc.ClearRDATA()
-				rc.ComparableV3 = ""
-			}
-			if strings.Contains(rc.GetTargetField(), "**resource-group**") {
-				_ = rc.SetTarget(strings.Replace(rc.GetTargetField(), "**resource-group**", strings.ToLower(origConfig["ResourceGroup"]), 1))
-				rc.ClearRDATA()
-				rc.ComparableV3 = ""
-			}
+			replaceIntegrationTargetTokens(&rc, origConfig["SubscriptionID"], origConfig["ResourceGroup"])
 
 			dom.Records = append(dom.Records, &rc)
 		}
@@ -270,6 +261,27 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 			t.FailNow()
 		}
 	})
+}
+
+func replaceIntegrationTargetTokens(rc *models.RecordConfig, subscriptionID, resourceGroup string) {
+	originalTarget := rc.GetTargetField()
+	target := strings.NewReplacer(
+		"**subscription-id**", subscriptionID,
+		"**resource-group**", strings.ToLower(resourceGroup),
+	).Replace(originalTarget)
+	if target == originalTarget {
+		return
+	}
+
+	if rc.Type == "AZURE_ALIAS" {
+		rd := rc.AsAZUREALIAS()
+		rd.Target = target
+		rc.SetRDATA(rd)
+		return
+	}
+
+	_ = rc.SetTarget(target)
+	rc.ClearRDATA()
 }
 
 func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string, origConfig map[string]string) {
@@ -559,7 +571,7 @@ func loc(name string, d1 uint8, m1 uint8, s1 float32, ns string,
 }
 
 func manyA(namePattern, target string, n int) []*models.RecordConfig {
-	recs := []*models.RecordConfig{}
+	recs := models.Records{}
 	for i := range n {
 		r, err := globalDC.NewRecordConfig(fmt.Sprintf(namePattern, i), defaultTTL, dnsv2.TypeA, target)
 		panicOnErr(err)

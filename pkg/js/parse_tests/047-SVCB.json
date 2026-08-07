@@ -35,9 +35,7 @@
               }
             ]
           },
-          "svcparams": "alpn=h3,h2 port=443 ipv4hint=123.123.123.123 ipv6hint=dead::beaf",
-          "svcpriority": 2,
-          "target": ".",
+          "target": "[h3,h2 443 123.123.123.123 dead::beaf]",
           "ttl": 300,
           "type": "HTTPS",
           "typenum": 65
@@ -52,8 +50,7 @@
             "Target": ".",
             "Value": null
           },
-          "svcpriority": 1,
-          "target": ".",
+          "target": "[]",
           "ttl": 300,
           "type": "SVCB",
           "typenum": 64

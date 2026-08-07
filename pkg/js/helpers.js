@@ -475,29 +475,8 @@ function validateR53AliasType(value) {
     );
 }
 
-function isStringOrArray(x) {
-    return _.isString(x) || _.isArray(x);
-}
-
 // AUTOSPLIT is deprecated. It is now a no-op.
 var AUTOSPLIT = {};
-
-var LUA = recordBuilder('LUA', {
-    args: [
-        ['name', _.isString],
-        ['rtype', _.isString],
-        ['target', isStringOrArray],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.luartype = args.rtype.toUpperCase();
-        if (_.isString(args.target)) {
-            record.target = args.target;
-        } else {
-            record.target = args.target.join('');
-        }
-    },
-});
 
 // Parses coordinates of the form 41°24'12.2"N 2°10'26.5"E
 function parseDMSCoordinatesString(inputString) {
@@ -884,32 +863,30 @@ function IGNORE_TARGET(target, rType) {
 }
 
 // IMPORT_TRANSFORM(translation_table, domain, ttl)
-var IMPORT_TRANSFORM = recordBuilder('IMPORT_TRANSFORM', {
-    args: [['translation_table'], ['domain'], ['ttl', _.isNumber]],
-    transform: function (record, args, modifiers) {
-        record.name = '@';
-        record.target = args.domain;
-        record.meta['transform_table'] = format_tt(args.translation_table);
-        record.ttl = args.ttl;
-    },
-});
+function importTransformOptions(record, processedArgs) {
+    return [
+        processedArgs[0],
+        processedArgs[1],
+        processedArgs[3],
+        processedArgs.length === 5 ? processedArgs[4] : '',
+        processedArgs[2],
+    ];
+}
+
+var importTransformRawBuilder = rawrecordBuilder(
+    'IMPORT_TRANSFORM',
+    true,
+    importTransformOptions
+);
+function importTransformBuilder(translation_table) {
+    arguments[0] = format_tt(translation_table);
+    return importTransformRawBuilder.apply(null, arguments);
+}
+
+var IMPORT_TRANSFORM = importTransformBuilder;
 
 // IMPORT_TRANSFORM_STRIP(translation_table, domain, ttl, suffixstrip)
-var IMPORT_TRANSFORM_STRIP = recordBuilder('IMPORT_TRANSFORM', {
-    args: [
-        ['translation_table'],
-        ['domain'],
-        ['ttl', _.isNumber],
-        ['suffixstrip'],
-    ],
-    transform: function (record, args, modifiers) {
-        record.name = '@';
-        record.target = args.domain;
-        record.meta['transform_table'] = format_tt(args.translation_table);
-        record.ttl = args.ttl;
-        record.meta['transform_suffixstrip'] = args.suffixstrip;
-    },
-});
+var IMPORT_TRANSFORM_STRIP = importTransformBuilder;
 
 // PURGE()
 function PURGE(d) {
@@ -1281,47 +1258,6 @@ function GIDINET_PREMIUM_NS() {
     ];
 }
 
-// CUSTOM, PROVIDER SPECIFIC RECORD TYPES
-
-var ADGUARDHOME_A_PASSTHROUGH = recordBuilder('ADGUARDHOME_A_PASSTHROUGH');
-
-var ADGUARDHOME_AAAA_PASSTHROUGH = recordBuilder(
-    'ADGUARDHOME_AAAA_PASSTHROUGH'
-);
-
-var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
-/**
- * @deprecated Please use URL or URL301 instead
- */
-var PORKBUN_URLFWD = recordBuilder('PORKBUN_URLFWD');
-var BUNNY_DNS_RDR = recordBuilder('BUNNY_DNS_RDR');
-
-// MIKROTIK_FWD(name, target, modifiers...)
-// RouterOS conditional DNS forwarding entry.
-var MIKROTIK_FWD = recordBuilder('MIKROTIK_FWD');
-
-// MIKROTIK_NXDOMAIN(name, modifiers...)
-// RouterOS NXDOMAIN entry — returns NXDOMAIN for matching queries (DNS blackholing).
-var MIKROTIK_NXDOMAIN = recordBuilder('MIKROTIK_NXDOMAIN', {
-    args: [['name', _.isString]],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.target = 'NXDOMAIN';
-    },
-});
-
-// MIKROTIK_FORWARDER(name, dns_servers, modifiers...)
-// RouterOS named DNS forwarder (/ip/dns/forwarders).
-// Use in the synthetic zone "_forwarders.mikrotik".
-var MIKROTIK_FORWARDER = recordBuilder('MIKROTIK_FORWARDER');
-
-var BUNNY_DNS_PZ = recordBuilder('BUNNY_DNS_PZ', {
-    args: [['name', _.isString], ['pullZoneId']],
-    transform: function (record, args, modifiers) {
-        record.name = args.name;
-        record.target = String(args.pullZoneId);
-    },
-});
 // LOC_BUILDER_DD takes an object:
 // label: The DNS label for the LOC record. (default: '@')
 // x: Decimal X coordinate.
@@ -2346,10 +2282,16 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 var A = rawrecordBuilder('A');
 var AAAA = rawrecordBuilder('AAAA');
+var ADGUARDHOME_A_PASSTHROUGH = rawrecordBuilder('ADGUARDHOME_A_PASSTHROUGH');
+var ADGUARDHOME_AAAA_PASSTHROUGH = rawrecordBuilder(
+    'ADGUARDHOME_AAAA_PASSTHROUGH'
+);
 var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
 var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
 var ALIAS = rawrecordBuilder('ALIAS');
 var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
+var BUNNY_DNS_PZ = rawrecordBuilder('BUNNY_DNS_PZ');
+var BUNNY_DNS_RDR = rawrecordBuilder('BUNNY_DNS_RDR');
 var CAA = rawrecordBuilder('CAA');
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
 var CF_SINGLE_REDIRECT = rawrecordBuilder(
@@ -2358,6 +2300,7 @@ var CF_SINGLE_REDIRECT = rawrecordBuilder(
 );
 var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
 var CF_WORKER_ROUTE = rawrecordBuilder('CF_WORKER_ROUTE', true);
+var CLOUDNS_WR = rawrecordBuilder('CLOUDNS_WR');
 var CNAME = rawrecordBuilder('CNAME');
 var DHCID = rawrecordBuilder('DHCID');
 var DNAME = rawrecordBuilder('DNAME');
@@ -2366,10 +2309,22 @@ var DS = rawrecordBuilder('DS');
 var FRAME = rawrecordBuilder('FRAME');
 var HTTPS = rawrecordBuilder('HTTPS');
 var LOC = rawrecordBuilder('LOC');
+var LUA = rawrecordBuilder('LUA');
+// RouterOS named DNS forwarder (/ip/dns/forwarders).
+// Use in the synthetic zone "_forwarders.mikrotik".
+var MIKROTIK_FORWARDER = rawrecordBuilder('MIKROTIK_FORWARDER');
+// RouterOS conditional DNS forwarding entry.
+var MIKROTIK_FWD = rawrecordBuilder('MIKROTIK_FWD');
+// RouterOS NXDOMAIN entry — returns NXDOMAIN for matching queries (DNS blackholing).
+var MIKROTIK_NXDOMAIN = rawrecordBuilder('MIKROTIK_NXDOMAIN');
 var MX = rawrecordBuilder('MX');
 var NAPTR = rawrecordBuilder('NAPTR');
 var NS = rawrecordBuilder('NS');
 var OPENPGPKEY = rawrecordBuilder('OPENPGPKEY');
+/**
+ * @deprecated Please use URL or URL301 instead
+ */
+var PORKBUN_URLFWD = rawrecordBuilder('PORKBUN_URLFWD');
 var PTR = rawrecordBuilder('PTR');
 var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
 var RP = rawrecordBuilder('RP');

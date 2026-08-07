@@ -162,39 +162,36 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.
 // All valid RecordConfig structs come through this function. Everything else is questionable.
 func newRecordConfigHelper(origin, name string, ttl uint32, typeNum uint16, rd dnsv2.RDATA, metadata map[string]string) (*RecordConfig, error) {
+
+	nameASCII, err := makeLabelName(name)
+	if err != nil {
+		return nil, err
+	}
+	nameUnicode, err := makeLabelNameUnicode(nameASCII)
+	if err != nil {
+		return nil, err
+	}
+	nameFQDNASCII := makeLabelNameFQDN(origin, nameASCII)
+	nameFQDNUnicode, err := makeNameFQDNUnicode(nameFQDNASCII)
+	if err != nil {
+		return nil, err
+	}
+
 	rc := &RecordConfig{
-		Type:        dnsutilv2.TypeToString(typeNum),
-		TypeNum:     typeNum,
-		TTL:         ttl,
-		Name:        name,
-		NameUnicode: makeLabelNameUnicode(name),
-		NameFQDN:    makeLabelNameFQDN(origin, name),
-		Metadata:    metadata,
+		Type:            dnsutilv2.TypeToString(typeNum),
+		TypeNum:         typeNum,
+		Name:            nameASCII,
+		NameUnicode:     nameUnicode,
+		NameFQDN:        nameFQDNASCII,
+		NameFQDNUnicode: nameFQDNUnicode,
+		TTL:             ttl,
+		Metadata:        metadata,
 	}
 	if rc.Metadata == nil {
 		rc.Metadata = map[string]string{}
 	}
-	rc.NameFQDNUnicode = makeNameFQDNUnicode(rc.NameFQDN)
 	rc.SetRDATA(rd)
 	return rc, nil
-}
-
-func legacySetTargetArgsTXT(rc *RecordConfig, args ...any) error {
-
-	rc.TypeNum = dnsv2.TypeTXT
-	rc.Type = "TXT"
-
-	if rc.Metadata == nil {
-		rc.Metadata = map[string]string{}
-	}
-
-	rd, err := MakeTXT("", nil, nrc.Flags{}, args...)
-	if err != nil {
-		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
-	}
-	rc.SetRDATA(rd)
-
-	return nil
 }
 
 func anyToTypeNum(a any) (uint16, error) {
@@ -214,29 +211,51 @@ func anyToTypeNum(a any) (uint16, error) {
 	return 0, fmt.Errorf("anyToTypeNum called with unknown type: %T", a)
 }
 
-func makeLabelNameFQDN(origin, name string) string {
-	if name == "@" {
-		return origin
+func makeLabelName(name string) (string, error) {
+	nameASCII, err := idna.ToASCII(name)
+	if err != nil {
+		return "", err
 	}
-	if strings.HasSuffix(name, ".") { // only needed by TestWriteZoneFileEach() and may be removed when that's gone.
-		return name[:len(name)-1]
+	nameASCII = strings.ToLower(nameASCII)
+
+	// Avoid pointless duplication.
+	if nameASCII == name {
+		return name, nil
 	}
-	return name + "." + origin
+
+	return nameASCII, err
 }
 
-func makeLabelNameUnicode(name string) string {
+func makeLabelNameUnicode(name string) (string, error) {
 	nameUnicode, err := idna.ToUnicode(name)
 	if err != nil {
-		panic(err) // should not happen
+		return "", err
 	}
-	return nameUnicode
+	// Avoid pointless duplication.
+	if name == nameUnicode {
+		return name, nil
+	}
+	return nameUnicode, nil
 }
 
-func makeNameFQDNUnicode(nameFQDN string) string {
-	// TODO(tlim): If this is too slow, we could join name + originFQDN
-	nameUnicode, err := idna.ToUnicode(nameFQDN)
-	if err != nil {
-		panic(err) // should not happen
+func makeLabelNameFQDN(origin, nameASCII string) string {
+	if nameASCII == "@" {
+		return origin
 	}
-	return nameUnicode
+	if strings.HasSuffix(nameASCII, ".") { // only needed by TestWriteZoneFileEach() and may be removed when that's gone. Otherwise this would be a failed assertion.
+		return nameASCII[:len(nameASCII)-1]
+	}
+	return nameASCII + "." + origin
+}
+
+func makeNameFQDNUnicode(nameFQDN string) (string, error) {
+	nameFQDNUnicode, err := idna.ToUnicode(nameFQDN)
+	if err != nil {
+		return "", err
+	}
+	// Avoid pointless duplication.
+	if nameFQDNUnicode == nameFQDN {
+		return nameFQDN, nil
+	}
+	return nameFQDNUnicode, nil
 }

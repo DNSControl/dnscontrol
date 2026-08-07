@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -23,6 +24,7 @@ type BUNNYDNSRDR struct {
 	Hdr dnsv2.Header
 
 	privatetypesrdata.BUNNYDNSRDR
+	// Target               string
 }
 
 // Typer interface.
@@ -33,28 +35,31 @@ func (rr *BUNNYDNSRDR) Type() uint16 { return TypeBUNNYDNSRDR }
 
 func (rr *BUNNYDNSRDR) Header() *dnsv2.Header { return &rr.Hdr }
 func (rr *BUNNYDNSRDR) Len() int {
-	return rr.Hdr.Len()
+	return rr.Hdr.Len() + rr.Data().Len()
 }
 func (rr *BUNNYDNSRDR) Data() dnsv2.RDATA {
-	return nil
+	return privatetypesrdata.BUNNYDNSRDR{Target: rr.Target}
 }
 func (rr *BUNNYDNSRDR) Clone() dnsv2.RR {
 	return &BUNNYDNSRDR{
-		rr.Hdr,
-		privatetypesrdata.BUNNYDNSRDR{}}
+		Hdr: rr.Hdr,
+		BUNNYDNSRDR: privatetypesrdata.BUNNYDNSRDR{
+			Target: rr.Target,
+		}}
 }
 func (rr *BUNNYDNSRDR) String() string {
-	return rr.Header().Name + "\t" +
+	return (rr.Header().Name + "\t" +
 		strconv.FormatInt(int64(rr.Header().TTL), 10) + "\t" +
-		dnsutilv2.ClassToString(rr.Header().Class) + "\tBUNNY_DNS_RDR" // RDATA is empty.
+		dnsutilv2.ClassToString(rr.Header().Class) + "\tBUNNY_DNS_RDR\t" + rr.Data().String())
 }
 
 // Parse makes an RDATA for this type using the tokens from dnsv2's parser.
 func (rr *BUNNYDNSRDR) Parse(tokens []string, s string) error {
 	args := TokensToArgs(tokens)
-	if len(args) != 0 {
-		return fmt.Errorf("BUNNY_DNS_RDR requires exactly 0 arguments, got %d", len(args))
+	if len(args) != 1 {
+		return fmt.Errorf("BUNNY_DNS_RDR requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
+	rr.Target = mustbe.RawString(args[0])
 	return nil
 }
 

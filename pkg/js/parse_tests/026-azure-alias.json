@@ -6,9 +6,6 @@
       "name": "foo.com",
       "records": [
         {
-          "azure_alias": {
-            "type": "AAAA"
-          },
           "comparablev3": "AAAA foo.com.",
           "filepos": "[line:3:5]",
           "meta": {
@@ -26,9 +23,6 @@
           "typenum": 65286
         },
         {
-          "azure_alias": {
-            "type": "A"
-          },
           "comparablev3": "A foo.com.",
           "filepos": "[line:2:5]",
           "meta": {
@@ -46,9 +40,6 @@
           "typenum": 65286
         },
         {
-          "azure_alias": {
-            "type": "CNAME"
-          },
           "comparablev3": "CNAME foo.com.",
           "filepos": "[line:4:5]",
           "meta": {

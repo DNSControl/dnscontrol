@@ -17,6 +17,7 @@
             "PublicKey": "AABBCCDD",
             "Tag": 0
           },
+          "target": "0",
           "ttl": 300,
           "type": "DNSKEY",
           "typenum": 48
