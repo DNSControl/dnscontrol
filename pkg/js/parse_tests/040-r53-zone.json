@@ -39,7 +39,7 @@
             "EvalTargetHealth": "false",
             "ZoneID": "Z2FTEDLFRTZ"
           },
-          "target": "Z2FTEDLFRTZ"
+          "target": "foo.com."
         }
       ]
     }

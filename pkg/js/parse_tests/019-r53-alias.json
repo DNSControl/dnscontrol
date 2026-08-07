@@ -24,7 +24,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -43,7 +44,7 @@
             "EvalTargetHealth": "false",
             "ZoneID": "ERERTFGFGF"
           },
-          "target": "ERERTFGFGF"
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -61,7 +62,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "false",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -79,7 +81,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -98,7 +101,7 @@
             "EvalTargetHealth": "false",
             "ZoneID": "Z2FTEDLFRTF"
           },
-          "target": "Z2FTEDLFRTF"
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -116,7 +119,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -134,7 +138,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -152,7 +157,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -170,7 +176,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -188,7 +195,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -206,7 +214,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -224,7 +233,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -242,7 +252,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -260,7 +271,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -278,7 +290,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -296,7 +309,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -314,7 +328,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -332,7 +347,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         },
         {
           "type": "R53_ALIAS",
@@ -350,7 +366,8 @@
             "Target": "foo.com.",
             "EvalTargetHealth": "",
             "ZoneID": ""
-          }
+          },
+          "target": "foo.com."
         }
       ]
     }
