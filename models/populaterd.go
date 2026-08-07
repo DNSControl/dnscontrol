@@ -172,9 +172,11 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		rc.SetRDATA(rd)
 
 	case dnsv2.TypeCNAME:
-		// rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
-		// errorChk(err)
-		// rc.SetRDATA(rd)
+		// Needed when a provider converts ALIAS->CNAME via ChangeType() (which
+		// clears the RDATA) and the diff engine then rebuilds the V3 fields.
+		rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
+		errorChk(err)
+		rc.SetRDATA(rd)
 
 	case dnsv2.TypeDHCID:
 		// rd, err := MakeDHCID(origin, nil, isEnabled, rc.GetTargetField())

@@ -78,6 +78,13 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 	case privatetypesrdata.ADGUARDHOMEAPASSTHROUGH:
 	case privatetypesrdata.AKAMAICDN:
 	case privatetypesrdata.ALIAS:
+		// Mirror the target into the legacy .target field. Several providers
+		// convert ALIAS->CNAME with ChangeType(), which clears the RDATA; the
+		// rebuild (copyLegacyFieldsToRD) then re-derives the CNAME from
+		// GetTargetField(). Without this the target would be lost.
+		if err := rc.SetTarget(rd.Target); err != nil {
+			return err
+		}
 	case privatetypesrdata.BUNNYDNSPZ:
 	case privatetypesrdata.CFWORKERROUTE:
 	case privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT:

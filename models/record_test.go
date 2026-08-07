@@ -64,6 +64,39 @@ func TestAzureAliasTargetSurvivesRecompute(t *testing.T) {
 	}
 }
 
+// TestAliasToCnameChangeType reproduces the bug where converting an ALIAS to a
+// CNAME via ChangeType() (as CLOUDFLAREAPI and other flattening providers do)
+// panicked ("FixUp: .RDATA is nil for type CNAME") and/or lost the target,
+// because ALIAS never mirrored its target into .target and the CNAME rebuild
+// case was not implemented. See copyRDtoLegacyFields()/copyLegacyFieldsToRD().
+func TestAliasToCnameChangeType(t *testing.T) {
+	const origin = "example.com"
+	const wantTarget = "foo.example.com."
+
+	dc := MustNewDomainConfig(origin)
+	rc, err := dc.NewRecordConfig("@", 300, "ALIAS", wantTarget)
+	if err != nil {
+		t.Fatalf("NewRecordConfig: %v", err)
+	}
+
+	// A provider converts the apex ALIAS into a CNAME (CNAME flattening).
+	rc.ChangeType("CNAME", origin)
+
+	// The diff engine rebuilds the cleared V3 fields. This must not panic and
+	// must preserve the target.
+	rc.FixRD(origin)
+
+	if rc.GetRDATA() == nil {
+		t.Fatal("RDATA is nil after FixRD")
+	}
+	if got := rc.AsCNAME().Target; got != wantTarget {
+		t.Errorf("CNAME target = %q, want %q", got, wantTarget)
+	}
+	if got := rc.GetTargetField(); got != wantTarget {
+		t.Errorf("GetTargetField = %q, want %q", got, wantTarget)
+	}
+}
+
 func TestHasRecordTypeName(t *testing.T) {
 	x := &RecordConfig{
 		Type: "A",
