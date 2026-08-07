@@ -109,8 +109,8 @@ jobs:
       # These providers will be tested if the env variable is set.
       # Set it to the domain name to use during the test.
       ALIDNS_DOMAIN: ${{ vars.ALIDNS_DOMAIN }}
-      AXFRDDNS_DOMAIN: ${{ vars.AXFRDDNS_DOMAIN }}
       AXFRDDNS_DNSSEC_DOMAIN: ${{ vars.AXFRDDNS_DNSSEC_DOMAIN }}
+      AXFRDDNS_DOMAIN: ${{ vars.AXFRDDNS_DOMAIN }}
       AZURE_DNS_DOMAIN: ${{ vars.AZURE_DNS_DOMAIN }}
       AZURE_PRIVATE_DNS_DOMAIN: ${{ vars.AZURE_PRIVATE_DNS_DOMAIN }}
       BIND_DOMAIN: ${{ vars.BIND_DOMAIN }}
@@ -120,6 +120,7 @@ jobs:
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
+      DNSIMPLE_DOMAIN: ${{ vars.DNSIMPLE_DOMAIN }}
       DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
       FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
@@ -128,6 +129,7 @@ jobs:
       HEDNS_DOMAIN: ${{ vars.HEDNS_DOMAIN }}
       HETZNER_V2_DOMAIN: ${{ vars.HETZNER_V2_DOMAIN }}
       HUAWEICLOUD_DOMAIN: ${{ vars.HUAWEICLOUD_DOMAIN }}
+      INWX_DOMAIN: ${{ vars.INWX_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
       LUADNS_DOMAIN: ${{ vars.LUADNS_DOMAIN }}
@@ -135,7 +137,9 @@ jobs:
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
+      NETLIFY_DOMAIN: ${{ vars.NETLIFY_DOMAIN }}
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
+      NEXDNS_DOMAIN: ${{ vars.NEXDNS_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
       OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
