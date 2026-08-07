@@ -2,11 +2,14 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"unicode"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
@@ -25,14 +28,34 @@ func (rc *RecordConfig) HasFormatIdenticalToTXT() bool {
 // SetTargetTXT sets the TXT fields when there is 1 string.
 //
 // LUA records reuse the TXT accessors (their payload is a TXT-format string).
-// When .Type is "LUA" the value is stored as a LUA rdata (using the already-set
-// .LuaRType) rather than a TXT rdata.
+// When .Type is "LUA", preserve its emitted record type while replacing the
+// payload in its RDATA.
 func (rc *RecordConfig) SetTargetTXT(s string) error {
 	if rc.Type == "LUA" {
-		rc.SetRDATA(privatetypesrdata.LUA{LuaType: rc.LuaRType, LuaPayload: s})
-		return rc.SetTarget(s)
+		rd := rc.AsLUA()
+		rd.LuaPayload = s
+		rc.SetRDATA(rd)
+		return nil
 	}
 	return legacySetTargetArgsTXT(rc, s)
+}
+
+func legacySetTargetArgsTXT(rc *RecordConfig, args ...any) error {
+
+	rc.TypeNum = dnsv2.TypeTXT
+	rc.Type = "TXT"
+
+	if rc.Metadata == nil {
+		rc.Metadata = map[string]string{}
+	}
+
+	rd, err := MakeTXT("", nil, nrc.Flags{}, args...)
+	if err != nil {
+		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
+	}
+	rc.SetRDATA(rd)
+
+	return nil
 }
 
 // SetTargetTXTs joins the supplied TXT fields and stores canonical 255-octet segments.

@@ -396,8 +396,8 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 
 		// Store the IDs. These will be needed for update/delete operations.
 		sr := rec.AsCLOUDFLAREAPISINGLEREDIRECT()
-		sr.SRRRulesetID = rules.ID
-		sr.SRRRulesetRuleID = pr.ID
+		sr.RT_SRRRulesetID = rules.ID
+		sr.RT_SRRRulesetRuleID = pr.ID
 		rec.SetRDATA(sr)
 
 		recs = append(recs, rec)
@@ -451,8 +451,8 @@ func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatety
 
 func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
 	err := c.cfClient.DeleteRulesetRule(context.Background(), cloudflare.ZoneIdentifier(domainID), cloudflare.DeleteRulesetRuleParams{
-		RulesetID:     cfr.SRRRulesetID,
-		RulesetRuleID: cfr.SRRRulesetRuleID,
+		RulesetID:     cfr.RT_SRRRulesetID,
+		RulesetRuleID: cfr.RT_SRRRulesetRuleID,
 	},
 	)
 	// NB(tlim): Yuck. This returns an error even when it is successful. Dig into the JSON for the real status.

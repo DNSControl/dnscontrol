@@ -8,7 +8,6 @@
         {
           "comparablev3": "15 foo.com.",
           "filepos": "[line:2:5]",
-          "mxpreference": 15,
           "name": "@",
           "name_unicode": "@",
           "rdata": {

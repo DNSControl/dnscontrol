@@ -339,39 +339,43 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 	var srvRecs []nc.DomainSRVRecord
 
 	id := 1
-	for _, r := range dc.Records {
-		var value string
+	for _, rc := range dc.Records {
 
-		if r.Type == "SRV" {
-			recServiceAndProtocol := strings.SplitAfterN(r.GetLabel(), ".", 2)
+		if rc.Type == "SRV" {
+			recServiceAndProtocol := strings.SplitAfterN(rc.GetLabel(), ".", 2)
 			recService, recProtocol := recServiceAndProtocol[0], recServiceAndProtocol[1]
 
+			f := rc.AsSRV()
 			rec := nc.DomainSRVRecord{
 				Service:  recService,
 				Protocol: recProtocol,
-				Priority: int(r.SrvPriority),
-				Port:     int(r.SrvPort),
-				Target:   r.GetTargetField(),
-				Weight:   int(r.SrvWeight),
+				Priority: int(f.Priority),
+				Port:     int(f.Port),
+				Target:   f.Target,
+				Weight:   int(f.Weight),
 			}
 
 			srvRecs = append(srvRecs, rec)
 		} else {
-			switch rtype := r.Type; rtype { // #rtype_variations
-			case "CAA":
-				value = r.GetRDATA().String()
-			default:
-				value = r.GetTargetField()
-			}
 
 			rec := nc.DomainDNSHost{
-				ID:      id,
-				Name:    r.GetLabel(),
-				Type:    r.Type,
-				Address: value,
-				MXPref:  int(r.MxPreference),
-				TTL:     int(r.TTL),
+				ID:   id,
+				Name: rc.GetLabel(),
+				Type: rc.Type,
+				TTL:  int(rc.TTL),
 			}
+
+			switch rtype := rc.Type; rtype {
+			case "CAA":
+				rec.Address = rc.GetRDATA().String()
+			case "MX":
+				f := rc.AsMX()
+				rec.MXPref = int(f.Preference)
+				rec.Address = f.Mx
+			default:
+				rec.Address = rc.GetTargetField()
+			}
+
 			recs = append(recs, rec)
 		}
 

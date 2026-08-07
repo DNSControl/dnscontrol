@@ -12,12 +12,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "name1",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "then1",
             "SRWhen": "when1"
           },
+          "target": "then1",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -29,12 +30,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "name2",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "then2",
             "SRWhen": "when2"
           },
+          "target": "then2",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -46,12 +48,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "name3",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "then3",
             "SRWhen": "when3"
           },
+          "target": "then3",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -67,12 +70,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "namemeta",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "thenmeta",
             "SRWhen": "whenmeta"
           },
+          "target": "thenmeta",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -84,12 +88,13 @@
           "name_unicode": "@",
           "rdata": {
             "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
             "SRName": "namettl",
-            "SRRRulesetID": "",
-            "SRRRulesetRuleID": "",
             "SRThen": "thenttl",
             "SRWhen": "whenttl"
           },
+          "target": "thenttl",
           "ttl": 999,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289

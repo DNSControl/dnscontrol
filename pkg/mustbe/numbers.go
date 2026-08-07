@@ -158,6 +158,11 @@ func Int64(arg any) int64 {
 		return v
 	case uint16:
 		return int64(v)
+	case float64:
+		if math.Trunc(v) != v || v < math.MinInt64 || v >= float64(math.MaxInt64) {
+			panic(fmt.Sprintf("value %v is not an int64", arg))
+		}
+		return int64(v)
 	case string:
 		ni, err := strconv.ParseInt(arg.(string), 10, 64)
 		if err != nil {
@@ -165,7 +170,7 @@ func Int64(arg any) int64 {
 		}
 		return int64(ni)
 	}
-	panic(fmt.Sprintf("value %v is type %T, expected uint32", arg, arg))
+	panic(fmt.Sprintf("value %v is type %T, expected int64", arg, arg))
 }
 
 func Float32(arg any) float32 {

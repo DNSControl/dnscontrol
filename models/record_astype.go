@@ -51,6 +51,10 @@ func (rc *RecordConfig) AsBUNNYDNSPZ() privatetypesrdata.BUNNYDNSPZ {
 	return rc.GetRDATA().(privatetypesrdata.BUNNYDNSPZ)
 }
 
+func (rc *RecordConfig) AsBUNNYDNSRDR() privatetypesrdata.BUNNYDNSRDR {
+	return rc.GetRDATA().(privatetypesrdata.BUNNYDNSRDR)
+}
+
 func (rc *RecordConfig) AsCAA() dnsrdatav2.CAA {
 	return rc.GetRDATA().(dnsrdatav2.CAA)
 }
@@ -157,6 +161,10 @@ func (rc *RecordConfig) AsHIP() dnsrdatav2.HIP {
 
 func (rc *RecordConfig) AsHTTPS() dnsrdatav2.SVCB {
 	return rc.GetRDATA().(dnsrdatav2.SVCB)
+}
+
+func (rc *RecordConfig) AsIMPORTTRANSFORM() privatetypesrdata.IMPORTTRANSFORM {
+	return rc.GetRDATA().(privatetypesrdata.IMPORTTRANSFORM)
 }
 
 func (rc *RecordConfig) AsIPN() dnsrdatav2.IPN {

@@ -171,7 +171,7 @@ func Test_assert_valid_target(t *testing.T) {
 		experiment string
 		isError    bool
 	}{
-		{"@", false},
+		// {"@", false}, // In v5, target hosts are never "@".
 		{"foo", false},
 		{"foo.bar.", false},
 		{"foo.", false},

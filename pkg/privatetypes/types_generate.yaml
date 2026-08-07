@@ -81,8 +81,13 @@ types:
 
   - name: Bunny_Dns_Rdr
     codepoint: 65320
-    fields: []
-    test_data: []
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: https://example.com
 
   - name: Cf_Worker_Route
     codepoint: 65288
@@ -109,15 +114,15 @@ types:
       - name: SRThen
         type: RawString
     runtimeFields:
-      - name: SRRRulesetID
+      - name: RT_SRRRulesetID
         type: RawString
         structtag: "json:\"sr_rulesetid,omitempty\""
         comment: "ID of the ruleset containing this rule (populated by API)"
-      - name: SRRRulesetRuleID
+      - name: RT_SRRRulesetRuleID
         type: RawString
         structtag: "json:\"sr_rulesetruleid,omitempty\""
         comment: "ID of this rule within the ruleset (populated by API)"
-#      - name: SRDisplay
+#      - name: RT_SRDisplay
 #        type: RawString
 #        structtag: "json:\"sr_display,omitempty\""
 #        comment: "How is this displayed to the user (SetTarget) for CF_SINGLE_REDIRECT"
@@ -150,11 +155,30 @@ types:
         values:
           Target: example.com.
 
+  - name: Import_Transform
+    codepoint: 65322
+    fields:
+      - name: TransformTable
+        type: RawString
+      - name: TTL
+        type: Uint16
+      - name: SuffixStrip
+        type: RawString
+      - name: TargetDomain
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          TransformTable: 1.1.1.0 ~ 1.1.1.100 ~ 4.4.4.100 ~
+          SuffixStrip: com
+          TargetDomain: example.com
+          TTL: 123
+
   - name: Lua
     codepoint: 65292
     fields:
       - name: LuaType
-        type: RawString
+        type: ToUpperRawString
       - name: LuaPayload
         type: RawString
     test_data:
@@ -206,7 +230,7 @@ types:
     test_data:
       - name: "plain"
         values:
-          Target: http://example.com
+          Location: http://example.com
 
   - name: R53_Alias
     codepoint: 65298

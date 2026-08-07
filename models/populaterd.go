@@ -112,32 +112,37 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 
 	// These record types have no fields in RecordConfig (other than .rdata) to backfill.
 
-	case privatetypes.TypeAKAMAICDN:
-		// no-op
 	case privatetypes.TypeAKAMAITLC:
 		rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, isEnabled, rc.AnswerType, rc.GetTargetField())
 		errorChk(err)
 		rc.SetRDATA(rd)
+
+	case dnsv2.TypeCAA:
+	case dnsv2.TypeDNSKEY:
+	case dnsv2.TypeDS:
+	case dnsv2.TypeHTTPS:
+	case dnsv2.TypeLOC:
+	case dnsv2.TypeMX:
+	case dnsv2.TypeNAPTR:
+	case dnsv2.TypeRP:
+	case dnsv2.TypeSMIMEA:
+	case dnsv2.TypeSOA:
+	case dnsv2.TypeSRV:
+	case dnsv2.TypeSSHFP:
+	case dnsv2.TypeSVCB:
+	case dnsv2.TypeTLSA:
+	case privatetypes.TypeAKAMAICDN:
 	case privatetypes.TypeBUNNYDNSPZ:
-		// no-op
 	case privatetypes.TypeBUNNYDNSRDR:
-		// no-op
+	case privatetypes.TypeCFWORKERROUTE:
 	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
-		// no-op
 	case privatetypes.TypeCLOUDNSWR:
-		// no-op
 	case privatetypes.TypeLUA:
-		// no-op
 	case privatetypes.TypeMIKROTIKFORWARDER:
-		// no-op
 	case privatetypes.TypeMIKROTIKFWD:
-		// no-op
 	case privatetypes.TypeMIKROTIKNXDOMAIN:
-		// no-op
 	case privatetypes.TypeNETLIFY:
-		// no-op
 	case privatetypes.TypeNETLIFYV6:
-		// no-op
 
 	// These record types need to pull from their legacy fields in RecordConfig to make the RDATA.
 
@@ -146,144 +151,77 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case privatetypes.TypeALIAS:
-		rd, err := privatetypesrdata.MakeALIAS(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeALIAS(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case dnsv2.TypeAAAA:
 		rd, err := MakeAAAA(origin, nil, isEnabled, rc.GetTargetIP())
 		errorChk(err)
 		rc.SetRDATA(rd)
 	case privatetypes.TypeADGUARDHOMEAPASSTHROUGH:
-		rd, err := privatetypesrdata.MakeADGUARDHOMEAPASSTHROUGH(origin, nil, isEnabled)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeADGUARDHOMEAPASSTHROUGH(origin, nil, isEnabled)
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case privatetypes.TypeADGUARDHOMEAAAAPASSTHROUGH:
-		rd, err := privatetypesrdata.MakeADGUARDHOMEAAAAPASSTHROUGH(origin, nil, isEnabled)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeADGUARDHOMEAAAAPASSTHROUGH(origin, nil, isEnabled)
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case privatetypes.TypeAZUREALIAS:
-		rd, err := privatetypesrdata.MakeAZUREALIAS(origin, nil, isEnabled, rc.AzureAlias["type"], rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
 
-	case dnsv2.TypeCAA:
-		rd, err := MakeCAA(origin, nil, isEnabled, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
 	case dnsv2.TypeCNAME:
-		rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case privatetypes.TypeCFWORKERROUTE:
-		// no-op
+		// rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case dnsv2.TypeDHCID:
-		rd, err := MakeDHCID(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeDHCID(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case dnsv2.TypeDNAME:
-		rd, err := MakeDNAME(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case dnsv2.TypeDNSKEY:
-		// no-op
-	case dnsv2.TypeDS:
-		rd, err := MakeDS(origin, nil, isEnabled, rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeDNAME(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case privatetypes.TypeFRAME:
-		rd, err := privatetypesrdata.MakeFRAME(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-
-	case dnsv2.TypeHTTPS:
-		rd, err := MakeHTTPS(origin, nil, isEnabled, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
-		if err != nil {
-			s := fmt.Sprintf("BUG: FixUp: MakeHTTPS failed for record %s IN %s %s: %v", rc.NameFQDN, rc.Type, rc.GetTargetField(), err)
-			fmt.Println(s)
-			panic(s)
-		}
-		rc.SetRDATA(rd)
-
-	case dnsv2.TypeLOC:
-		// no-op
-
-	case dnsv2.TypeMX:
-		rd, err := MakeMX(origin, nil, isEnabled, rc.MxPreference, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeFRAME(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case dnsv2.TypeNS:
-		rd, err := MakeNS(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case dnsv2.TypeNAPTR:
-		rd, err := MakeNAPTR(origin, nil, isEnabled, rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeNS(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case dnsv2.TypeOPENPGPKEY:
-		rd, err := MakeOPENPGPKEY(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeOPENPGPKEY(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case privatetypes.TypePORKBUNURLFWD:
-		rd, err := privatetypesrdata.MakePORKBUNURLFWD(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakePORKBUNURLFWD(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case dnsv2.TypePTR:
-		rd, err := MakePTR(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakePTR(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
-	case dnsv2.TypeRP:
-		// RP is native to RecordConfigV3. No FixUP is needed or possible.
 	case privatetypes.TypeR53ALIAS:
-		rd, err := privatetypesrdata.MakeR53ALIAS(origin, nil, isEnabled,
-			rc.R53Alias["type"],
-			rc.GetTargetField(),
-			rc.R53Alias["evaluate_target_health"],
-			rc.R53Alias["zone_id"],
-		)
-		errorChk(err)
-		rc.SetRDATA(rd)
 
-	case dnsv2.TypeSMIMEA:
-		// no-op
-	case dnsv2.TypeSOA:
-		// no op -- legacy fields have been eliminated
-	case dnsv2.TypeSRV:
-		rd, err := MakeSRV(origin, nil, isEnabled, rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case dnsv2.TypeSSHFP:
-		rd, err := MakeSSHFP(origin, nil, isEnabled, rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
-	case dnsv2.TypeSVCB:
-		rd, err := MakeSVCB(origin, nil, isEnabled, rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
-		errorChk(err)
-		rc.SetRDATA(rd)
-
-	case dnsv2.TypeTLSA:
-		rd, err := MakeTLSA(origin, nil, isEnabled, rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
 	case dnsv2.TypeTXT:
-		rd, err := MakeTXT(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeTXT(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case privatetypes.TypeURL:
-		rd, err := privatetypesrdata.MakeURL(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeURL(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case privatetypes.TypeURL301:
-		rd, err := privatetypesrdata.MakeURL301(origin, nil, isEnabled, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeURL301(origin, nil, isEnabled, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	default:
 		panic(fmt.Sprintf("RDATA FIXUP NOT IMPLEMENTED TYPE=%q", rc.Type))

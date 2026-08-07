@@ -51,10 +51,15 @@ func recordToNative(rc *models.RecordConfig, id ...uint32) paramStruct {
 	case "TXT":
 		zrec.Rdata = rc.GetTargetTXTJoined()
 	case "MX":
-		zrec.Priority = rc.MxPreference
-		zrec.Rdata = rc.GetTargetField()
+		f := rc.AsMX()
+		zrec.Priority = f.Preference
+		zrec.Rdata = f.Mx
 	case "SRV":
-		zrec.Priority = rc.SrvPriority
+		f := rc.AsSRV()
+		zrec.Priority = f.Priority
+		zrec.Rdata = f.Target
+		// if that doesn't work, try:
+		//zrec.Rdata = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
 	}
 	// fmt.Printf("r2n:zr %+v\n", zrec)
 

@@ -1,0 +1,33 @@
+{
+  "dns_providers": [],
+  "domains": [
+    {
+      "dnsProviders": {},
+      "name": "example.com",
+      "records": [
+        {
+          "comparablev3": "\"https://example.com\"",
+          "filepos": "[line:4:5]",
+          "meta": {
+            "includePath": "yes",
+            "orig_custom_type": "PORKBUN_URLFWD",
+            "type": "permanent",
+            "wildcard": "no"
+          },
+          "name": "shop",
+          "name_unicode": "shop",
+          "rdata": {
+            "Location": "https://example.com"
+          },
+          "target": "https://example.com",
+          "ttl": 300,
+          "type": "PORKBUN_URLFWD",
+          "typenum": 65297
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "example.com"
+    }
+  ],
+  "registrars": []
+}

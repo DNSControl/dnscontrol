@@ -179,10 +179,11 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 
 	case "SRV":
 		// SRV records: enabled, key, record_type, value, priority, weight, port allowed
-		m["value"] = strings.TrimSuffix(rc.AsSRV().Target, ".")
-		m["priority"] = int(rc.SrvPriority)
-		m["weight"] = int(rc.SrvWeight)
-		m["port"] = int(rc.SrvPort)
+		f := rc.AsSRV()
+		m["value"] = strings.TrimSuffix(f.Target, ".")
+		m["priority"] = int(f.Priority)
+		m["weight"] = int(f.Weight)
+		m["port"] = int(f.Port)
 
 	default:
 		return nil, fmt.Errorf("unsupported record type: %s", rc.Type)

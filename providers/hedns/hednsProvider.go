@@ -754,14 +754,16 @@ func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *model
 	// Work out the content
 	switch rc.Type {
 	case "MX":
-		values.Set("Priority", strconv.FormatUint(uint64(rc.MxPreference), 10))
-		values.Set("Content", rc.GetTargetField())
+		f := rc.AsMX()
+		values.Set("Priority", strconv.FormatUint(uint64(f.Preference), 10))
+		values.Set("Content", f.Mx)
 	case "SRV":
+		f := rc.AsSRV()
 		values.Del("Content")
-		values.Set("Target", rc.GetTargetField())
-		values.Set("Priority", strconv.FormatUint(uint64(rc.SrvPriority), 10))
-		values.Set("Weight", strconv.FormatUint(uint64(rc.SrvWeight), 10))
-		values.Set("Port", strconv.FormatUint(uint64(rc.SrvPort), 10))
+		values.Set("Target", f.Target)
+		values.Set("Priority", strconv.FormatUint(uint64(f.Priority), 10))
+		values.Set("Weight", strconv.FormatUint(uint64(f.Weight), 10))
+		values.Set("Port", strconv.FormatUint(uint64(f.Port), 10))
 	default:
 		values.Set("Content", rc.GetRDATA().String())
 	}

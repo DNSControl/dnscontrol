@@ -194,7 +194,7 @@ func reportSkips(recs models.Records, full bool) []string {
 	}
 
 	for _, r := range recs[:last] {
-		msgs = append(msgs, fmt.Sprintf(`    %s("%s.", %s),`, r.Type, r.GetLabelFQDN(), r.GetTargetJS()))
+		msgs = append(msgs, fmt.Sprintf(`    %s("%s.", %s),`, r.Type, r.GetLabelFQDN(), r.GetRDATA().String()))
 	}
 	if shorten && printer.MaxReport != 0 {
 		msgs = append(msgs, fmt.Sprintf("    ...and %d more... (use --full to show all)", len(recs)-printer.MaxReport))

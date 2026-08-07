@@ -61,7 +61,7 @@ func (rr *LUA) Parse(tokens []string, s string) error {
 	if len(args) != 2 {
 		return fmt.Errorf("LUA requires exactly 2 arguments, got %d: %v", len(args), args)
 	}
-	rr.LuaType = mustbe.RawString(args[0])
+	rr.LuaType = mustbe.ToUpperRawString(args[0])
 	rr.LuaPayload = mustbe.RawString(args[1])
 	return nil
 }
