@@ -67,7 +67,8 @@ func RDtoFieldsStrings(s dnsv2.RDATA) ([]string, error) {
 	return result, nil
 }
 
-// RDtoFieldsStrings returns the fields of a RDATA struct as strings.
+// RDtoFieldsJS returns the fields of a RDATA struct as Javascript-constants.
+// Examples: int: `2`; string:  `"mystring"`
 // Floats are restricted to 2 digits after the decimal.
 func RDtoFieldsJS(s dnsv2.RDATA) ([]string, error) {
 
