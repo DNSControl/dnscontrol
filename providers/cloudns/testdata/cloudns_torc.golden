@@ -2,6 +2,7 @@
 @ 300 IN NS pns72.cloudns.com.
 @ 300 IN NS pns73.cloudns.net.
 @ 300 IN NS pns74.cloudns.uk.
+final 300 IN TXT "TestDNSProviders was successful!"
 testa 300 IN A 1.1.1.1
 testa 300 IN A 3.3.3.3
 @ 300 IN A 2.2.2.2

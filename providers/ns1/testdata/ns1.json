@@ -1,7 +1,7 @@
 [
   {
     "domain": "*.dnscontrolintegration.io",
-    "id": "6a71e67e8b2bd30001ebba39",
+    "id": "6a762549346a5300017f137f",
     "short_answers": [
       "3.3.3.3"
     ],
@@ -11,7 +11,7 @@
   },
   {
     "domain": "4.dnscontrolintegration.io",
-    "id": "6a71e6a9bcd87e0001b26f7b",
+    "id": "6a7625788935f3000181e80b",
     "short_answers": [
       "bar.com."
     ],
@@ -21,7 +21,7 @@
   },
   {
     "domain": "4.dnscontrolintegration.io",
-    "id": "6a71e6a9bcd87e0001b26f7b",
+    "id": "6a7625788935f3000181e80b",
     "short_answers": [
       "foo.com."
     ],
@@ -31,9 +31,9 @@
   },
   {
     "domain": "_443._tcp.dnscontrolintegration.io",
-    "id": "6a71e6adbcd87e0001b27025",
+    "id": "6a76257c346a5300017f1b36",
     "short_answers": [
-      "2 0 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
     ],
     "tier": 1,
     "ttl": 300,
@@ -41,9 +41,9 @@
   },
   {
     "domain": "_443._tcp.dnscontrolintegration.io",
-    "id": "6a71e6adbcd87e0001b27025",
+    "id": "6a76257c346a5300017f1b36",
     "short_answers": [
-      "2 0 2 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
     ],
     "tier": 1,
     "ttl": 300,
@@ -51,9 +51,9 @@
   },
   {
     "domain": "_443._tcp.dnscontrolintegration.io",
-    "id": "6a71e6adbcd87e0001b27025",
+    "id": "6a76257c346a5300017f1b36",
     "short_answers": [
-      "2 0 2 fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210"
+      "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
     ],
     "tier": 1,
     "ttl": 300,
@@ -61,9 +61,9 @@
   },
   {
     "domain": "_443._tcp.dnscontrolintegration.io",
-    "id": "6a71e6adbcd87e0001b27025",
+    "id": "6a76257c346a5300017f1b36",
     "short_answers": [
-      "2 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
     ],
     "tier": 1,
     "ttl": 300,
@@ -71,9 +71,9 @@
   },
   {
     "domain": "_443._tcp.dnscontrolintegration.io",
-    "id": "6a71e6adbcd87e0001b27025",
+    "id": "6a76257c346a5300017f1b36",
     "short_answers": [
-      "3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
     ],
     "tier": 1,
     "ttl": 300,
@@ -81,7 +81,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "15 65 75 foo4.com.",
       "52 6 7 foo.com."
@@ -92,7 +92,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "15 65 75 foo4.com.",
       "52 62 7 foo.com."
@@ -103,7 +103,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "15 65 75 foo4.com.",
       "52 62 72 foo.com."
@@ -114,7 +114,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "5 6 7 foo.com.",
       "15 65 75 foo3.com."
@@ -125,7 +125,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "5 6 7 foo.com.",
       "15 65 75 foo4.com."
@@ -136,7 +136,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "5 6 7 foo.com.",
       "5 60 70 foo2.com.",
@@ -148,7 +148,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "5 6 7 foo.com.",
       "5 60 70 foo2.com."
@@ -159,7 +159,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6aa2e427500014a806c",
+    "id": "6a76257853398800019bbfa7",
     "short_answers": [
       "5 6 7 foo.com."
     ],
@@ -169,7 +169,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6ac8b2bd30001ebbff4",
+    "id": "6a76257b8935f3000181e885",
     "short_answers": [
       "15 65 75 ."
     ],
@@ -179,7 +179,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6acbcd87e0001b26fea",
+    "id": "6a76257b8935f3000181e89a",
     "short_answers": [
       "5 6 7 foo.com."
     ],
@@ -189,7 +189,7 @@
   },
   {
     "domain": "_sip._tcp.dnscontrolintegration.io",
-    "id": "6a71e6acbcd87e0001b26fea",
+    "id": "6a76257b8935f3000181e89a",
     "short_answers": [
       "5 6 7 foo.com."
     ],
@@ -199,7 +199,7 @@
   },
   {
     "domain": "a.dnscontrolintegration.io",
-    "id": "6a71e6a3bcd87e0001b26e87",
+    "id": "6a7625718935f3000181e73c",
     "short_answers": [
       "xn--ndaaa.com."
     ],
@@ -209,7 +209,7 @@
   },
   {
     "domain": "a.dnscontrolintegration.io",
-    "id": "6a71e6b6f4dcaf0001aac841",
+    "id": "6a762585c8db430001ab91cb",
     "short_answers": [
       "b.dnscontrolintegration.io."
     ],
@@ -219,7 +219,7 @@
   },
   {
     "domain": "another-child.dnscontrolintegration.io",
-    "id": "6a71e6b0bcd87e0001b270a3",
+    "id": "6a76257f8935f3000181e910",
     "short_answers": [
       "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44",
       "1501 13 1 EE02C885B5B4ED64899F2D43EB2B8E6619BDB50C",
@@ -232,7 +232,7 @@
   },
   {
     "domain": "another-child.dnscontrolintegration.io",
-    "id": "6a71e6b0bcd87e0001b270a3",
+    "id": "6a76257f8935f3000181e910",
     "short_answers": [
       "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -242,7 +242,7 @@
   },
   {
     "domain": "another-child.dnscontrolintegration.io",
-    "id": "6a71e6b28b2bd30001ebc0cb",
+    "id": "6a762581346a5300017f1bc4",
     "short_answers": [
       "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -252,7 +252,7 @@
   },
   {
     "domain": "another-child.dnscontrolintegration.io",
-    "id": "6a71e6b4dcba9b0001290abb",
+    "id": "6a762583b7d0d50001d18fbf",
     "short_answers": [
       "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44",
       "1501 14 4 109BB6B5B6D5547C1CE03C7A8BD7D8F80C1CB0957F50C4F7FDA04692079917E4F9CAD52B878F3D8234E1A170B154B72D",
@@ -265,7 +265,7 @@
   },
   {
     "domain": "another-child.dnscontrolintegration.io",
-    "id": "6a71e6b4dcba9b0001290abb",
+    "id": "6a762583b7d0d50001d18fbf",
     "short_answers": [
       "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -275,7 +275,7 @@
   },
   {
     "domain": "bar.bat.dnscontrolintegration.io",
-    "id": "6a71e6c18b2bd30001ebc28b",
+    "id": "6a7625928935f3000181ebf9",
     "short_answers": [
       "5.5.5.5"
     ],
@@ -285,7 +285,7 @@
   },
   {
     "domain": "bar.dnscontrolintegration.io",
-    "id": "6a71e69ebcd87e0001b26d86",
+    "id": "6a76256c53398800019bbe72",
     "short_answers": [
       "5 bar.com."
     ],
@@ -295,7 +295,7 @@
   },
   {
     "domain": "bar.dnscontrolintegration.io",
-    "id": "6a71e6a12e427500014a7f58",
+    "id": "6a76256fb7d0d50001d18ca0",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -305,7 +305,7 @@
   },
   {
     "domain": "bar.dnscontrolintegration.io",
-    "id": "6a71e6b88b2bd30001ebc18d",
+    "id": "6a762588346a5300017f1c9e",
     "short_answers": [
       "5.5.5.5"
     ],
@@ -315,7 +315,7 @@
   },
   {
     "domain": "bar.dnscontrolintegration.io",
-    "id": "6a71e6bc8b2bd30001ebc1f9",
+    "id": "6a76258c346a5300017f1d39",
     "short_answers": [
       "5.5.5.5"
     ],
@@ -325,7 +325,7 @@
   },
   {
     "domain": "bar.dnscontrolintegration.io",
-    "id": "6a71e6c62e427500014a82d1",
+    "id": "6a762597346a5300017f1f36",
     "short_answers": [
       "redact2.acm-validations.aws."
     ],
@@ -335,7 +335,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b1dcba9b0001290a77",
+    "id": "6a7625808935f3000181e93a",
     "short_answers": [
       "1 13 1 DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"
     ],
@@ -345,7 +345,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b1dcba9b0001290a77",
+    "id": "6a7625808935f3000181e93a",
     "short_answers": [
       "3 13 1 DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"
     ],
@@ -355,7 +355,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b1dcba9b0001290a77",
+    "id": "6a7625808935f3000181e93a",
     "short_answers": [
       "3 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -365,7 +365,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b1dcba9b0001290a77",
+    "id": "6a7625808935f3000181e93a",
     "short_answers": [
       "3 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -375,7 +375,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b1dcba9b0001290a77",
+    "id": "6a7625808935f3000181e93a",
     "short_answers": [
       "8857 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -385,7 +385,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b2f4dcaf0001aac819",
+    "id": "6a762582b7d0d50001d18f9f",
     "short_answers": [
       "1 14 4 417212FD1C8BC5896FEFD8DB58AF824545E85B0D0546409366A30AEF7269FAE258173BD185FB262C86F3BB86FBA04368"
     ],
@@ -395,7 +395,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b2f4dcaf0001aac819",
+    "id": "6a762582b7d0d50001d18f9f",
     "short_answers": [
       "3 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -405,7 +405,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b2f4dcaf0001aac819",
+    "id": "6a762582b7d0d50001d18f9f",
     "short_answers": [
       "3 14 4 3115238F89E0BF5252D9718113B1B9FFF854608D84BE94EEFB9210DC1CC0B4F3557342A27465CFACC42EF137AE9A5489"
     ],
@@ -415,7 +415,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b2f4dcaf0001aac819",
+    "id": "6a762582b7d0d50001d18f9f",
     "short_answers": [
       "3 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -425,7 +425,7 @@
   },
   {
     "domain": "child.dnscontrolintegration.io",
-    "id": "6a71e6b2f4dcaf0001aac819",
+    "id": "6a762582b7d0d50001d18f9f",
     "short_answers": [
       "8857 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -435,7 +435,7 @@
   },
   {
     "domain": "decoy.dnscontrolintegration.io",
-    "id": "6a71e69ef4dcaf0001aac5e5",
+    "id": "6a76256c8935f3000181e635",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -445,7 +445,7 @@
   },
   {
     "domain": "decoy.dnscontrolintegration.io",
-    "id": "6a71e69ef4dcaf0001aac5e5",
+    "id": "6a76256c8935f3000181e635",
     "short_answers": [
       "2.2.2.2"
     ],
@@ -455,7 +455,7 @@
   },
   {
     "domain": "decoy.dnscontrolintegration.io",
-    "id": "6a71e69ef4dcaf0001aac5e5",
+    "id": "6a76256c8935f3000181e635",
     "short_answers": [
       "3.3.3.3"
     ],
@@ -467,9 +467,10 @@
     "domain": "dnscontrolintegration.io",
     "id": "64ddfedfe8530e00818347de",
     "short_answers": [
-      "dns2.p02.nsone.net.",
-      "ns1.foo.com.",
-      "ns2.foo.com."
+      "dns1.p05.nsone.net.",
+      "dns2.p05.nsone.net.",
+      "dns3.p05.nsone.net.",
+      "dns4.p05.nsone.net."
     ],
     "tier": 1,
     "ttl": 300,
@@ -477,28 +478,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "64ddfedfe8530e00818347de",
-    "short_answers": [
-      "dns2.p02.nsone.net.",
-      "ns1.foo.com."
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "NS"
-  },
-  {
-    "domain": "dnscontrolintegration.io",
-    "id": "64ddfedfe8530e00818347de",
-    "short_answers": [
-      "dns2.p02.nsone.net."
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "NS"
-  },
-  {
-    "domain": "dnscontrolintegration.io",
-    "id": "6a71e67dbcd87e0001b268aa",
+    "id": "6a76254853398800019bb124",
     "short_answers": [
       "2.2.2.2"
     ],
@@ -508,7 +488,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e67dbcd87e0001b268aa",
+    "id": "6a76254853398800019bb124",
     "short_answers": [
       "4.4.4.4"
     ],
@@ -518,7 +498,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6808b2bd30001ebbab9",
+    "id": "6a76254cb7d0d50001d185a7",
     "short_answers": [
       "5 bar.com."
     ],
@@ -528,7 +508,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6808b2bd30001ebbab9",
+    "id": "6a76254cb7d0d50001d185a7",
     "short_answers": [
       "5 foo.com."
     ],
@@ -538,7 +518,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6878b2bd30001ebbbb2",
+    "id": "6a7625538935f3000181e15b",
     "short_answers": [
       "8.8.8.8"
     ],
@@ -548,7 +528,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6878b2bd30001ebbbb2",
+    "id": "6a7625538935f3000181e15b",
     "short_answers": [
       "8.8.8.8"
     ],
@@ -558,7 +538,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6878b2bd30001ebbbb2",
+    "id": "6a7625538935f3000181e15b",
     "short_answers": [
       "8.8.8.8"
     ],
@@ -568,7 +548,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68bf4dcaf0001aabb76",
+    "id": "6a762558b7d0d50001d188a3",
     "short_answers": [
       "0 test.com. "
     ],
@@ -578,7 +558,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68bf4dcaf0001aabb76",
+    "id": "6a762558b7d0d50001d188a3",
     "short_answers": [
       "1 test.com. alpn=h2 port=99"
     ],
@@ -588,7 +568,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68bf4dcaf0001aabb76",
+    "id": "6a762558b7d0d50001d188a3",
     "short_answers": [
       "1 test.com. port=80"
     ],
@@ -598,7 +578,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68bf4dcaf0001aabb76",
+    "id": "6a762558b7d0d50001d188a3",
     "short_answers": [
       "1 test.com. port=99"
     ],
@@ -608,7 +588,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68bf4dcaf0001aabb76",
+    "id": "6a762558b7d0d50001d188a3",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999"
     ],
@@ -618,7 +598,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68cdcba9b0001290626",
+    "id": "6a76255ac8db430001ab8c6e",
     "short_answers": [
       "3 example.com. alpn=h2 port=80 ech=another+base64+encoded+value"
     ],
@@ -628,7 +608,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68cdcba9b0001290626",
+    "id": "6a76255ac8db430001ab8c6e",
     "short_answers": [
       "3 example.com. alpn=h2 port=80 ech=some+base64+encoded+value///"
     ],
@@ -638,7 +618,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68cdcba9b0001290626",
+    "id": "6a76255ac8db430001ab8c6e",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999 ech=some+base64+encoded+value///"
     ],
@@ -648,7 +628,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68cdcba9b0001290626",
+    "id": "6a76255ac8db430001ab8c6e",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999"
     ],
@@ -658,7 +638,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68cdcba9b0001290626",
+    "id": "6a76255ac8db430001ab8c6e",
     "short_answers": [
       "3 yetanother.com. alpn=h2 port=80 ech=another+base64+encoded+value"
     ],
@@ -668,7 +648,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68e8b2bd30001ebbcb2",
+    "id": "6a76255b8935f3000181e38d",
     "short_answers": [
       "0 test.com. "
     ],
@@ -678,7 +658,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68e8b2bd30001ebbcb2",
+    "id": "6a76255b8935f3000181e38d",
     "short_answers": [
       "1 test.com. alpn=h2 port=99"
     ],
@@ -688,7 +668,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68e8b2bd30001ebbcb2",
+    "id": "6a76255b8935f3000181e38d",
     "short_answers": [
       "1 test.com. port=80"
     ],
@@ -698,7 +678,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68e8b2bd30001ebbcb2",
+    "id": "6a76255b8935f3000181e38d",
     "short_answers": [
       "1 test.com. port=99"
     ],
@@ -708,7 +688,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e68e8b2bd30001ebbcb2",
+    "id": "6a76255b8935f3000181e38d",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999"
     ],
@@ -718,7 +698,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6908b2bd30001ebbcce",
+    "id": "6a76255d346a5300017f1726",
     "short_answers": [
       "3 example.com. alpn=h2 port=80 ech=another+base64+encoded+value"
     ],
@@ -728,7 +708,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6908b2bd30001ebbcce",
+    "id": "6a76255d346a5300017f1726",
     "short_answers": [
       "3 example.com. alpn=h2 port=80 ech=some+base64+encoded+value///"
     ],
@@ -738,7 +718,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6908b2bd30001ebbcce",
+    "id": "6a76255d346a5300017f1726",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999 ech=some+base64+encoded+value///"
     ],
@@ -748,7 +728,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6908b2bd30001ebbcce",
+    "id": "6a76255d346a5300017f1726",
     "short_answers": [
       "3 example.com. alpn=h2,h3 port=999"
     ],
@@ -758,7 +738,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6908b2bd30001ebbcce",
+    "id": "6a76255d346a5300017f1726",
     "short_answers": [
       "3 yetanother.com. alpn=h2 port=80 ech=another+base64+encoded+value"
     ],
@@ -768,7 +748,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e691bcd87e0001b26b9d",
+    "id": "6a76255fc8db430001ab8cf7",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -778,7 +758,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6922e427500014a7db2",
+    "id": "6a762560c8db430001ab8d10",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -788,7 +768,17 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6942e427500014a7dde",
+    "id": "6a762561346a5300017f1804",
+    "short_answers": [
+      "1.2.3.2"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "dnscontrolintegration.io",
+    "id": "6a762562346a5300017f180a",
     "short_answers": [
       "0 ."
     ],
@@ -798,7 +788,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6942e427500014a7dde",
+    "id": "6a762562346a5300017f180a",
     "short_answers": [
       "2 dnscontrolintegration.io.",
       "8 www.dnscontrolintegration.io."
@@ -809,17 +799,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e694dcba9b00012906e0",
-    "short_answers": [
-      "1.2.3.2"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "dnscontrolintegration.io",
-    "id": "6a71e695dcba9b0001290705",
+    "id": "6a7625638935f3000181e4db",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -829,7 +809,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a4f4dcaf0001aac678",
+    "id": "6a76257253398800019bbf15",
     "short_answers": [
       "0 issue letsencrypt.org"
     ],
@@ -839,7 +819,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a4f4dcaf0001aac678",
+    "id": "6a76257253398800019bbf15",
     "short_answers": [
       "0 issue letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
     ],
@@ -849,7 +829,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a4f4dcaf0001aac678",
+    "id": "6a76257253398800019bbf15",
     "short_answers": [
       "0 issuewild ;"
     ],
@@ -859,7 +839,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a4f4dcaf0001aac678",
+    "id": "6a76257253398800019bbf15",
     "short_answers": [
       "0 issuewild example.com"
     ],
@@ -869,7 +849,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a4f4dcaf0001aac678",
+    "id": "6a76257253398800019bbf15",
     "short_answers": [
       "0 issuewild letsencrypt.org"
     ],
@@ -879,7 +859,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a5f4dcaf0001aac6a5",
+    "id": "6a762574346a5300017f1a4f",
     "short_answers": [
       "0 issue letsencrypt.org"
     ],
@@ -889,7 +869,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6a5f4dcaf0001aac6a5",
+    "id": "6a762574346a5300017f1a4f",
     "short_answers": [
       "128 issue letsencrypt.org"
     ],
@@ -899,7 +879,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6ae2e427500014a8125",
+    "id": "6a76257e8935f3000181e8f0",
     "short_answers": [
       "1 13 1 DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"
     ],
@@ -909,7 +889,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6ae2e427500014a8125",
+    "id": "6a76257e8935f3000181e8f0",
     "short_answers": [
       "3 13 1 DA39A3EE5E6B4B0D3255BFEF95601890AFD80709"
     ],
@@ -919,7 +899,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6ae2e427500014a8125",
+    "id": "6a76257e8935f3000181e8f0",
     "short_answers": [
       "3 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -929,7 +909,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6ae2e427500014a8125",
+    "id": "6a76257e8935f3000181e8f0",
     "short_answers": [
       "3 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -939,7 +919,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6ae2e427500014a8125",
+    "id": "6a76257e8935f3000181e8f0",
     "short_answers": [
       "8857 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
     ],
@@ -949,7 +929,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6b6f4dcaf0001aac847",
+    "id": "6a762586b7d0d50001d1900c",
     "short_answers": [
       "foo.com."
     ],
@@ -959,7 +939,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6b6f4dcaf0001aac847",
+    "id": "6a762586b7d0d50001d1900c",
     "short_answers": [
       "foo2.com."
     ],
@@ -969,7 +949,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6b7bcd87e0001b27141",
+    "id": "6a762587b7d0d50001d1902f",
     "short_answers": [
       "foo.dnscontrolintegration.io."
     ],
@@ -979,7 +959,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6bc8b2bd30001ebc1f2",
+    "id": "6a76258c346a5300017f1d2c",
     "short_answers": [
       "simple"
     ],
@@ -989,7 +969,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6bcf4dcaf0001aac8b1",
+    "id": "6a76258c8935f3000181eaed",
     "short_answers": [
       "1.2.3.4",
       "2.3.4.5"
@@ -1000,7 +980,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6c0bcd87e0001b27223",
+    "id": "6a762590b7d0d50001d1916e",
     "short_answers": [
       "2.2.2.2"
     ],
@@ -1010,7 +990,7 @@
   },
   {
     "domain": "dnscontrolintegration.io",
-    "id": "6a71e6c0bcd87e0001b2722a",
+    "id": "6a762590c8db430001ab9301",
     "short_answers": [
       "asimple"
     ],
@@ -1020,17 +1000,7 @@
   },
   {
     "domain": "dyndns-city1.dnscontrolintegration.io",
-    "id": "6a71e6c7f4dcaf0001aac995",
-    "short_answers": [
-      "91.42.1.1"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "dyndns-city1.dnscontrolintegration.io",
-    "id": "6a71e6c7f4dcaf0001aac9a0",
+    "id": "6a762598346a5300017f1f50",
     "short_answers": [
       "2003:dd:d7ff::fe71:ce77"
     ],
@@ -1039,18 +1009,18 @@
     "type": "AAAA"
   },
   {
-    "domain": "dyndns-city2.dnscontrolintegration.io",
-    "id": "6a71e6c72e427500014a8304",
+    "domain": "dyndns-city1.dnscontrolintegration.io",
+    "id": "6a762598c8db430001ab945b",
     "short_answers": [
-      "2003:dd:d7ff::fe71:ce78"
+      "91.42.1.1"
     ],
     "tier": 1,
     "ttl": 300,
-    "type": "AAAA"
+    "type": "A"
   },
   {
     "domain": "dyndns-city2.dnscontrolintegration.io",
-    "id": "6a71e6c7dcba9b0001290c8e",
+    "id": "6a762598346a5300017f1f56",
     "short_answers": [
       "91.42.1.2"
     ],
@@ -1059,8 +1029,18 @@
     "type": "A"
   },
   {
+    "domain": "dyndns-city2.dnscontrolintegration.io",
+    "id": "6a762598b7d0d50001d19baf",
+    "short_answers": [
+      "2003:dd:d7ff::fe71:ce78"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "AAAA"
+  },
+  {
     "domain": "final.dnscontrolintegration.io",
-    "id": "6a71e6cadcba9b0001290d04",
+    "id": "6a76259bb7d0d50001d19c20",
     "short_answers": [
       "TestDNSProviders was successful!"
     ],
@@ -1070,7 +1050,7 @@
   },
   {
     "domain": "final.dnscontrolintegration.io",
-    "id": "6a71e6cadcba9b0001290d19",
+    "id": "6a76259cb7d0d50001d19c3c",
     "short_answers": [
       "TestDNSProviders was successful!"
     ],
@@ -1080,7 +1060,7 @@
   },
   {
     "domain": "foo.bat.dnscontrolintegration.io",
-    "id": "6a71e6c18b2bd30001ebc293",
+    "id": "6a762592b7d0d50001d19211",
     "short_answers": [
       "1.2.3.4",
       "2.3.4.5"
@@ -1091,7 +1071,7 @@
   },
   {
     "domain": "foo.bat.dnscontrolintegration.io",
-    "id": "6a71e6c1dcba9b0001290be0",
+    "id": "6a762592b7d0d50001d1921c",
     "short_answers": [
       "simple"
     ],
@@ -1101,7 +1081,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6808b2bd30001ebbaa1",
+    "id": "6a76254b53398800019bb1bc",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1111,7 +1091,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e689bcd87e0001b26a4e",
+    "id": "6a762555346a5300017f1594",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1121,7 +1101,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e689bcd87e0001b26a62",
+    "id": "6a76255653398800019bb351",
     "short_answers": [
       "5 mx.google.com."
     ],
@@ -1131,7 +1111,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e68a8b2bd30001ebbc0f",
+    "id": "6a76255653398800019bb382",
     "short_answers": [
       "4.5.6.7"
     ],
@@ -1141,17 +1121,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e68abcd87e0001b26a8d",
-    "short_answers": [
-      "google.com."
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "CNAME"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e68adcba9b0001290596",
+    "id": "6a762557346a5300017f162c",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1161,7 +1131,17 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e68bbcd87e0001b26aba",
+    "id": "6a7625578935f3000181e2a0",
+    "short_answers": [
+      "google.com."
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "CNAME"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762558346a5300017f1641",
     "short_answers": [
       "google2.com."
     ],
@@ -1171,7 +1151,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e691bcd87e0001b26ba5",
+    "id": "6a76255f346a5300017f1778",
     "short_answers": [
       "dnscontrolintegration.io."
     ],
@@ -1181,7 +1161,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e692dcba9b000129069e",
+    "id": "6a762560c8db430001ab8d16",
     "short_answers": [
       "8 dnscontrolintegration.io."
     ],
@@ -1191,7 +1171,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e695f4dcaf0001aac4a2",
+    "id": "6a762564346a5300017f185c",
     "short_answers": [
       "dnscontrolintegration.io."
     ],
@@ -1201,7 +1181,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e69d8b2bd30001ebbe10",
+    "id": "6a76256b53398800019bbe51",
     "short_answers": [
       "v=spf1 ip4:99.99.99.99 -all"
     ],
@@ -1211,7 +1191,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e69ff4dcaf0001aac5fd",
+    "id": "6a76256d53398800019bbea4",
     "short_answers": [
       "1.2.3.4",
       "2.3.4.5"
@@ -1222,7 +1202,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e69ff4dcaf0001aac5fd",
+    "id": "6a76256d53398800019bbea4",
     "short_answers": [
       "1.2.3.4",
       "3.4.5.6"
@@ -1233,7 +1213,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e69ff4dcaf0001aac5fd",
+    "id": "6a76256d53398800019bbea4",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1243,7 +1223,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6a12e427500014a7f63",
+    "id": "6a76256fb7d0d50001d18cb2",
     "short_answers": [
       "2.3.4.5",
       "3.4.5.6"
@@ -1254,7 +1234,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6a12e427500014a7f63",
+    "id": "6a76256fb7d0d50001d18cb2",
     "short_answers": [
       "2.3.4.5",
       "8.8.8.8"
@@ -1265,7 +1245,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6a12e427500014a7f63",
+    "id": "6a76256fb7d0d50001d18cb2",
     "short_answers": [
       "2.3.4.5"
     ],
@@ -1275,7 +1255,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6a1dcba9b0001290898",
+    "id": "6a76256fc8db430001ab8f47",
     "short_answers": [
       "10 foo.dnscontrolintegration.io.",
       "20 bar.dnscontrolintegration.io."
@@ -1286,7 +1266,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6b78b2bd30001ebc14f",
+    "id": "6a762587b7d0d50001d19028",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1296,7 +1276,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6b8bcd87e0001b2715b",
+    "id": "6a76258853398800019bc0fb",
     "short_answers": [
       "1.2.3.4",
       "2.3.4.5"
@@ -1307,7 +1287,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6b8f4dcaf0001aac86f",
+    "id": "6a76258853398800019bc108",
     "short_answers": [
       "simple"
     ],
@@ -1317,7 +1297,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c0dcba9b0001290bc7",
+    "id": "6a762590346a5300017f1db0",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -1327,7 +1307,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c0f4dcaf0001aac908",
+    "id": "6a762590b7d0d50001d19180",
     "short_answers": [
       "simple"
     ],
@@ -1337,72 +1317,7 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d1",
-    "short_answers": [
-      "1.1.1.1",
-      "10.10.10.10"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d1",
-    "short_answers": [
-      "1.1.1.1",
-      "11.11.11.11"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d1",
-    "short_answers": [
-      "1.1.1.1",
-      "12.12.12.12"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d1",
-    "short_answers": [
-      "1.1.1.1",
-      "13.13.13.13"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d1",
-    "short_answers": [
-      "1.1.1.1",
-      "14.14.14.14"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c38b2bd30001ebc2d9",
-    "short_answers": [
-      "2003:dd:d7ff::fe71:aaaa"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "AAAA"
-  },
-  {
-    "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c3f4dcaf0001aac934",
+    "id": "6a7625948935f3000181ec93",
     "short_answers": [
       "10 aspmx.l.google.com.",
       "20 alt1.aspmx.l.google.com."
@@ -1413,7 +1328,72 @@
   },
   {
     "domain": "foo.dnscontrolintegration.io",
-    "id": "6a71e6c62e427500014a82d8",
+    "id": "6a762594b7d0d50001d19adc",
+    "short_answers": [
+      "2003:dd:d7ff::fe71:aaaa"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "AAAA"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762594c8db430001ab93c1",
+    "short_answers": [
+      "1.1.1.1",
+      "10.10.10.10"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762594c8db430001ab93c1",
+    "short_answers": [
+      "1.1.1.1",
+      "11.11.11.11"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762594c8db430001ab93c1",
+    "short_answers": [
+      "1.1.1.1",
+      "12.12.12.12"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762594c8db430001ab93c1",
+    "short_answers": [
+      "1.1.1.1",
+      "13.13.13.13"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a762594c8db430001ab93c1",
+    "short_answers": [
+      "1.1.1.1",
+      "14.14.14.14"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
+    "domain": "foo.dnscontrolintegration.io",
+    "id": "6a76259753398800019bc35a",
     "short_answers": [
       "redact1.acm-validations.aws."
     ],
@@ -1423,7 +1403,7 @@
   },
   {
     "domain": "foo254.dnscontrolintegration.io",
-    "id": "6a71e6972e427500014a7e16",
+    "id": "6a76256453398800019bbd8c",
     "short_answers": [
       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     ],
@@ -1433,7 +1413,7 @@
   },
   {
     "domain": "foo255.dnscontrolintegration.io",
-    "id": "6a71e6972e427500014a7e24",
+    "id": "6a76256453398800019bbd9c",
     "short_answers": [
       "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
     ],
@@ -1443,7 +1423,7 @@
   },
   {
     "domain": "foo256.dnscontrolintegration.io",
-    "id": "6a71e6978b2bd30001ebbd6a",
+    "id": "6a762565b7d0d50001d18abf",
     "short_answers": [
       "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
     ],
@@ -1453,7 +1433,7 @@
   },
   {
     "domain": "foo509.dnscontrolintegration.io",
-    "id": "6a71e6988b2bd30001ebbd72",
+    "id": "6a762565c8db430001ab8dcd",
     "short_answers": [
       "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
     ],
@@ -1463,7 +1443,7 @@
   },
   {
     "domain": "foo510.dnscontrolintegration.io",
-    "id": "6a71e6982e427500014a7e32",
+    "id": "6a762565346a5300017f18b5",
     "short_answers": [
       "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
     ],
@@ -1473,7 +1453,7 @@
   },
   {
     "domain": "foo511.dnscontrolintegration.io",
-    "id": "6a71e698f4dcaf0001aac4fd",
+    "id": "6a762566b7d0d50001d18ae8",
     "short_answers": [
       "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
     ],
@@ -1483,7 +1463,7 @@
   },
   {
     "domain": "foo764.dnscontrolintegration.io",
-    "id": "6a71e699f4dcaf0001aac51e",
+    "id": "6a762566346a5300017f18bc",
     "short_answers": [
       "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
     ],
@@ -1493,7 +1473,7 @@
   },
   {
     "domain": "foo765.dnscontrolintegration.io",
-    "id": "6a71e699dcba9b0001290770",
+    "id": "6a76256753398800019bbdcf",
     "short_answers": [
       "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
     ],
@@ -1503,7 +1483,7 @@
   },
   {
     "domain": "foo766.dnscontrolintegration.io",
-    "id": "6a71e6998b2bd30001ebbd9f",
+    "id": "6a7625678935f3000181e53b",
     "short_answers": [
       "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
     ],
@@ -1513,7 +1493,7 @@
   },
   {
     "domain": "foobt.dnscontrolintegration.io",
-    "id": "6a71e69a2e427500014a7e53",
+    "id": "6a762567b7d0d50001d18b12",
     "short_answers": [
       "blah`blah"
     ],
@@ -1523,7 +1503,7 @@
   },
   {
     "domain": "foodq.dnscontrolintegration.io",
-    "id": "6a71e69abcd87e0001b26cd7",
+    "id": "6a762568b7d0d50001d18b2c",
     "short_answers": [
       "in\"side"
     ],
@@ -1533,7 +1513,7 @@
   },
   {
     "domain": "foodqs.dnscontrolintegration.io",
-    "id": "6a71e69bf4dcaf0001aac590",
+    "id": "6a76256853398800019bbdf3",
     "short_answers": [
       "\"left"
     ],
@@ -1543,7 +1523,7 @@
   },
   {
     "domain": "foodqs.dnscontrolintegration.io",
-    "id": "6a71e69bf4dcaf0001aac590",
+    "id": "6a76256853398800019bbdf3",
     "short_answers": [
       "in\"ter\"ior"
     ],
@@ -1553,7 +1533,7 @@
   },
   {
     "domain": "foodqs.dnscontrolintegration.io",
-    "id": "6a71e69bf4dcaf0001aac590",
+    "id": "6a76256853398800019bbdf3",
     "short_answers": [
       "right\""
     ],
@@ -1563,7 +1543,7 @@
   },
   {
     "domain": "fooosbs1.dnscontrolintegration.io",
-    "id": "6a71e69d2e427500014a7ecb",
+    "id": "6a76256b8935f3000181e5f5",
     "short_answers": [
       "1back\\slash"
     ],
@@ -1573,7 +1553,7 @@
   },
   {
     "domain": "fooosbs2.dnscontrolintegration.io",
-    "id": "6a71e69d8b2bd30001ebbe1f",
+    "id": "6a76256b346a5300017f1942",
     "short_answers": [
       "2back\\\\slash"
     ],
@@ -1583,7 +1563,7 @@
   },
   {
     "domain": "fooosbs3.dnscontrolintegration.io",
-    "id": "6a71e69d2e427500014a7ed4",
+    "id": "6a76256b346a5300017f1948",
     "short_answers": [
       "3back\\\\\\slash"
     ],
@@ -1593,7 +1573,7 @@
   },
   {
     "domain": "fooosbs4.dnscontrolintegration.io",
-    "id": "6a71e69d8b2bd30001ebbe2a",
+    "id": "6a76256b53398800019bbe67",
     "short_answers": [
       "4back\\\\\\\\slash"
     ],
@@ -1603,7 +1583,7 @@
   },
   {
     "domain": "foosc1.dnscontrolintegration.io",
-    "id": "6a71e69bbcd87e0001b26d1d",
+    "id": "6a76256953398800019bbe12",
     "short_answers": [
       "semi;colon"
     ],
@@ -1613,7 +1593,7 @@
   },
   {
     "domain": "foosc2.dnscontrolintegration.io",
-    "id": "6a71e69c2e427500014a7e8d",
+    "id": "6a76256a53398800019bbe27",
     "short_answers": [
       "wssemi ; colon"
     ],
@@ -1623,7 +1603,7 @@
   },
   {
     "domain": "foosp.dnscontrolintegration.io",
-    "id": "6a71e69c8b2bd30001ebbdfb",
+    "id": "6a76256ac8db430001ab8e98",
     "short_answers": [
       "with spaces"
     ],
@@ -1633,7 +1613,7 @@
   },
   {
     "domain": "foosq.dnscontrolintegration.io",
-    "id": "6a71e69adcba9b000129079b",
+    "id": "6a762567c8db430001ab8e15",
     "short_answers": [
       "quo'te"
     ],
@@ -1643,7 +1623,7 @@
   },
   {
     "domain": "foows1.dnscontrolintegration.io",
-    "id": "6a71e69c2e427500014a7eb8",
+    "id": "6a76256a8935f3000181e5d2",
     "short_answers": [
       "trailingws "
     ],
@@ -1653,7 +1633,7 @@
   },
   {
     "domain": "mail.bat.dnscontrolintegration.io",
-    "id": "6a71e6c18b2bd30001ebc29a",
+    "id": "6a762592b7d0d50001d1922d",
     "short_answers": [
       "ghs.googlehosted.com."
     ],
@@ -1663,7 +1643,7 @@
   },
   {
     "domain": "mail.dnscontrolintegration.io",
-    "id": "6a71e6b8bcd87e0001b27162",
+    "id": "6a7625888935f3000181ea5d",
     "short_answers": [
       "ghs.googlehosted.com."
     ],
@@ -1673,7 +1653,7 @@
   },
   {
     "domain": "mail.dnscontrolintegration.io",
-    "id": "6a71e6bcf4dcaf0001aac8bb",
+    "id": "6a76258db7d0d50001d190e6",
     "short_answers": [
       "ghs.googlehosted.com."
     ],
@@ -1683,17 +1663,7 @@
   },
   {
     "domain": "nmx.dnscontrolintegration.io",
-    "id": "6a71e6922e427500014a7dbe",
-    "short_answers": [
-      "1.2.3.3"
-    ],
-    "tier": 1,
-    "ttl": 300,
-    "type": "A"
-  },
-  {
-    "domain": "nmx.dnscontrolintegration.io",
-    "id": "6a71e693bcd87e0001b26bd6",
+    "id": "6a762560346a5300017f17bb",
     "short_answers": [
       "0 ."
     ],
@@ -1703,7 +1673,7 @@
   },
   {
     "domain": "nmx.dnscontrolintegration.io",
-    "id": "6a71e693bcd87e0001b26bd6",
+    "id": "6a762560346a5300017f17bb",
     "short_answers": [
       "3 nmx.dnscontrolintegration.io.",
       "9 www.dnscontrolintegration.io."
@@ -1713,8 +1683,18 @@
     "type": "MX"
   },
   {
+    "domain": "nmx.dnscontrolintegration.io",
+    "id": "6a76256053398800019bbd29",
+    "short_answers": [
+      "1.2.3.3"
+    ],
+    "tier": 1,
+    "ttl": 300,
+    "type": "A"
+  },
+  {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "100 10 U E2U+sip !^.*$!sip:customer-service@example.com! .",
       "102 10 U E2U+email !^.*$!mailto:information@example.com! ."
@@ -1725,7 +1705,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "100 10 U E2U+sip !^.*$!sip:customer-service@example.com! ."
     ],
@@ -1735,7 +1715,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 10 U E2U+email !^.*$!mailto:information@example.com! ."
     ],
@@ -1745,7 +1725,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 A E2U+email !^.*$!mailto:information@example.com! ."
     ],
@@ -1755,7 +1735,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 A E2U+sip  example.foo.com."
     ],
@@ -1765,7 +1745,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 A E2U+sip  example2.foo.com."
     ],
@@ -1775,7 +1755,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 A E2U+sip !^.*$!mailto:information@example.com! ."
     ],
@@ -1785,7 +1765,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 A E2U+sip !^.*$!sip:customer-service@example.com! ."
     ],
@@ -1795,7 +1775,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6a68b2bd30001ebbf15",
+    "id": "6a762574b7d0d50001d18d85",
     "short_answers": [
       "103 20 U E2U+email !^.*$!mailto:information@example.com! ."
     ],
@@ -1805,7 +1785,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b48b2bd30001ebc100",
+    "id": "6a762584c8db430001ab919b",
     "short_answers": [
       "AAAAAAAAuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA="
     ],
@@ -1815,7 +1795,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b48b2bd30001ebc100",
+    "id": "6a762584c8db430001ab919b",
     "short_answers": [
       "AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA="
     ],
@@ -1825,7 +1805,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b58b2bd30001ebc128",
+    "id": "6a76258553398800019bc0b0",
     "short_answers": [
       "example.com."
     ],
@@ -1835,7 +1815,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b58b2bd30001ebc128",
+    "id": "6a76258553398800019bc0b0",
     "short_answers": [
       "example.net."
     ],
@@ -1845,7 +1825,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b7dcba9b0001290afa",
+    "id": "6a762587c8db430001ab91f1",
     "short_answers": [
       "foo.com."
     ],
@@ -1855,7 +1835,7 @@
   },
   {
     "domain": "test.dnscontrolintegration.io",
-    "id": "6a71e6b7dcba9b0001290afa",
+    "id": "6a762587c8db430001ab91f1",
     "short_answers": [
       "foo2.com."
     ],
@@ -1865,7 +1845,7 @@
   },
   {
     "domain": "testa.dnscontrolintegration.io",
-    "id": "6a71e67c8b2bd30001ebba05",
+    "id": "6a762547346a5300017f1362",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -1875,7 +1855,7 @@
   },
   {
     "domain": "testa.dnscontrolintegration.io",
-    "id": "6a71e67c8b2bd30001ebba05",
+    "id": "6a762547346a5300017f1362",
     "short_answers": [
       "3.3.3.3"
     ],
@@ -1885,7 +1865,7 @@
   },
   {
     "domain": "testa.dnscontrolintegration.io",
-    "id": "6a71e686dcba9b0001290513",
+    "id": "6a762552c8db430001ab8aa5",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -1895,7 +1875,7 @@
   },
   {
     "domain": "testa.dnscontrolintegration.io",
-    "id": "6a71e686dcba9b0001290513",
+    "id": "6a762552c8db430001ab8aa5",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -1905,7 +1885,7 @@
   },
   {
     "domain": "testaaaa.dnscontrolintegration.io",
-    "id": "6a71e67e8b2bd30001ebba47",
+    "id": "6a76254a53398800019bb156",
     "short_answers": [
       "2607:f8b0:4006:820::2006"
     ],
@@ -1915,7 +1895,7 @@
   },
   {
     "domain": "testaaaa.dnscontrolintegration.io",
-    "id": "6a71e67e8b2bd30001ebba47",
+    "id": "6a76254a53398800019bb156",
     "short_answers": [
       "2607:f8b0:4006:820::2013"
     ],
@@ -1925,7 +1905,7 @@
   },
   {
     "domain": "testcname.dnscontrolintegration.io",
-    "id": "6a71e67f2e427500014a7b22",
+    "id": "6a76254ac8db430001ab8941",
     "short_answers": [
       "www.google.com."
     ],
@@ -1935,7 +1915,7 @@
   },
   {
     "domain": "testcname.dnscontrolintegration.io",
-    "id": "6a71e67f2e427500014a7b22",
+    "id": "6a76254ac8db430001ab8941",
     "short_answers": [
       "www.yahoo.com."
     ],
@@ -1945,7 +1925,7 @@
   },
   {
     "domain": "testcname.dnscontrolintegration.io",
-    "id": "6a71e680dcba9b0001290430",
+    "id": "6a76254cb7d0d50001d1857d",
     "short_answers": [
       "foo.dnscontrolintegration.io."
     ],
@@ -1955,7 +1935,7 @@
   },
   {
     "domain": "testdefined.dnscontrolintegration.io",
-    "id": "6a71e6c8dcba9b0001290cac",
+    "id": "6a762599346a5300017f1f79",
     "short_answers": [
       "2.2.2.2"
     ],
@@ -1965,7 +1945,7 @@
   },
   {
     "domain": "testdefined.dnscontrolintegration.io",
-    "id": "6a71e6c8dcba9b0001290cac",
+    "id": "6a762599346a5300017f1f79",
     "short_answers": [
       "9.9.9.9"
     ],
@@ -1975,7 +1955,7 @@
   },
   {
     "domain": "testignore.dnscontrolintegration.io",
-    "id": "6a71e6c82e427500014a8334",
+    "id": "6a76259953398800019bc3bc",
     "short_answers": [
       "8.8.8.8"
     ],
@@ -1985,7 +1965,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e681dcba9b000129044b",
+    "id": "6a76254dc8db430001ab89b1",
     "short_answers": [
       "5 bar.com."
     ],
@@ -1995,7 +1975,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e681dcba9b000129044b",
+    "id": "6a76254dc8db430001ab89b1",
     "short_answers": [
       "5 foo.com."
     ],
@@ -2005,7 +1985,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e6822e427500014a7bc0",
+    "id": "6a76254e346a5300017f1428",
     "short_answers": [
       "100 foo.com."
     ],
@@ -2015,7 +1995,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e6822e427500014a7bc0",
+    "id": "6a76254e346a5300017f1428",
     "short_answers": [
       "5 foo.com."
     ],
@@ -2025,7 +2005,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e684f4dcaf0001aababa",
+    "id": "6a76255153398800019bb24d",
     "short_answers": [
       "5 foo.com.",
       "100 bar.com."
@@ -2036,7 +2016,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e685dcba9b00012904e7",
+    "id": "6a762551b7d0d50001d1868e",
     "short_answers": [
       "5 foo.com.",
       "100 bar.com."
@@ -2047,7 +2027,7 @@
   },
   {
     "domain": "testmx.dnscontrolintegration.io",
-    "id": "6a71e685dcba9b00012904e7",
+    "id": "6a762551b7d0d50001d1868e",
     "short_answers": [
       "5 foo.com."
     ],
@@ -2057,7 +2037,7 @@
   },
   {
     "domain": "testtxt.dnscontrolintegration.io",
-    "id": "6a71e682bcd87e0001b2697b",
+    "id": "6a76254e53398800019bb203",
     "short_answers": [
       "changed"
     ],
@@ -2067,7 +2047,7 @@
   },
   {
     "domain": "testtxt.dnscontrolintegration.io",
-    "id": "6a71e682bcd87e0001b2697b",
+    "id": "6a76254e53398800019bb203",
     "short_answers": [
       "simple"
     ],
@@ -2077,7 +2057,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e67e2e427500014a7af1",
+    "id": "6a76254953398800019bb13c",
     "short_answers": [
       "5.5.5.5"
     ],
@@ -2087,7 +2067,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6832e427500014a7bf4",
+    "id": "6a76254fc8db430001ab8a07",
     "short_answers": [
       "1.1.1.1",
       "2.2.2.2",
@@ -2099,7 +2079,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6832e427500014a7c0a",
+    "id": "6a762550c8db430001ab8a28",
     "short_answers": [
       "1.1.1.1",
       "2.2.2.2",
@@ -2111,7 +2091,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6832e427500014a7c0a",
+    "id": "6a762550c8db430001ab8a28",
     "short_answers": [
       "1.1.1.1",
       "2.2.2.2"
@@ -2122,7 +2102,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6832e427500014a7c0a",
+    "id": "6a762550c8db430001ab8a28",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -2132,7 +2112,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6852e427500014a7c39",
+    "id": "6a762551346a5300017f148b",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -2142,7 +2122,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6858b2bd30001ebbb6d",
+    "id": "6a762551c8db430001ab8a68",
     "short_answers": [
       "1.1.1.1"
     ],
@@ -2152,7 +2132,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6872e427500014a7ca8",
+    "id": "6a762553b7d0d50001d186cd",
     "short_answers": [
       "1.2.3.4",
       "5.6.7.8"
@@ -2163,7 +2143,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6872e427500014a7ca8",
+    "id": "6a762553b7d0d50001d186cd",
     "short_answers": [
       "2.2.2.2",
       "5.6.7.8"
@@ -2174,7 +2154,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6872e427500014a7ca8",
+    "id": "6a762553b7d0d50001d186cd",
     "short_answers": [
       "2.2.2.2",
       "5.6.7.8"
@@ -2185,7 +2165,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e688f4dcaf0001aabb0b",
+    "id": "6a762555c8db430001ab8b32",
     "short_answers": [
       "1.2.3.4",
       "5.6.7.8"
@@ -2196,7 +2176,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e688f4dcaf0001aabb0b",
+    "id": "6a762555c8db430001ab8b32",
     "short_answers": [
       "5.6.7.8"
     ],
@@ -2206,7 +2186,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e693bcd87e0001b26bdd",
+    "id": "6a762560b7d0d50001d189fc",
     "short_answers": [
       "1.2.3.9"
     ],
@@ -2216,7 +2196,7 @@
   },
   {
     "domain": "www.dnscontrolintegration.io",
-    "id": "6a71e6948b2bd30001ebbd0c",
+    "id": "6a7625628935f3000181e4a3",
     "short_answers": [
       "1.2.3.8"
     ],
@@ -2226,7 +2206,7 @@
   },
   {
     "domain": "xn--fiq228c.dnscontrolintegration.io",
-    "id": "6a71e6a32e427500014a7f9e",
+    "id": "6a7625718935f3000181e722",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -2236,7 +2216,7 @@
   },
   {
     "domain": "xn--ndaaa.dnscontrolintegration.io",
-    "id": "6a71e6a2f4dcaf0001aac646",
+    "id": "6a762570c8db430001ab8f68",
     "short_answers": [
       "1.2.3.4"
     ],
@@ -2246,7 +2226,7 @@
   },
   {
     "domain": "xn--ndaaa.dnscontrolintegration.io",
-    "id": "6a71e6a2f4dcaf0001aac646",
+    "id": "6a762570c8db430001ab8f68",
     "short_answers": [
       "2.2.2.2"
     ],
@@ -2256,7 +2236,7 @@
   },
   {
     "domain": "xn--o-0gab.dnscontrolintegration.io",
-    "id": "6a71e6a3f4dcaf0001aac669",
+    "id": "6a762572346a5300017f1a26",
     "short_answers": [
       "xn--ndaaa.xn--vhquv."
     ],
@@ -2266,7 +2246,7 @@
   },
   {
     "domain": "xyz.dnscontrolintegration.io",
-    "id": "6a71e6958b2bd30001ebbd2a",
+    "id": "6a762563346a5300017f184a",
     "short_answers": [
       "ns1.foo.com.",
       "ns2.foo.com."
@@ -2277,7 +2257,7 @@
   },
   {
     "domain": "xyz.dnscontrolintegration.io",
-    "id": "6a71e6958b2bd30001ebbd2a",
+    "id": "6a762563346a5300017f184a",
     "short_answers": [
       "ns2.foo.com."
     ],
@@ -2287,7 +2267,7 @@
   },
   {
     "domain": "zzz.dnscontrolintegration.io",
-    "id": "6a71e6c3f4dcaf0001aac93d",
+    "id": "6a7625948935f3000181eca1",
     "short_answers": [
       "3.3.3.3",
       "4.4.4.4"
@@ -2298,7 +2278,7 @@
   },
   {
     "domain": "zzz.dnscontrolintegration.io",
-    "id": "6a71e6c3f4dcaf0001aac944",
+    "id": "6a7625948935f3000181eca7",
     "short_answers": [
       "2003:dd:d7ff::fe71:cccc"
     ],

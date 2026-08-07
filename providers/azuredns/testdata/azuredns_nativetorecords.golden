@@ -1,231 +1,231 @@
-testcname.dnscontrol-azure.com. 300 IN CNAME www.google.com.
-nmx.dnscontrol-azure.com. 300 IN MX 3 nmx.dnscontrol-azure.com.
-nmx.dnscontrol-azure.com. 300 IN MX 9 www.dnscontrol-azure.com.
-fooosbs4.dnscontrol-azure.com. 300 IN TXT "4back\\\\\\\\slash"
-foo.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 13.13.13.13
-www.dnscontrol-azure.com. 400 IN A 2.2.2.2
-www.dnscontrol-azure.com. 400 IN A 5.6.7.8
-dyndns-city1.dnscontrol-azure.com. 300 IN AAAA 2003:dd:d7ff::fe71:ce77
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-bar.dnscontrol-azure.com. 300 IN CNAME redact2.acm-validations.aws.
-foosq.dnscontrol-azure.com. 300 IN TXT "quo'te"
-dnscontrol-azure.com. 300 IN CAA 0 issuewild "letsencrypt.org"
-www.dnscontrol-azure.com. 300 IN A 2.2.2.2
-www.dnscontrol-azure.com. 300 IN A 5.6.7.8
-testmx.dnscontrol-azure.com. 300 IN MX 5 foo.com.
-testtxt.dnscontrol-azure.com. 300 IN TXT "simple"
-testmx.dnscontrol-azure.com. 300 IN MX 5 foo.com.
-foo.dnscontrol-azure.com. 300 IN A 4.5.6.7
-xyz.dnscontrol-azure.com. 300 IN NS ns1.foo.com.
-xyz.dnscontrol-azure.com. 300 IN NS ns2.foo.com.
-foo.dnscontrol-azure.com. 300 IN MX 10 aspmx.l.google.com.
-foo.dnscontrol-azure.com. 300 IN MX 20 alt1.aspmx.l.google.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 52 6 7 foo.com.
-www.dnscontrol-azure.com. 400 IN A 5.6.7.8
-foo.dnscontrol-azure.com. 300 IN AAAA 2003:dd:d7ff::fe71:aaaa
-dnscontrol-azure.com. 300 IN NS ns1-06.azure-dns.com.
-dnscontrol-azure.com. 300 IN NS ns2-06.azure-dns.net.
-dnscontrol-azure.com. 300 IN NS ns3-06.azure-dns.org.
-dnscontrol-azure.com. 300 IN NS ns4-06.azure-dns.info.
-testmx.dnscontrol-azure.com. 300 IN MX 100 foo.com.
-dnscontrol-azure.com. 300 IN CAA 0 issue "letsencrypt.org"
-mail.dnscontrol-azure.com. 300 IN CNAME ghs.googlehosted.com.
-dnscontrol-azure.com. 300 IN CAA 0 issue "letsencrypt.org"
-bar.dnscontrol-azure.com. 300 IN A 5.5.5.5
-www.dnscontrol-azure.com. 300 IN A 1.2.3.4
-www.dnscontrol-azure.com. 300 IN A 5.6.7.8
-quux.cname.dnscontrol-azure.com. 300 IN CNAME google2.com.
-foo.bat.dnscontrol-azure.com. 300 IN TXT "simple"
-testignore.dnscontrol-azure.com. 300 IN A 8.8.8.8
-testdefined.dnscontrol-azure.com. 300 IN A 9.9.9.9
-xn--ndaaa.dnscontrol-azure.com. 300 IN A 1.2.3.4
-testdefined.dnscontrol-azure.com. 300 IN A 2.2.2.2
-www.dnscontrol-azure.com. 300 IN A 1.2.3.9
-dnscontrol-azure.com. 300 IN MX 0 .
-nmx.dnscontrol-azure.com. 300 IN MX 0 .
-dyndns-city1.dnscontrol-azure.com. 300 IN A 91.42.1.1
-www.dnscontrol-azure.com. 300 IN A 1.2.3.8
-dnscontrol-azure.com. 300 IN NS ns1-06.azure-dns.com.
-dnscontrol-azure.com. 300 IN NS ns2-06.azure-dns.net.
-dnscontrol-azure.com. 300 IN NS ns3-06.azure-dns.org.
-dnscontrol-azure.com. 300 IN NS ns4-06.azure-dns.info.
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN A 3.4.5.6
-testa.dnscontrol-azure.com. 300 IN A 1.1.1.1
-testmx.dnscontrol-azure.com. 300 IN MX 5 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 60 70 foo2.com.
-foo.dnscontrol-azure.com. 300 IN CNAME dnscontrol-azure.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 60 70 foo2.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo3.com.
-dnscontrol-azure.com. 300 IN CAA 0 issuewild ";"
-_sip._tcp.dnscontrol-azure.com. 333 IN SRV 5 6 7 foo.com.
-foo.dnscontrol-azure.com. 300 IN MX 10 foo.dnscontrol-azure.com.
-foo.dnscontrol-azure.com. 300 IN MX 20 bar.dnscontrol-azure.com.
-nmx.dnscontrol-azure.com. 300 IN A 1.2.3.3
-bar.dnscontrol-azure.com. 300 IN A 1.2.3.4
-dnscontrol-azure.com. 300 IN CAA 128 issue "letsencrypt.org"
-fooosbs2.dnscontrol-azure.com. 300 IN TXT "2back\\\\slash"
-*.dnscontrol-azure.com. 300 IN A 3.3.3.3
-xn--fiq228c.dnscontrol-azure.com. 300 IN A 1.2.3.4
-dnscontrol-azure.com. 1000 IN A 8.8.8.8
-mail.bat.dnscontrol-azure.com. 300 IN CNAME ghs.googlehosted.com.
-foosc2.dnscontrol-azure.com. 300 IN TXT "wssemi ; colon"
-foobt.dnscontrol-azure.com. 300 IN TXT "blah`blah"
-dnscontrol-azure.com. 300 IN TXT "simple"
-testa.dnscontrol-azure.com. 999 IN A 1.1.1.1
-dyndns-city2.dnscontrol-azure.com. 300 IN AAAA 2003:dd:d7ff::fe71:ce78
-foo.bat.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.bat.dnscontrol-azure.com. 300 IN A 2.3.4.5
-foosp.dnscontrol-azure.com. 300 IN TXT "with spaces"
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-foows1.dnscontrol-azure.com. 300 IN TXT "trailingws "
-foo.a.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 10.10.10.10
-dnscontrol-azure.com. 300 IN A 1.2.3.4
-dnscontrol-azure.com. 300 IN A 2.3.4.5
-a.dnscontrol-azure.com. 300 IN CNAME xn--ndaaa.com.
-quux.a.dnscontrol-azure.com. 300 IN A 2.3.4.5
-decoy.dnscontrol-azure.com. 300 IN A 2.2.2.2
-4.dnscontrol-azure.com. 300 IN PTR foo.com.
-foo0.dnscontrol-azure.com. 300 IN TXT ""
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-foo.dnscontrol-azure.com. 300 IN A 8.8.8.8
-bar.cname.dnscontrol-azure.com. 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/quux.cname"
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-foo.dnscontrol-azure.com. 300 IN A 8.8.8.8
-foosc1.dnscontrol-azure.com. 300 IN TXT "semi;colon"
-foo511.dnscontrol-azure.com. 300 IN TXT "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "F"
-xyz.dnscontrol-azure.com. 300 IN NS ns2.foo.com.
-mail.dnscontrol-azure.com. 300 IN CNAME ghs.googlehosted.com.
-dnscontrol-azure.com. 300 IN NS ns1-06.azure-dns.com.
-dnscontrol-azure.com. 300 IN NS ns1.foo.com.
-dnscontrol-azure.com. 300 IN NS ns2-06.azure-dns.net.
-dnscontrol-azure.com. 300 IN NS ns3-06.azure-dns.org.
-dnscontrol-azure.com. 300 IN NS ns4-06.azure-dns.info.
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-www.dnscontrol-azure.com. 300 IN A 2.2.2.2
-www.dnscontrol-azure.com. 300 IN A 3.3.3.3
-nmx.dnscontrol-azure.com. 300 IN MX 0 .
-xn--ndaaa.dnscontrol-azure.com. 300 IN A 2.2.2.2
-foo.dnscontrol-azure.com. 300 IN CNAME google.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 52 62 72 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 .
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-bar.dnscontrol-azure.com. 300 IN MX 5 bar.com.
-foo764.dnscontrol-azure.com. 300 IN TXT "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
-dnscontrol-azure.com. 300 IN CAA 0 issuewild "example.com"
-testa.dnscontrol-azure.com. 333 IN A 1.1.1.1
-foodqs.dnscontrol-azure.com. 300 IN TXT "right\""
-fooosbs1.dnscontrol-azure.com. 300 IN TXT "1back\\slash"
-dnscontrol-azure.com. 300 IN TXT "asimple"
-zzz.dnscontrol-azure.com. 300 IN AAAA 2003:dd:d7ff::fe71:cccc
-bar.a.dnscontrol-azure.com. 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/quux.a"
-final.dnscontrol-azure.com. 300 IN TXT "TestDNSProviders was successful!"
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo3.com.
-bar.a.dnscontrol-azure.com. 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 52 62 7 foo.com.
-foo.dnscontrol-azure.com. 300 IN TXT "v=spf1 ip4:99.99.99.99 -all"
-dnscontrol-azure.com. 300 IN NS ns1-06.azure-dns.com.
-dnscontrol-azure.com. 300 IN NS ns1.foo.com.
-dnscontrol-azure.com. 300 IN NS ns2-06.azure-dns.net.
-dnscontrol-azure.com. 300 IN NS ns2.foo.com.
-dnscontrol-azure.com. 300 IN NS ns3-06.azure-dns.org.
-dnscontrol-azure.com. 300 IN NS ns4-06.azure-dns.info.
-foo765.dnscontrol-azure.com. 300 IN TXT "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
-foo509.dnscontrol-azure.com. 300 IN TXT "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
-dnscontrol-azure.com. 300 IN MX 5 bar.com.
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN TXT "simple"
-dnscontrol-azure.com. 300 IN A 2.2.2.2
-foo.cname.dnscontrol-azure.com. 300 IN CNAME google.com.
-_sip._tcp.dnscontrol-azure.com. 4400 IN SRV 5 6 7 foo.com.
-dyndns-city2.dnscontrol-azure.com. 300 IN A 91.42.1.2
-zzz.dnscontrol-azure.com. 300 IN A 3.3.3.3
-zzz.dnscontrol-azure.com. 300 IN A 4.4.4.4
-dnscontrol-azure.com. 300 IN A 1.2.3.4
-dnscontrol-azure.com. 300 IN A 1.2.3.4
-bar.dnscontrol-azure.com. 300 IN A 5.5.5.5
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-xn--o-0gab.dnscontrol-azure.com. 300 IN CNAME xn--ndaaa.xn--vhquv.
-dnscontrol-azure.com. 300 IN MX 2 dnscontrol-azure.com.
-dnscontrol-azure.com. 300 IN MX 8 www.dnscontrol-azure.com.
-dnscontrol-azure.com. 300 IN A 1.2.3.4
-testmx.dnscontrol-azure.com. 300 IN MX 5 foo.com.
-testmx.dnscontrol-azure.com. 300 IN MX 100 bar.com.
-testmx.dnscontrol-azure.com. 300 IN MX 5 foo.com.
-testmx.dnscontrol-azure.com. 300 IN MX 100 bar.com.
-foo510.dnscontrol-azure.com. 300 IN TXT "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
-foo.dnscontrol-azure.com. 300 IN MX 5 mx.google.com.
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN CNAME google2.com.
-www.dnscontrol-azure.com. 300 IN A 5.5.5.5
-bar.a.dnscontrol-azure.com. 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
-dnscontrol-azure.com. 300 IN A 2.2.2.2
-final.dnscontrol-azure.com. 300 IN TXT "TestDNSProviders was successful!"
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foodqs.dnscontrol-azure.com. 300 IN TXT "\"left"
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-www.dnscontrol-azure.com. 300 IN A 2.2.2.2
-www.dnscontrol-azure.com. 300 IN A 3.3.3.3
-dnscontrol-azure.com. 300 IN CAA 0 issue "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
-bar.bat.dnscontrol-azure.com. 300 IN A 5.5.5.5
-foo.dnscontrol-azure.com. 300 IN NS dnscontrol-azure.com.
-foo.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 12.12.12.12
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 15 65 75 foo4.com.
-foodqs.dnscontrol-azure.com. 300 IN TXT "in\"ter\"ior"
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-dnscontrol-azure.com. 300 IN A 1.2.3.2
-foo.dnscontrol-azure.com. 300 IN A 1.2.3.4
-foo.dnscontrol-azure.com. 300 IN A 3.4.5.6
-foo.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 14.14.14.14
-fooosbs3.dnscontrol-azure.com. 300 IN TXT "3back\\\\\\slash"
-foo766.dnscontrol-azure.com. 300 IN TXT "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "J"
-foo.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN A 11.11.11.11
-foodq.dnscontrol-azure.com. 300 IN TXT "in\"side"
-decoy.dnscontrol-azure.com. 300 IN A 1.1.1.1
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-foo.dnscontrol-azure.com. 300 IN TXT "simple"
-testa.dnscontrol-azure.com. 300 IN A 3.3.3.3
-foo.dnscontrol-azure.com. 300 IN CNAME redact1.acm-validations.aws.
-4.dnscontrol-azure.com. 300 IN PTR bar.com.
-_sip._tcp.dnscontrol-azure.com. 300 IN SRV 5 6 7 foo.com.
-foo256.dnscontrol-azure.com. 300 IN TXT "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" "C"
-dnscontrol-azure.com. 500 IN A 8.8.8.8
-foo.dnscontrol-azure.com. 300 IN MX 8 dnscontrol-azure.com.
-testmx.dnscontrol-azure.com. 300 IN MX 5 bar.com.
-foo254.dnscontrol-azure.com. 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-bar.cname.dnscontrol-azure.com. 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
-testaaaa.dnscontrol-azure.com. 300 IN AAAA 2607:f8b0:4006:820::2013
-testtxt.dnscontrol-azure.com. 300 IN TXT "changed"
-bar.cname.dnscontrol-azure.com. 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
-dnscontrol-azure.com. 666 IN A 8.8.8.8
-dnscontrol-azure.com. 300 IN MX 5 foo.com.
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-foo.dnscontrol-azure.com. 300 IN A 3.4.5.6
-dnscontrol-azure.com. 300 IN MX 0 .
-decoy.dnscontrol-azure.com. 300 IN A 3.3.3.3
-dnscontrol-azure.com. 300 IN A 4.4.4.4
-foo255.dnscontrol-azure.com. 300 IN TXT "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-testaaaa.dnscontrol-azure.com. 300 IN AAAA 2607:f8b0:4006:820::2006
-www.dnscontrol-azure.com. 300 IN A 1.1.1.1
-www.dnscontrol-azure.com. 300 IN A 2.2.2.2
-www.dnscontrol-azure.com. 700 IN A 1.2.3.4
-www.dnscontrol-azure.com. 700 IN A 5.6.7.8
-testcname.dnscontrol-azure.com. 300 IN CNAME foo.dnscontrol-azure.com.
-foo.dnscontrol-azure.com. 300 IN A 2.3.4.5
-testcname.dnscontrol-azure.com. 300 IN CNAME www.yahoo.com.
+foosc1 300 IN TXT "semi;colon"
+@ 300 IN MX 2 dnscontrol-azure.com.
+@ 300 IN MX 8 www.dnscontrol-azure.com.
+_sip._tcp 4400 IN SRV 5 6 7 foo.com.
+nmx 300 IN A 1.2.3.3
+foo 300 IN MX 10 foo.dnscontrol-azure.com.
+foo 300 IN MX 20 bar.dnscontrol-azure.com.
+foo 300 IN A 1.1.1.1
+foo 300 IN A 14.14.14.14
+bar.cname 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/quux.cname"
+testmx 300 IN MX 100 foo.com.
+mail 300 IN CNAME ghs.googlehosted.com.
+@ 666 IN A 8.8.8.8
+testcname 300 IN CNAME www.yahoo.com.
+@ 300 IN A 2.2.2.2
+bar 300 IN A 5.5.5.5
+_sip._tcp 300 IN SRV 15 65 75 .
+@ 500 IN A 8.8.8.8
+@ 300 IN CAA 0 issue "letsencrypt.org"
+www 400 IN A 5.6.7.8
+foobt 300 IN TXT "blah`blah"
+foo0 300 IN TXT ""
+fooosbs4 300 IN TXT "4back\\\\\\\\slash"
+foo 300 IN CNAME google2.com.
+@ 300 IN A 1.2.3.4
+@ 300 IN A 1.2.3.2
+foo 300 IN A 1.1.1.1
+foo 300 IN A 10.10.10.10
+foo 300 IN CNAME dnscontrol-azure.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+testaaaa 300 IN AAAA 2607:f8b0:4006:820::2013
+foows1 300 IN TXT "trailingws "
+foo.bat 300 IN TXT "simple"
+bar 300 IN A 5.5.5.5
+foo 300 IN A 1.1.1.1
+foo 300 IN A 12.12.12.12
+foo 300 IN MX 5 mx.google.com.
+4 300 IN PTR foo.com.
+foodqs 300 IN TXT "right\""
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 62 72 foo.com.
+www 300 IN A 1.1.1.1
+@ 300 IN NS ns1-06.azure-dns.com.
+@ 300 IN NS ns2-06.azure-dns.net.
+@ 300 IN NS ns3-06.azure-dns.org.
+@ 300 IN NS ns4-06.azure-dns.info.
+mail 300 IN CNAME ghs.googlehosted.com.
+@ 300 IN NS ns1-06.azure-dns.com.
+@ 300 IN NS ns1.foo.com.
+@ 300 IN NS ns2-06.azure-dns.net.
+@ 300 IN NS ns3-06.azure-dns.org.
+@ 300 IN NS ns4-06.azure-dns.info.
+www 300 IN A 5.5.5.5
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 5 60 70 foo2.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 5 60 70 foo2.com.
+_sip._tcp 300 IN SRV 15 65 75 foo3.com.
+mail.bat 300 IN CNAME ghs.googlehosted.com.
+nmx 300 IN MX 0 .
+decoy 300 IN A 1.1.1.1
+foosp 300 IN TXT "with spaces"
+www 300 IN A 1.1.1.1
+@ 300 IN TXT "asimple"
+@ 300 IN CAA 0 issuewild ";"
+foodq 300 IN TXT "in\"side"
+testa 300 IN A 1.1.1.1
+@ 300 IN A 1.2.3.4
+@ 300 IN A 2.3.4.5
+fooosbs2 300 IN TXT "2back\\\\slash"
+nmx 300 IN MX 3 nmx.dnscontrol-azure.com.
+nmx 300 IN MX 9 www.dnscontrol-azure.com.
+nmx 300 IN MX 0 .
+@ 300 IN A 1.2.3.4
+@ 300 IN CAA 0 issue "letsencrypt.org"
+www 300 IN A 1.2.3.8
+foo.a 300 IN A 1.2.3.4
+foo764 300 IN TXT "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+foo 300 IN A 2.3.4.5
+foo 300 IN A 8.8.8.8
+decoy 300 IN A 3.3.3.3
+testa 999 IN A 1.1.1.1
+xn--ndaaa 300 IN A 1.2.3.4
+bar.a 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+www 300 IN A 3.3.3.3
+@ 300 IN MX 5 foo.com.
+foodqs 300 IN TXT "in\"ter\"ior"
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 100 bar.com.
+bar 300 IN A 1.2.3.4
+foo 300 IN MX 8 dnscontrol-azure.com.
+foodqs 300 IN TXT "\"left"
+@ 300 IN CAA 0 issue "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+testa 300 IN A 3.3.3.3
+foo 300 IN A 1.2.3.4
+zzz 300 IN AAAA 2003:dd:d7ff::fe71:cccc
+www 300 IN A 1.2.3.9
+testmx 300 IN MX 5 foo.com.
+bar 300 IN MX 5 bar.com.
+@ 300 IN CAA 0 issuewild "example.com"
+www 400 IN A 2.2.2.2
+www 400 IN A 5.6.7.8
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+www 300 IN A 3.3.3.3
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 62 7 foo.com.
+foo511 300 IN TXT "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "F"
+xyz 300 IN NS ns1.foo.com.
+xyz 300 IN NS ns2.foo.com.
+foo256 300 IN TXT "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" "C"
+dyndns-city1 300 IN AAAA 2003:dd:d7ff::fe71:ce77
+foo255 300 IN TXT "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+@ 1000 IN A 8.8.8.8
+foosq 300 IN TXT "quo'te"
+foo509 300 IN TXT "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+foo 300 IN CNAME redact1.acm-validations.aws.
+@ 300 IN NS ns1-06.azure-dns.com.
+@ 300 IN NS ns1.foo.com.
+@ 300 IN NS ns2-06.azure-dns.net.
+@ 300 IN NS ns2.foo.com.
+@ 300 IN NS ns3-06.azure-dns.org.
+@ 300 IN NS ns4-06.azure-dns.info.
+foo254 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+xyz 300 IN NS ns2.foo.com.
+@ 300 IN A 1.2.3.4
+quux.cname 300 IN CNAME google2.com.
+foo.bat 300 IN A 1.2.3.4
+foo.bat 300 IN A 2.3.4.5
+* 300 IN A 3.3.3.3
+www 300 IN A 1.2.3.4
+www 300 IN A 5.6.7.8
+foo 300 IN TXT "simple"
+foo 300 IN A 1.2.3.4
+foo 300 IN A 2.3.4.5
+foo 300 IN A 1.2.3.4
+foo 300 IN A 3.4.5.6
+zzz 300 IN A 3.3.3.3
+zzz 300 IN A 4.4.4.4
+a 300 IN CNAME xn--ndaaa.com.
+@ 300 IN TXT "simple"
+foo 300 IN A 1.2.3.4
+bar.cname 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
+bar.cname 300 IN AZURE_ALIAS CNAME "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/CNAME/foo.cname"
+testtxt 300 IN TXT "simple"
+xn--ndaaa 300 IN A 2.2.2.2
+foo 300 IN CNAME google.com.
+foo 300 IN MX 10 aspmx.l.google.com.
+foo 300 IN MX 20 alt1.aspmx.l.google.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo3.com.
+dyndns-city1 300 IN A 91.42.1.1
+bar.a 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/foo.a"
+testaaaa 300 IN AAAA 2607:f8b0:4006:820::2006
+foo 300 IN A 2.3.4.5
+testmx 300 IN MX 5 foo.com.
+testcname 300 IN CNAME www.google.com.
+@ 300 IN MX 0 .
+final 300 IN TXT "TestDNSProviders was successful!"
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 6 7 foo.com.
+4 300 IN PTR bar.com.
+quux.a 300 IN A 2.3.4.5
+foo 300 IN A 2.3.4.5
+foo 300 IN A 8.8.8.8
+dyndns-city2 300 IN AAAA 2003:dd:d7ff::fe71:ce78
+foo 300 IN NS dnscontrol-azure.com.
+testignore 300 IN A 8.8.8.8
+foo765 300 IN TXT "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+fooosbs1 300 IN TXT "1back\\slash"
+foo 300 IN A 1.2.3.4
+foo 300 IN A 3.4.5.6
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+foo 300 IN A 1.2.3.4
+_sip._tcp 333 IN SRV 5 6 7 foo.com.
+bar.bat 300 IN A 5.5.5.5
+@ 300 IN CAA 128 issue "letsencrypt.org"
+fooosbs3 300 IN TXT "3back\\\\\\slash"
+foo 300 IN A 1.2.3.4
+foosc2 300 IN TXT "wssemi ; colon"
+foo 300 IN A 4.5.6.7
+testdefined 300 IN A 2.2.2.2
+xn--o-0gab 300 IN CNAME xn--ndaaa.xn--vhquv.
+@ 300 IN NS ns1-06.azure-dns.com.
+@ 300 IN NS ns2-06.azure-dns.net.
+@ 300 IN NS ns3-06.azure-dns.org.
+@ 300 IN NS ns4-06.azure-dns.info.
+testmx 300 IN MX 5 foo.com.
+testa 333 IN A 1.1.1.1
+@ 300 IN MX 0 .
+@ 300 IN MX 5 bar.com.
+foo 300 IN A 2.3.4.5
+foo 300 IN A 3.4.5.6
+www 300 IN A 2.2.2.2
+www 300 IN A 5.6.7.8
+foo 300 IN TXT "simple"
+foo 300 IN AAAA 2003:dd:d7ff::fe71:aaaa
+www 700 IN A 1.2.3.4
+www 700 IN A 5.6.7.8
+@ 300 IN A 4.4.4.4
+bar 300 IN CNAME redact2.acm-validations.aws.
+foo766 300 IN TXT "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "J"
+bar.a 300 IN AZURE_ALIAS A "/subscriptions/02efc9e4-732d-4a8d-8b82-5b37e10eb89d/resourceGroups/dnscontroltest/providers/Microsoft.Network/dnszones/dnscontrol-azure.com/A/quux.a"
+testdefined 300 IN A 9.9.9.9
+foo510 300 IN TXT "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+dyndns-city2 300 IN A 91.42.1.2
+testcname 300 IN CNAME foo.dnscontrol-azure.com.
+@ 300 IN CAA 0 issuewild "letsencrypt.org"
+decoy 300 IN A 2.2.2.2
+final 300 IN TXT "TestDNSProviders was successful!"
+foo 300 IN A 1.1.1.1
+foo 300 IN A 13.13.13.13
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 100 bar.com.
+testtxt 300 IN TXT "changed"
+foo 300 IN A 1.2.3.4
+foo 300 IN A 2.3.4.5
+foo.cname 300 IN CNAME google.com.
+testmx 300 IN MX 5 bar.com.
+foo 300 IN TXT "v=spf1 ip4:99.99.99.99 -all"
+xn--fiq228c 300 IN A 1.2.3.4
+www 300 IN A 1.1.1.1
+@ 300 IN A 2.2.2.2
+foo 300 IN A 1.2.3.4
+foo 300 IN A 1.1.1.1
+foo 300 IN A 11.11.11.11

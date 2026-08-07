@@ -1,337 +1,337 @@
-dnscontroltest-luadns.com. 86400 IN NS 01.rikudns.net.
-dnscontroltest-luadns.com. 86400 IN NS 02.rikudns.net.
-dnscontroltest-luadns.com. 86400 IN NS 03.rikudns.net.
-dnscontroltest-luadns.com. 86400 IN NS 04.rikudns.net.
-testa.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-testa.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-dnscontroltest-luadns.com. 300 IN A 4.4.4.4
-*.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-www.dnscontroltest-luadns.com. 300 IN A 5.5.5.5
-testaaaa.dnscontroltest-luadns.com. 300 IN AAAA 2607:f8b0:4006:820::2006
-testaaaa.dnscontroltest-luadns.com. 300 IN AAAA 2607:f8b0:4006:820::2013
-testcname.dnscontroltest-luadns.com. 300 IN CNAME www.google.com.
-testcname.dnscontroltest-luadns.com. 300 IN CNAME www.yahoo.com.
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-testcname.dnscontroltest-luadns.com. 300 IN CNAME foo.dnscontroltest-luadns.com.
-dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-dnscontroltest-luadns.com. 300 IN MX 5 bar.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 bar.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 100 foo.com.
-testtxt.dnscontroltest-luadns.com. 300 IN TXT "simple"
-testtxt.dnscontroltest-luadns.com. 300 IN TXT "changed"
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-www.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-www.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-www.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-www.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-www.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 100 bar.com.
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-www.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 5 foo.com.
-testmx.dnscontroltest-luadns.com. 300 IN MX 100 bar.com.
-testa.dnscontroltest-luadns.com. 333 IN A 1.1.1.1
-testa.dnscontroltest-luadns.com. 999 IN A 1.1.1.1
-dnscontroltest-luadns.com. 666 IN A 8.8.8.8
-www.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-www.dnscontroltest-luadns.com. 300 IN A 5.6.7.8
-dnscontroltest-luadns.com. 1000 IN A 8.8.8.8
-www.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-www.dnscontroltest-luadns.com. 300 IN A 5.6.7.8
-dnscontroltest-luadns.com. 500 IN A 8.8.8.8
-www.dnscontroltest-luadns.com. 400 IN A 2.2.2.2
-www.dnscontroltest-luadns.com. 400 IN A 5.6.7.8
-www.dnscontroltest-luadns.com. 400 IN A 5.6.7.8
-www.dnscontroltest-luadns.com. 700 IN A 1.2.3.4
-www.dnscontroltest-luadns.com. 700 IN A 5.6.7.8
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN MX 5 mx.google.com.
-foo.dnscontroltest-luadns.com. 300 IN A 4.5.6.7
-foo.dnscontroltest-luadns.com. 300 IN CNAME google.com.
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN CNAME google2.com.
-dnscontroltest-luadns.com. 300 IN HTTPS 0 test.com.
-dnscontroltest-luadns.com. 300 IN HTTPS 1 test.com. port="80"
-dnscontroltest-luadns.com. 300 IN HTTPS 1 test.com. port="99"
-dnscontroltest-luadns.com. 300 IN HTTPS 1 test.com. alpn="h2" port="99"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999" ech="some+base64+encoded+value///"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 example.com. alpn="h2" port="80" ech="some+base64+encoded+value///"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 example.com. alpn="h2" port="80" ech="another+base64+encoded+value"
-dnscontroltest-luadns.com. 300 IN HTTPS 3 yetanother.com. alpn="h2" port="80" ech="another+base64+encoded+value"
-dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN CNAME dnscontroltest-luadns.com.
-dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN MX 8 dnscontroltest-luadns.com.
-nmx.dnscontroltest-luadns.com. 300 IN A 1.2.3.3
-nmx.dnscontroltest-luadns.com. 300 IN MX 0 .
-www.dnscontroltest-luadns.com. 300 IN A 1.2.3.9
-nmx.dnscontroltest-luadns.com. 300 IN MX 3 nmx.dnscontroltest-luadns.com.
-nmx.dnscontroltest-luadns.com. 300 IN MX 9 www.dnscontroltest-luadns.com.
-nmx.dnscontroltest-luadns.com. 300 IN MX 0 .
-dnscontroltest-luadns.com. 300 IN A 1.2.3.2
-dnscontroltest-luadns.com. 300 IN MX 0 .
-www.dnscontroltest-luadns.com. 300 IN A 1.2.3.8
-dnscontroltest-luadns.com. 300 IN MX 2 dnscontroltest-luadns.com.
-dnscontroltest-luadns.com. 300 IN MX 8 www.dnscontroltest-luadns.com.
-dnscontroltest-luadns.com. 300 IN MX 0 .
-xyz.dnscontroltest-luadns.com. 300 IN NS ns2.foo.com.
-xyz.dnscontroltest-luadns.com. 300 IN NS ns1.foo.com.
-xyz.dnscontroltest-luadns.com. 300 IN NS ns2.foo.com.
-dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN NS dnscontroltest-luadns.com.
-dnscontroltest-luadns.com. 300 IN NS ns1.foo.com.
-dnscontroltest-luadns.com. 300 IN NS ns1.foo.com.
-dnscontroltest-luadns.com. 300 IN NS ns2.foo.com.
-foo254.dnscontroltest-luadns.com. 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-foo255.dnscontroltest-luadns.com. 300 IN TXT "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
-foo256.dnscontroltest-luadns.com. 300 IN TXT "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" "C"
-foo509.dnscontroltest-luadns.com. 300 IN TXT "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
-foo510.dnscontroltest-luadns.com. 300 IN TXT "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
-foo511.dnscontroltest-luadns.com. 300 IN TXT "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "F"
-foo764.dnscontroltest-luadns.com. 300 IN TXT "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
-foo765.dnscontroltest-luadns.com. 300 IN TXT "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
-foo766.dnscontroltest-luadns.com. 300 IN TXT "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "J"
-foosq.dnscontroltest-luadns.com. 300 IN TXT "quo'te"
-foobt.dnscontroltest-luadns.com. 300 IN TXT "blah`blah"
-foodq.dnscontroltest-luadns.com. 300 IN TXT "in\"side"
-foodqs.dnscontroltest-luadns.com. 300 IN TXT "in\"ter\"ior"
-foodqs.dnscontroltest-luadns.com. 300 IN TXT "\"left"
-foodqs.dnscontroltest-luadns.com. 300 IN TXT "right\""
-foosc1.dnscontroltest-luadns.com. 300 IN TXT "semi;colon"
-foosc2.dnscontroltest-luadns.com. 300 IN TXT "wssemi ; colon"
-foosp.dnscontroltest-luadns.com. 300 IN TXT "with spaces"
-foows1.dnscontroltest-luadns.com. 300 IN TXT "trailingws "
-foo.dnscontroltest-luadns.com. 300 IN TXT "v=spf1 ip4:99.99.99.99 -all"
-fooosbs1.dnscontroltest-luadns.com. 300 IN TXT "1back\\slash"
-fooosbs2.dnscontroltest-luadns.com. 300 IN TXT "2back\\\\slash"
-fooosbs3.dnscontroltest-luadns.com. 300 IN TXT "3back\\\\\\slash"
-fooosbs4.dnscontroltest-luadns.com. 300 IN TXT "4back\\\\\\\\slash"
-bar.dnscontroltest-luadns.com. 300 IN MX 5 bar.com.
-decoy.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-decoy.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-decoy.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 3.4.5.6
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 3.4.5.6
-bar.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN A 3.4.5.6
-foo.dnscontroltest-luadns.com. 300 IN MX 10 foo.dnscontroltest-luadns.com.
-foo.dnscontroltest-luadns.com. 300 IN MX 20 bar.dnscontroltest-luadns.com.
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN A 8.8.8.8
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN A 8.8.8.8
-xn--ndaaa.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-xn--ndaaa.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-xn--fiq228c.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-a.dnscontroltest-luadns.com. 300 IN CNAME xn--ndaaa.com.
-xn--o-0gab.dnscontroltest-luadns.com. 300 IN CNAME xn--ndaaa.xn--vhquv.
-pager101-rec0000.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0001.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0002.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0003.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0004.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0005.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0006.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0007.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0008.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0009.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0010.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0011.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0012.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0013.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0014.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0015.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0016.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0017.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0018.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0019.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0020.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0021.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0022.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0023.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0024.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0025.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0026.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0027.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0028.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0029.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0030.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0031.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0032.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0033.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0034.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0035.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0036.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0037.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0038.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0039.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0040.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0041.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0042.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0043.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0044.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0045.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0046.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0047.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0048.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0049.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0050.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0051.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0052.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0053.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0054.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0055.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0056.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0057.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0058.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0059.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0060.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0061.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0062.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0063.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0064.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0065.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0066.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0067.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0068.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0069.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0070.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0071.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0072.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0073.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0074.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0075.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0076.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0077.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0078.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0079.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0080.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0081.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0082.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0083.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0084.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0085.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0086.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0087.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0088.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0089.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0090.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0091.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0092.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0093.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0094.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0095.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0096.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0097.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0098.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0099.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-pager101-rec0100.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-dnscontroltest-luadns.com. 300 IN CAA 0 issue "letsencrypt.org"
-dnscontroltest-luadns.com. 300 IN CAA 0 issuewild "letsencrypt.org"
-dnscontroltest-luadns.com. 300 IN CAA 0 issuewild "example.com"
-dnscontroltest-luadns.com. 300 IN CAA 0 issuewild ";"
-dnscontroltest-luadns.com. 300 IN CAA 0 issue "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
-dnscontroltest-luadns.com. 300 IN CAA 0 issue "letsencrypt.org"
-dnscontroltest-luadns.com. 300 IN CAA 128 issue "letsencrypt.org"
-4.dnscontroltest-luadns.com. 300 IN PTR foo.com.
-4.dnscontroltest-luadns.com. 300 IN PTR bar.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 60 70 foo2.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 60 70 foo2.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo3.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo3.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 52 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 52 62 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 foo4.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 52 62 72 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 300 IN SRV 15 65 75 .
-_sip._tcp.dnscontroltest-luadns.com. 333 IN SRV 5 6 7 foo.com.
-_sip._tcp.dnscontroltest-luadns.com. 4400 IN SRV 5 6 7 foo.com.
-dnscontroltest-luadns.com. 300 IN SSHFP 1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C
-dnscontroltest-luadns.com. 300 IN SSHFP 2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C
-dnscontroltest-luadns.com. 300 IN SSHFP 2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC
-_443._tcp.dnscontroltest-luadns.com. 300 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
-_443._tcp.dnscontroltest-luadns.com. 300 IN TLSA 2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
-_443._tcp.dnscontroltest-luadns.com. 300 IN TLSA 2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
-_443._tcp.dnscontroltest-luadns.com. 300 IN TLSA 2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
-_443._tcp.dnscontroltest-luadns.com. 300 IN TLSA 2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210
-dnscontroltest-luadns.com. 300 IN ALIAS foo.com.
-dnscontroltest-luadns.com. 300 IN ALIAS foo2.com.
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-dnscontroltest-luadns.com. 300 IN ALIAS foo.dnscontroltest-luadns.com.
-test.dnscontroltest-luadns.com. 300 IN ALIAS foo.com.
-test.dnscontroltest-luadns.com. 300 IN ALIAS foo2.com.
-bar.dnscontroltest-luadns.com. 300 IN A 5.5.5.5
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.dnscontroltest-luadns.com. 300 IN TXT "simple"
-mail.dnscontroltest-luadns.com. 300 IN CNAME ghs.googlehosted.com.
-dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-dnscontroltest-luadns.com. 300 IN TXT "simple"
-bar.dnscontroltest-luadns.com. 300 IN A 5.5.5.5
-mail.dnscontroltest-luadns.com. 300 IN CNAME ghs.googlehosted.com.
-dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-dnscontroltest-luadns.com. 300 IN TXT "asimple"
-foo.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.dnscontroltest-luadns.com. 300 IN TXT "simple"
-bar.bat.dnscontroltest-luadns.com. 300 IN A 5.5.5.5
-foo.bat.dnscontroltest-luadns.com. 300 IN A 1.2.3.4
-foo.bat.dnscontroltest-luadns.com. 300 IN A 2.3.4.5
-foo.bat.dnscontroltest-luadns.com. 300 IN TXT "simple"
-mail.bat.dnscontroltest-luadns.com. 300 IN CNAME ghs.googlehosted.com.
-foo.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-foo.dnscontroltest-luadns.com. 300 IN A 10.10.10.10
-foo.dnscontroltest-luadns.com. 300 IN AAAA 2003:dd:d7ff::fe71:aaaa
-foo.dnscontroltest-luadns.com. 300 IN MX 10 aspmx.l.google.com.
-foo.dnscontroltest-luadns.com. 300 IN MX 20 alt1.aspmx.l.google.com.
-zzz.dnscontroltest-luadns.com. 300 IN A 3.3.3.3
-zzz.dnscontroltest-luadns.com. 300 IN A 4.4.4.4
-zzz.dnscontroltest-luadns.com. 300 IN AAAA 2003:dd:d7ff::fe71:cccc
-foo.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-foo.dnscontroltest-luadns.com. 300 IN A 11.11.11.11
-foo.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-foo.dnscontroltest-luadns.com. 300 IN A 12.12.12.12
-foo.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-foo.dnscontroltest-luadns.com. 300 IN A 13.13.13.13
-foo.dnscontroltest-luadns.com. 300 IN A 1.1.1.1
-foo.dnscontroltest-luadns.com. 300 IN A 14.14.14.14
-bar.dnscontroltest-luadns.com. 300 IN CNAME redact2.acm-validations.aws.
-foo.dnscontroltest-luadns.com. 300 IN CNAME redact1.acm-validations.aws.
-dyndns-city1.dnscontroltest-luadns.com. 300 IN A 91.42.1.1
-dyndns-city1.dnscontroltest-luadns.com. 300 IN AAAA 2003:dd:d7ff::fe71:ce77
-dyndns-city2.dnscontroltest-luadns.com. 300 IN A 91.42.1.2
-dyndns-city2.dnscontroltest-luadns.com. 300 IN AAAA 2003:dd:d7ff::fe71:ce78
-testdefined.dnscontroltest-luadns.com. 300 IN A 9.9.9.9
-testignore.dnscontroltest-luadns.com. 300 IN A 8.8.8.8
-testdefined.dnscontroltest-luadns.com. 300 IN A 2.2.2.2
-6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com. 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAxCQnAKBDmA75+73+3lYVXDwrMUbaR61fNZgGeOHwmDq0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEYZ3PIZnaOWQrPxj6VX+9VdC3r4wFAgAAAAECGwECHgUCF4AACgkQVX+9VdC3r4xq6wEAl2ujFSqWwc2wQuHedpFrSTN9Gh7cIziKCZ3f8BGSRTgBAIvjKlWLLLBu0FPpCVlcfkpsZMV5YRrg90k+D+O4zZ4M
-bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com. 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAO2uf8a0MUkNWUHzey8FhYJP2SS+061pF+GFK23egV9K0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEwP53wg/jSbhjzamYC/4c89luNM4FAgAAAAECGwECHgUCF4AACgkQC/4c89luNM4/LgEA8ARj4iJ0fVrpRRnhrTtlGwos170TDhTuZfPoGMqweS0A/1GWtg6/ywR4EPtRu+p9WogsQmO1HOk3ag3I5d7iP18C
-6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com. 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAQWiJ4gXP6wC2wQ7h7odcLpZU+mQD2rHiqtTgj+1e6ou0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEE/tuN1tP/jpKko/EvTN4yJT7efAsFAgAAAAECGwECHgUCF4AACgkQTN4yJT7efAuxPQD/aEhrJaCX9FD1IkjA/8UmK0nokjtJNy46It3IWTGT4EQBAJI6goeRQBJqu/UnHmjv0OfqBQQCt87f9zXqZxLjiIQN
-bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com. 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K
-final.dnscontroltest-luadns.com. 300 IN TXT "TestDNSProviders was successful!"
-final.dnscontroltest-luadns.com. 300 IN TXT "TestDNSProviders was successful!"
+@ 86400 IN NS 01.rikudns.net.
+@ 86400 IN NS 02.rikudns.net.
+@ 86400 IN NS 03.rikudns.net.
+@ 86400 IN NS 04.rikudns.net.
+testa 300 IN A 1.1.1.1
+testa 300 IN A 3.3.3.3
+@ 300 IN A 2.2.2.2
+@ 300 IN A 4.4.4.4
+* 300 IN A 3.3.3.3
+www 300 IN A 5.5.5.5
+testaaaa 300 IN AAAA 2607:f8b0:4006:820::2006
+testaaaa 300 IN AAAA 2607:f8b0:4006:820::2013
+testcname 300 IN CNAME www.google.com.
+testcname 300 IN CNAME www.yahoo.com.
+foo 300 IN A 1.2.3.4
+testcname 300 IN CNAME foo.dnscontroltest-luadns.com.
+@ 300 IN MX 5 foo.com.
+@ 300 IN MX 5 bar.com.
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 5 bar.com.
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 100 foo.com.
+testtxt 300 IN TXT "simple"
+testtxt 300 IN TXT "changed"
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+www 300 IN A 3.3.3.3
+www 300 IN A 1.1.1.1
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+www 300 IN A 1.1.1.1
+www 300 IN A 2.2.2.2
+www 300 IN A 3.3.3.3
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 100 bar.com.
+www 300 IN A 1.1.1.1
+www 300 IN A 1.1.1.1
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 5 foo.com.
+testmx 300 IN MX 100 bar.com.
+testa 333 IN A 1.1.1.1
+testa 999 IN A 1.1.1.1
+@ 666 IN A 8.8.8.8
+www 300 IN A 1.2.3.4
+www 300 IN A 5.6.7.8
+@ 1000 IN A 8.8.8.8
+www 300 IN A 2.2.2.2
+www 300 IN A 5.6.7.8
+@ 500 IN A 8.8.8.8
+www 400 IN A 2.2.2.2
+www 400 IN A 5.6.7.8
+www 400 IN A 5.6.7.8
+www 700 IN A 1.2.3.4
+www 700 IN A 5.6.7.8
+foo 300 IN A 1.2.3.4
+foo 300 IN MX 5 mx.google.com.
+foo 300 IN A 4.5.6.7
+foo 300 IN CNAME google.com.
+foo 300 IN A 1.2.3.4
+foo 300 IN CNAME google2.com.
+@ 300 IN HTTPS 0 test.com.
+@ 300 IN HTTPS 1 test.com. port="80"
+@ 300 IN HTTPS 1 test.com. port="99"
+@ 300 IN HTTPS 1 test.com. alpn="h2" port="99"
+@ 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999"
+@ 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999"
+@ 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999" ech="some+base64+encoded+value///"
+@ 300 IN HTTPS 3 example.com. alpn="h2" port="80" ech="some+base64+encoded+value///"
+@ 300 IN HTTPS 3 example.com. alpn="h2" port="80" ech="another+base64+encoded+value"
+@ 300 IN HTTPS 3 yetanother.com. alpn="h2" port="80" ech="another+base64+encoded+value"
+@ 300 IN A 1.2.3.4
+foo 300 IN CNAME dnscontroltest-luadns.com.
+@ 300 IN A 1.2.3.4
+foo 300 IN MX 8 dnscontroltest-luadns.com.
+nmx 300 IN A 1.2.3.3
+nmx 300 IN MX 0 .
+www 300 IN A 1.2.3.9
+nmx 300 IN MX 3 nmx.dnscontroltest-luadns.com.
+nmx 300 IN MX 9 www.dnscontroltest-luadns.com.
+nmx 300 IN MX 0 .
+@ 300 IN A 1.2.3.2
+@ 300 IN MX 0 .
+www 300 IN A 1.2.3.8
+@ 300 IN MX 2 dnscontroltest-luadns.com.
+@ 300 IN MX 8 www.dnscontroltest-luadns.com.
+@ 300 IN MX 0 .
+xyz 300 IN NS ns2.foo.com.
+xyz 300 IN NS ns1.foo.com.
+xyz 300 IN NS ns2.foo.com.
+@ 300 IN A 1.2.3.4
+foo 300 IN NS dnscontroltest-luadns.com.
+@ 300 IN NS ns1.foo.com.
+@ 300 IN NS ns1.foo.com.
+@ 300 IN NS ns2.foo.com.
+foo254 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+foo255 300 IN TXT "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+foo256 300 IN TXT "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" "C"
+foo509 300 IN TXT "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+foo510 300 IN TXT "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+foo511 300 IN TXT "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" "F"
+foo764 300 IN TXT "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG" "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+foo765 300 IN TXT "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH" "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+foo766 300 IN TXT "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ" "J"
+foosq 300 IN TXT "quo'te"
+foobt 300 IN TXT "blah`blah"
+foodq 300 IN TXT "in\"side"
+foodqs 300 IN TXT "in\"ter\"ior"
+foodqs 300 IN TXT "\"left"
+foodqs 300 IN TXT "right\""
+foosc1 300 IN TXT "semi;colon"
+foosc2 300 IN TXT "wssemi ; colon"
+foosp 300 IN TXT "with spaces"
+foows1 300 IN TXT "trailingws "
+foo 300 IN TXT "v=spf1 ip4:99.99.99.99 -all"
+fooosbs1 300 IN TXT "1back\\slash"
+fooosbs2 300 IN TXT "2back\\\\slash"
+fooosbs3 300 IN TXT "3back\\\\\\slash"
+fooosbs4 300 IN TXT "4back\\\\\\\\slash"
+bar 300 IN MX 5 bar.com.
+decoy 300 IN A 1.1.1.1
+decoy 300 IN A 2.2.2.2
+decoy 300 IN A 3.3.3.3
+foo 300 IN A 1.2.3.4
+foo 300 IN A 2.3.4.5
+foo 300 IN A 1.2.3.4
+foo 300 IN A 3.4.5.6
+foo 300 IN A 1.2.3.4
+foo 300 IN A 1.2.3.4
+foo 300 IN A 3.4.5.6
+bar 300 IN A 1.2.3.4
+foo 300 IN A 2.3.4.5
+foo 300 IN A 3.4.5.6
+foo 300 IN MX 10 foo.dnscontroltest-luadns.com.
+foo 300 IN MX 20 bar.dnscontroltest-luadns.com.
+foo 300 IN A 2.3.4.5
+foo 300 IN A 8.8.8.8
+foo 300 IN A 2.3.4.5
+foo 300 IN A 2.3.4.5
+foo 300 IN A 8.8.8.8
+xn--ndaaa 300 IN A 1.2.3.4
+xn--ndaaa 300 IN A 2.2.2.2
+xn--fiq228c 300 IN A 1.2.3.4
+a 300 IN CNAME xn--ndaaa.com.
+xn--o-0gab 300 IN CNAME xn--ndaaa.xn--vhquv.
+pager101-rec0000 300 IN A 1.2.3.4
+pager101-rec0001 300 IN A 1.2.3.4
+pager101-rec0002 300 IN A 1.2.3.4
+pager101-rec0003 300 IN A 1.2.3.4
+pager101-rec0004 300 IN A 1.2.3.4
+pager101-rec0005 300 IN A 1.2.3.4
+pager101-rec0006 300 IN A 1.2.3.4
+pager101-rec0007 300 IN A 1.2.3.4
+pager101-rec0008 300 IN A 1.2.3.4
+pager101-rec0009 300 IN A 1.2.3.4
+pager101-rec0010 300 IN A 1.2.3.4
+pager101-rec0011 300 IN A 1.2.3.4
+pager101-rec0012 300 IN A 1.2.3.4
+pager101-rec0013 300 IN A 1.2.3.4
+pager101-rec0014 300 IN A 1.2.3.4
+pager101-rec0015 300 IN A 1.2.3.4
+pager101-rec0016 300 IN A 1.2.3.4
+pager101-rec0017 300 IN A 1.2.3.4
+pager101-rec0018 300 IN A 1.2.3.4
+pager101-rec0019 300 IN A 1.2.3.4
+pager101-rec0020 300 IN A 1.2.3.4
+pager101-rec0021 300 IN A 1.2.3.4
+pager101-rec0022 300 IN A 1.2.3.4
+pager101-rec0023 300 IN A 1.2.3.4
+pager101-rec0024 300 IN A 1.2.3.4
+pager101-rec0025 300 IN A 1.2.3.4
+pager101-rec0026 300 IN A 1.2.3.4
+pager101-rec0027 300 IN A 1.2.3.4
+pager101-rec0028 300 IN A 1.2.3.4
+pager101-rec0029 300 IN A 1.2.3.4
+pager101-rec0030 300 IN A 1.2.3.4
+pager101-rec0031 300 IN A 1.2.3.4
+pager101-rec0032 300 IN A 1.2.3.4
+pager101-rec0033 300 IN A 1.2.3.4
+pager101-rec0034 300 IN A 1.2.3.4
+pager101-rec0035 300 IN A 1.2.3.4
+pager101-rec0036 300 IN A 1.2.3.4
+pager101-rec0037 300 IN A 1.2.3.4
+pager101-rec0038 300 IN A 1.2.3.4
+pager101-rec0039 300 IN A 1.2.3.4
+pager101-rec0040 300 IN A 1.2.3.4
+pager101-rec0041 300 IN A 1.2.3.4
+pager101-rec0042 300 IN A 1.2.3.4
+pager101-rec0043 300 IN A 1.2.3.4
+pager101-rec0044 300 IN A 1.2.3.4
+pager101-rec0045 300 IN A 1.2.3.4
+pager101-rec0046 300 IN A 1.2.3.4
+pager101-rec0047 300 IN A 1.2.3.4
+pager101-rec0048 300 IN A 1.2.3.4
+pager101-rec0049 300 IN A 1.2.3.4
+pager101-rec0050 300 IN A 1.2.3.4
+pager101-rec0051 300 IN A 1.2.3.4
+pager101-rec0052 300 IN A 1.2.3.4
+pager101-rec0053 300 IN A 1.2.3.4
+pager101-rec0054 300 IN A 1.2.3.4
+pager101-rec0055 300 IN A 1.2.3.4
+pager101-rec0056 300 IN A 1.2.3.4
+pager101-rec0057 300 IN A 1.2.3.4
+pager101-rec0058 300 IN A 1.2.3.4
+pager101-rec0059 300 IN A 1.2.3.4
+pager101-rec0060 300 IN A 1.2.3.4
+pager101-rec0061 300 IN A 1.2.3.4
+pager101-rec0062 300 IN A 1.2.3.4
+pager101-rec0063 300 IN A 1.2.3.4
+pager101-rec0064 300 IN A 1.2.3.4
+pager101-rec0065 300 IN A 1.2.3.4
+pager101-rec0066 300 IN A 1.2.3.4
+pager101-rec0067 300 IN A 1.2.3.4
+pager101-rec0068 300 IN A 1.2.3.4
+pager101-rec0069 300 IN A 1.2.3.4
+pager101-rec0070 300 IN A 1.2.3.4
+pager101-rec0071 300 IN A 1.2.3.4
+pager101-rec0072 300 IN A 1.2.3.4
+pager101-rec0073 300 IN A 1.2.3.4
+pager101-rec0074 300 IN A 1.2.3.4
+pager101-rec0075 300 IN A 1.2.3.4
+pager101-rec0076 300 IN A 1.2.3.4
+pager101-rec0077 300 IN A 1.2.3.4
+pager101-rec0078 300 IN A 1.2.3.4
+pager101-rec0079 300 IN A 1.2.3.4
+pager101-rec0080 300 IN A 1.2.3.4
+pager101-rec0081 300 IN A 1.2.3.4
+pager101-rec0082 300 IN A 1.2.3.4
+pager101-rec0083 300 IN A 1.2.3.4
+pager101-rec0084 300 IN A 1.2.3.4
+pager101-rec0085 300 IN A 1.2.3.4
+pager101-rec0086 300 IN A 1.2.3.4
+pager101-rec0087 300 IN A 1.2.3.4
+pager101-rec0088 300 IN A 1.2.3.4
+pager101-rec0089 300 IN A 1.2.3.4
+pager101-rec0090 300 IN A 1.2.3.4
+pager101-rec0091 300 IN A 1.2.3.4
+pager101-rec0092 300 IN A 1.2.3.4
+pager101-rec0093 300 IN A 1.2.3.4
+pager101-rec0094 300 IN A 1.2.3.4
+pager101-rec0095 300 IN A 1.2.3.4
+pager101-rec0096 300 IN A 1.2.3.4
+pager101-rec0097 300 IN A 1.2.3.4
+pager101-rec0098 300 IN A 1.2.3.4
+pager101-rec0099 300 IN A 1.2.3.4
+pager101-rec0100 300 IN A 1.2.3.4
+@ 300 IN CAA 0 issue "letsencrypt.org"
+@ 300 IN CAA 0 issuewild "letsencrypt.org"
+@ 300 IN CAA 0 issuewild "example.com"
+@ 300 IN CAA 0 issuewild ";"
+@ 300 IN CAA 0 issue "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+@ 300 IN CAA 0 issue "letsencrypt.org"
+@ 300 IN CAA 128 issue "letsencrypt.org"
+4 300 IN PTR foo.com.
+4 300 IN PTR bar.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 5 60 70 foo2.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 5 60 70 foo2.com.
+_sip._tcp 300 IN SRV 15 65 75 foo3.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo3.com.
+_sip._tcp 300 IN SRV 5 6 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 6 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 62 7 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+_sip._tcp 300 IN SRV 52 62 72 foo.com.
+_sip._tcp 300 IN SRV 15 65 75 .
+_sip._tcp 333 IN SRV 5 6 7 foo.com.
+_sip._tcp 4400 IN SRV 5 6 7 foo.com.
+@ 300 IN SSHFP 1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C
+@ 300 IN SSHFP 2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C
+@ 300 IN SSHFP 2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC
+_443._tcp 300 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+_443._tcp 300 IN TLSA 2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+_443._tcp 300 IN TLSA 2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+_443._tcp 300 IN TLSA 2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+_443._tcp 300 IN TLSA 2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210
+@ 300 IN ALIAS foo.com.
+@ 300 IN ALIAS foo2.com.
+foo 300 IN A 1.2.3.4
+@ 300 IN ALIAS foo.dnscontroltest-luadns.com.
+test 300 IN ALIAS foo.com.
+test 300 IN ALIAS foo2.com.
+bar 300 IN A 5.5.5.5
+foo 300 IN A 1.2.3.4
+foo 300 IN A 2.3.4.5
+foo 300 IN TXT "simple"
+mail 300 IN CNAME ghs.googlehosted.com.
+@ 300 IN A 1.2.3.4
+@ 300 IN A 2.3.4.5
+@ 300 IN TXT "simple"
+bar 300 IN A 5.5.5.5
+mail 300 IN CNAME ghs.googlehosted.com.
+@ 300 IN A 2.2.2.2
+@ 300 IN TXT "asimple"
+foo 300 IN A 1.2.3.4
+foo 300 IN TXT "simple"
+bar.bat 300 IN A 5.5.5.5
+foo.bat 300 IN A 1.2.3.4
+foo.bat 300 IN A 2.3.4.5
+foo.bat 300 IN TXT "simple"
+mail.bat 300 IN CNAME ghs.googlehosted.com.
+foo 300 IN A 1.1.1.1
+foo 300 IN A 10.10.10.10
+foo 300 IN AAAA 2003:dd:d7ff::fe71:aaaa
+foo 300 IN MX 10 aspmx.l.google.com.
+foo 300 IN MX 20 alt1.aspmx.l.google.com.
+zzz 300 IN A 3.3.3.3
+zzz 300 IN A 4.4.4.4
+zzz 300 IN AAAA 2003:dd:d7ff::fe71:cccc
+foo 300 IN A 1.1.1.1
+foo 300 IN A 11.11.11.11
+foo 300 IN A 1.1.1.1
+foo 300 IN A 12.12.12.12
+foo 300 IN A 1.1.1.1
+foo 300 IN A 13.13.13.13
+foo 300 IN A 1.1.1.1
+foo 300 IN A 14.14.14.14
+bar 300 IN CNAME redact2.acm-validations.aws.
+foo 300 IN CNAME redact1.acm-validations.aws.
+dyndns-city1 300 IN A 91.42.1.1
+dyndns-city1 300 IN AAAA 2003:dd:d7ff::fe71:ce77
+dyndns-city2 300 IN A 91.42.1.2
+dyndns-city2 300 IN AAAA 2003:dd:d7ff::fe71:ce78
+testdefined 300 IN A 9.9.9.9
+testignore 300 IN A 8.8.8.8
+testdefined 300 IN A 2.2.2.2
+6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAxCQnAKBDmA75+73+3lYVXDwrMUbaR61fNZgGeOHwmDq0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEYZ3PIZnaOWQrPxj6VX+9VdC3r4wFAgAAAAECGwECHgUCF4AACgkQVX+9VdC3r4xq6wEAl2ujFSqWwc2wQuHedpFrSTN9Gh7cIziKCZ3f8BGSRTgBAIvjKlWLLLBu0FPpCVlcfkpsZMV5YRrg90k+D+O4zZ4M
+bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAO2uf8a0MUkNWUHzey8FhYJP2SS+061pF+GFK23egV9K0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEwP53wg/jSbhjzamYC/4c89luNM4FAgAAAAECGwECHgUCF4AACgkQC/4c89luNM4/LgEA8ARj4iJ0fVrpRRnhrTtlGwos170TDhTuZfPoGMqweS0A/1GWtg6/ywR4EPtRu+p9WogsQmO1HOk3ag3I5d7iP18C
+6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAQWiJ4gXP6wC2wQ7h7odcLpZU+mQD2rHiqtTgj+1e6ou0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEE/tuN1tP/jpKko/EvTN4yJT7efAsFAgAAAAECGwECHgUCF4AACgkQTN4yJT7efAuxPQD/aEhrJaCX9FD1IkjA/8UmK0nokjtJNy46It3IWTGT4EQBAJI6goeRQBJqu/UnHmjv0OfqBQQCt87f9zXqZxLjiIQN
+bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey 300 IN OPENPGPKEY mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K
+final 300 IN TXT "TestDNSProviders was successful!"
+final 300 IN TXT "TestDNSProviders was successful!"

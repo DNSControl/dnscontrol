@@ -37,9 +37,10 @@
 @ 300 IN MX 5 bar.com.
 @ 300 IN MX 5 foo.com.
 @ 300 IN MX 8 www.dnscontrolintegration.io.
-@ 300 IN NS dns2.p02.nsone.net.
-@ 300 IN NS ns1.foo.com.
-@ 300 IN NS ns2.foo.com.
+@ 300 IN NS dns1.p05.nsone.net.
+@ 300 IN NS dns2.p05.nsone.net.
+@ 300 IN NS dns3.p05.nsone.net.
+@ 300 IN NS dns4.p05.nsone.net.
 @ 300 IN SVCB 0 test.com.
 @ 300 IN SVCB 1 test.com. alpn="h2" port="99"
 @ 300 IN SVCB 1 test.com. port="80"
