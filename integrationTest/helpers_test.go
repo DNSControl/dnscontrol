@@ -9,10 +9,31 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/providers/cloudflare"
 )
+
+func TestReplaceIntegrationTargetTokensAzureAlias(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("alias", 300, privatetypes.TypeAZUREALIAS, "A",
+		"/subscriptions/**subscription-id**/resourceGroups/**resource-group**/providers/Microsoft.Network/dnszones/example.com/A/target")
+
+	replaceIntegrationTargetTokens(rc, "SUB123", "MyResourceGroup")
+
+	want := "/subscriptions/SUB123/resourceGroups/myresourcegroup/providers/Microsoft.Network/dnszones/example.com/A/target"
+	if got := rc.AsAZUREALIAS().Target; got != want {
+		t.Fatalf("AZURE_ALIAS target = %q, want %q", got, want)
+	}
+	if rc.GetRDATA() == nil {
+		t.Fatal("AZURE_ALIAS RDATA is nil after placeholder replacement")
+	}
+	if rc.ComparableV3 == "" {
+		t.Fatal("AZURE_ALIAS ComparableV3 is empty after placeholder replacement")
+	}
+}
 
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")

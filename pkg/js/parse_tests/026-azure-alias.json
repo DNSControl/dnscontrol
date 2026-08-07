@@ -1,65 +1,65 @@
 {
-  "registrars": [],
   "dns_providers": [],
   "domains": [
     {
-      "name": "foo.com",
-      "uniquename": "foo.com",
-      "registrar": "none",
       "dnsProviders": {},
+      "name": "foo.com",
       "records": [
         {
-          "type": "AZURE_ALIAS",
-          "typenum": 65286,
           "comparablev3": "AAAA foo.com.",
-          "ttl": 300,
-          "name": "aaaatest",
-          "name_unicode": "aaaatest",
+          "filepos": "[line:3:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
-          "filepos": "[line:3:5]",
+          "name": "aaaatest",
+          "name_unicode": "aaaatest",
           "rdata": {
             "AliasType": "AAAA",
             "Target": "foo.com."
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
-          "type": "AZURE_ALIAS",
-          "typenum": 65286,
           "comparablev3": "A foo.com.",
-          "ttl": 300,
-          "name": "atest",
-          "name_unicode": "atest",
+          "filepos": "[line:2:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
-          "filepos": "[line:2:5]",
+          "name": "atest",
+          "name_unicode": "atest",
           "rdata": {
             "AliasType": "A",
             "Target": "foo.com."
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
-          "type": "AZURE_ALIAS",
-          "typenum": 65286,
           "comparablev3": "CNAME foo.com.",
-          "ttl": 300,
-          "name": "cnametest",
-          "name_unicode": "cnametest",
+          "filepos": "[line:4:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
-          "filepos": "[line:4:5]",
+          "name": "cnametest",
+          "name_unicode": "cnametest",
           "rdata": {
             "AliasType": "CNAME",
             "Target": "foo.com."
           },
-          "target": "foo.com."
+          "target": "foo.com.",
+          "ttl": 300,
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         }
-      ]
+      ],
+      "registrar": "none",
+      "uniquename": "foo.com"
     }
-  ]
+  ],
+  "registrars": []
 }

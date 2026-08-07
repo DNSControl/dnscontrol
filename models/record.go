@@ -71,7 +71,8 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target          string // If a name, must end with "."
+	target string // If a name, must end with "."
+	//AnswerType      string `json:"answer_type,omitempty"`
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
 }
 
@@ -146,6 +147,7 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
 		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
 		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+		//AnswerType      string `json:"answer_type,omitempty"`
 		UnknownTypeName string `json:"unknown_type_name,omitempty"`
 
 		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
