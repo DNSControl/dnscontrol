@@ -358,7 +358,7 @@ jobs:
           echo "END: Running tests 0 to $END"
           go install gotest.tools/gotestsum@v1.13.0
           if [ -n "$${{ matrix.provider }}_DOMAIN" ] ; then
-            # NB(tlim): THe output of gotestsum needs to go to stdout AND the
+            # NB(tlim): The output of gotestsum needs to go to stdout AND the
             # gotestsum-output.txt file. That's why "tee" is used.
             gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- \
                 -timeout 70m -v \
@@ -369,7 +369,7 @@ jobs:
                 -cfflatten=false \
                 -cftags=false \
                 -end $END \
-                ./... >&1 | \
+                >&1 | \
                 tee ${TEST_RESULTS}/gotestsum-output.txt
           else
             echo "Skip test for ${{ matrix.provider }} provider"
