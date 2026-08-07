@@ -308,8 +308,16 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 		case "TXT":
 			r.Content = rec.GetTargetTXTJoined()
 		case "HTTPS":
+			// The RDATA's String() quotes every SvcParam value (e.g. port="80",
+			// alpn="h2,h3"), which LuaDNS's strict SVCB parser rejects. Build the
+			// content with unquoted params (port=80, alpn=h2,h3) instead.
 			f := rec.AsHTTPS()
-			r.Content = f.String()
+			params := models.Svcbv2ValueToString(f.Value)
+			if params == "" {
+				r.Content = fmt.Sprintf("%d %s", f.Priority, f.Target)
+			} else {
+				r.Content = fmt.Sprintf("%d %s %s", f.Priority, f.Target, params)
+			}
 		default:
 			r.Content = rec.GetRDATA().String()
 		}
