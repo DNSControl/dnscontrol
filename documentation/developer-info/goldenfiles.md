@@ -93,8 +93,7 @@ func TestToReqGolden(t *testing.T) {
 }
 ```
 
-
-If you provide both ToRC and ToNative, you can test the round-trip:
+If both ToRC and ToNative are tested, you add round-trip testing:
 
 ```go
 func TestConversionRoundTrip(t *testing.T) {
