@@ -53,9 +53,9 @@ foo 300 IN CNAME google.com.
 foo 300 IN A 1.2.3.4
 foo 300 IN CNAME google2.com.
 @ 300 IN A 1.2.3.4
-foo 300 IN CNAME dnscontroltest-digitalocean.com.
+foo 300 IN CNAME example.com.
 @ 300 IN A 1.2.3.4
-foo 300 IN MX 8 dnscontroltest-digitalocean.com.
+foo 300 IN MX 8 example.com.
 nmx 300 IN A 1.2.3.3
 www 300 IN A 1.2.3.9
 nmx 300 IN MX 9 www.dnscontroltest-digitalocean.com.
@@ -63,11 +63,11 @@ nmx 300 IN MX 3 nmx.dnscontroltest-digitalocean.com.
 @ 300 IN A 1.2.3.2
 www 300 IN A 1.2.3.8
 @ 300 IN MX 8 www.dnscontroltest-digitalocean.com.
-@ 300 IN MX 2 dnscontroltest-digitalocean.com.
+@ 300 IN MX 2 example.com.
 xyz 300 IN NS ns2.foo.com.
 xyz 300 IN NS ns1.foo.com.
 @ 300 IN A 1.2.3.4
-foo 300 IN NS dnscontroltest-digitalocean.com.
+foo 300 IN NS example.com.
 @ 300 IN NS ns1.foo.com.
 @ 300 IN NS ns2.foo.com.
 foo254 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"

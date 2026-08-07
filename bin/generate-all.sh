@@ -9,7 +9,14 @@ if [ -x node_modules/.bin/prettier ]; then
 fi
 
 echo ========== bin/fmtjson
-bin/fmtjson $(find . -path ./.vscode -prune -o -type f -name "*.json" ! -name "package-lock.json" -print)
+bin/fmtjson $(find \
+	dist \
+	commands/test_data \
+        integrationTest pkg \
+	documentation/assets  \
+	-type f -name "*.json" \
+	! -name "package-lock.json" \
+	-print)
 
 # dnsconfig.js-compatible files:
 echo ========== fmt parse_tests

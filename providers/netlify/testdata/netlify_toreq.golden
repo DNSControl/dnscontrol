@@ -1,7 +1,7 @@
 [
   {
     "flag": 0,
-    "hostname": "*.netlifytest.yesthattom.com",
+    "hostname": "*.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -10,7 +10,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 1000,
     "type": "A",
@@ -19,7 +19,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -28,7 +28,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -37,7 +37,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -46,7 +46,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -55,7 +55,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -64,7 +64,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "ALIAS",
@@ -73,7 +73,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "ALIAS",
@@ -82,7 +82,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "ALIAS",
@@ -91,7 +91,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issue",
     "ttl": 300,
@@ -101,7 +101,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issue",
     "ttl": 300,
@@ -111,7 +111,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issuewild",
     "ttl": 300,
@@ -121,7 +121,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issuewild",
     "ttl": 300,
@@ -131,7 +131,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issuewild",
     "ttl": 300,
@@ -141,7 +141,7 @@
   },
   {
     "flag": 128,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "tag": "issue",
     "ttl": 300,
@@ -151,7 +151,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 2,
     "ttl": 300,
     "type": "MX",
@@ -160,7 +160,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -169,7 +169,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -178,7 +178,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 8,
     "ttl": 300,
     "type": "MX",
@@ -187,7 +187,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -196,7 +196,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -205,7 +205,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -214,7 +214,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -223,7 +223,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -232,7 +232,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -241,7 +241,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -250,7 +250,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -259,7 +259,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 500,
     "type": "A",
@@ -268,7 +268,7 @@
   },
   {
     "flag": 0,
-    "hostname": "netlifytest.yesthattom.com",
+    "hostname": "example.com",
     "priority": 0,
     "ttl": 666,
     "type": "A",
@@ -277,7 +277,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 75,
     "priority": 15,
     "ttl": 300,
@@ -287,7 +287,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 75,
     "priority": 15,
     "ttl": 300,
@@ -297,7 +297,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 75,
     "priority": 15,
     "ttl": 300,
@@ -307,7 +307,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 7,
     "priority": 5,
     "ttl": 300,
@@ -317,7 +317,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 70,
     "priority": 5,
     "ttl": 300,
@@ -327,7 +327,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 7,
     "priority": 52,
     "ttl": 300,
@@ -337,7 +337,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 7,
     "priority": 52,
     "ttl": 300,
@@ -347,7 +347,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 72,
     "priority": 52,
     "ttl": 300,
@@ -357,7 +357,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 7,
     "priority": 5,
     "ttl": 333,
@@ -367,7 +367,7 @@
   },
   {
     "flag": 0,
-    "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+    "hostname": "_sip._tcp.example.com",
     "port": 7,
     "priority": 5,
     "ttl": 4400,
@@ -377,7 +377,7 @@
   },
   {
     "flag": 0,
-    "hostname": "a.netlifytest.yesthattom.com",
+    "hostname": "a.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -386,7 +386,7 @@
   },
   {
     "flag": 0,
-    "hostname": "bar.netlifytest.yesthattom.com",
+    "hostname": "bar.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -395,7 +395,7 @@
   },
   {
     "flag": 0,
-    "hostname": "bar.netlifytest.yesthattom.com",
+    "hostname": "bar.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -404,7 +404,7 @@
   },
   {
     "flag": 0,
-    "hostname": "bar.netlifytest.yesthattom.com",
+    "hostname": "bar.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -413,7 +413,7 @@
   },
   {
     "flag": 0,
-    "hostname": "bar.netlifytest.yesthattom.com",
+    "hostname": "bar.example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -422,7 +422,7 @@
   },
   {
     "flag": 0,
-    "hostname": "bar.bat.netlifytest.yesthattom.com",
+    "hostname": "bar.bat.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -431,7 +431,7 @@
   },
   {
     "flag": 0,
-    "hostname": "decoy.netlifytest.yesthattom.com",
+    "hostname": "decoy.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -440,7 +440,7 @@
   },
   {
     "flag": 0,
-    "hostname": "decoy.netlifytest.yesthattom.com",
+    "hostname": "decoy.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -449,7 +449,7 @@
   },
   {
     "flag": 0,
-    "hostname": "decoy.netlifytest.yesthattom.com",
+    "hostname": "decoy.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -458,7 +458,7 @@
   },
   {
     "flag": 0,
-    "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+    "hostname": "dyndns-city1.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -467,7 +467,7 @@
   },
   {
     "flag": 0,
-    "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+    "hostname": "dyndns-city1.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
@@ -476,7 +476,7 @@
   },
   {
     "flag": 0,
-    "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+    "hostname": "dyndns-city2.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -485,7 +485,7 @@
   },
   {
     "flag": 0,
-    "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+    "hostname": "dyndns-city2.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
@@ -494,7 +494,7 @@
   },
   {
     "flag": 0,
-    "hostname": "final.netlifytest.yesthattom.com",
+    "hostname": "final.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -503,7 +503,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -512,7 +512,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -521,7 +521,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -530,7 +530,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -539,7 +539,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -548,7 +548,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -557,7 +557,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -566,7 +566,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -575,7 +575,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -584,7 +584,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -593,7 +593,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -602,7 +602,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
@@ -611,7 +611,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -620,7 +620,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -629,7 +629,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -638,7 +638,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -647,7 +647,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 10,
     "ttl": 300,
     "type": "MX",
@@ -656,7 +656,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 10,
     "ttl": 300,
     "type": "MX",
@@ -665,7 +665,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 20,
     "ttl": 300,
     "type": "MX",
@@ -674,7 +674,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 20,
     "ttl": 300,
     "type": "MX",
@@ -683,7 +683,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -692,7 +692,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 8,
     "ttl": 300,
     "type": "MX",
@@ -701,7 +701,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -710,7 +710,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -719,7 +719,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.netlifytest.yesthattom.com",
+    "hostname": "foo.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -728,7 +728,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.bat.netlifytest.yesthattom.com",
+    "hostname": "foo.bat.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -737,7 +737,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.bat.netlifytest.yesthattom.com",
+    "hostname": "foo.bat.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -746,7 +746,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo.bat.netlifytest.yesthattom.com",
+    "hostname": "foo.bat.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -755,7 +755,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo254.netlifytest.yesthattom.com",
+    "hostname": "foo254.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -764,7 +764,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo255.netlifytest.yesthattom.com",
+    "hostname": "foo255.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -773,7 +773,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo256.netlifytest.yesthattom.com",
+    "hostname": "foo256.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -782,7 +782,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo509.netlifytest.yesthattom.com",
+    "hostname": "foo509.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -791,7 +791,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo510.netlifytest.yesthattom.com",
+    "hostname": "foo510.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -800,7 +800,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo511.netlifytest.yesthattom.com",
+    "hostname": "foo511.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -809,7 +809,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo764.netlifytest.yesthattom.com",
+    "hostname": "foo764.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -818,7 +818,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo765.netlifytest.yesthattom.com",
+    "hostname": "foo765.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -827,7 +827,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foo766.netlifytest.yesthattom.com",
+    "hostname": "foo766.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -836,7 +836,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foobt.netlifytest.yesthattom.com",
+    "hostname": "foobt.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -845,7 +845,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foodq.netlifytest.yesthattom.com",
+    "hostname": "foodq.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -854,7 +854,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foodqs.netlifytest.yesthattom.com",
+    "hostname": "foodqs.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -863,7 +863,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foodqs.netlifytest.yesthattom.com",
+    "hostname": "foodqs.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -872,7 +872,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foodqs.netlifytest.yesthattom.com",
+    "hostname": "foodqs.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -881,7 +881,7 @@
   },
   {
     "flag": 0,
-    "hostname": "fooosbs1.netlifytest.yesthattom.com",
+    "hostname": "fooosbs1.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -890,7 +890,7 @@
   },
   {
     "flag": 0,
-    "hostname": "fooosbs2.netlifytest.yesthattom.com",
+    "hostname": "fooosbs2.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -899,7 +899,7 @@
   },
   {
     "flag": 0,
-    "hostname": "fooosbs3.netlifytest.yesthattom.com",
+    "hostname": "fooosbs3.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -908,7 +908,7 @@
   },
   {
     "flag": 0,
-    "hostname": "fooosbs4.netlifytest.yesthattom.com",
+    "hostname": "fooosbs4.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -917,7 +917,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foosc1.netlifytest.yesthattom.com",
+    "hostname": "foosc1.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -926,7 +926,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foosc2.netlifytest.yesthattom.com",
+    "hostname": "foosc2.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -935,7 +935,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foosp.netlifytest.yesthattom.com",
+    "hostname": "foosp.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -944,7 +944,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foosq.netlifytest.yesthattom.com",
+    "hostname": "foosq.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -953,7 +953,7 @@
   },
   {
     "flag": 0,
-    "hostname": "foows1.netlifytest.yesthattom.com",
+    "hostname": "foows1.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -962,7 +962,7 @@
   },
   {
     "flag": 0,
-    "hostname": "mail.netlifytest.yesthattom.com",
+    "hostname": "mail.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -971,7 +971,7 @@
   },
   {
     "flag": 0,
-    "hostname": "mail.bat.netlifytest.yesthattom.com",
+    "hostname": "mail.bat.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -980,7 +980,7 @@
   },
   {
     "flag": 0,
-    "hostname": "nmx.netlifytest.yesthattom.com",
+    "hostname": "nmx.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -989,7 +989,7 @@
   },
   {
     "flag": 0,
-    "hostname": "nmx.netlifytest.yesthattom.com",
+    "hostname": "nmx.example.com",
     "priority": 3,
     "ttl": 300,
     "type": "MX",
@@ -998,7 +998,7 @@
   },
   {
     "flag": 0,
-    "hostname": "nmx.netlifytest.yesthattom.com",
+    "hostname": "nmx.example.com",
     "priority": 9,
     "ttl": 300,
     "type": "MX",
@@ -1007,7 +1007,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0000.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0000.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1016,7 +1016,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0001.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0001.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1025,7 +1025,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0002.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0002.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1034,7 +1034,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0003.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0003.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1043,7 +1043,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0004.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0004.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1052,7 +1052,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0005.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0005.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1061,7 +1061,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0006.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0006.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1070,7 +1070,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0007.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0007.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1079,7 +1079,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0008.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0008.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1088,7 +1088,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0009.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0009.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1097,7 +1097,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0010.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0010.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1106,7 +1106,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0011.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0011.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1115,7 +1115,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0012.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0012.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1124,7 +1124,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0013.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0013.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1133,7 +1133,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0014.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0014.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1142,7 +1142,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0015.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0015.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1151,7 +1151,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0016.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0016.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1160,7 +1160,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0017.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0017.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1169,7 +1169,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0018.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0018.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1178,7 +1178,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0019.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0019.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1187,7 +1187,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0020.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0020.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1196,7 +1196,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0021.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0021.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1205,7 +1205,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0022.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0022.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1214,7 +1214,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0023.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0023.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1223,7 +1223,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0024.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0024.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1232,7 +1232,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0025.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0025.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1241,7 +1241,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0026.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0026.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1250,7 +1250,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0027.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0027.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1259,7 +1259,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0028.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0028.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1268,7 +1268,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0029.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0029.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1277,7 +1277,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0030.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0030.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1286,7 +1286,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0031.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0031.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1295,7 +1295,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0032.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0032.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1304,7 +1304,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0033.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0033.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1313,7 +1313,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0034.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0034.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1322,7 +1322,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0035.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0035.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1331,7 +1331,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0036.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0036.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1340,7 +1340,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0037.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0037.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1349,7 +1349,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0038.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0038.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1358,7 +1358,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0039.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0039.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1367,7 +1367,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0040.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0040.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1376,7 +1376,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0041.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0041.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1385,7 +1385,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0042.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0042.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1394,7 +1394,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0043.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0043.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1403,7 +1403,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0044.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0044.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1412,7 +1412,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0045.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0045.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1421,7 +1421,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0046.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0046.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1430,7 +1430,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0047.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0047.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1439,7 +1439,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0048.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0048.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1448,7 +1448,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0049.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0049.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1457,7 +1457,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0050.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0050.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1466,7 +1466,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0051.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0051.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1475,7 +1475,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0052.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0052.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1484,7 +1484,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0053.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0053.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1493,7 +1493,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0054.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0054.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1502,7 +1502,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0055.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0055.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1511,7 +1511,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0056.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0056.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1520,7 +1520,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0057.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0057.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1529,7 +1529,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0058.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0058.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1538,7 +1538,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0059.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0059.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1547,7 +1547,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0060.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0060.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1556,7 +1556,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0061.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0061.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1565,7 +1565,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0062.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0062.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1574,7 +1574,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0063.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0063.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1583,7 +1583,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0064.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0064.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1592,7 +1592,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0065.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0065.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1601,7 +1601,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0066.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0066.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1610,7 +1610,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0067.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0067.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1619,7 +1619,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0068.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0068.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1628,7 +1628,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0069.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0069.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1637,7 +1637,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0070.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0070.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1646,7 +1646,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0071.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0071.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1655,7 +1655,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0072.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0072.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1664,7 +1664,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0073.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0073.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1673,7 +1673,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0074.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0074.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1682,7 +1682,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0075.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0075.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1691,7 +1691,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0076.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0076.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1700,7 +1700,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0077.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0077.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1709,7 +1709,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0078.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0078.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1718,7 +1718,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0079.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0079.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1727,7 +1727,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0080.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0080.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1736,7 +1736,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0081.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0081.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1745,7 +1745,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0082.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0082.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1754,7 +1754,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0083.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0083.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1763,7 +1763,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0084.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0084.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1772,7 +1772,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0085.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0085.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1781,7 +1781,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0086.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0086.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1790,7 +1790,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0087.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0087.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1799,7 +1799,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0088.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0088.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1808,7 +1808,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0089.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0089.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1817,7 +1817,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0090.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0090.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1826,7 +1826,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0091.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0091.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1835,7 +1835,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0092.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0092.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1844,7 +1844,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0093.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0093.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1853,7 +1853,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0094.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0094.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1862,7 +1862,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0095.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0095.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1871,7 +1871,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0096.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0096.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1880,7 +1880,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0097.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0097.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1889,7 +1889,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0098.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0098.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1898,7 +1898,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0099.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0099.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1907,7 +1907,7 @@
   },
   {
     "flag": 0,
-    "hostname": "pager101-rec0100.netlifytest.yesthattom.com",
+    "hostname": "pager101-rec0100.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1916,7 +1916,7 @@
   },
   {
     "flag": 0,
-    "hostname": "test.netlifytest.yesthattom.com",
+    "hostname": "test.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "ALIAS",
@@ -1925,7 +1925,7 @@
   },
   {
     "flag": 0,
-    "hostname": "test.netlifytest.yesthattom.com",
+    "hostname": "test.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "ALIAS",
@@ -1934,7 +1934,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testa.netlifytest.yesthattom.com",
+    "hostname": "testa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1943,7 +1943,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testa.netlifytest.yesthattom.com",
+    "hostname": "testa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -1952,7 +1952,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testa.netlifytest.yesthattom.com",
+    "hostname": "testa.example.com",
     "priority": 0,
     "ttl": 333,
     "type": "A",
@@ -1961,7 +1961,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testa.netlifytest.yesthattom.com",
+    "hostname": "testa.example.com",
     "priority": 0,
     "ttl": 999,
     "type": "A",
@@ -1970,7 +1970,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testaaaa.netlifytest.yesthattom.com",
+    "hostname": "testaaaa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
@@ -1979,7 +1979,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testaaaa.netlifytest.yesthattom.com",
+    "hostname": "testaaaa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
@@ -1988,7 +1988,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testcname.netlifytest.yesthattom.com",
+    "hostname": "testcname.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -1997,7 +1997,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testcname.netlifytest.yesthattom.com",
+    "hostname": "testcname.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -2006,7 +2006,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testcname.netlifytest.yesthattom.com",
+    "hostname": "testcname.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -2015,7 +2015,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testdefined.netlifytest.yesthattom.com",
+    "hostname": "testdefined.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2024,7 +2024,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testdefined.netlifytest.yesthattom.com",
+    "hostname": "testdefined.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2033,7 +2033,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testignore.netlifytest.yesthattom.com",
+    "hostname": "testignore.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2042,7 +2042,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testmx.netlifytest.yesthattom.com",
+    "hostname": "testmx.example.com",
     "priority": 100,
     "ttl": 300,
     "type": "MX",
@@ -2051,7 +2051,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testmx.netlifytest.yesthattom.com",
+    "hostname": "testmx.example.com",
     "priority": 100,
     "ttl": 300,
     "type": "MX",
@@ -2060,7 +2060,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testmx.netlifytest.yesthattom.com",
+    "hostname": "testmx.example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -2069,7 +2069,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testmx.netlifytest.yesthattom.com",
+    "hostname": "testmx.example.com",
     "priority": 5,
     "ttl": 300,
     "type": "MX",
@@ -2078,7 +2078,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testtxt.netlifytest.yesthattom.com",
+    "hostname": "testtxt.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -2087,7 +2087,7 @@
   },
   {
     "flag": 0,
-    "hostname": "testtxt.netlifytest.yesthattom.com",
+    "hostname": "testtxt.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "TXT",
@@ -2096,7 +2096,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2105,7 +2105,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2114,7 +2114,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2123,7 +2123,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2132,7 +2132,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2141,7 +2141,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2150,7 +2150,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2159,7 +2159,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2168,7 +2168,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 400,
     "type": "A",
@@ -2177,7 +2177,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 400,
     "type": "A",
@@ -2186,7 +2186,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 700,
     "type": "A",
@@ -2195,7 +2195,7 @@
   },
   {
     "flag": 0,
-    "hostname": "www.netlifytest.yesthattom.com",
+    "hostname": "www.example.com",
     "priority": 0,
     "ttl": 700,
     "type": "A",
@@ -2204,7 +2204,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xn--fiq228c.netlifytest.yesthattom.com",
+    "hostname": "xn--fiq228c.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2213,7 +2213,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+    "hostname": "xn--ndaaa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2222,7 +2222,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+    "hostname": "xn--ndaaa.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2231,7 +2231,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xn--o-0gab.netlifytest.yesthattom.com",
+    "hostname": "xn--o-0gab.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "CNAME",
@@ -2240,7 +2240,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xyz.netlifytest.yesthattom.com",
+    "hostname": "xyz.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -2249,7 +2249,7 @@
   },
   {
     "flag": 0,
-    "hostname": "xyz.netlifytest.yesthattom.com",
+    "hostname": "xyz.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "NS",
@@ -2258,7 +2258,7 @@
   },
   {
     "flag": 0,
-    "hostname": "zzz.netlifytest.yesthattom.com",
+    "hostname": "zzz.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2267,7 +2267,7 @@
   },
   {
     "flag": 0,
-    "hostname": "zzz.netlifytest.yesthattom.com",
+    "hostname": "zzz.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "A",
@@ -2276,7 +2276,7 @@
   },
   {
     "flag": 0,
-    "hostname": "zzz.netlifytest.yesthattom.com",
+    "hostname": "zzz.example.com",
     "priority": 0,
     "ttl": 300,
     "type": "AAAA",
