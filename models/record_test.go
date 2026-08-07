@@ -35,6 +35,35 @@ func TestR53AliasTargetSurvivesRecompute(t *testing.T) {
 	}
 }
 
+// TestAzureAliasTargetSurvivesRecompute is the AZURE_ALIAS analog of
+// TestR53AliasTargetSurvivesRecompute. Before the fix, RecomputeV3Fields()
+// panicked ("FixUp: .RDATA is nil for type AZURE_ALIAS") because the RDATA
+// rebuild case was not implemented. See copyLegacyFieldsToRD()/copyRDtoLegacyFields().
+func TestAzureAliasTargetSurvivesRecompute(t *testing.T) {
+	const origin = "example.com"
+	const wantTarget = "/subscriptions/sub/resourceGroups/rg/providers/Microsoft.Network/dnszones/example.com/A/kyle"
+
+	dc := MustNewDomainConfig(origin)
+	rc, err := dc.NewRecordConfig("kenny", 300, "AZURE_ALIAS", "A", wantTarget)
+	if err != nil {
+		t.Fatalf("NewRecordConfig: %v", err)
+	}
+
+	if got := rc.AsAZUREALIAS().Target; got != wantTarget {
+		t.Fatalf("target after construction = %q, want %q", got, wantTarget)
+	}
+
+	// Refreshing the cached V3 fields must not panic and must preserve the target.
+	rc.RecomputeV3Fields(origin)
+
+	if got := rc.AsAZUREALIAS().Target; got != wantTarget {
+		t.Errorf("target after RecomputeV3Fields = %q, want %q", got, wantTarget)
+	}
+	if got := rc.GetTargetField(); got != wantTarget {
+		t.Errorf("GetTargetField after RecomputeV3Fields = %q, want %q", got, wantTarget)
+	}
+}
+
 func TestHasRecordTypeName(t *testing.T) {
 	x := &RecordConfig{
 		Type: "A",

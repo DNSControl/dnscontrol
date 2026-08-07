@@ -25,6 +25,13 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 		rc.AnswerType = rd.AnswerType
 	case privatetypesrdata.AZUREALIAS:
 		rc.AzureAlias = map[string]string{"type": rd.AliasType}
+		// Mirror the alias target into the legacy .target field so that
+		// copyLegacyFieldsToRD() can re-derive the RDATA from GetTargetField()
+		// (e.g. when RecomputeV3Fields() rebuilds after ClearRDATA()). Without
+		// this the target would be lost. See the R53ALIAS case below.
+		if err := rc.SetTarget(rd.Target); err != nil {
+			return err
+		}
 	case privatetypesrdata.LUA:
 		rc.LuaRType = rd.LuaType
 	case privatetypesrdata.R53ALIAS:

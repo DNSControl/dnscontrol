@@ -167,9 +167,9 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		// errorChk(err)
 		// rc.SetRDATA(rd)
 	case privatetypes.TypeAZUREALIAS:
-		// rd, err := privatetypesrdata.MakeAZUREALIAS(origin, nil, isEnabled, rc.AzureAlias["type"], rc.GetTargetField())
-		// errorChk(err)
-		// rc.SetRDATA(rd)
+		rd, err := privatetypesrdata.MakeAZUREALIAS(origin, nil, isEnabled, rc.AzureAlias["type"], rc.GetTargetField())
+		errorChk(err)
+		rc.SetRDATA(rd)
 
 	case dnsv2.TypeCNAME:
 		// rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
