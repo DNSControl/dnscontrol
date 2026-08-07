@@ -5,6 +5,36 @@ import (
 	"testing"
 )
 
+// TestR53AliasTargetSurvivesRecompute reproduces the bug where an R53_ALIAS
+// target was lost (defaulting to the zone apex) after a provider filled in the
+// zone_id and called RecomputeV3Fields(). See copyRDtoLegacyFields().
+func TestR53AliasTargetSurvivesRecompute(t *testing.T) {
+	const origin = "example.com"
+	const wantTarget = "kyle.example.com."
+
+	dc := MustNewDomainConfig(origin)
+	rc, err := dc.NewRecordConfig("kenny", 300, "R53_ALIAS", "A", wantTarget, "false")
+	if err != nil {
+		t.Fatalf("NewRecordConfig: %v", err)
+	}
+
+	if got := rc.AsR53ALIAS().Target; got != wantTarget {
+		t.Fatalf("target after construction = %q, want %q", got, wantTarget)
+	}
+
+	// Simulate a provider (Route 53) filling in the zone_id and refreshing the
+	// cached V3 fields, exactly as route53Provider.GetZoneRecordsCorrections does.
+	rc.R53Alias["zone_id"] = "Z0389923"
+	rc.RecomputeV3Fields(origin)
+
+	if got := rc.AsR53ALIAS().Target; got != wantTarget {
+		t.Errorf("target after RecomputeV3Fields = %q, want %q", got, wantTarget)
+	}
+	if got := rc.GetTargetField(); got != wantTarget {
+		t.Errorf("GetTargetField after RecomputeV3Fields = %q, want %q", got, wantTarget)
+	}
+}
+
 func TestHasRecordTypeName(t *testing.T) {
 	x := &RecordConfig{
 		Type: "A",

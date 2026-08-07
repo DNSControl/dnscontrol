@@ -601,7 +601,9 @@ func ptr(name, target string) *models.RecordConfig {
 }
 
 func r53alias(name, aliasType, target, evalTargetHealth string) *models.RecordConfig {
+	// fmt.Printf("DEBUG: r53alias: name=%q aliasType=%q target=%q evalTargetHealth=%q\n", name, aliasType, target, evalTargetHealth)
 	target = fillTemplate(target)
+	fmt.Printf("DEBUG: r53alias: NEWtarget=%q\n", target)
 	r, err := globalDC.NewRecordConfig(name, defaultTTL, privatetypes.TypeR53ALIAS, aliasType, target, evalTargetHealth)
 	panicOnErr(err)
 	return r

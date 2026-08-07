@@ -23,6 +23,12 @@ func (rc *RecordConfig) GetTargetField() string {
 		return rc.GetTargetTXTJoined()
 	}
 	if rc.rdata != nil {
+		if rc.Type == "R53_ALIAS" {
+			// R53_ALIAS's target (DNSName) is not the last field of the RDATA
+			// (that's the zone_id), so the "last field" heuristic below is wrong
+			// for it.
+			return rc.AsR53ALIAS().Target
+		}
 		// Return the last field. Not perfect, but good enough until we get rid of this function.
 		fx, err := RDtoFieldsStrings(rc.GetRDATA())
 		if err != nil {

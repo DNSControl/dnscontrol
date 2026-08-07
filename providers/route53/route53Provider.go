@@ -470,9 +470,11 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 				if len(inst.New) != 1 {
 					log.Fatal("Only one R53_ALIAS_ permitted on a label")
 				}
+				fmt.Printf("DEBUG: Creating an ALIAS\n")
 				rrset = aliasToRRSet(zone, inst.New[0])
 				rrset.Name = aws.String(instNameFQDN)
 			} else {
+				fmt.Printf("DEBUG: Creating an NOT-ALIAS\n")
 				// Make a list of all the records to be installed at label:rtype
 				rrset = &r53Types.ResourceRecordSet{
 					Name: aws.String(instNameFQDN),
@@ -561,6 +563,15 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 	var results models.Records
 	if set.AliasTarget != nil {
 
+		// fmt.Printf("DEBUG: making RC for R53_ALIAS: label=%v ttl=%v type=%v atype=%v %v %v %v\n",
+		// 	dc.LabelFromFQDNNoDot(unescape(set.Name)), 300,
+		// 	privatetypes.TypeR53ALIAS,
+		// 	string(set.Type),
+		// 	aws.ToString(set.AliasTarget.DNSName),
+		// 	strconv.FormatBool(set.AliasTarget.EvaluateTargetHealth),
+		// 	aws.ToString(set.AliasTarget.HostedZoneId),
+		// )
+
 		rc, err := dc.NewRecordConfig(dc.LabelFromFQDNNoDot(unescape(set.Name)), 300,
 			privatetypes.TypeR53ALIAS,
 			string(set.Type),
@@ -578,6 +589,7 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 	} else if set.TrafficPolicyInstanceId != nil {
 		// skip traffic policy records
 	} else {
+		// fmt.Printf("DEBUG: NOT AN ALIAS: label=%v ttl=%v type=%v\n", dc.LabelFromFQDNNoDot(unescape(set.Name)), aws.ToInt64(set.TTL), set.Type)
 		for _, rec := range set.ResourceRecords {
 			switch rtype := set.Type; rtype {
 			case r53Types.RRTypeSpf:
@@ -684,6 +696,7 @@ func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
 	target := r.AsR53ALIAS().Target
+	fmt.Printf("DEBUG: target=%s\n", target)
 	zoneID := getZoneID(zone, r)
 	evalTargetHealth, err := strconv.ParseBool(r.R53Alias["evaluate_target_health"])
 	if err != nil {

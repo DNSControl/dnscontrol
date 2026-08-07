@@ -36,6 +36,14 @@ func (rc *RecordConfig) copyRDtoLegacyFields() error {
 			rc.R53Alias["zone_id"] = rd.ZoneID
 		}
 		rc.R53Alias["evaluate_target_health"] = rd.EvalTargetHealth
+		// The alias target (DNSName) is the record's primary target. It must be
+		// mirrored into the legacy .target field: copyLegacyFieldsToRD() re-derives
+		// the RDATA from GetTargetField() (e.g. when RecomputeV3Fields() rebuilds
+		// after a provider fills in zone_id), and without this the target would be
+		// lost and default to the zone apex.
+		if err := rc.SetTarget(rd.Target); err != nil {
+			return err
+		}
 
 	case dnsrdatav2.A:
 	case dnsrdatav2.AAAA:
