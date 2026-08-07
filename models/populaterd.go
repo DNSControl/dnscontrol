@@ -8,7 +8,6 @@ import (
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 // RecomputeV3Fields re-derives the cached "V3 Fields" (.RDATA and
@@ -163,9 +162,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		// errorChk(err)
 		// rc.SetRDATA(rd)
 	case privatetypes.TypeAZUREALIAS:
-		// rd, err := privatetypesrdata.MakeAZUREALIAS(origin, nil, isEnabled, rc.AzureAlias["type"], rc.GetTargetField())
-		// errorChk(err)
-		// rc.SetRDATA(rd)
 
 	case dnsv2.TypeCNAME:
 		// rd, err := MakeCNAME(origin, nil, isEnabled, rc.GetTargetField())
@@ -207,14 +203,6 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		// rc.SetRDATA(rd)
 
 	case privatetypes.TypeR53ALIAS:
-		rd, err := privatetypesrdata.MakeR53ALIAS(origin, nil, isEnabled,
-			rc.R53Alias["type"],
-			rc.GetTargetField(),
-			rc.R53Alias["evaluate_target_health"],
-			rc.R53Alias["zone_id"],
-		)
-		errorChk(err)
-		rc.SetRDATA(rd)
 
 	case dnsv2.TypeTXT:
 		// rd, err := MakeTXT(origin, nil, isEnabled, rc.GetTargetField())

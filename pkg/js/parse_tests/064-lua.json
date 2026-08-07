@@ -19,7 +19,6 @@
             "orig_custom_type": "LUA"
           },
           "filepos": "[line:5:5]",
-          "luartype": "TXT",
           "rdata": {
             "LuaType": "TXT",
             "LuaPayload": "; return 'ok'"
@@ -37,7 +36,6 @@
             "orig_custom_type": "LUA"
           },
           "filepos": "[line:4:5]",
-          "luartype": "A",
           "rdata": {
             "LuaType": "A",
             "LuaPayload": "return_127_0_0_1"

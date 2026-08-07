@@ -34,3 +34,39 @@ func TestNativeToRecord(t *testing.T) {
 		})
 	}
 }
+
+// TestRecordsToNativeHTTPS verifies that HTTPS records are serialized with
+// unquoted SvcParams (port=80, not port="80"), which LuaDNS's strict parser
+// requires.
+func TestRecordsToNativeHTTPS(t *testing.T) {
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	tests := []struct {
+		name        string
+		priority    uint16
+		target      string
+		params      string
+		wantContent string
+	}{
+		{"port", 1, "example.com.", "port=80", "1 example.com. port=80"},
+		{"alpn+port", 3, "example.com.", "alpn=h2,h3 port=999", "3 example.com. alpn=h2,h3 port=999"},
+		{"alias-mode-no-params", 0, "example.com.", "", "0 example.com."},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			rc, err := dc.NewRecordConfig("@", 300, "HTTPS", tc.priority, tc.target, tc.params)
+			if err != nil {
+				t.Fatal(err)
+			}
+			rrs := recordsToNative([]*models.RecordConfig{rc})
+			if len(rrs) != 1 {
+				t.Fatalf("recordsToNative returned %d records, want 1", len(rrs))
+			}
+			if got := rrs[0].Content; got != tc.wantContent {
+				t.Errorf("content = %q, want %q", got, tc.wantContent)
+			}
+		})
+	}
+}

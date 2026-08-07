@@ -44,7 +44,7 @@ func TestToRecordConfig(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "script.example.com", recordConfig.NameFQDN)
 	assert.Equal(t, "LUA", recordConfig.Type)
-	assert.Equal(t, "TXT", recordConfig.LuaRType)
+	assert.Equal(t, "TXT", recordConfig.AsLUA().LuaType)
 	assert.Equal(t, "return 'Hello, world!'", recordConfig.GetTargetTXTJoined())
 	assert.Equal(t, "TXT \"return 'Hello, world!'\"", recordConfig.GetRDATA().String())
 	assert.Equal(t, uint32(3600), recordConfig.TTL)
