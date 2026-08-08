@@ -556,13 +556,15 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				suffixstrip := rec.Metadata["transform_suffixstrip"]
 				transformTable := rec.Metadata["transform_table"]
 				ttl := rec.TTL
-				targetDomain := rec.GetTargetField()
+				var targetDomain string
 				if rec.GetRDATA() != nil {
 					rd := rec.AsIMPORTTRANSFORM()
 					transformTable = rd.TransformTable
 					ttl = uint32(rd.TTL)
 					suffixstrip = rd.SuffixStrip
 					targetDomain = rd.TargetDomain
+				} else {
+					targetDomain = rec.GetTargetField()
 				}
 				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
