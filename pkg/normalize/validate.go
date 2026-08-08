@@ -95,7 +95,6 @@ func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []strin
 
 		cType := providers.GetCustomRecordType(rec.Type)
 		if cType == nil {
-			//return fmt.Errorf("unsupported record type (%v) domain=%v name=%v", rec.Type, domain, rec.GetLabel())
 			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v Type=%s TypeNum=%d", rec.Type, domain, rec.GetLabel(), rec.Type, rec.TypeNum)
 		}
 		for _, providerType := range pTypes {
@@ -477,10 +476,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			// 		// RDATA/ComparableV3 so they reflect the new target.
 			// 		rec.RecomputeV3Fields(domain.Name)
 			// 	}
-			case "A", "AAAA":
-				//if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
-				//	errs = append(errs, err)
-				//}
+			// case "A", "AAAA":
+			//if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
+			//	errs = append(errs, err)
+			//}
 			case "PTR":
 				var err error
 				var name string
@@ -496,14 +495,24 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", f.Tag))
 				}
 			case "OPENPGPKEY":
-				target := rec.AsOPENPGPKEY().PublicKey
-				if target, err = transform.OPENPGPKEY(target); err != nil {
+				var orig, transformed, final string
+				var err error
+				orig = rec.AsOPENPGPKEY().PublicKey
+				transformed, err = transform.OPENPGPKEY(orig)
+				if err != nil {
+					final = orig
 					errs = append(errs, err)
-					// } else {
-					// 	if err := rec.SetTarget(target); err != nil {
-					// 		errs = append(errs, err)
-					// 	}
+				} else {
+					final = transformed
 				}
+				if orig != final {
+					rd, err := models.MakeOPENPGPKEY("", nil, nrc.Flags{}, final)
+					if err != nil {
+						errs = append(errs, err)
+					}
+					rec.SetRDATA(rd)
+				}
+
 			case "TLSA":
 				f := rec.AsTLSA()
 				if f.Usage > 3 {
