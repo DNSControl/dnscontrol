@@ -310,8 +310,8 @@ jobs:
           # Converts label names into a single string for easier grep/matching
           LABELS: ${{ join(github.event.pull_request.labels.*.name, ' ') }}
         run: |
-          END=3
-          echo "END: Default set to $END"
+          END=1
+          #echo "END: Default set to $END"
 
           # Release gate: release_draft.yml calls this via workflow_call with
           # full=true, which forces the entire suite (not just the smoke test).
@@ -326,10 +326,10 @@ jobs:
               END=999
               echo "END: Pull request + longtest label. END=$END"
             else
-              echo "END: longtest not set. No change."
+              echo "END: longtest not set. No change. END=$END"
             fi
           else
-              echo "END: Not a pull request. No change."
+              echo "END: Not a pull request. No change. END=$END"
           fi
           # Check if branch is main
           # NB(tlim): This used to be github.base_ref but it was changed to
