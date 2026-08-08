@@ -225,12 +225,18 @@ func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	// Get the target in the format expected by Infomaniak API
 	var target string
 	switch rc.Type {
-	case "A", "AAAA":
-		target = rc.GetTargetField()
+	case "A":
+		target = rc.AsA().Addr.String()
+	case "AAAA":
+		target = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "NS", "DNAME":
+	case "CNAME":
 		// Remove trailing dot for the API
-		target = strings.TrimSuffix(rc.GetTargetField(), ".")
+		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case "NS":
+		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
+	case "DNAME":
+		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
 	case "MX":
 		// Format: "priority target" (without trailing dot)
