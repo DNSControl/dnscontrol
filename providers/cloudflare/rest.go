@@ -10,6 +10,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/cloudflare/cloudflare-go"
 	"golang.org/x/net/idna"
 )
@@ -44,7 +45,9 @@ func (c *cloudflareProvider) getRecordsForDomain(id string, dc *models.DomainCon
 		return nil, fmt.Errorf("failed fetching record list from cloudflare(%q): %w", c.cfClient.APIEmail, err)
 	}
 	for _, rec := range rrs {
+		before := providers.BeginToRC(c.observer, "nativeToRecord", rec)
 		rt, err := c.nativeToRecord(dc, rec)
+		providers.EndToRC(c.observer, "nativeToRecord", before, rec, models.Records{rt}, err)
 		if err != nil {
 			return nil, err
 		}

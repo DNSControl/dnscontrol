@@ -8,7 +8,7 @@ import (
 )
 
 func TestToRecordConfigGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "websupport_torecordconfig",
+	providergolden.CheckToRC(t, "toRecordConfig",
 		func(dc *models.DomainConfig, native nativeRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRecordConfig(dc, native)
 			return []*models.RecordConfig{rc}, err
@@ -16,11 +16,15 @@ func TestToRecordConfigGolden(t *testing.T) {
 }
 
 func TestToNativeGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "websupport_tonative", toNative)
+	providergolden.CheckToNative(t, "toNative", func(_ *models.DomainConfig, records models.Records) (nativeRecord, error) {
+		return toNative(records[0])
+	})
 }
 
 func TestConversionRoundTrip(t *testing.T) {
-	providergolden.CheckRoundTrip(t, toNative,
+	providergolden.CheckRoundTrip(t, "toNative", func(_ *models.DomainConfig, records models.Records) (nativeRecord, error) {
+		return toNative(records[0])
+	},
 		func(dc *models.DomainConfig, native nativeRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRecordConfig(dc, native)
 			return []*models.RecordConfig{rc}, err

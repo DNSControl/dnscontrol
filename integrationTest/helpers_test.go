@@ -144,7 +144,11 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		metadata = []byte(`{ ` + strings.Join(items, `, `) + ` }`)
 	}
 
-	provider, err := providers.CreateDNSProvider(profileType, cfg, metadata)
+	var createOptions []providers.CreateOption
+	if *recordFlag || *recordDirFlag != "" {
+		createOptions = append(createOptions, providers.WithConversionObserver(recorder.ForDomain(cfg["domain"])))
+	}
+	provider, err := providers.CreateDNSProvider(profileType, cfg, metadata, createOptions...)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -161,12 +165,8 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		if err != nil {
 			t.Fatal(err)
 		}
-		name, err := providergolden.ProviderName(provider)
-		if err != nil {
-			t.Fatal(err)
-		}
-		t.Cleanup(func() { writeRecording(t, dir, name) })
-		return providergolden.Record(provider, recorder), cfg["domain"], cfg
+		t.Cleanup(func() { writeRecording(t, dir) })
+		return provider, cfg["domain"], cfg
 	}
 
 	return provider, cfg["domain"], cfg
@@ -181,10 +181,9 @@ func recordingDir(p providers.DNSServiceProvider) (string, error) {
 	return providergolden.TestdataDir(p)
 }
 
-// writeRecording writes everything recorded so far to dir, named after the
-// provider under test.
-func writeRecording(t *testing.T, dir, name string) {
-	written, err := recorder.WriteTo(dir, name)
+// writeRecording writes every observed conversion input/output pair to dir.
+func writeRecording(t *testing.T, dir string) {
+	written, err := recorder.WriteTo(dir)
 	for _, path := range written {
 		t.Logf("Recorded %s", path)
 	}

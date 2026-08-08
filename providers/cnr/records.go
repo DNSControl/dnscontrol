@@ -12,6 +12,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // Record covers an individual DNS resource record.
@@ -113,7 +114,10 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	addrridx := 0
 
 	addRR := func(rc *models.RecordConfig) error {
+		input := models.Records{rc}
+		before := providers.BeginToNative(n.observer, "createRecordString", input)
 		newRecordString, err := n.createRecordString(rc, dc.Name)
+		providers.EndToNative(n.observer, "createRecordString", before, input, newRecordString, err)
 		if err != nil {
 			return err
 		}

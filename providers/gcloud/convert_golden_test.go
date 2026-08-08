@@ -9,7 +9,7 @@ import (
 )
 
 func TestNativeToRecordGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "gcloud_nativetorecord",
+	providergolden.CheckToRC(t, "nativeToRecord",
 		func(dc *models.DomainConfig, native gdns.ResourceRecordSet) ([]*models.RecordConfig, error) {
 			// GCLOUD returns every value of a label/rtype pair in one set.
 			rcs := make([]*models.RecordConfig, 0, len(native.Rrdatas))

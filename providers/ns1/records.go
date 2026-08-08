@@ -11,6 +11,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/dns"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/filter"
@@ -34,7 +35,9 @@ func (n *nsone) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) 
 
 	found := models.Records{}
 	for _, r := range z.Records {
+		before := providers.BeginToRC(n.observer, "convert", r)
 		zrs, err := convert(r, dc)
+		providers.EndToRC(n.observer, "convert", before, r, zrs, err)
 		if err != nil {
 			return nil, err
 		}

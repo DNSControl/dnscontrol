@@ -7,5 +7,5 @@ import (
 )
 
 func TestNativeToRecordsGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "gandiv5_nativetorecords", nativeToRecords)
+	providergolden.CheckToRC(t, "nativeToRecords", nativeToRecords)
 }

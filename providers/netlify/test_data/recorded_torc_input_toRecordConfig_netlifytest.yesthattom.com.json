@@ -1,0 +1,3185 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "hostname": "*.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9afa4da832aee910661",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 15,
+      "weight": 65,
+      "port": 75,
+      "id": "6a71ead66626742fa760bbf2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo3.com."
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 15,
+      "weight": 65,
+      "port": 75,
+      "id": "6a71ead854a80320d818c31f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo4.com."
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 15,
+      "weight": 65,
+      "port": 75,
+      "id": "6a71eadf78738c23f42abca0",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "."
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 5,
+      "weight": 6,
+      "port": 7,
+      "id": "6a71ead4087cf61df81c0bb8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 5,
+      "weight": 60,
+      "port": 70,
+      "id": "6a71ead56626742ec760bbf4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo2.com."
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 52,
+      "weight": 6,
+      "port": 7,
+      "id": "6a71eada18b52c22e064e34c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 52,
+      "weight": 62,
+      "port": 7,
+      "id": "6a71eadc57eb87302ecf16d3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 300,
+      "priority": 52,
+      "weight": 62,
+      "port": 72,
+      "id": "6a71eadd78738c23482abcd7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 333,
+      "priority": 5,
+      "weight": 6,
+      "port": 7,
+      "id": "6a71eae157eb873175cf1608",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "type": "SRV",
+      "ttl": 4400,
+      "priority": 5,
+      "weight": 6,
+      "port": 7,
+      "id": "6a71eae31fec39273f761a59",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "hostname": "a.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71ea564582b02a56de1fdd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "xn--ndaaa.com."
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "hostname": "bar.bat.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb18b4a8d02e38bc50db",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.5.5.5"
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea46b4a8d02762bc51a6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eaef7b778a3103e6ef0a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.5.5.5"
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb0257eb873122cf17b5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.5.5.5"
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71eb3be93eba23be43ab18",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "redact2.acm-validations.aws."
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71ea395682b6259eb5aee4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea3a4582b027a4de1ffb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea3bc29ec12146ac13b7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea3dc29ec12152ac1326",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb3e9e30e42def24f71e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "91.42.1.1"
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71eb3fe93eba23a443aa4f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2003:dd:d7ff::fe71:ce77"
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb3f4812a80083ed9829",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "91.42.1.2"
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71eb405d50012d494c386d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2003:dd:d7ff::fe71:ce78"
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "hostname": "final.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a6eb21df6e9cc005943bfa1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "TestDNSProviders was successful!"
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "hostname": "final.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb52a99ab328791ff7ea",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "TestDNSProviders was successful!"
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "hostname": "final.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb5a6227373935c5673d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "TestDNSProviders was successful!"
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb193f5a832d63411709",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb19e93eba23a443aa39",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb1ac5142e308220a377",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9b962273727e7c56748",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9f447f1f8266f1eee66",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9f87b778a28bce6f1b9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "4.5.6.7"
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9fcb4a8d0258dbc51bd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea3f18b52c238864e094",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea3fd214ce1b7d7f8c15",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea41d81a70251bcf9867",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.4.5.6"
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea43b97fe028ddfee84b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.4.5.6"
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea476227372c84c567e1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.4.5.6"
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea477b778a2cade6efb6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea4a89a54f251f63352a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea4c9e30e42a0024f628",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eae8628aff294ca1c50c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eaf07b778a3103e6ef0c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eaf0950bab229d44b929",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb13f952312fdffc4d79",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb24971e97328ff089b9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb2574390a2fc5995a2a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "10.10.10.10"
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb29e93eba201b43aba2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "11.11.11.11"
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb2e624ead261f7713c4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "12.12.12.12"
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb30a99ab328791ff7e4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "13.13.13.13"
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb3289a54f299263356a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "14.14.14.14"
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71eb25622737323bc5674f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2003:dd:d7ff::fe71:aaaa"
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71e9fb624ead1e8c7714a7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "google.com."
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71e9fe83a93922d38270bf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "google2.com."
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71ea005682b62509b5afef",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71eb3b10faa22461ce2389",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "redact1.acm-validations.aws."
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 10,
+      "id": "6a71ea4812f0e922a10bbd57",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 10,
+      "id": "6a71eb256027812602380e35",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "aspmx.l.google.com."
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 20,
+      "id": "6a71ea4889a54f22fa63356c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 20,
+      "id": "6a71eb26971e973324f0899e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "alt1.aspmx.l.google.com."
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9f67b778a2adfe6eebf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "mx.google.com."
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 8,
+      "id": "6a71ea045682b62509b5aff1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a71ea129256a622daf24c8a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea33d81a7023cacf9922",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "v=spf1 ip4:99.99.99.99 -all"
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eaf142d664203e899264",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb1318b52c287564e179",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "hostname": "foo254.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea18f952312526fc4e6f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "hostname": "foo255.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea1af9523127dafc4d82",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "hostname": "foo256.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea1b8e474e1c072018eb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "hostname": "foo509.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea1d7b778a2adfe6eec4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "hostname": "foo510.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea1e9256a6227af24cab",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "hostname": "foo511.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea1fd81a702999cf971e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "hostname": "foo764.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea215921231c2b4314d4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "hostname": "foo765.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea220f7f502e3d5faa2f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "hostname": "foo766.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2474390a2784995cdd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "hostname": "foobt.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea265921231a2043159a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "blah`blah"
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "hostname": "foodq.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea28e93eba1cb443ab83",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "in\"side"
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea29971e972bd4f08982",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "in\"ter\"ior"
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2b6227372bf1c56911",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "\"left"
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2cd81a7023cacf98f3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "right\""
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "hostname": "fooosbs1.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea35f952312490fc4dbb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1back\\slash"
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "hostname": "fooosbs2.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea35d81a7026b8cf9792",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2back\\\\slash"
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "hostname": "fooosbs3.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea365682b62339b5af84",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3back\\\\\\slash"
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "hostname": "fooosbs4.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea366227372de8c5673f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "4back\\\\\\\\slash"
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "hostname": "foosc1.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2ebd82222806ec7989",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "semi;colon"
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "hostname": "foosc2.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2fd81a70264acf979f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "wssemi ; colon"
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "hostname": "foosp.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea308e474e1d50201b60",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "with spaces"
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "hostname": "foosq.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea2583a939235c8270dd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "quo'te"
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "hostname": "foows1.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71ea323f5a832377411b45",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "trailingws "
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "hostname": "mail.bat.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71eb1a87383b3183983f13",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ghs.googlehosted.com."
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "hostname": "mail.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71eaf1e93eba233343aa25",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ghs.googlehosted.com."
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "hostname": "mail.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71eb02581d5f27d3374b9e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ghs.googlehosted.com."
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 1000,
+      "id": "6a71e9e55682b62509b5ae9a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9ab57eb872792cf1736",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9ad13b9201c96def24f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "4.4.4.4"
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea0078738c19d62abd66",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea03b4a8d0263dbc50e7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea0b89a54f22d8633566",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.2"
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea12a4da8329b2910802",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb0074390a3112995a12",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb01e07126203264d6e8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb10581d5f296a374a4e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 500,
+      "id": "6a71e9ece93eba1ca743aa79",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 666,
+      "id": "6a71e9e357eb872a03cf17f8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "ALIAS",
+      "ttl": 300,
+      "id": "6a71eae4b97fe02d97fee768",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "ALIAS",
+      "ttl": 300,
+      "id": "6a71eae628e2fe2bca009720",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo2.com."
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "ALIAS",
+      "ttl": 300,
+      "id": "6a71eae857eb873122cf17ac",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "flag": 128,
+      "tag": "issue",
+      "id": "6a71ead1556b082e8e4b63b1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "letsencrypt.org"
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issue",
+      "id": "6a71eac75682b62936b5af97",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "letsencrypt.org"
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issue",
+      "id": "6a71eacd1fec39292b7618e8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issue",
+      "id": "6a71ead05682b62a82b5ae92",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "letsencrypt.org"
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issuewild",
+      "id": "6a71eac89256a627f8f24cd0",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "letsencrypt.org"
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issuewild",
+      "id": "6a71eacad214ce1ed77f8baf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "example.com"
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "CAA",
+      "ttl": 300,
+      "tag": "issuewild",
+      "id": "6a71eacc4a10712121afa6f5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": ";"
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 2,
+      "id": "6a71ea0c624ead1f857714f8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9bc47f1f826e01eee1a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9bd5682b62339b5aee9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 8,
+      "id": "6a71ea0ca984d020e19b34d6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "www.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a6c9b8892bb3b9192390112",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "dns1.p09.nsone.net."
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a6c9b89433c3093795c4e3b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "dns2.p09.nsone.net."
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a6c9b8a0c1a431740ec4a54",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "dns3.p09.nsone.net."
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a6c9b8a6658ac9571aa9c0b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "dns4.p09.nsone.net."
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a71ea15bd8222276bec78bf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ns1.foo.com."
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a71ea16bd8222276bec78c2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ns2.foo.com."
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb0147f1f830081eee19",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "hostname": "netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71eb1183a9392eab827092",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "asimple"
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea064a10711f47afa5fc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.3"
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 3,
+      "id": "6a71ea085f8c551f35882fb3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "nmx.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 9,
+      "id": "6a71ea073ec273297ea13292",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "www.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "hostname": "pager101-rec0000.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5b1fec3926e57618e7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "hostname": "pager101-rec0001.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5b581d5f2165374bbd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "hostname": "pager101-rec0002.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5c624ead24b77713bc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "hostname": "pager101-rec0003.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5c13b92022f0def2ae",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "hostname": "pager101-rec0004.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5d087cf61d231c09a5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "hostname": "pager101-rec0005.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5d47f1f82c361eee13",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "hostname": "pager101-rec0006.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5e13b920235fdef178",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "hostname": "pager101-rec0007.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5ebd82222b42ec7893",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "hostname": "pager101-rec0008.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5f83a93927778270bf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "hostname": "pager101-rec0009.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5f47f1f82ae71eef3c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "hostname": "pager101-rec0010.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea605921231dc64313dc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "hostname": "pager101-rec0011.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea60a99ab324a11ff1c9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "hostname": "pager101-rec0012.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea60628aff240ea1c508",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "hostname": "pager101-rec0013.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6142d6641e51899144",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "hostname": "pager101-rec0014.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6149968726851c758e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "hostname": "pager101-rec0015.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea629256a626aff24c89",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "hostname": "pager101-rec0016.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea631afc762bbdfe8238",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "hostname": "pager101-rec0017.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea635f8c5521af88346a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "hostname": "pager101-rec0018.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea644582b02a56de1ff6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "hostname": "pager101-rec0019.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea65b4a8d02762bc51cc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "hostname": "pager101-rec0020.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6574390a2ad9995a1b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "hostname": "pager101-rec0021.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6649968725bf1c7750",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "hostname": "pager101-rec0022.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea66e071261b3264d70b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "hostname": "pager101-rec0023.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea671afc762a0efe824a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "hostname": "pager101-rec0024.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6754a8031ced18c31b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "hostname": "pager101-rec0025.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6857eb873180cf1600",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "hostname": "pager101-rec0026.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea68602781228c380d76",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "hostname": "pager101-rec0027.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea699007371b11f66fa6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "hostname": "pager101-rec0028.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6913b9202461def171",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "hostname": "pager101-rec0029.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6ac29ec124abac11c5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "hostname": "pager101-rec0030.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6af9523127dafc4d93",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "hostname": "pager101-rec0031.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6ba99ab324a11ff1cb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "hostname": "pager101-rec0032.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6b78738c1d332abcab",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "hostname": "pager101-rec0033.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6c8e474e1c882019da",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "hostname": "pager101-rec0034.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6d5921231d4e4313e3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "hostname": "pager101-rec0035.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6d971e972d3cf089e8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "hostname": "pager101-rec0036.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6d950bab1fe644ba90",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "hostname": "pager101-rec0037.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6e556b082fa34b61d9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "hostname": "pager101-rec0038.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6e592123200c4313a6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "hostname": "pager101-rec0039.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6f7b778a2d2ce6f085",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "hostname": "pager101-rec0040.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea6f1fec3927a97618e6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "hostname": "pager101-rec0041.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea708e474e1d50201b78",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "hostname": "pager101-rec0042.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea70e93eba1e7743aac3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "hostname": "pager101-rec0043.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7157eb872f55cf1610",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "hostname": "pager101-rec0044.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea71628aff23e1a1c61f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "hostname": "pager101-rec0045.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7283a9392891827091",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "hostname": "pager101-rec0046.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea72b4a8d0283fbc5113",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "hostname": "pager101-rec0047.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7354a80320d818c25a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "hostname": "pager101-rec0048.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea739007371e4ff66ebf",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "hostname": "pager101-rec0049.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea74e071261c7a64d79f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "hostname": "pager101-rec0050.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea745682b62922b5ae92",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "hostname": "pager101-rec0051.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7578738c1c8c2ac2cb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "hostname": "pager101-rec0052.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7512f0e925e40bbc9e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "hostname": "pager101-rec0053.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea756626742bab60bbfb",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "hostname": "pager101-rec0054.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea76971e972d3cf089ed",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "hostname": "pager101-rec0055.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7687383b2b1198416e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "hostname": "pager101-rec0056.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7774390a29dc995a16",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "hostname": "pager101-rec0057.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea775921231f594313bd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "hostname": "pager101-rec0058.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7887383b2b11984171",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "hostname": "pager101-rec0059.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7849968726851c7593",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "hostname": "pager101-rec0060.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea79c29ec12407ac127b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "hostname": "pager101-rec0061.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea79950bab1f2d44b9f9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "hostname": "pager101-rec0062.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7af952312990fc4d8b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "hostname": "pager101-rec0063.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7b0f7f502cd55faa97",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "hostname": "pager101-rec0064.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7b1fec39265a7618f1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "hostname": "pager101-rec0065.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7c602781207f380e6e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "hostname": "pager101-rec0066.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7c64e6f42c26480b66",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "hostname": "pager101-rec0067.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7c13b9202370def19c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "hostname": "pager101-rec0068.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7d6227372d21c56a8b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "hostname": "pager101-rec0069.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7db4a8d0283fbc5116",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "hostname": "pager101-rec0070.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7e13b9202461def17e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "hostname": "pager101-rec0071.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7e42d6641e7589914a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "hostname": "pager101-rec0072.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7f64e6f42bb9480b65",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "hostname": "pager101-rec0073.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea7f9e30e42bee24f5bc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "hostname": "pager101-rec0074.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea805682b627f9b5ae9a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "hostname": "pager101-rec0075.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea80d81a702c98cf970f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "hostname": "pager101-rec0076.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea815682b62693b5aeb2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "hostname": "pager101-rec0077.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea81d214ce1c127f8bd5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "hostname": "pager101-rec0078.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea82e93eba208043aa48",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "hostname": "pager101-rec0079.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8210faa22124ce247e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "hostname": "pager101-rec0080.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8364e6f42ad2480d11",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "hostname": "pager101-rec0081.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8347f1f82a831eef40",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "hostname": "pager101-rec0082.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea84499687280b1c7596",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "hostname": "pager101-rec0083.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea84499687293e1c7588",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "hostname": "pager101-rec0084.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea85624ead21e57713c4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "hostname": "pager101-rec0085.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea85e071261ae064d831",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "hostname": "pager101-rec0086.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea867b778a2dcde6eeb3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "hostname": "pager101-rec0087.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea86087cf619b61c0a53",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "hostname": "pager101-rec0088.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea861fec3924dd761968",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "hostname": "pager101-rec0089.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8718b52c26cc64e094",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "hostname": "pager101-rec0090.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8889a54f2442633542",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "hostname": "pager101-rec0091.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea88c5142e29fd20a42c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "hostname": "pager101-rec0092.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8a556b082deb4b6216",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "hostname": "pager101-rec0093.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8a13b920235fdef201",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "hostname": "pager101-rec0094.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8c556b082e494b6264",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "hostname": "pager101-rec0095.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8cf9523129e6fc4d81",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "hostname": "pager101-rec0096.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8dc29ec125d3ac11bc",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "hostname": "pager101-rec0097.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8de93eba21b343aa60",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "hostname": "pager101-rec0098.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8e6626742bab60bc19",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "hostname": "pager101-rec0099.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea8f5682b627f9b5ae9f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "hostname": "pager101-rec0100.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea90499687281b1c758f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "hostname": "test.netlifytest.yesthattom.com",
+      "type": "ALIAS",
+      "ttl": 300,
+      "id": "6a71eaeb1afc762c22fe827b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "hostname": "test.netlifytest.yesthattom.com",
+      "type": "ALIAS",
+      "ttl": 300,
+      "id": "6a71eaeda984d024159b34e7",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo2.com."
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9a813b9201c96def24c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9aa54a8031e3e18c25a",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 333,
+      "id": "6a71e9df89a54f215f6335c2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 999,
+      "id": "6a71e9e147f1f828a01eee0f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "hostname": "testaaaa.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71e9b249968722041c75b8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2607:f8b0:4006:820::2006"
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "hostname": "testaaaa.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71e9b459212318594314d0",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2607:f8b0:4006:820::2013"
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71e9b65d5001256d4c381e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "www.google.com."
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71e9b8bd822225d6ec7872",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "www.yahoo.com."
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71e9ba1fec3922447619ac",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.netlifytest.yesthattom.com."
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "hostname": "testdefined.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb45628aff280fa1c6bd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "9.9.9.9"
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "hostname": "testdefined.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb4b78738c26c52abcf5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "hostname": "testignore.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb45d81a702c98cf98b8",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 100,
+      "id": "6a71e9c513b9201c96def39d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 100,
+      "id": "6a71e9d512f0e920440bbda0",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 100,
+      "id": "6a71e9dbe93eba1d1243aa27",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9c05f8c551fcc882fad",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9c23f5a8323a3411731",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9c3e93eba1c6a43aa83",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9d5581d5f2126374a4c",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "type": "MX",
+      "ttl": 300,
+      "priority": 5,
+      "id": "6a71e9dab4a8d0241dbc50e1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "hostname": "testtxt.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71e9c7d81a7028d0cf9714",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "hostname": "testtxt.netlifytest.yesthattom.com",
+      "type": "TXT",
+      "ttl": 300,
+      "id": "6a71e9ca28e2fe20a7009717",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "changed"
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9af556b0827434b61dd",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.5.5.5"
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9cb3ec2732905a13291",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9cc5d50011f734c38f6",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9cc83a93921d5827197",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9cf90073719dcf66f89",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9d013b9201c96def39f",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9d2087cf616151c0a3d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9d654a803180418c4aa",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9d9950bab1ea144b7f3",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9e3b4a8d02511bc50f2",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9e4e071261b4164d797",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 268,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71e9e718b52c1d0164e0a1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 269,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea07556b082b154b61ed",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.9"
+    }
+  },
+  {
+    "index": 270,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea0b9256a6227af24ca0",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.8"
+    }
+  },
+  {
+    "index": 271,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 400,
+      "id": "6a71e9ec57eb8728d3cf1685",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 272,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 400,
+      "id": "6a71e9ed7b778a292be6ef1d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 273,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 400,
+      "id": "6a71e9f0581d5f1f7e374ad9",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 274,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 700,
+      "id": "6a71e9f21fec39202176191e",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 275,
+    "value": {
+      "hostname": "www.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 700,
+      "id": "6a71e9f254a8031a1518c389",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 276,
+    "value": {
+      "hostname": "xn--fiq228c.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5454a8031cc418c42d",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 277,
+    "value": {
+      "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea50b4a8d02802bc50e1",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 278,
+    "value": {
+      "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71ea5287383b2a25983f10",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 279,
+    "value": {
+      "hostname": "xn--o-0gab.netlifytest.yesthattom.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "id": "6a71ea595682b62738b5ae93",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "xn--ndaaa.xn--vhquv."
+    }
+  },
+  {
+    "index": 280,
+    "value": {
+      "hostname": "xyz.netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a71ea108e474e1c88201914",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ns2.foo.com."
+    }
+  },
+  {
+    "index": 281,
+    "value": {
+      "hostname": "xyz.netlifytest.yesthattom.com",
+      "type": "NS",
+      "ttl": 300,
+      "id": "6a71ea1187383b25489840b4",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "ns1.foo.com."
+    }
+  },
+  {
+    "index": 282,
+    "value": {
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb2612f0e925ee0bbf60",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 283,
+    "value": {
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "type": "A",
+      "ttl": 300,
+      "id": "6a71eb27a984d026159b34b5",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "4.4.4.4"
+    }
+  },
+  {
+    "index": 284,
+    "value": {
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "id": "6a71eb271afc762f9afe824b",
+      "dns_zone_id": "6a6c97136493576deb86a800",
+      "value": "2003:dd:d7ff::fe71:cccc"
+    }
+  }
+]

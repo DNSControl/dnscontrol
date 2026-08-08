@@ -1,56 +1,8 @@
-// Package providergolden replays recorded provider data through a provider's
-// record conversion functions and compares the result with a golden file.
-//
-// A provider is enrolled by adding one small test per conversion function. The
-// test names the recorded data and adapts the provider's function to a uniform
-// signature:
-//
-//	func TestToRecordConfig(t *testing.T) {
-//		providergolden.CheckToRC(t, "netlify_torecordconfig",
-//			func(dc *models.DomainConfig, n dnsRecord) ([]*models.RecordConfig, error) {
-//				rc, err := toRecordConfig(dc, &n)
-//				return []*models.RecordConfig{rc}, err
-//			})
-//	}
-//
-// When both conversion directions use the same native type, CheckRoundTrip
-// verifies that converting a recorded RecordConfig to the native type and back
-// preserves its StringWithMeta representation.
-//
-// The data lives in the provider's test_data directory. A recording covers the
-// whole provider, so the input files are named after it, and the golden file is
-// named after the test that produced it:
-//
-//	test_data/<provider>.meta.json  recording metadata, including the zone
-//	test_data/<provider>.json       native records, as the provider's API returns them
-//	test_data/<provider>.records    DNS records, in the golden line format below
-//	test_data/<name>.golden         the expected output
-//
-// <provider> is the directory the test is running in, which is the same name
-// the integration tests record under, so a recording needs no renaming and one
-// recording feeds every test the provider has.
-//
-// CheckToRC reads the .json file, CheckToNative reads the .records file, and
-// both write the .golden file. A provider with no recorded data is skipped, so
-// providers can be enrolled one at a time.
-//
-// "go test <package> -update" rewrites the golden files from the recorded
-// inputs. It never contacts a provider's API and never rewrites an input file,
-// so gathering data from a live account stays a separate, explicit step.
-//
-// That step is Recorder, which collects both kinds of input from a provider as
-// it is used. The integration tests wrap their provider in one when they are
-// given "-record", and write what it collected to TestdataDir.
-//
-// A golden line is the record's label, TTL, class, type and RDATA, followed by
-// the metadata when the record has any:
-//
-//	www 300 IN A 192.0.2.1
-//	@ 3600 IN MX 10 mail.example.com.
-//	fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
+// Package providergolden records and replays exact provider conversion calls.
 package providergolden
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -58,6 +10,8 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -66,259 +20,272 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var update = flag.Bool("update", false, "rewrite the provider conversion golden files")
+var update = flag.Bool("update", false, "rewrite provider conversion expected-output files")
 
-const (
-	testDataDir = "test_data"
+const testDataDir = "test_data"
 
-	// Extensions of the two kinds of recorded input, written by Recorder and
-	// read by CheckToRC and CheckToNative.
-	metadataExt = ".meta.json"
-	nativesExt  = ".json"
-	recordsExt  = ".records"
-)
+var safeFilenamePart = regexp.MustCompile(`^[A-Za-z0-9_.-]+$`)
 
-type recordingMetadata struct {
-	Domain string `json:"domain"`
+func conversionFilename(kind, function, domain, ext string) string {
+	if !safeFilenamePart.MatchString(function) || !safeFilenamePart.MatchString(domain) {
+		panic(fmt.Sprintf("unsafe conversion filename: function=%q domain=%q", function, domain))
+	}
+	return fmt.Sprintf("%s_%s_%s.%s", kind, function, domain, ext)
 }
 
-// CheckToRC replays the native records recorded in test_data/<provider>.json
-// through convert and compares the records it returns with
-// test_data/<name>.golden.
-func CheckToRC[N any](t *testing.T, name string, convert func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error)) {
-	t.Helper()
-
-	input, err := inputFile(nativesExt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	data, ok, err := loadInput(testDataDir, input)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
-	}
-
-	var natives []N
-	if err := json.Unmarshal(data, &natives); err != nil {
-		t.Fatalf("%s: %v", input, err)
-	}
-
-	dc := models.MustNewDomainConfig(RecordedDomain(t))
-	var b strings.Builder
-	for i, native := range natives {
-		recs, err := convert(dc, native)
-		if err != nil {
-			t.Fatalf("%s: record %d: %v", input, i, err)
-		}
-		for _, rc := range recs {
-			if rc == nil {
-				continue
-			}
-			b.WriteString(rc.StringWithMeta())
-			b.WriteByte('\n')
-		}
-	}
-
-	report(t, testDataDir, name, []byte(b.String()))
+func toRCInputFile(function, domain string) string {
+	return conversionFilename("recorded_torc_input", function, domain, "json")
 }
 
-// CheckToNative replays the records recorded in test_data/<provider>.records
-// through convert and compares the native records it returns with
-// test_data/<name>.golden.
-func CheckToNative[N any](t *testing.T, name string, convert func(rc *models.RecordConfig) (N, error)) {
-	t.Helper()
-
-	input, err := inputFile(recordsExt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	data, ok, err := loadInput(testDataDir, input)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
-	}
-
-	recs, err := parseRecords(models.MustNewDomainConfig(RecordedDomain(t)), string(data))
-	if err != nil {
-		t.Fatalf("%s: %v", input, err)
-	}
-
-	natives := make([]N, 0, len(recs))
-	for i, rc := range recs {
-		native, err := convert(rc)
-		if err != nil {
-			t.Fatalf("%s: record %d: %v", input, i, err)
-		}
-		natives = append(natives, native)
-	}
-
-	got, err := json.MarshalIndent(natives, "", "  ")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	report(t, testDataDir, name, append(got, '\n'))
+func toRCOutputFile(function, domain string) string {
+	return conversionFilename("expected_torc_output", function, domain, "records")
 }
 
-// CheckRoundTrip replays the records in test_data/<provider>.records through
-// both provider conversion functions and verifies that their DNSControl
-// representation is unchanged.
-func CheckRoundTrip[N any](t *testing.T,
-	toNative func(rc *models.RecordConfig) (N, error),
-	toRC func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error),
-) {
+func toNativeInputFile(function, domain string) string {
+	return conversionFilename("recorded_tonative_input", function, domain, "records")
+}
+
+func toNativeOutputFile(function, domain string) string {
+	return conversionFilename("expected_tonative_output", function, domain, "json")
+}
+
+type indexedValue[T any] struct {
+	Index int `json:"index"`
+	Value T   `json:"value"`
+}
+
+// CheckToRC replays every domain recorded for function.
+func CheckToRC[N any, R ~[]*models.RecordConfig](t *testing.T, function string, convert func(*models.DomainConfig, N) (R, error)) {
 	t.Helper()
-
-	input, err := inputFile(recordsExt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	data, ok, err := loadInput(testDataDir, input)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
-	}
-
-	dc := models.MustNewDomainConfig(RecordedDomain(t))
-	recs, err := parseRecords(dc, string(data))
-	if err != nil {
-		t.Fatalf("%s: %v", input, err)
-	}
-
-	for i, before := range recs {
-		native, err := toNative(before)
-		if err != nil {
-			t.Fatalf("%s: record %d: convert to native: %v", input, i, err)
-		}
-		after, err := toRC(dc, native)
-		if err != nil {
-			t.Fatalf("%s: record %d: convert back to RecordConfig: %v", input, i, err)
-		}
-
-		after = nonNilRecords(after)
-		if len(after) != 1 {
-			t.Errorf("%s: record %d: round trip returned %d records, want 1", input, i, len(after))
+	metadata := loadMetadataForTest(t)
+	found := false
+	for _, recording := range metadata.Recordings {
+		if !slices.Contains(recording.ToRC, function) {
 			continue
 		}
-		if want, got := before.StringWithMeta(), after[0].StringWithMeta(); got != want {
-			t.Errorf("%s: record %d changed in round trip\nwant: %s\n got: %s", input, i, want, got)
-		}
+		found = true
+		recording := recording
+		t.Run(recording.Domain, func(t *testing.T) {
+			input := toRCInputFile(function, recording.Domain)
+			data := mustLoad(t, input)
+			var natives []indexedValue[N]
+			if err := json.Unmarshal(data, &natives); err != nil {
+				t.Fatalf("%s: %v", input, err)
+			}
+			validateIndexes(t, input, indexesOf(natives))
+
+			dc := models.MustNewDomainConfig(recording.Domain)
+			var got strings.Builder
+			for _, item := range natives {
+				before := mustMarshal(t, item.Value)
+				records, err := convert(dc, item.Value)
+				if err != nil {
+					t.Fatalf("%s: index %d: %v", input, item.Index, err)
+				}
+				after := mustMarshal(t, item.Value)
+				if !bytes.Equal(before, after) {
+					t.Errorf("%s: index %d: ToRC mutated its native input", input, item.Index)
+				}
+				for _, record := range recordStrings(models.Records(records)) {
+					fmt.Fprintf(&got, "%d\t%s\n", item.Index, record)
+				}
+			}
+			reportFile(t, toRCOutputFile(function, recording.Domain), []byte(got.String()))
+		})
+	}
+	if !found {
+		t.Skipf("no ToRC recording for %s", function)
 	}
 }
 
-// RecordedDomain returns the zone captured alongside the provider data. The
-// environment is deliberately not consulted: replaying a recording must not
-// depend on the credentials or integration-test zone of the person running it.
-func RecordedDomain(t *testing.T) string {
+// CheckToNative replays every domain recorded for function. Records sharing an
+// index are passed to convert as one conversion invocation.
+func CheckToNative[N any](t *testing.T, function string, convert func(*models.DomainConfig, models.Records) (N, error)) {
 	t.Helper()
-
-	input, err := inputFile(metadataExt)
-	if err != nil {
-		t.Fatal(err)
-	}
-	data, ok, err := loadInput(testDataDir, input)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
-		t.Fatalf("%s is missing; record the provider again with -record", filepath.Join(testDataDir, input))
-	}
-
-	var metadata recordingMetadata
-	if err := json.Unmarshal(data, &metadata); err != nil {
-		t.Fatalf("%s: %v", input, err)
-	}
-	if metadata.Domain == "" {
-		t.Fatalf("%s: domain is empty", input)
-	}
-	return metadata.Domain
-}
-
-func nonNilRecords(recs []*models.RecordConfig) []*models.RecordConfig {
-	n := 0
-	for _, rc := range recs {
-		if rc != nil {
-			recs[n] = rc
-			n++
+	metadata := loadMetadataForTest(t)
+	found := false
+	for _, recording := range metadata.Recordings {
+		if !slices.Contains(recording.ToNative, function) {
+			continue
 		}
+		found = true
+		recording := recording
+		t.Run(recording.Domain, func(t *testing.T) {
+			input := toNativeInputFile(function, recording.Domain)
+			groups, err := parseIndexedRecords(models.MustNewDomainConfig(recording.Domain), string(mustLoad(t, input)))
+			if err != nil {
+				t.Fatalf("%s: %v", input, err)
+			}
+			outputs := make([]indexedValue[N], 0, len(groups))
+			dc := models.MustNewDomainConfig(recording.Domain)
+			for _, group := range groups {
+				before := mustMarshal(t, group.Records)
+				native, err := convert(dc, group.Records)
+				if err != nil {
+					t.Fatalf("%s: index %d: %v", input, group.Index, err)
+				}
+				after := mustMarshal(t, group.Records)
+				if !bytes.Equal(before, after) {
+					t.Errorf("%s: index %d: ToNative mutated its RecordConfig input", input, group.Index)
+				}
+				outputs = append(outputs, indexedValue[N]{Index: group.Index, Value: native})
+			}
+			data, err := json.MarshalIndent(outputs, "", "  ")
+			if err != nil {
+				t.Fatal(err)
+			}
+			reportFile(t, toNativeOutputFile(function, recording.Domain), append(data, '\n'))
+		})
 	}
-	return recs[:n]
+	if !found {
+		t.Skipf("no ToNative recording for %s", function)
+	}
 }
 
-// inputFile returns the recorded input file with extension ext that belongs to
-// the provider under test: the directory the test is running in is the
-// provider's package directory, and a recording is named after it.
-func inputFile(ext string) (string, error) {
-	wd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Base(wd) + ext, nil
-}
-
-// loadInput reads a recorded input file. ok is false when the file does not
-// exist, which means the provider has not been enrolled yet.
-func loadInput(dir, filename string) (data []byte, ok bool, err error) {
-	data, err = os.ReadFile(filepath.Join(dir, filename))
-	if errors.Is(err, fs.ErrNotExist) {
-		return nil, false, nil
-	}
-	if err != nil {
-		return nil, false, err
-	}
-	return data, true, nil
-}
-
-// report compares got with the golden file, or rewrites the golden file when
-// -update was given.
-func report(t *testing.T, dir, name string, got []byte) {
+// CheckRoundTrip verifies each indexed ToNative input through both directions.
+func CheckRoundTrip[N any, R ~[]*models.RecordConfig](t *testing.T, toNativeFunction string,
+	toNative func(*models.DomainConfig, models.Records) (N, error),
+	toRC func(*models.DomainConfig, N) (R, error),
+) {
 	t.Helper()
-
-	skip, diff, err := compareGolden(dir, name, got, *update)
-	switch {
-	case err != nil:
-		t.Fatal(err)
-	case skip != "":
-		t.Skip(skip)
-	case diff != "":
-		t.Errorf("%s.golden does not match the conversion (-want +got):\n%s", name, diff)
+	metadata := loadMetadataForTest(t)
+	for _, recording := range metadata.Recordings {
+		if !slices.Contains(recording.ToNative, toNativeFunction) {
+			continue
+		}
+		recording := recording
+		t.Run(recording.Domain, func(t *testing.T) {
+			dc := models.MustNewDomainConfig(recording.Domain)
+			groups, err := parseIndexedRecords(dc, string(mustLoad(t, toNativeInputFile(toNativeFunction, recording.Domain))))
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, group := range groups {
+				native, err := toNative(dc, group.Records)
+				if err != nil {
+					t.Fatalf("index %d: convert to native: %v", group.Index, err)
+				}
+				after, err := toRC(dc, native)
+				if err != nil {
+					t.Fatalf("index %d: convert to RecordConfig: %v", group.Index, err)
+				}
+				if diff := cmp.Diff(recordStrings(group.Records), recordStrings(models.Records(after))); diff != "" {
+					t.Errorf("index %d changed in round trip (-before +after):\n%s", group.Index, diff)
+				}
+			}
+		})
 	}
 }
 
-// compareGolden compares got with <dir>/<name>.golden, or writes got to it when
-// update is true. It returns a reason to skip when the golden file does not
-// exist, and a diff when the contents differ.
-func compareGolden(dir, name string, got []byte, update bool) (skip, diff string, err error) {
-	path := filepath.Join(dir, name+".golden")
+type indexedRecordGroup struct {
+	Index   int
+	Records models.Records
+}
 
-	if update {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return "", "", err
+func parseIndexedRecords(dc *models.DomainConfig, text string) ([]indexedRecordGroup, error) {
+	var groups []indexedRecordGroup
+	positions := map[int]int{}
+	for lineNumber, line := range strings.Split(text, "\n") {
+		if strings.TrimSpace(line) == "" {
+			continue
 		}
-		return "", "", os.WriteFile(path, got, 0o644)
+		prefix, record, ok := strings.Cut(line, "\t")
+		if !ok {
+			return nil, fmt.Errorf("line %d: expected index, tab, and record", lineNumber+1)
+		}
+		index64, err := strconv.ParseInt(prefix, 10, 32)
+		if err != nil || index64 <= 0 {
+			return nil, fmt.Errorf("line %d: invalid index %q", lineNumber+1, prefix)
+		}
+		index := int(index64)
+		position, exists := positions[index]
+		if !exists {
+			if len(groups) != 0 && index <= groups[len(groups)-1].Index {
+				return nil, fmt.Errorf("line %d: indexes must increase", lineNumber+1)
+			}
+			positions[index] = len(groups)
+			groups = append(groups, indexedRecordGroup{Index: index})
+			position = len(groups) - 1
+		}
+		rc, err := parseRecord(dc, record)
+		if err != nil {
+			return nil, fmt.Errorf("line %d: %w", lineNumber+1, err)
+		}
+		groups[position].Records = append(groups[position].Records, rc)
 	}
+	return groups, nil
+}
 
+func indexesOf[T any](values []indexedValue[T]) []int {
+	indexes := make([]int, len(values))
+	for i := range values {
+		indexes[i] = values[i].Index
+	}
+	return indexes
+}
+
+func validateIndexes(t *testing.T, filename string, indexes []int) {
+	t.Helper()
+	for i, index := range indexes {
+		if index <= 0 || i != 0 && index <= indexes[i-1] {
+			t.Fatalf("%s: indexes must be positive and increasing: %v", filename, indexes)
+		}
+	}
+}
+
+func loadMetadataForTest(t *testing.T) recordingMetadata {
+	t.Helper()
+	metadata, err := readMetadata(testDataDir)
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			t.Skipf("%s has no recorded data", filepath.Join(testDataDir, "meta.json"))
+		}
+		t.Fatal(err)
+	}
+	return metadata
+}
+
+func mustLoad(t *testing.T, filename string) []byte {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join(testDataDir, filename))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return data
+}
+
+func mustMarshal(t *testing.T, value any) []byte {
+	t.Helper()
+	data, err := json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return data
+}
+
+func reportFile(t *testing.T, filename string, got []byte) {
+	t.Helper()
+	path := filepath.Join(testDataDir, filename)
+	if *update {
+		if err := os.WriteFile(path, got, 0o644); err != nil {
+			t.Fatal(err)
+		}
+		return
+	}
 	want, err := os.ReadFile(path)
 	if errors.Is(err, fs.ErrNotExist) {
-		return fmt.Sprintf("%s does not exist: run \"go test . -update\" to record it", path), "", nil
+		t.Skipf("%s does not exist: run go test . -update", path)
 	}
 	if err != nil {
-		return "", "", err
+		t.Fatal(err)
 	}
-
-	return "", cmp.Diff(strings.Split(string(want), "\n"), strings.Split(string(got), "\n")), nil
+	if diff := cmp.Diff(strings.Split(string(want), "\n"), strings.Split(string(got), "\n")); diff != "" {
+		t.Errorf("%s does not match (-want +got):\n%s", filename, diff)
+	}
 }
 
-// parseRecords parses the golden line format. Blank lines are ignored.
+// parseRecords parses unindexed record text. It remains useful for focused
+// parser tests and migration tooling.
 func parseRecords(dc *models.DomainConfig, text string) ([]*models.RecordConfig, error) {
 	var recs []*models.RecordConfig
 	for i, line := range strings.Split(text, "\n") {
@@ -336,13 +303,11 @@ func parseRecords(dc *models.DomainConfig, text string) ([]*models.RecordConfig,
 
 func parseRecord(dc *models.DomainConfig, line string) (*models.RecordConfig, error) {
 	record, metatext := cutMetadata(line)
-
 	fields := strings.SplitN(record, " ", 5)
 	if len(fields) != 5 {
 		return nil, fmt.Errorf("%q: expected \"label ttl IN type rdata\"", line)
 	}
 	name, ttltext, class, rtype, rdata := fields[0], fields[1], fields[2], fields[3], fields[4]
-
 	ttl, err := strconv.ParseUint(ttltext, 10, 32)
 	if err != nil {
 		return nil, fmt.Errorf("%q: %w", line, err)
@@ -350,12 +315,10 @@ func parseRecord(dc *models.DomainConfig, line string) (*models.RecordConfig, er
 	if class != "IN" {
 		return nil, fmt.Errorf("%q: expected class \"IN\"", line)
 	}
-
 	rc, err := dc.NewRecordConfigParse(name, uint32(ttl), rtype, rdata)
 	if err != nil {
 		return nil, err
 	}
-
 	metadata, err := parseMetadata(metatext)
 	if err != nil {
 		return nil, fmt.Errorf("%q: %w", line, err)
@@ -363,12 +326,9 @@ func parseRecord(dc *models.DomainConfig, line string) (*models.RecordConfig, er
 	if len(metadata) != 0 {
 		rc.Metadata = metadata
 	}
-
 	return rc, nil
 }
 
-// cutMetadata splits a line at the first semicolon that is not inside a quoted
-// string.
 func cutMetadata(line string) (record, metadata string) {
 	quoted := false
 	for i := 0; i < len(line); i++ {
@@ -386,7 +346,6 @@ func cutMetadata(line string) (record, metadata string) {
 	return line, ""
 }
 
-// parseMetadata parses a sequence of key="value" pairs.
 func parseMetadata(s string) (map[string]string, error) {
 	metadata := map[string]string{}
 	s = strings.TrimLeft(s, " ")
@@ -405,7 +364,6 @@ func parseMetadata(s string) (map[string]string, error) {
 	return metadata, nil
 }
 
-// cutQuoted removes a Go-quoted string from the front of s.
 func cutQuoted(s string) (value, rest string, err error) {
 	if !strings.HasPrefix(s, `"`) {
 		return "", "", fmt.Errorf("metadata %q: expected a quoted value", s)

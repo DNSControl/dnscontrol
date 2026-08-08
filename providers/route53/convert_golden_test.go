@@ -10,7 +10,7 @@ import (
 )
 
 func TestNativeToRecordsGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "route53_nativetorecords",
+	providergolden.CheckToRC(t, "nativeToRecords",
 		func(dc *models.DomainConfig, native r53Types.ResourceRecordSet) ([]*models.RecordConfig, error) {
 			return nativeToRecords(dc, native, dc.Name)
 		})

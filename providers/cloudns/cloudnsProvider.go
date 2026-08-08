@@ -220,7 +220,10 @@ func (c *cloudnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		createNSRecordCorrections []*models.Correction
 	)
 	for _, m := range create {
+		input := models.Records{m.Desired}
+		before := providers.BeginToNative(c.observer, "toReq", input)
 		req, err := toReq(m.Desired)
+		providers.EndToNative(c.observer, "toReq", before, input, req, err)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -255,7 +258,10 @@ func (c *cloudnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 	for _, m := range modify {
 		id := m.Existing.Original.(*domainRecord).ID
+		input := models.Records{m.Desired}
+		before := providers.BeginToNative(c.observer, "toReq", input)
 		req, err := toReq(m.Desired)
+		providers.EndToNative(c.observer, "toReq", before, input, req, err)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -344,7 +350,9 @@ func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	}
 	existingRecords := make([]*models.RecordConfig, len(records))
 	for i := range records {
+		before := providers.BeginToRC(c.observer, "toRc", &records[i])
 		existingRecords[i], err = toRc(dc, &records[i])
+		providers.EndToRC(c.observer, "toRc", before, &records[i], models.Records{existingRecords[i]}, err)
 		if err != nil {
 			return nil, err
 		}

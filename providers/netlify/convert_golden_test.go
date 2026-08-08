@@ -8,7 +8,7 @@ import (
 )
 
 func TestToRecordConfigGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "netlify_torecordconfig",
+	providergolden.CheckToRC(t, "toRecordConfig",
 		func(dc *models.DomainConfig, native dnsRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRecordConfig(dc, &native)
 			return []*models.RecordConfig{rc}, err
@@ -16,8 +16,8 @@ func TestToRecordConfigGolden(t *testing.T) {
 }
 
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "netlify_toreq",
-		func(rc *models.RecordConfig) (*dnsRecordCreate, error) {
-			return toReq(rc), nil
+	providergolden.CheckToNative(t, "toReq",
+		func(_ *models.DomainConfig, records models.Records) (*dnsRecordCreate, error) {
+			return toReq(records[0]), nil
 		})
 }

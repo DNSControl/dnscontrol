@@ -9,7 +9,7 @@ import (
 )
 
 func TestToRcGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "digitalocean_torc",
+	providergolden.CheckToRC(t, "toRc",
 		func(dc *models.DomainConfig, native godo.DomainRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRc(dc, &native)
 			return []*models.RecordConfig{rc}, err
@@ -17,8 +17,8 @@ func TestToRcGolden(t *testing.T) {
 }
 
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "digitalocean_toreq",
-		func(rc *models.RecordConfig) (*godo.DomainRecordEditRequest, error) {
-			return toReq(rc), nil
+	providergolden.CheckToNative(t, "toReq",
+		func(_ *models.DomainConfig, records models.Records) (*godo.DomainRecordEditRequest, error) {
+			return toReq(records[0]), nil
 		})
 }

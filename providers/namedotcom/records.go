@@ -8,6 +8,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -22,7 +23,9 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	actual := make([]*models.RecordConfig, len(records))
 	for i, r := range records {
+		before := providers.BeginToRC(n.observer, "toRecord", r)
 		actual[i], err = toRecord(r, dc)
+		providers.EndToRC(n.observer, "toRecord", before, r, models.Records{actual[i]}, err)
 		if err != nil {
 			return nil, err
 		}

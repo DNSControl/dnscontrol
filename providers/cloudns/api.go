@@ -12,11 +12,13 @@ import (
 	"sync"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // cloudnsProvider is the handle for the ClouDNS API.
 type cloudnsProvider struct {
-	creds struct {
+	observer providers.ConversionObserver
+	creds    struct {
 		id       string
 		password string
 		subid    string
@@ -27,6 +29,10 @@ type cloudnsProvider struct {
 	sync.Mutex       // Protects all access to the following fields:
 	domainIndex      map[string]string
 	nameserversNames []string
+}
+
+func (c *cloudnsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 type requestParams map[string]string

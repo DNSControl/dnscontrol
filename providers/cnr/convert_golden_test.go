@@ -8,9 +8,8 @@ import (
 )
 
 func TestCreateRecordStringGolden(t *testing.T) {
-	domain := providergolden.RecordedDomain(t)
-	providergolden.CheckToNative(t, "cnr_createrecordstring",
-		func(rc *models.RecordConfig) (string, error) {
-			return (&Client{}).createRecordString(rc, domain)
+	providergolden.CheckToNative(t, "createRecordString",
+		func(dc *models.DomainConfig, records models.Records) (string, error) {
+			return (&Client{}).createRecordString(records[0], dc.Name)
 		})
 }

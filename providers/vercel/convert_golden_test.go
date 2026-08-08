@@ -8,7 +8,7 @@ import (
 )
 
 func TestVercelRecordToRCGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "vercel_vercelrecordtorc",
+	providergolden.CheckToRC(t, "vercelRecordToRC",
 		func(dc *models.DomainConfig, native DNSRecord) ([]*models.RecordConfig, error) {
 			rc, err := vercelRecordToRC(dc, native)
 			return []*models.RecordConfig{rc}, err
@@ -16,13 +16,14 @@ func TestVercelRecordToRCGolden(t *testing.T) {
 }
 
 func TestToVercelCreateRequestGolden(t *testing.T) {
-	domain := providergolden.RecordedDomain(t)
-	providergolden.CheckToNative(t, "vercel_tovercelcreaterequest",
-		func(rc *models.RecordConfig) (createDNSRecordRequest, error) {
-			return toVercelCreateRequest(domain, rc)
+	providergolden.CheckToNative(t, "toVercelCreateRequest",
+		func(dc *models.DomainConfig, records models.Records) (createDNSRecordRequest, error) {
+			return toVercelCreateRequest(dc.Name, records[0])
 		})
 }
 
 func TestToVercelUpdateRequestGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "vercel_tovercelupdaterequest", toVercelUpdateRequest)
+	providergolden.CheckToNative(t, "toVercelUpdateRequest", func(_ *models.DomainConfig, records models.Records) (updateDNSRecordRequest, error) {
+		return toVercelUpdateRequest(records[0])
+	})
 }

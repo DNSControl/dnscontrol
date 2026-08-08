@@ -9,7 +9,7 @@ import (
 )
 
 func TestNativeToRecordsGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "azureprivatedns_nativetorecords",
+	providergolden.CheckToRC(t, "nativeToRecords",
 		func(dc *models.DomainConfig, native adns.RecordSet) ([]*models.RecordConfig, error) {
 			return nativeToRecords(&native, dc), nil
 		})

@@ -9,7 +9,7 @@ import (
 )
 
 func TestToRecordGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "namedotcom_torecord",
+	providergolden.CheckToRC(t, "toRecord",
 		func(dc *models.DomainConfig, native namecom.Record) ([]*models.RecordConfig, error) {
 			rc, err := toRecord(&native, dc)
 			return []*models.RecordConfig{rc}, err

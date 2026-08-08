@@ -1,192 +1,60 @@
-# Provider conversion tests
+# Adding provider conversion golden tests
 
-Most providers convert between their API's native record format and
-`models.RecordConfig`. Those conversion functions are only exercised by the
-integration tests, which need credentials and a test zone. When a provider's
-author becomes unavailable, nobody can run them.
+`pkg/providergolden` records and replays the exact conversion calls exercised by
+integration tests. See [goldenfiles.md](goldenfiles.md) for the recording
+workflow and file formats.
 
-`pkg/providergolden` replays recorded data through those functions and compares
-the result with a golden file. The recorded data is checked in, so the tests run
-in `go test ./...` with no credentials and no network.
+## Instrument the provider
 
-Providers are enrolled one at a time. A provider with no recorded data is
-skipped, never failed.
-
-## Enrolling a provider
-
-### 1. Record the data
-
-The integration tests already drive every conversion a provider has, so the
-easiest way to collect the data is to record an integration run. Add `-record`
-to the command you normally use:
-
-```shell
-go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
-  -args -verbose -profile CLOUDFLAREAPI -record
-```
-
-The recording goes to `providers/<package>/test_data`, the test-data directory of
-the package the provider under test is implemented in, so `CLOUDFLAREAPI` writes
-to `providers/cloudflare/test_data`. Use `-recorddir` to write somewhere else. A
-relative `-recorddir` is relative to the top of the repository:
-
-```shell
-go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
-  -args -verbose -profile CLOUDFLAREAPI -recorddir providers/cloudflare/test_data
-```
-
-Either way two files are written, named after the provider's package:
-
-- `cloudflare.records` — every record the tests asked the provider to store,
-  which is what a `CheckToNative` function is given.
-- `cloudflare.json` — the native record each returned record came from, read
-  from `RecordConfig.Original`. That is what a `CheckToRC` function is given. It
-  is written only for providers that fill `Original` in.
-
-Those are the names the tests read, so there is nothing to rename. One recording
-feeds every test the provider has: a provider with two `CheckToNative` functions
-replays the same `.records` file through both. Read the files before committing
-them, though: they contain whatever your zone contained during the run.
-
-{% hint style="warning" %}
-The domain the test passes to `CheckToRC` and `CheckToNative` has to be the zone
-the data was recorded against, and nothing enforces it. `providergolden.Domain`
-takes it from the same `<PROVIDER>_DOMAIN` variable the integration tests use, so
-a recording and the test that replays it agree as long as that variable holds the
-zone the data came from. Where they disagree, native records carry labels as the
-API returned them, so a fixture recorded against `realzone.net` replayed by a
-test that says `example.com` produces a golden whose labels are still fully
-qualified:
-
-```
-www.realzone.net 300 IN A 192.0.2.1
-realzone.net 3600 IN MX 10 mail.example.org.
-```
-
-`LabelFromFQDNNoDot` and its siblings print `ERROR: ... called WRONG` when this
-happens, but they return the name lowercased rather than shortened and the test
-passes, so `-update` writes that golden and it becomes the baseline. Set the
-domain before recording the golden, not after.
-
-A golden recorded against a zone other than `example.com` only matches while
-`<PROVIDER>_DOMAIN` still names that zone, so it does not match in a checkout
-that does not set it. Record from `example.com` when the golden is to be
-committed.
-{% endhint %}
-
-{% hint style="warning" %}
-`Original` is recorded as it stands once the provider has built the zone, which
-is not always what the API sent. A converter that canonicalizes a value in place
-before storing the record in `Original` records a native that already carries
-the canonicalization, and a golden replayed from it never exercises the line
-that applies it. Check the recorded natives against the API's own responses when
-a provider's converter writes to the record it was given.
-{% endhint %}
-
-Without `-record` nothing is collected, no file is written and the provider is
-not wrapped, so a normal run is unchanged. Under `-record` the provider is
-wrapped in a `models.DNSProvider`, which is all the integration tests ask of it
-today. A test that type-asserts a provider to an optional interface such as
-`ZoneCreator` would need the wrapper to forward that interface too.
-
-Data can also be collected by hand. It goes in `providers/<package>/test_data`
-under the package's own name, `providers/netlify/test_data/netlify.json` and
-`providers/netlify/test_data/netlify.records`. The `.json` file is a JSON array
-of the native records your provider's API returns:
-
-```json
-[
-  {
-    "content": "192.0.2.1",
-    "id": 42,
-    "name": "www.example.com",
-    "ttl": 3600,
-    "type": "A"
-  }
-]
-```
-
-{% hint style="warning" %}
-Record from a throwaway zone. Native records carry labels, addresses, and record
-and zone IDs verbatim, which for a LAN appliance means your internal DNS ends up
-in a public repository.
-{% endhint %}
-
-### 2. Add the test
-
-The test adapts your conversion function to a uniform signature. That adapter is
-the only code you write:
+Add a `providers.ConversionObserver` field to the provider and implement
+`SetConversionObserver`. Around each conversion boundary, pass the same input
+to `Begin` before conversion and `End` after conversion, together with the
+result and error:
 
 ```go
-var testDomain = providergolden.Domain("NETLIFY")
+before := providers.BeginToRC(p.observer, "toRc", native)
+records, err := toRc(dc, native)
+providers.EndToRC(p.observer, "toRc", before, native, records, err)
+```
 
-func TestToRecordConfigGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "netlify_torecordconfig", testDomain,
-		func(dc *models.DomainConfig, native dnsRecord) ([]*models.RecordConfig, error) {
-			rc, err := toRecordConfig(dc, &native)
-			return []*models.RecordConfig{rc}, err
-		})
+For the other direction:
+
+```go
+input := models.Records{record}
+before := providers.BeginToNative(p.observer, "toReq", input)
+request, err := toReq(record)
+providers.EndToNative(p.observer, "toReq", before, input, request, err)
+```
+
+Observe the conversion at every call site used by integration tests. Use the
+conversion function's exact name as the observer name.
+
+## Add replay tests
+
+Adapters receive the domain from `test_data/meta.json`; no environment variable
+is needed.
+
+```go
+func TestToRcGolden(t *testing.T) {
+    providergolden.CheckToRC(t, "toRc",
+        func(dc *models.DomainConfig, native domainRecord) (models.Records, error) {
+            rc, err := toRc(dc, &native)
+            return models.Records{rc}, err
+        })
 }
-```
 
-The name is the golden file's, `netlify_torecordconfig.golden`, so name it after
-the function under test. The recorded input is `netlify.json`, found from the
-directory the test runs in rather than from that name, so several tests can
-replay one recording.
-
-`providergolden.Domain` returns `$NETLIFY_DOMAIN`, or `example.com` when that
-is unset, so the same test replays a recording of your own zone and the
-committed fixtures.
-
-Use `CheckToNative` for the other direction: `toNative`, `toReq`,
-`recordToCreateRequest`, or whatever your provider calls it. Its input is a list
-of DNS records rather than native records, so it reads a `.records` file:
-
-```go
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "netlify_toreq", testDomain,
-		func(rc *models.RecordConfig) (*dnsRecordCreate, error) {
-			return toReq(rc), nil
-		})
+    providergolden.CheckToNative(t, "toReq",
+        func(_ *models.DomainConfig, records models.Records) (requestParams, error) {
+            return toReq(records[0])
+        })
 }
 ```
 
-The `.golden` file produced by `CheckToRC` is a valid `.records` file, so the
-usual way to write one is to copy it and add whatever else you want covered.
+`CheckToNative` passes all records sharing an index in one call, which supports
+record-set conversions. `CheckRoundTrip` can additionally verify providers
+whose two conversions are compatible.
 
-### 3. Generate the golden files
-
-```shell
-go test ./providers/netlify/ -update
-```
-
-Read the generated files before committing them. `-update` records whatever the
-code does today, including bugs.
-
-## The golden format
-
-One line per record: the label, TTL, class, type and RDATA, followed by the
-record's metadata when it has any:
-
-```
-www 300 IN A 192.0.2.1
-@ 3600 IN MX 10 mail.example.com.
-fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
-```
-
-`CheckToNative` writes its golden as JSON, since a native record has no
-zonefile representation.
-
-## Updating
-
-Run `go test ./providers/<provider>/ -update` after an intentional change and
-review the diff. `-update` rewrites only the golden files: the recorded inputs
-are never touched, so updating a golden never needs an API key.
-
-## What these tests do and do not catch
-
-They pin a provider's conversion functions against their own past behaviour, so
-they catch a refactor that changes what a provider sends or understands. They do
-not catch a conversion that has been wrong since the day it was written, and
-they say nothing about the correction and apply path. That is still worth having
-for a provider whose integration tests nobody can run.
+An unrecorded function is skipped. Once a passing integration run is available,
+record it with `-record`, inspect the new files, and run the provider package
+normally to verify replay.

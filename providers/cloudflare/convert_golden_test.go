@@ -10,7 +10,7 @@ import (
 
 func TestNativeToRecordGolden(t *testing.T) {
 	c := &cloudflareProvider{}
-	providergolden.CheckToRC(t, "cloudflare_nativetorecord",
+	providergolden.CheckToRC(t, "nativeToRecord",
 		func(dc *models.DomainConfig, native cloudflare.DNSRecord) ([]*models.RecordConfig, error) {
 			if native.Type == "" {
 				// TODO(tlim): Figure out why we're getting natives with no type.  Something to do with CLOUDFLAREAPI_SINGLE_REDIRECT.

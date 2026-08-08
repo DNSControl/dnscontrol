@@ -8,7 +8,7 @@ import (
 )
 
 func TestToRcGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "packetframe_torc",
+	providergolden.CheckToRC(t, "toRc",
 		func(dc *models.DomainConfig, native domainRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRc(dc, &native)
 			return []*models.RecordConfig{rc}, err
@@ -16,16 +16,16 @@ func TestToRcGolden(t *testing.T) {
 }
 
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "packetframe_toreq",
-		func(rc *models.RecordConfig) (*domainRecord, error) {
-			return toReq("zone-1", rc)
+	providergolden.CheckToNative(t, "toReq",
+		func(_ *models.DomainConfig, records models.Records) (*domainRecord, error) {
+			return toReq("zone-1", records[0])
 		})
 }
 
 func TestConversionRoundTrip(t *testing.T) {
-	providergolden.CheckRoundTrip(t,
-		func(rc *models.RecordConfig) (*domainRecord, error) {
-			return toReq("zone-1", rc)
+	providergolden.CheckRoundTrip(t, "toReq",
+		func(_ *models.DomainConfig, records models.Records) (*domainRecord, error) {
+			return toReq("zone-1", records[0])
 		},
 		func(dc *models.DomainConfig, native *domainRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRc(dc, native)
