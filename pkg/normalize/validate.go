@@ -315,10 +315,10 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 		}
 		switch rec.Type {
 		case "A":
-			addr, _ := netip.ParseAddr(rec.GetTargetField())
+			addr := rec.AsA().Addr
 			trs, err := transform.IPToList(addr, transforms)
 			if err != nil {
-				return fmt.Errorf("import_transform: TransformIP(%v, %v) returned err=%w", rec.GetTargetField(), transforms, err)
+				return fmt.Errorf("import_transform: TransformIP(%v, %v) returned err=%w", addr, transforms, err)
 			}
 			for _, tr := range trs {
 				r := newRec(rec, ttl)
@@ -344,7 +344,7 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 			}
 			r.SetLabel(l, dstDomain.Name)
 
-			rd, err := models.MakeCNAME(dstDomain.Name, rec.Metadata, nrc.Flags{}, transformCNAME(r.GetTargetField(), srcDomain.Name, dstDomain.Name, suffixstrip))
+			rd, err := models.MakeCNAME(dstDomain.Name, rec.Metadata, nrc.Flags{}, transformCNAME(r.AsCNAME().Target, srcDomain.Name, dstDomain.Name, suffixstrip))
 			if err != nil {
 				return err
 			}
@@ -496,7 +496,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", f.Tag))
 				}
 			case "OPENPGPKEY":
-				target := rec.GetTargetField()
+				target := rec.AsOPENPGPKEY().PublicKey
 				if target, err = transform.OPENPGPKEY(target); err != nil {
 					errs = append(errs, err)
 				} else {
@@ -556,20 +556,24 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				suffixstrip := rec.Metadata["transform_suffixstrip"]
 				transformTable := rec.Metadata["transform_table"]
 				ttl := rec.TTL
+				var targetDomain string
 				if rec.GetRDATA() != nil {
 					rd := rec.AsIMPORTTRANSFORM()
 					transformTable = rd.TransformTable
 					ttl = uint32(rd.TTL)
 					suffixstrip = rd.SuffixStrip
+					targetDomain = rd.TargetDomain
+				} else {
+					targetDomain = rec.GetTargetField()
 				}
 				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
 					errs = append(errs, err)
 					continue
 				}
-				c := config.FindDomain(rec.GetTargetField())
+				c := config.FindDomain(targetDomain)
 				if c == nil {
-					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", rec.GetTargetField())
+					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", targetDomain)
 					errs = append(errs, err)
 				}
 				err = importTransform(c, domain, table, ttl, suffixstrip)

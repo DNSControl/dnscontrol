@@ -327,8 +327,9 @@ func TestTransforms(t *testing.T) {
 			continue
 		}
 		for r, rec := range dc.Records {
-			if rec.GetTargetField() != test.expectedRecords[r] {
-				t.Errorf("test %d at index %d: records don't match. Expect %s but found %s.", i, r, test.expectedRecords[r], rec.GetTargetField())
+			got := rec.AsA().Addr.String()
+			if got != test.expectedRecords[r] {
+				t.Errorf("test %d at index %d: records don't match. Expect %s but found %s.", i, r, test.expectedRecords[r], got)
 				continue
 			}
 		}

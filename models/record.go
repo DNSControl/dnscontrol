@@ -443,7 +443,12 @@ func Downcase(recs []*RecordConfig) {
 		switch r.Type { // #rtype_variations
 		case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA":
 			// Target is case insensitive. Downcase it.
+			r0 := r.target
 			r.target = strings.ToLower(r.target)
+			r1 := r.target
+			if r0 != r1 {
+				panic(fmt.Sprintf("assertion failed: Downcase: %q != %q", r0, r1))
+			}
 			// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
 		case "A", "CAA", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "DHCID", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SSHFP", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
 			// Do nothing. (IP address or case sensitive target)

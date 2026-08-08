@@ -54,14 +54,20 @@ func recordConfigToNative(rc *models.RecordConfig, _ string) *CreateRecordReques
 		name = name[:len(name)-1]
 	}
 
-	target := rc.GetTargetField()
-
+	var target string
 	switch rc.Type {
+	case "A":
+		target = rc.AsA().Addr.String()
+	case "AAAA":
+		target = rc.AsAAAA().Addr.String()
 	case "CNAME":
+		target = rc.AsCNAME().Target
 		// Remove trailing dot
 		if len(target) > 0 && target[len(target)-1] == '.' {
 			target = target[:len(target)-1]
 		}
+	default:
+		target = rc.GetTargetField()
 	}
 
 	return &CreateRecordRequest{

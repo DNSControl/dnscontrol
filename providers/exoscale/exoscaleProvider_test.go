@@ -90,7 +90,7 @@ func TestNativeToRecord_SRVNoDoubleDot(t *testing.T) {
 				t.Fatal("expected record, got nil")
 			}
 			// target should end with exactly one dot
-			target := rc.GetTargetField()
+			target := rc.AsSRV().Target
 			if len(target) >= 2 && target[len(target)-1] == '.' && target[len(target)-2] == '.' {
 				t.Errorf("double trailing dot in SRV target: %q", target)
 			}
@@ -107,7 +107,7 @@ func TestNativeToRecord_CNAMENoDoubleDot(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error for content %q: %v", content, err)
 		}
-		target := rc.GetTargetField()
+		target := rc.AsCNAME().Target
 		if len(target) >= 2 && target[len(target)-1] == '.' && target[len(target)-2] == '.' {
 			t.Errorf("double trailing dot in CNAME target for input %q: got %q", content, target)
 		}
