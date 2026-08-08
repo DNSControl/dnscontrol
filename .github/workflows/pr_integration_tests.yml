@@ -373,7 +373,7 @@ jobs:
                 -cfredirect=true                                          \
                 -cfflatten=false                                          \
                 -cftags=false                                             \
-                -end $END                                                 \
+                -end "$END"
           else
             echo "Skip test for ${{ matrix.provider }} provider"
           fi
