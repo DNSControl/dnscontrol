@@ -19,7 +19,6 @@
           "rdata": {
             "Location": "https://example.com"
           },
-          "target": "https://example.com",
           "ttl": 300,
           "type": "PORKBUN_URLFWD",
           "typenum": 65297

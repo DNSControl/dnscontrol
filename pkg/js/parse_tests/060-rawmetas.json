@@ -17,7 +17,6 @@
             "Mbox": "user2.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17
@@ -34,7 +33,6 @@
             "Mbox": "user2.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17

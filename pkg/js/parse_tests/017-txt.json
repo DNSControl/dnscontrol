@@ -15,7 +15,6 @@
               "simple"
             ]
           },
-          "target": "simple",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -30,7 +29,6 @@
               "ws at end "
             ]
           },
-          "target": "ws at end ",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -45,7 +43,6 @@
               "one"
             ]
           },
-          "target": "one",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -60,7 +57,6 @@
               "bonieclyde"
             ]
           },
-          "target": "bonieclyde",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -75,7 +71,6 @@
               "strawwoodbrick"
             ]
           },
-          "target": "strawwoodbrick",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16

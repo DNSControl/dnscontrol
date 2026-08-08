@@ -19,7 +19,6 @@
             "Retry": 900,
             "Serial": 0
           },
-          "target": "86400",
           "ttl": 300,
           "type": "SOA",
           "typenum": 6

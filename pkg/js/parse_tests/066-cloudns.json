@@ -16,7 +16,6 @@
           "rdata": {
             "Target": "https://example.com"
           },
-          "target": "https://example.com",
           "ttl": 300,
           "type": "CLOUDNS_WR",
           "typenum": 65290

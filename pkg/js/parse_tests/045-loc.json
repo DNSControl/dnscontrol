@@ -19,7 +19,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "9997600",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -38,7 +37,6 @@
             "Version": 0,
             "VertPre": 19
           },
-          "target": "9997599",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -57,7 +55,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10001033",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -76,7 +73,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000600",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -95,7 +91,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10001000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -114,7 +109,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "9995600",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -133,7 +127,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "4294967295",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -152,7 +145,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "0",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -171,7 +163,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -190,7 +181,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -209,7 +199,6 @@
             "Version": 0,
             "VertPre": 153
           },
-          "target": "10000000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -228,7 +217,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000300",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -247,7 +235,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10030000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -266,7 +253,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10092000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -285,7 +271,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10224000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -304,7 +289,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000400",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -323,7 +307,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000400",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -342,7 +325,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000400",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -361,7 +343,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000400",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -380,7 +361,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10030000",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -399,7 +379,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10000300",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -418,7 +397,6 @@
             "Version": 0,
             "VertPre": 0
           },
-          "target": "10001900",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29

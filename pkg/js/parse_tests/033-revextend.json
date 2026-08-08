@@ -20,7 +20,6 @@
           "rdata": {
             "Ns": "ns1.example.com."
           },
-          "target": "ns1.example.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -34,7 +33,6 @@
             "Ns": "ns2.example.org."
           },
           "subdomain": "7",
-          "target": "ns2.example.org.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -57,7 +55,6 @@
           "rdata": {
             "Ns": "ns1.fooexample.com."
           },
-          "target": "ns1.fooexample.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -71,7 +68,6 @@
             "Ns": "ns1.example.com."
           },
           "subdomain": "lego",
-          "target": "ns1.example.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -85,7 +81,6 @@
             "Ns": "ns1.lego.example.com."
           },
           "subdomain": "lego",
-          "target": "ns1.lego.example.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2

@@ -16,7 +16,6 @@
           "rdata": {
             "PullZoneID": 12345
           },
-          "target": "12345",
           "ttl": 300,
           "type": "BUNNY_DNS_PZ",
           "typenum": 65287
@@ -32,7 +31,6 @@
           "rdata": {
             "Target": "https://example.com"
           },
-          "target": "https://example.com",
           "ttl": 300,
           "type": "BUNNY_DNS_RDR",
           "typenum": 65320

@@ -13,7 +13,6 @@
           "rdata": {
             "Target": "bar.com."
           },
-          "target": "bar.com.",
           "ttl": 300,
           "type": "DNAME",
           "typenum": 39

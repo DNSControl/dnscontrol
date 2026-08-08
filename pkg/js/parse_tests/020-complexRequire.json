@@ -13,7 +13,6 @@
           "rdata": {
             "Addr": "1.2.3.4"
           },
-          "target": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -26,7 +25,6 @@
           "rdata": {
             "Target": "foo.com."
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -39,7 +37,6 @@
           "rdata": {
             "Target": "foo.com."
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -52,7 +49,6 @@
           "rdata": {
             "Target": "foo.com."
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -65,7 +61,6 @@
           "rdata": {
             "Target": "foo.com."
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5

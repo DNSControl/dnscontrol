@@ -20,7 +20,6 @@
           "rdata": {
             "Addr": "10.1.1.1"
           },
-          "target": "10.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -33,7 +32,6 @@
           "rdata": {
             "Addr": "10.2.2.2"
           },
-          "target": "10.2.2.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -56,7 +54,6 @@
           "rdata": {
             "Addr": "10.3.3.3"
           },
-          "target": "10.3.3.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -69,7 +66,6 @@
           "rdata": {
             "Addr": "10.4.4.4"
           },
-          "target": "10.4.4.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -92,7 +88,6 @@
           "rdata": {
             "Addr": "10.5.5.5"
           },
-          "target": "10.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -105,7 +100,6 @@
           "rdata": {
             "Addr": "10.7.7.7"
           },
-          "target": "10.7.7.7",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -118,7 +112,6 @@
           "rdata": {
             "Addr": "10.8.8.8"
           },
-          "target": "10.8.8.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -131,7 +124,6 @@
           "rdata": {
             "Addr": "10.6.6.6"
           },
-          "target": "10.6.6.6",
           "ttl": 300,
           "type": "A",
           "typenum": 1
