@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
@@ -125,13 +126,11 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	}
 
 	var val string
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
-	case dnsv2.TypeTXT:
-		f := rc.AsTXT()
+	case dnsrdatav2.TXT:
 		val = f.String()
 
 	default:
@@ -165,9 +164,8 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 	}
 
 	var val string
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
 
@@ -188,8 +186,7 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 	// 		val = u
 	// 	}
 
-	case dnsv2.TypeTXT:
-		f := rc.AsTXT()
+	case dnsrdatav2.TXT:
 		val = f.String()
 	default:
 		val = rc.GetRDATA().String()

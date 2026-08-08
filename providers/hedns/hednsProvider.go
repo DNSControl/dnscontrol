@@ -17,6 +17,7 @@ import (
 	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -759,13 +760,11 @@ func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *model
 	}
 
 	// Work out the content
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		values.Set("Priority", strconv.FormatUint(uint64(f.Preference), 10))
 		values.Set("Content", f.Mx)
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	case dnsrdatav2.SRV:
 		values.Del("Content")
 		values.Set("Target", f.Target)
 		values.Set("Priority", strconv.FormatUint(uint64(f.Priority), 10))

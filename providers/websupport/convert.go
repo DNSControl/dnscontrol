@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -42,21 +42,18 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		TTL:  rc.TTL,
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		r.Priority = intPtr(f.Preference)
 		r.Content = trimDot(f.Mx)
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	case dnsrdatav2.SRV:
 		r.Priority = intPtr(f.Priority)
 		r.Weight = intPtr(f.Weight)
 		r.Port = intPtr(f.Port)
 		r.Content = trimDot(f.Target)
-	case dnsv2.TypeTXT:
+	case dnsrdatav2.TXT:
 		r.Content = rc.GetTargetTXTJoined()
-	case dnsv2.TypeCNAME:
-		f := rc.AsCNAME()
+	case dnsrdatav2.CNAME:
 		r.Content = trimDot(f.Target)
 	default:
 		r.Content = rc.GetRDATA().String()

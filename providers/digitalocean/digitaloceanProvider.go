@@ -10,6 +10,7 @@ import (
 	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -360,29 +361,26 @@ func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
 		TTL:  int(rc.TTL),
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeCAA:
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CAA:
 		// DO API requires that a CAA target ends in dot.
 		// Interestingly enough, the value returned from API doesn't
 		// contain a trailing dot.
-		f := rc.AsCAA()
 		// r.Data = target + "."
 		r.Tag = f.Tag
 		r.Flags = int(f.Flag)
 		r.Data = f.Value + "."
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	case dnsrdatav2.MX:
 		// DO uses the same field for MX and SRV priority
 		r.Priority = int(f.Preference)
 		r.Data = f.Mx
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	case dnsrdatav2.SRV:
 		// DO uses the same field for MX and SRV priority
 		r.Priority = int(f.Priority)
 		r.Weight = int(f.Weight)
 		r.Port = int(f.Port)
 		r.Data = f.Target
-	case dnsv2.TypeTXT:
+	case dnsrdatav2.TXT:
 		// TXT records are the one place where DO combines many items into one field.
 		r.Data = rc.GetTargetTXTJoined()
 	default:
