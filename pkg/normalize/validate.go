@@ -499,10 +499,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				target := rec.AsOPENPGPKEY().PublicKey
 				if target, err = transform.OPENPGPKEY(target); err != nil {
 					errs = append(errs, err)
-				} else {
-					if err := rec.SetTarget(target); err != nil {
-						errs = append(errs, err)
-					}
+					// } else {
+					// 	if err := rec.SetTarget(target); err != nil {
+					// 		errs = append(errs, err)
+					// 	}
 				}
 			case "TLSA":
 				f := rec.AsTLSA()
@@ -1015,7 +1015,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 		for i, newIP := range newIPs {
 			if i == 0 && newIP.Compare(ip) != 0 {
 				// replace target of first record if different
-				if err := rec.SetTarget(newIP.String()); err != nil {
+				if err := rec.SetTargetIP(newIP); err != nil {
 					return err
 				}
 				rec.RecomputeV3Fields(domain.Name)
@@ -1025,7 +1025,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err != nil {
 					return err
 				}
-				if err := cpy.SetTarget(newIP.String()); err != nil {
+				if err := cpy.SetTargetIP(newIP); err != nil {
 					return err
 				}
 				cpy.RecomputeV3Fields(domain.Name)

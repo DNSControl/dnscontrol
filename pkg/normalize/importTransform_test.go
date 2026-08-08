@@ -5,13 +5,8 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
-
-func makeRC(label, domain, target string, rc models.RecordConfig) *models.RecordConfig {
-	rc.SetLabel(label, domain)
-	rc.MustSetTarget(target)
-	return &rc
-}
 
 func TestImportTransform(t *testing.T) {
 	const transformDouble = "0.0.0.0~1.1.1.1~~9.0.0.0,10.0.0.0"
@@ -26,8 +21,10 @@ func TestImportTransform(t *testing.T) {
 	d1.Metadata = map[string]string{"transform_table": transformSingle}
 	dcDst.AddRecordConfig(d1)
 
-	d2 := makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM"})
-	d2.Metadata = map[string]string{"transform_table": transformDouble}
+	// d2 := makeRC("@", "internal", "stackexchange.com", models.RecordConfig{Type: "IMPORT_TRANSFORM"})
+	// d2.Metadata = map[string]string{"transform_table": transformDouble}
+	d2 := dcSrc.MustNewRecordConfig("@", 0, privatetypes.TypeIMPORTTRANSFORM, transformDouble, 299, "com.internal", "internal")
+	d2.Metadata["transform_table"] = transformDouble
 	dcDst.AddRecordConfig(d2)
 
 	d2.FixRD(dcDst.Name)

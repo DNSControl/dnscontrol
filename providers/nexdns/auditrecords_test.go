@@ -100,13 +100,13 @@ func TestRejectUnroutableIP(t *testing.T) {
 				rtype = "AAAA"
 			}
 
-			rc := &models.RecordConfig{Type: rtype}
-			rc.SetLabel("@", testOrigin)
-			if err := rc.SetTarget(tt.address); err != nil {
+			dc := models.MustNewDomainConfig(testOrigin)
+			rc, err := dc.NewRecordConfig("@", 0, rtype, tt.address)
+			if err != nil {
 				t.Fatalf("SetTarget() error = %v", err)
 			}
 
-			err := rejectUnroutableIP(rc)
+			err = rejectUnroutableIP(rc)
 			if tt.reject && err == nil {
 				t.Errorf("%s (%s) was accepted, want rejected", tt.address, tt.what)
 			}

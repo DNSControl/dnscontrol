@@ -6,9 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 // RecomputeV3Fields re-derives the cached "V3 Fields" (.RDATA and
@@ -19,9 +17,9 @@ import (
 // (which compares .ComparableV3) would keep seeing the pre-mutation values and
 // report a spurious change.
 func (rc *RecordConfig) RecomputeV3Fields(origin string) {
-	rc.ClearRDATA()
-	rc.copyLegacyFieldsToRD(origin)
-	rc.RegenerateComparableV3()
+	// rc.ClearRDATA()
+	// rc.copyLegacyFieldsToRD(origin)
+	// rc.RegenerateComparableV3()
 }
 
 // FixRD populates the "V3 Fields": .TypeNum, .RDATA and .ComparableV3. It is non-destructive for .RDATA and .ComparableV3 if those are non-nil.
@@ -106,16 +104,16 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 		return
 	}
 
-	isEnabled := nrc.Flags{}
+	// isEnabled := nrc.Flags{}
 
 	switch rc.TypeNum {
 
 	// These record types have no fields in RecordConfig (other than .rdata) to backfill.
 
 	case privatetypes.TypeAKAMAITLC:
-		rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, isEnabled, rc.AnswerType, rc.GetTargetField())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := privatetypesrdata.MakeAKAMAITLC(origin, nil, isEnabled, rc.AnswerType, rc.GetTargetField())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 
 	case dnsv2.TypeCAA:
 	case dnsv2.TypeDNSKEY:
@@ -147,17 +145,17 @@ func (rc *RecordConfig) copyLegacyFieldsToRD(origin string) {
 	// These record types need to pull from their legacy fields in RecordConfig to make the RDATA.
 
 	case dnsv2.TypeA:
-		rd, err := MakeA(origin, nil, isEnabled, rc.GetTargetIP())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeA(origin, nil, isEnabled, rc.GetTargetIP())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case privatetypes.TypeALIAS:
 		// rd, err := privatetypesrdata.MakeALIAS(origin, nil, isEnabled, rc.GetTargetField())
 		// errorChk(err)
 		// rc.SetRDATA(rd)
 	case dnsv2.TypeAAAA:
-		rd, err := MakeAAAA(origin, nil, isEnabled, rc.GetTargetIP())
-		errorChk(err)
-		rc.SetRDATA(rd)
+		// rd, err := MakeAAAA(origin, nil, isEnabled, rc.GetTargetIP())
+		// errorChk(err)
+		// rc.SetRDATA(rd)
 	case privatetypes.TypeADGUARDHOMEAPASSTHROUGH:
 		// rd, err := privatetypesrdata.MakeADGUARDHOMEAPASSTHROUGH(origin, nil, isEnabled)
 		// errorChk(err)

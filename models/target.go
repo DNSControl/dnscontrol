@@ -40,26 +40,21 @@ func (rc *RecordConfig) GetTargetField() string {
 		}
 		return fx[len(fx)-1]
 	}
-	return rc.target
+	// return rc.target
+	panic("GetTargetField")
 }
 
 // GetTargetIP returns the net.IP stored in .target.
 func (rc *RecordConfig) GetTargetIP() netip.Addr {
-	if rc.Type != "A" && rc.Type != "AAAA" {
-		panic(fmt.Errorf("GetTargetIP called on an inappropriate rtype (%s)", rc.Type))
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.A:
+		return f.Addr
+	case dnsrdatav2.AAAA:
+		return f.Addr
 	}
-
-	if rc.GetRDATA() != nil {
-		if rc.Type == "A" {
-			return rc.rdata.(dnsrdatav2.A).Addr
-		}
-		if rc.Type == "AAAA" {
-			return rc.rdata.(dnsrdatav2.AAAA).Addr
-		}
-	}
-
-	ip, _ := netip.ParseAddr(rc.target)
-	return ip
+	panic(fmt.Sprintf("wrong type GetTargetIP(%T)", rc.GetRDATA()))
+	// ip, _ := netip.ParseAddr(rc.target)
+	// return ip
 }
 
 // GetTargetDebug returns a string with the various fields spelled out.
@@ -119,23 +114,23 @@ func (rc *RecordConfig) GetTargetDebug() string {
 //}
 
 // SetTarget sets the target, assuming that the rtype is appropriate.
-func (rc *RecordConfig) SetTarget(target string) error {
-	// TXT stores its value in .rdata (the single source of truth). Route legacy
-	// SetTarget callers there so .target is never the TXT store.
-	if rc.Type == "TXT" {
-		return rc.SetTargetTXT(target)
-	}
-	rc.target = target
-	return nil
-}
+// func (rc *RecordConfig) SetTarget(target string) error {
+// 	// TXT stores its value in .rdata (the single source of truth). Route legacy
+// 	// SetTarget callers there so .target is never the TXT store.
+// 	if rc.Type == "TXT" {
+// 		return rc.SetTargetTXT(target)
+// 	}
+// 	rc.target = target
+// 	return nil
+// }
 
-// MustSetTarget is like SetTarget, but panics if an error occurs.
-// It should only be used in _test.go files and in the init() function.
-func (rc *RecordConfig) MustSetTarget(target string) {
-	if err := rc.SetTarget(target); err != nil {
-		panic(err)
-	}
-}
+// // MustSetTarget is like SetTarget, but panics if an error occurs.
+// // It should only be used in _test.go files and in the init() function.
+// func (rc *RecordConfig) MustSetTarget(target string) {
+// 	if err := rc.SetTarget(target); err != nil {
+// 		panic(err)
+// 	}
+// }
 
 // SetTargetIP sets the target to an IP, verifying this is an appropriate rtype.
 func (rc *RecordConfig) SetTargetIP(ip netip.Addr) error {
@@ -148,12 +143,14 @@ func (rc *RecordConfig) SetTargetIP(ip netip.Addr) error {
 			return err
 		}
 		rc.SetRDATA(rd)
+		return nil
 	case dnsv2.TypeAAAA:
 		rd, err := MakeAAAA("", nil, nrc.Flags{}, ip)
 		if err != nil {
 			return err
 		}
 		rc.SetRDATA(rd)
+		return nil
 	}
 	return fmt.Errorf("invalid IP %v", ip)
 }

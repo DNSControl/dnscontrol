@@ -75,16 +75,16 @@ func AddNSRecords(dc *models.DomainConfig) {
 		if err != nil {
 			panic("Should not happen: " + err.Error())
 		}
-		t := ns.Name
-		if !strings.HasSuffix(t, ".") {
-			t += "."
-		}
-		if err := rc.SetTarget(t); err != nil {
-			fmt.Printf("failed AddNSRecords rc.SetTarget(%q): %s\n", t, err)
-		}
-
-		// Hack. We should use a NewRecordConfig constructor instead.
-		rc.FixRD(dc.Name)
+		// t := ns.Name
+		// if !strings.HasSuffix(t, ".") {
+		// 	t += "."
+		// }
+		// if err := rc.SetTarget(t); err != nil {
+		// 	fmt.Printf("failed AddNSRecords rc.SetTarget(%q): %s\n", t, err)
+		// }
+		//
+		// // Hack. We should use a NewRecordConfig constructor instead.
+		// rc.FixRD(dc.Name)
 
 		dc.Records = append(dc.Records, rc)
 	}

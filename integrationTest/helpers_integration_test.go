@@ -280,7 +280,7 @@ func replaceIntegrationTargetTokens(rc *models.RecordConfig, subscriptionID, res
 		return
 	}
 
-	_ = rc.SetTarget(target)
+	// _ = rc.SetTarget(target)
 	rc.ClearRDATA()
 }
 
