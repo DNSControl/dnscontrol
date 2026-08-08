@@ -48,7 +48,8 @@ jobs:
     - name: Run unit tests
       run: |
         go install gotest.tools/gotestsum@v1.13.0
-        gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
+        echo "PACKAGE_NAMES=$PACKAGE_NAMES"
+        gotestsum --junitfile "${TEST_RESULTS}/gotestsum-report.xml" -- $PACKAGE_NAMES
 #    - name: Enforce Go Formatted Code
 #      run: "[ `go fmt ./... | wc -l` -eq 0 ]"
     - uses: actions/upload-artifact@v7.0.1

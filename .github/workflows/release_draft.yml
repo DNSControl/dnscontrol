@@ -32,7 +32,7 @@ on:
         default: ""
         type: string
       skip_longtest:
-        description: "DANGER: skip the full longtest integration gate (use only when tests are known-broken or for an emergency release)"
+        description: "Only do short-test"
         required: false
         default: false
         type: boolean
@@ -133,7 +133,7 @@ jobs:
           {
             echo "## ⚠️ longtest integration gate SKIPPED"
             echo ""
-            echo "Release \`${{ inputs.version }}\` was cut with **skip_longtest=true** — the full integration suite did NOT run."
+            echo "Release \`${{ inputs.version }}\` was cut with **skip_longtest=true**"
           } >> "$GITHUB_STEP_SUMMARY"
 
       # DISPATCH ONLY: tag the tip of the selected branch and push the tag.
@@ -232,8 +232,8 @@ jobs:
           fi
 
       # use GoReleaser to build for all platforms.
-      - id: release
-        name: Goreleaser release
+      - name: Goreleaser release
+        id: release
         uses: goreleaser/goreleaser-action@v7
         with:
           distribution: goreleaser

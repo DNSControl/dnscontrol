@@ -439,10 +439,9 @@ jobs:
         shell: bash
         env:
           # Converts label names into a single string for easier grep/matching
-          LABELS: ${{ join(github.event.pull_request.labels.*.name, ' ') }}
+          LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          END=1
-          #echo "END: Default set to $END"
+          END="1"
 
           # Release gate: release_draft.yml calls this via workflow_call with
           # full=true, which forces the entire suite (not just the smoke test).
@@ -460,7 +459,7 @@ jobs:
               echo "END: longtest not set. No change. END=$END"
             fi
           else
-              echo "END: Not a pull request. No change. END=$END"
+            echo "END: Not a pull request. No change. END=$END"
           fi
           # Check if branch is main
           # NB(tlim): This used to be github.base_ref but it was changed to
@@ -493,18 +492,21 @@ jobs:
           go install gotest.tools/gotestsum@v1.13.0
           if [ -n "$${{ matrix.provider }}_DOMAIN" ] ; then
             # NB(tlim): THe output of gotestsum is written to two places
-            gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml --jsonfile ${TEST_RESULTS}/gotestsum-output.txt -- \
-                -timeout 70m                                              \
-                -v                                                        \
-                ./...                                                     \
-                -args                                                     \
-                -verbose                                                  \
-                -profile ${{ matrix.provider }}                           \
-                -cfworkers=true                                           \
-                -cfredirect=true                                          \
-                -cfflatten=false                                          \
-                -cftags=false                                             \
-                -end "$END"
+            gotestsum \
+              --junitfile "${TEST_RESULTS}/gotestsum-report.xml"        \
+              --jsonfile "${TEST_RESULTS}/gotestsum-output.txt"         \
+              --                                                        \
+              -timeout 70m                                              \
+              -v                                                        \
+              ./...                                                     \
+              -args                                                     \
+              -verbose                                                  \
+              -profile "${{ matrix.provider }}"                         \
+              -cfworkers=true                                           \
+              -cfredirect=true                                          \
+              -cfflatten=false                                          \
+              -cftags=false                                             \
+              -end "$END"
           else
             echo "Skip test for ${{ matrix.provider }} provider"
           fi
