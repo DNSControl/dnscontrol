@@ -300,11 +300,6 @@
     "customer-number": "$NETCUP_CUSTOMER_NUMBER",
     "domain": "$NETCUP_DOMAIN"
   },
-  "NEXDNS": {
-    "TYPE": "NEXDNS",
-    "api_token": "$NEXDNS_API_TOKEN",
-    "domain": "$NEXDNS_DOMAIN"
-  },
   "NETLIFY": {
     "TYPE": "NETLIFY",
     "domain": "$NETLIFY_DOMAIN",
@@ -316,6 +311,11 @@
     "apiKey": "$NETNOD_APIKEY",
     "apiUrl": "$NETNOD_APIURL",
     "domain": "$NETNOD_DOMAIN"
+  },
+  "NEXDNS": {
+    "TYPE": "NEXDNS",
+    "api_token": "$NEXDNS_API_TOKEN",
+    "domain": "$NEXDNS_DOMAIN"
   },
   "NS1": {
     "TYPE": "NS1",
