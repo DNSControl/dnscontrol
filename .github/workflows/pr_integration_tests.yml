@@ -372,7 +372,7 @@ jobs:
                 -cfflatten=false                                          \
                 -cftags=false                                             \
                 -end $END                                                 \
-                | >&1                                                     \
+                >&1                                                       \
                 | tee ${TEST_RESULTS}/gotestsum-output.txt
           else
             echo "Skip test for ${{ matrix.provider }} provider"
