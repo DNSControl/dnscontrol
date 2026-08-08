@@ -21,8 +21,8 @@ type Client struct {
 	client      *cnrcl.APIClient
 }
 
-func (c *Client) SetConversionObserver(observer providers.ConversionObserver) {
-	c.observer = observer
+func (client *Client) SetConversionObserver(observer providers.ConversionObserver) {
+	client.observer = observer
 }
 
 var features = providers.DocumentationNotes{

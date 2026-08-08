@@ -22,8 +22,8 @@ type packetframeProvider struct {
 	domainIndex map[string]zoneInfo
 }
 
-func (p *packetframeProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	p.observer = observer
+func (api *packetframeProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	api.observer = observer
 }
 
 // newPacketframe creates the provider.

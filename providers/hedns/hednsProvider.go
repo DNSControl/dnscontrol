@@ -157,8 +157,8 @@ type hednsProvider struct {
 	zoneCache  zonecache.ZoneCache[uint64]
 }
 
-func (h *hednsProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	h.observer = observer
+func (c *hednsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 // Record stores the HEDNS specific zone and record IDs.

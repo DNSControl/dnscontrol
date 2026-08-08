@@ -31,8 +31,8 @@ type porkbunProvider struct {
 	maxDuration time.Duration
 }
 
-func (p *porkbunProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	p.observer = observer
+func (c *porkbunProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 type requestParams map[string]any

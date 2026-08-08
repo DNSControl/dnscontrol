@@ -120,8 +120,8 @@ type gandiv5Provider struct {
 	apiurl    string
 }
 
-func (g *gandiv5Provider) SetConversionObserver(observer providers.ConversionObserver) {
-	g.observer = observer
+func (client *gandiv5Provider) SetConversionObserver(observer providers.ConversionObserver) {
+	client.observer = observer
 }
 
 // newDsp generates a DNS Service Provider client handle.

@@ -31,8 +31,8 @@ type transipProvider struct {
 	domains  *domain.Repository
 }
 
-func (t *transipProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	t.observer = observer
+func (n *transipProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	n.observer = observer
 }
 
 var features = providers.DocumentationNotes{

@@ -63,8 +63,8 @@ type vercelProvider struct {
 	listLimiter   *rateLimiter
 }
 
-func (v *vercelProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	v.observer = observer
+func (c *vercelProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 func init() {

@@ -43,8 +43,8 @@ type websupportProvider struct {
 	services map[string]int64
 }
 
-func (w *websupportProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	w.observer = observer
+func (c *websupportProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 func init() {

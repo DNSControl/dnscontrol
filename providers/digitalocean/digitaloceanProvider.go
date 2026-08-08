@@ -33,8 +33,8 @@ type digitaloceanProvider struct {
 	client   *godo.Client
 }
 
-func (d *digitaloceanProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	d.observer = observer
+func (api *digitaloceanProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	api.observer = observer
 }
 
 var defaultNameServerNames = []string{
