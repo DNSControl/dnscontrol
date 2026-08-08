@@ -394,8 +394,8 @@ func (c *unifiClient) useNewAPI() bool {
 	switch c.apiVersion {
 	case APIVersionNew:
 		return true
-	case APIVersionLegacy:
-		return false
+	// case APIVersionLegacy:
+	// 	return false
 	case APIVersionAuto:
 		c.detectAPIAvailability()
 		if c.newAPIAvailable != nil && *c.newAPIAvailable {

@@ -15,10 +15,10 @@ func AuditRecords(records []*models.RecordConfig) []error {
 		switch rc.Type {
 		case "A", "AAAA", "CNAME":
 			// Supported
-		case "PTR":
-			// FortiGate limitations: these record types are not fully supported.
-			problems = append(problems,
-				fmt.Errorf("record type %s is not supported by FortiGate provider (name: %s)", rc.Type, rc.GetLabelFQDN()))
+		// case "PTR":
+		// 	// FortiGate limitations: these record types are not fully supported.
+		// 	problems = append(problems,
+		// 		fmt.Errorf("record type %s is not supported by FortiGate provider (name: %s)", rc.Type, rc.GetLabelFQDN()))
 		default:
 			problems = append(problems,
 				fmt.Errorf("record type %s is not supported by FortiGate provider (name: %s)", rc.Type, rc.GetLabelFQDN()))

@@ -46,21 +46,21 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		}
 		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
-	case "TXT":
-		// TODO(tlim): A few ways that might fix
-		//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
-		//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
-
-		// Try this first:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
-
-		// Try this if the other fails: (probably won't work)
-		//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
-
-		// Or this?
-		//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
-		// You'll need to add this to imports above:
-		// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	// case "TXT":
+	// 	// TODO(tlim): A few ways that might fix
+	// 	//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
+	// 	//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
+	//
+	// 	// Try this first:
+	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+	//
+	// 	// Try this if the other fails: (probably won't work)
+	// 	//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+	//
+	// 	// Or this?
+	// 	//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
+	// 	// You'll need to add this to imports above:
+	// 	// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 
 	// case "ALIAS":
 	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, val)

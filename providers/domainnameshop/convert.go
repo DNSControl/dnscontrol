@@ -14,8 +14,8 @@ func toRecordConfig(dc *models.DomainConfig, currentRecord *domainNameShopRecord
 	var rc *models.RecordConfig
 	var err error
 	switch currentRecord.Type {
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
+	// case "TXT":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, currentRecord.ActualPriority, target)
 	case "SRV":

@@ -545,28 +545,28 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 		f := rc.AsMX()
 		priority = int(f.Preference)
 		content = strings.TrimSuffix(f.Mx, ".")
-	case "SRV":
-		// TODO(tlim): Remove commented out code if new code works.
-		// DNScale API expects full content: "priority weight port target"
-		// target := rc.Get|TargetField()
-		// if !strings.HasSuffix(target, ".") {
-		// 	target = target + "."
-		// }
-		// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
-		content = rc.GetRDATA().String()
+	// case "SRV":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	// DNScale API expects full content: "priority weight port target"
+	// 	// target := rc.Get|TargetField()
+	// 	// if !strings.HasSuffix(target, ".") {
+	// 	// 	target = target + "."
+	// 	// }
+	// 	// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
+	// 	content = rc.GetRDATA().String()
 
-	case "CAA":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
-	case "TLSA":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
-	case "SSHFP":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
+	// case "CAA":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
+	// case "TLSA":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
+	// case "SSHFP":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
 	case "HTTPS", "SVCB":
 		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns
 		// DNScale API requires selective quote handling for SVCB params:

@@ -84,8 +84,8 @@ func toRecordConfig(dc *models.DomainConfig, r dnsRecord) (*models.RecordConfig,
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
-	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
+	// case "A", "AAAA":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "CNAME", "NS", "DNAME":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, addTrailingDot(target))

@@ -191,10 +191,10 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 		priorityNum = f.Preference
 		prio = fmt.Sprintf(" %d ", priorityNum)
 		content = f.Mx
-	case "TXT":
-		content = rec.GetRDATA().String()
-	case "DS":
-		content = rec.GetRDATA().String()
+	// case "TXT":
+	// 	content = rec.GetRDATA().String()
+	// case "DS":
+	// 	content = rec.GetRDATA().String()
 	default:
 		content = rec.GetRDATA().String()
 	}
@@ -308,8 +308,8 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	}
 
 	switch rec.Type {
-	case "TXT":
-		r.Content = rec.GetRDATA().String()
+	// case "TXT":
+	// 	r.Content = rec.GetRDATA().String()
 	case "MX":
 		f := rec.AsMX()
 		r.Priority = new(f.Preference)

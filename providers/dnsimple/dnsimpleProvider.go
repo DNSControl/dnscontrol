@@ -681,9 +681,9 @@ func getTargetRecordPriority(rc *models.RecordConfig) int {
 		return int(rc.AsMX().Preference)
 	case dnsv2.TypeSRV:
 		return int(rc.AsSRV().Priority)
-	case dnsv2.TypeNAPTR:
-		// Neither order nor preference
-		return 0
+	// case dnsv2.TypeNAPTR:
+	// 	// Neither order nor preference
+	// 	return 0
 	default:
 		return 0
 	}

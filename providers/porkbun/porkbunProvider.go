@@ -452,8 +452,8 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	}
 
 	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "ALIAS", "CNAME":
-		req["content"] = rc.GetRDATA().String()
+	// case "A", "AAAA", "NS", "ALIAS", "CNAME":
+	// 	req["content"] = rc.GetRDATA().String()
 	case "TXT":
 		req["content"] = rc.GetTargetTXTJoined()
 	case "MX":
