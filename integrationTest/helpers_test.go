@@ -39,8 +39,8 @@ func TestReplaceIntegrationTargetTokensAzureAlias(t *testing.T) {
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
-	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run to the provider's testdata directory")
-	recordDirFlag        = flag.String("recorddir", "", "Directory to record into, and implies -record (default: the provider's testdata directory)")
+	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run to the provider's test_data directory")
+	recordDirFlag        = flag.String("recorddir", "", "Directory to record into, and implies -record (default: the provider's test_data directory)")
 	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
 	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
@@ -173,7 +173,7 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 }
 
 // recordingDir is where a recording of p is written: -recorddir when it is
-// given, and otherwise p's own testdata directory.
+// given, and otherwise p's own test_data directory.
 func recordingDir(p providers.DNSServiceProvider) (string, error) {
 	if *recordDirFlag != "" {
 		return providergolden.ResolveDir(*recordDirFlag)

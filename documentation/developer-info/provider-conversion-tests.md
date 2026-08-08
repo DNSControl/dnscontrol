@@ -25,14 +25,14 @@ go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
   -args -verbose -profile CLOUDFLAREAPI -record
 ```
 
-The recording goes to `providers/<package>/testdata`, the testdata directory of
+The recording goes to `providers/<package>/test_data`, the test-data directory of
 the package the provider under test is implemented in, so `CLOUDFLAREAPI` writes
-to `providers/cloudflare/testdata`. Use `-recorddir` to write somewhere else. A
+to `providers/cloudflare/test_data`. Use `-recorddir` to write somewhere else. A
 relative `-recorddir` is relative to the top of the repository:
 
 ```shell
 go test -run TestDNSProviders -timeout 1h -failfast -v ./integrationTest \
-  -args -verbose -profile CLOUDFLAREAPI -recorddir providers/cloudflare/testdata
+  -args -verbose -profile CLOUDFLAREAPI -recorddir providers/cloudflare/test_data
 ```
 
 Either way two files are written, named after the provider's package:
@@ -89,9 +89,9 @@ wrapped in a `models.DNSProvider`, which is all the integration tests ask of it
 today. A test that type-asserts a provider to an optional interface such as
 `ZoneCreator` would need the wrapper to forward that interface too.
 
-Data can also be collected by hand. It goes in `providers/<package>/testdata`
-under the package's own name, `providers/netlify/testdata/netlify.json` and
-`providers/netlify/testdata/netlify.records`. The `.json` file is a JSON array
+Data can also be collected by hand. It goes in `providers/<package>/test_data`
+under the package's own name, `providers/netlify/test_data/netlify.json` and
+`providers/netlify/test_data/netlify.records`. The `.json` file is a JSON array
 of the native records your provider's API returns:
 
 ```json

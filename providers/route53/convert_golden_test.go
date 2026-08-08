@@ -9,10 +9,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-var testDomain = providergolden.Domain("ROUTE53")
-
 func TestNativeToRecordsGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "route53_nativetorecords", testDomain,
+	providergolden.CheckToRC(t, "route53_nativetorecords",
 		func(dc *models.DomainConfig, native r53Types.ResourceRecordSet) ([]*models.RecordConfig, error) {
 			return nativeToRecords(dc, native, dc.Name)
 		})

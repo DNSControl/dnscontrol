@@ -8,10 +8,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-var testDomain = providergolden.Domain("AZURE_DNS")
-
 func TestNativeToRecordsGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "azuredns_nativetorecords", testDomain,
+	providergolden.CheckToRC(t, "azuredns_nativetorecords",
 		func(dc *models.DomainConfig, native adns.RecordSet) ([]*models.RecordConfig, error) {
 			return nativeToRecords(&native, dc), nil
 		})

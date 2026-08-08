@@ -28,7 +28,7 @@ func TestARecordingIsNamedAfterTheProvidersPackageNotItsType(t *testing.T) {
 }
 
 func TestRecordingDirResolvesRecordDirFromTheModuleRoot(t *testing.T) {
-	rel := filepath.Join("providers", "bind", "testdata")
+	rel := filepath.Join("providers", "bind", "test_data")
 
 	old := *recordDirFlag
 	*recordDirFlag = rel

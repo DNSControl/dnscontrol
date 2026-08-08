@@ -8,7 +8,7 @@ import (
 )
 
 func TestToRcGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "porkbun_torc", "example.com",
+	providergolden.CheckToRC(t, "porkbun_torc",
 		func(dc *models.DomainConfig, native domainRecord) ([]*models.RecordConfig, error) {
 			rc, err := toRc(dc, &native)
 			return []*models.RecordConfig{rc}, err
@@ -16,5 +16,5 @@ func TestToRcGolden(t *testing.T) {
 }
 
 func TestToReqGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "porkbun_toreq", "example.com", toReq)
+	providergolden.CheckToNative(t, "porkbun_toreq", toReq)
 }

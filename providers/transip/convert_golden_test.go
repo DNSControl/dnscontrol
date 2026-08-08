@@ -6,8 +6,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 )
 
-var testDomain = providergolden.Domain("TRANSIP")
-
 func TestRecordToNativeGolden(t *testing.T) {
-	providergolden.CheckToNative(t, "transip_recordtonative", testDomain, recordToNative)
+	providergolden.CheckToNative(t, "transip_recordtonative", recordToNative)
 }

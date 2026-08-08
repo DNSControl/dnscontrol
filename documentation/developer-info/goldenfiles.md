@@ -23,7 +23,7 @@ export FOO_BAR=baz
 go test -failfast -run TestDNSProviders -v ./integrationTest  -args -verbose -profile CLOUDNS -record
 ```
 
-This updates `providers/cloudns/testdata/cloudns.json`
+This updates `providers/cloudns/test_data/cloudns.json`
 
 `-failfast` is used to make any failures more apparent.
 
@@ -41,7 +41,7 @@ intentionally collected but human verification is important!
 go test ./providers/cloudns  -update
 ```
 
-This updates `providers/cloudns/testdata/cloudns_torc.golden` (each provider is different,
+This updates `providers/cloudns/test_data/cloudns_torc.golden` (each provider is different,
 some will create multiple files.
 
 Done

@@ -44,18 +44,25 @@ func TestRecorderWritesTheRecordsItObserved(t *testing.T) {
 	}
 
 	rec := NewRecorder()
-	rec.Observe(desired, nil)
+	rec.Observe(dc.Name, desired, nil)
 
 	dir := t.TempDir()
 	written, err := rec.WriteTo(dir, "example")
 	if err != nil {
 		t.Fatalf("WriteTo() error: %v", err)
 	}
-	if want := []string{filepath.Join(dir, "example.records")}; len(written) != 1 || written[0] != want[0] {
+	if want := []string{filepath.Join(dir, "example.meta.json"), filepath.Join(dir, "example.records")}; len(written) != len(want) || written[0] != want[0] || written[1] != want[1] {
 		t.Fatalf("WriteTo() wrote %v, want %v", written, want)
 	}
+	metadata, err := os.ReadFile(written[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := "{\n  \"domain\": \"example.com\"\n}\n"; string(metadata) != want {
+		t.Errorf("example.meta.json = %q, want %q", metadata, want)
+	}
 
-	got, err := os.ReadFile(written[0])
+	got, err := os.ReadFile(written[1])
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,18 +91,18 @@ func TestRecorderWritesTheNativeRecordsBehindTheConvertedOnes(t *testing.T) {
 	withoutOriginal := dc.MustNewRecordConfig("mail", 300, "A", "192.0.2.2")
 
 	rec := NewRecorder()
-	rec.Observe(nil, models.Records{withOriginal, withoutOriginal})
+	rec.Observe(dc.Name, nil, models.Records{withOriginal, withoutOriginal})
 
 	dir := t.TempDir()
 	written, err := rec.WriteTo(dir, "example")
 	if err != nil {
 		t.Fatalf("WriteTo() error: %v", err)
 	}
-	if want := []string{filepath.Join(dir, "example.json")}; len(written) != 1 || written[0] != want[0] {
+	if want := []string{filepath.Join(dir, "example.meta.json"), filepath.Join(dir, "example.json")}; len(written) != len(want) || written[0] != want[0] || written[1] != want[1] {
 		t.Fatalf("WriteTo() wrote %v, want %v", written, want)
 	}
 
-	data, err := os.ReadFile(written[0])
+	data, err := os.ReadFile(written[1])
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -118,7 +125,7 @@ func TestRecorderDiscardsDuplicates(t *testing.T) {
 
 	rec := NewRecorder()
 	for range 3 {
-		rec.Observe(models.Records{rc}, models.Records{rc})
+		rec.Observe(dc.Name, models.Records{rc}, models.Records{rc})
 	}
 
 	dir := t.TempDir()
@@ -153,7 +160,7 @@ func TestRecorderReportsANativeItCannotMarshal(t *testing.T) {
 	rc.Original = make(chan int)
 
 	rec := NewRecorder()
-	rec.Observe(nil, models.Records{rc})
+	rec.Observe(dc.Name, nil, models.Records{rc})
 
 	written, err := rec.WriteTo(t.TempDir(), "example")
 	if err == nil {
@@ -181,6 +188,18 @@ func TestRecorderWritesNothingWhenItObservedNothing(t *testing.T) {
 	}
 	if len(entries) != 0 {
 		t.Errorf("WriteTo() created %d files, want 0", len(entries))
+	}
+}
+
+func TestRecorderRejectsMultipleDomains(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "A", "192.0.2.1")
+	rec := NewRecorder()
+	rec.Observe("example.com", models.Records{rc}, nil)
+	rec.Observe("other.example", models.Records{rc}, nil)
+
+	if _, err := rec.WriteTo(t.TempDir(), "example"); err == nil || !strings.Contains(err.Error(), "multiple domains") {
+		t.Fatalf("WriteTo() error = %v, want a multiple-domains error", err)
 	}
 }
 
@@ -219,12 +238,12 @@ func TestRecordObservesTheConversionsAndReturnsWhatTheProviderReturned(t *testin
 	if err != nil {
 		t.Fatalf("WriteTo() error: %v", err)
 	}
-	want := []string{filepath.Join(dir, "example.records"), filepath.Join(dir, "example.json")}
-	if len(written) != len(want) || written[0] != want[0] || written[1] != want[1] {
+	want := []string{filepath.Join(dir, "example.meta.json"), filepath.Join(dir, "example.records"), filepath.Join(dir, "example.json")}
+	if len(written) != len(want) || written[0] != want[0] || written[1] != want[1] || written[2] != want[2] {
 		t.Fatalf("WriteTo() wrote %v, want %v", written, want)
 	}
 
-	records, err := os.ReadFile(written[0])
+	records, err := os.ReadFile(written[1])
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -254,23 +273,23 @@ func TestARecordingIsNamedTheWayTheChecksReadIt(t *testing.T) {
 	rc.Original = fakeNative{Name: "www", Type: "A"}
 
 	rec := NewRecorder()
-	rec.Observe(models.Records{rc}, models.Records{rc})
+	rec.Observe(dc.Name, models.Records{rc}, models.Records{rc})
 
 	packageDir := filepath.Join(t.TempDir(), name)
-	if _, err := rec.WriteTo(filepath.Join(packageDir, testdataDir), name); err != nil {
+	if _, err := rec.WriteTo(filepath.Join(packageDir, testDataDir), name); err != nil {
 		t.Fatalf("WriteTo() error: %v", err)
 	}
 
 	t.Chdir(packageDir)
-	for _, ext := range []string{nativesExt, recordsExt} {
+	for _, ext := range []string{metadataExt, nativesExt, recordsExt} {
 		input, err := inputFile(ext)
 		if err != nil {
 			t.Fatalf("inputFile(%q) error: %v", ext, err)
 		}
-		if _, ok, err := loadInput(testdataDir, input); err != nil {
+		if _, ok, err := loadInput(testDataDir, input); err != nil {
 			t.Fatalf("loadInput(%q) error: %v", input, err)
 		} else if !ok {
-			t.Errorf("the recording is not readable as %s", filepath.Join(testdataDir, input))
+			t.Errorf("the recording is not readable as %s", filepath.Join(testDataDir, input))
 		}
 	}
 }
@@ -283,13 +302,13 @@ func TestTestdataDirIsTheProvidersOwnTestdataDirectory(t *testing.T) {
 	if !filepath.IsAbs(dir) {
 		t.Errorf("TestdataDir() = %q, want an absolute path", dir)
 	}
-	if want := filepath.Join("providers", "providergolden", testdataDir); !strings.HasSuffix(dir, want) {
+	if want := filepath.Join("providers", "providergolden", testDataDir); !strings.HasSuffix(dir, want) {
 		t.Errorf("TestdataDir() = %q, want a path ending in %q", dir, want)
 	}
 }
 
 func TestResolveDirIsRelativeToTheModuleRoot(t *testing.T) {
-	rel := filepath.Join("providers", "bind", testdataDir)
+	rel := filepath.Join("providers", "bind", testDataDir)
 
 	dir, err := ResolveDir(rel)
 	if err != nil {

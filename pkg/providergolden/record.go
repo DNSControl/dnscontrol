@@ -22,6 +22,7 @@ import (
 // same records produces a small file.
 type Recorder struct {
 	mu      sync.Mutex
+	domain  string
 	records map[string]bool
 	natives map[string]bool
 	errs    []error
@@ -35,13 +36,19 @@ func NewRecorder() *Recorder {
 	}
 }
 
-// Observe adds one round of conversion inputs. desired holds the records the
-// provider is about to convert into its own format; existing holds the records
-// it has just converted out of its own format, each carrying the native record
-// it came from in RecordConfig.Original.
-func (r *Recorder) Observe(desired, existing models.Records) {
+// Observe adds one round of conversion inputs for domain. desired holds the
+// records the provider is about to convert into its own format; existing holds
+// the records it has just converted out of its own format, each carrying the
+// native record it came from in RecordConfig.Original.
+func (r *Recorder) Observe(domain string, desired, existing models.Records) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
+
+	if r.domain == "" {
+		r.domain = domain
+	} else if r.domain != domain {
+		r.errs = append(r.errs, fmt.Errorf("recording contains multiple domains: %q and %q", r.domain, domain))
+	}
 
 	for _, rc := range desired {
 		r.records[rc.StringWithMeta()] = true
@@ -60,19 +67,31 @@ func (r *Recorder) Observe(desired, existing models.Records) {
 	}
 }
 
-// WriteTo writes what has been observed to dir as <name>.records and
-// <name>.json, sorted so that two runs of the same tests produce the same file.
+// WriteTo writes what has been observed to dir as <name>.meta.json,
+// <name>.records, and <name>.json, sorted so that two runs of the same tests
+// produce the same file.
 // name is the provider the recording is of, as ProviderName returns it, which
 // is the name CheckToRC and CheckToNative look for.
 //
-// A file is not written when nothing of that kind was observed: a provider that
-// does not fill in RecordConfig.Original produces no <name>.json. WriteTo
-// returns the paths it wrote.
+// Metadata is written whenever either kind of conversion input was observed. A
+// provider that does not fill in RecordConfig.Original produces no <name>.json.
+// WriteTo returns the paths it wrote.
 func (r *Recorder) WriteTo(dir, name string) ([]string, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	var written []string
+	if len(r.records) != 0 || len(r.natives) != 0 {
+		metadata, err := json.MarshalIndent(recordingMetadata{Domain: r.domain}, "", "  ")
+		if err != nil {
+			return written, err
+		}
+		path, err := writeFile(dir, name+metadataExt, append(metadata, '\n'))
+		if err != nil {
+			return written, err
+		}
+		written = append(written, path)
+	}
 
 	if len(r.records) != 0 {
 		text := strings.Join(slices.Sorted(maps.Keys(r.records)), "\n") + "\n"
@@ -117,8 +136,8 @@ func ProviderName(p models.DNSProvider) (string, error) {
 	return path.Base(t.PkgPath()), nil
 }
 
-// TestdataDir returns the testdata directory that belongs to p:
-// providers/<package>/testdata under the module root, where <package> is the
+// TestdataDir returns the test_data directory that belongs to p:
+// providers/<package>/test_data under the module root, where <package> is the
 // package p is implemented in.
 func TestdataDir(p models.DNSProvider) (string, error) {
 	name, err := ProviderName(p)
@@ -130,7 +149,7 @@ func TestdataDir(p models.DNSProvider) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(root, "providers", name, testdataDir), nil
+	return filepath.Join(root, "providers", name, testDataDir), nil
 }
 
 // ResolveDir returns dir as an absolute path, resolving a relative dir against
@@ -190,6 +209,6 @@ type recordingProvider struct {
 }
 
 func (p *recordingProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	p.rec.Observe(dc.Records, existing)
+	p.rec.Observe(dc.Name, dc.Records, existing)
 	return p.DNSProvider.GetZoneRecordsCorrections(dc, existing)
 }

@@ -8,10 +8,8 @@ import (
 	gdns "google.golang.org/api/dns/v1"
 )
 
-var testDomain = providergolden.Domain("GCLOUD")
-
 func TestNativeToRecordGolden(t *testing.T) {
-	providergolden.CheckToRC(t, "gcloud_nativetorecord", testDomain,
+	providergolden.CheckToRC(t, "gcloud_nativetorecord",
 		func(dc *models.DomainConfig, native gdns.ResourceRecordSet) ([]*models.RecordConfig, error) {
 			// GCLOUD returns every value of a label/rtype pair in one set.
 			rcs := make([]*models.RecordConfig, 0, len(native.Rrdatas))

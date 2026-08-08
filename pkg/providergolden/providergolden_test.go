@@ -9,17 +9,20 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
-func TestDomainReadsTheProvidersDomainVariable(t *testing.T) {
-	t.Setenv("VERCEL_DOMAIN", "recorded.example.net")
-	if got := Domain("VERCEL"); got != "recorded.example.net" {
-		t.Errorf("Domain() = %q, want %q", got, "recorded.example.net")
+func TestRecordedDomainIgnoresTheEnvironment(t *testing.T) {
+	dir := filepath.Join(t.TempDir(), "vercel")
+	if err := os.MkdirAll(filepath.Join(dir, testDataDir), 0o755); err != nil {
+		t.Fatal(err)
 	}
-}
+	if err := os.WriteFile(filepath.Join(dir, testDataDir, "vercel"+metadataExt),
+		[]byte("{\"domain\":\"recorded.example.net\"}\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Chdir(dir)
+	t.Setenv("VERCEL_DOMAIN", "current.example.org")
 
-func TestDomainFallsBackToExampleCom(t *testing.T) {
-	t.Setenv("VERCEL_DOMAIN", "")
-	if got := Domain("VERCEL"); got != "example.com" {
-		t.Errorf("Domain() = %q, want %q", got, "example.com")
+	if got := RecordedDomain(t); got != "recorded.example.net" {
+		t.Errorf("RecordedDomain() = %q, want %q", got, "recorded.example.net")
 	}
 }
 
@@ -99,7 +102,11 @@ func TestInputFileIsNamedAfterTheProvidersDirectory(t *testing.T) {
 	}
 	t.Chdir(dir)
 
-	for ext, want := range map[string]string{nativesExt: "cloudns.json", recordsExt: "cloudns.records"} {
+	for ext, want := range map[string]string{
+		metadataExt: "cloudns.meta.json",
+		nativesExt:  "cloudns.json",
+		recordsExt:  "cloudns.records",
+	} {
 		got, err := inputFile(ext)
 		if err != nil {
 			t.Fatalf("inputFile(%q) error: %v", ext, err)
@@ -116,12 +123,12 @@ func TestRecordedInputsAreNamedAfterTheirProvider(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	dirs, err := filepath.Glob(filepath.Join(root, "providers", "*", testdataDir))
+	dirs, err := filepath.Glob(filepath.Join(root, "providers", "*", testDataDir))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(dirs) == 0 {
-		t.Fatal("no provider has a testdata directory")
+		t.Fatal("no provider has a test_data directory")
 	}
 
 	for _, dir := range dirs {
@@ -131,13 +138,16 @@ func TestRecordedInputsAreNamedAfterTheirProvider(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, entry := range entries {
-			ext := filepath.Ext(entry.Name())
-			if ext != nativesExt && ext != recordsExt {
-				continue
+			var ext string
+			for _, candidate := range []string{metadataExt, nativesExt, recordsExt} {
+				if strings.HasSuffix(entry.Name(), candidate) {
+					ext = candidate
+					break
+				}
 			}
-			if want := provider + ext; entry.Name() != want {
+			if ext != "" && entry.Name() != provider+ext {
 				t.Errorf("providers/%s/%s holds %s, want %s: a recorded input is named after its provider, not after a test",
-					provider, testdataDir, entry.Name(), want)
+					provider, testDataDir, entry.Name(), provider+ext)
 			}
 		}
 	}

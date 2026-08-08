@@ -5,10 +5,8 @@
 // test names the recorded data and adapts the provider's function to a uniform
 // signature:
 //
-//	var testDomain = providergolden.Domain("NETLIFY")
-//
 //	func TestToRecordConfig(t *testing.T) {
-//		providergolden.CheckToRC(t, "netlify_torecordconfig", testDomain,
+//		providergolden.CheckToRC(t, "netlify_torecordconfig",
 //			func(dc *models.DomainConfig, n dnsRecord) ([]*models.RecordConfig, error) {
 //				rc, err := toRecordConfig(dc, &n)
 //				return []*models.RecordConfig{rc}, err
@@ -19,13 +17,14 @@
 // verifies that converting a recorded RecordConfig to the native type and back
 // preserves its StringWithMeta representation.
 //
-// The data lives in the provider's testdata directory. A recording covers the
+// The data lives in the provider's test_data directory. A recording covers the
 // whole provider, so the input files are named after it, and the golden file is
 // named after the test that produced it:
 //
-//	testdata/<provider>.json     native records, as the provider's API returns them
-//	testdata/<provider>.records  DNS records, in the golden line format below
-//	testdata/<name>.golden       the expected output
+//	test_data/<provider>.meta.json  recording metadata, including the zone
+//	test_data/<provider>.json       native records, as the provider's API returns them
+//	test_data/<provider>.records    DNS records, in the golden line format below
+//	test_data/<name>.golden         the expected output
 //
 // <provider> is the directory the test is running in, which is the same name
 // the integration tests record under, so a recording needs no renaming and one
@@ -70,29 +69,23 @@ import (
 var update = flag.Bool("update", false, "rewrite the provider conversion golden files")
 
 const (
-	testdataDir = "testdata"
+	testDataDir = "test_data"
 
 	// Extensions of the two kinds of recorded input, written by Recorder and
 	// read by CheckToRC and CheckToNative.
-	nativesExt = ".json"
-	recordsExt = ".records"
+	metadataExt = ".meta.json"
+	nativesExt  = ".json"
+	recordsExt  = ".records"
 )
 
-// Domain returns the zone the data for provider was recorded against: the value
-// of the provider's <PROVIDER>_DOMAIN environment variable, or "example.com"
-// when that is unset. It is the variable the integration tests take their test
-// zone from, so a recording and the test that replays it agree by default.
-func Domain(provider string) string {
-	if domain := os.Getenv(provider + "_DOMAIN"); domain != "" {
-		return domain
-	}
-	return "example.com"
+type recordingMetadata struct {
+	Domain string `json:"domain"`
 }
 
-// CheckToRC replays the native records recorded in testdata/<provider>.json
+// CheckToRC replays the native records recorded in test_data/<provider>.json
 // through convert and compares the records it returns with
-// testdata/<name>.golden.
-func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error)) {
+// test_data/<name>.golden.
+func CheckToRC[N any](t *testing.T, name string, convert func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error)) {
 	t.Helper()
 
 	input, err := inputFile(nativesExt)
@@ -100,12 +93,12 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 		t.Fatal(err)
 	}
 
-	data, ok, err := loadInput(testdataDir, input)
+	data, ok, err := loadInput(testDataDir, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
+		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
 	}
 
 	var natives []N
@@ -113,7 +106,7 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 		t.Fatalf("%s: %v", input, err)
 	}
 
-	dc := models.MustNewDomainConfig(domain)
+	dc := models.MustNewDomainConfig(RecordedDomain(t))
 	var b strings.Builder
 	for i, native := range natives {
 		recs, err := convert(dc, native)
@@ -129,13 +122,13 @@ func CheckToRC[N any](t *testing.T, name, domain string, convert func(dc *models
 		}
 	}
 
-	report(t, testdataDir, name, []byte(b.String()))
+	report(t, testDataDir, name, []byte(b.String()))
 }
 
-// CheckToNative replays the records recorded in testdata/<provider>.records
+// CheckToNative replays the records recorded in test_data/<provider>.records
 // through convert and compares the native records it returns with
-// testdata/<name>.golden.
-func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *models.RecordConfig) (N, error)) {
+// test_data/<name>.golden.
+func CheckToNative[N any](t *testing.T, name string, convert func(rc *models.RecordConfig) (N, error)) {
 	t.Helper()
 
 	input, err := inputFile(recordsExt)
@@ -143,15 +136,15 @@ func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *mo
 		t.Fatal(err)
 	}
 
-	data, ok, err := loadInput(testdataDir, input)
+	data, ok, err := loadInput(testDataDir, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
+		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
 	}
 
-	recs, err := parseRecords(models.MustNewDomainConfig(domain), string(data))
+	recs, err := parseRecords(models.MustNewDomainConfig(RecordedDomain(t)), string(data))
 	if err != nil {
 		t.Fatalf("%s: %v", input, err)
 	}
@@ -170,13 +163,13 @@ func CheckToNative[N any](t *testing.T, name, domain string, convert func(rc *mo
 		t.Fatal(err)
 	}
 
-	report(t, testdataDir, name, append(got, '\n'))
+	report(t, testDataDir, name, append(got, '\n'))
 }
 
-// CheckRoundTrip replays the records in testdata/<provider>.records through
+// CheckRoundTrip replays the records in test_data/<provider>.records through
 // both provider conversion functions and verifies that their DNSControl
 // representation is unchanged.
-func CheckRoundTrip[N any](t *testing.T, domain string,
+func CheckRoundTrip[N any](t *testing.T,
 	toNative func(rc *models.RecordConfig) (N, error),
 	toRC func(dc *models.DomainConfig, native N) ([]*models.RecordConfig, error),
 ) {
@@ -187,15 +180,15 @@ func CheckRoundTrip[N any](t *testing.T, domain string,
 		t.Fatal(err)
 	}
 
-	data, ok, err := loadInput(testdataDir, input)
+	data, ok, err := loadInput(testDataDir, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !ok {
-		t.Skipf("%s has no recorded data yet", filepath.Join(testdataDir, input))
+		t.Skipf("%s has no recorded data yet", filepath.Join(testDataDir, input))
 	}
 
-	dc := models.MustNewDomainConfig(domain)
+	dc := models.MustNewDomainConfig(RecordedDomain(t))
 	recs, err := parseRecords(dc, string(data))
 	if err != nil {
 		t.Fatalf("%s: %v", input, err)
@@ -220,6 +213,34 @@ func CheckRoundTrip[N any](t *testing.T, domain string,
 			t.Errorf("%s: record %d changed in round trip\nwant: %s\n got: %s", input, i, want, got)
 		}
 	}
+}
+
+// RecordedDomain returns the zone captured alongside the provider data. The
+// environment is deliberately not consulted: replaying a recording must not
+// depend on the credentials or integration-test zone of the person running it.
+func RecordedDomain(t *testing.T) string {
+	t.Helper()
+
+	input, err := inputFile(metadataExt)
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, ok, err := loadInput(testDataDir, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Fatalf("%s is missing; record the provider again with -record", filepath.Join(testDataDir, input))
+	}
+
+	var metadata recordingMetadata
+	if err := json.Unmarshal(data, &metadata); err != nil {
+		t.Fatalf("%s: %v", input, err)
+	}
+	if metadata.Domain == "" {
+		t.Fatalf("%s: domain is empty", input)
+	}
+	return metadata.Domain
 }
 
 func nonNilRecords(recs []*models.RecordConfig) []*models.RecordConfig {
