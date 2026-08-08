@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"slices"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	api "github.com/luadns/luadns-go"
 	"golang.org/x/time/rate"
 
@@ -317,10 +318,10 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 			Type: rec.Type,
 			TTL:  rec.TTL,
 		}
-		switch rtype := rec.Type; rtype {
-		case "TXT":
+		switch rtype := rec.TypeNum; rtype {
+		case dnsv2.TypeTXT:
 			r.Content = rec.GetTargetTXTJoined()
-		case "HTTPS":
+		case dnsv2.TypeHTTPS:
 			// The RDATA's String() quotes every SvcParam value (e.g. port="80",
 			// alpn="h2,h3"), which LuaDNS's strict SVCB parser rejects. Build the
 			// content with unquoted params (port=80, alpn=h2,h3) instead.

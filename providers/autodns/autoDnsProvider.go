@@ -231,11 +231,11 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				//resourceRecord.Pref = int32(f.Preference)
 				//resourceRecord.Value = f.Mx
 
-			case dnsv2.TypeSRV:
-				resourceRecord.Value = rc.GetRDATA().String()
+			// case dnsv2.TypeSRV:
+			// 	resourceRecord.Value = rc.GetRDATA().String()
 
-			case dnsv2.TypeCAA:
-				resourceRecord.Value = rc.GetRDATA().String()
+			// case dnsv2.TypeCAA:
+			// 	resourceRecord.Value = rc.GetRDATA().String()
 
 			default:
 				resourceRecord.Value = rc.GetRDATA().String()

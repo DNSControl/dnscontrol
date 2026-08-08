@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -193,8 +194,8 @@ func toReq(zoneID string, rc *models.RecordConfig) (*domainRecord, error) {
 		Zone:  zoneID,
 	}
 
-	switch rc.Type {
-	case "TXT":
+	switch rc.TypeNum {
+	case dnsv2.TypeTXT:
 		req.Value = rc.GetTargetTXTJoined()
 	default:
 		req.Value = rc.GetRDATA().String()

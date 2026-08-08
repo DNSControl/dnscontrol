@@ -159,22 +159,22 @@ func toRewriteEntry(dc *models.DomainConfig, rc *models.RecordConfig) (rewriteEn
 	re := rewriteEntry{
 		Domain: rc.NameFQDN,
 	}
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		re.Answer = rc.AsA().Addr.String()
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		re.Answer = rc.AsAAAA().Addr.String()
 
-	case "ALIAS":
+	case privatetypes.TypeALIAS:
 		re.Answer = dc.ToShort(rc.AsALIAS().Target)
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		re.Answer = dc.ToShort(rc.AsCNAME().Target)
 
-	case "ADGUARDHOME_A_PASSTHROUGH":
+	case privatetypes.TypeADGUARDHOMEAPASSTHROUGH:
 		re.Answer = "A"
 
-	case "ADGUARDHOME_AAAA_PASSTHROUGH":
+	case privatetypes.TypeADGUARDHOMEAAAAPASSTHROUGH:
 		re.Answer = "AAAA"
 
 	default:

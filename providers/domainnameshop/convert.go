@@ -3,6 +3,7 @@ package domainnameshop
 import (
 	"strconv"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -14,8 +15,8 @@ func toRecordConfig(dc *models.DomainConfig, currentRecord *domainNameShopRecord
 	var rc *models.RecordConfig
 	var err error
 	switch currentRecord.Type {
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
+	// case "TXT":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, target)
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, ttl, currentRecord.Type, currentRecord.ActualPriority, target)
 	case "SRV":
@@ -55,8 +56,8 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		DomainID: domainID,
 	}
 
-	switch rc.Type {
-	case "CAA":
+	switch rc.TypeNum {
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		// Actual CAA FLAG
 		switch f.Tag {
@@ -70,11 +71,11 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		dnsR.CAAFlag = uint64(int(f.Flag))
 		dnsR.ActualCAAFlag = strconv.Itoa(int(f.Flag))
 		dnsR.Data = f.Value
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		dnsR.Priority = strconv.Itoa(int(f.Preference))
 		dnsR.Data = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		dnsR.Priority = strconv.Itoa(int(f.Priority))
 		dnsR.Weight = strconv.Itoa(int(f.Weight))
@@ -82,7 +83,7 @@ func (api *domainNameShopProvider) fromRecordConfig(domainName string, rc *model
 		dnsR.ActualWeight = f.Weight
 		dnsR.ActualPort = f.Port
 		dnsR.Data = f.Target
-	case "TXT":
+	case dnsv2.TypeTXT:
 		dnsR.Data = rc.GetTargetTXTJoined()
 	default:
 		dnsR.Data = rc.GetRDATA().String()

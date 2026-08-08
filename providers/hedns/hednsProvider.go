@@ -759,12 +759,12 @@ func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *model
 	}
 
 	// Work out the content
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		values.Set("Priority", strconv.FormatUint(uint64(f.Preference), 10))
 		values.Set("Content", f.Mx)
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		values.Del("Content")
 		values.Set("Target", f.Target)

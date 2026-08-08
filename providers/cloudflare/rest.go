@@ -185,16 +185,16 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 	var content string
 	prio := ""
 	priorityNum := uint16(0)
-	switch rec.Type {
-	case "MX":
+	switch rec.TypeNum {
+	case dnsv2.TypeMX:
 		f := rec.AsMX()
 		priorityNum = f.Preference
 		prio = fmt.Sprintf(" %d ", priorityNum)
 		content = f.Mx
-	case "TXT":
-		content = rec.GetRDATA().String()
-	case "DS":
-		content = rec.GetRDATA().String()
+	// case "TXT":
+	// 	content = rec.GetRDATA().String()
+	// case "DS":
+	// 	content = rec.GetRDATA().String()
 	default:
 		content = rec.GetRDATA().String()
 	}
@@ -239,30 +239,30 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 				flatten := true
 				cf.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
 			}
-			switch rec.Type {
-			case "SRV":
+			switch rec.TypeNum {
+			case dnsv2.TypeSRV:
 				cf.Data = cfSrvData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case "CAA":
+			case dnsv2.TypeCAA:
 				cf.Data = cfCaaData(rec)
 				cf.Name = rec.GetLabelFQDN()
 				cf.Content = ""
-			case "TLSA":
+			case dnsv2.TypeTLSA:
 				cf.Data = cfTlsaData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case "SSHFP":
+			case dnsv2.TypeSSHFP:
 				cf.Data = cfSshfpData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case "DNSKEY":
+			case dnsv2.TypeDNSKEY:
 				cf.Data = cfDnskeyData(rec)
-			case "DS":
+			case dnsv2.TypeDS:
 				cf.Data = cfDSData(rec)
-			case "NAPTR":
+			case dnsv2.TypeNAPTR:
 				cf.Data = cfNaptrData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case "HTTPS", "SVCB":
+			case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
 				cf.Data = cfSvcbData(rec)
-			case "LOC":
+			case dnsv2.TypeLOC:
 				cf.Data = cfLocData(rec)
 			}
 			resp, err := c.cfClient.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(domainID), cf)
@@ -307,48 +307,48 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 		}
 	}
 
-	switch rec.Type {
-	case "TXT":
-		r.Content = rec.GetRDATA().String()
-	case "MX":
+	switch rec.TypeNum {
+	// case "TXT":
+	// 	r.Content = rec.GetRDATA().String()
+	case dnsv2.TypeMX:
 		f := rec.AsMX()
 		r.Priority = new(f.Preference)
 		r.Content = f.Mx
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		// Handle CNAME flattening setting
 		flatten := rec.Metadata[metaCNAMEFlatten] == "on"
 		r.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
 		r.Content = rec.AsCNAME().Target
-	case "SRV":
+	case dnsv2.TypeSRV:
 		r.Data = cfSrvData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = rec.GetRDATA().String()
-	case "CAA":
+	case dnsv2.TypeCAA:
 		r.Data = cfCaaData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = ""
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		r.Data = cfTlsaData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = rec.GetRDATA().String()
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		r.Data = cfSshfpData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = rec.GetRDATA().String()
-	case "DNSKEY":
+	case dnsv2.TypeDNSKEY:
 		r.Data = cfDnskeyData(rec)
 		r.Content = ""
-	case "DS":
+	case dnsv2.TypeDS:
 		r.Data = cfDSData(rec)
 		r.Content = ""
-	case "NAPTR":
+	case dnsv2.TypeNAPTR:
 		r.Data = cfNaptrData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = rec.GetRDATA().String()
-	case "HTTPS", "SVCB":
+	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
 		r.Data = cfSvcbData(rec)
 		r.Content = rec.GetRDATA().String()
-	case "LOC":
+	case dnsv2.TypeLOC:
 		r.Data = cfLocData(rec)
 		r.Content = rec.GetRDATA().String()
 	default:

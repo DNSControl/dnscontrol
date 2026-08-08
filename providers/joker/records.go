@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
@@ -324,21 +325,21 @@ func (api *jokerProvider) recordsToZoneFormat(_ string, records models.Records) 
 		// Using that would simplify many of the cases. I've modified the easy ones.
 
 		// Joker format: <label> <type> <pri> <target> <ttl> (valid-from/valid-to omitted when 0)
-		switch rc.Type {
-		case "A", "AAAA":
+		switch rc.TypeNum {
+		case dnsv2.TypeA, dnsv2.TypeAAAA:
 			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.GetRDATA().String(), rc.TTL)
 			lines = append(lines, line)
-		case "CNAME":
+		case dnsv2.TypeCNAME:
 			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.AsCNAME().Target, rc.TTL)
 			lines = append(lines, line)
-		case "NS":
+		case dnsv2.TypeNS:
 			line := fmt.Sprintf("%s %s 0 %s %d", label, rc.Type, rc.AsNS().Ns, rc.TTL)
 			lines = append(lines, line)
-		case "MX":
+		case dnsv2.TypeMX:
 			f := rc.AsMX()
 			line := fmt.Sprintf("%s %s %d %s %d", label, rc.Type, f.Preference, f.Mx, rc.TTL)
 			lines = append(lines, line)
-		case "TXT":
+		case dnsv2.TypeTXT:
 			// Fix TXT record escaping - escape backslashes first, then quotes
 			content := rc.GetTargetTXTJoined()
 			content = strings.ReplaceAll(content, "\\", "\\\\")
@@ -351,17 +352,17 @@ func (api *jokerProvider) recordsToZoneFormat(_ string, records models.Records) 
 			// line := fmt.Sprintf("%s TXT 0 \"%s\" %d", label, ts, rc.TTL)
 
 			lines = append(lines, line)
-		case "SRV":
+		case dnsv2.TypeSRV:
 			f := rc.AsSRV()
 			target := fmt.Sprintf("%s:%d", f.Target, f.Port)
 			priority := fmt.Sprintf("%d/%d", f.Priority, f.Weight)
 			line := fmt.Sprintf("%s %s %s %s %d", label, rc.Type, priority, target, rc.TTL)
 			lines = append(lines, line)
-		case "CAA":
+		case dnsv2.TypeCAA:
 			f := rc.AsCAA()
 			line := fmt.Sprintf("%s %s %d %s \"%s\" %d", label, rc.Type, f.Flag, f.Tag, f.Value, rc.TTL)
 			lines = append(lines, line)
-		case "NAPTR":
+		case dnsv2.TypeNAPTR:
 			// NAPTR format for Joker: order/preference replacement ttl 0 0 "flags" "service" "regex"
 			f := rc.AsNAPTR()
 			priority := fmt.Sprintf("%d/%d", f.Order, f.Preference)

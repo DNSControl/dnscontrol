@@ -76,8 +76,8 @@ func makeRC(rtype, label, target string) *models.RecordConfig {
 	switch rtype {
 	case "SRV":
 		return dc.MustNewRecordConfig(label, 300, rtype, 0, 0, 0, target)
-	case "TXT":
-		return dc.MustNewRecordConfig(label, 300, rtype, target)
+	// case "TXT":
+	// 	return dc.MustNewRecordConfig(label, 300, rtype, target)
 	default:
 		return dc.MustNewRecordConfig(label, 300, rtype, target)
 	}

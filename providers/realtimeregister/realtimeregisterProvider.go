@@ -252,8 +252,8 @@ func toRecord(rc *models.RecordConfig) Record {
 		TTL:  int(rc.TTL),
 	}
 
-	switch rtype := rc.Type; rtype {
-	case "SRV":
+	switch rtype := rc.TypeNum; rtype {
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		record.Priority = parsePriority(int(f.Priority))
 		t := removeTrailingDot(f.Target)
@@ -261,15 +261,15 @@ func toRecord(rc *models.RecordConfig) Record {
 			t = "."
 		}
 		record.Content = fmt.Sprintf("%d %d %s", f.Weight, f.Port, t)
-	case "NAPTR", "SSHFP", "TLSA", "CAA":
+	case dnsv2.TypeNAPTR, dnsv2.TypeSSHFP, dnsv2.TypeTLSA, dnsv2.TypeCAA:
 		record.Content = rc.GetRDATA().String()
-	case "TXT":
+	case dnsv2.TypeTXT:
 		//record.Content = addEscapeChars(record.Content)
 		record.Content = rc.AsTXT().String()
-	case "DS":
+	case dnsv2.TypeDS:
 		f := rc.AsDS()
 		record.Content = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, strings.ToUpper(f.Digest))
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		// Workaround for 0 prio and 'omitempty' restrictions on json marshalling
 		if f.Preference == 0 {
@@ -284,7 +284,7 @@ func toRecord(rc *models.RecordConfig) Record {
 		}
 		record.Content = target
 
-	case "LOC":
+	case dnsv2.TypeLOC:
 		parts := strings.Fields(rc.GetRDATA().String())
 		degrees1, _ := strconv.ParseUint(parts[0], 10, 32)
 		minutes1, _ := strconv.ParseUint(parts[1], 10, 32)
@@ -298,10 +298,10 @@ func toRecord(rc *models.RecordConfig) Record {
 			degrees1, minutes1, parts[2], parts[3], degrees2, minutes2,
 			parts[6], parts[7], altitude, size, hp, vp,
 		)
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		record.Content = removeTrailingDot(rc.AsCNAME().Target)
 
-	case "A", "AAAA":
+	case dnsv2.TypeA, dnsv2.TypeAAAA:
 		record.Content = rc.GetRDATA().String()
 
 	default:

@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -310,15 +311,15 @@ func toGidinetRecord(domain string, rc *models.RecordConfig) *DNSRecord {
 		Priority:   0,
 	}
 
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		rec.Priority = int(f.Preference)
 		// Remove trailing dot from target
 		target := f.Mx
 		rec.Data = strings.TrimSuffix(target, ".")
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// SRV Data format: priority weight port target (with trailing dot per Gidinet spec)
 		// The Priority field is only for MX records
 		f := rc.AsSRV()
@@ -329,17 +330,17 @@ func toGidinetRecord(domain string, rc *models.RecordConfig) *DNSRecord {
 		}
 		rec.Data = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, target)
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		// Remove trailing dot from target
 		target := rc.AsCNAME().Target
 		rec.Data = strings.TrimSuffix(target, ".")
 
-	case "NS":
+	case dnsv2.TypeNS:
 		// Remove trailing dot from target
 		target := rc.AsNS().Ns
 		rec.Data = strings.TrimSuffix(target, ".")
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		// Chunk long TXT values into quoted segments for the API
 		rec.Data = chunkTXT(rc.GetTargetTXTJoined())
 

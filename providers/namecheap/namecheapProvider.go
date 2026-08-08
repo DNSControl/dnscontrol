@@ -366,10 +366,10 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 				TTL:  int(rc.TTL),
 			}
 
-			switch rtype := rc.Type; rtype {
-			case "CAA":
+			switch rtype := rc.TypeNum; rtype {
+			case dnsv2.TypeCAA:
 				rec.Address = rc.GetRDATA().String()
-			case "MX":
+			case dnsv2.TypeMX:
 				f := rc.AsMX()
 				rec.MXPref = int(f.Preference)
 				rec.Address = f.Mx

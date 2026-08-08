@@ -367,16 +367,16 @@ func nativeToRecordTypeDiff(recordType *string) (adns.RecordType, error) {
 		return adns.RecordTypeA, nil
 	case "AAAA", "AZURE_ALIAS_AAAA":
 		return adns.RecordTypeAAAA, nil
-	case "CAA":
-		// CAA doesn't make any senese in a private dns zone in azure
-		return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
+	// case "CAA":
+	// 	// CAA doesn't make any senese in a private dns zone in azure
+	// 	return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
 	case "CNAME", "AZURE_ALIAS_CNAME":
 		return adns.RecordTypeCNAME, nil
 	case "MX":
 		return adns.RecordTypeMX, nil
-	case "NS":
-		// NS record types don't make any sense in a private azure dns zone
-		return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
+	// case "NS":
+	// 	// NS record types don't make any sense in a private azure dns zone
+	// 	return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
 	case "PTR":
 		return adns.RecordTypePTR, nil
 	case "SRV":
@@ -505,8 +505,8 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 			f := rec.AsSRV()
 			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(f.Target), Port: new(int32(f.Port)), Weight: new(int32(f.Weight)), Priority: new(int32(f.Priority))})
 			/* CAA records don't work in a private zone */
-		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
-			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
+		// case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
+		// 	return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
 		default:
 			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
 		}

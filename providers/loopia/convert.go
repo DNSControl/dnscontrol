@@ -15,13 +15,13 @@ func nativeToRecord(zr zoneRecord, dc *models.DomainConfig, subdomain string) (r
 	ttl := record.TTL
 
 	switch rtype := record.Type; rtype {
-	case "CAA":
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
+	// case "CAA":
+	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
 	case "MX":
 		// See dnscontrol issue #2218
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, record.Priority, dc.ToFqdnWithDot(record.Rdata))
-	case "NAPTR":
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
+	// case "NAPTR":
+	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, record.Rdata)
 	default:

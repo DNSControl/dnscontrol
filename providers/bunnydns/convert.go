@@ -43,8 +43,8 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 		rd := rc.GetRDATA().(dnsrdatav2.SVCB)
 		r.Priority = rd.Priority
 		r.Value = rd.Target
-	case recordTypeTLSA:
-		r.Value = rc.GetRDATA().String()
+	// case recordTypeTLSA:
+	// 	r.Value = rc.GetRDATA().String()
 	case recordTypePullZone:
 		// When creating Pull Zone records, the API expects an integer PullZoneId field,
 		// while the Value field should be empty.

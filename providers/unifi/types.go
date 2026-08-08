@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -139,45 +140,45 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 		"value":       "",
 	}
 
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		m["value"] = rc.AsA().Addr.String()
 		// A records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		m["value"] = rc.AsAAAA().Addr.String()
 		// AAAA records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		m["value"] = strings.TrimSuffix(rc.AsCNAME().Target, ".")
 		// CNAME records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case "NS":
+	case dnsv2.TypeNS:
 		m["value"] = strings.TrimSuffix(rc.AsNS().Ns, ".")
 		// NS records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case "MX":
+	case dnsv2.TypeMX:
 		// MX records: only enabled, key, record_type, value, priority allowed
 		m["value"] = strings.TrimSuffix(rc.AsMX().Mx, ".")
 		m["priority"] = int(rc.AsMX().Preference)
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		// TXT records: only enabled, key, record_type, value allowed
 		m["value"] = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// SRV records: enabled, key, record_type, value, priority, weight, port allowed
 		f := rc.AsSRV()
 		m["value"] = strings.TrimSuffix(f.Target, ".")
@@ -289,8 +290,8 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 
 	// The new API only accepts ttlSeconds for A/AAAA/CNAME; sending it for
 	// MX/TXT/SRV is rejected with "Unknown request body property '$.ttlSeconds'".
-	switch rc.Type {
-	case "A", "AAAA", "CNAME":
+	switch rc.TypeNum {
+	case dnsv2.TypeA, dnsv2.TypeAAAA, dnsv2.TypeCNAME:
 		if rc.TTL > 0 {
 			r.TTLSeconds = int(rc.TTL)
 		} else {
@@ -298,30 +299,30 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 		}
 	}
 
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		r.Type = NewAPITypeA
 		r.IPv4Address = rc.AsA().Addr.String()
 
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		r.Type = NewAPITypeAAAA
 		r.IPv6Address = rc.AsAAAA().Addr.String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		r.Type = NewAPITypeCNAME
 		r.TargetDomain = strings.TrimSuffix(rc.AsCNAME().Target, ".")
 
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		r.Type = NewAPITypeMX
 		r.Priority = int(f.Preference)
 		r.MailServerDomain = strings.TrimSuffix(f.Mx, ".")
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		r.Type = NewAPITypeTXT
 		r.Text = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		r.Type = NewAPITypeSRV
 		// The new API wants the "_service._proto.name" label split apart, e.g.
