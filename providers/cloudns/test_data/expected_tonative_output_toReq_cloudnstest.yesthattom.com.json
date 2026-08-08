@@ -14,7 +14,7 @@
       "host": "",
       "record": "8.8.8.8",
       "record-type": "A",
-      "ttl": "1000"
+      "ttl": "1800"
     }
   },
   {
@@ -278,7 +278,7 @@
     "index": 25,
     "value": {
       "host": "",
-      "record": "ns1.foo.com.",
+      "record": "ns1.example.com.",
       "record-type": "NS",
       "ttl": "300"
     }
@@ -287,7 +287,7 @@
     "index": 26,
     "value": {
       "host": "",
-      "record": "ns2.foo.com.",
+      "record": "ns1.foo.com.",
       "record-type": "NS",
       "ttl": "300"
     }
@@ -296,7 +296,7 @@
     "index": 27,
     "value": {
       "host": "",
-      "record": "pns71.cloudns.net.",
+      "record": "ns2.example.com.",
       "record-type": "NS",
       "ttl": "300"
     }
@@ -305,31 +305,13 @@
     "index": 28,
     "value": {
       "host": "",
-      "record": "pns72.cloudns.com.",
+      "record": "ns2.foo.com.",
       "record-type": "NS",
       "ttl": "300"
     }
   },
   {
     "index": 29,
-    "value": {
-      "host": "",
-      "record": "pns73.cloudns.net.",
-      "record-type": "NS",
-      "ttl": "300"
-    }
-  },
-  {
-    "index": 30,
-    "value": {
-      "host": "",
-      "record": "pns74.cloudns.uk.",
-      "record-type": "NS",
-      "ttl": "300"
-    }
-  },
-  {
-    "index": 31,
     "value": {
       "algorithm": "1",
       "fptype": "1",
@@ -340,7 +322,7 @@
     }
   },
   {
-    "index": 32,
+    "index": 30,
     "value": {
       "algorithm": "2",
       "fptype": "1",
@@ -351,7 +333,7 @@
     }
   },
   {
-    "index": 33,
+    "index": 31,
     "value": {
       "algorithm": "2",
       "fptype": "2",
@@ -362,7 +344,7 @@
     }
   },
   {
-    "index": 34,
+    "index": 32,
     "value": {
       "host": "",
       "record": "asimple",
@@ -371,7 +353,7 @@
     }
   },
   {
-    "index": 35,
+    "index": 33,
     "value": {
       "host": "",
       "record": "simple",
@@ -380,25 +362,25 @@
     }
   },
   {
+    "index": 34,
+    "value": {
+      "host": "",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "host": "",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "900"
+    }
+  },
+  {
     "index": 36,
-    "value": {
-      "host": "",
-      "record": "8.8.8.8",
-      "record-type": "A",
-      "ttl": "500"
-    }
-  },
-  {
-    "index": 37,
-    "value": {
-      "host": "",
-      "record": "8.8.8.8",
-      "record-type": "A",
-      "ttl": "666"
-    }
-  },
-  {
-    "index": 38,
     "value": {
       "host": "_443._tcp",
       "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
@@ -410,7 +392,7 @@
     }
   },
   {
-    "index": 39,
+    "index": 37,
     "value": {
       "host": "_443._tcp",
       "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
@@ -422,7 +404,7 @@
     }
   },
   {
-    "index": 40,
+    "index": 38,
     "value": {
       "host": "_443._tcp",
       "record": "FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
@@ -434,7 +416,7 @@
     }
   },
   {
-    "index": 41,
+    "index": 39,
     "value": {
       "host": "_443._tcp",
       "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
@@ -446,7 +428,7 @@
     }
   },
   {
-    "index": 42,
+    "index": 40,
     "value": {
       "host": "_443._tcp",
       "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
@@ -458,7 +440,19 @@
     }
   },
   {
-    "index": 43,
+    "index": 41,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "21600",
+      "weight": "6"
+    }
+  },
+  {
+    "index": 42,
     "value": {
       "host": "_sip._tcp",
       "port": "75",
@@ -470,7 +464,7 @@
     }
   },
   {
-    "index": 44,
+    "index": 43,
     "value": {
       "host": "_sip._tcp",
       "port": "75",
@@ -482,7 +476,7 @@
     }
   },
   {
-    "index": 45,
+    "index": 44,
     "value": {
       "host": "_sip._tcp",
       "port": "75",
@@ -494,7 +488,7 @@
     }
   },
   {
-    "index": 46,
+    "index": 45,
     "value": {
       "host": "_sip._tcp",
       "port": "7",
@@ -506,7 +500,7 @@
     }
   },
   {
-    "index": 47,
+    "index": 46,
     "value": {
       "host": "_sip._tcp",
       "port": "70",
@@ -518,7 +512,7 @@
     }
   },
   {
-    "index": 48,
+    "index": 47,
     "value": {
       "host": "_sip._tcp",
       "port": "7",
@@ -530,7 +524,7 @@
     }
   },
   {
-    "index": 49,
+    "index": 48,
     "value": {
       "host": "_sip._tcp",
       "port": "7",
@@ -542,7 +536,7 @@
     }
   },
   {
-    "index": 50,
+    "index": 49,
     "value": {
       "host": "_sip._tcp",
       "port": "72",
@@ -554,31 +548,19 @@
     }
   },
   {
+    "index": 50,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "600",
+      "weight": "6"
+    }
+  },
+  {
     "index": 51,
-    "value": {
-      "host": "_sip._tcp",
-      "port": "7",
-      "priority": "5",
-      "record": "foo.com.",
-      "record-type": "SRV",
-      "ttl": "333",
-      "weight": "6"
-    }
-  },
-  {
-    "index": 52,
-    "value": {
-      "host": "_sip._tcp",
-      "port": "7",
-      "priority": "5",
-      "record": "foo.com.",
-      "record-type": "SRV",
-      "ttl": "4400",
-      "weight": "6"
-    }
-  },
-  {
-    "index": 53,
     "value": {
       "host": "a",
       "record": "xn--ndaaa.com.",
@@ -587,7 +569,7 @@
     }
   },
   {
-    "index": 54,
+    "index": 52,
     "value": {
       "host": "a",
       "record": "b.cloudnstest.yesthattom.com.",
@@ -596,7 +578,7 @@
     }
   },
   {
-    "index": 55,
+    "index": 53,
     "value": {
       "altitude": "-24.33",
       "h-precision": "200",
@@ -617,7 +599,7 @@
     }
   },
   {
-    "index": 56,
+    "index": 54,
     "value": {
       "algorithm": "1",
       "digest-type": "4",
@@ -629,7 +611,7 @@
     }
   },
   {
-    "index": 57,
+    "index": 55,
     "value": {
       "algorithm": "13",
       "digest-type": "4",
@@ -641,7 +623,7 @@
     }
   },
   {
-    "index": 58,
+    "index": 56,
     "value": {
       "algorithm": "3",
       "digest-type": "4",
@@ -653,7 +635,7 @@
     }
   },
   {
-    "index": 59,
+    "index": 57,
     "value": {
       "host": "another-child",
       "record": "ns101.cloudns.net.",
@@ -662,7 +644,7 @@
     }
   },
   {
-    "index": 60,
+    "index": 58,
     "value": {
       "altitude": "10.22",
       "h-precision": "0",
@@ -683,7 +665,7 @@
     }
   },
   {
-    "index": 61,
+    "index": 59,
     "value": {
       "host": "bar",
       "record": "1.2.3.4",
@@ -692,7 +674,7 @@
     }
   },
   {
-    "index": 62,
+    "index": 60,
     "value": {
       "host": "bar",
       "record": "5.5.5.5",
@@ -701,7 +683,7 @@
     }
   },
   {
-    "index": 63,
+    "index": 61,
     "value": {
       "host": "bar",
       "record": "redact2.acm-validations.aws.",
@@ -710,7 +692,7 @@
     }
   },
   {
-    "index": 64,
+    "index": 62,
     "value": {
       "host": "bar",
       "priority": "5",
@@ -720,7 +702,7 @@
     }
   },
   {
-    "index": 65,
+    "index": 63,
     "value": {
       "host": "bar.bat",
       "record": "5.5.5.5",
@@ -729,7 +711,7 @@
     }
   },
   {
-    "index": 66,
+    "index": 64,
     "value": {
       "altitude": "10",
       "h-precision": "0",
@@ -750,7 +732,7 @@
     }
   },
   {
-    "index": 67,
+    "index": 65,
     "value": {
       "algorithm": "13",
       "digest-type": "1",
@@ -762,7 +744,7 @@
     }
   },
   {
-    "index": 68,
+    "index": 66,
     "value": {
       "algorithm": "13",
       "digest-type": "2",
@@ -774,7 +756,7 @@
     }
   },
   {
-    "index": 69,
+    "index": 67,
     "value": {
       "algorithm": "1",
       "digest-type": "4",
@@ -786,7 +768,7 @@
     }
   },
   {
-    "index": 70,
+    "index": 68,
     "value": {
       "algorithm": "13",
       "digest-type": "1",
@@ -798,7 +780,7 @@
     }
   },
   {
-    "index": 71,
+    "index": 69,
     "value": {
       "algorithm": "3",
       "digest-type": "4",
@@ -810,7 +792,7 @@
     }
   },
   {
-    "index": 72,
+    "index": 70,
     "value": {
       "host": "child",
       "record": "ns101.cloudns.net.",
@@ -819,7 +801,7 @@
     }
   },
   {
-    "index": 73,
+    "index": 71,
     "value": {
       "altitude": "-44",
       "h-precision": "0",
@@ -840,7 +822,7 @@
     }
   },
   {
-    "index": 74,
+    "index": 72,
     "value": {
       "host": "decoy",
       "record": "1.1.1.1",
@@ -849,7 +831,7 @@
     }
   },
   {
-    "index": 75,
+    "index": 73,
     "value": {
       "host": "decoy",
       "record": "2.2.2.2",
@@ -858,7 +840,7 @@
     }
   },
   {
-    "index": 76,
+    "index": 74,
     "value": {
       "host": "decoy",
       "record": "3.3.3.3",
@@ -867,7 +849,7 @@
     }
   },
   {
-    "index": 77,
+    "index": 75,
     "value": {
       "host": "dyndns-city1",
       "record": "91.42.1.1",
@@ -876,7 +858,7 @@
     }
   },
   {
-    "index": 78,
+    "index": 76,
     "value": {
       "host": "dyndns-city1",
       "record": "2003:dd:d7ff::fe71:ce77",
@@ -885,7 +867,7 @@
     }
   },
   {
-    "index": 79,
+    "index": 77,
     "value": {
       "host": "dyndns-city2",
       "record": "91.42.1.2",
@@ -894,7 +876,7 @@
     }
   },
   {
-    "index": 80,
+    "index": 78,
     "value": {
       "host": "dyndns-city2",
       "record": "2003:dd:d7ff::fe71:ce78",
@@ -903,7 +885,7 @@
     }
   },
   {
-    "index": 81,
+    "index": 79,
     "value": {
       "host": "final",
       "record": "TestDNSProviders was successful!",
@@ -912,7 +894,7 @@
     }
   },
   {
-    "index": 82,
+    "index": 80,
     "value": {
       "host": "foo",
       "record": "1.1.1.1",
@@ -921,7 +903,7 @@
     }
   },
   {
-    "index": 83,
+    "index": 81,
     "value": {
       "host": "foo",
       "record": "1.2.3.4",
@@ -930,7 +912,7 @@
     }
   },
   {
-    "index": 84,
+    "index": 82,
     "value": {
       "host": "foo",
       "record": "10.10.10.10",
@@ -939,7 +921,7 @@
     }
   },
   {
-    "index": 85,
+    "index": 83,
     "value": {
       "host": "foo",
       "record": "11.11.11.11",
@@ -948,7 +930,7 @@
     }
   },
   {
-    "index": 86,
+    "index": 84,
     "value": {
       "host": "foo",
       "record": "12.12.12.12",
@@ -957,7 +939,7 @@
     }
   },
   {
-    "index": 87,
+    "index": 85,
     "value": {
       "host": "foo",
       "record": "13.13.13.13",
@@ -966,7 +948,7 @@
     }
   },
   {
-    "index": 88,
+    "index": 86,
     "value": {
       "host": "foo",
       "record": "14.14.14.14",
@@ -975,7 +957,7 @@
     }
   },
   {
-    "index": 89,
+    "index": 87,
     "value": {
       "host": "foo",
       "record": "2.3.4.5",
@@ -984,7 +966,7 @@
     }
   },
   {
-    "index": 90,
+    "index": 88,
     "value": {
       "host": "foo",
       "record": "3.4.5.6",
@@ -993,7 +975,7 @@
     }
   },
   {
-    "index": 91,
+    "index": 89,
     "value": {
       "host": "foo",
       "record": "4.5.6.7",
@@ -1002,7 +984,7 @@
     }
   },
   {
-    "index": 92,
+    "index": 90,
     "value": {
       "host": "foo",
       "record": "8.8.8.8",
@@ -1011,7 +993,7 @@
     }
   },
   {
-    "index": 93,
+    "index": 91,
     "value": {
       "host": "foo",
       "record": "2003:dd:d7ff::fe71:aaaa",
@@ -1020,7 +1002,7 @@
     }
   },
   {
-    "index": 94,
+    "index": 92,
     "value": {
       "host": "foo",
       "record": "cloudnstest.yesthattom.com.",
@@ -1029,7 +1011,7 @@
     }
   },
   {
-    "index": 95,
+    "index": 93,
     "value": {
       "host": "foo",
       "record": "google.com.",
@@ -1038,7 +1020,7 @@
     }
   },
   {
-    "index": 96,
+    "index": 94,
     "value": {
       "host": "foo",
       "record": "google2.com.",
@@ -1047,7 +1029,7 @@
     }
   },
   {
-    "index": 97,
+    "index": 95,
     "value": {
       "host": "foo",
       "record": "redact1.acm-validations.aws.",
@@ -1056,7 +1038,7 @@
     }
   },
   {
-    "index": 98,
+    "index": 96,
     "value": {
       "host": "foo",
       "priority": "10",
@@ -1066,7 +1048,7 @@
     }
   },
   {
-    "index": 99,
+    "index": 97,
     "value": {
       "host": "foo",
       "priority": "10",
@@ -1076,7 +1058,7 @@
     }
   },
   {
-    "index": 100,
+    "index": 98,
     "value": {
       "host": "foo",
       "priority": "20",
@@ -1086,7 +1068,7 @@
     }
   },
   {
-    "index": 101,
+    "index": 99,
     "value": {
       "host": "foo",
       "priority": "20",
@@ -1096,7 +1078,7 @@
     }
   },
   {
-    "index": 102,
+    "index": 100,
     "value": {
       "host": "foo",
       "priority": "5",
@@ -1106,7 +1088,7 @@
     }
   },
   {
-    "index": 103,
+    "index": 101,
     "value": {
       "host": "foo",
       "priority": "8",
@@ -1116,7 +1098,7 @@
     }
   },
   {
-    "index": 104,
+    "index": 102,
     "value": {
       "host": "foo",
       "record": "cloudnstest.yesthattom.com.",
@@ -1125,7 +1107,7 @@
     }
   },
   {
-    "index": 105,
+    "index": 103,
     "value": {
       "host": "foo",
       "record": "simple",
@@ -1134,7 +1116,7 @@
     }
   },
   {
-    "index": 106,
+    "index": 104,
     "value": {
       "host": "foo",
       "record": "v=spf1 ip4:99.99.99.99 -all",
@@ -1143,7 +1125,7 @@
     }
   },
   {
-    "index": 107,
+    "index": 105,
     "value": {
       "host": "foo.bat",
       "record": "1.2.3.4",
@@ -1152,7 +1134,7 @@
     }
   },
   {
-    "index": 108,
+    "index": 106,
     "value": {
       "host": "foo.bat",
       "record": "2.3.4.5",
@@ -1161,7 +1143,7 @@
     }
   },
   {
-    "index": 109,
+    "index": 107,
     "value": {
       "host": "foo.bat",
       "record": "simple",
@@ -1170,7 +1152,7 @@
     }
   },
   {
-    "index": 110,
+    "index": 108,
     "value": {
       "host": "foo254",
       "record": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -1179,7 +1161,7 @@
     }
   },
   {
-    "index": 111,
+    "index": 109,
     "value": {
       "host": "foo255",
       "record": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
@@ -1188,7 +1170,7 @@
     }
   },
   {
-    "index": 112,
+    "index": 110,
     "value": {
       "host": "foo256",
       "record": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
@@ -1197,7 +1179,7 @@
     }
   },
   {
-    "index": 113,
+    "index": 111,
     "value": {
       "host": "foo509",
       "record": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
@@ -1206,7 +1188,7 @@
     }
   },
   {
-    "index": 114,
+    "index": 112,
     "value": {
       "host": "foo510",
       "record": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
@@ -1215,7 +1197,7 @@
     }
   },
   {
-    "index": 115,
+    "index": 113,
     "value": {
       "host": "foo511",
       "record": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
@@ -1224,7 +1206,7 @@
     }
   },
   {
-    "index": 116,
+    "index": 114,
     "value": {
       "host": "foo764",
       "record": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
@@ -1233,7 +1215,7 @@
     }
   },
   {
-    "index": 117,
+    "index": 115,
     "value": {
       "host": "foo765",
       "record": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
@@ -1242,7 +1224,7 @@
     }
   },
   {
-    "index": 118,
+    "index": 116,
     "value": {
       "host": "foo766",
       "record": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
@@ -1251,7 +1233,7 @@
     }
   },
   {
-    "index": 119,
+    "index": 117,
     "value": {
       "host": "fooosbs1",
       "record": "1back\\slash",
@@ -1260,7 +1242,7 @@
     }
   },
   {
-    "index": 120,
+    "index": 118,
     "value": {
       "host": "fooosbs2",
       "record": "2back\\\\slash",
@@ -1269,7 +1251,7 @@
     }
   },
   {
-    "index": 121,
+    "index": 119,
     "value": {
       "host": "fooosbs3",
       "record": "3back\\\\\\slash",
@@ -1278,7 +1260,7 @@
     }
   },
   {
-    "index": 122,
+    "index": 120,
     "value": {
       "host": "fooosbs4",
       "record": "4back\\\\\\\\slash",
@@ -1287,7 +1269,7 @@
     }
   },
   {
-    "index": 123,
+    "index": 121,
     "value": {
       "host": "foosc1",
       "record": "semi;colon",
@@ -1296,7 +1278,7 @@
     }
   },
   {
-    "index": 124,
+    "index": 122,
     "value": {
       "host": "foosc2",
       "record": "wssemi ; colon",
@@ -1305,7 +1287,7 @@
     }
   },
   {
-    "index": 125,
+    "index": 123,
     "value": {
       "host": "foosp",
       "record": "with spaces",
@@ -1314,7 +1296,7 @@
     }
   },
   {
-    "index": 126,
+    "index": 124,
     "value": {
       "host": "foosq",
       "record": "quo'te",
@@ -1323,7 +1305,7 @@
     }
   },
   {
-    "index": 127,
+    "index": 125,
     "value": {
       "host": "mail",
       "record": "ghs.googlehosted.com.",
@@ -1332,7 +1314,7 @@
     }
   },
   {
-    "index": 128,
+    "index": 126,
     "value": {
       "host": "mail.bat",
       "record": "ghs.googlehosted.com.",
@@ -1341,7 +1323,7 @@
     }
   },
   {
-    "index": 129,
+    "index": 127,
     "value": {
       "host": "nmx",
       "record": "1.2.3.3",
@@ -1350,7 +1332,7 @@
     }
   },
   {
-    "index": 130,
+    "index": 128,
     "value": {
       "host": "nmx",
       "priority": "0",
@@ -1360,7 +1342,7 @@
     }
   },
   {
-    "index": 131,
+    "index": 129,
     "value": {
       "host": "nmx",
       "priority": "3",
@@ -1370,7 +1352,7 @@
     }
   },
   {
-    "index": 132,
+    "index": 130,
     "value": {
       "host": "nmx",
       "priority": "9",
@@ -1380,7 +1362,7 @@
     }
   },
   {
-    "index": 133,
+    "index": 131,
     "value": {
       "host": "test",
       "record": "foo.com.",
@@ -1389,7 +1371,7 @@
     }
   },
   {
-    "index": 134,
+    "index": 132,
     "value": {
       "host": "test",
       "record": "foo2.com.",
@@ -1398,7 +1380,7 @@
     }
   },
   {
-    "index": 135,
+    "index": 133,
     "value": {
       "host": "test",
       "record": "example.com.",
@@ -1407,7 +1389,7 @@
     }
   },
   {
-    "index": 136,
+    "index": 134,
     "value": {
       "host": "test",
       "record": "example.net.",
@@ -1416,7 +1398,7 @@
     }
   },
   {
-    "index": 137,
+    "index": 135,
     "value": {
       "flag": "U",
       "host": "test",
@@ -1431,7 +1413,7 @@
     }
   },
   {
-    "index": 138,
+    "index": 136,
     "value": {
       "flag": "U",
       "host": "test",
@@ -1446,7 +1428,7 @@
     }
   },
   {
-    "index": 139,
+    "index": 137,
     "value": {
       "flag": "U",
       "host": "test",
@@ -1461,7 +1443,7 @@
     }
   },
   {
-    "index": 140,
+    "index": 138,
     "value": {
       "flag": "A",
       "host": "test",
@@ -1476,7 +1458,7 @@
     }
   },
   {
-    "index": 141,
+    "index": 139,
     "value": {
       "flag": "A",
       "host": "test",
@@ -1491,7 +1473,7 @@
     }
   },
   {
-    "index": 142,
+    "index": 140,
     "value": {
       "flag": "A",
       "host": "test",
@@ -1506,7 +1488,7 @@
     }
   },
   {
-    "index": 143,
+    "index": 141,
     "value": {
       "flag": "A",
       "host": "test",
@@ -1521,7 +1503,7 @@
     }
   },
   {
-    "index": 144,
+    "index": 142,
     "value": {
       "flag": "A",
       "host": "test",
@@ -1536,7 +1518,7 @@
     }
   },
   {
-    "index": 145,
+    "index": 143,
     "value": {
       "flag": "U",
       "host": "test",
@@ -1551,7 +1533,16 @@
     }
   },
   {
-    "index": 146,
+    "index": 144,
+    "value": {
+      "host": "testa",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "1800"
+    }
+  },
+  {
+    "index": 145,
     "value": {
       "host": "testa",
       "record": "1.1.1.1",
@@ -1560,7 +1551,7 @@
     }
   },
   {
-    "index": 147,
+    "index": 146,
     "value": {
       "host": "testa",
       "record": "3.3.3.3",
@@ -1569,25 +1560,16 @@
     }
   },
   {
+    "index": 147,
+    "value": {
+      "host": "testa",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
     "index": 148,
-    "value": {
-      "host": "testa",
-      "record": "1.1.1.1",
-      "record-type": "A",
-      "ttl": "333"
-    }
-  },
-  {
-    "index": 149,
-    "value": {
-      "host": "testa",
-      "record": "1.1.1.1",
-      "record-type": "A",
-      "ttl": "999"
-    }
-  },
-  {
-    "index": 150,
     "value": {
       "host": "testaaaa",
       "record": "2607:f8b0:4006:820::2006",
@@ -1596,7 +1578,7 @@
     }
   },
   {
-    "index": 151,
+    "index": 149,
     "value": {
       "host": "testaaaa",
       "record": "2607:f8b0:4006:820::2013",
@@ -1605,7 +1587,7 @@
     }
   },
   {
-    "index": 152,
+    "index": 150,
     "value": {
       "host": "testcname",
       "record": "foo.cloudnstest.yesthattom.com.",
@@ -1614,7 +1596,7 @@
     }
   },
   {
-    "index": 153,
+    "index": 151,
     "value": {
       "host": "testcname",
       "record": "www.google.com.",
@@ -1623,7 +1605,7 @@
     }
   },
   {
-    "index": 154,
+    "index": 152,
     "value": {
       "host": "testcname",
       "record": "www.yahoo.com.",
@@ -1632,7 +1614,7 @@
     }
   },
   {
-    "index": 155,
+    "index": 153,
     "value": {
       "host": "testdefined",
       "record": "2.2.2.2",
@@ -1641,7 +1623,7 @@
     }
   },
   {
-    "index": 156,
+    "index": 154,
     "value": {
       "host": "testdefined",
       "record": "9.9.9.9",
@@ -1650,7 +1632,7 @@
     }
   },
   {
-    "index": 157,
+    "index": 155,
     "value": {
       "host": "testignore",
       "record": "8.8.8.8",
@@ -1659,10 +1641,30 @@
     }
   },
   {
-    "index": 158,
+    "index": 156,
     "value": {
       "host": "testmx",
       "priority": "100",
+      "record": "bar.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "host": "testmx",
+      "priority": "100",
+      "record": "foo.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "host": "testmx",
+      "priority": "5",
       "record": "bar.com.",
       "record-type": "MX",
       "ttl": "300"
@@ -1672,7 +1674,7 @@
     "index": 159,
     "value": {
       "host": "testmx",
-      "priority": "100",
+      "priority": "5",
       "record": "foo.com.",
       "record-type": "MX",
       "ttl": "300"
@@ -1681,26 +1683,6 @@
   {
     "index": 160,
     "value": {
-      "host": "testmx",
-      "priority": "5",
-      "record": "bar.com.",
-      "record-type": "MX",
-      "ttl": "300"
-    }
-  },
-  {
-    "index": 161,
-    "value": {
-      "host": "testmx",
-      "priority": "5",
-      "record": "foo.com.",
-      "record-type": "MX",
-      "ttl": "300"
-    }
-  },
-  {
-    "index": 162,
-    "value": {
       "host": "testtxt",
       "record": "changed",
       "record-type": "TXT",
@@ -1708,7 +1690,7 @@
     }
   },
   {
-    "index": 163,
+    "index": 161,
     "value": {
       "host": "testtxt",
       "record": "simple",
@@ -1717,7 +1699,7 @@
     }
   },
   {
-    "index": 164,
+    "index": 162,
     "value": {
       "host": "www",
       "record": "1.1.1.1",
@@ -1726,7 +1708,7 @@
     }
   },
   {
-    "index": 165,
+    "index": 163,
     "value": {
       "host": "www",
       "record": "1.2.3.4",
@@ -1735,7 +1717,7 @@
     }
   },
   {
-    "index": 166,
+    "index": 164,
     "value": {
       "host": "www",
       "record": "1.2.3.8",
@@ -1744,7 +1726,7 @@
     }
   },
   {
-    "index": 167,
+    "index": 165,
     "value": {
       "host": "www",
       "record": "1.2.3.9",
@@ -1753,7 +1735,7 @@
     }
   },
   {
-    "index": 168,
+    "index": 166,
     "value": {
       "host": "www",
       "record": "2.2.2.2",
@@ -1762,7 +1744,7 @@
     }
   },
   {
-    "index": 169,
+    "index": 167,
     "value": {
       "host": "www",
       "record": "3.3.3.3",
@@ -1771,7 +1753,7 @@
     }
   },
   {
-    "index": 170,
+    "index": 168,
     "value": {
       "host": "www",
       "record": "5.5.5.5",
@@ -1780,7 +1762,7 @@
     }
   },
   {
-    "index": 171,
+    "index": 169,
     "value": {
       "host": "www",
       "record": "5.6.7.8",
@@ -1789,12 +1771,30 @@
     }
   },
   {
-    "index": 172,
+    "index": 170,
     "value": {
       "host": "www",
       "record": "2.2.2.2",
       "record-type": "A",
-      "ttl": "400"
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "host": "www",
+      "record": "5.6.7.8",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "host": "www",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "900"
     }
   },
   {
@@ -1803,29 +1803,11 @@
       "host": "www",
       "record": "5.6.7.8",
       "record-type": "A",
-      "ttl": "400"
+      "ttl": "900"
     }
   },
   {
     "index": 174,
-    "value": {
-      "host": "www",
-      "record": "1.2.3.4",
-      "record-type": "A",
-      "ttl": "700"
-    }
-  },
-  {
-    "index": 175,
-    "value": {
-      "host": "www",
-      "record": "5.6.7.8",
-      "record-type": "A",
-      "ttl": "700"
-    }
-  },
-  {
-    "index": 176,
     "value": {
       "host": "xn--fiq228c",
       "record": "1.2.3.4",
@@ -1834,7 +1816,7 @@
     }
   },
   {
-    "index": 177,
+    "index": 175,
     "value": {
       "host": "xn--ndaaa",
       "record": "1.2.3.4",
@@ -1843,7 +1825,7 @@
     }
   },
   {
-    "index": 178,
+    "index": 176,
     "value": {
       "host": "xn--ndaaa",
       "record": "2.2.2.2",
@@ -1852,7 +1834,7 @@
     }
   },
   {
-    "index": 179,
+    "index": 177,
     "value": {
       "host": "xn--o-0gab",
       "record": "xn--ndaaa.xn--vhquv.",
@@ -1861,7 +1843,7 @@
     }
   },
   {
-    "index": 180,
+    "index": 178,
     "value": {
       "host": "xyz",
       "record": "ns1.foo.com.",
@@ -1870,7 +1852,7 @@
     }
   },
   {
-    "index": 181,
+    "index": 179,
     "value": {
       "host": "xyz",
       "record": "ns2.foo.com.",
@@ -1879,7 +1861,7 @@
     }
   },
   {
-    "index": 182,
+    "index": 180,
     "value": {
       "host": "zzz",
       "record": "3.3.3.3",
@@ -1888,7 +1870,7 @@
     }
   },
   {
-    "index": 183,
+    "index": 181,
     "value": {
       "host": "zzz",
       "record": "4.4.4.4",
@@ -1897,7 +1879,7 @@
     }
   },
   {
-    "index": 184,
+    "index": 182,
     "value": {
       "host": "zzz",
       "record": "2003:dd:d7ff::fe71:cccc",

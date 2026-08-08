@@ -162,3 +162,5 @@
 162	testignore 300 IN A 8.8.8.8
 163	final 300 IN TXT "TestDNSProviders was successful!"
 164	final 300 IN TXT "TestDNSProviders was successful!"
+165	@ 300 IN NS ns1.example.com.
+166	@ 300 IN NS ns2.example.com.

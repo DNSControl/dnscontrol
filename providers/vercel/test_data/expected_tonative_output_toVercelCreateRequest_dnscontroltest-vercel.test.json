@@ -13,10 +13,10 @@
     "index": 2,
     "value": {
       "name": "",
-      "ttl": 1000,
+      "ttl": 300,
       "type": "A",
       "comment": "",
-      "value": "8.8.8.8"
+      "value": "1.2.3.2"
     }
   },
   {
@@ -26,7 +26,7 @@
       "ttl": 300,
       "type": "A",
       "comment": "",
-      "value": "1.2.3.2"
+      "value": "1.2.3.4"
     }
   },
   {
@@ -36,31 +36,11 @@
       "ttl": 300,
       "type": "A",
       "comment": "",
-      "value": "1.2.3.4"
-    }
-  },
-  {
-    "index": 5,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
       "value": "2.2.2.2"
     }
   },
   {
-    "index": 6,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
-      "value": "4.4.4.4"
-    }
-  },
-  {
-    "index": 7,
+    "index": 5,
     "value": {
       "name": "",
       "ttl": 300,
@@ -70,7 +50,7 @@
     }
   },
   {
-    "index": 8,
+    "index": 6,
     "value": {
       "name": "",
       "ttl": 300,
@@ -80,17 +60,7 @@
     }
   },
   {
-    "index": 9,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "ALIAS",
-      "comment": "",
-      "value": "foo2.com."
-    }
-  },
-  {
-    "index": 10,
+    "index": 7,
     "value": {
       "name": "",
       "ttl": 300,
@@ -100,27 +70,7 @@
     }
   },
   {
-    "index": 11,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "CAA",
-      "comment": "",
-      "value": "0 issuewild \"example.com\""
-    }
-  },
-  {
-    "index": 12,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "CAA",
-      "comment": "",
-      "value": "0 issuewild \"letsencrypt.org\""
-    }
-  },
-  {
-    "index": 13,
+    "index": 8,
     "value": {
       "name": "",
       "ttl": 300,
@@ -130,17 +80,7 @@
     }
   },
   {
-    "index": 14,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "CAA",
-      "comment": "",
-      "value": "128 issue \"letsencrypt.org\""
-    }
-  },
-  {
-    "index": 15,
+    "index": 9,
     "value": {
       "name": "",
       "ttl": 300,
@@ -154,63 +94,7 @@
     }
   },
   {
-    "index": 16,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "HTTPS",
-      "comment": "",
-      "https": {
-        "priority": 1,
-        "target": "test.com.",
-        "params": "alpn=h2 port=99"
-      }
-    }
-  },
-  {
-    "index": 17,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "HTTPS",
-      "comment": "",
-      "https": {
-        "priority": 1,
-        "target": "test.com.",
-        "params": "port=80"
-      }
-    }
-  },
-  {
-    "index": 18,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "HTTPS",
-      "comment": "",
-      "https": {
-        "priority": 1,
-        "target": "test.com.",
-        "params": "port=99"
-      }
-    }
-  },
-  {
-    "index": 19,
-    "value": {
-      "name": "",
-      "ttl": 300,
-      "type": "HTTPS",
-      "comment": "",
-      "https": {
-        "priority": 3,
-        "target": "example.com.",
-        "params": "alpn=h2,h3 port=999"
-      }
-    }
-  },
-  {
-    "index": 20,
+    "index": 10,
     "value": {
       "mxPriority": 2,
       "name": "",
@@ -221,18 +105,7 @@
     }
   },
   {
-    "index": 21,
-    "value": {
-      "mxPriority": 5,
-      "name": "",
-      "ttl": 300,
-      "type": "MX",
-      "comment": "",
-      "value": "bar.com."
-    }
-  },
-  {
-    "index": 22,
+    "index": 11,
     "value": {
       "mxPriority": 5,
       "name": "",
@@ -243,7 +116,7 @@
     }
   },
   {
-    "index": 23,
+    "index": 12,
     "value": {
       "mxPriority": 8,
       "name": "",
@@ -254,17 +127,7 @@
     }
   },
   {
-    "index": 24,
-    "value": {
-      "name": "",
-      "ttl": 500,
-      "type": "A",
-      "comment": "",
-      "value": "8.8.8.8"
-    }
-  },
-  {
-    "index": 25,
+    "index": 13,
     "value": {
       "name": "",
       "ttl": 666,
@@ -274,7 +137,7 @@
     }
   },
   {
-    "index": 26,
+    "index": 14,
     "value": {
       "name": "_sip._tcp",
       "srv": {
@@ -289,7 +152,7 @@
     }
   },
   {
-    "index": 27,
+    "index": 15,
     "value": {
       "name": "_sip._tcp",
       "srv": {
@@ -304,22 +167,7 @@
     }
   },
   {
-    "index": 28,
-    "value": {
-      "name": "_sip._tcp",
-      "srv": {
-        "port": 75,
-        "priority": 15,
-        "target": "foo4.com.",
-        "weight": 65
-      },
-      "ttl": 300,
-      "type": "SRV",
-      "comment": ""
-    }
-  },
-  {
-    "index": 29,
+    "index": 16,
     "value": {
       "name": "_sip._tcp",
       "srv": {
@@ -334,7 +182,7 @@
     }
   },
   {
-    "index": 30,
+    "index": 17,
     "value": {
       "name": "_sip._tcp",
       "srv": {
@@ -349,52 +197,7 @@
     }
   },
   {
-    "index": 31,
-    "value": {
-      "name": "_sip._tcp",
-      "srv": {
-        "port": 7,
-        "priority": 52,
-        "target": "foo.com.",
-        "weight": 6
-      },
-      "ttl": 300,
-      "type": "SRV",
-      "comment": ""
-    }
-  },
-  {
-    "index": 32,
-    "value": {
-      "name": "_sip._tcp",
-      "srv": {
-        "port": 7,
-        "priority": 52,
-        "target": "foo.com.",
-        "weight": 62
-      },
-      "ttl": 300,
-      "type": "SRV",
-      "comment": ""
-    }
-  },
-  {
-    "index": 33,
-    "value": {
-      "name": "_sip._tcp",
-      "srv": {
-        "port": 72,
-        "priority": 52,
-        "target": "foo.com.",
-        "weight": 62
-      },
-      "ttl": 300,
-      "type": "SRV",
-      "comment": ""
-    }
-  },
-  {
-    "index": 34,
+    "index": 18,
     "value": {
       "name": "_sip._tcp",
       "srv": {
@@ -409,22 +212,7 @@
     }
   },
   {
-    "index": 35,
-    "value": {
-      "name": "_sip._tcp",
-      "srv": {
-        "port": 7,
-        "priority": 5,
-        "target": "foo.com.",
-        "weight": 6
-      },
-      "ttl": 4400,
-      "type": "SRV",
-      "comment": ""
-    }
-  },
-  {
-    "index": 36,
+    "index": 19,
     "value": {
       "name": "a",
       "ttl": 300,
@@ -434,7 +222,7 @@
     }
   },
   {
-    "index": 37,
+    "index": 20,
     "value": {
       "name": "bar",
       "ttl": 300,
@@ -444,7 +232,7 @@
     }
   },
   {
-    "index": 38,
+    "index": 21,
     "value": {
       "mxPriority": 5,
       "name": "bar",
@@ -455,7 +243,7 @@
     }
   },
   {
-    "index": 39,
+    "index": 22,
     "value": {
       "name": "decoy",
       "ttl": 300,
@@ -465,27 +253,7 @@
     }
   },
   {
-    "index": 40,
-    "value": {
-      "name": "decoy",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
-      "value": "2.2.2.2"
-    }
-  },
-  {
-    "index": 41,
-    "value": {
-      "name": "decoy",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
-      "value": "3.3.3.3"
-    }
-  },
-  {
-    "index": 42,
+    "index": 23,
     "value": {
       "name": "final",
       "ttl": 300,
@@ -495,7 +263,7 @@
     }
   },
   {
-    "index": 43,
+    "index": 24,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -505,7 +273,7 @@
     }
   },
   {
-    "index": 44,
+    "index": 25,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -515,7 +283,7 @@
     }
   },
   {
-    "index": 45,
+    "index": 26,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -525,7 +293,7 @@
     }
   },
   {
-    "index": 46,
+    "index": 27,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -535,7 +303,7 @@
     }
   },
   {
-    "index": 47,
+    "index": 28,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -545,7 +313,7 @@
     }
   },
   {
-    "index": 48,
+    "index": 29,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -555,7 +323,7 @@
     }
   },
   {
-    "index": 49,
+    "index": 30,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -565,7 +333,7 @@
     }
   },
   {
-    "index": 50,
+    "index": 31,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -575,7 +343,7 @@
     }
   },
   {
-    "index": 51,
+    "index": 32,
     "value": {
       "mxPriority": 10,
       "name": "foo",
@@ -586,7 +354,7 @@
     }
   },
   {
-    "index": 52,
+    "index": 33,
     "value": {
       "mxPriority": 20,
       "name": "foo",
@@ -597,7 +365,7 @@
     }
   },
   {
-    "index": 53,
+    "index": 34,
     "value": {
       "mxPriority": 5,
       "name": "foo",
@@ -608,7 +376,7 @@
     }
   },
   {
-    "index": 54,
+    "index": 35,
     "value": {
       "mxPriority": 8,
       "name": "foo",
@@ -619,7 +387,7 @@
     }
   },
   {
-    "index": 55,
+    "index": 36,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -629,7 +397,7 @@
     }
   },
   {
-    "index": 56,
+    "index": 37,
     "value": {
       "name": "foo",
       "ttl": 300,
@@ -639,7 +407,7 @@
     }
   },
   {
-    "index": 57,
+    "index": 38,
     "value": {
       "name": "foo254",
       "ttl": 300,
@@ -649,7 +417,7 @@
     }
   },
   {
-    "index": 58,
+    "index": 39,
     "value": {
       "name": "foo255",
       "ttl": 300,
@@ -659,7 +427,7 @@
     }
   },
   {
-    "index": 59,
+    "index": 40,
     "value": {
       "name": "foo256",
       "ttl": 300,
@@ -669,7 +437,7 @@
     }
   },
   {
-    "index": 60,
+    "index": 41,
     "value": {
       "name": "foo509",
       "ttl": 300,
@@ -679,7 +447,7 @@
     }
   },
   {
-    "index": 61,
+    "index": 42,
     "value": {
       "name": "foo510",
       "ttl": 300,
@@ -689,7 +457,7 @@
     }
   },
   {
-    "index": 62,
+    "index": 43,
     "value": {
       "name": "foo511",
       "ttl": 300,
@@ -699,7 +467,7 @@
     }
   },
   {
-    "index": 63,
+    "index": 44,
     "value": {
       "name": "foo764",
       "ttl": 300,
@@ -709,7 +477,7 @@
     }
   },
   {
-    "index": 64,
+    "index": 45,
     "value": {
       "name": "foo765",
       "ttl": 300,
@@ -719,7 +487,7 @@
     }
   },
   {
-    "index": 65,
+    "index": 46,
     "value": {
       "name": "foo766",
       "ttl": 300,
@@ -729,7 +497,7 @@
     }
   },
   {
-    "index": 66,
+    "index": 47,
     "value": {
       "name": "foobt",
       "ttl": 300,
@@ -739,7 +507,7 @@
     }
   },
   {
-    "index": 67,
+    "index": 48,
     "value": {
       "name": "foodq",
       "ttl": 300,
@@ -749,17 +517,7 @@
     }
   },
   {
-    "index": 68,
-    "value": {
-      "name": "foodqs",
-      "ttl": 300,
-      "type": "TXT",
-      "comment": "",
-      "value": "\"left"
-    }
-  },
-  {
-    "index": 69,
+    "index": 49,
     "value": {
       "name": "foodqs",
       "ttl": 300,
@@ -769,17 +527,7 @@
     }
   },
   {
-    "index": 70,
-    "value": {
-      "name": "foodqs",
-      "ttl": 300,
-      "type": "TXT",
-      "comment": "",
-      "value": "right\""
-    }
-  },
-  {
-    "index": 71,
+    "index": 50,
     "value": {
       "name": "fooosbs1",
       "ttl": 300,
@@ -789,7 +537,7 @@
     }
   },
   {
-    "index": 72,
+    "index": 51,
     "value": {
       "name": "fooosbs2",
       "ttl": 300,
@@ -799,7 +547,7 @@
     }
   },
   {
-    "index": 73,
+    "index": 52,
     "value": {
       "name": "fooosbs3",
       "ttl": 300,
@@ -809,7 +557,7 @@
     }
   },
   {
-    "index": 74,
+    "index": 53,
     "value": {
       "name": "fooosbs4",
       "ttl": 300,
@@ -819,7 +567,7 @@
     }
   },
   {
-    "index": 75,
+    "index": 54,
     "value": {
       "name": "foosc1",
       "ttl": 300,
@@ -829,7 +577,7 @@
     }
   },
   {
-    "index": 76,
+    "index": 55,
     "value": {
       "name": "foosc2",
       "ttl": 300,
@@ -839,7 +587,7 @@
     }
   },
   {
-    "index": 77,
+    "index": 56,
     "value": {
       "name": "foosp",
       "ttl": 300,
@@ -849,7 +597,7 @@
     }
   },
   {
-    "index": 78,
+    "index": 57,
     "value": {
       "name": "foosq",
       "ttl": 300,
@@ -859,7 +607,7 @@
     }
   },
   {
-    "index": 79,
+    "index": 58,
     "value": {
       "name": "foows1",
       "ttl": 300,
@@ -869,7 +617,7 @@
     }
   },
   {
-    "index": 80,
+    "index": 59,
     "value": {
       "name": "nmx",
       "ttl": 300,
@@ -879,7 +627,7 @@
     }
   },
   {
-    "index": 81,
+    "index": 60,
     "value": {
       "mxPriority": 3,
       "name": "nmx",
@@ -890,7 +638,7 @@
     }
   },
   {
-    "index": 82,
+    "index": 61,
     "value": {
       "mxPriority": 9,
       "name": "nmx",
@@ -901,7 +649,7 @@
     }
   },
   {
-    "index": 83,
+    "index": 62,
     "value": {
       "name": "test",
       "ttl": 300,
@@ -911,17 +659,7 @@
     }
   },
   {
-    "index": 84,
-    "value": {
-      "name": "test",
-      "ttl": 300,
-      "type": "ALIAS",
-      "comment": "",
-      "value": "foo2.com."
-    }
-  },
-  {
-    "index": 85,
+    "index": 63,
     "value": {
       "name": "testa",
       "ttl": 300,
@@ -931,17 +669,7 @@
     }
   },
   {
-    "index": 86,
-    "value": {
-      "name": "testa",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
-      "value": "3.3.3.3"
-    }
-  },
-  {
-    "index": 87,
+    "index": 64,
     "value": {
       "name": "testa",
       "ttl": 333,
@@ -951,17 +679,7 @@
     }
   },
   {
-    "index": 88,
-    "value": {
-      "name": "testa",
-      "ttl": 999,
-      "type": "A",
-      "comment": "",
-      "value": "1.1.1.1"
-    }
-  },
-  {
-    "index": 89,
+    "index": 65,
     "value": {
       "name": "testaaaa",
       "ttl": 300,
@@ -971,17 +689,7 @@
     }
   },
   {
-    "index": 90,
-    "value": {
-      "name": "testaaaa",
-      "ttl": 300,
-      "type": "AAAA",
-      "comment": "",
-      "value": "2607:f8b0:4006:820::2013"
-    }
-  },
-  {
-    "index": 91,
+    "index": 66,
     "value": {
       "name": "testcname",
       "ttl": 300,
@@ -991,7 +699,7 @@
     }
   },
   {
-    "index": 92,
+    "index": 67,
     "value": {
       "name": "testcname",
       "ttl": 300,
@@ -1001,17 +709,7 @@
     }
   },
   {
-    "index": 93,
-    "value": {
-      "name": "testcname",
-      "ttl": 300,
-      "type": "CNAME",
-      "comment": "",
-      "value": "www.yahoo.com."
-    }
-  },
-  {
-    "index": 94,
+    "index": 68,
     "value": {
       "mxPriority": 100,
       "name": "testmx",
@@ -1022,29 +720,7 @@
     }
   },
   {
-    "index": 95,
-    "value": {
-      "mxPriority": 100,
-      "name": "testmx",
-      "ttl": 300,
-      "type": "MX",
-      "comment": "",
-      "value": "foo.com."
-    }
-  },
-  {
-    "index": 96,
-    "value": {
-      "mxPriority": 5,
-      "name": "testmx",
-      "ttl": 300,
-      "type": "MX",
-      "comment": "",
-      "value": "bar.com."
-    }
-  },
-  {
-    "index": 97,
+    "index": 69,
     "value": {
       "mxPriority": 5,
       "name": "testmx",
@@ -1055,17 +731,7 @@
     }
   },
   {
-    "index": 98,
-    "value": {
-      "name": "testtxt",
-      "ttl": 300,
-      "type": "TXT",
-      "comment": "",
-      "value": "changed"
-    }
-  },
-  {
-    "index": 99,
+    "index": 70,
     "value": {
       "name": "testtxt",
       "ttl": 300,
@@ -1075,7 +741,7 @@
     }
   },
   {
-    "index": 100,
+    "index": 71,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1085,7 +751,7 @@
     }
   },
   {
-    "index": 101,
+    "index": 72,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1095,7 +761,7 @@
     }
   },
   {
-    "index": 102,
+    "index": 73,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1105,7 +771,7 @@
     }
   },
   {
-    "index": 103,
+    "index": 74,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1115,7 +781,7 @@
     }
   },
   {
-    "index": 104,
+    "index": 75,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1125,7 +791,7 @@
     }
   },
   {
-    "index": 105,
+    "index": 76,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1135,7 +801,7 @@
     }
   },
   {
-    "index": 106,
+    "index": 77,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1145,7 +811,7 @@
     }
   },
   {
-    "index": 107,
+    "index": 78,
     "value": {
       "name": "www",
       "ttl": 300,
@@ -1155,17 +821,7 @@
     }
   },
   {
-    "index": 108,
-    "value": {
-      "name": "www",
-      "ttl": 400,
-      "type": "A",
-      "comment": "",
-      "value": "2.2.2.2"
-    }
-  },
-  {
-    "index": 109,
+    "index": 79,
     "value": {
       "name": "www",
       "ttl": 400,
@@ -1175,7 +831,7 @@
     }
   },
   {
-    "index": 110,
+    "index": 80,
     "value": {
       "name": "www",
       "ttl": 700,
@@ -1185,17 +841,7 @@
     }
   },
   {
-    "index": 111,
-    "value": {
-      "name": "www",
-      "ttl": 700,
-      "type": "A",
-      "comment": "",
-      "value": "5.6.7.8"
-    }
-  },
-  {
-    "index": 112,
+    "index": 81,
     "value": {
       "name": "xn--fiq228c",
       "ttl": 300,
@@ -1205,7 +851,7 @@
     }
   },
   {
-    "index": 113,
+    "index": 82,
     "value": {
       "name": "xn--ndaaa",
       "ttl": 300,
@@ -1215,17 +861,7 @@
     }
   },
   {
-    "index": 114,
-    "value": {
-      "name": "xn--ndaaa",
-      "ttl": 300,
-      "type": "A",
-      "comment": "",
-      "value": "2.2.2.2"
-    }
-  },
-  {
-    "index": 115,
+    "index": 83,
     "value": {
       "name": "xn--o-0gab",
       "ttl": 300,
@@ -1235,7 +871,7 @@
     }
   },
   {
-    "index": 116,
+    "index": 84,
     "value": {
       "name": "xyz",
       "ttl": 300,
@@ -1245,7 +881,7 @@
     }
   },
   {
-    "index": 117,
+    "index": 85,
     "value": {
       "name": "xyz",
       "ttl": 300,

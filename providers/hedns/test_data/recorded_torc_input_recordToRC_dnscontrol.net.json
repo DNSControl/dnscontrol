@@ -7,7 +7,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080425 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080799 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -21,7 +21,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080426 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080800 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -35,7 +35,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080427 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080801 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -49,7 +49,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080428 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080802 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -63,7 +63,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080429 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080803 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -77,7 +77,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080430 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080804 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -91,7 +91,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080431 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080805 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -105,7 +105,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080432 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080806 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -119,7 +119,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080433 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080807 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -133,7 +133,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080434 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080808 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -147,7 +147,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080435 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080809 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -161,7 +161,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080436 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080810 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -175,7 +175,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080437 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080811 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -189,7 +189,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080439 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080813 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -203,7 +203,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080441 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080815 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -217,7 +217,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080442 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080816 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -231,7 +231,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080443 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080817 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -245,7 +245,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080445 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080819 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -259,7 +259,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080446 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080820 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -273,7 +273,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080447 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080821 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -287,7 +287,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080448 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080822 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -301,7 +301,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080449 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080823 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -315,7 +315,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080450 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080824 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -329,7 +329,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080451 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080825 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -343,7 +343,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080452 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080826 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -357,7 +357,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080453 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080827 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -371,7 +371,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080454 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080828 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -385,7 +385,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080455 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080829 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -399,7 +399,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080456 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080830 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -413,7 +413,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080457 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080831 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -427,7 +427,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080458 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080832 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -441,7 +441,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080459 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080833 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -455,7 +455,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080460 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080834 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -469,7 +469,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080461 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080835 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -483,7 +483,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080464 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080838 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -497,7 +497,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080467 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080841 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -511,7 +511,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080468 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080842 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -525,7 +525,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080469 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080843 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -539,7 +539,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080470 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080844 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -553,7 +553,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080473 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080847 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -567,7 +567,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080476 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080850 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -581,7 +581,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080479 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080853 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -595,7 +595,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080480 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080854 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -609,7 +609,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080481 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080855 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -623,7 +623,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080482 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080856 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -637,7 +637,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080485 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080859 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -651,7 +651,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080486 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080860 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -665,7 +665,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080487 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080861 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -679,7 +679,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080488 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080862 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -693,7 +693,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080491 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080865 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -707,7 +707,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080492 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080866 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -721,7 +721,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080493 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080867 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -735,7 +735,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080496 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080870 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -749,7 +749,7 @@
       "ID": 4858238117,
       "Type": "SOA",
       "Name": "",
-      "Data": "ns1.he.net. hostmaster.he.net. 2026080499 86400 7200 3600000 172800",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080873 86400 7200 3600000 172800",
       "TTL": 172800,
       "Priority": 0,
       "DDNSEnabled": false
@@ -757,6 +757,286 @@
   },
   {
     "index": 55,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080874 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080876 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080878 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080879 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080881 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080883 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080884 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080885 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080887 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080889 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080890 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080891 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080892 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080893 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080894 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080895 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080896 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080897 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080898 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 4858238117,
+      "Type": "SOA",
+      "Name": "",
+      "Data": "ns1.he.net. hostmaster.he.net. 2026080899 86400 7200 3600000 172800",
+      "TTL": 172800,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 75,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
@@ -770,7 +1050,7 @@
     }
   },
   {
-    "index": 56,
+    "index": 76,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
@@ -784,7 +1064,7 @@
     }
   },
   {
-    "index": 57,
+    "index": 77,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
@@ -798,7 +1078,7 @@
     }
   },
   {
-    "index": 58,
+    "index": 78,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
@@ -812,7 +1092,7 @@
     }
   },
   {
-    "index": 59,
+    "index": 79,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
@@ -826,294 +1106,14 @@
     }
   },
   {
-    "index": 60,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137983,
-      "Type": "A",
-      "Name": "testa.dnscontrol.net",
-      "Data": "1.1.1.1",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 61,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137983,
-      "Type": "A",
-      "Name": "testa.dnscontrol.net",
-      "Data": "3.3.3.3",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 62,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137984,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "2.2.2.2",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 63,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137984,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "4.4.4.4",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 64,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137985,
-      "Type": "AAAA",
-      "Name": "testaaaa.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2006",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 65,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434137985,
-      "Type": "AAAA",
-      "Name": "testaaaa.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2013",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 66,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138312,
-      "Type": "CNAME",
-      "Name": "testcname.dnscontrol.net",
-      "Data": "www.google.com.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 67,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138312,
-      "Type": "CNAME",
-      "Name": "testcname.dnscontrol.net",
-      "Data": "www.yahoo.com.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 68,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138313,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 69,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138493,
-      "Type": "CNAME",
-      "Name": "testcname.dnscontrol.net",
-      "Data": "foo.dnscontrol.net.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 70,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138603,
-      "Type": "MX",
-      "Name": "dnscontrol.net",
-      "Data": "bar.com",
-      "TTL": 300,
-      "Priority": 5,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 71,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138603,
-      "Type": "MX",
-      "Name": "dnscontrol.net",
-      "Data": "foo.com",
-      "TTL": 300,
-      "Priority": 5,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 72,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138604,
-      "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
-      "Data": "bar.com",
-      "TTL": 300,
-      "Priority": 5,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 73,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138604,
-      "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
-      "Data": "foo.com",
-      "TTL": 300,
-      "Priority": 5,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 74,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138605,
-      "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
-      "Data": "foo.com",
-      "TTL": 300,
-      "Priority": 100,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 75,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138605,
-      "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
-      "Data": "foo.com",
-      "TTL": 300,
-      "Priority": 5,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 76,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138606,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "other.example.com. bar.com.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 77,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138606,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "other.example.com. example.com.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 78,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138606,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "user.example.com. bar.com.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 79,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434138607,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "user.dnscontrol.net. server.dnscontrol.net.",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
     "index": 80,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138607,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "user2.dnscontrol.net. server.dnscontrol.net.",
+      "ID": 9444608294,
+      "Type": "A",
+      "Name": "testa.dnscontrol.net",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1124,10 +1124,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138607,
-      "Type": "RP",
-      "Name": "foo.dnscontrol.net",
-      "Data": "user2.dnscontrol.net. waiter.dnscontrol.net.",
+      "ID": 9444608294,
+      "Type": "A",
+      "Name": "testa.dnscontrol.net",
+      "Data": "3.3.3.3",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1138,10 +1138,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138608,
-      "Type": "TXT",
-      "Name": "testtxt.dnscontrol.net",
-      "Data": "\"changed\"",
+      "ID": 9444608295,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "2.2.2.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1152,10 +1152,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138608,
-      "Type": "TXT",
-      "Name": "testtxt.dnscontrol.net",
-      "Data": "\"simple\"",
+      "ID": 9444608295,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "4.4.4.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1166,10 +1166,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138609,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "ID": 9444608296,
+      "Type": "AAAA",
+      "Name": "testaaaa.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2006",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1180,10 +1180,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138610,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444608296,
+      "Type": "AAAA",
+      "Name": "testaaaa.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2013",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1194,10 +1194,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138611,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "3.3.3.3",
+      "ID": 9444608297,
+      "Type": "CNAME",
+      "Name": "testcname.dnscontrol.net",
+      "Data": "www.google.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1208,10 +1208,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138612,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "ID": 9444608297,
+      "Type": "CNAME",
+      "Name": "testcname.dnscontrol.net",
+      "Data": "www.yahoo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1222,10 +1222,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138613,
+      "ID": 9444608298,
       "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1236,10 +1236,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434138614,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "3.3.3.3",
+      "ID": 9444608299,
+      "Type": "CNAME",
+      "Name": "testcname.dnscontrol.net",
+      "Data": "foo.dnscontrol.net.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1250,12 +1250,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140630,
+      "ID": 9444608300,
       "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
+      "Name": "dnscontrol.net",
       "Data": "bar.com",
       "TTL": 300,
-      "Priority": 100,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1264,9 +1264,9 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140631,
+      "ID": 9444608300,
       "Type": "MX",
-      "Name": "testmx.dnscontrol.net",
+      "Name": "dnscontrol.net",
       "Data": "foo.com",
       "TTL": 300,
       "Priority": 5,
@@ -1278,12 +1278,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140632,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "ID": 9444608301,
+      "Type": "MX",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "bar.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1292,21 +1292,7 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140633,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.1.1.1",
-      "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": false
-    }
-  },
-  {
-    "index": 94,
-    "value": {
-      "ZoneID": 1075212,
-      "ZoneName": "dnscontrol.net",
-      "ID": 9434140634,
+      "ID": 9444608301,
       "Type": "MX",
       "Name": "testmx.dnscontrol.net",
       "Data": "foo.com",
@@ -1316,16 +1302,30 @@
     }
   },
   {
+    "index": 94,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444608647,
+      "Type": "MX",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "foo.com",
+      "TTL": 300,
+      "Priority": 100,
+      "DDNSEnabled": false
+    }
+  },
+  {
     "index": 95,
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140635,
+      "ID": 9444608647,
       "Type": "MX",
       "Name": "testmx.dnscontrol.net",
-      "Data": "bar.com",
+      "Data": "foo.com",
       "TTL": 300,
-      "Priority": 100,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1334,11 +1334,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140636,
-      "Type": "A",
-      "Name": "testa.dnscontrol.net",
-      "Data": "1.1.1.1",
-      "TTL": 333,
+      "ID": 9444608648,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "other.example.com. bar.com.",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1348,11 +1348,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140636,
-      "Type": "A",
-      "Name": "testa.dnscontrol.net",
-      "Data": "1.1.1.1",
-      "TTL": 999,
+      "ID": 9444608648,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "other.example.com. example.com.",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1362,11 +1362,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140637,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "8.8.8.8",
-      "TTL": 1000,
+      "ID": 9444608648,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "user.example.com. bar.com.",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1376,11 +1376,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140637,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "8.8.8.8",
-      "TTL": 500,
+      "ID": 9444608649,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "user.dnscontrol.net. server.dnscontrol.net.",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1390,11 +1390,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140637,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "8.8.8.8",
-      "TTL": 666,
+      "ID": 9444608649,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "user2.dnscontrol.net. server.dnscontrol.net.",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1404,10 +1404,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140638,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444608649,
+      "Type": "RP",
+      "Name": "foo.dnscontrol.net",
+      "Data": "user2.dnscontrol.net. waiter.dnscontrol.net.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1418,10 +1418,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140638,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444608738,
+      "Type": "TXT",
+      "Name": "testtxt.dnscontrol.net",
+      "Data": "\"changed\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1432,11 +1432,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140638,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "2.2.2.2",
-      "TTL": 400,
+      "ID": 9444608738,
+      "Type": "TXT",
+      "Name": "testtxt.dnscontrol.net",
+      "Data": "\"simple\"",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1446,10 +1446,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140639,
+      "ID": 9444608739,
       "Type": "A",
       "Name": "www.dnscontrol.net",
-      "Data": "5.6.7.8",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1460,11 +1460,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140639,
+      "ID": 9444608740,
       "Type": "A",
       "Name": "www.dnscontrol.net",
-      "Data": "5.6.7.8",
-      "TTL": 400,
+      "Data": "2.2.2.2",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1474,11 +1474,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140640,
+      "ID": 9444608741,
       "Type": "A",
       "Name": "www.dnscontrol.net",
-      "Data": "5.6.7.8",
-      "TTL": 400,
+      "Data": "3.3.3.3",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1488,11 +1488,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140640,
+      "ID": 9444608742,
       "Type": "A",
       "Name": "www.dnscontrol.net",
-      "Data": "5.6.7.8",
-      "TTL": 700,
+      "Data": "1.1.1.1",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1502,11 +1502,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140641,
+      "ID": 9444608743,
       "Type": "A",
       "Name": "www.dnscontrol.net",
-      "Data": "1.2.3.4",
-      "TTL": 700,
+      "Data": "2.2.2.2",
+      "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1516,10 +1516,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140642,
+      "ID": 9444608744,
       "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "Name": "www.dnscontrol.net",
+      "Data": "3.3.3.3",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1530,12 +1530,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140643,
+      "ID": 9444608745,
       "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "mx.google.com",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "bar.com",
       "TTL": 300,
-      "Priority": 5,
+      "Priority": 100,
       "DDNSEnabled": false
     }
   },
@@ -1544,12 +1544,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140644,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "4.5.6.7",
+      "ID": 9444608746,
+      "Type": "MX",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "foo.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1558,10 +1558,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140645,
-      "Type": "CNAME",
-      "Name": "foo.dnscontrol.net",
-      "Data": "google.com.",
+      "ID": 9444608747,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1572,10 +1572,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140646,
+      "ID": 9444608748,
       "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1586,12 +1586,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140647,
-      "Type": "CNAME",
-      "Name": "foo.dnscontrol.net",
-      "Data": "google2.com.",
+      "ID": 9444608749,
+      "Type": "MX",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "foo.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1600,12 +1600,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140648,
-      "Type": "HTTPS",
-      "Name": "dnscontrol.net",
-      "Data": "0 test.com.",
+      "ID": 9444608750,
+      "Type": "MX",
+      "Name": "testmx.dnscontrol.net",
+      "Data": "bar.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 100,
       "DDNSEnabled": false
     }
   },
@@ -1614,11 +1614,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140648,
-      "Type": "HTTPS",
-      "Name": "dnscontrol.net",
-      "Data": "1 test.com. alpn=\"h2\" port=\"99\"",
-      "TTL": 300,
+      "ID": 9444608751,
+      "Type": "A",
+      "Name": "testa.dnscontrol.net",
+      "Data": "1.1.1.1",
+      "TTL": 333,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1628,11 +1628,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140648,
-      "Type": "HTTPS",
-      "Name": "dnscontrol.net",
-      "Data": "1 test.com. port=\"80\"",
-      "TTL": 300,
+      "ID": 9444608751,
+      "Type": "A",
+      "Name": "testa.dnscontrol.net",
+      "Data": "1.1.1.1",
+      "TTL": 999,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1642,11 +1642,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140648,
-      "Type": "HTTPS",
+      "ID": 9444608752,
+      "Type": "A",
       "Name": "dnscontrol.net",
-      "Data": "1 test.com. port=\"99\"",
-      "TTL": 300,
+      "Data": "8.8.8.8",
+      "TTL": 1000,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1656,11 +1656,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140648,
-      "Type": "HTTPS",
+      "ID": 9444608752,
+      "Type": "A",
       "Name": "dnscontrol.net",
-      "Data": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
-      "TTL": 300,
+      "Data": "8.8.8.8",
+      "TTL": 500,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1670,11 +1670,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140931,
-      "Type": "SVCB",
+      "ID": 9444608752,
+      "Type": "A",
       "Name": "dnscontrol.net",
-      "Data": "0 test.com.",
-      "TTL": 300,
+      "Data": "8.8.8.8",
+      "TTL": 666,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1684,10 +1684,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140931,
-      "Type": "SVCB",
-      "Name": "dnscontrol.net",
-      "Data": "1 test.com. alpn=\"h2\" port=\"99\"",
+      "ID": 9444608753,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1698,10 +1698,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140931,
-      "Type": "SVCB",
-      "Name": "dnscontrol.net",
-      "Data": "1 test.com. port=\"80\"",
+      "ID": 9444608753,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "2.2.2.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1712,11 +1712,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140931,
-      "Type": "SVCB",
-      "Name": "dnscontrol.net",
-      "Data": "1 test.com. port=\"99\"",
-      "TTL": 300,
+      "ID": 9444608753,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "2.2.2.2",
+      "TTL": 400,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1726,10 +1726,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140931,
-      "Type": "SVCB",
-      "Name": "dnscontrol.net",
-      "Data": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
+      "ID": 9444608754,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "5.6.7.8",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1740,11 +1740,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140946,
+      "ID": 9444608754,
       "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "1.2.3.4",
-      "TTL": 300,
+      "Name": "www.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 400,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1754,11 +1754,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140947,
-      "Type": "CNAME",
-      "Name": "foo.dnscontrol.net",
-      "Data": "dnscontrol.net.",
-      "TTL": 300,
+      "ID": 9444608755,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 400,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1768,11 +1768,11 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140948,
+      "ID": 9444608755,
       "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "1.2.3.4",
-      "TTL": 300,
+      "Name": "www.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 700,
       "Priority": 0,
       "DDNSEnabled": false
     }
@@ -1782,12 +1782,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140949,
-      "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "dnscontrol.net",
-      "TTL": 300,
-      "Priority": 8,
+      "ID": 9444608756,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.2.3.4",
+      "TTL": 700,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -1796,10 +1796,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140950,
+      "ID": 9444610241,
       "Type": "A",
-      "Name": "nmx.dnscontrol.net",
-      "Data": "1.2.3.3",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1810,12 +1810,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140951,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.2.3.9",
+      "ID": 9444611877,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "mx.google.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -1824,12 +1824,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140952,
-      "Type": "MX",
-      "Name": "nmx.dnscontrol.net",
-      "Data": "www.dnscontrol.net",
+      "ID": 9444612365,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "4.5.6.7",
       "TTL": 300,
-      "Priority": 9,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -1838,12 +1838,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140953,
-      "Type": "MX",
-      "Name": "nmx.dnscontrol.net",
-      "Data": "nmx.dnscontrol.net",
+      "ID": 9444612366,
+      "Type": "CNAME",
+      "Name": "foo.dnscontrol.net",
+      "Data": "google.com.",
       "TTL": 300,
-      "Priority": 3,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -1852,10 +1852,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140954,
+      "ID": 9444612367,
       "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "1.2.3.2",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1866,10 +1866,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140955,
-      "Type": "A",
-      "Name": "www.dnscontrol.net",
-      "Data": "1.2.3.8",
+      "ID": 9444612368,
+      "Type": "CNAME",
+      "Name": "foo.dnscontrol.net",
+      "Data": "google2.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1880,12 +1880,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140956,
-      "Type": "MX",
+      "ID": 9444612369,
+      "Type": "HTTPS",
       "Name": "dnscontrol.net",
-      "Data": "www.dnscontrol.net",
+      "Data": "0 test.com.",
       "TTL": 300,
-      "Priority": 8,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -1894,12 +1894,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140957,
-      "Type": "MX",
+      "ID": 9444612369,
+      "Type": "HTTPS",
       "Name": "dnscontrol.net",
-      "Data": "dnscontrol.net",
+      "Data": "1 test.com. alpn=\"h2\" port=\"99\"",
       "TTL": 300,
-      "Priority": 2,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -1908,10 +1908,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140958,
-      "Type": "NS",
-      "Name": "xyz.dnscontrol.net",
-      "Data": "ns2.foo.com.",
+      "ID": 9444612369,
+      "Type": "HTTPS",
+      "Name": "dnscontrol.net",
+      "Data": "1 test.com. port=\"80\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1922,10 +1922,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140959,
-      "Type": "NS",
-      "Name": "xyz.dnscontrol.net",
-      "Data": "ns1.foo.com.",
+      "ID": 9444612369,
+      "Type": "HTTPS",
+      "Name": "dnscontrol.net",
+      "Data": "1 test.com. port=\"99\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1936,10 +1936,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140960,
-      "Type": "A",
+      "ID": 9444612369,
+      "Type": "HTTPS",
       "Name": "dnscontrol.net",
-      "Data": "1.2.3.4",
+      "Data": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1950,10 +1950,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140961,
-      "Type": "NS",
-      "Name": "foo.dnscontrol.net",
-      "Data": "dnscontrol.net.",
+      "ID": 9444612370,
+      "Type": "SVCB",
+      "Name": "dnscontrol.net",
+      "Data": "0 test.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1964,10 +1964,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140962,
-      "Type": "NS",
+      "ID": 9444612370,
+      "Type": "SVCB",
       "Name": "dnscontrol.net",
-      "Data": "ns1.foo.com.",
+      "Data": "1 test.com. alpn=\"h2\" port=\"99\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1978,10 +1978,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140963,
-      "Type": "NS",
+      "ID": 9444612370,
+      "Type": "SVCB",
       "Name": "dnscontrol.net",
-      "Data": "ns2.foo.com.",
+      "Data": "1 test.com. port=\"80\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -1992,10 +1992,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434140964,
-      "Type": "TXT",
-      "Name": "foo0.dnscontrol.net",
-      "Data": "",
+      "ID": 9444612370,
+      "Type": "SVCB",
+      "Name": "dnscontrol.net",
+      "Data": "1 test.com. port=\"99\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2006,10 +2006,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141104,
-      "Type": "TXT",
-      "Name": "foo254.dnscontrol.net",
-      "Data": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"",
+      "ID": 9444612370,
+      "Type": "SVCB",
+      "Name": "dnscontrol.net",
+      "Data": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2020,10 +2020,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141207,
-      "Type": "TXT",
-      "Name": "foo255.dnscontrol.net",
-      "Data": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\"",
+      "ID": 9444612371,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2034,10 +2034,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141208,
-      "Type": "TXT",
-      "Name": "foo256.dnscontrol.net",
-      "Data": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\"",
+      "ID": 9444612372,
+      "Type": "CNAME",
+      "Name": "foo.dnscontrol.net",
+      "Data": "dnscontrol.net.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2048,10 +2048,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141232,
-      "Type": "TXT",
-      "Name": "foo509.dnscontrol.net",
-      "Data": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"",
+      "ID": 9444612373,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2062,12 +2062,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141233,
-      "Type": "TXT",
-      "Name": "foo510.dnscontrol.net",
-      "Data": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"",
+      "ID": 9444612374,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 8,
       "DDNSEnabled": false
     }
   },
@@ -2076,10 +2076,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141494,
-      "Type": "TXT",
-      "Name": "foo511.dnscontrol.net",
-      "Data": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\"",
+      "ID": 9444612375,
+      "Type": "A",
+      "Name": "nmx.dnscontrol.net",
+      "Data": "1.2.3.3",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2090,10 +2090,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141495,
-      "Type": "TXT",
-      "Name": "foo764.dnscontrol.net",
-      "Data": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"",
+      "ID": 9444612376,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.2.3.9",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2104,12 +2104,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141496,
-      "Type": "TXT",
-      "Name": "foo765.dnscontrol.net",
-      "Data": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"",
+      "ID": 9444612377,
+      "Type": "MX",
+      "Name": "nmx.dnscontrol.net",
+      "Data": "www.dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 9,
       "DDNSEnabled": false
     }
   },
@@ -2118,12 +2118,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141497,
-      "Type": "TXT",
-      "Name": "foo766.dnscontrol.net",
-      "Data": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\"",
+      "ID": 9444612378,
+      "Type": "MX",
+      "Name": "nmx.dnscontrol.net",
+      "Data": "nmx.dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 3,
       "DDNSEnabled": false
     }
   },
@@ -2132,10 +2132,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141498,
-      "Type": "TXT",
-      "Name": "foosq.dnscontrol.net",
-      "Data": "\"quo'te\"",
+      "ID": 9444612379,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "1.2.3.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2146,10 +2146,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141499,
-      "Type": "TXT",
-      "Name": "foobt.dnscontrol.net",
-      "Data": "\"blah`blah\"",
+      "ID": 9444612531,
+      "Type": "A",
+      "Name": "www.dnscontrol.net",
+      "Data": "1.2.3.8",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2160,12 +2160,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141500,
-      "Type": "TXT",
-      "Name": "foodq.dnscontrol.net",
-      "Data": "\"in\\\"side\"",
+      "ID": 9444612532,
+      "Type": "MX",
+      "Name": "dnscontrol.net",
+      "Data": "www.dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 8,
       "DDNSEnabled": false
     }
   },
@@ -2174,12 +2174,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141501,
-      "Type": "TXT",
-      "Name": "foodqs.dnscontrol.net",
-      "Data": "\"\\\"left\"",
+      "ID": 9444612533,
+      "Type": "MX",
+      "Name": "dnscontrol.net",
+      "Data": "dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 2,
       "DDNSEnabled": false
     }
   },
@@ -2188,10 +2188,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141501,
-      "Type": "TXT",
-      "Name": "foodqs.dnscontrol.net",
-      "Data": "\"in\\\"ter\\\"ior\"",
+      "ID": 9444612534,
+      "Type": "NS",
+      "Name": "xyz.dnscontrol.net",
+      "Data": "ns2.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2202,10 +2202,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141501,
-      "Type": "TXT",
-      "Name": "foodqs.dnscontrol.net",
-      "Data": "\"right\\\"\"",
+      "ID": 9444612535,
+      "Type": "NS",
+      "Name": "xyz.dnscontrol.net",
+      "Data": "ns1.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2216,10 +2216,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141502,
-      "Type": "TXT",
-      "Name": "foosc1.dnscontrol.net",
-      "Data": "\"semi;colon\"",
+      "ID": 9444612536,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2230,10 +2230,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141503,
-      "Type": "TXT",
-      "Name": "foosc2.dnscontrol.net",
-      "Data": "\"wssemi ; colon\"",
+      "ID": 9444612537,
+      "Type": "NS",
+      "Name": "foo.dnscontrol.net",
+      "Data": "dnscontrol.net.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2244,10 +2244,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141504,
-      "Type": "TXT",
-      "Name": "foosp.dnscontrol.net",
-      "Data": "\"with spaces\"",
+      "ID": 9444612645,
+      "Type": "NS",
+      "Name": "dnscontrol.net",
+      "Data": "ns1.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2258,10 +2258,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141505,
-      "Type": "TXT",
-      "Name": "foows1.dnscontrol.net",
-      "Data": "\"trailingws \"",
+      "ID": 9444612646,
+      "Type": "NS",
+      "Name": "dnscontrol.net",
+      "Data": "ns2.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2272,10 +2272,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434141506,
+      "ID": 9444612647,
       "Type": "TXT",
-      "Name": "foo.dnscontrol.net",
-      "Data": "\"v=spf1 ip4:99.99.99.99 -all\"",
+      "Name": "foo0.dnscontrol.net",
+      "Data": "",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2286,10 +2286,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143507,
+      "ID": 9444612955,
       "Type": "TXT",
-      "Name": "fooosbs1.dnscontrol.net",
-      "Data": "\"1back\\\\slash\"",
+      "Name": "foo254.dnscontrol.net",
+      "Data": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2300,10 +2300,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143508,
+      "ID": 9444612956,
       "Type": "TXT",
-      "Name": "fooosbs2.dnscontrol.net",
-      "Data": "\"2back\\\\\\\\slash\"",
+      "Name": "foo255.dnscontrol.net",
+      "Data": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2314,10 +2314,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143509,
+      "ID": 9444612957,
       "Type": "TXT",
-      "Name": "fooosbs3.dnscontrol.net",
-      "Data": "\"3back\\\\\\\\\\\\slash\"",
+      "Name": "foo256.dnscontrol.net",
+      "Data": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2328,10 +2328,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143510,
+      "ID": 9444612958,
       "Type": "TXT",
-      "Name": "fooosbs4.dnscontrol.net",
-      "Data": "\"4back\\\\\\\\\\\\\\\\slash\"",
+      "Name": "foo509.dnscontrol.net",
+      "Data": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2342,12 +2342,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143511,
-      "Type": "MX",
-      "Name": "bar.dnscontrol.net",
-      "Data": "bar.com",
+      "ID": 9444613091,
+      "Type": "TXT",
+      "Name": "foo510.dnscontrol.net",
+      "Data": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"",
       "TTL": 300,
-      "Priority": 5,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -2356,10 +2356,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143512,
-      "Type": "A",
-      "Name": "decoy.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "ID": 9444613092,
+      "Type": "TXT",
+      "Name": "foo511.dnscontrol.net",
+      "Data": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2370,10 +2370,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143512,
-      "Type": "A",
-      "Name": "decoy.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444613093,
+      "Type": "TXT",
+      "Name": "foo764.dnscontrol.net",
+      "Data": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2384,10 +2384,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143512,
-      "Type": "A",
-      "Name": "decoy.dnscontrol.net",
-      "Data": "3.3.3.3",
+      "ID": 9444613094,
+      "Type": "TXT",
+      "Name": "foo765.dnscontrol.net",
+      "Data": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2398,10 +2398,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143513,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444613239,
+      "Type": "TXT",
+      "Name": "foo766.dnscontrol.net",
+      "Data": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2412,10 +2412,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143514,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "2.3.4.5",
+      "ID": 9444613655,
+      "Type": "TXT",
+      "Name": "foosq.dnscontrol.net",
+      "Data": "\"quo'te\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2426,10 +2426,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143514,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "3.4.5.6",
+      "ID": 9444613656,
+      "Type": "TXT",
+      "Name": "foobt.dnscontrol.net",
+      "Data": "\"blah`blah\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2440,10 +2440,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143515,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "3.4.5.6",
+      "ID": 9444613657,
+      "Type": "TXT",
+      "Name": "foodq.dnscontrol.net",
+      "Data": "\"in\\\"side\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2454,10 +2454,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143516,
-      "Type": "A",
-      "Name": "bar.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444613681,
+      "Type": "TXT",
+      "Name": "foodqs.dnscontrol.net",
+      "Data": "\"\\\"left\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2468,10 +2468,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143517,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "2.3.4.5",
+      "ID": 9444613681,
+      "Type": "TXT",
+      "Name": "foodqs.dnscontrol.net",
+      "Data": "\"in\\\"ter\\\"ior\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2482,10 +2482,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143518,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "3.4.5.6",
+      "ID": 9444613681,
+      "Type": "TXT",
+      "Name": "foodqs.dnscontrol.net",
+      "Data": "\"right\\\"\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2496,10 +2496,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143518,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "8.8.8.8",
+      "ID": 9444613682,
+      "Type": "TXT",
+      "Name": "foosc1.dnscontrol.net",
+      "Data": "\"semi;colon\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2510,12 +2510,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143519,
-      "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "bar.dnscontrol.net",
+      "ID": 9444613684,
+      "Type": "TXT",
+      "Name": "foosc2.dnscontrol.net",
+      "Data": "\"wssemi ; colon\"",
       "TTL": 300,
-      "Priority": 20,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -2524,12 +2524,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434143520,
-      "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "foo.dnscontrol.net",
+      "ID": 9444613686,
+      "Type": "TXT",
+      "Name": "foosp.dnscontrol.net",
+      "Data": "\"with spaces\"",
       "TTL": 300,
-      "Priority": 10,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -2538,10 +2538,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144543,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "8.8.8.8",
+      "ID": 9444613831,
+      "Type": "TXT",
+      "Name": "foows1.dnscontrol.net",
+      "Data": "\"trailingws \"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2552,10 +2552,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144544,
-      "Type": "A",
-      "Name": "xn--ndaaa.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444613832,
+      "Type": "TXT",
+      "Name": "foo.dnscontrol.net",
+      "Data": "\"v=spf1 ip4:99.99.99.99 -all\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2566,10 +2566,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144544,
-      "Type": "A",
-      "Name": "xn--ndaaa.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444613833,
+      "Type": "TXT",
+      "Name": "fooosbs1.dnscontrol.net",
+      "Data": "\"1back\\\\slash\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2580,10 +2580,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144545,
-      "Type": "A",
-      "Name": "xn--fiq228c.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444613834,
+      "Type": "TXT",
+      "Name": "fooosbs2.dnscontrol.net",
+      "Data": "\"2back\\\\\\\\slash\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2594,10 +2594,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144546,
-      "Type": "CNAME",
-      "Name": "a.dnscontrol.net",
-      "Data": "xn--ndaaa.com.",
+      "ID": 9444613835,
+      "Type": "TXT",
+      "Name": "fooosbs3.dnscontrol.net",
+      "Data": "\"3back\\\\\\\\\\\\slash\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2608,10 +2608,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144547,
-      "Type": "CNAME",
-      "Name": "xn--o-0gab.dnscontrol.net",
-      "Data": "xn--ndaaa.xn--vhquv.",
+      "ID": 9444613976,
+      "Type": "TXT",
+      "Name": "fooosbs4.dnscontrol.net",
+      "Data": "\"4back\\\\\\\\\\\\\\\\slash\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2622,12 +2622,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144548,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+      "ID": 9444613977,
+      "Type": "MX",
+      "Name": "bar.dnscontrol.net",
+      "Data": "bar.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -2636,10 +2636,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144548,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issue \"letsencrypt.org\"",
+      "ID": 9444613978,
+      "Type": "A",
+      "Name": "decoy.dnscontrol.net",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2650,10 +2650,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144548,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issuewild \";\"",
+      "ID": 9444613978,
+      "Type": "A",
+      "Name": "decoy.dnscontrol.net",
+      "Data": "2.2.2.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2664,10 +2664,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144548,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issuewild \"example.com\"",
+      "ID": 9444613978,
+      "Type": "A",
+      "Name": "decoy.dnscontrol.net",
+      "Data": "3.3.3.3",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2678,10 +2678,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144548,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issuewild \"letsencrypt.org\"",
+      "ID": 9444613979,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2692,10 +2692,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144549,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "0 issue \"letsencrypt.org\"",
+      "ID": 9444613980,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "2.3.4.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2706,10 +2706,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434144549,
-      "Type": "CAA",
-      "Name": "dnscontrol.net",
-      "Data": "128 issue \"letsencrypt.org\"",
+      "ID": 9444613980,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "3.4.5.6",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2720,10 +2720,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152270,
-      "Type": "LOC",
-      "Name": "dnscontrol.net",
-      "Data": "42 21 54.000 N 71 06 18.000 W -24.05m 30m 0.00m 0.00m",
+      "ID": 9444613981,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "3.4.5.6",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2734,10 +2734,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152270,
-      "Type": "LOC",
-      "Name": "dnscontrol.net",
-      "Data": "42 21 54.000 N 71 06 18.000 W -24.06m 30m 10m 0.00m",
+      "ID": 9444613982,
+      "Type": "A",
+      "Name": "bar.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2748,10 +2748,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152270,
-      "Type": "LOC",
-      "Name": "dnscontrol.net",
-      "Data": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
+      "ID": 9444613983,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "2.3.4.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2762,10 +2762,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152294,
-      "Type": "LOC",
-      "Name": "a.dnscontrol.net",
-      "Data": "42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m",
+      "ID": 9444613984,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "3.4.5.6",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2776,10 +2776,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152295,
-      "Type": "LOC",
-      "Name": "b.dnscontrol.net",
-      "Data": "52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m",
+      "ID": 9444613984,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "8.8.8.8",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2790,12 +2790,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152296,
-      "Type": "LOC",
-      "Name": "c.dnscontrol.net",
-      "Data": "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m",
+      "ID": 9444613985,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "bar.dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 20,
       "DDNSEnabled": false
     }
   },
@@ -2804,12 +2804,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152297,
-      "Type": "LOC",
-      "Name": "d.dnscontrol.net",
-      "Data": "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m",
+      "ID": 9444613986,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "foo.dnscontrol.net",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 10,
       "DDNSEnabled": false
     }
   },
@@ -2818,10 +2818,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "ID": 9444613987,
+      "Type": "A",
+      "Name": "foo.dnscontrol.net",
+      "Data": "8.8.8.8",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2832,10 +2832,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "ID": 9444613988,
+      "Type": "A",
+      "Name": "xn--ndaaa.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2846,10 +2846,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "ID": 9444613988,
+      "Type": "A",
+      "Name": "xn--ndaaa.dnscontrol.net",
+      "Data": "2.2.2.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2860,10 +2860,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" .",
+      "ID": 9444613989,
+      "Type": "A",
+      "Name": "xn--fiq228c.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2874,10 +2874,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "ID": 9444613990,
+      "Type": "CNAME",
+      "Name": "a.dnscontrol.net",
+      "Data": "xn--ndaaa.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2888,10 +2888,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com.",
+      "ID": 9444613991,
+      "Type": "CNAME",
+      "Name": "xn--o-0gab.dnscontrol.net",
+      "Data": "xn--ndaaa.xn--vhquv.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2902,10 +2902,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com.",
+      "ID": 9444614109,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2916,10 +2916,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152298,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "ID": 9444614109,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issue \"letsencrypt.org\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2930,10 +2930,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152299,
-      "Type": "NAPTR",
-      "Name": "test.dnscontrol.net",
-      "Data": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "ID": 9444614109,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issuewild \";\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2944,10 +2944,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152300,
-      "Type": "PTR",
-      "Name": "4.dnscontrol.net",
-      "Data": "bar.com.",
+      "ID": 9444614109,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issuewild \"example.com\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2958,10 +2958,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152300,
-      "Type": "PTR",
-      "Name": "4.dnscontrol.net",
-      "Data": "foo.com.",
+      "ID": 9444614109,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issuewild \"letsencrypt.org\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -2972,12 +2972,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152301,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "6 7 foo.com.",
+      "ID": 9444614212,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "0 issue \"letsencrypt.org\"",
       "TTL": 300,
-      "Priority": 5,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -2986,12 +2986,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152301,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "6 7 foo.com.",
+      "ID": 9444614212,
+      "Type": "CAA",
+      "Name": "dnscontrol.net",
+      "Data": "128 issue \"letsencrypt.org\"",
       "TTL": 300,
-      "Priority": 52,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3000,12 +3000,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152301,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "62 7 foo.com.",
+      "ID": 9444614213,
+      "Type": "LOC",
+      "Name": "dnscontrol.net",
+      "Data": "42 21 54.000 N 71 06 18.000 W -24.05m 30m 0.00m 0.00m",
       "TTL": 300,
-      "Priority": 52,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3014,12 +3014,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152301,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "62 72 foo.com.",
+      "ID": 9444614213,
+      "Type": "LOC",
+      "Name": "dnscontrol.net",
+      "Data": "42 21 54.000 N 71 06 18.000 W -24.06m 30m 10m 0.00m",
       "TTL": 300,
-      "Priority": 52,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3028,12 +3028,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152302,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "60 70 foo2.com.",
+      "ID": 9444614213,
+      "Type": "LOC",
+      "Name": "dnscontrol.net",
+      "Data": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
       "TTL": 300,
-      "Priority": 5,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3042,12 +3042,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152303,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "65 75 foo3.com.",
+      "ID": 9444614214,
+      "Type": "LOC",
+      "Name": "a.dnscontrol.net",
+      "Data": "42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m",
       "TTL": 300,
-      "Priority": 15,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3056,12 +3056,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152303,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "65 75 foo4.com.",
+      "ID": 9444614215,
+      "Type": "LOC",
+      "Name": "b.dnscontrol.net",
+      "Data": "52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m",
       "TTL": 300,
-      "Priority": 15,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3070,12 +3070,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152488,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "65 75 .",
+      "ID": 9444614216,
+      "Type": "LOC",
+      "Name": "c.dnscontrol.net",
+      "Data": "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m",
       "TTL": 300,
-      "Priority": 15,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3084,12 +3084,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152489,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "6 7 foo.com.",
-      "TTL": 333,
-      "Priority": 5,
+      "ID": 9444614217,
+      "Type": "LOC",
+      "Name": "d.dnscontrol.net",
+      "Data": "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m",
+      "TTL": 300,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3098,12 +3098,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152489,
-      "Type": "SRV",
-      "Name": "_sip._tcp.dnscontrol.net",
-      "Data": "6 7 foo.com.",
-      "TTL": 4400,
-      "Priority": 5,
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "TTL": 300,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3112,10 +3112,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152631,
-      "Type": "SSHFP",
-      "Name": "dnscontrol.net",
-      "Data": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3126,10 +3126,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152631,
-      "Type": "SSHFP",
-      "Name": "dnscontrol.net",
-      "Data": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3140,10 +3140,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152631,
-      "Type": "SSHFP",
-      "Name": "dnscontrol.net",
-      "Data": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3154,10 +3154,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152634,
-      "Type": "ALIAS",
-      "Name": "dnscontrol.net",
-      "Data": "foo.com.",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3168,10 +3168,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152634,
-      "Type": "ALIAS",
-      "Name": "dnscontrol.net",
-      "Data": "foo2.com.",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3182,10 +3182,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152635,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3196,10 +3196,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152636,
-      "Type": "ALIAS",
-      "Name": "dnscontrol.net",
-      "Data": "foo.dnscontrol.net.",
+      "ID": 9444614218,
+      "Type": "NAPTR",
+      "Name": "test.dnscontrol.net",
+      "Data": "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3210,10 +3210,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152637,
-      "Type": "ALIAS",
+      "ID": 9444614219,
+      "Type": "NAPTR",
       "Name": "test.dnscontrol.net",
-      "Data": "foo.com.",
+      "Data": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3224,10 +3224,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152637,
-      "Type": "ALIAS",
-      "Name": "test.dnscontrol.net",
-      "Data": "foo2.com.",
+      "ID": 9444616226,
+      "Type": "PTR",
+      "Name": "4.dnscontrol.net",
+      "Data": "bar.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3238,10 +3238,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152638,
-      "Type": "A",
-      "Name": "bar.dnscontrol.net",
-      "Data": "5.5.5.5",
+      "ID": 9444616226,
+      "Type": "PTR",
+      "Name": "4.dnscontrol.net",
+      "Data": "foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3252,12 +3252,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152639,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444616432,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "6 7 foo.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -3266,12 +3266,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152640,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "2.3.4.5",
+      "ID": 9444616432,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "6 7 foo.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 52,
       "DDNSEnabled": false
     }
   },
@@ -3280,12 +3280,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152641,
-      "Type": "TXT",
-      "Name": "foo.dnscontrol.net",
-      "Data": "\"simple\"",
+      "ID": 9444616432,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "62 7 foo.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 52,
       "DDNSEnabled": false
     }
   },
@@ -3294,12 +3294,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434152642,
-      "Type": "CNAME",
-      "Name": "mail.dnscontrol.net",
-      "Data": "ghs.googlehosted.com.",
+      "ID": 9444616432,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "62 72 foo.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 52,
       "DDNSEnabled": false
     }
   },
@@ -3308,12 +3308,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153783,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444616433,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "60 70 foo2.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -3322,12 +3322,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153784,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "2.3.4.5",
+      "ID": 9444616434,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "65 75 foo3.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 15,
       "DDNSEnabled": false
     }
   },
@@ -3336,12 +3336,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153785,
-      "Type": "TXT",
-      "Name": "dnscontrol.net",
-      "Data": "\"simple\"",
+      "ID": 9444616434,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "65 75 foo4.com.",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 15,
       "DDNSEnabled": false
     }
   },
@@ -3350,12 +3350,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153786,
-      "Type": "A",
-      "Name": "bar.dnscontrol.net",
-      "Data": "5.5.5.5",
+      "ID": 9444616435,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "65 75 .",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 15,
       "DDNSEnabled": false
     }
   },
@@ -3364,12 +3364,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153787,
-      "Type": "CNAME",
-      "Name": "mail.dnscontrol.net",
-      "Data": "ghs.googlehosted.com.",
-      "TTL": 300,
-      "Priority": 0,
+      "ID": 9444616436,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "6 7 foo.com.",
+      "TTL": 333,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -3378,12 +3378,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153788,
-      "Type": "A",
-      "Name": "dnscontrol.net",
-      "Data": "2.2.2.2",
-      "TTL": 300,
-      "Priority": 0,
+      "ID": 9444616436,
+      "Type": "SRV",
+      "Name": "_sip._tcp.dnscontrol.net",
+      "Data": "6 7 foo.com.",
+      "TTL": 4400,
+      "Priority": 5,
       "DDNSEnabled": false
     }
   },
@@ -3392,10 +3392,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153789,
-      "Type": "TXT",
+      "ID": 9444616437,
+      "Type": "SSHFP",
       "Name": "dnscontrol.net",
-      "Data": "\"asimple\"",
+      "Data": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3406,10 +3406,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153790,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444616437,
+      "Type": "SSHFP",
+      "Name": "dnscontrol.net",
+      "Data": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3420,10 +3420,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434153791,
-      "Type": "TXT",
-      "Name": "foo.dnscontrol.net",
-      "Data": "\"simple\"",
+      "ID": 9444616437,
+      "Type": "SSHFP",
+      "Name": "dnscontrol.net",
+      "Data": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3434,10 +3434,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434155286,
-      "Type": "A",
-      "Name": "bar.bat.dnscontrol.net",
-      "Data": "5.5.5.5",
+      "ID": 9444616438,
+      "Type": "ALIAS",
+      "Name": "dnscontrol.net",
+      "Data": "foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3448,10 +3448,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434155907,
-      "Type": "A",
-      "Name": "foo.bat.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "ID": 9444616438,
+      "Type": "ALIAS",
+      "Name": "dnscontrol.net",
+      "Data": "foo2.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3462,10 +3462,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434156524,
+      "ID": 9444616439,
       "Type": "A",
-      "Name": "foo.bat.dnscontrol.net",
-      "Data": "2.3.4.5",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3476,10 +3476,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157046,
-      "Type": "TXT",
-      "Name": "foo.bat.dnscontrol.net",
-      "Data": "\"simple\"",
+      "ID": 9444616440,
+      "Type": "ALIAS",
+      "Name": "dnscontrol.net",
+      "Data": "foo.dnscontrol.net.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3490,10 +3490,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157219,
-      "Type": "CNAME",
-      "Name": "mail.bat.dnscontrol.net",
-      "Data": "ghs.googlehosted.com.",
+      "ID": 9444616441,
+      "Type": "ALIAS",
+      "Name": "test.dnscontrol.net",
+      "Data": "foo.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3504,10 +3504,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157247,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "ID": 9444616441,
+      "Type": "ALIAS",
+      "Name": "test.dnscontrol.net",
+      "Data": "foo2.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3518,10 +3518,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157248,
+      "ID": 9444616442,
       "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "10.10.10.10",
+      "Name": "bar.dnscontrol.net",
+      "Data": "5.5.5.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3532,10 +3532,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157248,
+      "ID": 9444616443,
       "Type": "A",
       "Name": "foo.dnscontrol.net",
-      "Data": "11.11.11.11",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3546,10 +3546,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157248,
+      "ID": 9444616444,
       "Type": "A",
       "Name": "foo.dnscontrol.net",
-      "Data": "12.12.12.12",
+      "Data": "2.3.4.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3560,10 +3560,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157248,
-      "Type": "A",
+      "ID": 9444616445,
+      "Type": "TXT",
       "Name": "foo.dnscontrol.net",
-      "Data": "13.13.13.13",
+      "Data": "\"simple\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3574,10 +3574,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157248,
-      "Type": "A",
-      "Name": "foo.dnscontrol.net",
-      "Data": "14.14.14.14",
+      "ID": 9444616446,
+      "Type": "CNAME",
+      "Name": "mail.dnscontrol.net",
+      "Data": "ghs.googlehosted.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3588,10 +3588,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157250,
-      "Type": "AAAA",
-      "Name": "foo.dnscontrol.net",
-      "Data": "2003:dd:d7ff::fe71:aaaa",
+      "ID": 9444616447,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3602,12 +3602,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157252,
-      "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "aspmx.l.google.com",
+      "ID": 9444616448,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "2.3.4.5",
       "TTL": 300,
-      "Priority": 10,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3616,12 +3616,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157253,
-      "Type": "MX",
-      "Name": "foo.dnscontrol.net",
-      "Data": "alt1.aspmx.l.google.com",
+      "ID": 9444616449,
+      "Type": "TXT",
+      "Name": "dnscontrol.net",
+      "Data": "\"simple\"",
       "TTL": 300,
-      "Priority": 20,
+      "Priority": 0,
       "DDNSEnabled": false
     }
   },
@@ -3630,10 +3630,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434157255,
+      "ID": 9444616450,
       "Type": "A",
-      "Name": "zzz.dnscontrol.net",
-      "Data": "3.3.3.3",
+      "Name": "bar.dnscontrol.net",
+      "Data": "5.5.5.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3644,10 +3644,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159884,
-      "Type": "A",
-      "Name": "zzz.dnscontrol.net",
-      "Data": "4.4.4.4",
+      "ID": 9444616451,
+      "Type": "CNAME",
+      "Name": "mail.dnscontrol.net",
+      "Data": "ghs.googlehosted.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3658,10 +3658,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159886,
-      "Type": "AAAA",
-      "Name": "zzz.dnscontrol.net",
-      "Data": "2003:dd:d7ff::fe71:cccc",
+      "ID": 9444616452,
+      "Type": "A",
+      "Name": "dnscontrol.net",
+      "Data": "2.2.2.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3672,10 +3672,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159897,
-      "Type": "CNAME",
-      "Name": "bar.dnscontrol.net",
-      "Data": "redact2.acm-validations.aws.",
+      "ID": 9444616453,
+      "Type": "TXT",
+      "Name": "dnscontrol.net",
+      "Data": "\"asimple\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3686,10 +3686,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159900,
-      "Type": "CNAME",
+      "ID": 9444616454,
+      "Type": "A",
       "Name": "foo.dnscontrol.net",
-      "Data": "redact1.acm-validations.aws.",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3700,10 +3700,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159904,
-      "Type": "A",
-      "Name": "dyndns-city1.dnscontrol.net",
-      "Data": "91.42.1.1",
+      "ID": 9444616455,
+      "Type": "TXT",
+      "Name": "foo.dnscontrol.net",
+      "Data": "\"simple\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3714,10 +3714,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159906,
-      "Type": "AAAA",
-      "Name": "dyndns-city1.dnscontrol.net",
-      "Data": "2003:dd:d7ff::fe71:ce77",
+      "ID": 9444616456,
+      "Type": "A",
+      "Name": "bar.bat.dnscontrol.net",
+      "Data": "5.5.5.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3728,10 +3728,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159907,
+      "ID": 9444616457,
       "Type": "A",
-      "Name": "dyndns-city2.dnscontrol.net",
-      "Data": "91.42.1.2",
+      "Name": "foo.bat.dnscontrol.net",
+      "Data": "1.2.3.4",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3742,10 +3742,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159909,
-      "Type": "AAAA",
-      "Name": "dyndns-city2.dnscontrol.net",
-      "Data": "2003:dd:d7ff::fe71:ce78",
+      "ID": 9444616458,
+      "Type": "A",
+      "Name": "foo.bat.dnscontrol.net",
+      "Data": "2.3.4.5",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3756,10 +3756,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159912,
-      "Type": "A",
-      "Name": "testdefined.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444616459,
+      "Type": "TXT",
+      "Name": "foo.bat.dnscontrol.net",
+      "Data": "\"simple\"",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3770,10 +3770,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159912,
-      "Type": "A",
-      "Name": "testdefined.dnscontrol.net",
-      "Data": "9.9.9.9",
+      "ID": 9444616460,
+      "Type": "CNAME",
+      "Name": "mail.bat.dnscontrol.net",
+      "Data": "ghs.googlehosted.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3784,10 +3784,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159913,
+      "ID": 9444616461,
       "Type": "A",
-      "Name": "testignore.dnscontrol.net",
-      "Data": "8.8.8.8",
+      "Name": "foo.dnscontrol.net",
+      "Data": "1.1.1.1",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3798,13 +3798,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159914,
+      "ID": 9444616462,
       "Type": "A",
-      "Name": "hdyn.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "Name": "foo.dnscontrol.net",
+      "Data": "10.10.10.10",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3812,13 +3812,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159914,
+      "ID": 9444616462,
       "Type": "A",
-      "Name": "hdyn.dnscontrol.net",
-      "Data": "10.0.0.1",
+      "Name": "foo.dnscontrol.net",
+      "Data": "11.11.11.11",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3826,10 +3826,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159914,
+      "ID": 9444616462,
       "Type": "A",
-      "Name": "hdyn.dnscontrol.net",
-      "Data": "5.6.7.8",
+      "Name": "foo.dnscontrol.net",
+      "Data": "12.12.12.12",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3840,13 +3840,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159914,
+      "ID": 9444616462,
       "Type": "A",
-      "Name": "hdyn.dnscontrol.net",
-      "Data": "5.6.7.8",
+      "Name": "foo.dnscontrol.net",
+      "Data": "13.13.13.13",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3854,10 +3854,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434159991,
+      "ID": 9444616462,
       "Type": "A",
-      "Name": "hstatic.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "Name": "foo.dnscontrol.net",
+      "Data": "14.14.14.14",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -3868,13 +3868,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163343,
+      "ID": 9444616463,
       "Type": "AAAA",
-      "Name": "hdynv6.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2006",
+      "Name": "foo.dnscontrol.net",
+      "Data": "2003:dd:d7ff::fe71:aaaa",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3882,13 +3882,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163343,
-      "Type": "AAAA",
-      "Name": "hdynv6.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2013",
+      "ID": 9444616464,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "aspmx.l.google.com",
       "TTL": 300,
-      "Priority": 0,
-      "DDNSEnabled": true
+      "Priority": 10,
+      "DDNSEnabled": false
     }
   },
   {
@@ -3896,12 +3896,12 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163344,
-      "Type": "TXT",
-      "Name": "hdyntxt.dnscontrol.net",
-      "Data": "\"dynamic-value\"",
+      "ID": 9444616465,
+      "Type": "MX",
+      "Name": "foo.dnscontrol.net",
+      "Data": "alt1.aspmx.l.google.com",
       "TTL": 300,
-      "Priority": 0,
+      "Priority": 20,
       "DDNSEnabled": false
     }
   },
@@ -3910,13 +3910,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163344,
-      "Type": "TXT",
-      "Name": "hdyntxt.dnscontrol.net",
-      "Data": "\"dynamic-value\"",
+      "ID": 9444616466,
+      "Type": "A",
+      "Name": "zzz.dnscontrol.net",
+      "Data": "3.3.3.3",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3924,13 +3924,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163345,
+      "ID": 9444616467,
       "Type": "A",
-      "Name": "hkey.dnscontrol.net",
-      "Data": "1.2.3.4",
+      "Name": "zzz.dnscontrol.net",
+      "Data": "4.4.4.4",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3938,13 +3938,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163345,
-      "Type": "A",
-      "Name": "hkey.dnscontrol.net",
-      "Data": "5.6.7.8",
+      "ID": 9444616468,
+      "Type": "AAAA",
+      "Name": "zzz.dnscontrol.net",
+      "Data": "2003:dd:d7ff::fe71:cccc",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3952,13 +3952,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163346,
-      "Type": "AAAA",
-      "Name": "hkeyv6.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2006",
+      "ID": 9444616469,
+      "Type": "CNAME",
+      "Name": "bar.dnscontrol.net",
+      "Data": "redact2.acm-validations.aws.",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3966,13 +3966,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163346,
-      "Type": "AAAA",
-      "Name": "hkeyv6.dnscontrol.net",
-      "Data": "2607:f8b0:4006:820::2013",
+      "ID": 9444616470,
+      "Type": "CNAME",
+      "Name": "foo.dnscontrol.net",
+      "Data": "redact1.acm-validations.aws.",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3980,13 +3980,13 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163348,
+      "ID": 9444616471,
       "Type": "A",
-      "Name": "hdmix-dyn.dnscontrol.net",
-      "Data": "1.1.1.1",
+      "Name": "dyndns-city1.dnscontrol.net",
+      "Data": "91.42.1.1",
       "TTL": 300,
       "Priority": 0,
-      "DDNSEnabled": true
+      "DDNSEnabled": false
     }
   },
   {
@@ -3994,10 +3994,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163349,
-      "Type": "A",
-      "Name": "hdmix-static.dnscontrol.net",
-      "Data": "2.2.2.2",
+      "ID": 9444616472,
+      "Type": "AAAA",
+      "Name": "dyndns-city1.dnscontrol.net",
+      "Data": "2003:dd:d7ff::fe71:ce77",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -4008,10 +4008,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163349,
+      "ID": 9444616473,
       "Type": "A",
-      "Name": "hdmix-static.dnscontrol.net",
-      "Data": "3.3.3.3",
+      "Name": "dyndns-city2.dnscontrol.net",
+      "Data": "91.42.1.2",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -4022,10 +4022,10 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163350,
-      "Type": "TXT",
-      "Name": "final.dnscontrol.net",
-      "Data": "\"TestDNSProviders was successful!\"",
+      "ID": 9444616474,
+      "Type": "AAAA",
+      "Name": "dyndns-city2.dnscontrol.net",
+      "Data": "2003:dd:d7ff::fe71:ce78",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
@@ -4036,10 +4036,318 @@
     "value": {
       "ZoneID": 1075212,
       "ZoneName": "dnscontrol.net",
-      "ID": 9434163351,
+      "ID": 9444616475,
+      "Type": "A",
+      "Name": "testdefined.dnscontrol.net",
+      "Data": "2.2.2.2",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 290,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616475,
+      "Type": "A",
+      "Name": "testdefined.dnscontrol.net",
+      "Data": "9.9.9.9",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 291,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616476,
+      "Type": "A",
+      "Name": "testignore.dnscontrol.net",
+      "Data": "8.8.8.8",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 292,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616477,
+      "Type": "A",
+      "Name": "hdyn.dnscontrol.net",
+      "Data": "1.2.3.4",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 293,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616477,
+      "Type": "A",
+      "Name": "hdyn.dnscontrol.net",
+      "Data": "10.0.0.1",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 294,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616477,
+      "Type": "A",
+      "Name": "hdyn.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 295,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616477,
+      "Type": "A",
+      "Name": "hdyn.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 296,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616478,
+      "Type": "A",
+      "Name": "hstatic.dnscontrol.net",
+      "Data": "2.2.2.2",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 297,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616479,
+      "Type": "AAAA",
+      "Name": "hdynv6.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2006",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 298,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616479,
+      "Type": "AAAA",
+      "Name": "hdynv6.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2013",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 299,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616480,
+      "Type": "TXT",
+      "Name": "hdyntxt.dnscontrol.net",
+      "Data": "\"dynamic-value\"",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 300,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616480,
+      "Type": "TXT",
+      "Name": "hdyntxt.dnscontrol.net",
+      "Data": "\"dynamic-value\"",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 301,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616481,
+      "Type": "A",
+      "Name": "hkey.dnscontrol.net",
+      "Data": "1.2.3.4",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 302,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616481,
+      "Type": "A",
+      "Name": "hkey.dnscontrol.net",
+      "Data": "5.6.7.8",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 303,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616482,
+      "Type": "AAAA",
+      "Name": "hkeyv6.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2006",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 304,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616482,
+      "Type": "AAAA",
+      "Name": "hkeyv6.dnscontrol.net",
+      "Data": "2607:f8b0:4006:820::2013",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 305,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616483,
+      "Type": "A",
+      "Name": "hdmix-dyn.dnscontrol.net",
+      "Data": "1.1.1.1",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": true
+    }
+  },
+  {
+    "index": 306,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616484,
+      "Type": "A",
+      "Name": "hdmix-static.dnscontrol.net",
+      "Data": "2.2.2.2",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 307,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616484,
+      "Type": "A",
+      "Name": "hdmix-static.dnscontrol.net",
+      "Data": "3.3.3.3",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 308,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616485,
       "Type": "TXT",
       "Name": "final.dnscontrol.net",
       "Data": "\"TestDNSProviders was successful!\"",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 309,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616486,
+      "Type": "TXT",
+      "Name": "final.dnscontrol.net",
+      "Data": "\"TestDNSProviders was successful!\"",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 310,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616487,
+      "Type": "NS",
+      "Name": "dnscontrol.net",
+      "Data": "ns1.example.com.",
+      "TTL": 300,
+      "Priority": 0,
+      "DDNSEnabled": false
+    }
+  },
+  {
+    "index": 311,
+    "value": {
+      "ZoneID": 1075212,
+      "ZoneName": "dnscontrol.net",
+      "ID": 9444616488,
+      "Type": "NS",
+      "Name": "dnscontrol.net",
+      "Data": "ns2.example.com.",
       "TTL": 300,
       "Priority": 0,
       "DDNSEnabled": false
