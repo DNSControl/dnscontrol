@@ -31,7 +31,7 @@ jobs:
           go-version: stable
       # `go build` also warms the module + build cache for the commands below.
       - run: go build -o dnscontrol .
-      - run: bin/fmtjson $(find . -type f -name "*.json" ! -name "package-lock.json" -print)
+      - run: bin/fmtjson-all.sh
       - run: go mod tidy
       - run: go generate ./...
       - run: go fmt ./...

@@ -230,7 +230,9 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		case diff2.REPORT:
 			corr = &models.Correction{Msg: change.MsgsJoined}
 		case diff2.CREATE:
+			before := providers.BeginToNative(c.observer, "toReq", change.New)
 			req, err := toReq(change.New[0])
+			providers.EndToNative(c.observer, "toReq", before, change.New, req, err)
 			if err != nil {
 				return nil, 0, err
 			}
@@ -245,7 +247,9 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 			}
 		case diff2.CHANGE:
 			id := change.Old[0].Original.(*domainRecord).ID
+			before := providers.BeginToNative(c.observer, "toReq", change.New)
 			req, err := toReq(change.New[0])
+			providers.EndToNative(c.observer, "toReq", before, change.New, req, err)
 			if err != nil {
 				return nil, 0, err
 			}
@@ -318,7 +322,9 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if shouldSkip {
 			continue
 		}
+		before := providers.BeginToRC(c.observer, "toRc", &records[i])
 		newr, err := toRc(dc, &records[i])
+		providers.EndToRC(c.observer, "toRc", before, &records[i], models.Records{newr}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -447,7 +453,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 
 	switch rc.Type { // #rtype_variations
 	case "A", "AAAA", "NS", "ALIAS", "CNAME":
-	// Nothing special.
+		req["content"] = rc.GetRDATA().String()
 	case "TXT":
 		req["content"] = rc.GetTargetTXTJoined()
 	case "MX":

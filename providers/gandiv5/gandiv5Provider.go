@@ -112,11 +112,16 @@ var features = providers.DocumentationNotes{
 
 // gandiv5Provider is the gandiv5Provider handle used to store any client-related state.
 type gandiv5Provider struct {
+	observer  providers.ConversionObserver
 	apikey    string
 	token     string
 	sharingid string
 	debug     bool
 	apiurl    string
+}
+
+func (client *gandiv5Provider) SetConversionObserver(observer providers.ConversionObserver) {
+	client.observer = observer
 }
 
 // newDsp generates a DNS Service Provider client handle.
@@ -195,7 +200,9 @@ func (client *gandiv5Provider) GetZoneRecords(dc *models.DomainConfig) (models.R
 	// Convert them to DNScontrol's native format:
 	var existingRecords models.Records
 	for _, rr := range records {
+		before := providers.BeginToRC(client.observer, "nativeToRecords", rr)
 		rrs, err := nativeToRecords(dc, rr)
+		providers.EndToRC(client.observer, "nativeToRecords", before, rr, rrs, err)
 		if err != nil {
 			return nil, err
 		}

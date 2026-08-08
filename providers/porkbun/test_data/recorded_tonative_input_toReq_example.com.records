@@ -1,0 +1,15 @@
+1	@ 600 IN A 192.0.2.1
+2	www 600 IN A 192.0.2.2
+3	www 600 IN AAAA 2001:db8::1
+4	alias 600 IN CNAME www.example.com.
+5	@ 3600 IN MX 10 mail.example.com.
+6	@ 600 IN TXT "v=spf1 include:_spf.example.net -all"
+7	sub 86400 IN NS ns1.example.net.
+8	@ 600 IN CAA 0 issue "letsencrypt.org"
+9	_sip._tcp 600 IN SRV 10 20 5060 sip.example.com.
+10	_25._tcp.mail 600 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+11	@ 600 IN SSHFP 1 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+12	@ 600 IN HTTPS 1 . alpn="h3,h2" ipv4hint="192.0.2.1"
+13	_8443._foo 600 IN SVCB 16 svc.example.net. port="8443" alpn="h2"
+14	fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
+15	perm 0 IN URL301 https://example.net/moved ; includePath="yes" type="permanent" wildcard="yes"

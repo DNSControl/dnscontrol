@@ -125,6 +125,7 @@ func init() {
 
 // cloudflareProvider is the handle for API calls.
 type cloudflareProvider struct {
+	observer      providers.ConversionObserver
 	ipConversions []transform.IPConversion
 	ignoredLabels []string
 	manageWorkers bool
@@ -139,6 +140,10 @@ type cloudflareProvider struct {
 	tcZone        string   // Transcode Current zone
 
 	zoneCache zonecache.ZoneCache[cloudflare.Zone]
+}
+
+func (c *cloudflareProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 // GetNameservers returns the nameservers for a domain.

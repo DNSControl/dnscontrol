@@ -12,6 +12,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // Record covers an individual DNS resource record.
@@ -36,12 +37,12 @@ type Record struct {
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	return n.getRecords(dc)
+func (client *Client) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	return client.getRecords(dc)
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
-func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
+func (client *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
 	var aliasSkip *models.Correction
 	hasAlias := false
 	for _, rc := range dc.Records {
@@ -59,7 +60,7 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 		}
 	}
 	if hasAlias {
-		signed, err := n.isZoneSigned(dc.Name)
+		signed, err := client.isZoneSigned(dc.Name)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -113,7 +114,10 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	addrridx := 0
 
 	addRR := func(rc *models.RecordConfig) error {
-		newRecordString, err := n.createRecordString(rc, dc.Name)
+		input := models.Records{rc}
+		before := providers.BeginToNative(client.observer, "createRecordString", input)
+		newRecordString, err := client.createRecordString(rc, dc.Name)
+		providers.EndToNative(client.observer, "createRecordString", before, input, newRecordString, err)
 		if err != nil {
 			return err
 		}
@@ -158,18 +162,18 @@ func (n *Client) GetZoneRecordsCorrections(dc *models.DomainConfig, actual model
 	// non-empty params map therefore means there is a zone update to send.
 	if len(params) > 0 {
 		msg := fmt.Sprintf("GENERATE_ZONE: %s\n%s", dc.Name, buf.String())
-		if n.isDebugOn() {
+		if client.isDebugOn() {
 			msg = fmt.Sprintf("GENERATE_ZONE: %s\n%sPROVIDER CNR, API COMMAND PARAMETERS:\n%s", dc.Name, buf.String(), builder.String())
 		}
 		corrections = append(corrections, &models.Correction{
 			Msg: msg,
 			F: func() error {
-				return n.updateZoneBy(params, dc.Name)
+				return client.updateZoneBy(params, dc.Name)
 			},
 		})
 	}
 
-	dnssecCorrections, err := n.getDNSSECCorrections(dc)
+	dnssecCorrections, err := client.getDNSSECCorrections(dc)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -198,22 +202,22 @@ func toRC(dc *models.DomainConfig, data map[string]string) (*models.RecordConfig
 }
 
 // updateZoneBy updates the zone with the provided changes.
-func (n *Client) updateZoneBy(params map[string]any, domain string) error {
+func (client *Client) updateZoneBy(params map[string]any, domain string) error {
 	zone := domain
 	cmd := map[string]any{
 		"COMMAND": "ModifyDNSZone",
 		"DNSZONE": zone,
 	}
 	maps.Copy(cmd, params)
-	r := n.client.Request(cmd)
+	r := client.client.Request(cmd)
 	if !r.IsSuccess() {
-		return n.GetAPIError("Error while updating zone", zone, r)
+		return client.GetAPIError("Error while updating zone", zone, r)
 	}
 	return nil
 }
 
 // getRecords queries the API for all resource records of a zone.
-func (n *Client) getRecords(dc *models.DomainConfig) (models.Records, error) {
+func (client *Client) getRecords(dc *models.DomainConfig) (models.Records, error) {
 	var records models.Records
 	domain := dc.Name
 
@@ -227,24 +231,24 @@ func (n *Client) getRecords(dc *models.DomainConfig) (models.Records, error) {
 		"LIMIT":   "10000",
 		"WIDE":    "1",
 	}
-	r := n.client.Request(cmd)
+	r := client.client.Request(cmd)
 
 	// Check if the request was successful
 	if !r.IsSuccess() {
 		if r.GetCode() == 545 {
 			// If dns zone does not exist create a new one automatically
 			if !isNoPopulate() {
-				err := n.EnsureZoneExists(dc)
+				err := client.EnsureZoneExists(dc)
 				if err != nil {
 					return nil, err
 				}
 			} else {
 				// Return specific error if the zone does not exist
-				return nil, n.GetAPIError("Use `dnscontrol create-domains` to create not-existing zone", domain, r)
+				return nil, client.GetAPIError("Use `dnscontrol create-domains` to create not-existing zone", domain, r)
 			}
 		}
 		// Return general error for any other issues
-		return nil, n.GetAPIError("Failed loading resource records for zone", domain, r)
+		return nil, client.GetAPIError("Failed loading resource records for zone", domain, r)
 	}
 	totalRecords := r.GetRecordsTotalCount()
 	if totalRecords <= 0 {
@@ -271,7 +275,7 @@ func (n *Client) getRecords(dc *models.DomainConfig) (models.Records, error) {
 }
 
 // Function to create record string from given RecordConfig for the ADDRR# API parameter.
-func (n *Client) createRecordString(rc *models.RecordConfig, domain string) (string, error) {
+func (client *Client) createRecordString(rc *models.RecordConfig, domain string) (string, error) {
 
 	host := rc.GetLabel()
 	// Apex records are represented by domain+".".
@@ -339,7 +343,7 @@ func isNoPopulate() bool {
 }
 
 // Function to check if debug mode is enabled.
-func (n *Client) isDebugOn() bool {
-	debugMode, exists := n.conf["debugmode"]
+func (client *Client) isDebugOn() bool {
+	debugMode, exists := client.conf["debugmode"]
 	return exists && (debugMode == "1" || debugMode == "2")
 }

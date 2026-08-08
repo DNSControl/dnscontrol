@@ -1,0 +1,1890 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "host": "*",
+      "record": "3.3.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "host": "",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "1800"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "host": "",
+      "record": "1.2.3.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "host": "",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "host": "",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "host": "",
+      "record": "2.3.4.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "host": "",
+      "record": "4.4.4.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "host": "",
+      "record": "foo.cloudnstest.yesthattom.com.",
+      "record-type": "ALIAS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "host": "",
+      "record": "foo.com.",
+      "record-type": "ALIAS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "host": "",
+      "record": "foo2.com.",
+      "record-type": "ALIAS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "caa_flag": "0",
+      "caa_type": "issue",
+      "caa_value": "letsencrypt.org",
+      "host": "",
+      "record": "0 issue \"letsencrypt.org\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "caa_flag": "0",
+      "caa_type": "issue",
+      "caa_value": "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234",
+      "host": "",
+      "record": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "caa_flag": "0",
+      "caa_type": "issuewild",
+      "caa_value": ";",
+      "host": "",
+      "record": "0 issuewild \";\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "caa_flag": "0",
+      "caa_type": "issuewild",
+      "caa_value": "example.com",
+      "host": "",
+      "record": "0 issuewild \"example.com\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "caa_flag": "0",
+      "caa_type": "issuewild",
+      "caa_value": "letsencrypt.org",
+      "host": "",
+      "record": "0 issuewild \"letsencrypt.org\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "caa_flag": "128",
+      "caa_type": "issue",
+      "caa_value": "letsencrypt.org",
+      "host": "",
+      "record": "128 issue \"letsencrypt.org\"",
+      "record-type": "CAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "altitude": "-24.05",
+      "h-precision": "0",
+      "host": "",
+      "lat-deg": "42",
+      "lat-dir": "N",
+      "lat-min": "21",
+      "lat-sec": "54.000",
+      "long-deg": "71",
+      "long-dir": "W",
+      "long-min": "06",
+      "long-sec": "18.000",
+      "record": "42 21 54.000 N 71 06 18.000 W -24.05m 30m 0.00m 0.00m",
+      "record-type": "LOC",
+      "size": "30",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "altitude": "-24.06",
+      "h-precision": "10",
+      "host": "",
+      "lat-deg": "42",
+      "lat-dir": "N",
+      "lat-min": "21",
+      "lat-sec": "54.000",
+      "long-deg": "71",
+      "long-dir": "W",
+      "long-min": "06",
+      "long-sec": "18.000",
+      "record": "42 21 54.000 N 71 06 18.000 W -24.06m 30m 10m 0.00m",
+      "record-type": "LOC",
+      "size": "30",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "altitude": "-24",
+      "h-precision": "0",
+      "host": "",
+      "lat-deg": "42",
+      "lat-dir": "N",
+      "lat-min": "21",
+      "lat-sec": "54.000",
+      "long-deg": "71",
+      "long-dir": "W",
+      "long-min": "06",
+      "long-sec": "18.000",
+      "record": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
+      "record-type": "LOC",
+      "size": "30",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "host": "",
+      "priority": "0",
+      "record": ".",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "host": "",
+      "priority": "2",
+      "record": "cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "host": "",
+      "priority": "5",
+      "record": "bar.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "host": "",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "host": "",
+      "priority": "8",
+      "record": "www.cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "host": "",
+      "record": "ns1.example.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "host": "",
+      "record": "ns1.foo.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "host": "",
+      "record": "ns2.example.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "host": "",
+      "record": "ns2.foo.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "algorithm": "1",
+      "fptype": "1",
+      "host": "",
+      "record": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "record-type": "SSHFP",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "algorithm": "2",
+      "fptype": "1",
+      "host": "",
+      "record": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "record-type": "SSHFP",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "algorithm": "2",
+      "fptype": "2",
+      "host": "",
+      "record": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+      "record-type": "SSHFP",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "host": "",
+      "record": "asimple",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "host": "",
+      "record": "simple",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "host": "",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "host": "",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "900"
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "host": "_443._tcp",
+      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record-type": "TLSA",
+      "tlsa_matching_type": "1",
+      "tlsa_selector": "0",
+      "tlsa_usage": "2",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "host": "_443._tcp",
+      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record-type": "TLSA",
+      "tlsa_matching_type": "2",
+      "tlsa_selector": "0",
+      "tlsa_usage": "2",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "host": "_443._tcp",
+      "record": "FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+      "record-type": "TLSA",
+      "tlsa_matching_type": "2",
+      "tlsa_selector": "0",
+      "tlsa_usage": "2",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "host": "_443._tcp",
+      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record-type": "TLSA",
+      "tlsa_matching_type": "1",
+      "tlsa_selector": "1",
+      "tlsa_usage": "2",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "host": "_443._tcp",
+      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record-type": "TLSA",
+      "tlsa_matching_type": "1",
+      "tlsa_selector": "1",
+      "tlsa_usage": "3",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "21600",
+      "weight": "6"
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "75",
+      "priority": "15",
+      "record": ".",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "65"
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "75",
+      "priority": "15",
+      "record": "foo3.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "65"
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "75",
+      "priority": "15",
+      "record": "foo4.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "65"
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "6"
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "70",
+      "priority": "5",
+      "record": "foo2.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "60"
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "52",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "6"
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "52",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "62"
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "72",
+      "priority": "52",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "300",
+      "weight": "62"
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "host": "_sip._tcp",
+      "port": "7",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "SRV",
+      "ttl": "600",
+      "weight": "6"
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "host": "a",
+      "record": "xn--ndaaa.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "host": "a",
+      "record": "b.cloudnstest.yesthattom.com.",
+      "record-type": "DNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "altitude": "-24.33",
+      "h-precision": "200",
+      "host": "a",
+      "lat-deg": "42",
+      "lat-dir": "N",
+      "lat-min": "21",
+      "lat-sec": "43.950",
+      "long-deg": "71",
+      "long-dir": "W",
+      "long-min": "05",
+      "long-sec": "6.340",
+      "record": "42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m",
+      "record-type": "LOC",
+      "size": "1",
+      "ttl": "300",
+      "v-precision": "10"
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "algorithm": "1",
+      "digest-type": "4",
+      "host": "another-child",
+      "key-tag": "2159",
+      "record": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "algorithm": "13",
+      "digest-type": "4",
+      "host": "another-child",
+      "key-tag": "35632",
+      "record": "F5F32ABCA6B01AA7A9963012F90B7C8523A1D946185A3AD70B67F3C9F18E7312FA9DD6AB2F7D8382F789213DB173D429",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "algorithm": "3",
+      "digest-type": "4",
+      "host": "another-child",
+      "key-tag": "63909",
+      "record": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "host": "another-child",
+      "record": "ns101.cloudns.net.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "altitude": "10.22",
+      "h-precision": "0",
+      "host": "b",
+      "lat-deg": "52",
+      "lat-dir": "N",
+      "lat-min": "14",
+      "lat-sec": "5.000",
+      "long-deg": "00",
+      "long-dir": "E",
+      "long-min": "08",
+      "long-sec": "50.000",
+      "record": "52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m",
+      "record-type": "LOC",
+      "size": "0",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "host": "bar",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "host": "bar",
+      "record": "5.5.5.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "host": "bar",
+      "record": "redact2.acm-validations.aws.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "host": "bar",
+      "priority": "5",
+      "record": "bar.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "host": "bar.bat",
+      "record": "5.5.5.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "altitude": "10",
+      "h-precision": "0",
+      "host": "c",
+      "lat-deg": "32",
+      "lat-dir": "S",
+      "lat-min": "07",
+      "lat-sec": "19.000",
+      "long-deg": "116",
+      "long-dir": "E",
+      "long-min": "02",
+      "long-sec": "25.000",
+      "record": "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m",
+      "record-type": "LOC",
+      "size": "0",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "algorithm": "13",
+      "digest-type": "1",
+      "host": "child",
+      "key-tag": "2075",
+      "record": "2706D12E256C8FDD9BFB45EFB25FE537E21A82F6",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "algorithm": "13",
+      "digest-type": "2",
+      "host": "child",
+      "key-tag": "2075",
+      "record": "3F7A1EAC8C813A0BEBD0C3B8AAB387E31945EA0CD5E1D84A2E8E27674566C156",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "algorithm": "1",
+      "digest-type": "4",
+      "host": "child",
+      "key-tag": "2159",
+      "record": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "algorithm": "13",
+      "digest-type": "1",
+      "host": "child",
+      "key-tag": "35632",
+      "record": "1E07663FF507A40874B8605463DD41DE482079D6",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "algorithm": "3",
+      "digest-type": "4",
+      "host": "child",
+      "key-tag": "63909",
+      "record": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "record-type": "DS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "host": "child",
+      "record": "ns101.cloudns.net.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "altitude": "-44",
+      "h-precision": "0",
+      "host": "d",
+      "lat-deg": "42",
+      "lat-dir": "N",
+      "lat-min": "21",
+      "lat-sec": "28.760",
+      "long-deg": "71",
+      "long-dir": "W",
+      "long-min": "00",
+      "long-sec": "51.620",
+      "record": "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m",
+      "record-type": "LOC",
+      "size": "2000",
+      "ttl": "300",
+      "v-precision": "0"
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "host": "decoy",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "host": "decoy",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "host": "decoy",
+      "record": "3.3.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "host": "dyndns-city1",
+      "record": "91.42.1.1",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "host": "dyndns-city1",
+      "record": "2003:dd:d7ff::fe71:ce77",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "host": "dyndns-city2",
+      "record": "91.42.1.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "host": "dyndns-city2",
+      "record": "2003:dd:d7ff::fe71:ce78",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "host": "final",
+      "record": "TestDNSProviders was successful!",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "host": "foo",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "host": "foo",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "host": "foo",
+      "record": "10.10.10.10",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "host": "foo",
+      "record": "11.11.11.11",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "host": "foo",
+      "record": "12.12.12.12",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "host": "foo",
+      "record": "13.13.13.13",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "host": "foo",
+      "record": "14.14.14.14",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "host": "foo",
+      "record": "2.3.4.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "host": "foo",
+      "record": "3.4.5.6",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "host": "foo",
+      "record": "4.5.6.7",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "host": "foo",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "host": "foo",
+      "record": "2003:dd:d7ff::fe71:aaaa",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "host": "foo",
+      "record": "cloudnstest.yesthattom.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "host": "foo",
+      "record": "google.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "host": "foo",
+      "record": "google2.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "host": "foo",
+      "record": "redact1.acm-validations.aws.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "host": "foo",
+      "priority": "10",
+      "record": "aspmx.l.google.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "host": "foo",
+      "priority": "10",
+      "record": "foo.cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "host": "foo",
+      "priority": "20",
+      "record": "alt1.aspmx.l.google.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "host": "foo",
+      "priority": "20",
+      "record": "bar.cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "host": "foo",
+      "priority": "5",
+      "record": "mx.google.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "host": "foo",
+      "priority": "8",
+      "record": "cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "host": "foo",
+      "record": "cloudnstest.yesthattom.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "host": "foo",
+      "record": "simple",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "host": "foo",
+      "record": "v=spf1 ip4:99.99.99.99 -all",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "host": "foo.bat",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "host": "foo.bat",
+      "record": "2.3.4.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "host": "foo.bat",
+      "record": "simple",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "host": "foo254",
+      "record": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "host": "foo255",
+      "record": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "host": "foo256",
+      "record": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "host": "foo509",
+      "record": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "host": "foo510",
+      "record": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "host": "foo511",
+      "record": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "host": "foo764",
+      "record": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "host": "foo765",
+      "record": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "host": "foo766",
+      "record": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "host": "fooosbs1",
+      "record": "1back\\slash",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "host": "fooosbs2",
+      "record": "2back\\\\slash",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "host": "fooosbs3",
+      "record": "3back\\\\\\slash",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "host": "fooosbs4",
+      "record": "4back\\\\\\\\slash",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "host": "foosc1",
+      "record": "semi;colon",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "host": "foosc2",
+      "record": "wssemi ; colon",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "host": "foosp",
+      "record": "with spaces",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "host": "foosq",
+      "record": "quo'te",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "host": "mail",
+      "record": "ghs.googlehosted.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "host": "mail.bat",
+      "record": "ghs.googlehosted.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "host": "nmx",
+      "record": "1.2.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "host": "nmx",
+      "priority": "0",
+      "record": ".",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "host": "nmx",
+      "priority": "3",
+      "record": "nmx.cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "host": "nmx",
+      "priority": "9",
+      "record": "www.cloudnstest.yesthattom.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "host": "test",
+      "record": "foo.com.",
+      "record-type": "ALIAS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "host": "test",
+      "record": "foo2.com.",
+      "record-type": "ALIAS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "host": "test",
+      "record": "example.com.",
+      "record-type": "DNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "host": "test",
+      "record": "example.net.",
+      "record-type": "DNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "flag": "U",
+      "host": "test",
+      "order": "100",
+      "params": "E2U+sip",
+      "pref": "10",
+      "record": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!sip:customer-service@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "flag": "U",
+      "host": "test",
+      "order": "102",
+      "params": "E2U+email",
+      "pref": "10",
+      "record": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!mailto:information@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "flag": "U",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+email",
+      "pref": "10",
+      "record": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!mailto:information@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "flag": "A",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+email",
+      "pref": "20",
+      "record": "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!mailto:information@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "flag": "A",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+sip",
+      "pref": "20",
+      "record": "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!mailto:information@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "flag": "A",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+sip",
+      "pref": "20",
+      "record": "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!sip:customer-service@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "flag": "A",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+sip",
+      "pref": "20",
+      "record": "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com.",
+      "record-type": "NAPTR",
+      "regexp": "",
+      "replace": "example.foo.com.",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "flag": "A",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+sip",
+      "pref": "20",
+      "record": "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com.",
+      "record-type": "NAPTR",
+      "regexp": "",
+      "replace": "example2.foo.com.",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "flag": "U",
+      "host": "test",
+      "order": "103",
+      "params": "E2U+email",
+      "pref": "20",
+      "record": "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "record-type": "NAPTR",
+      "regexp": "!^.*$!mailto:information@example.com!",
+      "replace": ".",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "host": "testa",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "1800"
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "host": "testa",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "host": "testa",
+      "record": "3.3.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "host": "testa",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "host": "testaaaa",
+      "record": "2607:f8b0:4006:820::2006",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "host": "testaaaa",
+      "record": "2607:f8b0:4006:820::2013",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "host": "testcname",
+      "record": "foo.cloudnstest.yesthattom.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "host": "testcname",
+      "record": "www.google.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "host": "testcname",
+      "record": "www.yahoo.com.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "host": "testdefined",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "host": "testdefined",
+      "record": "9.9.9.9",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "host": "testignore",
+      "record": "8.8.8.8",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "host": "testmx",
+      "priority": "100",
+      "record": "bar.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "host": "testmx",
+      "priority": "100",
+      "record": "foo.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "host": "testmx",
+      "priority": "5",
+      "record": "bar.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "host": "testmx",
+      "priority": "5",
+      "record": "foo.com.",
+      "record-type": "MX",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "host": "testtxt",
+      "record": "changed",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "host": "testtxt",
+      "record": "simple",
+      "record-type": "TXT",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "host": "www",
+      "record": "1.1.1.1",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "host": "www",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "host": "www",
+      "record": "1.2.3.8",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "host": "www",
+      "record": "1.2.3.9",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "host": "www",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "host": "www",
+      "record": "3.3.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "host": "www",
+      "record": "5.5.5.5",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "host": "www",
+      "record": "5.6.7.8",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "host": "www",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "host": "www",
+      "record": "5.6.7.8",
+      "record-type": "A",
+      "ttl": "600"
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "host": "www",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "900"
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "host": "www",
+      "record": "5.6.7.8",
+      "record-type": "A",
+      "ttl": "900"
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "host": "xn--fiq228c",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "host": "xn--ndaaa",
+      "record": "1.2.3.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "host": "xn--ndaaa",
+      "record": "2.2.2.2",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "host": "xn--o-0gab",
+      "record": "xn--ndaaa.xn--vhquv.",
+      "record-type": "CNAME",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "host": "xyz",
+      "record": "ns1.foo.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "host": "xyz",
+      "record": "ns2.foo.com.",
+      "record-type": "NS",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "host": "zzz",
+      "record": "3.3.3.3",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "host": "zzz",
+      "record": "4.4.4.4",
+      "record-type": "A",
+      "ttl": "300"
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "host": "zzz",
+      "record": "2003:dd:d7ff::fe71:cccc",
+      "record-type": "AAAA",
+      "ttl": "300"
+    }
+  }
+]

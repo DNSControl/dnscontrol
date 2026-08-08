@@ -31,12 +31,17 @@ import (
 )
 
 type route53Provider struct {
+	observer      providers.ConversionObserver
 	client        *r53.Client
 	registrar     *r53d.Client
 	delegationSet *string
 	zonesMu       sync.Mutex
 	zonesByID     map[string]r53Types.HostedZone
 	zonesByDomain map[string]r53Types.HostedZone
+}
+
+func (r *route53Provider) SetConversionObserver(observer providers.ConversionObserver) {
+	r.observer = observer
 }
 
 func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
@@ -396,7 +401,9 @@ func (r *route53Provider) getZoneRecords(dc *models.DomainConfig, zone r53Types.
 
 	var existingRecords models.Records
 	for _, set := range records {
+		before := providers.BeginToRC(r.observer, "nativeToRecords", set)
 		rts, err := nativeToRecords(dc, set, unescape(zone.Name))
+		providers.EndToRC(r.observer, "nativeToRecords", before, set, rts, err)
 		if err != nil {
 			return nil, err
 		}

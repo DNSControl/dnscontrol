@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "dnscontroltest-luadns.com",
+      "to_rc": [
+        "nativeToRecord"
+      ],
+      "to_native": [
+        "recordsToNative"
+      ]
+    }
+  ]
+}
