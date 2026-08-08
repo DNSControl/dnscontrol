@@ -26,8 +26,8 @@
 26	final 300 IN TXT "TestDNSProviders was successful!"
 27	final 300 IN TXT "TestDNSProviders was successful!"
 28	final 300 IN TXT "TestDNSProviders was successful!"
-29	foo.bat 300 IN A 1.2.3.4
-30	foo.bat 300 IN A 2.3.4.5
+29	foo.bat 300 IN A 2.3.4.5
+30	foo.bat 300 IN A 1.2.3.4
 31	foo.bat 300 IN TXT "simple"
 32	foo 300 IN A 1.2.3.4
 33	foo 300 IN A 1.2.3.4
@@ -42,11 +42,11 @@
 42	foo 300 IN A 8.8.8.8
 43	foo 300 IN A 8.8.8.8
 44	foo 300 IN A 1.2.3.4
-45	foo 300 IN A 1.2.3.4
-46	foo 300 IN A 2.3.4.5
+45	foo 300 IN A 2.3.4.5
+46	foo 300 IN A 1.2.3.4
 47	foo 300 IN A 1.2.3.4
-48	foo 300 IN A 1.1.1.1
-49	foo 300 IN A 10.10.10.10
+48	foo 300 IN A 10.10.10.10
+49	foo 300 IN A 1.1.1.1
 50	foo 300 IN A 11.11.11.11
 51	foo 300 IN A 12.12.12.12
 52	foo 300 IN A 13.13.13.13
@@ -263,8 +263,8 @@
 264	www 300 IN A 3.3.3.3
 265	www 300 IN A 1.1.1.1
 266	www 300 IN A 1.1.1.1
-267	www 300 IN A 1.2.3.4
-268	www 300 IN A 5.6.7.8
+267	www 300 IN A 5.6.7.8
+268	www 300 IN A 1.2.3.4
 269	www 300 IN A 2.2.2.2
 270	www 300 IN A 1.2.3.9
 271	www 300 IN A 1.2.3.8
