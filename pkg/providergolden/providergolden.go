@@ -284,22 +284,22 @@ func reportFile(t *testing.T, filename string, got []byte) {
 	}
 }
 
-// parseRecords parses unindexed record text. It remains useful for focused
-// parser tests and migration tooling.
-func parseRecords(dc *models.DomainConfig, text string) ([]*models.RecordConfig, error) {
-	var recs []*models.RecordConfig
-	for i, line := range strings.Split(text, "\n") {
-		if strings.TrimSpace(line) == "" {
-			continue
-		}
-		rc, err := parseRecord(dc, line)
-		if err != nil {
-			return nil, fmt.Errorf("line %d: %w", i+1, err)
-		}
-		recs = append(recs, rc)
-	}
-	return recs, nil
-}
+// // parseRecords parses unindexed record text. It remains useful for focused
+// // parser tests and migration tooling.
+// func parseRecords(dc *models.DomainConfig, text string) ([]*models.RecordConfig, error) {
+// 	var recs []*models.RecordConfig
+// 	for i, line := range strings.Split(text, "\n") {
+// 		if strings.TrimSpace(line) == "" {
+// 			continue
+// 		}
+// 		rc, err := parseRecord(dc, line)
+// 		if err != nil {
+// 			return nil, fmt.Errorf("line %d: %w", i+1, err)
+// 		}
+// 		recs = append(recs, rc)
+// 	}
+// 	return recs, nil
+// }
 
 func parseRecord(dc *models.DomainConfig, line string) (*models.RecordConfig, error) {
 	record, metatext := cutMetadata(line)

@@ -246,20 +246,20 @@ retry:
 	return models.ToNameservers(nss)
 }
 
-func recordsToNative(records models.Records) ([]domain.DNSEntry, error) {
-	entries := make([]domain.DNSEntry, len(records))
+// func recordsToNative(records models.Records) ([]domain.DNSEntry, error) {
+// 	entries := make([]domain.DNSEntry, len(records))
 
-	for iX, record := range records {
-		entry, err := recordToNative(record)
-		if err != nil {
-			return nil, err
-		}
+// 	for iX, record := range records {
+// 		entry, err := recordToNative(record)
+// 		if err != nil {
+// 			return nil, err
+// 		}
 
-		entries[iX] = entry
-	}
+// 		entries[iX] = entry
+// 	}
 
-	return entries, nil
-}
+// 	return entries, nil
+// }
 
 func (n *transipProvider) recordsToNativeObserved(records models.Records) ([]domain.DNSEntry, error) {
 	entries := make([]domain.DNSEntry, len(records))

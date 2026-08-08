@@ -3,7 +3,7 @@
 # Run fmtjson on "all the directories we want".
 # Note: Never fmt the providers/*/test_data files.
 
-echo bin/fmtjson $(\
+bin/fmtjson $(\
   find \
       ./commands/test_data \
       ./commands/testdata/init \
