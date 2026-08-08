@@ -1,0 +1,36 @@
+1	@ 1000 IN A 8.8.8.8
+2	@ 300 IN A 4.4.4.4
+3	@ 300 IN ALIAS foo2.com.
+4	@ 300 IN CAA 0 issuewild "example.com"
+5	@ 300 IN CAA 0 issuewild "letsencrypt.org"
+6	@ 300 IN CAA 128 issue "letsencrypt.org"
+7	@ 300 IN HTTPS 1 test.com. alpn="h2" port="99"
+8	@ 300 IN HTTPS 1 test.com. port="80"
+9	@ 300 IN HTTPS 1 test.com. port="99"
+10	@ 300 IN HTTPS 3 example.com. alpn="h2,h3" port="999"
+11	@ 300 IN MX 5 bar.com.
+12	@ 500 IN A 8.8.8.8
+13	_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+14	_sip._tcp 300 IN SRV 52 6 7 foo.com.
+15	_sip._tcp 300 IN SRV 52 62 7 foo.com.
+16	_sip._tcp 300 IN SRV 52 62 72 foo.com.
+17	_sip._tcp 4400 IN SRV 5 6 7 foo.com.
+18	decoy 300 IN A 2.2.2.2
+19	decoy 300 IN A 3.3.3.3
+20	foo 300 IN A 3.4.5.6
+21	foo 300 IN A 8.8.8.8
+22	foodqs 300 IN TXT "\"left"
+23	foodqs 300 IN TXT "right\""
+24	test 300 IN ALIAS foo2.com.
+25	testa 300 IN A 3.3.3.3
+26	testa 999 IN A 1.1.1.1
+27	testaaaa 300 IN AAAA 2607:f8b0:4006:820::2013
+28	testcname 300 IN CNAME www.yahoo.com.
+29	testmx 300 IN MX 100 foo.com.
+30	testmx 300 IN MX 5 bar.com.
+31	testtxt 300 IN TXT "changed"
+32	www 300 IN A 2.2.2.2
+33	www 400 IN A 2.2.2.2
+34	www 400 IN A 5.6.7.8
+35	www 700 IN A 5.6.7.8
+36	xn--ndaaa 300 IN A 2.2.2.2

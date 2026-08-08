@@ -29,7 +29,12 @@ Info required in `creds.json`:
 
 // digitaloceanProvider is the handle for operations.
 type digitaloceanProvider struct {
-	client *godo.Client
+	observer providers.ConversionObserver
+	client   *godo.Client
+}
+
+func (api *digitaloceanProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	api.observer = observer
 }
 
 var defaultNameServerNames = []string{
@@ -199,7 +204,9 @@ func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models
 		if records[i].Type == "SOA" {
 			continue
 		}
+		before := providers.BeginToRC(api.observer, "toRc", &records[i])
 		r, err := toRc(dc, &records[i])
+		providers.EndToRC(api.observer, "toRc", before, &records[i], models.Records{r}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -247,7 +254,10 @@ func (api *digitaloceanProvider) GetZoneRecordsCorrections(dc *models.DomainConf
 			continue
 
 		case diff2.CREATE:
+			input := models.Records{inst.New[0]}
+			before := providers.BeginToNative(api.observer, "toReq", input)
 			req := toReq(inst.New[0])
+			providers.EndToNative(api.observer, "toReq", before, input, req, nil)
 			addCorrection(inst.MsgsJoined, func() (*godo.Response, error) {
 				_, resp, err := api.client.Domains.CreateRecord(ctx, dc.Name, req)
 				return resp, err
@@ -255,7 +265,10 @@ func (api *digitaloceanProvider) GetZoneRecordsCorrections(dc *models.DomainConf
 
 		case diff2.CHANGE:
 			id := inst.Old[0].Original.(*godo.DomainRecord).ID
+			input := models.Records{inst.New[0]}
+			before := providers.BeginToNative(api.observer, "toReq", input)
 			req := toReq(inst.New[0])
+			providers.EndToNative(api.observer, "toReq", before, input, req, nil)
 			addCorrection(inst.MsgsJoined, func() (*godo.Response, error) {
 				_, resp, err := api.client.Domains.EditRecord(ctx, dc.Name, id, req)
 				return resp, err

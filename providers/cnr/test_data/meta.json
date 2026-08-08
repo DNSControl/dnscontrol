@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "dnscontroltest-cnr.com",
+      "to_native": [
+        "createRecordString"
+      ]
+    }
+  ]
+}

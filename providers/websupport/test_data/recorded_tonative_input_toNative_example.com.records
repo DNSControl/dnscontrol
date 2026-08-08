@@ -1,0 +1,6 @@
+1	@ 3600 IN A 1.2.3.4
+2	ipv6 3600 IN AAAA 2a00:4b40:aaaa:2001::6
+3	www 3600 IN CNAME ghs.example.net.
+4	@ 3600 IN MX 10 mail.example.com.
+5	_sip._tcp 3600 IN SRV 10 20 5060 sip.example.com.
+6	@ 3600 IN TXT "hello world"

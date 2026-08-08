@@ -48,8 +48,13 @@ func init() {
 }
 
 type netlifyProvider struct {
+	observer    providers.ConversionObserver
 	apiToken    string // the account access token
 	accountSlug string // the account identifier slug. optional.
+}
+
+func (n *netlifyProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	n.observer = observer
 }
 
 func newNetlify(m map[string]string, message json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -104,42 +109,60 @@ func (n *netlifyProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	cleanRecords := make(models.Records, 0)
 
 	for _, r := range records {
-		if r.Type == "SOA" {
-			continue
-		}
-
-		label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
-		ttl := uint32(r.TTL)
-
-		var rec *models.RecordConfig
-		switch rtype := r.Type; rtype {
-		case "NETLIFY", "NETLIFYv6": // transparently ignore
-			continue
-		case "MX":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value,
-				nrc.Flags{TargetIsFqdnNoDot: true})
-		case "SRV":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value,
-				nrc.Flags{TargetIsFqdnNoDot: true})
-		case "TXT":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
-		case "CAA":
-			rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value,
-				nrc.Flags{TargetIsFqdnNoDot: true})
-		default:
-			rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value,
-				nrc.Flags{TargetIsFqdnNoDot: true})
-		}
+		before := providers.BeginToRC(n.observer, "toRecordConfig", r)
+		rec, err := toRecordConfig(dc, r)
+		providers.EndToRC(n.observer, "toRecordConfig", before, r, models.Records{rec}, err)
 		if err != nil {
-			return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+			return nil, err
 		}
-
-		rec.Original = r
+		if rec == nil {
+			continue
+		}
 
 		cleanRecords = append(cleanRecords, rec)
 	}
 
 	return cleanRecords, nil
+}
+
+// toRecordConfig converts a Netlify record to a RecordConfig. It returns nil for
+// SOA records and for the NETLIFY and NETLIFYv6 pseudo-types, which are ignored.
+func toRecordConfig(dc *models.DomainConfig, r *dnsRecord) (*models.RecordConfig, error) {
+	if r.Type == "SOA" {
+		return nil, nil
+	}
+
+	label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
+	ttl := uint32(r.TTL)
+
+	var rec *models.RecordConfig
+	var err error
+	switch rtype := r.Type; rtype {
+	case "NETLIFY", "NETLIFYv6": // transparently ignore
+		return nil, nil
+	case "MX":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SRV":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "TXT":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
+	case "CAA":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	default:
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+	}
+
+	rec.Original = r
+
+	return rec, nil
 }
 
 // ListZones returns all DNS zones managed by this provider.
@@ -176,7 +199,10 @@ func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, rec
 			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
 		case diff2.CREATE:
+			input := models.Records{change.New[0]}
+			before := providers.BeginToNative(n.observer, "toReq", input)
 			req := toReq(change.New[0])
+			providers.EndToNative(n.observer, "toReq", before, input, req, nil)
 			corrections = append(corrections, &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {
@@ -197,7 +223,10 @@ func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, rec
 		case diff2.CHANGE:
 			// Netlify has no update API, so a change is a delete followed by a create.
 			id := change.Old[0].Original.(*dnsRecord).ID
+			input := models.Records{change.New[0]}
+			before := providers.BeginToNative(n.observer, "toReq", input)
 			req := toReq(change.New[0])
+			providers.EndToNative(n.observer, "toReq", before, input, req, nil)
 			corrections = append(corrections, &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {

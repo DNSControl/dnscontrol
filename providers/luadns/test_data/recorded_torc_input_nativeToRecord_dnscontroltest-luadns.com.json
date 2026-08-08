@@ -1,0 +1,4409 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "id": 186296014,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "01.rikudns.net.",
+      "ttl": 86400,
+      "zone_id": 826476,
+      "created_at": "2026-07-02T23:36:53Z",
+      "updated_at": "2026-07-13T21:51:39Z"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "id": 186296015,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "02.rikudns.net.",
+      "ttl": 86400,
+      "zone_id": 826476,
+      "created_at": "2026-07-02T23:36:53Z",
+      "updated_at": "2026-07-13T21:51:39Z"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "id": 186296016,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "03.rikudns.net.",
+      "ttl": 86400,
+      "zone_id": 826476,
+      "created_at": "2026-07-02T23:36:53Z",
+      "updated_at": "2026-07-13T21:51:39Z"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "id": 186296017,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "04.rikudns.net.",
+      "ttl": 86400,
+      "zone_id": 826476,
+      "created_at": "2026-07-02T23:36:53Z",
+      "updated_at": "2026-07-13T21:51:39Z"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "id": 186389168,
+      "name": "testa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:50Z",
+      "updated_at": "2026-08-08T08:52:50Z"
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "id": 186389169,
+      "name": "testa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:50Z",
+      "updated_at": "2026-08-08T08:52:50Z"
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "id": 186389170,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:52Z",
+      "updated_at": "2026-08-08T08:52:52Z"
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "id": 186389171,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "4.4.4.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:52Z",
+      "updated_at": "2026-08-08T08:52:52Z"
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "id": 186389172,
+      "name": "*.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:54Z",
+      "updated_at": "2026-08-08T08:52:54Z"
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "id": 186389173,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.5.5.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:54Z",
+      "updated_at": "2026-08-08T08:52:54Z"
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "id": 186389174,
+      "name": "testaaaa.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2607:f8b0:4006:820::2006",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:56Z",
+      "updated_at": "2026-08-08T08:52:56Z"
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "id": 186389175,
+      "name": "testaaaa.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2607:f8b0:4006:820::2013",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:57Z",
+      "updated_at": "2026-08-08T08:52:57Z"
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "id": 186389176,
+      "name": "testcname.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "www.google.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:58Z",
+      "updated_at": "2026-08-08T08:52:58Z"
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "id": 186389177,
+      "name": "testcname.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "www.yahoo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:52:59Z",
+      "updated_at": "2026-08-08T08:52:59Z"
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "id": 186389178,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:00Z",
+      "updated_at": "2026-08-08T08:53:00Z"
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "id": 186389179,
+      "name": "testcname.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "foo.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:00Z",
+      "updated_at": "2026-08-08T08:53:00Z"
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "id": 186389180,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:02Z",
+      "updated_at": "2026-08-08T08:53:02Z"
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "id": 186389181,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:02Z",
+      "updated_at": "2026-08-08T08:53:02Z"
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "id": 186389182,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:03Z",
+      "updated_at": "2026-08-08T08:53:03Z"
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "id": 186389183,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:04Z",
+      "updated_at": "2026-08-08T08:53:04Z"
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "id": 186389184,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:05Z",
+      "updated_at": "2026-08-08T08:53:05Z"
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "id": 186389185,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "100 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:06Z",
+      "updated_at": "2026-08-08T08:53:06Z"
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "id": 186389186,
+      "name": "testtxt.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "simple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:07Z",
+      "updated_at": "2026-08-08T08:53:07Z"
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "id": 186389187,
+      "name": "testtxt.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "changed",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:08Z",
+      "updated_at": "2026-08-08T08:53:08Z"
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "id": 186389188,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:09Z",
+      "updated_at": "2026-08-08T08:53:09Z"
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "id": 186389189,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:09Z",
+      "updated_at": "2026-08-08T08:53:09Z"
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "id": 186389190,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:09Z",
+      "updated_at": "2026-08-08T08:53:09Z"
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "id": 186389191,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:11Z",
+      "updated_at": "2026-08-08T08:53:11Z"
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "id": 186389192,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:11Z",
+      "updated_at": "2026-08-08T08:53:11Z"
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "id": 186389193,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:11Z",
+      "updated_at": "2026-08-08T08:53:11Z"
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "id": 186389194,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:12Z",
+      "updated_at": "2026-08-08T08:53:12Z"
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "id": 186389195,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:12Z",
+      "updated_at": "2026-08-08T08:53:12Z"
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "id": 186389196,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:12Z",
+      "updated_at": "2026-08-08T08:53:12Z"
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "id": 186389197,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:13Z",
+      "updated_at": "2026-08-08T08:53:13Z"
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "id": 186389198,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "100 bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:13Z",
+      "updated_at": "2026-08-08T08:53:13Z"
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "id": 186389199,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:14Z",
+      "updated_at": "2026-08-08T08:53:14Z"
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "id": 186389200,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:15Z",
+      "updated_at": "2026-08-08T08:53:15Z"
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "id": 186389201,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:16Z",
+      "updated_at": "2026-08-08T08:53:16Z"
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "id": 186389202,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:17Z",
+      "updated_at": "2026-08-08T08:53:17Z"
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "id": 186389203,
+      "name": "testmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "100 bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:17Z",
+      "updated_at": "2026-08-08T08:53:17Z"
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "id": 186389204,
+      "name": "testa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 333,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:18Z",
+      "updated_at": "2026-08-08T08:53:18Z"
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "id": 186389205,
+      "name": "testa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 999,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:19Z",
+      "updated_at": "2026-08-08T08:53:19Z"
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "id": 186389206,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 666,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:20Z",
+      "updated_at": "2026-08-08T08:53:20Z"
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "id": 186389207,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:20Z",
+      "updated_at": "2026-08-08T08:53:20Z"
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "id": 186389208,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:20Z",
+      "updated_at": "2026-08-08T08:53:20Z"
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "id": 186389209,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 1000,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:21Z",
+      "updated_at": "2026-08-08T08:53:21Z"
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "id": 186389210,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:22Z",
+      "updated_at": "2026-08-08T08:53:22Z"
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "id": 186389211,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:22Z",
+      "updated_at": "2026-08-08T08:53:22Z"
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "id": 186389212,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 500,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:23Z",
+      "updated_at": "2026-08-08T08:53:23Z"
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "id": 186389213,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 400,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:23Z",
+      "updated_at": "2026-08-08T08:53:23Z"
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "id": 186389214,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 400,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:23Z",
+      "updated_at": "2026-08-08T08:53:23Z"
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "id": 186389215,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 400,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:24Z",
+      "updated_at": "2026-08-08T08:53:24Z"
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "id": 186389216,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 700,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:25Z",
+      "updated_at": "2026-08-08T08:53:25Z"
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "id": 186389217,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 700,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:25Z",
+      "updated_at": "2026-08-08T08:53:25Z"
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "id": 186389218,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:26Z",
+      "updated_at": "2026-08-08T08:53:26Z"
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "id": 186389219,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 mx.google.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:27Z",
+      "updated_at": "2026-08-08T08:53:27Z"
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "id": 186389220,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "4.5.6.7",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:28Z",
+      "updated_at": "2026-08-08T08:53:28Z"
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "id": 186389221,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "google.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:30Z",
+      "updated_at": "2026-08-08T08:53:30Z"
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "id": 186389222,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:31Z",
+      "updated_at": "2026-08-08T08:53:31Z"
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "id": 186389223,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "google2.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:32Z",
+      "updated_at": "2026-08-08T08:53:32Z"
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "id": 186389224,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "0 test.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:33Z",
+      "updated_at": "2026-08-08T08:53:33Z"
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "id": 186389225,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "1 test.com. port=80",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:34Z",
+      "updated_at": "2026-08-08T08:53:34Z"
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "id": 186389226,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "1 test.com. port=99",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:34Z",
+      "updated_at": "2026-08-08T08:53:34Z"
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "id": 186389227,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "1 test.com. alpn=h2 port=99",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:35Z",
+      "updated_at": "2026-08-08T08:53:35Z"
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "id": 186389228,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 example.com. alpn=h2,h3 port=999",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:36Z",
+      "updated_at": "2026-08-08T08:53:36Z"
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "id": 186389229,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 example.com. alpn=h2,h3 port=999",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:37Z",
+      "updated_at": "2026-08-08T08:53:37Z"
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "id": 186389230,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 example.com. alpn=h2,h3 port=999 ech=some+base64+encoded+value///",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:38Z",
+      "updated_at": "2026-08-08T08:53:38Z"
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "id": 186389231,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 example.com. alpn=h2 port=80 ech=some+base64+encoded+value///",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:39Z",
+      "updated_at": "2026-08-08T08:53:39Z"
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "id": 186389232,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 example.com. alpn=h2 port=80 ech=another+base64+encoded+value",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:40Z",
+      "updated_at": "2026-08-08T08:53:40Z"
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "id": 186389233,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "HTTPS",
+      "content": "3 yetanother.com. alpn=h2 port=80 ech=another+base64+encoded+value",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:41Z",
+      "updated_at": "2026-08-08T08:53:41Z"
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "id": 186389234,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:42Z",
+      "updated_at": "2026-08-08T08:53:42Z"
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "id": 186389235,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:42Z",
+      "updated_at": "2026-08-08T08:53:42Z"
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "id": 186389236,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:44Z",
+      "updated_at": "2026-08-08T08:53:44Z"
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "id": 186389237,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "8 dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:44Z",
+      "updated_at": "2026-08-08T08:53:44Z"
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "id": 186389238,
+      "name": "nmx.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:45Z",
+      "updated_at": "2026-08-08T08:53:45Z"
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "id": 186389239,
+      "name": "nmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "0 .",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:46Z",
+      "updated_at": "2026-08-08T08:53:46Z"
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "id": 186389241,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.9",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:46Z",
+      "updated_at": "2026-08-08T08:53:46Z"
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "id": 186389242,
+      "name": "nmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "3 nmx.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:47Z",
+      "updated_at": "2026-08-08T08:53:47Z"
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "id": 186389243,
+      "name": "nmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "9 www.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:47Z",
+      "updated_at": "2026-08-08T08:53:47Z"
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "id": 186389244,
+      "name": "nmx.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "0 .",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:47Z",
+      "updated_at": "2026-08-08T08:53:47Z"
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "id": 186389245,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:49Z",
+      "updated_at": "2026-08-08T08:53:49Z"
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "id": 186389246,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "0 .",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:49Z",
+      "updated_at": "2026-08-08T08:53:49Z"
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "id": 186389247,
+      "name": "www.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:50Z",
+      "updated_at": "2026-08-08T08:53:50Z"
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "id": 186389248,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "2 dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:50Z",
+      "updated_at": "2026-08-08T08:53:50Z"
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "id": 186389249,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "8 www.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:50Z",
+      "updated_at": "2026-08-08T08:53:50Z"
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "id": 186389250,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "0 .",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:51Z",
+      "updated_at": "2026-08-08T08:53:51Z"
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "id": 186389251,
+      "name": "xyz.dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns2.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:53Z",
+      "updated_at": "2026-08-08T08:53:53Z"
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "id": 186389252,
+      "name": "xyz.dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns1.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:54Z",
+      "updated_at": "2026-08-08T08:53:54Z"
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "id": 186389253,
+      "name": "xyz.dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns2.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:54Z",
+      "updated_at": "2026-08-08T08:53:54Z"
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "id": 186389254,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:54Z",
+      "updated_at": "2026-08-08T08:53:54Z"
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "id": 186389255,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:55Z",
+      "updated_at": "2026-08-08T08:53:55Z"
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "id": 186389256,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns1.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:56Z",
+      "updated_at": "2026-08-08T08:53:56Z"
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "id": 186389257,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns1.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:57Z",
+      "updated_at": "2026-08-08T08:53:57Z"
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "id": 186389258,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns2.foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:57Z",
+      "updated_at": "2026-08-08T08:53:57Z"
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "id": 186389259,
+      "name": "foo254.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:58Z",
+      "updated_at": "2026-08-08T08:53:58Z"
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "id": 186389260,
+      "name": "foo255.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:53:59Z",
+      "updated_at": "2026-08-08T08:53:59Z"
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "id": 186389261,
+      "name": "foo256.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:00Z",
+      "updated_at": "2026-08-08T08:54:00Z"
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "id": 186389262,
+      "name": "foo509.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:01Z",
+      "updated_at": "2026-08-08T08:54:01Z"
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "id": 186389263,
+      "name": "foo510.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:02Z",
+      "updated_at": "2026-08-08T08:54:02Z"
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "id": 186389264,
+      "name": "foo511.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:03Z",
+      "updated_at": "2026-08-08T08:54:03Z"
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "id": 186389265,
+      "name": "foo764.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:04Z",
+      "updated_at": "2026-08-08T08:54:04Z"
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "id": 186389266,
+      "name": "foo765.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:05Z",
+      "updated_at": "2026-08-08T08:54:05Z"
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "id": 186389267,
+      "name": "foo766.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:06Z",
+      "updated_at": "2026-08-08T08:54:06Z"
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "id": 186389268,
+      "name": "foosq.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "quo'te",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:07Z",
+      "updated_at": "2026-08-08T08:54:07Z"
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "id": 186389269,
+      "name": "foobt.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "blah`blah",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:08Z",
+      "updated_at": "2026-08-08T08:54:08Z"
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "id": 186389270,
+      "name": "foodq.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "in\"side",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:09Z",
+      "updated_at": "2026-08-08T08:54:09Z"
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "id": 186389271,
+      "name": "foodqs.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "in\"ter\"ior",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:10Z",
+      "updated_at": "2026-08-08T08:54:10Z"
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "id": 186389272,
+      "name": "foodqs.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "\"left",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:11Z",
+      "updated_at": "2026-08-08T08:54:11Z"
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "id": 186389273,
+      "name": "foodqs.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "right\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:12Z",
+      "updated_at": "2026-08-08T08:54:12Z"
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "id": 186389274,
+      "name": "foosc1.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "semi;colon",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:13Z",
+      "updated_at": "2026-08-08T08:54:13Z"
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "id": 186389275,
+      "name": "foosc2.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "wssemi ; colon",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:14Z",
+      "updated_at": "2026-08-08T08:54:14Z"
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "id": 186389276,
+      "name": "foosp.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "with spaces",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:15Z",
+      "updated_at": "2026-08-08T08:54:15Z"
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "id": 186389277,
+      "name": "foows1.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "trailingws ",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:16Z",
+      "updated_at": "2026-08-08T08:54:16Z"
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "id": 186389278,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "v=spf1 ip4:99.99.99.99 -all",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:17Z",
+      "updated_at": "2026-08-08T08:54:17Z"
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "id": 186389279,
+      "name": "fooosbs1.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "1back\\slash",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:18Z",
+      "updated_at": "2026-08-08T08:54:18Z"
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "id": 186389280,
+      "name": "fooosbs2.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "2back\\\\slash",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:18Z",
+      "updated_at": "2026-08-08T08:54:18Z"
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "id": 186389281,
+      "name": "fooosbs3.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "3back\\\\\\slash",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:19Z",
+      "updated_at": "2026-08-08T08:54:19Z"
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "id": 186389282,
+      "name": "fooosbs4.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "4back\\\\\\\\slash",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:19Z",
+      "updated_at": "2026-08-08T08:54:19Z"
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "id": 186389283,
+      "name": "bar.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "5 bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:21Z",
+      "updated_at": "2026-08-08T08:54:21Z"
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "id": 186389284,
+      "name": "decoy.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:22Z",
+      "updated_at": "2026-08-08T08:54:22Z"
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "id": 186389285,
+      "name": "decoy.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:22Z",
+      "updated_at": "2026-08-08T08:54:22Z"
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "id": 186389286,
+      "name": "decoy.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:23Z",
+      "updated_at": "2026-08-08T08:54:23Z"
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "id": 186389287,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:25Z",
+      "updated_at": "2026-08-08T08:54:25Z"
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "id": 186389288,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:25Z",
+      "updated_at": "2026-08-08T08:54:25Z"
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "id": 186389289,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:25Z",
+      "updated_at": "2026-08-08T08:54:25Z"
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "id": 186389290,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:25Z",
+      "updated_at": "2026-08-08T08:54:25Z"
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "id": 186389291,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:26Z",
+      "updated_at": "2026-08-08T08:54:26Z"
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "id": 186389292,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:27Z",
+      "updated_at": "2026-08-08T08:54:27Z"
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "id": 186389293,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:27Z",
+      "updated_at": "2026-08-08T08:54:27Z"
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "id": 186389294,
+      "name": "bar.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:28Z",
+      "updated_at": "2026-08-08T08:54:28Z"
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "id": 186389295,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:28Z",
+      "updated_at": "2026-08-08T08:54:28Z"
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "id": 186389296,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:28Z",
+      "updated_at": "2026-08-08T08:54:28Z"
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "id": 186389297,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "10 foo.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:29Z",
+      "updated_at": "2026-08-08T08:54:29Z"
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "id": 186389298,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "20 bar.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:29Z",
+      "updated_at": "2026-08-08T08:54:29Z"
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "id": 186389299,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:29Z",
+      "updated_at": "2026-08-08T08:54:29Z"
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "id": 186389300,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:29Z",
+      "updated_at": "2026-08-08T08:54:29Z"
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "id": 186389301,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:30Z",
+      "updated_at": "2026-08-08T08:54:30Z"
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "id": 186389302,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:31Z",
+      "updated_at": "2026-08-08T08:54:31Z"
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "id": 186389303,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:31Z",
+      "updated_at": "2026-08-08T08:54:31Z"
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "id": 186389304,
+      "name": "xn--ndaaa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:33Z",
+      "updated_at": "2026-08-08T08:54:33Z"
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "id": 186389305,
+      "name": "xn--ndaaa.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:33Z",
+      "updated_at": "2026-08-08T08:54:33Z"
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "id": 186389306,
+      "name": "xn--fiq228c.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:34Z",
+      "updated_at": "2026-08-08T08:54:34Z"
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "id": 186389307,
+      "name": "a.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "xn--ndaaa.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:35Z",
+      "updated_at": "2026-08-08T08:54:35Z"
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "id": 186389308,
+      "name": "xn--o-0gab.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "xn--ndaaa.xn--vhquv.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:37Z",
+      "updated_at": "2026-08-08T08:54:37Z"
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "id": 186389309,
+      "name": "pager101-rec0000.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:38Z",
+      "updated_at": "2026-08-08T08:54:38Z"
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "id": 186389310,
+      "name": "pager101-rec0001.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:38Z",
+      "updated_at": "2026-08-08T08:54:38Z"
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "id": 186389311,
+      "name": "pager101-rec0002.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:38Z",
+      "updated_at": "2026-08-08T08:54:38Z"
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "id": 186389312,
+      "name": "pager101-rec0003.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:39Z",
+      "updated_at": "2026-08-08T08:54:39Z"
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "id": 186389313,
+      "name": "pager101-rec0004.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:39Z",
+      "updated_at": "2026-08-08T08:54:39Z"
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "id": 186389314,
+      "name": "pager101-rec0005.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:39Z",
+      "updated_at": "2026-08-08T08:54:39Z"
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "id": 186389315,
+      "name": "pager101-rec0006.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:39Z",
+      "updated_at": "2026-08-08T08:54:39Z"
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "id": 186389316,
+      "name": "pager101-rec0007.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:40Z",
+      "updated_at": "2026-08-08T08:54:40Z"
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "id": 186389317,
+      "name": "pager101-rec0008.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:40Z",
+      "updated_at": "2026-08-08T08:54:40Z"
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "id": 186389318,
+      "name": "pager101-rec0009.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:40Z",
+      "updated_at": "2026-08-08T08:54:40Z"
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "id": 186389319,
+      "name": "pager101-rec0010.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:40Z",
+      "updated_at": "2026-08-08T08:54:40Z"
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "id": 186389320,
+      "name": "pager101-rec0011.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:41Z",
+      "updated_at": "2026-08-08T08:54:41Z"
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "id": 186389321,
+      "name": "pager101-rec0012.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:41Z",
+      "updated_at": "2026-08-08T08:54:41Z"
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "id": 186389322,
+      "name": "pager101-rec0013.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:41Z",
+      "updated_at": "2026-08-08T08:54:41Z"
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "id": 186389323,
+      "name": "pager101-rec0014.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:41Z",
+      "updated_at": "2026-08-08T08:54:41Z"
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "id": 186389324,
+      "name": "pager101-rec0015.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:42Z",
+      "updated_at": "2026-08-08T08:54:42Z"
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "id": 186389325,
+      "name": "pager101-rec0016.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:42Z",
+      "updated_at": "2026-08-08T08:54:42Z"
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "id": 186389326,
+      "name": "pager101-rec0017.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:42Z",
+      "updated_at": "2026-08-08T08:54:42Z"
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "id": 186389327,
+      "name": "pager101-rec0018.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:42Z",
+      "updated_at": "2026-08-08T08:54:42Z"
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "id": 186389328,
+      "name": "pager101-rec0019.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:43Z",
+      "updated_at": "2026-08-08T08:54:43Z"
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "id": 186389329,
+      "name": "pager101-rec0020.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:43Z",
+      "updated_at": "2026-08-08T08:54:43Z"
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "id": 186389330,
+      "name": "pager101-rec0021.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:43Z",
+      "updated_at": "2026-08-08T08:54:43Z"
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "id": 186389331,
+      "name": "pager101-rec0022.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:43Z",
+      "updated_at": "2026-08-08T08:54:43Z"
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "id": 186389332,
+      "name": "pager101-rec0023.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:44Z",
+      "updated_at": "2026-08-08T08:54:44Z"
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "id": 186389333,
+      "name": "pager101-rec0024.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:44Z",
+      "updated_at": "2026-08-08T08:54:44Z"
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "id": 186389334,
+      "name": "pager101-rec0025.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:44Z",
+      "updated_at": "2026-08-08T08:54:44Z"
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "id": 186389335,
+      "name": "pager101-rec0026.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:44Z",
+      "updated_at": "2026-08-08T08:54:44Z"
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "id": 186389336,
+      "name": "pager101-rec0027.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:45Z",
+      "updated_at": "2026-08-08T08:54:45Z"
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "id": 186389337,
+      "name": "pager101-rec0028.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:45Z",
+      "updated_at": "2026-08-08T08:54:45Z"
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "id": 186389338,
+      "name": "pager101-rec0029.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:45Z",
+      "updated_at": "2026-08-08T08:54:45Z"
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "id": 186389339,
+      "name": "pager101-rec0030.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:45Z",
+      "updated_at": "2026-08-08T08:54:45Z"
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "id": 186389340,
+      "name": "pager101-rec0031.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:46Z",
+      "updated_at": "2026-08-08T08:54:46Z"
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "id": 186389341,
+      "name": "pager101-rec0032.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:46Z",
+      "updated_at": "2026-08-08T08:54:46Z"
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "id": 186389342,
+      "name": "pager101-rec0033.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:46Z",
+      "updated_at": "2026-08-08T08:54:46Z"
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "id": 186389343,
+      "name": "pager101-rec0034.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:46Z",
+      "updated_at": "2026-08-08T08:54:46Z"
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "id": 186389344,
+      "name": "pager101-rec0035.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:47Z",
+      "updated_at": "2026-08-08T08:54:47Z"
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "id": 186389345,
+      "name": "pager101-rec0036.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:47Z",
+      "updated_at": "2026-08-08T08:54:47Z"
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "id": 186389346,
+      "name": "pager101-rec0037.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:47Z",
+      "updated_at": "2026-08-08T08:54:47Z"
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "id": 186389347,
+      "name": "pager101-rec0038.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:47Z",
+      "updated_at": "2026-08-08T08:54:47Z"
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "id": 186389348,
+      "name": "pager101-rec0039.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:48Z",
+      "updated_at": "2026-08-08T08:54:48Z"
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "id": 186389349,
+      "name": "pager101-rec0040.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:48Z",
+      "updated_at": "2026-08-08T08:54:48Z"
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "id": 186389350,
+      "name": "pager101-rec0041.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:48Z",
+      "updated_at": "2026-08-08T08:54:48Z"
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "id": 186389351,
+      "name": "pager101-rec0042.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:48Z",
+      "updated_at": "2026-08-08T08:54:48Z"
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "id": 186389352,
+      "name": "pager101-rec0043.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:49Z",
+      "updated_at": "2026-08-08T08:54:49Z"
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "id": 186389353,
+      "name": "pager101-rec0044.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:49Z",
+      "updated_at": "2026-08-08T08:54:49Z"
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "id": 186389354,
+      "name": "pager101-rec0045.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:49Z",
+      "updated_at": "2026-08-08T08:54:49Z"
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "id": 186389355,
+      "name": "pager101-rec0046.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:49Z",
+      "updated_at": "2026-08-08T08:54:49Z"
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "id": 186389356,
+      "name": "pager101-rec0047.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:50Z",
+      "updated_at": "2026-08-08T08:54:50Z"
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "id": 186389357,
+      "name": "pager101-rec0048.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:50Z",
+      "updated_at": "2026-08-08T08:54:50Z"
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "id": 186389358,
+      "name": "pager101-rec0049.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:50Z",
+      "updated_at": "2026-08-08T08:54:50Z"
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "id": 186389359,
+      "name": "pager101-rec0050.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:50Z",
+      "updated_at": "2026-08-08T08:54:50Z"
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "id": 186389360,
+      "name": "pager101-rec0051.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:51Z",
+      "updated_at": "2026-08-08T08:54:51Z"
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "id": 186389361,
+      "name": "pager101-rec0052.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:51Z",
+      "updated_at": "2026-08-08T08:54:51Z"
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "id": 186389362,
+      "name": "pager101-rec0053.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:51Z",
+      "updated_at": "2026-08-08T08:54:51Z"
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "id": 186389363,
+      "name": "pager101-rec0054.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:51Z",
+      "updated_at": "2026-08-08T08:54:51Z"
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "id": 186389364,
+      "name": "pager101-rec0055.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:52Z",
+      "updated_at": "2026-08-08T08:54:52Z"
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "id": 186389365,
+      "name": "pager101-rec0056.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:52Z",
+      "updated_at": "2026-08-08T08:54:52Z"
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "id": 186389366,
+      "name": "pager101-rec0057.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:52Z",
+      "updated_at": "2026-08-08T08:54:52Z"
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "id": 186389367,
+      "name": "pager101-rec0058.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:52Z",
+      "updated_at": "2026-08-08T08:54:52Z"
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "id": 186389368,
+      "name": "pager101-rec0059.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:53Z",
+      "updated_at": "2026-08-08T08:54:53Z"
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "id": 186389369,
+      "name": "pager101-rec0060.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:53Z",
+      "updated_at": "2026-08-08T08:54:53Z"
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "id": 186389370,
+      "name": "pager101-rec0061.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:53Z",
+      "updated_at": "2026-08-08T08:54:53Z"
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "id": 186389371,
+      "name": "pager101-rec0062.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:53Z",
+      "updated_at": "2026-08-08T08:54:53Z"
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "id": 186389372,
+      "name": "pager101-rec0063.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:54Z",
+      "updated_at": "2026-08-08T08:54:54Z"
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "id": 186389373,
+      "name": "pager101-rec0064.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:54Z",
+      "updated_at": "2026-08-08T08:54:54Z"
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "id": 186389374,
+      "name": "pager101-rec0065.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:54Z",
+      "updated_at": "2026-08-08T08:54:54Z"
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "id": 186389375,
+      "name": "pager101-rec0066.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:54Z",
+      "updated_at": "2026-08-08T08:54:54Z"
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "id": 186389376,
+      "name": "pager101-rec0067.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:55Z",
+      "updated_at": "2026-08-08T08:54:55Z"
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "id": 186389377,
+      "name": "pager101-rec0068.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:55Z",
+      "updated_at": "2026-08-08T08:54:55Z"
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "id": 186389378,
+      "name": "pager101-rec0069.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:55Z",
+      "updated_at": "2026-08-08T08:54:55Z"
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "id": 186389379,
+      "name": "pager101-rec0070.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:55Z",
+      "updated_at": "2026-08-08T08:54:55Z"
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "id": 186389380,
+      "name": "pager101-rec0071.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:56Z",
+      "updated_at": "2026-08-08T08:54:56Z"
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "id": 186389381,
+      "name": "pager101-rec0072.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:56Z",
+      "updated_at": "2026-08-08T08:54:56Z"
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "id": 186389382,
+      "name": "pager101-rec0073.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:56Z",
+      "updated_at": "2026-08-08T08:54:56Z"
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "id": 186389383,
+      "name": "pager101-rec0074.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:56Z",
+      "updated_at": "2026-08-08T08:54:56Z"
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "id": 186389384,
+      "name": "pager101-rec0075.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:57Z",
+      "updated_at": "2026-08-08T08:54:57Z"
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "id": 186389385,
+      "name": "pager101-rec0076.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:57Z",
+      "updated_at": "2026-08-08T08:54:57Z"
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "id": 186389386,
+      "name": "pager101-rec0077.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:57Z",
+      "updated_at": "2026-08-08T08:54:57Z"
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "id": 186389387,
+      "name": "pager101-rec0078.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:57Z",
+      "updated_at": "2026-08-08T08:54:57Z"
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "id": 186389388,
+      "name": "pager101-rec0079.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:58Z",
+      "updated_at": "2026-08-08T08:54:58Z"
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "id": 186389389,
+      "name": "pager101-rec0080.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:58Z",
+      "updated_at": "2026-08-08T08:54:58Z"
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "id": 186389390,
+      "name": "pager101-rec0081.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:58Z",
+      "updated_at": "2026-08-08T08:54:58Z"
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "id": 186389391,
+      "name": "pager101-rec0082.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:58Z",
+      "updated_at": "2026-08-08T08:54:58Z"
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "id": 186389392,
+      "name": "pager101-rec0083.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:59Z",
+      "updated_at": "2026-08-08T08:54:59Z"
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "id": 186389393,
+      "name": "pager101-rec0084.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:59Z",
+      "updated_at": "2026-08-08T08:54:59Z"
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "id": 186389394,
+      "name": "pager101-rec0085.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:59Z",
+      "updated_at": "2026-08-08T08:54:59Z"
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "id": 186389395,
+      "name": "pager101-rec0086.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:54:59Z",
+      "updated_at": "2026-08-08T08:54:59Z"
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "id": 186389396,
+      "name": "pager101-rec0087.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:00Z",
+      "updated_at": "2026-08-08T08:55:00Z"
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "id": 186389397,
+      "name": "pager101-rec0088.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:00Z",
+      "updated_at": "2026-08-08T08:55:00Z"
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "id": 186389398,
+      "name": "pager101-rec0089.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:00Z",
+      "updated_at": "2026-08-08T08:55:00Z"
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "id": 186389399,
+      "name": "pager101-rec0090.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:00Z",
+      "updated_at": "2026-08-08T08:55:00Z"
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "id": 186389400,
+      "name": "pager101-rec0091.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:01Z",
+      "updated_at": "2026-08-08T08:55:01Z"
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "id": 186389401,
+      "name": "pager101-rec0092.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:01Z",
+      "updated_at": "2026-08-08T08:55:01Z"
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "id": 186389402,
+      "name": "pager101-rec0093.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:01Z",
+      "updated_at": "2026-08-08T08:55:01Z"
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "id": 186389403,
+      "name": "pager101-rec0094.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:01Z",
+      "updated_at": "2026-08-08T08:55:01Z"
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "id": 186389404,
+      "name": "pager101-rec0095.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:02Z",
+      "updated_at": "2026-08-08T08:55:02Z"
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "id": 186389405,
+      "name": "pager101-rec0096.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:02Z",
+      "updated_at": "2026-08-08T08:55:02Z"
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "id": 186389406,
+      "name": "pager101-rec0097.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:02Z",
+      "updated_at": "2026-08-08T08:55:02Z"
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "id": 186389407,
+      "name": "pager101-rec0098.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:02Z",
+      "updated_at": "2026-08-08T08:55:02Z"
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "id": 186389408,
+      "name": "pager101-rec0099.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:03Z",
+      "updated_at": "2026-08-08T08:55:03Z"
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "id": 186389409,
+      "name": "pager101-rec0100.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:04Z",
+      "updated_at": "2026-08-08T08:55:04Z"
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "id": 186389410,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:30Z",
+      "updated_at": "2026-08-08T08:55:30Z"
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "id": 186389411,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issuewild \"letsencrypt.org\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:31Z",
+      "updated_at": "2026-08-08T08:55:31Z"
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "id": 186389412,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issuewild \"example.com\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:32Z",
+      "updated_at": "2026-08-08T08:55:32Z"
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "id": 186389413,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issuewild \";\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:32Z",
+      "updated_at": "2026-08-08T08:55:32Z"
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "id": 186389414,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:33Z",
+      "updated_at": "2026-08-08T08:55:33Z"
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "id": 186389415,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:34Z",
+      "updated_at": "2026-08-08T08:55:34Z"
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "id": 186389416,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "CAA",
+      "content": "128 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:35Z",
+      "updated_at": "2026-08-08T08:55:35Z"
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "id": 186389417,
+      "name": "4.dnscontroltest-luadns.com.",
+      "type": "PTR",
+      "content": "foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:36Z",
+      "updated_at": "2026-08-08T08:55:36Z"
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "id": 186389418,
+      "name": "4.dnscontroltest-luadns.com.",
+      "type": "PTR",
+      "content": "bar.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:37Z",
+      "updated_at": "2026-08-08T08:55:37Z"
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "id": 186389419,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:38Z",
+      "updated_at": "2026-08-08T08:55:38Z"
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "id": 186389420,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:39Z",
+      "updated_at": "2026-08-08T08:55:39Z"
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "id": 186389421,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 60 70 foo2.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:39Z",
+      "updated_at": "2026-08-08T08:55:39Z"
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "id": 186389422,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:40Z",
+      "updated_at": "2026-08-08T08:55:40Z"
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "id": 186389423,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 60 70 foo2.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:40Z",
+      "updated_at": "2026-08-08T08:55:40Z"
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "id": 186389424,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo3.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:40Z",
+      "updated_at": "2026-08-08T08:55:40Z"
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "id": 186389425,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:41Z",
+      "updated_at": "2026-08-08T08:55:41Z"
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "id": 186389426,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo3.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:41Z",
+      "updated_at": "2026-08-08T08:55:41Z"
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "id": 186389427,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:41Z",
+      "updated_at": "2026-08-08T08:55:41Z"
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "id": 186389428,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo4.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:41Z",
+      "updated_at": "2026-08-08T08:55:41Z"
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "id": 186389429,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo4.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:42Z",
+      "updated_at": "2026-08-08T08:55:42Z"
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "id": 186389430,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "52 6 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:42Z",
+      "updated_at": "2026-08-08T08:55:42Z"
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "id": 186389431,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo4.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:43Z",
+      "updated_at": "2026-08-08T08:55:43Z"
+    }
+  },
+  {
+    "index": 268,
+    "value": {
+      "id": 186389432,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "52 62 7 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:43Z",
+      "updated_at": "2026-08-08T08:55:43Z"
+    }
+  },
+  {
+    "index": 269,
+    "value": {
+      "id": 186389433,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 foo4.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:44Z",
+      "updated_at": "2026-08-08T08:55:44Z"
+    }
+  },
+  {
+    "index": 270,
+    "value": {
+      "id": 186389434,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "52 62 72 foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:44Z",
+      "updated_at": "2026-08-08T08:55:44Z"
+    }
+  },
+  {
+    "index": 271,
+    "value": {
+      "id": 186389435,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "15 65 75 .",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:45Z",
+      "updated_at": "2026-08-08T08:55:45Z"
+    }
+  },
+  {
+    "index": 272,
+    "value": {
+      "id": 186389436,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 333,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:46Z",
+      "updated_at": "2026-08-08T08:55:46Z"
+    }
+  },
+  {
+    "index": 273,
+    "value": {
+      "id": 186389437,
+      "name": "_sip._tcp.dnscontroltest-luadns.com.",
+      "type": "SRV",
+      "content": "5 6 7 foo.com.",
+      "ttl": 4400,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:47Z",
+      "updated_at": "2026-08-08T08:55:47Z"
+    }
+  },
+  {
+    "index": 274,
+    "value": {
+      "id": 186389438,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "SSHFP",
+      "content": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:48Z",
+      "updated_at": "2026-08-08T08:55:48Z"
+    }
+  },
+  {
+    "index": 275,
+    "value": {
+      "id": 186389439,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "SSHFP",
+      "content": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:49Z",
+      "updated_at": "2026-08-08T08:55:49Z"
+    }
+  },
+  {
+    "index": 276,
+    "value": {
+      "id": 186389440,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "SSHFP",
+      "content": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:50Z",
+      "updated_at": "2026-08-08T08:55:50Z"
+    }
+  },
+  {
+    "index": 277,
+    "value": {
+      "id": 186389441,
+      "name": "_443._tcp.dnscontroltest-luadns.com.",
+      "type": "TLSA",
+      "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:51Z",
+      "updated_at": "2026-08-08T08:55:51Z"
+    }
+  },
+  {
+    "index": 278,
+    "value": {
+      "id": 186389442,
+      "name": "_443._tcp.dnscontroltest-luadns.com.",
+      "type": "TLSA",
+      "content": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:52Z",
+      "updated_at": "2026-08-08T08:55:52Z"
+    }
+  },
+  {
+    "index": 279,
+    "value": {
+      "id": 186389443,
+      "name": "_443._tcp.dnscontroltest-luadns.com.",
+      "type": "TLSA",
+      "content": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:52Z",
+      "updated_at": "2026-08-08T08:55:52Z"
+    }
+  },
+  {
+    "index": 280,
+    "value": {
+      "id": 186389444,
+      "name": "_443._tcp.dnscontroltest-luadns.com.",
+      "type": "TLSA",
+      "content": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:53Z",
+      "updated_at": "2026-08-08T08:55:53Z"
+    }
+  },
+  {
+    "index": 281,
+    "value": {
+      "id": 186389445,
+      "name": "_443._tcp.dnscontroltest-luadns.com.",
+      "type": "TLSA",
+      "content": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:54Z",
+      "updated_at": "2026-08-08T08:55:54Z"
+    }
+  },
+  {
+    "index": 282,
+    "value": {
+      "id": 186389446,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "ALIAS",
+      "content": "foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:55Z",
+      "updated_at": "2026-08-08T08:55:55Z"
+    }
+  },
+  {
+    "index": 283,
+    "value": {
+      "id": 186389447,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "ALIAS",
+      "content": "foo2.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:56Z",
+      "updated_at": "2026-08-08T08:55:56Z"
+    }
+  },
+  {
+    "index": 284,
+    "value": {
+      "id": 186389448,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:57Z",
+      "updated_at": "2026-08-08T08:55:57Z"
+    }
+  },
+  {
+    "index": 285,
+    "value": {
+      "id": 186389449,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "ALIAS",
+      "content": "foo.dnscontroltest-luadns.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:57Z",
+      "updated_at": "2026-08-08T08:55:57Z"
+    }
+  },
+  {
+    "index": 286,
+    "value": {
+      "id": 186389450,
+      "name": "test.dnscontroltest-luadns.com.",
+      "type": "ALIAS",
+      "content": "foo.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:55:59Z",
+      "updated_at": "2026-08-08T08:55:59Z"
+    }
+  },
+  {
+    "index": 287,
+    "value": {
+      "id": 186389451,
+      "name": "test.dnscontroltest-luadns.com.",
+      "type": "ALIAS",
+      "content": "foo2.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:00Z",
+      "updated_at": "2026-08-08T08:56:00Z"
+    }
+  },
+  {
+    "index": 288,
+    "value": {
+      "id": 186389452,
+      "name": "bar.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.5.5.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:01Z",
+      "updated_at": "2026-08-08T08:56:01Z"
+    }
+  },
+  {
+    "index": 289,
+    "value": {
+      "id": 186389453,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:01Z",
+      "updated_at": "2026-08-08T08:56:01Z"
+    }
+  },
+  {
+    "index": 290,
+    "value": {
+      "id": 186389454,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:01Z",
+      "updated_at": "2026-08-08T08:56:01Z"
+    }
+  },
+  {
+    "index": 291,
+    "value": {
+      "id": 186389455,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "simple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:01Z",
+      "updated_at": "2026-08-08T08:56:01Z"
+    }
+  },
+  {
+    "index": 292,
+    "value": {
+      "id": 186389456,
+      "name": "mail.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:02Z",
+      "updated_at": "2026-08-08T08:56:02Z"
+    }
+  },
+  {
+    "index": 293,
+    "value": {
+      "id": 186389457,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:12Z",
+      "updated_at": "2026-08-08T08:56:12Z"
+    }
+  },
+  {
+    "index": 294,
+    "value": {
+      "id": 186389458,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:12Z",
+      "updated_at": "2026-08-08T08:56:12Z"
+    }
+  },
+  {
+    "index": 295,
+    "value": {
+      "id": 186389459,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "simple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:12Z",
+      "updated_at": "2026-08-08T08:56:12Z"
+    }
+  },
+  {
+    "index": 296,
+    "value": {
+      "id": 186389460,
+      "name": "bar.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.5.5.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:12Z",
+      "updated_at": "2026-08-08T08:56:12Z"
+    }
+  },
+  {
+    "index": 297,
+    "value": {
+      "id": 186389461,
+      "name": "mail.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:12Z",
+      "updated_at": "2026-08-08T08:56:12Z"
+    }
+  },
+  {
+    "index": 298,
+    "value": {
+      "id": 186389462,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:21Z",
+      "updated_at": "2026-08-08T08:56:21Z"
+    }
+  },
+  {
+    "index": 299,
+    "value": {
+      "id": 186389463,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "asimple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:22Z",
+      "updated_at": "2026-08-08T08:56:22Z"
+    }
+  },
+  {
+    "index": 300,
+    "value": {
+      "id": 186389464,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:22Z",
+      "updated_at": "2026-08-08T08:56:22Z"
+    }
+  },
+  {
+    "index": 301,
+    "value": {
+      "id": 186389465,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "simple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:22Z",
+      "updated_at": "2026-08-08T08:56:22Z"
+    }
+  },
+  {
+    "index": 302,
+    "value": {
+      "id": 186389466,
+      "name": "bar.bat.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "5.5.5.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:26Z",
+      "updated_at": "2026-08-08T08:56:26Z"
+    }
+  },
+  {
+    "index": 303,
+    "value": {
+      "id": 186389467,
+      "name": "foo.bat.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:26Z",
+      "updated_at": "2026-08-08T08:56:26Z"
+    }
+  },
+  {
+    "index": 304,
+    "value": {
+      "id": 186389468,
+      "name": "foo.bat.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:26Z",
+      "updated_at": "2026-08-08T08:56:26Z"
+    }
+  },
+  {
+    "index": 305,
+    "value": {
+      "id": 186389469,
+      "name": "foo.bat.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "simple",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:27Z",
+      "updated_at": "2026-08-08T08:56:27Z"
+    }
+  },
+  {
+    "index": 306,
+    "value": {
+      "id": 186389470,
+      "name": "mail.bat.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:27Z",
+      "updated_at": "2026-08-08T08:56:27Z"
+    }
+  },
+  {
+    "index": 307,
+    "value": {
+      "id": 186389471,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:32Z",
+      "updated_at": "2026-08-08T08:56:32Z"
+    }
+  },
+  {
+    "index": 308,
+    "value": {
+      "id": 186389472,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "10.10.10.10",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:32Z",
+      "updated_at": "2026-08-08T08:56:32Z"
+    }
+  },
+  {
+    "index": 309,
+    "value": {
+      "id": 186389473,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff::fe71:aaaa",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:32Z",
+      "updated_at": "2026-08-08T08:56:32Z"
+    }
+  },
+  {
+    "index": 310,
+    "value": {
+      "id": 186389474,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "10 aspmx.l.google.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:32Z",
+      "updated_at": "2026-08-08T08:56:32Z"
+    }
+  },
+  {
+    "index": 311,
+    "value": {
+      "id": 186389475,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "MX",
+      "content": "20 alt1.aspmx.l.google.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:32Z",
+      "updated_at": "2026-08-08T08:56:32Z"
+    }
+  },
+  {
+    "index": 312,
+    "value": {
+      "id": 186389476,
+      "name": "zzz.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:33Z",
+      "updated_at": "2026-08-08T08:56:33Z"
+    }
+  },
+  {
+    "index": 313,
+    "value": {
+      "id": 186389477,
+      "name": "zzz.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "4.4.4.4",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:33Z",
+      "updated_at": "2026-08-08T08:56:33Z"
+    }
+  },
+  {
+    "index": 314,
+    "value": {
+      "id": 186389478,
+      "name": "zzz.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff::fe71:cccc",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:33Z",
+      "updated_at": "2026-08-08T08:56:33Z"
+    }
+  },
+  {
+    "index": 315,
+    "value": {
+      "id": 186389479,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:34Z",
+      "updated_at": "2026-08-08T08:56:34Z"
+    }
+  },
+  {
+    "index": 316,
+    "value": {
+      "id": 186389480,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "11.11.11.11",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:34Z",
+      "updated_at": "2026-08-08T08:56:34Z"
+    }
+  },
+  {
+    "index": 317,
+    "value": {
+      "id": 186389481,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:35Z",
+      "updated_at": "2026-08-08T08:56:35Z"
+    }
+  },
+  {
+    "index": 318,
+    "value": {
+      "id": 186389482,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "12.12.12.12",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:35Z",
+      "updated_at": "2026-08-08T08:56:35Z"
+    }
+  },
+  {
+    "index": 319,
+    "value": {
+      "id": 186389483,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:36Z",
+      "updated_at": "2026-08-08T08:56:36Z"
+    }
+  },
+  {
+    "index": 320,
+    "value": {
+      "id": 186389484,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "13.13.13.13",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:36Z",
+      "updated_at": "2026-08-08T08:56:36Z"
+    }
+  },
+  {
+    "index": 321,
+    "value": {
+      "id": 186389485,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:37Z",
+      "updated_at": "2026-08-08T08:56:37Z"
+    }
+  },
+  {
+    "index": 322,
+    "value": {
+      "id": 186389486,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "14.14.14.14",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:37Z",
+      "updated_at": "2026-08-08T08:56:37Z"
+    }
+  },
+  {
+    "index": 323,
+    "value": {
+      "id": 186389487,
+      "name": "bar.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "redact2.acm-validations.aws.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:40Z",
+      "updated_at": "2026-08-08T08:56:40Z"
+    }
+  },
+  {
+    "index": 324,
+    "value": {
+      "id": 186389488,
+      "name": "foo.dnscontroltest-luadns.com.",
+      "type": "CNAME",
+      "content": "redact1.acm-validations.aws.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:40Z",
+      "updated_at": "2026-08-08T08:56:40Z"
+    }
+  },
+  {
+    "index": 325,
+    "value": {
+      "id": 186389489,
+      "name": "dyndns-city1.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "91.42.1.1",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:43Z",
+      "updated_at": "2026-08-08T08:56:43Z"
+    }
+  },
+  {
+    "index": 326,
+    "value": {
+      "id": 186389490,
+      "name": "dyndns-city1.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff::fe71:ce77",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:43Z",
+      "updated_at": "2026-08-08T08:56:43Z"
+    }
+  },
+  {
+    "index": 327,
+    "value": {
+      "id": 186389491,
+      "name": "dyndns-city2.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "91.42.1.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:43Z",
+      "updated_at": "2026-08-08T08:56:43Z"
+    }
+  },
+  {
+    "index": 328,
+    "value": {
+      "id": 186389492,
+      "name": "dyndns-city2.dnscontroltest-luadns.com.",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff::fe71:ce78",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:43Z",
+      "updated_at": "2026-08-08T08:56:43Z"
+    }
+  },
+  {
+    "index": 329,
+    "value": {
+      "id": 186389493,
+      "name": "testdefined.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "9.9.9.9",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:46Z",
+      "updated_at": "2026-08-08T08:56:46Z"
+    }
+  },
+  {
+    "index": 330,
+    "value": {
+      "id": 186389494,
+      "name": "testignore.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:47Z",
+      "updated_at": "2026-08-08T08:56:47Z"
+    }
+  },
+  {
+    "index": 331,
+    "value": {
+      "id": 186389495,
+      "name": "testdefined.dnscontroltest-luadns.com.",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:49Z",
+      "updated_at": "2026-08-08T08:56:49Z"
+    }
+  },
+  {
+    "index": 332,
+    "value": {
+      "id": 186389496,
+      "name": "6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com.",
+      "type": "OPENPGPKEY",
+      "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAxCQnAKBDmA75+73+3lYVXDwrMUbaR61fNZgGeOHwmDq0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEYZ3PIZnaOWQrPxj6VX+9VdC3r4wFAgAAAAECGwECHgUCF4AACgkQVX+9VdC3r4xq6wEAl2ujFSqWwc2wQuHedpFrSTN9Gh7cIziKCZ3f8BGSRTgBAIvjKlWLLLBu0FPpCVlcfkpsZMV5YRrg90k+D+O4zZ4M",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:51Z",
+      "updated_at": "2026-08-08T08:56:51Z"
+    }
+  },
+  {
+    "index": 333,
+    "value": {
+      "id": 186389497,
+      "name": "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com.",
+      "type": "OPENPGPKEY",
+      "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAO2uf8a0MUkNWUHzey8FhYJP2SS+061pF+GFK23egV9K0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEwP53wg/jSbhjzamYC/4c89luNM4FAgAAAAECGwECHgUCF4AACgkQC/4c89luNM4/LgEA8ARj4iJ0fVrpRRnhrTtlGwos170TDhTuZfPoGMqweS0A/1GWtg6/ywR4EPtRu+p9WogsQmO1HOk3ag3I5d7iP18C",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:52Z",
+      "updated_at": "2026-08-08T08:56:52Z"
+    }
+  },
+  {
+    "index": 334,
+    "value": {
+      "id": 186389498,
+      "name": "6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com.",
+      "type": "OPENPGPKEY",
+      "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAQWiJ4gXP6wC2wQ7h7odcLpZU+mQD2rHiqtTgj+1e6ou0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEE/tuN1tP/jpKko/EvTN4yJT7efAsFAgAAAAECGwECHgUCF4AACgkQTN4yJT7efAuxPQD/aEhrJaCX9FD1IkjA/8UmK0nokjtJNy46It3IWTGT4EQBAJI6goeRQBJqu/UnHmjv0OfqBQQCt87f9zXqZxLjiIQN",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:52Z",
+      "updated_at": "2026-08-08T08:56:52Z"
+    }
+  },
+  {
+    "index": 335,
+    "value": {
+      "id": 186389499,
+      "name": "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com.",
+      "type": "OPENPGPKEY",
+      "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:53Z",
+      "updated_at": "2026-08-08T08:56:53Z"
+    }
+  },
+  {
+    "index": 336,
+    "value": {
+      "id": 186389500,
+      "name": "final.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "TestDNSProviders was successful!",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:55Z",
+      "updated_at": "2026-08-08T08:56:55Z"
+    }
+  },
+  {
+    "index": 337,
+    "value": {
+      "id": 186389501,
+      "name": "final.dnscontroltest-luadns.com.",
+      "type": "TXT",
+      "content": "TestDNSProviders was successful!",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:56Z",
+      "updated_at": "2026-08-08T08:56:56Z"
+    }
+  },
+  {
+    "index": 338,
+    "value": {
+      "id": 186389502,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns1.example.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:57Z",
+      "updated_at": "2026-08-08T08:56:57Z"
+    }
+  },
+  {
+    "index": 339,
+    "value": {
+      "id": 186389503,
+      "name": "dnscontroltest-luadns.com.",
+      "type": "NS",
+      "content": "ns2.example.com.",
+      "ttl": 300,
+      "zone_id": 826476,
+      "created_at": "2026-08-08T08:56:57Z",
+      "updated_at": "2026-08-08T08:56:57Z"
+    }
+  }
+]

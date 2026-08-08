@@ -13,11 +13,16 @@ import (
 
 // Client describes a connection to the CNR API.
 type Client struct {
+	observer    providers.ConversionObserver
 	conf        map[string]string
 	APILogin    string
 	APIPassword string
 	APIEntity   string
 	client      *cnrcl.APIClient
+}
+
+func (client *Client) SetConversionObserver(observer providers.ConversionObserver) {
+	client.observer = observer
 }
 
 var features = providers.DocumentationNotes{

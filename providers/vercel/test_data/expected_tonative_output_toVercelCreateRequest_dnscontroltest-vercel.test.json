@@ -1,0 +1,893 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "name": "*",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.2"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "ALIAS",
+      "comment": "",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "ALIAS",
+      "comment": "",
+      "value": "foo.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "CAA",
+      "comment": "",
+      "value": "0 issue \"letsencrypt.org\""
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "CAA",
+      "comment": "",
+      "value": "128 issue \"digicert.com; cansignhttpexchanges=yes\""
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "name": "",
+      "ttl": 300,
+      "type": "HTTPS",
+      "comment": "",
+      "https": {
+        "priority": 0,
+        "target": "test.com.",
+        "params": ""
+      }
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "mxPriority": 2,
+      "name": "",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "mxPriority": 5,
+      "name": "",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "mxPriority": 8,
+      "name": "",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "www.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "name": "",
+      "ttl": 666,
+      "type": "A",
+      "comment": "",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "name": "_sip._tcp",
+      "srv": {
+        "port": 75,
+        "priority": 15,
+        "target": ".",
+        "weight": 65
+      },
+      "ttl": 300,
+      "type": "SRV",
+      "comment": ""
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "name": "_sip._tcp",
+      "srv": {
+        "port": 75,
+        "priority": 15,
+        "target": "foo3.com.",
+        "weight": 65
+      },
+      "ttl": 300,
+      "type": "SRV",
+      "comment": ""
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "name": "_sip._tcp",
+      "srv": {
+        "port": 7,
+        "priority": 5,
+        "target": "foo.com.",
+        "weight": 6
+      },
+      "ttl": 300,
+      "type": "SRV",
+      "comment": ""
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "name": "_sip._tcp",
+      "srv": {
+        "port": 70,
+        "priority": 5,
+        "target": "foo2.com.",
+        "weight": 60
+      },
+      "ttl": 300,
+      "type": "SRV",
+      "comment": ""
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "name": "_sip._tcp",
+      "srv": {
+        "port": 7,
+        "priority": 5,
+        "target": "foo.com.",
+        "weight": 6
+      },
+      "ttl": 333,
+      "type": "SRV",
+      "comment": ""
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "name": "a",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "xn--ndaaa.com."
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "name": "bar",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "mxPriority": 5,
+      "name": "bar",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "name": "decoy",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "name": "final",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "TestDNSProviders was successful!"
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "2.3.4.5"
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "3.4.5.6"
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "4.5.6.7"
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "8.8.8.8"
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "google.com."
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "google2.com."
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "mxPriority": 10,
+      "name": "foo",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "foo.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "mxPriority": 20,
+      "name": "foo",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "bar.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "mxPriority": 5,
+      "name": "foo",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "mx.google.com."
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "mxPriority": 8,
+      "name": "foo",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "NS",
+      "comment": "",
+      "value": "dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "name": "foo",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "v=spf1 ip4:99.99.99.99 -all"
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "name": "foo254",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "name": "foo255",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "name": "foo256",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "name": "foo509",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "name": "foo510",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "name": "foo511",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "name": "foo764",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "name": "foo765",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "name": "foo766",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "name": "foobt",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "blah`blah"
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "name": "foodq",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "in\"side"
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "name": "foodqs",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "in\"ter\"ior"
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "name": "fooosbs1",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "1back\\slash"
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "name": "fooosbs2",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "2back\\\\slash"
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "name": "fooosbs3",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "3back\\\\\\slash"
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "name": "fooosbs4",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "4back\\\\\\\\slash"
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "name": "foosc1",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "semi;colon"
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "name": "foosc2",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "wssemi ; colon"
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "name": "foosp",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "with spaces"
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "name": "foosq",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "quo'te"
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "name": "foows1",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "trailingws "
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "name": "nmx",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.3"
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "mxPriority": 3,
+      "name": "nmx",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "nmx.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "mxPriority": 9,
+      "name": "nmx",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "www.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "name": "test",
+      "ttl": 300,
+      "type": "ALIAS",
+      "comment": "",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "name": "testa",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "name": "testa",
+      "ttl": 333,
+      "type": "A",
+      "comment": "",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "name": "testaaaa",
+      "ttl": 300,
+      "type": "AAAA",
+      "comment": "",
+      "value": "2607:f8b0:4006:820::2006"
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "name": "testcname",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "foo.dnscontroltest-vercel.test."
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "name": "testcname",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "www.google.com."
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "mxPriority": 100,
+      "name": "testmx",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "bar.com."
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "mxPriority": 5,
+      "name": "testmx",
+      "ttl": 300,
+      "type": "MX",
+      "comment": "",
+      "value": "foo.com."
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "name": "testtxt",
+      "ttl": 300,
+      "type": "TXT",
+      "comment": "",
+      "value": "simple"
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.1.1.1"
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.8"
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.9"
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "2.2.2.2"
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "3.3.3.3"
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "5.5.5.5"
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "name": "www",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "name": "www",
+      "ttl": 400,
+      "type": "A",
+      "comment": "",
+      "value": "5.6.7.8"
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "name": "www",
+      "ttl": 700,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "name": "xn--fiq228c",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "name": "xn--ndaaa",
+      "ttl": 300,
+      "type": "A",
+      "comment": "",
+      "value": "1.2.3.4"
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "name": "xn--o-0gab",
+      "ttl": 300,
+      "type": "CNAME",
+      "comment": "",
+      "value": "xn--ndaaa.xn--vhquv."
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "name": "xyz",
+      "ttl": 300,
+      "type": "NS",
+      "comment": "",
+      "value": "ns1.foo.com."
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "name": "xyz",
+      "ttl": 300,
+      "type": "NS",
+      "comment": "",
+      "value": "ns2.foo.com."
+    }
+  }
+]

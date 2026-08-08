@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
 	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
 )
 
@@ -43,6 +44,27 @@ func (api *rwthProvider) printRecConfig(rr models.RecordConfig) string {
 
 	return fmt.Sprintf("%s%s%s\n",
 		prefix, prettyzone.FormatLine([]int{10, 5, 2, 5, 0}, []string{rr.NameFQDN, ttl, "IN", typeStr, target}), comment)
+}
+
+// toRecordConfig converts an RWTH record to a RecordConfig. It returns nil for
+// the records that RWTH locks, which cannot be managed.
+func toRecordConfig(dc *models.DomainConfig, apiRecord RecordReply) (*models.RecordConfig, error) {
+	if checkIsLockedSystemAPIRecord(apiRecord) != nil {
+		return nil, nil
+	}
+
+	dnsRec, err := NewRR(apiRecord.Content) // Parse content as DNS record
+	if err != nil {
+		return nil, err
+	}
+
+	recConfig, err := dnsrr.RRv2toRC(dc, dnsRec) // and make it a RC
+	if err != nil {
+		return nil, err
+	}
+	recConfig.Original = apiRecord // but keep our ApiRecord as the original
+
+	return recConfig, nil
 }
 
 // NewRR returns custom dns.NewRR with RWTH default TTL.

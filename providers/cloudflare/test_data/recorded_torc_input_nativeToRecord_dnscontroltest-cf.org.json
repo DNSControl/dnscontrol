@@ -1,0 +1,4461 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "created_on": "2026-08-07T20:56:50.481379Z",
+      "modified_on": "2026-08-07T20:56:52.223642Z",
+      "type": "AAAA",
+      "name": "testaaaa.dnscontroltest-cf.org",
+      "content": "2607:f8b0:4006:820::2013",
+      "meta": {},
+      "id": "e6dac08605c3396e93b4f30f283e8f63",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "created_on": "2026-08-08T08:52:58.61726Z",
+      "modified_on": "2026-08-08T08:52:58.61726Z",
+      "type": "A",
+      "name": "testa.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "68cd3d7838f2d67f58f0f4c6f21e0cc5",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "created_on": "2026-08-08T08:52:58.61726Z",
+      "modified_on": "2026-08-08T08:53:00.393897Z",
+      "type": "A",
+      "name": "testa.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "68cd3d7838f2d67f58f0f4c6f21e0cc5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "created_on": "2026-08-08T08:53:03.162191Z",
+      "modified_on": "2026-08-08T08:53:03.162191Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "13fa55e2bc8c48b2bfc2d1f84e03fc52",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "created_on": "2026-08-08T08:53:03.162191Z",
+      "modified_on": "2026-08-08T08:53:04.922217Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "4.4.4.4",
+      "meta": {},
+      "id": "13fa55e2bc8c48b2bfc2d1f84e03fc52",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "created_on": "2026-08-08T08:53:07.625851Z",
+      "modified_on": "2026-08-08T08:53:07.625851Z",
+      "type": "A",
+      "name": "*.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "b6a5d12fae5470a385c7dc43992ce9cc",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "created_on": "2026-08-08T08:53:07.893367Z",
+      "modified_on": "2026-08-08T08:53:07.893367Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "5.5.5.5",
+      "meta": {},
+      "id": "5c28ec552c51a5efd73ddefa0b5bc86c",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "created_on": "2026-08-08T08:53:12.403714Z",
+      "modified_on": "2026-08-08T08:53:12.403714Z",
+      "type": "AAAA",
+      "name": "testaaaa.dnscontroltest-cf.org",
+      "content": "2607:f8b0:4006:820::2006",
+      "meta": {},
+      "id": "052db1608f6eda803b0cc1416bf86899",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "created_on": "2026-08-08T08:53:12.403714Z",
+      "modified_on": "2026-08-08T08:53:14.121972Z",
+      "type": "AAAA",
+      "name": "testaaaa.dnscontroltest-cf.org",
+      "content": "2607:f8b0:4006:820::2013",
+      "meta": {},
+      "id": "052db1608f6eda803b0cc1416bf86899",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "created_on": "2026-08-08T08:53:16.969094Z",
+      "modified_on": "2026-08-08T08:53:16.969094Z",
+      "type": "CNAME",
+      "name": "testcname.dnscontroltest-cf.org",
+      "content": "www.google.com",
+      "meta": {},
+      "id": "1d62d7c72c5ff9445a74424a6df542e9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "created_on": "2026-08-08T08:53:16.969094Z",
+      "modified_on": "2026-08-08T08:53:18.626181Z",
+      "type": "CNAME",
+      "name": "testcname.dnscontroltest-cf.org",
+      "content": "www.yahoo.com",
+      "meta": {},
+      "id": "1d62d7c72c5ff9445a74424a6df542e9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "created_on": "2026-08-08T08:53:21.373585Z",
+      "modified_on": "2026-08-08T08:53:21.373585Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "ce33e4a5b8d1d80146e754bcfdecc190",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "created_on": "2026-08-08T08:53:21.65134Z",
+      "modified_on": "2026-08-08T08:53:21.65134Z",
+      "type": "CNAME",
+      "name": "testcname.dnscontroltest-cf.org",
+      "content": "foo.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "3de538a4f479bda092011845d6dfb6a5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "created_on": "2026-08-08T08:53:24.614764Z",
+      "modified_on": "2026-08-08T08:53:24.614764Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "6b8b34900bb45e0cc198d9e2ce23b2e6",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "created_on": "2026-08-08T08:53:24.614764Z",
+      "modified_on": "2026-08-08T08:53:26.377227Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "6b8b34900bb45e0cc198d9e2ce23b2e6",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "created_on": "2026-08-08T08:53:28.403145Z",
+      "modified_on": "2026-08-08T08:53:28.403145Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "547382922791fe55a69a7e5fad6d8f07",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "created_on": "2026-08-08T08:53:28.403145Z",
+      "modified_on": "2026-08-08T08:53:30.120294Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "547382922791fe55a69a7e5fad6d8f07",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "created_on": "2026-08-08T08:53:32.877074Z",
+      "modified_on": "2026-08-08T08:53:32.877074Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "8e2d81510b1e1615648cbb862ef153e2",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "created_on": "2026-08-08T08:53:32.877074Z",
+      "modified_on": "2026-08-08T08:53:34.618029Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "8e2d81510b1e1615648cbb862ef153e2",
+      "priority": 100,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "created_on": "2026-08-08T08:53:37.361197Z",
+      "modified_on": "2026-08-08T08:53:37.361197Z",
+      "type": "TXT",
+      "name": "testtxt.dnscontroltest-cf.org",
+      "content": "\"simple\"",
+      "meta": {},
+      "id": "f255c395994825525cfbe313fb7b9ac6",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "created_on": "2026-08-08T08:53:37.361197Z",
+      "modified_on": "2026-08-08T08:53:39.152994Z",
+      "type": "TXT",
+      "name": "testtxt.dnscontroltest-cf.org",
+      "content": "\"changed\"",
+      "meta": {},
+      "id": "f255c395994825525cfbe313fb7b9ac6",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "created_on": "2026-08-08T08:53:41.872279Z",
+      "modified_on": "2026-08-08T08:53:41.872279Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "59039ecca3aa28674e4403598afca45c",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "created_on": "2026-08-08T08:53:42.145562Z",
+      "modified_on": "2026-08-08T08:53:42.145562Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "6cbfe39584b045b602696c091c9f3670",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "created_on": "2026-08-08T08:53:42.361089Z",
+      "modified_on": "2026-08-08T08:53:42.361089Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "10002c1816be2156a565019118200b4a",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "created_on": "2026-08-08T08:53:45.642121Z",
+      "modified_on": "2026-08-08T08:53:45.642121Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "4f8d901b673a73a32586881f6b14b48e",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "created_on": "2026-08-08T08:53:47.398798Z",
+      "modified_on": "2026-08-08T08:53:47.398798Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "f4576d72677d3ebef880ae4b94292fc0",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "created_on": "2026-08-08T08:53:49.11988Z",
+      "modified_on": "2026-08-08T08:53:49.11988Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "61ad0fbd6cd50d01690064d054deb52c",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "created_on": "2026-08-08T08:53:52.369731Z",
+      "modified_on": "2026-08-08T08:53:52.369731Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "5af0c9c71ad1d01b4f06616673ff1688",
+      "priority": 100,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "created_on": "2026-08-08T08:53:52.617007Z",
+      "modified_on": "2026-08-08T08:53:52.617007Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "c4cb457191a751fa9c6d0dcb3c0635e7",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "created_on": "2026-08-08T08:53:52.872557Z",
+      "modified_on": "2026-08-08T08:53:52.872557Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "949459580791c493557138e442f20e15",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "created_on": "2026-08-08T08:53:56.217503Z",
+      "modified_on": "2026-08-08T08:53:56.217503Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "0ba4e6482057b8c8df3e0257b8e65c63",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "created_on": "2026-08-08T08:53:57.895191Z",
+      "modified_on": "2026-08-08T08:53:57.895191Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "d9b7b17a648b0ec3791a504a228380c3",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "created_on": "2026-08-08T08:53:59.653155Z",
+      "modified_on": "2026-08-08T08:53:59.653155Z",
+      "type": "MX",
+      "name": "testmx.dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "7a1736b7f794f7815f9fdf12c21af5db",
+      "priority": 100,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "created_on": "2026-08-08T08:54:02.865745Z",
+      "modified_on": "2026-08-08T08:54:02.865745Z",
+      "type": "A",
+      "name": "testa.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "cf29c8133dffc39bc0007de7c385ddad",
+      "ttl": 333,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "created_on": "2026-08-08T08:54:02.865745Z",
+      "modified_on": "2026-08-08T08:54:04.645153Z",
+      "type": "A",
+      "name": "testa.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "cf29c8133dffc39bc0007de7c385ddad",
+      "ttl": 999,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.374201Z",
+      "modified_on": "2026-08-08T08:54:07.374201Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "a41dbb092f60e9edd7b2044e9d17b37b",
+      "ttl": 666,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.374201Z",
+      "modified_on": "2026-08-08T08:54:09.623752Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "a41dbb092f60e9edd7b2044e9d17b37b",
+      "ttl": 1000,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.374201Z",
+      "modified_on": "2026-08-08T08:54:13.128831Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "a41dbb092f60e9edd7b2044e9d17b37b",
+      "ttl": 500,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.628108Z",
+      "modified_on": "2026-08-08T08:54:07.628108Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "da9a49f9962cf072e5bf9a22441eef78",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.628108Z",
+      "modified_on": "2026-08-08T08:54:11.373266Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "da9a49f9962cf072e5bf9a22441eef78",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.628108Z",
+      "modified_on": "2026-08-08T08:54:13.37613Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "da9a49f9962cf072e5bf9a22441eef78",
+      "ttl": 400,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.91623Z",
+      "modified_on": "2026-08-08T08:54:07.91623Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "5.6.7.8",
+      "meta": {},
+      "id": "8c0888da7ca45499964690ebccd2c4cc",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "created_on": "2026-08-08T08:54:07.91623Z",
+      "modified_on": "2026-08-08T08:54:13.623717Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "5.6.7.8",
+      "meta": {},
+      "id": "8c0888da7ca45499964690ebccd2c4cc",
+      "ttl": 400,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "created_on": "2026-08-08T08:54:16.870684Z",
+      "modified_on": "2026-08-08T08:54:16.870684Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "5.6.7.8",
+      "meta": {},
+      "id": "84bc54d357c2e34923bb5157226dc8cf",
+      "ttl": 400,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "created_on": "2026-08-08T08:54:16.870684Z",
+      "modified_on": "2026-08-08T08:54:18.619443Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "5.6.7.8",
+      "meta": {},
+      "id": "84bc54d357c2e34923bb5157226dc8cf",
+      "ttl": 700,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "created_on": "2026-08-08T08:54:18.878499Z",
+      "modified_on": "2026-08-08T08:54:18.878499Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "cffe1c68aff4d7a01324ab94cc76d2c2",
+      "ttl": 700,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "created_on": "2026-08-08T08:54:21.874394Z",
+      "modified_on": "2026-08-08T08:54:21.874394Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "cfdc088569b39e58106a6ac6a7a5dc25",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "created_on": "2026-08-08T08:54:23.874624Z",
+      "modified_on": "2026-08-08T08:54:23.874624Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "mx.google.com",
+      "meta": {},
+      "id": "37f60745f82a44053e263d58aab650e6",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "created_on": "2026-08-08T08:54:25.871689Z",
+      "modified_on": "2026-08-08T08:54:25.871689Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "4.5.6.7",
+      "meta": {},
+      "id": "03c27309b24f6a446e52de216de19a74",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "created_on": "2026-08-08T08:54:28.64354Z",
+      "modified_on": "2026-08-08T08:54:28.64354Z",
+      "type": "CNAME",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "google.com",
+      "meta": {},
+      "id": "ed2873e70cd056cc3b46d4607814222f",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "created_on": "2026-08-08T08:54:30.621081Z",
+      "modified_on": "2026-08-08T08:54:30.621081Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "6b3ab4fb29d38eb281924b9cdd0f3a0c",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "created_on": "2026-08-08T08:54:32.62638Z",
+      "modified_on": "2026-08-08T08:54:32.62638Z",
+      "type": "CNAME",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "google2.com",
+      "meta": {},
+      "id": "825359d05e63ec22dcd29869f40c45e3",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "created_on": "2026-08-08T08:54:35.367184Z",
+      "modified_on": "2026-08-08T08:54:35.367184Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 test.com.",
+      "meta": {},
+      "data": {
+        "priority": 0,
+        "target": "test.com.",
+        "value": ""
+      },
+      "id": "7e8f4e1821533a2eba96277d272e3af7",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "created_on": "2026-08-08T08:54:35.367184Z",
+      "modified_on": "2026-08-08T08:54:37.198033Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. port=\"80\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "port=\"80\""
+      },
+      "id": "7e8f4e1821533a2eba96277d272e3af7",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "created_on": "2026-08-08T08:54:35.367184Z",
+      "modified_on": "2026-08-08T08:54:38.875147Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. port=\"99\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "port=\"99\""
+      },
+      "id": "7e8f4e1821533a2eba96277d272e3af7",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "created_on": "2026-08-08T08:54:35.367184Z",
+      "modified_on": "2026-08-08T08:54:40.62308Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. alpn=\"h2\" port=\"99\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "alpn=\"h2\" port=\"99\""
+      },
+      "id": "7e8f4e1821533a2eba96277d272e3af7",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "created_on": "2026-08-08T08:54:35.367184Z",
+      "modified_on": "2026-08-08T08:54:42.380991Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\""
+      },
+      "id": "7e8f4e1821533a2eba96277d272e3af7",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "created_on": "2026-08-08T08:54:45.123184Z",
+      "modified_on": "2026-08-08T08:54:45.123184Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\""
+      },
+      "id": "68762fe223c0204a9f458a4d6af22f02",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "created_on": "2026-08-08T08:54:45.123184Z",
+      "modified_on": "2026-08-08T08:54:46.869383Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\" ech=\"some+base64+encoded+value///\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\" ech=\"some+base64+encoded+value///\""
+      },
+      "id": "68762fe223c0204a9f458a4d6af22f02",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "created_on": "2026-08-08T08:54:45.123184Z",
+      "modified_on": "2026-08-08T08:54:50.127287Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2\" port=\"80\" ech=\"some+base64+encoded+value///\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"some+base64+encoded+value///\""
+      },
+      "id": "68762fe223c0204a9f458a4d6af22f02",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "created_on": "2026-08-08T08:54:45.123184Z",
+      "modified_on": "2026-08-08T08:54:51.875419Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\""
+      },
+      "id": "68762fe223c0204a9f458a4d6af22f02",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "created_on": "2026-08-08T08:54:45.123184Z",
+      "modified_on": "2026-08-08T08:54:53.628982Z",
+      "type": "HTTPS",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 yetanother.com. alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "yetanother.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\""
+      },
+      "id": "68762fe223c0204a9f458a4d6af22f02",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "created_on": "2026-08-08T08:54:56.418503Z",
+      "modified_on": "2026-08-08T08:54:56.418503Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 test.com.",
+      "meta": {},
+      "data": {
+        "priority": 0,
+        "target": "test.com.",
+        "value": ""
+      },
+      "id": "8c605a297b8656952e3195b801ff69e8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "created_on": "2026-08-08T08:54:56.418503Z",
+      "modified_on": "2026-08-08T08:54:58.133073Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. port=\"80\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "port=\"80\""
+      },
+      "id": "8c605a297b8656952e3195b801ff69e8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "created_on": "2026-08-08T08:54:56.418503Z",
+      "modified_on": "2026-08-08T08:54:59.869767Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. port=\"99\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "port=\"99\""
+      },
+      "id": "8c605a297b8656952e3195b801ff69e8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "created_on": "2026-08-08T08:54:56.418503Z",
+      "modified_on": "2026-08-08T08:55:02.13934Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 test.com. alpn=\"h2\" port=\"99\"",
+      "meta": {},
+      "data": {
+        "priority": 1,
+        "target": "test.com.",
+        "value": "alpn=\"h2\" port=\"99\""
+      },
+      "id": "8c605a297b8656952e3195b801ff69e8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "created_on": "2026-08-08T08:54:56.418503Z",
+      "modified_on": "2026-08-08T08:55:03.8187Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\""
+      },
+      "id": "8c605a297b8656952e3195b801ff69e8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "created_on": "2026-08-08T08:55:06.539203Z",
+      "modified_on": "2026-08-08T08:55:06.539203Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\""
+      },
+      "id": "1e721b77c2f406d95efb8a0032df2de8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "created_on": "2026-08-08T08:55:06.539203Z",
+      "modified_on": "2026-08-08T08:55:08.324699Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2,h3\" port=\"999\" ech=\"some+base64+encoded+value///\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2,h3\" port=\"999\" ech=\"some+base64+encoded+value///\""
+      },
+      "id": "1e721b77c2f406d95efb8a0032df2de8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "created_on": "2026-08-08T08:55:06.539203Z",
+      "modified_on": "2026-08-08T08:55:11.633094Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2\" port=\"80\" ech=\"some+base64+encoded+value///\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"some+base64+encoded+value///\""
+      },
+      "id": "1e721b77c2f406d95efb8a0032df2de8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "created_on": "2026-08-08T08:55:06.539203Z",
+      "modified_on": "2026-08-08T08:55:13.512878Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 example.com. alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "example.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\""
+      },
+      "id": "1e721b77c2f406d95efb8a0032df2de8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "created_on": "2026-08-08T08:55:06.539203Z",
+      "modified_on": "2026-08-08T08:55:15.153528Z",
+      "type": "SVCB",
+      "name": "dnscontroltest-cf.org",
+      "content": "3 yetanother.com. alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\"",
+      "meta": {},
+      "data": {
+        "priority": 3,
+        "target": "yetanother.com.",
+        "value": "alpn=\"h2\" port=\"80\" ech=\"another+base64+encoded+value\""
+      },
+      "id": "1e721b77c2f406d95efb8a0032df2de8",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "created_on": "2026-08-08T08:55:17.908086Z",
+      "modified_on": "2026-08-08T08:55:17.908086Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "0a99e8dd74610d1c2408a69e1c7c719f",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "created_on": "2026-08-08T08:55:18.162006Z",
+      "modified_on": "2026-08-08T08:55:18.162006Z",
+      "type": "CNAME",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "dnscontroltest-cf.org",
+      "meta": {},
+      "id": "6e3d1c0e9a2d695283a6b6e65e0265b9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "created_on": "2026-08-08T08:55:21.229301Z",
+      "modified_on": "2026-08-08T08:55:21.229301Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "0ebc22b46e61c18c5dcc8915ffab1516",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "created_on": "2026-08-08T08:55:21.47952Z",
+      "modified_on": "2026-08-08T08:55:21.47952Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "dnscontroltest-cf.org",
+      "meta": {},
+      "id": "73b750bc1c480d45ceb4d320fd6508b2",
+      "priority": 8,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "created_on": "2026-08-08T08:55:24.475228Z",
+      "modified_on": "2026-08-08T08:55:24.475228Z",
+      "type": "A",
+      "name": "nmx.dnscontroltest-cf.org",
+      "content": "1.2.3.3",
+      "meta": {},
+      "id": "76839d5d3497831408f73af7dd1ce9eb",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "created_on": "2026-08-08T08:55:24.768287Z",
+      "modified_on": "2026-08-08T08:55:24.768287Z",
+      "type": "MX",
+      "name": "nmx.dnscontroltest-cf.org",
+      "content": ".",
+      "meta": {},
+      "id": "d91d10d4c3794641a26b3e0542d7d1c5",
+      "priority": 0,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "created_on": "2026-08-08T08:55:24.768287Z",
+      "modified_on": "2026-08-08T08:55:26.980349Z",
+      "type": "MX",
+      "name": "nmx.dnscontroltest-cf.org",
+      "content": "nmx.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "d91d10d4c3794641a26b3e0542d7d1c5",
+      "priority": 3,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "created_on": "2026-08-08T08:55:24.768287Z",
+      "modified_on": "2026-08-08T08:55:28.75572Z",
+      "type": "MX",
+      "name": "nmx.dnscontroltest-cf.org",
+      "content": ".",
+      "meta": {},
+      "id": "d91d10d4c3794641a26b3e0542d7d1c5",
+      "priority": 0,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "created_on": "2026-08-08T08:55:25.02308Z",
+      "modified_on": "2026-08-08T08:55:25.02308Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.2.3.9",
+      "meta": {},
+      "id": "ee952b3c1c903111e725c423f67d0d8f",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "created_on": "2026-08-08T08:55:26.769581Z",
+      "modified_on": "2026-08-08T08:55:26.769581Z",
+      "type": "MX",
+      "name": "nmx.dnscontroltest-cf.org",
+      "content": "www.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "9b222d846d12c7791758477b73fc0e89",
+      "priority": 9,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "created_on": "2026-08-08T08:55:32.321721Z",
+      "modified_on": "2026-08-08T08:55:32.321721Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "1.2.3.2",
+      "meta": {},
+      "id": "0180ea23db8aa12a886037700baf2ae5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "created_on": "2026-08-08T08:55:32.535387Z",
+      "modified_on": "2026-08-08T08:55:32.535387Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": ".",
+      "meta": {},
+      "id": "8491d646748e8f85a3d002ed8ff75216",
+      "priority": 0,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "created_on": "2026-08-08T08:55:32.535387Z",
+      "modified_on": "2026-08-08T08:55:34.818742Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": "dnscontroltest-cf.org",
+      "meta": {},
+      "id": "8491d646748e8f85a3d002ed8ff75216",
+      "priority": 2,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "created_on": "2026-08-08T08:55:32.535387Z",
+      "modified_on": "2026-08-08T08:55:36.548455Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": ".",
+      "meta": {},
+      "id": "8491d646748e8f85a3d002ed8ff75216",
+      "priority": 0,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "created_on": "2026-08-08T08:55:32.79411Z",
+      "modified_on": "2026-08-08T08:55:32.79411Z",
+      "type": "A",
+      "name": "www.dnscontroltest-cf.org",
+      "content": "1.2.3.8",
+      "meta": {},
+      "id": "ec2b69b54a918de177c0c8ccf6434f64",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "created_on": "2026-08-08T08:55:34.543632Z",
+      "modified_on": "2026-08-08T08:55:34.543632Z",
+      "type": "MX",
+      "name": "dnscontroltest-cf.org",
+      "content": "www.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "4c01f045e37e9cc0a527489040e5874c",
+      "priority": 8,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "created_on": "2026-08-08T08:55:40.047606Z",
+      "modified_on": "2026-08-08T08:55:40.047606Z",
+      "type": "NS",
+      "name": "xyz.dnscontroltest-cf.org",
+      "content": "ns2.foo.com",
+      "meta": {},
+      "id": "15e3c412dfd7858065b821d6cdbf3825",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "created_on": "2026-08-08T08:55:41.800667Z",
+      "modified_on": "2026-08-08T08:55:41.800667Z",
+      "type": "NS",
+      "name": "xyz.dnscontroltest-cf.org",
+      "content": "ns1.foo.com",
+      "meta": {},
+      "id": "109e6bdabd0c2ef39d490bad98e34df2",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "created_on": "2026-08-08T08:55:43.540347Z",
+      "modified_on": "2026-08-08T08:55:43.540347Z",
+      "type": "NS",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "dnscontroltest-cf.org",
+      "meta": {},
+      "id": "56a29214836faf250cddf9b71b394386",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "created_on": "2026-08-08T08:55:43.828291Z",
+      "modified_on": "2026-08-08T08:55:43.828291Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "7151f035f41cbf1e28247c6cd4c2c85c",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "created_on": "2026-08-08T08:55:47.287919Z",
+      "modified_on": "2026-08-08T08:55:47.287919Z",
+      "type": "NS",
+      "name": "dnscontroltest-cf.org",
+      "content": "ns1.foo.com",
+      "meta": {},
+      "id": "c398f3f3e750358232b2d2ea3bb5282f",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "created_on": "2026-08-08T08:55:49.07461Z",
+      "modified_on": "2026-08-08T08:55:49.07461Z",
+      "type": "NS",
+      "name": "dnscontroltest-cf.org",
+      "content": "ns2.foo.com",
+      "meta": {},
+      "id": "c0cf43da00d9b8ffd87370c0dcd05eaa",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "created_on": "2026-08-08T08:55:52.080678Z",
+      "modified_on": "2026-08-08T08:55:52.080678Z",
+      "type": "TXT",
+      "name": "foo254.dnscontroltest-cf.org",
+      "content": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"",
+      "meta": {},
+      "id": "f45165e7fa03690d6d2c57a57c168046",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "created_on": "2026-08-08T08:55:54.045448Z",
+      "modified_on": "2026-08-08T08:55:54.045448Z",
+      "type": "TXT",
+      "name": "foo255.dnscontroltest-cf.org",
+      "content": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\"",
+      "meta": {},
+      "id": "cc719c0476b48766cd60fe7eaa06c047",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "created_on": "2026-08-08T08:55:56.111162Z",
+      "modified_on": "2026-08-08T08:55:56.111162Z",
+      "type": "TXT",
+      "name": "foo256.dnscontroltest-cf.org",
+      "content": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\"",
+      "meta": {},
+      "id": "067fce63ac0e68230e63b26db12451be",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "created_on": "2026-08-08T08:55:58.072491Z",
+      "modified_on": "2026-08-08T08:55:58.072491Z",
+      "type": "TXT",
+      "name": "foo509.dnscontroltest-cf.org",
+      "content": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"",
+      "meta": {},
+      "id": "b12818f5855763d969e8e6888c6b913a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "created_on": "2026-08-08T08:56:00.046902Z",
+      "modified_on": "2026-08-08T08:56:00.046902Z",
+      "type": "TXT",
+      "name": "foo510.dnscontroltest-cf.org",
+      "content": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"",
+      "meta": {},
+      "id": "b19f86b4bd14809659103c6ee32cf9a2",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "created_on": "2026-08-08T08:56:02.099828Z",
+      "modified_on": "2026-08-08T08:56:02.099828Z",
+      "type": "TXT",
+      "name": "foo511.dnscontroltest-cf.org",
+      "content": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\"",
+      "meta": {},
+      "id": "1450124d4248d697c4ca45bd04c9c383",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "created_on": "2026-08-08T08:56:04.074597Z",
+      "modified_on": "2026-08-08T08:56:04.074597Z",
+      "type": "TXT",
+      "name": "foo764.dnscontroltest-cf.org",
+      "content": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"",
+      "meta": {},
+      "id": "fc29b80c6389eb435b5c11927675585e",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "created_on": "2026-08-08T08:56:06.106252Z",
+      "modified_on": "2026-08-08T08:56:06.106252Z",
+      "type": "TXT",
+      "name": "foo765.dnscontroltest-cf.org",
+      "content": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"",
+      "meta": {},
+      "id": "8e59c71ca7519aea71b1a6c2dd2b20cd",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "created_on": "2026-08-08T08:56:08.042982Z",
+      "modified_on": "2026-08-08T08:56:08.042982Z",
+      "type": "TXT",
+      "name": "foo766.dnscontroltest-cf.org",
+      "content": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\"",
+      "meta": {},
+      "id": "a8618d3affc75c311b6d386ae8eed596",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "created_on": "2026-08-08T08:56:10.042251Z",
+      "modified_on": "2026-08-08T08:56:10.042251Z",
+      "type": "TXT",
+      "name": "foosq.dnscontroltest-cf.org",
+      "content": "\"quo'te\"",
+      "meta": {},
+      "id": "e6f65cd977878ac8f1dda4bd11d7194a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "created_on": "2026-08-08T08:56:11.807075Z",
+      "modified_on": "2026-08-08T08:56:11.807075Z",
+      "type": "TXT",
+      "name": "foobt.dnscontroltest-cf.org",
+      "content": "\"blah`blah\"",
+      "meta": {},
+      "id": "29438c9cd28afd53863e0d77ccdcef2e",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "created_on": "2026-08-08T08:56:14.045659Z",
+      "modified_on": "2026-08-08T08:56:14.045659Z",
+      "type": "TXT",
+      "name": "foodq.dnscontroltest-cf.org",
+      "content": "\"in\\\"side\"",
+      "meta": {},
+      "id": "4f38f8908ce3c7b185fa507d0a784d48",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "created_on": "2026-08-08T08:56:16.03697Z",
+      "modified_on": "2026-08-08T08:56:16.03697Z",
+      "type": "TXT",
+      "name": "foodqs.dnscontroltest-cf.org",
+      "content": "\"in\\\"ter\\\"ior\"",
+      "meta": {},
+      "id": "5dcda493dc0362141507a4c2f6d22b73",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "created_on": "2026-08-08T08:56:16.03697Z",
+      "modified_on": "2026-08-08T08:56:17.790925Z",
+      "type": "TXT",
+      "name": "foodqs.dnscontroltest-cf.org",
+      "content": "\"\\\"left\"",
+      "meta": {},
+      "id": "5dcda493dc0362141507a4c2f6d22b73",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "created_on": "2026-08-08T08:56:16.03697Z",
+      "modified_on": "2026-08-08T08:56:19.584965Z",
+      "type": "TXT",
+      "name": "foodqs.dnscontroltest-cf.org",
+      "content": "\"right\\\"\"",
+      "meta": {},
+      "id": "5dcda493dc0362141507a4c2f6d22b73",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "created_on": "2026-08-08T08:56:21.595628Z",
+      "modified_on": "2026-08-08T08:56:21.595628Z",
+      "type": "TXT",
+      "name": "foosc1.dnscontroltest-cf.org",
+      "content": "\"semi;colon\"",
+      "meta": {},
+      "id": "5e032821872fd4d96eff4695632ca921",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "created_on": "2026-08-08T08:56:23.537949Z",
+      "modified_on": "2026-08-08T08:56:23.537949Z",
+      "type": "TXT",
+      "name": "foosc2.dnscontroltest-cf.org",
+      "content": "\"wssemi ; colon\"",
+      "meta": {},
+      "id": "2dc6b5f91a11d7afb0ef8d4c45bc9585",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "created_on": "2026-08-08T08:56:25.546181Z",
+      "modified_on": "2026-08-08T08:56:25.546181Z",
+      "type": "TXT",
+      "name": "foosp.dnscontroltest-cf.org",
+      "content": "\"with spaces\"",
+      "meta": {},
+      "id": "0d8d86f1607e6ba70bdfbef358c0a74b",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "created_on": "2026-08-08T08:56:27.736868Z",
+      "modified_on": "2026-08-08T08:56:27.736868Z",
+      "type": "TXT",
+      "name": "foows1.dnscontroltest-cf.org",
+      "content": "\"trailingws \"",
+      "meta": {},
+      "id": "52ac5ffa98084607eeee7a527a6f5e10",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "created_on": "2026-08-08T08:56:29.439273Z",
+      "modified_on": "2026-08-08T08:56:29.439273Z",
+      "type": "TXT",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "\"v=spf1 ip4:99.99.99.99 -all\"",
+      "meta": {},
+      "id": "fef3024f23a5e8232a70b67d4861205a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "created_on": "2026-08-08T08:56:32.460462Z",
+      "modified_on": "2026-08-08T08:56:32.460462Z",
+      "type": "TXT",
+      "name": "fooosbs1.dnscontroltest-cf.org",
+      "content": "\"1back\\\\slash\"",
+      "meta": {},
+      "id": "401e7cd6fd5cd397c99411ca4bd26260",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "created_on": "2026-08-08T08:56:32.685514Z",
+      "modified_on": "2026-08-08T08:56:32.685514Z",
+      "type": "TXT",
+      "name": "fooosbs2.dnscontroltest-cf.org",
+      "content": "\"2back\\\\\\\\slash\"",
+      "meta": {},
+      "id": "2c21d01df2294e549eb386c7ec0fbaea",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "created_on": "2026-08-08T08:56:32.940478Z",
+      "modified_on": "2026-08-08T08:56:32.940478Z",
+      "type": "TXT",
+      "name": "fooosbs3.dnscontroltest-cf.org",
+      "content": "\"3back\\\\\\\\\\\\slash\"",
+      "meta": {},
+      "id": "2b7aada7de68db57b3fd62e59dd6e3cc",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "created_on": "2026-08-08T08:56:33.185145Z",
+      "modified_on": "2026-08-08T08:56:33.185145Z",
+      "type": "TXT",
+      "name": "fooosbs4.dnscontroltest-cf.org",
+      "content": "\"4back\\\\\\\\\\\\\\\\slash\"",
+      "meta": {},
+      "id": "6e467bf24d070003019b5e9d4b23bfdd",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "created_on": "2026-08-08T08:56:36.682437Z",
+      "modified_on": "2026-08-08T08:56:36.682437Z",
+      "type": "MX",
+      "name": "bar.dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "83227bc1b8969fd15ba8c770255da894",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "created_on": "2026-08-08T08:56:38.439122Z",
+      "modified_on": "2026-08-08T08:56:38.439122Z",
+      "type": "A",
+      "name": "decoy.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "b7ecd6af32e882bd607d26401d1a842b",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "created_on": "2026-08-08T08:56:38.439122Z",
+      "modified_on": "2026-08-08T08:56:40.195976Z",
+      "type": "A",
+      "name": "decoy.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "b7ecd6af32e882bd607d26401d1a842b",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "created_on": "2026-08-08T08:56:38.439122Z",
+      "modified_on": "2026-08-08T08:56:41.934135Z",
+      "type": "A",
+      "name": "decoy.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "b7ecd6af32e882bd607d26401d1a842b",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "created_on": "2026-08-08T08:56:44.934732Z",
+      "modified_on": "2026-08-08T08:56:44.934732Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "07d1837dc8a99520147b5836177b685f",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "created_on": "2026-08-08T08:56:45.227764Z",
+      "modified_on": "2026-08-08T08:56:45.227764Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "2.3.4.5",
+      "meta": {},
+      "id": "5783543c4816f3a9c1fe381fa2e6dde8",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "created_on": "2026-08-08T08:56:45.227764Z",
+      "modified_on": "2026-08-08T08:56:46.94069Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "3.4.5.6",
+      "meta": {},
+      "id": "5783543c4816f3a9c1fe381fa2e6dde8",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "created_on": "2026-08-08T08:56:50.487244Z",
+      "modified_on": "2026-08-08T08:56:50.487244Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "3.4.5.6",
+      "meta": {},
+      "id": "629b1427e3fc293e6c681a7c7b38fdc2",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "created_on": "2026-08-08T08:56:53.475817Z",
+      "modified_on": "2026-08-08T08:56:53.475817Z",
+      "type": "A",
+      "name": "bar.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "38cd99239abbcc42c1c632597b124795",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "created_on": "2026-08-08T08:56:53.727739Z",
+      "modified_on": "2026-08-08T08:56:53.727739Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "2.3.4.5",
+      "meta": {},
+      "id": "fc9e1db290682a76b9857e8fdfce8089",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "created_on": "2026-08-08T08:56:53.999467Z",
+      "modified_on": "2026-08-08T08:56:53.999467Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "3.4.5.6",
+      "meta": {},
+      "id": "0820ee8c1068db036e8307c07a2c4972",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "created_on": "2026-08-08T08:56:53.999467Z",
+      "modified_on": "2026-08-08T08:56:56.222216Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "0820ee8c1068db036e8307c07a2c4972",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "created_on": "2026-08-08T08:56:54.218578Z",
+      "modified_on": "2026-08-08T08:56:54.218578Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "bar.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "535171da314ebbdc4c084450ae533e57",
+      "priority": 20,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "created_on": "2026-08-08T08:56:54.473495Z",
+      "modified_on": "2026-08-08T08:56:54.473495Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "foo.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "51a5a1daabf94c69389bea2b6aeed749",
+      "priority": 10,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "created_on": "2026-08-08T08:56:59.726974Z",
+      "modified_on": "2026-08-08T08:56:59.726974Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "65f6afa203dc6c6ac0e72e134a6a03ed",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "created_on": "2026-08-08T08:57:03.489967Z",
+      "modified_on": "2026-08-08T08:57:03.489967Z",
+      "type": "A",
+      "name": "xn--ndaaa.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "050e0f8f33ca0f22b18649855f50a247",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "created_on": "2026-08-08T08:57:03.489967Z",
+      "modified_on": "2026-08-08T08:57:05.30429Z",
+      "type": "A",
+      "name": "xn--ndaaa.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "050e0f8f33ca0f22b18649855f50a247",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "created_on": "2026-08-08T08:57:06.991815Z",
+      "modified_on": "2026-08-08T08:57:06.991815Z",
+      "type": "A",
+      "name": "xn--fiq228c.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "0206b7c6a0d61220e50e842876543dd2",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "created_on": "2026-08-08T08:57:09.023869Z",
+      "modified_on": "2026-08-08T08:57:09.023869Z",
+      "type": "CNAME",
+      "name": "a.dnscontroltest-cf.org",
+      "content": "xn--ndaaa.com",
+      "meta": {},
+      "id": "952a87c1d2d925cf669d0bcddae2de22",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "created_on": "2026-08-08T08:57:11.997975Z",
+      "modified_on": "2026-08-08T08:57:11.997975Z",
+      "type": "CNAME",
+      "name": "xn--o-0gab.dnscontroltest-cf.org",
+      "content": "xn--ndaaa.xn--vhquv",
+      "meta": {},
+      "id": "75e2597cc81d2dc6330b67637db121e2",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "created_on": "2026-08-08T08:57:14.737756Z",
+      "modified_on": "2026-08-08T08:57:14.737756Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issue \"letsencrypt.org\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issue",
+        "value": "letsencrypt.org"
+      },
+      "id": "9c738f603f353306763e25538c549e56",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "created_on": "2026-08-08T08:57:14.737756Z",
+      "modified_on": "2026-08-08T08:57:16.501971Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issuewild \"letsencrypt.org\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issuewild",
+        "value": "letsencrypt.org"
+      },
+      "id": "9c738f603f353306763e25538c549e56",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "created_on": "2026-08-08T08:57:14.737756Z",
+      "modified_on": "2026-08-08T08:57:18.266627Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issuewild \"example.com\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issuewild",
+        "value": "example.com"
+      },
+      "id": "9c738f603f353306763e25538c549e56",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "created_on": "2026-08-08T08:57:14.737756Z",
+      "modified_on": "2026-08-08T08:57:20.040716Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issuewild \";\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issuewild",
+        "value": ";"
+      },
+      "id": "9c738f603f353306763e25538c549e56",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "created_on": "2026-08-08T08:57:14.737756Z",
+      "modified_on": "2026-08-08T08:57:21.78579Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issue",
+        "value": "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+      },
+      "id": "9c738f603f353306763e25538c549e56",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "created_on": "2026-08-08T08:57:24.510343Z",
+      "modified_on": "2026-08-08T08:57:24.510343Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "0 issue \"letsencrypt.org\"",
+      "meta": {},
+      "data": {
+        "flags": 0,
+        "tag": "issue",
+        "value": "letsencrypt.org"
+      },
+      "id": "29576b04314cef8a88683e391ad4fa12",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "created_on": "2026-08-08T08:57:24.510343Z",
+      "modified_on": "2026-08-08T08:57:26.25214Z",
+      "type": "CAA",
+      "name": "dnscontroltest-cf.org",
+      "content": "128 issue \"letsencrypt.org\"",
+      "meta": {},
+      "data": {
+        "flags": 128,
+        "tag": "issue",
+        "value": "letsencrypt.org"
+      },
+      "id": "29576b04314cef8a88683e391ad4fa12",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "created_on": "2026-08-08T08:57:29.05712Z",
+      "modified_on": "2026-08-08T08:57:29.05712Z",
+      "type": "LOC",
+      "name": "dnscontroltest-cf.org",
+      "content": "42 21 54.000 N 71 6 18.000 W -24.05 30.00 0.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": -24.05000000000291,
+        "lat_degrees": 42,
+        "lat_direction": "N",
+        "lat_minutes": 21,
+        "lat_seconds": 54,
+        "long_degrees": 71,
+        "long_direction": "W",
+        "long_minutes": 6,
+        "long_seconds": 18,
+        "precision_horz": 0,
+        "precision_vert": 0,
+        "size": 30
+      },
+      "id": "92eef8a7f2244af4a4a14fbf30c57794",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "created_on": "2026-08-08T08:57:29.05712Z",
+      "modified_on": "2026-08-08T08:57:30.757873Z",
+      "type": "LOC",
+      "name": "dnscontroltest-cf.org",
+      "content": "42 21 54.000 N 71 6 18.000 W -24.06 30.00 10.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": -24.05999999999767,
+        "lat_degrees": 42,
+        "lat_direction": "N",
+        "lat_minutes": 21,
+        "lat_seconds": 54,
+        "long_degrees": 71,
+        "long_direction": "W",
+        "long_minutes": 6,
+        "long_seconds": 18,
+        "precision_horz": 10,
+        "precision_vert": 0,
+        "size": 30
+      },
+      "id": "92eef8a7f2244af4a4a14fbf30c57794",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "created_on": "2026-08-08T08:57:29.05712Z",
+      "modified_on": "2026-08-08T08:57:32.536183Z",
+      "type": "LOC",
+      "name": "dnscontroltest-cf.org",
+      "content": "42 21 54.000 N 71 6 18.000 W -24.00 30.00 0.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": -24,
+        "lat_degrees": 42,
+        "lat_direction": "N",
+        "lat_minutes": 21,
+        "lat_seconds": 54,
+        "long_degrees": 71,
+        "long_direction": "W",
+        "long_minutes": 6,
+        "long_seconds": 18,
+        "precision_horz": 0,
+        "precision_vert": 0,
+        "size": 30
+      },
+      "id": "92eef8a7f2244af4a4a14fbf30c57794",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "created_on": "2026-08-08T08:57:32.759776Z",
+      "modified_on": "2026-08-08T08:57:32.759776Z",
+      "type": "LOC",
+      "name": "a.dnscontroltest-cf.org",
+      "content": "42 21 43.950 N 71 5 6.340 W -24.33 1.00 200.00 10.00",
+      "meta": {},
+      "data": {
+        "altitude": -24.330000000001746,
+        "lat_degrees": 42,
+        "lat_direction": "N",
+        "lat_minutes": 21,
+        "lat_seconds": 43.95,
+        "long_degrees": 71,
+        "long_direction": "W",
+        "long_minutes": 5,
+        "long_seconds": 6.34,
+        "precision_horz": 200,
+        "precision_vert": 10,
+        "size": 1
+      },
+      "id": "d3089e712977034b70fa8f9acccabdbe",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "created_on": "2026-08-08T08:57:33.028782Z",
+      "modified_on": "2026-08-08T08:57:33.028782Z",
+      "type": "LOC",
+      "name": "b.dnscontroltest-cf.org",
+      "content": "52 14 5.000 N 0 8 50.000 E 10.22 0.00 0.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": 10.220000000001164,
+        "lat_degrees": 52,
+        "lat_direction": "N",
+        "lat_minutes": 14,
+        "lat_seconds": 5,
+        "long_degrees": 0,
+        "long_direction": "E",
+        "long_minutes": 8,
+        "long_seconds": 50,
+        "precision_horz": 0,
+        "precision_vert": 0,
+        "size": 0
+      },
+      "id": "ac93794054b7617bca81646d93d6d25a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "created_on": "2026-08-08T08:57:33.255778Z",
+      "modified_on": "2026-08-08T08:57:33.255778Z",
+      "type": "LOC",
+      "name": "c.dnscontroltest-cf.org",
+      "content": "32 7 19.000 S 116 2 25.000 E 10.00 0.00 0.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": 10,
+        "lat_degrees": 32,
+        "lat_direction": "S",
+        "lat_minutes": 7,
+        "lat_seconds": 19,
+        "long_degrees": 116,
+        "long_direction": "E",
+        "long_minutes": 2,
+        "long_seconds": 25,
+        "precision_horz": 0,
+        "precision_vert": 0,
+        "size": 0
+      },
+      "id": "f23f1a0b63fead6e11b0bce72b6cf349",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "created_on": "2026-08-08T08:57:33.499971Z",
+      "modified_on": "2026-08-08T08:57:33.499971Z",
+      "type": "LOC",
+      "name": "d.dnscontroltest-cf.org",
+      "content": "42 21 28.760 N 71 0 51.620 W -44.00 2000.00 0.00 0.00",
+      "meta": {},
+      "data": {
+        "altitude": -44,
+        "lat_degrees": 42,
+        "lat_direction": "N",
+        "lat_minutes": 21,
+        "lat_seconds": 28.76,
+        "long_degrees": 71,
+        "long_direction": "W",
+        "long_minutes": 0,
+        "long_seconds": 51.62,
+        "precision_horz": 0,
+        "precision_vert": 0,
+        "size": 2000
+      },
+      "id": "a78fc32e2ecbc3906fbf3828defee929",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:37.294518Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "U",
+        "order": 100,
+        "preference": 10,
+        "regex": "!^.*$!sip:customer-service@example.com!",
+        "replacement": ".",
+        "service": "E2U+sip"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:42.500795Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "U",
+        "order": 103,
+        "preference": 10,
+        "regex": "!^.*$!mailto:information@example.com!",
+        "replacement": ".",
+        "service": "E2U+email"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:44.248668Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "U",
+        "order": 103,
+        "preference": 20,
+        "regex": "!^.*$!mailto:information@example.com!",
+        "replacement": ".",
+        "service": "E2U+email"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:46.002306Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "A",
+        "order": 103,
+        "preference": 20,
+        "regex": "!^.*$!mailto:information@example.com!",
+        "replacement": ".",
+        "service": "E2U+email"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:47.751201Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "A",
+        "order": 103,
+        "preference": 20,
+        "regex": "!^.*$!mailto:information@example.com!",
+        "replacement": ".",
+        "service": "E2U+sip"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:49.49377Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "A",
+        "order": 103,
+        "preference": 20,
+        "regex": "!^.*$!sip:customer-service@example.com!",
+        "replacement": ".",
+        "service": "E2U+sip"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:51.288783Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com.",
+      "meta": {},
+      "data": {
+        "flags": "A",
+        "order": 103,
+        "preference": 20,
+        "regex": "",
+        "replacement": "example.foo.com.",
+        "service": "E2U+sip"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "created_on": "2026-08-08T08:57:37.294518Z",
+      "modified_on": "2026-08-08T08:57:53.005665Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com.",
+      "meta": {},
+      "data": {
+        "flags": "A",
+        "order": 103,
+        "preference": 20,
+        "regex": "",
+        "replacement": "example2.foo.com.",
+        "service": "E2U+sip"
+      },
+      "id": "ebb6af608f9fc04a3d2bd352ea93c325",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "created_on": "2026-08-08T08:57:39.046297Z",
+      "modified_on": "2026-08-08T08:57:39.046297Z",
+      "type": "NAPTR",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
+      "meta": {},
+      "data": {
+        "flags": "U",
+        "order": 102,
+        "preference": 10,
+        "regex": "!^.*$!mailto:information@example.com!",
+        "replacement": ".",
+        "service": "E2U+email"
+      },
+      "id": "d3e77fe134744400f9cca87b683814cd",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "created_on": "2026-08-08T08:57:55.806935Z",
+      "modified_on": "2026-08-08T08:57:55.806935Z",
+      "type": "PTR",
+      "name": "4.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "d8627466515de29cb5a24e125d04a80d",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "created_on": "2026-08-08T08:57:55.806935Z",
+      "modified_on": "2026-08-08T08:57:57.514274Z",
+      "type": "PTR",
+      "name": "4.dnscontroltest-cf.org",
+      "content": "bar.com",
+      "meta": {},
+      "id": "d8627466515de29cb5a24e125d04a80d",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "created_on": "2026-08-08T08:58:00.283982Z",
+      "modified_on": "2026-08-08T08:58:00.283982Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "6 7 foo.com",
+      "meta": {},
+      "data": {
+        "port": 7,
+        "priority": 5,
+        "target": "foo.com",
+        "weight": 6
+      },
+      "id": "0618a7af74e849dfe1aaa04199a09a7d",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "created_on": "2026-08-08T08:58:00.283982Z",
+      "modified_on": "2026-08-08T08:58:14.421178Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "6 7 foo.com",
+      "meta": {},
+      "data": {
+        "port": 7,
+        "priority": 52,
+        "target": "foo.com",
+        "weight": 6
+      },
+      "id": "0618a7af74e849dfe1aaa04199a09a7d",
+      "priority": 52,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "created_on": "2026-08-08T08:58:00.283982Z",
+      "modified_on": "2026-08-08T08:58:17.438619Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "62 7 foo.com",
+      "meta": {},
+      "data": {
+        "port": 7,
+        "priority": 52,
+        "target": "foo.com",
+        "weight": 62
+      },
+      "id": "0618a7af74e849dfe1aaa04199a09a7d",
+      "priority": 52,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "created_on": "2026-08-08T08:58:00.283982Z",
+      "modified_on": "2026-08-08T08:58:19.155217Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "62 72 foo.com",
+      "meta": {},
+      "data": {
+        "port": 72,
+        "priority": 52,
+        "target": "foo.com",
+        "weight": 62
+      },
+      "id": "0618a7af74e849dfe1aaa04199a09a7d",
+      "priority": 52,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "created_on": "2026-08-08T08:58:04.049928Z",
+      "modified_on": "2026-08-08T08:58:04.049928Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "60 70 foo2.com",
+      "meta": {},
+      "data": {
+        "port": 70,
+        "priority": 5,
+        "target": "foo2.com",
+        "weight": 60
+      },
+      "id": "c9be7581ea54860a6baf30962acacc14",
+      "priority": 5,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "created_on": "2026-08-08T08:58:07.983451Z",
+      "modified_on": "2026-08-08T08:58:07.983451Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "65 75 foo3.com",
+      "meta": {},
+      "data": {
+        "port": 75,
+        "priority": 15,
+        "target": "foo3.com",
+        "weight": 65
+      },
+      "id": "4557648f4bcc4b0a63d53872a2743e26",
+      "priority": 15,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "created_on": "2026-08-08T08:58:07.983451Z",
+      "modified_on": "2026-08-08T08:58:12.684911Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "65 75 foo4.com",
+      "meta": {},
+      "data": {
+        "port": 75,
+        "priority": 15,
+        "target": "foo4.com",
+        "weight": 65
+      },
+      "id": "4557648f4bcc4b0a63d53872a2743e26",
+      "priority": 15,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "created_on": "2026-08-08T08:58:22.157694Z",
+      "modified_on": "2026-08-08T08:58:22.157694Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "65 75 .",
+      "meta": {},
+      "data": {
+        "port": 75,
+        "priority": 15,
+        "target": ".",
+        "weight": 65
+      },
+      "id": "1e6d0bdb2433dfb7cdcb1503c5afcc07",
+      "priority": 15,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "created_on": "2026-08-08T08:58:27.461203Z",
+      "modified_on": "2026-08-08T08:58:27.461203Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "6 7 foo.com",
+      "meta": {},
+      "data": {
+        "port": 7,
+        "priority": 5,
+        "target": "foo.com",
+        "weight": 6
+      },
+      "id": "362fb2cd8ae2bf1833b93929cbc1d594",
+      "priority": 5,
+      "ttl": 333,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "created_on": "2026-08-08T08:58:27.461203Z",
+      "modified_on": "2026-08-08T08:58:29.206448Z",
+      "type": "SRV",
+      "name": "_sip._tcp.dnscontroltest-cf.org",
+      "content": "6 7 foo.com",
+      "meta": {},
+      "data": {
+        "port": 7,
+        "priority": 5,
+        "target": "foo.com",
+        "weight": 6
+      },
+      "id": "362fb2cd8ae2bf1833b93929cbc1d594",
+      "priority": 5,
+      "ttl": 4400,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "created_on": "2026-08-08T08:58:31.98Z",
+      "modified_on": "2026-08-08T08:58:31.98Z",
+      "type": "SSHFP",
+      "name": "dnscontroltest-cf.org",
+      "content": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "meta": {},
+      "data": {
+        "algorithm": 1,
+        "fingerprint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+        "type": 1
+      },
+      "id": "8a6e49cc3ae88a617e88aa87efea5e38",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "created_on": "2026-08-08T08:58:31.98Z",
+      "modified_on": "2026-08-08T08:58:33.721678Z",
+      "type": "SSHFP",
+      "name": "dnscontroltest-cf.org",
+      "content": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "meta": {},
+      "data": {
+        "algorithm": 2,
+        "fingerprint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+        "type": 1
+      },
+      "id": "8a6e49cc3ae88a617e88aa87efea5e38",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "created_on": "2026-08-08T08:58:31.98Z",
+      "modified_on": "2026-08-08T08:58:35.463146Z",
+      "type": "SSHFP",
+      "name": "dnscontroltest-cf.org",
+      "content": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+      "meta": {},
+      "data": {
+        "algorithm": 2,
+        "fingerprint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+        "type": 2
+      },
+      "id": "8a6e49cc3ae88a617e88aa87efea5e38",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "created_on": "2026-08-08T08:58:38.212572Z",
+      "modified_on": "2026-08-08T08:58:38.212572Z",
+      "type": "TLSA",
+      "name": "_443._tcp.dnscontroltest-cf.org",
+      "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "meta": {},
+      "data": {
+        "certificate": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "matching_type": 1,
+        "selector": 1,
+        "usage": 3
+      },
+      "id": "cd011bd77b767888fab04ec09032345a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "created_on": "2026-08-08T08:58:38.212572Z",
+      "modified_on": "2026-08-08T08:58:39.967441Z",
+      "type": "TLSA",
+      "name": "_443._tcp.dnscontroltest-cf.org",
+      "content": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "meta": {},
+      "data": {
+        "certificate": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "matching_type": 1,
+        "selector": 1,
+        "usage": 2
+      },
+      "id": "cd011bd77b767888fab04ec09032345a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "created_on": "2026-08-08T08:58:38.212572Z",
+      "modified_on": "2026-08-08T08:58:41.75656Z",
+      "type": "TLSA",
+      "name": "_443._tcp.dnscontroltest-cf.org",
+      "content": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "meta": {},
+      "data": {
+        "certificate": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "matching_type": 1,
+        "selector": 0,
+        "usage": 2
+      },
+      "id": "cd011bd77b767888fab04ec09032345a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "created_on": "2026-08-08T08:58:38.212572Z",
+      "modified_on": "2026-08-08T08:58:43.45705Z",
+      "type": "TLSA",
+      "name": "_443._tcp.dnscontroltest-cf.org",
+      "content": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "meta": {},
+      "data": {
+        "certificate": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "matching_type": 2,
+        "selector": 0,
+        "usage": 2
+      },
+      "id": "cd011bd77b767888fab04ec09032345a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "created_on": "2026-08-08T08:58:38.212572Z",
+      "modified_on": "2026-08-08T08:58:45.213117Z",
+      "type": "TLSA",
+      "name": "_443._tcp.dnscontroltest-cf.org",
+      "content": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+      "meta": {},
+      "data": {
+        "certificate": "FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+        "matching_type": 2,
+        "selector": 0,
+        "usage": 2
+      },
+      "id": "cd011bd77b767888fab04ec09032345a",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "created_on": "2026-08-08T08:58:47.99362Z",
+      "modified_on": "2026-08-08T08:58:47.99362Z",
+      "type": "NS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "ns101.cloudns.net",
+      "meta": {},
+      "id": "361e50ca0438a6f09a1dd1ec1199f04d",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "created_on": "2026-08-08T08:58:48.204234Z",
+      "modified_on": "2026-08-08T08:58:48.204234Z",
+      "type": "DS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "35632 13 1 1E07663FF507A40874B8605463DD41DE482079D6",
+      "meta": {},
+      "data": {
+        "algorithm": 13,
+        "digest": "1E07663FF507A40874B8605463DD41DE482079D6",
+        "digest_type": 1,
+        "key_tag": 35632
+      },
+      "id": "29c87cd79f90e11b63e59a5f33cc1180",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "created_on": "2026-08-08T08:58:48.204234Z",
+      "modified_on": "2026-08-08T08:58:50.153285Z",
+      "type": "DS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "2075 13 1 2706D12E256C8FDD9BFB45EFB25FE537E21A82F6",
+      "meta": {},
+      "data": {
+        "algorithm": 13,
+        "digest": "2706D12E256C8FDD9BFB45EFB25FE537E21A82F6",
+        "digest_type": 1,
+        "key_tag": 2075
+      },
+      "id": "29c87cd79f90e11b63e59a5f33cc1180",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "created_on": "2026-08-08T08:58:48.204234Z",
+      "modified_on": "2026-08-08T08:58:52.107061Z",
+      "type": "DS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "2075 13 2 3F7A1EAC8C813A0BEBD0C3B8AAB387E31945EA0CD5E1D84A2E8E27674566C156",
+      "meta": {},
+      "data": {
+        "algorithm": 13,
+        "digest": "3F7A1EAC8C813A0BEBD0C3B8AAB387E31945EA0CD5E1D84A2E8E27674566C156",
+        "digest_type": 2,
+        "key_tag": 2075
+      },
+      "id": "29c87cd79f90e11b63e59a5f33cc1180",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "created_on": "2026-08-08T08:58:48.204234Z",
+      "modified_on": "2026-08-08T08:58:54.052051Z",
+      "type": "DS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "2159 1 4 F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "meta": {},
+      "data": {
+        "algorithm": 1,
+        "digest": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+        "digest_type": 4,
+        "key_tag": 2159
+      },
+      "id": "29c87cd79f90e11b63e59a5f33cc1180",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "created_on": "2026-08-08T08:58:48.204234Z",
+      "modified_on": "2026-08-08T08:58:56.089341Z",
+      "type": "DS",
+      "name": "child.dnscontroltest-cf.org",
+      "content": "63909 3 4 EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "meta": {},
+      "data": {
+        "algorithm": 3,
+        "digest": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+        "digest_type": 4,
+        "key_tag": 63909
+      },
+      "id": "29c87cd79f90e11b63e59a5f33cc1180",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "created_on": "2026-08-08T08:58:58.326625Z",
+      "modified_on": "2026-08-08T08:58:58.326625Z",
+      "type": "NS",
+      "name": "another-child.dnscontroltest-cf.org",
+      "content": "ns101.cloudns.net",
+      "meta": {},
+      "id": "e3bab773a2a76b2b8b1f56f636de57ea",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "created_on": "2026-08-08T08:58:58.601762Z",
+      "modified_on": "2026-08-08T08:58:58.601762Z",
+      "type": "DS",
+      "name": "another-child.dnscontroltest-cf.org",
+      "content": "35632 13 4 F5F32ABCA6B01AA7A9963012F90B7C8523A1D946185A3AD70B67F3C9F18E7312FA9DD6AB2F7D8382F789213DB173D429",
+      "meta": {},
+      "data": {
+        "algorithm": 13,
+        "digest": "F5F32ABCA6B01AA7A9963012F90B7C8523A1D946185A3AD70B67F3C9F18E7312FA9DD6AB2F7D8382F789213DB173D429",
+        "digest_type": 4,
+        "key_tag": 35632
+      },
+      "id": "5ab98848493f505c8ec7e5236d5dd4ec",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "created_on": "2026-08-08T08:59:00.795947Z",
+      "modified_on": "2026-08-08T08:59:00.795947Z",
+      "type": "DS",
+      "name": "another-child.dnscontroltest-cf.org",
+      "content": "2159 1 4 F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "meta": {},
+      "data": {
+        "algorithm": 1,
+        "digest": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+        "digest_type": 4,
+        "key_tag": 2159
+      },
+      "id": "157abcce619e2492870862bab53057ee",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "created_on": "2026-08-08T08:59:01.238093Z",
+      "modified_on": "2026-08-08T08:59:01.238093Z",
+      "type": "DS",
+      "name": "another-child.dnscontroltest-cf.org",
+      "content": "63909 3 4 EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "meta": {},
+      "data": {
+        "algorithm": 3,
+        "digest": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+        "digest_type": 4,
+        "key_tag": 63909
+      },
+      "id": "e2846a8b1de0ac692815dbba84530ce6",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "created_on": "2026-08-08T08:59:05.012255Z",
+      "modified_on": "2026-08-08T08:59:05.012255Z",
+      "type": "CNAME",
+      "name": "dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "50cced3d5487264c797e1e3f6a207da9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "created_on": "2026-08-08T08:59:05.012255Z",
+      "modified_on": "2026-08-08T08:59:06.762742Z",
+      "type": "CNAME",
+      "name": "dnscontroltest-cf.org",
+      "content": "foo2.com",
+      "meta": {},
+      "id": "50cced3d5487264c797e1e3f6a207da9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "created_on": "2026-08-08T08:59:09.536502Z",
+      "modified_on": "2026-08-08T08:59:09.536502Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "50e3b52e292a31b2ad33007d696416f9",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "created_on": "2026-08-08T08:59:09.75889Z",
+      "modified_on": "2026-08-08T08:59:09.75889Z",
+      "type": "CNAME",
+      "name": "dnscontroltest-cf.org",
+      "content": "foo.dnscontroltest-cf.org",
+      "meta": {},
+      "id": "cb4404a2b0d4f5dbab8a41bfaef1d2e3",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "created_on": "2026-08-08T08:59:12.756825Z",
+      "modified_on": "2026-08-08T08:59:12.756825Z",
+      "type": "CNAME",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "foo.com",
+      "meta": {},
+      "id": "cbe042ca4cc5d8b09d65b256218834bf",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "created_on": "2026-08-08T08:59:12.756825Z",
+      "modified_on": "2026-08-08T08:59:14.538777Z",
+      "type": "CNAME",
+      "name": "test.dnscontroltest-cf.org",
+      "content": "foo2.com",
+      "meta": {},
+      "id": "cbe042ca4cc5d8b09d65b256218834bf",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "created_on": "2026-08-08T08:59:30.124791Z",
+      "modified_on": "2026-08-08T08:59:30.124791Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "9dea4ab3dedc6d6a1473b115efd5e313",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "created_on": "2026-08-08T08:59:32.867707Z",
+      "modified_on": "2026-08-08T08:59:33.126781Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "0612c212dc46bdaff297d5a972a75ef8",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "created_on": "2026-08-08T08:59:36.656661Z",
+      "modified_on": "2026-08-08T08:59:36.656661Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "1582772ec83cdf253db88a92ee3e3ee1",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "created_on": "2026-08-08T08:59:36.656661Z",
+      "modified_on": "2026-08-08T08:59:38.374249Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "1582772ec83cdf253db88a92ee3e3ee1",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "created_on": "2026-08-08T08:59:41.153972Z",
+      "modified_on": "2026-08-08T08:59:41.396466Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "01d1261af843e3f960b5744ac75faa29",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "created_on": "2026-08-08T08:59:41.153972Z",
+      "modified_on": "2026-08-08T08:59:43.112017Z",
+      "type": "A",
+      "name": "prxy.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "01d1261af843e3f960b5744ac75faa29",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "created_on": "2026-08-08T08:59:45.868788Z",
+      "modified_on": "2026-08-08T08:59:45.868788Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "3d545a7b4a7564ea418a968c6b716696",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "created_on": "2026-08-08T08:59:48.641102Z",
+      "modified_on": "2026-08-08T08:59:48.94209Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "698fd70c95b06682cf4c1565483c71a3",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "created_on": "2026-08-08T08:59:52.438192Z",
+      "modified_on": "2026-08-08T08:59:52.438192Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "afb79ea64e9c43e7f1f82d46240bed46",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "created_on": "2026-08-08T08:59:52.438192Z",
+      "modified_on": "2026-08-08T08:59:54.223397Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "afb79ea64e9c43e7f1f82d46240bed46",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "created_on": "2026-08-08T08:59:56.942433Z",
+      "modified_on": "2026-08-08T08:59:57.181943Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "de6630adb709da1cf5ead2963566b869",
+      "ttl": 1,
+      "proxied": true,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "created_on": "2026-08-08T08:59:56.942433Z",
+      "modified_on": "2026-08-08T08:59:58.94299Z",
+      "type": "CNAME",
+      "name": "cproxy.dnscontroltest-cf.org",
+      "content": "example.com",
+      "meta": {},
+      "id": "de6630adb709da1cf5ead2963566b869",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "created_on": "2026-08-08T09:00:04.60331Z",
+      "modified_on": "2026-08-08T09:00:04.60331Z",
+      "type": "A",
+      "name": "cmnt.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "fa7d8016d3810a2b9ada9a169be822dd",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "comment": "Test comment",
+      "settings": {}
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "created_on": "2026-08-08T09:00:04.60331Z",
+      "modified_on": "2026-08-08T09:00:08.305977Z",
+      "type": "A",
+      "name": "cmnt.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "fa7d8016d3810a2b9ada9a169be822dd",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "comment": "Changed comment",
+      "settings": {}
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "created_on": "2026-08-08T09:00:04.60331Z",
+      "modified_on": "2026-08-08T09:00:10.583779Z",
+      "type": "A",
+      "name": "cmnt.dnscontroltest-cf.org",
+      "content": "174.136.107.111",
+      "meta": {},
+      "id": "fa7d8016d3810a2b9ada9a169be822dd",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "created_on": "2026-08-08T09:00:29.169878Z",
+      "modified_on": "2026-08-08T09:00:29.169878Z",
+      "type": "A",
+      "name": "bar.dnscontroltest-cf.org",
+      "content": "5.5.5.5",
+      "meta": {},
+      "id": "92bfa57cfb29357e60afa48240bd243e",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "created_on": "2026-08-08T09:00:29.42871Z",
+      "modified_on": "2026-08-08T09:00:29.42871Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "df041474a3d0b1d029ff6d8e293f12dd",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "created_on": "2026-08-08T09:00:29.705325Z",
+      "modified_on": "2026-08-08T09:00:29.705325Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "2.3.4.5",
+      "meta": {},
+      "id": "285305100b30d45d89ad0903d3efe1fb",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "created_on": "2026-08-08T09:00:29.918895Z",
+      "modified_on": "2026-08-08T09:00:29.918895Z",
+      "type": "TXT",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "\"simple\"",
+      "meta": {},
+      "id": "a6b31cd0f4e6174bfae61e4a932ac7cd",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "created_on": "2026-08-08T09:00:30.23621Z",
+      "modified_on": "2026-08-08T09:00:30.23621Z",
+      "type": "CNAME",
+      "name": "mail.dnscontroltest-cf.org",
+      "content": "ghs.googlehosted.com",
+      "meta": {},
+      "id": "ec47e36e0e735e5b5fc6fe793a02eb3c",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "created_on": "2026-08-08T09:00:58.973698Z",
+      "modified_on": "2026-08-08T09:00:58.973698Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "8d0fd1d54a0b1849a4425a9e25f96725",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "created_on": "2026-08-08T09:00:59.247342Z",
+      "modified_on": "2026-08-08T09:00:59.247342Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "2.3.4.5",
+      "meta": {},
+      "id": "3ca74fb1e2eee9baee4628edc7b9d70b",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "created_on": "2026-08-08T09:00:59.473831Z",
+      "modified_on": "2026-08-08T09:00:59.473831Z",
+      "type": "TXT",
+      "name": "dnscontroltest-cf.org",
+      "content": "\"simple\"",
+      "meta": {},
+      "id": "902cee6477ee0f76a9791aaf69c67a98",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "created_on": "2026-08-08T09:00:59.691654Z",
+      "modified_on": "2026-08-08T09:00:59.691654Z",
+      "type": "A",
+      "name": "bar.dnscontroltest-cf.org",
+      "content": "5.5.5.5",
+      "meta": {},
+      "id": "d0a15d9ce1969845ca66ba109bbc749e",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "created_on": "2026-08-08T09:01:00.127763Z",
+      "modified_on": "2026-08-08T09:01:00.127763Z",
+      "type": "CNAME",
+      "name": "mail.dnscontroltest-cf.org",
+      "content": "ghs.googlehosted.com",
+      "meta": {},
+      "id": "2893f0f1d37b56e7b04fcdf5e72619ea",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "created_on": "2026-08-08T09:01:25.064711Z",
+      "modified_on": "2026-08-08T09:01:25.064711Z",
+      "type": "A",
+      "name": "dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "e692c40d9c10a4e0028e406f1fc120d6",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "created_on": "2026-08-08T09:01:25.231331Z",
+      "modified_on": "2026-08-08T09:01:25.231331Z",
+      "type": "TXT",
+      "name": "dnscontroltest-cf.org",
+      "content": "\"asimple\"",
+      "meta": {},
+      "id": "9b154df0d9231b2fbac2dbc4cbb892ab",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "created_on": "2026-08-08T09:01:25.545899Z",
+      "modified_on": "2026-08-08T09:01:25.545899Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "ac7eb80927f7db805e2ddbe5e5f49dd2",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "created_on": "2026-08-08T09:01:25.731772Z",
+      "modified_on": "2026-08-08T09:01:25.731772Z",
+      "type": "TXT",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "\"simple\"",
+      "meta": {},
+      "id": "629cbf5cdc2916fc3470eb09cddd836e",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "created_on": "2026-08-08T09:01:35.233657Z",
+      "modified_on": "2026-08-08T09:01:35.233657Z",
+      "type": "A",
+      "name": "bar.bat.dnscontroltest-cf.org",
+      "content": "5.5.5.5",
+      "meta": {},
+      "id": "9d87665614978d8512802fcaa96e1b02",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "created_on": "2026-08-08T09:01:35.523551Z",
+      "modified_on": "2026-08-08T09:01:35.523551Z",
+      "type": "A",
+      "name": "foo.bat.dnscontroltest-cf.org",
+      "content": "1.2.3.4",
+      "meta": {},
+      "id": "4612e169c3bbcf4603cae6942f1266d7",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "created_on": "2026-08-08T09:01:35.774214Z",
+      "modified_on": "2026-08-08T09:01:35.774214Z",
+      "type": "A",
+      "name": "foo.bat.dnscontroltest-cf.org",
+      "content": "2.3.4.5",
+      "meta": {},
+      "id": "85a1f0f15c12cd189f1d10d3ab5c7754",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "created_on": "2026-08-08T09:01:36.017248Z",
+      "modified_on": "2026-08-08T09:01:36.017248Z",
+      "type": "TXT",
+      "name": "foo.bat.dnscontroltest-cf.org",
+      "content": "\"simple\"",
+      "meta": {},
+      "id": "11d8c198e12a5fb40bf5eae6c607b6f9",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "created_on": "2026-08-08T09:01:36.23773Z",
+      "modified_on": "2026-08-08T09:01:36.23773Z",
+      "type": "CNAME",
+      "name": "mail.bat.dnscontroltest-cf.org",
+      "content": "ghs.googlehosted.com",
+      "meta": {},
+      "id": "af494c317c5bd462835f673d98add226",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.024968Z",
+      "modified_on": "2026-08-08T09:01:49.024968Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "1.1.1.1",
+      "meta": {},
+      "id": "448c6652ea136245efc4a9f74cc26d64",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.252983Z",
+      "modified_on": "2026-08-08T09:01:49.252983Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "10.10.10.10",
+      "meta": {},
+      "id": "4ed81be9ad1635d0b4f6f882c7eb30d5",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.252983Z",
+      "modified_on": "2026-08-08T09:01:52.533369Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "11.11.11.11",
+      "meta": {},
+      "id": "4ed81be9ad1635d0b4f6f882c7eb30d5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.252983Z",
+      "modified_on": "2026-08-08T09:01:55.776979Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "12.12.12.12",
+      "meta": {},
+      "id": "4ed81be9ad1635d0b4f6f882c7eb30d5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.252983Z",
+      "modified_on": "2026-08-08T09:01:59.047259Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "13.13.13.13",
+      "meta": {},
+      "id": "4ed81be9ad1635d0b4f6f882c7eb30d5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.252983Z",
+      "modified_on": "2026-08-08T09:02:02.253656Z",
+      "type": "A",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "14.14.14.14",
+      "meta": {},
+      "id": "4ed81be9ad1635d0b4f6f882c7eb30d5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.506233Z",
+      "modified_on": "2026-08-08T09:01:49.506233Z",
+      "type": "AAAA",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "2003:dd:d7ff::fe71:aaaa",
+      "meta": {},
+      "id": "feb660a1840957d5603e202a9ae164c5",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "created_on": "2026-08-08T09:01:49.785416Z",
+      "modified_on": "2026-08-08T09:01:49.785416Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "aspmx.l.google.com",
+      "meta": {},
+      "id": "6c9daff7d452c1a28759f6aed8a89e4f",
+      "priority": 10,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "created_on": "2026-08-08T09:01:50.032947Z",
+      "modified_on": "2026-08-08T09:01:50.032947Z",
+      "type": "MX",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "alt1.aspmx.l.google.com",
+      "meta": {},
+      "id": "4a7f86a6b0472b76bee969b3092b7aae",
+      "priority": 20,
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "created_on": "2026-08-08T09:01:50.243548Z",
+      "modified_on": "2026-08-08T09:01:50.243548Z",
+      "type": "A",
+      "name": "zzz.dnscontroltest-cf.org",
+      "content": "3.3.3.3",
+      "meta": {},
+      "id": "6ad2fef4dcff2f059c0c145ecc150a94",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "created_on": "2026-08-08T09:01:50.490415Z",
+      "modified_on": "2026-08-08T09:01:50.490415Z",
+      "type": "A",
+      "name": "zzz.dnscontroltest-cf.org",
+      "content": "4.4.4.4",
+      "meta": {},
+      "id": "b2f534f4f18335bb09810947c84a9c03",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "created_on": "2026-08-08T09:01:50.741529Z",
+      "modified_on": "2026-08-08T09:01:50.741529Z",
+      "type": "AAAA",
+      "name": "zzz.dnscontroltest-cf.org",
+      "content": "2003:dd:d7ff::fe71:cccc",
+      "meta": {},
+      "id": "d21e1ce1f16b7a5a2dcaf11f91f03660",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "created_on": "2026-08-08T09:02:08.358787Z",
+      "modified_on": "2026-08-08T09:02:08.358787Z",
+      "type": "CNAME",
+      "name": "bar.dnscontroltest-cf.org",
+      "content": "redact2.acm-validations.aws",
+      "meta": {},
+      "id": "93a9fe5a52b94ab1312f9c50079ce5ae",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "created_on": "2026-08-08T09:02:08.60024Z",
+      "modified_on": "2026-08-08T09:02:08.60024Z",
+      "type": "CNAME",
+      "name": "foo.dnscontroltest-cf.org",
+      "content": "redact1.acm-validations.aws",
+      "meta": {},
+      "id": "3c9daafe33688fe4bd6dc5ee827d49dc",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {
+        "flatten_cname": false
+      }
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "created_on": "2026-08-08T09:02:13.826357Z",
+      "modified_on": "2026-08-08T09:02:13.826357Z",
+      "type": "A",
+      "name": "dyndns-city1.dnscontroltest-cf.org",
+      "content": "91.42.1.1",
+      "meta": {},
+      "id": "5f8d3dfda2acbc6557e67581ebf83feb",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "created_on": "2026-08-08T09:02:14.077606Z",
+      "modified_on": "2026-08-08T09:02:14.077606Z",
+      "type": "AAAA",
+      "name": "dyndns-city1.dnscontroltest-cf.org",
+      "content": "2003:dd:d7ff::fe71:ce77",
+      "meta": {},
+      "id": "c2cb0eb9ddb82654cc7d33dd97215b52",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "created_on": "2026-08-08T09:02:14.420568Z",
+      "modified_on": "2026-08-08T09:02:14.420568Z",
+      "type": "A",
+      "name": "dyndns-city2.dnscontroltest-cf.org",
+      "content": "91.42.1.2",
+      "meta": {},
+      "id": "d2041b0640df15771b230ca0f604538b",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "created_on": "2026-08-08T09:02:14.582036Z",
+      "modified_on": "2026-08-08T09:02:14.582036Z",
+      "type": "AAAA",
+      "name": "dyndns-city2.dnscontroltest-cf.org",
+      "content": "2003:dd:d7ff::fe71:ce78",
+      "meta": {},
+      "id": "3c57898ef735a89d110ab1ef4d1863b3",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "created_on": "2026-08-08T09:02:21.08152Z",
+      "modified_on": "2026-08-08T09:02:21.08152Z",
+      "type": "A",
+      "name": "testdefined.dnscontroltest-cf.org",
+      "content": "9.9.9.9",
+      "meta": {},
+      "id": "71a7af79331e96637f079122b8d4690a",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "created_on": "2026-08-08T09:02:21.08152Z",
+      "modified_on": "2026-08-08T09:02:29.126346Z",
+      "type": "A",
+      "name": "testdefined.dnscontroltest-cf.org",
+      "content": "2.2.2.2",
+      "meta": {},
+      "id": "71a7af79331e96637f079122b8d4690a",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "created_on": "2026-08-08T09:02:21.348094Z",
+      "modified_on": "2026-08-08T09:02:21.348094Z",
+      "type": "A",
+      "name": "testignore.dnscontroltest-cf.org",
+      "content": "8.8.8.8",
+      "meta": {},
+      "id": "0ca19dd51d7c2f5d63d3fded9150b867",
+      "ttl": 300,
+      "proxied": false,
+      "proxiable": true,
+      "settings": {}
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "created_on": "2026-08-08T09:02:34.3268Z",
+      "modified_on": "2026-08-08T09:02:34.3268Z",
+      "type": "TXT",
+      "name": "final.dnscontroltest-cf.org",
+      "content": "\"TestDNSProviders was successful!\"",
+      "meta": {},
+      "id": "70853e216facd81d090fb0005c96cbba",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "created_on": "2026-08-08T09:02:37.076121Z",
+      "modified_on": "2026-08-08T09:02:37.076121Z",
+      "type": "TXT",
+      "name": "final.dnscontroltest-cf.org",
+      "content": "\"TestDNSProviders was successful!\"",
+      "meta": {},
+      "id": "ccdedc3ae9ce86cf67578fcb705fc982",
+      "ttl": 300,
+      "proxied": false,
+      "settings": {}
+    }
+  }
+]

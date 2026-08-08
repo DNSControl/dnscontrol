@@ -1,0 +1,1895 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "id": 286698793,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testa",
+      "fqdn": "testa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "id": 286698794,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testa",
+      "fqdn": "testa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "id": 286698795,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "id": 286698797,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "4.4.4.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "id": 286698798,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "*",
+      "fqdn": "*.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "id": 286698799,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.5.5.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "id": 286698801,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testaaaa",
+      "fqdn": "testaaaa.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2607:f8b0:4006:820::2006",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "id": 286698802,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testaaaa",
+      "fqdn": "testaaaa.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2607:f8b0:4006:820::2013",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "id": 286698803,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testcname",
+      "fqdn": "testcname.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "www.google.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "id": 286698804,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testcname",
+      "fqdn": "testcname.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "www.yahoo.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "id": 286698806,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "id": 286698807,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testcname",
+      "fqdn": "testcname.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "foo.dnscontroltest-ndc.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "id": 286698808,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "id": 286698810,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "id": 286698811,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "id": 286698812,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "id": 286698813,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "id": 286698814,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 100
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "id": 286698816,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testtxt",
+      "fqdn": "testtxt.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "simple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "id": 286698817,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testtxt",
+      "fqdn": "testtxt.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "changed",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "id": 286698818,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "id": 286698819,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "id": 286698820,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "id": 286698821,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "id": 286698822,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "id": 286698823,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "id": 286698824,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.com.",
+      "ttl": 300,
+      "priority": 100
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "id": 286698825,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "id": 286698826,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "id": 286698827,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "id": 286698828,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "id": 286698829,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testmx",
+      "fqdn": "testmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.com.",
+      "ttl": 300,
+      "priority": 100
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "id": 286698830,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testa",
+      "fqdn": "testa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 333
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "id": 286698831,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testa",
+      "fqdn": "testa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 999
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "id": 286698832,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 666
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "id": 286698833,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "id": 286698834,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.6.7.8",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "id": 286698835,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 1000
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "id": 286698839,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "id": 286698843,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 500
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "id": 286698845,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 400
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "id": 286698846,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.6.7.8",
+      "ttl": 400
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "id": 286698848,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.6.7.8",
+      "ttl": 400
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "id": 286698849,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.6.7.8",
+      "ttl": 700
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "id": 286698851,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 700
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "id": 286698858,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "id": 286698862,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "mx.google.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "id": 286698863,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "4.5.6.7",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "id": 286698864,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "google.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "id": 286698866,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "id": 286698870,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "google2.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "id": 286698874,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "id": 286698875,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "dnscontroltest-ndc.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "id": 286698876,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "id": 286698878,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 8
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "id": 286698886,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "nmx",
+      "fqdn": "nmx.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "id": 286698890,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.9",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "id": 286698891,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "nmx",
+      "fqdn": "nmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "www.dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 9
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "id": 286698892,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "nmx",
+      "fqdn": "nmx.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "nmx.dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 3
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "id": 286698901,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "id": 286698902,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "www",
+      "fqdn": "www.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.8",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "id": 286698904,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "www.dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 8
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "id": 286698906,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 2
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "id": 286698913,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xyz",
+      "fqdn": "xyz.dnscontroltest-ndc.com.",
+      "type": "NS",
+      "answer": "ns2.foo.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "id": 286698917,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xyz",
+      "fqdn": "xyz.dnscontroltest-ndc.com.",
+      "type": "NS",
+      "answer": "ns1.foo.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "id": 286698921,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "id": 286698923,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "NS",
+      "answer": "dnscontroltest-ndc.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "id": 286698930,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo254",
+      "fqdn": "foo254.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "id": 286698935,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo255",
+      "fqdn": "foo255.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "id": 286698936,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo256",
+      "fqdn": "foo256.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "id": 286698937,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foosq",
+      "fqdn": "foosq.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "quo'te",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "id": 286698938,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foobt",
+      "fqdn": "foobt.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "blah`blah",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "id": 286698939,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foosc1",
+      "fqdn": "foosc1.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "semi;colon",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "id": 286698941,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foosc2",
+      "fqdn": "foosc2.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "wssemi ; colon",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "id": 286698942,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foosp",
+      "fqdn": "foosp.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "with spaces",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "id": 286698943,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "v=spf1 ip4:99.99.99.99 -all",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "id": 286698944,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "fooosbs1",
+      "fqdn": "fooosbs1.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "1back\\slash",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "id": 286698945,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "fooosbs2",
+      "fqdn": "fooosbs2.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "2back\\\\slash",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "id": 286698946,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "fooosbs3",
+      "fqdn": "fooosbs3.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "3back\\\\\\slash",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "id": 286698947,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "fooosbs4",
+      "fqdn": "fooosbs4.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "4back\\\\\\\\slash",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "id": 286698948,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar",
+      "fqdn": "bar.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.com.",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "id": 286698950,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "decoy",
+      "fqdn": "decoy.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "id": 286698954,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "decoy",
+      "fqdn": "decoy.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "id": 286698956,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "decoy",
+      "fqdn": "decoy.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "id": 286698958,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "id": 286698959,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.3.4.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "id": 286698960,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.4.5.6",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "id": 286698961,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.4.5.6",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "id": 286698962,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar",
+      "fqdn": "bar.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "id": 286698963,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.3.4.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "id": 286698964,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.4.5.6",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "id": 286698966,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "bar.dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 20
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "id": 286698967,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "foo.dnscontroltest-ndc.com.",
+      "ttl": 300,
+      "priority": 10
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "id": 286698968,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "id": 286698969,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "id": 286698970,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xn--ndaaa",
+      "fqdn": "xn--ndaaa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "id": 286698971,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xn--ndaaa",
+      "fqdn": "xn--ndaaa.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "id": 286698973,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xn--fiq228c",
+      "fqdn": "xn--fiq228c.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "id": 286698974,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "a",
+      "fqdn": "a.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "xn--ndaaa.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "id": 286698976,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "xn--o-0gab",
+      "fqdn": "xn--o-0gab.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "xn--ndaaa.xn--vhquv.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "id": 286698978,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "6 7 foo.com",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "id": 286698979,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "60 70 foo2.com",
+      "ttl": 300,
+      "priority": 5
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "id": 286698980,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "65 75 foo3.com",
+      "ttl": 300,
+      "priority": 15
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "id": 286698981,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "65 75 foo4.com",
+      "ttl": 300,
+      "priority": 15
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "id": 286698982,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "6 7 foo.com",
+      "ttl": 300,
+      "priority": 52
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "id": 286698983,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "62 7 foo.com",
+      "ttl": 300,
+      "priority": 52
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "id": 286698985,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "62 72 foo.com",
+      "ttl": 300,
+      "priority": 52
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "id": 286698986,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "6 7 foo.com",
+      "ttl": 333,
+      "priority": 5
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "id": 286698987,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "_sip._tcp",
+      "fqdn": "_sip._tcp.dnscontroltest-ndc.com.",
+      "type": "SRV",
+      "answer": "6 7 foo.com",
+      "ttl": 4400,
+      "priority": 5
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "id": 286698988,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "ANAME",
+      "answer": "foo.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "id": 286698989,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "ANAME",
+      "answer": "foo2.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "id": 286698990,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "id": 286698991,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "ANAME",
+      "answer": "foo.dnscontroltest-ndc.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "id": 286698992,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "test",
+      "fqdn": "test.dnscontroltest-ndc.com.",
+      "type": "ANAME",
+      "answer": "foo.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "id": 286698994,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "test",
+      "fqdn": "test.dnscontroltest-ndc.com.",
+      "type": "ANAME",
+      "answer": "foo2.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "id": 286698995,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar",
+      "fqdn": "bar.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.5.5.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "id": 286698996,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "id": 286698997,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.3.4.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "id": 286698998,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "simple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "id": 286698999,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "mail",
+      "fqdn": "mail.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "ghs.googlehosted.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "id": 286699001,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "id": 286699002,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.3.4.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "id": 286699003,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "simple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "id": 286699004,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar",
+      "fqdn": "bar.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.5.5.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "id": 286699005,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "mail",
+      "fqdn": "mail.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "ghs.googlehosted.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "id": 286699006,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "id": 286699007,
+      "domainName": "dnscontroltest-ndc.com",
+      "fqdn": "dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "asimple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "id": 286699008,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "id": 286699009,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "simple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "id": 286699010,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar.bat",
+      "fqdn": "bar.bat.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "5.5.5.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "id": 286699011,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo.bat",
+      "fqdn": "foo.bat.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.2.3.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "id": 286699012,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo.bat",
+      "fqdn": "foo.bat.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.3.4.5",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "id": 286699013,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo.bat",
+      "fqdn": "foo.bat.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "simple",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "id": 286699014,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "mail.bat",
+      "fqdn": "mail.bat.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "ghs.googlehosted.com.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "id": 286699022,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "1.1.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "id": 286699023,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "10.10.10.10",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "id": 286699024,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2003:dd:d7ff::fe71:aaaa",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "id": 286699025,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "aspmx.l.google.com.",
+      "ttl": 300,
+      "priority": 10
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "id": 286699026,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "MX",
+      "answer": "alt1.aspmx.l.google.com.",
+      "ttl": 300,
+      "priority": 20
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "id": 286699027,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "zzz",
+      "fqdn": "zzz.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "3.3.3.3",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "id": 286699028,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "zzz",
+      "fqdn": "zzz.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "4.4.4.4",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "id": 286699029,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "zzz",
+      "fqdn": "zzz.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2003:dd:d7ff::fe71:cccc",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "id": 286699030,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "11.11.11.11",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "id": 286699031,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "12.12.12.12",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "id": 286699032,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "13.13.13.13",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "id": 286699033,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "14.14.14.14",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "id": 286699035,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "bar",
+      "fqdn": "bar.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "redact2.acm-validations.aws.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "id": 286699037,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "foo",
+      "fqdn": "foo.dnscontroltest-ndc.com.",
+      "type": "CNAME",
+      "answer": "redact1.acm-validations.aws.",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "id": 286699048,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "dyndns-city1",
+      "fqdn": "dyndns-city1.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "91.42.1.1",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "id": 286699050,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "dyndns-city1",
+      "fqdn": "dyndns-city1.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2003:dd:d7ff::fe71:ce77",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "id": 286699051,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "dyndns-city2",
+      "fqdn": "dyndns-city2.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "91.42.1.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "id": 286699052,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "dyndns-city2",
+      "fqdn": "dyndns-city2.dnscontroltest-ndc.com.",
+      "type": "AAAA",
+      "answer": "2003:dd:d7ff::fe71:ce78",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "id": 286699054,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testdefined",
+      "fqdn": "testdefined.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "9.9.9.9",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "id": 286699055,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testignore",
+      "fqdn": "testignore.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "8.8.8.8",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "id": 286699063,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "testdefined",
+      "fqdn": "testdefined.dnscontroltest-ndc.com.",
+      "type": "A",
+      "answer": "2.2.2.2",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "id": 286699064,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "final",
+      "fqdn": "final.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "TestDNSProviders was successful!",
+      "ttl": 300
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "id": 286699065,
+      "domainName": "dnscontroltest-ndc.com",
+      "host": "final",
+      "fqdn": "final.dnscontroltest-ndc.com.",
+      "type": "TXT",
+      "answer": "TestDNSProviders was successful!",
+      "ttl": 300
+    }
+  }
+]

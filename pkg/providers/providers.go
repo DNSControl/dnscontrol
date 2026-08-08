@@ -41,6 +41,10 @@ var RegistrarTypes = map[string]RegistrarInitializer{}
 // DspInitializer is a function to create a DNS service provider. Function will be passed the unprocessed json payload from the configuration file for the given provider.
 type DspInitializer func(map[string]string, json.RawMessage) (DNSServiceProvider, error)
 
+// DspInitializerWithOptions creates a DNS service provider with optional
+// constructor dependencies such as a conversion observer.
+type DspInitializerWithOptions func(map[string]string, json.RawMessage, CreateOptions) (DNSServiceProvider, error)
+
 // RecordAuditor is a function that verifies that all the records
 // are supportable by this provider. It returns a list of errors
 // detailing records that this provider can not support.
@@ -48,8 +52,9 @@ type RecordAuditor func([]*models.RecordConfig) []error
 
 // DspFuncs lists functions registered with a provider.
 type DspFuncs struct {
-	Initializer   DspInitializer
-	RecordAuditor RecordAuditor
+	Initializer            DspInitializer
+	InitializerWithOptions DspInitializerWithOptions
+	RecordAuditor          RecordAuditor
 }
 
 // DNSProviderTypes stores initializer for each DSP.
@@ -115,7 +120,7 @@ func CreateRegistrar(rType string, config map[string]string) (Registrar, error) 
 }
 
 // CreateDNSProvider initializes a dns provider instance from given credentials.
-func CreateDNSProvider(providerTypeName string, config map[string]string, meta json.RawMessage) (DNSServiceProvider, error) {
+func CreateDNSProvider(providerTypeName string, config map[string]string, meta json.RawMessage, opts ...CreateOption) (DNSServiceProvider, error) {
 	var err error
 	providerTypeName, err = beCompatible(providerTypeName, config)
 	if err != nil {
@@ -126,7 +131,18 @@ func CreateDNSProvider(providerTypeName string, config map[string]string, meta j
 	if !ok {
 		return nil, fmt.Errorf("no such DNS service provider: %q", providerTypeName)
 	}
-	return p.Initializer(config, meta)
+	options := newCreateOptions(opts)
+	if p.InitializerWithOptions != nil {
+		return p.InitializerWithOptions(config, meta, options)
+	}
+	provider, err := p.Initializer(config, meta)
+	if err != nil {
+		return nil, err
+	}
+	if setter, ok := provider.(ConversionObserverSetter); ok {
+		setter.SetConversionObserver(options.ConversionObserver)
+	}
+	return provider, nil
 }
 
 // beCompatible looks up.

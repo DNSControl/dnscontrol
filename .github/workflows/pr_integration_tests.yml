@@ -361,16 +361,19 @@ jobs:
             # NB(tlim): THe output of gotestsum needs to go to stdout AND the
             # gotestsum-output.txt file. That's why "tee" is used.
             gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- \
-                -timeout 70m -v \
-                -verbose \
-                -profile ${{ matrix.provider }} \
-                -cfworkers=true \
-                -cfredirect=true \
-                -cfflatten=false \
-                -cftags=false \
-                -end $END \
-                ./... >&1 | \
-                tee ${TEST_RESULTS}/gotestsum-output.txt
+                -timeout 70m                                              \
+                -v                                                        \
+                ./...                                                     \
+                -args                                                     \
+                -verbose                                                  \
+                -profile ${{ matrix.provider }}                           \
+                -cfworkers=true                                           \
+                -cfredirect=true                                          \
+                -cfflatten=false                                          \
+                -cftags=false                                             \
+                -end $END                                                 \
+                >&1                                                       \
+                | tee ${TEST_RESULTS}/gotestsum-output.txt
           else
             echo "Skip test for ${{ matrix.provider }} provider"
           fi

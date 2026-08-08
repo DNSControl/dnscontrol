@@ -22,6 +22,7 @@ import (
 const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
 
 type azurednsProvider struct {
+	observer       providers.ConversionObserver
 	zonesClient    *adns.PrivateZonesClient
 	recordsClient  *adns.RecordSetsClient
 	zones          map[string]*adns.PrivateZone
@@ -29,6 +30,10 @@ type azurednsProvider struct {
 	subscriptionID *string
 	rawRecords     map[string][]*adns.RecordSet
 	zoneName       map[string]string
+}
+
+func (a *azurednsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	a.observer = observer
 }
 
 func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -220,7 +225,10 @@ func (a *azurednsProvider) getExistingRecords(dc *models.DomainConfig) (models.R
 
 	var existingRecords models.Records
 	for _, set := range rawRecords {
-		existingRecords = append(existingRecords, nativeToRecords(set, dc)...)
+		before := providers.BeginToRC(a.observer, "nativeToRecords", set)
+		records := nativeToRecords(set, dc)
+		providers.EndToRC(a.observer, "nativeToRecords", before, set, records, nil)
+		existingRecords = append(existingRecords, records...)
 	}
 
 	a.rawRecords[domain] = rawRecords

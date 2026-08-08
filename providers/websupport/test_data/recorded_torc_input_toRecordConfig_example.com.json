@@ -1,0 +1,66 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "content": "1.2.3.4",
+      "id": 42,
+      "name": "example.com",
+      "ttl": 3600,
+      "type": "A"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "content": "2a00:4b40:aaaa:2001::6",
+      "id": 43,
+      "name": "ipv6.example.com",
+      "ttl": 3600,
+      "type": "AAAA"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "content": "ghs.example.net",
+      "id": 44,
+      "name": "www.example.com",
+      "ttl": 3600,
+      "type": "CNAME"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "content": "mail.example.com",
+      "id": 45,
+      "name": "example.com",
+      "priority": 10,
+      "ttl": 3600,
+      "type": "MX"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "content": "sip.example.com",
+      "id": 46,
+      "name": "_sip._tcp.example.com",
+      "port": 5060,
+      "priority": 10,
+      "ttl": 3600,
+      "type": "SRV",
+      "weight": 20
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "content": "hello world",
+      "id": 47,
+      "name": "example.com",
+      "ttl": 3600,
+      "type": "TXT"
+    }
+  }
+]

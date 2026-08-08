@@ -420,58 +420,73 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	records := models.Records{}
 
 	for _, record := range info.Records {
-		if record.Type == "SOA" {
+		rc, err := toRecordConfig(dc, record)
+		if err != nil {
+			return nil, err
+		}
+		if rc == nil {
 			continue
 		}
-
-		/*
-		   INWX is a little bit special for CNAME,NS,MX and SRV records:
-		   The API will not accept any target with a final dot but will
-		   instead always add this final dot internally.
-		   Records with empty targets (i.e. records with target ".")
-		   are allowed.
-		*/
-		rtypeAddDot := map[string]bool{
-			"ALIAS": true,
-			"CNAME": true,
-			"MX":    true,
-			"NS":    true,
-			"SRV":   true,
-			"PTR":   true,
-		}
-		if rtypeAddDot[record.Type] {
-			if record.Type == "MX" && record.Content == "." {
-				// null records don't need to be modified
-			} else if record.Type == "SRV" && strings.HasSuffix(record.Content, ".") {
-				// null targets don't need to be modified
-			} else {
-				record.Content = record.Content + "."
-			}
-		}
-
-		label := dc.ToShort(record.Name)
-		ttl := uint32(record.TTL)
-
-		var rc *models.RecordConfig
-		switch rType := record.Type; rType {
-		case "MX":
-			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
-		case "SRV":
-			rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content,
-				nrc.Flags{SrvWeirdSplit: true})
-		default:
-			rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content,
-				nrc.Flags{TxtDontParse: true})
-		}
-		if err != nil {
-			return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
-		}
-		rc.Original = record
 
 		records = append(records, rc)
 	}
 
 	return records, nil
+}
+
+// toRecordConfig converts an INWX record to a RecordConfig. It returns nil for
+// SOA records, which are not managed.
+func toRecordConfig(dc *models.DomainConfig, record goinwx.NameserverRecord) (*models.RecordConfig, error) {
+	if record.Type == "SOA" {
+		return nil, nil
+	}
+
+	/*
+	   INWX is a little bit special for CNAME,NS,MX and SRV records:
+	   The API will not accept any target with a final dot but will
+	   instead always add this final dot internally.
+	   Records with empty targets (i.e. records with target ".")
+	   are allowed.
+	*/
+	rtypeAddDot := map[string]bool{
+		"ALIAS": true,
+		"CNAME": true,
+		"MX":    true,
+		"NS":    true,
+		"SRV":   true,
+		"PTR":   true,
+	}
+	if rtypeAddDot[record.Type] {
+		if record.Type == "MX" && record.Content == "." {
+			// null records don't need to be modified
+		} else if record.Type == "SRV" && strings.HasSuffix(record.Content, ".") {
+			// null targets don't need to be modified
+		} else {
+			record.Content = record.Content + "."
+		}
+	}
+
+	label := dc.ToShort(record.Name)
+	ttl := uint32(record.TTL)
+
+	var rc *models.RecordConfig
+	var err error
+	switch rType := record.Type; rType {
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content,
+			nrc.Flags{SrvWeirdSplit: true})
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content,
+			nrc.Flags{TxtDontParse: true})
+	}
+	if err != nil {
+		return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
+	}
+	rc.Original = record
+
+	return rc, nil
 }
 
 // ListZones returns the zones configured in INWX.
