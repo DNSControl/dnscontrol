@@ -366,9 +366,10 @@ func filterApexNS(dc *models.DomainConfig) {
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
-			target := strings.TrimSuffix(rec.GetTargetField(), ".")
+			ns := rec.AsNS().Ns
+			target := strings.TrimSuffix(ns, ".")
 			if !expected[target] {
-				printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added.\n", rec.GetTargetField())
+				printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added.\n", ns)
 			}
 			continue
 		}

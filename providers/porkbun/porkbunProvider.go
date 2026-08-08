@@ -13,6 +13,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -413,9 +414,20 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		if subdomain == "@" {
 			subdomain = ""
 		}
+		var location string
+		switch rd := rc.GetRDATA().(type) {
+		case privatetypesrdata.PORKBUNURLFWD:
+			location = rd.Location
+		case privatetypesrdata.URL:
+			location = rd.Location
+		case privatetypesrdata.URL301:
+			location = rd.Location
+		default:
+			location = rc.GetTargetField()
+		}
 		return requestParams{
 			"subdomain":   subdomain,
-			"location":    rc.GetTargetField(),
+			"location":    location,
 			"type":        rc.Metadata[metaType],
 			"includePath": rc.Metadata[metaIncludePath],
 			"wildcard":    rc.Metadata[metaWildcard],
@@ -473,8 +485,9 @@ func checkNSModifications(dc *models.DomainConfig) {
 	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
-			if strings.HasSuffix(rec.GetTargetField(), ".porkbun.com") {
-				printer.Warnf("porkbun does not support modifying NS records on base domain. %s will not be added.\n", rec.GetTargetField())
+			target := rec.AsNS().Ns
+			if strings.HasSuffix(target, ".porkbun.com") {
+				printer.Warnf("porkbun does not support modifying NS records on base domain. %s will not be added.\n", target)
 			}
 			continue
 		}

@@ -231,8 +231,9 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	// namecheap does not allow setting @ NS with basic DNS
 	dc.Filter(func(r *models.RecordConfig) bool {
 		if r.Type == "NS" && r.GetLabel() == "@" {
-			if !strings.HasSuffix(r.GetTargetField(), "registrar-servers.com.") {
-				printer.Println("\n", r.GetTargetField(), "Namecheap does not support changing apex NS records. Skipping.")
+			target := r.AsNS().Ns
+			if !strings.HasSuffix(target, "registrar-servers.com.") {
+				printer.Println("\n", target, "Namecheap does not support changing apex NS records. Skipping.")
 			}
 			return false
 		}

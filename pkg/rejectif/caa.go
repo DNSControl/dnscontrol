@@ -21,7 +21,7 @@ func CaaFlagIsNonZero(rc *models.RecordConfig) error {
 // whitespace in the target.
 // See https://github.com/DNSControl/dnscontrol/issues/1374
 func CaaTargetContainsWhitespace(rc *models.RecordConfig) error {
-	if strings.ContainsAny(rc.GetTargetField(), " \t\r\n") {
+	if strings.ContainsAny(rc.AsCAA().Value, " \t\r\n") {
 		return errors.New("caa target contains whitespace")
 	}
 	return nil
