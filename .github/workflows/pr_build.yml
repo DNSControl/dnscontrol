@@ -48,7 +48,7 @@ jobs:
     - name: Run unit tests
       run: |
         go install gotest.tools/gotestsum@v1.13.0
-        echo "PACKAGE_NAMES=$PACKAGE_NAMES"
+        # shellcheck disable=SC2086  # PACKAGE_NAMES is an intentionally unquoted, space-separated list of package paths
         gotestsum --junitfile "${TEST_RESULTS}/gotestsum-report.xml" -- $PACKAGE_NAMES
 #    - name: Enforce Go Formatted Code
 #      run: "[ `go fmt ./... | wc -l` -eq 0 ]"

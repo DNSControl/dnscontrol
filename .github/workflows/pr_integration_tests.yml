@@ -451,7 +451,6 @@ jobs:
           # Only for PRs
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Check for 'longtest' label
-            #if [[ "${{ github.event.pull_request.labels.*.name }}" =~ "longtest" ]]; then
             if [[ " $LABELS " =~ " longtest " ]]; then
               END=999
               echo "END: Pull request + longtest label. END=$END"
@@ -482,7 +481,7 @@ jobs:
             echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
           echo "END: Final value: END=$END"
-          echo "END=$END" >> $GITHUB_ENV
+          echo "END=$END" >> "$GITHUB_ENV"
 
       - name: Run integration tests for ${{ matrix.provider }} provider
         shell: bash -eo pipefail {0}
