@@ -15,6 +15,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
@@ -385,15 +386,15 @@ func genComparableWithMgmt(rec *models.RecordConfig, manageComments, manageTags 
 }
 
 func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, domainID, msg string) []*models.Correction {
-	switch newrec.Type {
-	case "CF_WORKER_ROUTE":
+	switch newrec.TypeNum {
+	case privatetypes.TypeCFWORKERROUTE:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
 				return c.createWorkerRoute(domainID, newrec.GetRDATA())
 			},
 		}}
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
@@ -408,25 +409,25 @@ func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, dom
 
 func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordConfig, domainID string, msg string) []*models.Correction {
 	var idTxt string
-	switch oldrec.Type {
-	case "CF_WORKER_ROUTE":
+	switch oldrec.TypeNum {
+	case privatetypes.TypeCFWORKERROUTE:
 		idTxt = oldrec.Original.(cloudflare.WorkerRoute).ID
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 		idTxt = oldrec.AsCLOUDFLAREAPISINGLEREDIRECT().RT_SRRRulesetID
 	default:
 		idTxt = oldrec.Original.(cloudflare.DNSRecord).ID
 	}
 	msg = msg + color.YellowString(" id=%v", idTxt)
 
-	switch newrec.Type {
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+	switch newrec.TypeNum {
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
 				return c.updateSingleRedirect(domainID, oldrec, newrec)
 			},
 		}}
-	case "CF_WORKER_ROUTE":
+	case privatetypes.TypeCFWORKERROUTE:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
@@ -663,8 +664,8 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 			return fmt.Errorf("CNAME record %#v has both CF_PROXY_ON and CF_CNAME_FLATTEN_ON set, but these are mutually exclusive; Cloudflare ignores CNAME flattening when proxy is enabled", rec.GetLabel())
 		}
 
-		switch rec.Type {
-		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+		switch rec.TypeNum {
+		case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 			// SINGLEREDIRECT record types. Verify they are enabled.
 			if !c.manageSingleRedirects {
 				return errors.New("you must add 'manage_single_redirects: true' metadata to cloudflare provider to use CLOUDFLAREAPI_SINGLE_REDIRECT records")

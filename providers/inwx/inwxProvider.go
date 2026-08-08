@@ -13,6 +13,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/fatih/color"
 	"github.com/nrdcg/goinwx"
@@ -207,7 +208,7 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 		TTL:    int(rec.TTL),
 	}
 
-	switch rType := rec.Type; rType {
+	switch rType := rec.TypeNum; rType {
 	/*
 	   INWX is a little bit special for CNAME, NS, MX and SRV records:
 	   The API will not accept any target with a final dot but will
@@ -215,19 +216,19 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 	   Records with empty targets (i.e., records with target ".")
 	   are allowed.
 	*/
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		f := rec.AsCNAME()
 		content := f.Target
 		req.Content = content[:len(content)-1]
-	case "NS":
+	case dnsv2.TypeNS:
 		f := rec.AsNS()
 		content := f.Ns
 		req.Content = content[:len(content)-1]
-	case "ALIAS":
+	case privatetypes.TypeALIAS:
 		f := rec.AsALIAS()
 		content := f.Target
 		req.Content = content[:len(content)-1]
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rec.AsMX()
 		req.Priority = int(f.Preference)
 		content := f.Mx
@@ -236,7 +237,7 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 		} else {
 			req.Content = content[:len(content)-1]
 		}
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rec.AsSRV()
 		req.Priority = int(f.Priority)
 		content := f.Target
@@ -245,7 +246,7 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 		} else {
 			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content[:len(content)-1])
 		}
-	case "TXT":
+	case dnsv2.TypeTXT:
 		req.Content = rec.GetTargetTXTJoined()
 
 	default:

@@ -256,23 +256,23 @@ func toReq(rc *models.RecordConfig) *dnsRecordCreate {
 		TTL:      int64(rc.TTL),
 	}
 
-	switch rc.Type {
-	case "CAA":
+	switch rc.TypeNum {
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		r.Tag = f.Tag
 		r.Flag = int64(f.Flag)
 		r.Value = f.Value
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		r.Priority = int64(f.Preference)
 		r.Value = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		r.Priority = int64(f.Priority)
 		r.Port = int64(f.Port)
 		r.Weight = int64(f.Weight)
 		r.Value = f.Target
-	case "TXT":
+	case dnsv2.TypeTXT:
 		r.Value = rc.GetTargetTXTJoined()
 	default:
 		r.Value = rc.GetRDATA().String()

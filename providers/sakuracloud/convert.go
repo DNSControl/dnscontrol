@@ -3,6 +3,7 @@ package sakuracloud
 import (
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -43,10 +44,10 @@ func toNative(rc *models.RecordConfig) domainRecord {
 		rr.TTL = rc.TTL
 	}
 
-	switch rc.Type {
-	case "TXT":
+	switch rc.TypeNum {
+	case dnsv2.TypeTXT:
 		rr.RData = rc.GetTargetTXTJoined()
-	case "CAA":
+	case dnsv2.TypeCAA:
 		// SakuraCloud requires the CAA value to remain quoted, e.g.
 		// `0 issue "letsencrypt.org"`. The generic quote-stripping above
 		// produces `0 issue letsencrypt.org`, which the API rejects as

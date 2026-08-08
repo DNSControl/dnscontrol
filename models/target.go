@@ -5,6 +5,7 @@ import (
 	"net/netip"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
@@ -140,14 +141,14 @@ func (rc *RecordConfig) MustSetTarget(target string) {
 func (rc *RecordConfig) SetTargetIP(ip netip.Addr) error {
 	// TODO(tlim): Verify the rtype is appropriate for an IP.
 	//return rc.SetTarget(ip.String())
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		rd, err := MakeA("", nil, nrc.Flags{}, ip)
 		if err != nil {
 			return err
 		}
 		rc.SetRDATA(rd)
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		rd, err := MakeAAAA("", nil, nrc.Flags{}, ip)
 		if err != nil {
 			return err

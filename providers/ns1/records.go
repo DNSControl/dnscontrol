@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -132,14 +133,14 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 		Filters: []*filter.Filter{}, // Work through a bug in the NS1 API library that causes 400 Input validation failed (Value None for field '<obj>.filters' is not of type array)
 	}
 	for _, r := range recs {
-		switch r.Type {
-		case "MX":
+		switch r.TypeNum {
+		case dnsv2.TypeMX:
 			f := r.AsMX()
 			//rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
 			rec.AddAnswer(&dns.Answer{Rdata: []string{strconv.FormatInt(int64(f.Preference), 10), f.Mx}})
-		case "TXT":
+		case dnsv2.TypeTXT:
 			rec.AddAnswer(&dns.Answer{Rdata: []string{r.GetTargetTXTJoined()}})
-		case "CAA":
+		case dnsv2.TypeCAA:
 			f := r.AsCAA()
 			rec.AddAnswer(&dns.Answer{
 				Rdata: []string{
@@ -148,7 +149,7 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 					f.Value,
 				},
 			})
-		case "SRV":
+		case dnsv2.TypeSRV:
 			f := r.AsSRV()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.FormatInt(int64(f.Priority), 10),
@@ -161,7 +162,7 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 			//
 			// Here's the original for comparison:
 			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
-		case "NAPTR":
+		case dnsv2.TypeNAPTR:
 			f := r.AsNAPTR()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.Itoa(int(f.Order)),
@@ -171,7 +172,7 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				f.Regexp,
 				f.Replacement,
 			}})
-		case "DS":
+		case dnsv2.TypeDS:
 			f := r.AsDS()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.Itoa(int(f.KeyTag)),
@@ -179,21 +180,21 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				strconv.Itoa(int(f.DigestType)),
 				f.Digest,
 			}})
-		case "SVCB":
+		case dnsv2.TypeSVCB:
 			f := r.AsSVCB()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.Itoa(int(f.Priority)),
 				f.Target,
 				models.Svcbv2ValueToString(f.Value),
 			}})
-		case "HTTPS":
+		case dnsv2.TypeHTTPS:
 			f := r.AsHTTPS()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.Itoa(int(f.Priority)),
 				f.Target,
 				models.Svcbv2ValueToString(f.Value),
 			}})
-		case "TLSA":
+		case dnsv2.TypeTLSA:
 			f := r.AsTLSA()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
 				strconv.Itoa(int(f.Usage)),

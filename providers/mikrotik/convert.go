@@ -91,37 +91,37 @@ func recordToNative(rc *models.RecordConfig) (*dnsStaticRecord, error) {
 		TTL:  formatMikrotikDuration(rc.TTL),
 	}
 
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		nr.Type = "A"
 		nr.Address = rc.AsA().String()
 
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		nr.Type = "AAAA"
 		nr.Address = rc.AsAAAA().String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		nr.Type = "CNAME"
 		nr.CName = stripTrailingDot(rc.AsCNAME().Target)
 
-	case "MIKROTIK_FWD":
+	case privatetypes.TypeMIKROTIKFWD:
 		nr.Type = "FWD"
 		nr.ForwardTo = rc.AsMIKROTIKFWD().ForwardTo
 
-	case "MIKROTIK_NXDOMAIN":
+	case privatetypes.TypeMIKROTIKNXDOMAIN:
 		nr.Type = "NXDOMAIN"
 		// NXDOMAIN has no target field — only name matters.
 
-	case "MX":
+	case dnsv2.TypeMX:
 		nr.Type = "MX"
 		nr.MxExchange = stripTrailingDot(rc.AsMX().Mx)
 		nr.MxPreference = strconv.FormatUint(uint64(rc.AsMX().Preference), 10)
 
-	case "NS":
+	case dnsv2.TypeNS:
 		nr.Type = "NS"
 		nr.NS = stripTrailingDot(rc.AsNS().String())
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		nr.Type = "SRV"
 		srv := rc.AsSRV()
 		nr.SrvTarget = stripTrailingDot(srv.Target)
@@ -129,7 +129,7 @@ func recordToNative(rc *models.RecordConfig) (*dnsStaticRecord, error) {
 		nr.SrvPriority = strconv.FormatUint(uint64(srv.Priority), 10)
 		nr.SrvWeight = strconv.FormatUint(uint64(srv.Weight), 10)
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		nr.Type = "TXT"
 		nr.Text = rc.GetTargetTXTJoined()
 

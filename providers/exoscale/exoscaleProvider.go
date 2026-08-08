@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
@@ -233,12 +234,12 @@ func (provider *exoscaleProvider) createRecordFunc(
 		var prio int64
 
 		var target string
-		switch recordConfig.Type {
-		case "MX":
+		switch recordConfig.TypeNum {
+		case dnsv2.TypeMX:
 			f := recordConfig.AsMX()
 			target = f.Mx
 			prio = int64(f.Preference)
-		case "SRV":
+		case dnsv2.TypeSRV:
 			f := recordConfig.AsSRV()
 			prio = int64(f.Priority)
 			target = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
@@ -294,12 +295,12 @@ func (provider *exoscaleProvider) updateRecordFunc(
 		name := rc.GetLabel()
 
 		var target string
-		switch rc.Type {
-		case "MX":
+		switch rc.TypeNum {
+		case dnsv2.TypeMX:
 			mx := rc.GetRDATA().(dnsrdatav2.MX)
 			target = mx.Mx
 			record.Priority = int64(mx.Preference)
-		case "SRV":
+		case dnsv2.TypeSRV:
 			// API wants priority as separate argument. The target contains the weight, port, target.
 			srv := rc.GetRDATA().(dnsrdatav2.SRV)
 			target = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, srv.Target)

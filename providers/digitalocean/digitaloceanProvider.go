@@ -360,8 +360,8 @@ func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
 		TTL:  int(rc.TTL),
 	}
 
-	switch rc.Type {
-	case "CAA":
+	switch rc.TypeNum {
+	case dnsv2.TypeCAA:
 		// DO API requires that a CAA target ends in dot.
 		// Interestingly enough, the value returned from API doesn't
 		// contain a trailing dot.
@@ -370,19 +370,19 @@ func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
 		r.Tag = f.Tag
 		r.Flags = int(f.Flag)
 		r.Data = f.Value + "."
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		// DO uses the same field for MX and SRV priority
 		r.Priority = int(f.Preference)
 		r.Data = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		// DO uses the same field for MX and SRV priority
 		r.Priority = int(f.Priority)
 		r.Weight = int(f.Weight)
 		r.Port = int(f.Port)
 		r.Data = f.Target
-	case "TXT":
+	case dnsv2.TypeTXT:
 		// TXT records are the one place where DO combines many items into one field.
 		r.Data = rc.GetTargetTXTJoined()
 	default:

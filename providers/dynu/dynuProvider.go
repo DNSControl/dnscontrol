@@ -332,12 +332,12 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		TTL:        int(rc.TTL),
 		State:      true,
 	}
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		req.IPv4Address = rc.AsA().String()
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		req.IPv6Address = rc.AsAAAA().String()
-	case "AFSDB":
+	case dnsv2.TypeAFSDB:
 		// Target: "<subtype> <hostname>."
 
 		// parts := strings.Fields(rc.GetTargetField())
@@ -350,13 +350,13 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		f := rc.AsAFSDB()
 		req.SubType = new(int(f.Subtype))
 		req.Host = strings.TrimSuffix(f.Hostname, ".")
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		flags := int(f.Flag)
 		req.Flags = &flags
 		req.Tag = f.Tag
 		req.Value = f.Value
-	case "CERT":
+	case dnsv2.TypeCERT:
 
 		// Target: "<type> <keytag> <algorithm> <cert-base64>"
 		// parts := strings.Fields(rc.GetTargetField())
@@ -376,12 +376,12 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Algorithm = new(int(f.Algorithm))
 		req.Certificate = f.Certificate
 
-	case "CNAME", "NS", "PTR", "DNAME":
+	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.TypePTR, dnsv2.TypeDNAME:
 		req.Host = strings.TrimSuffix(rc.GetRDATA().String(), ".")
-	case "DHCID":
+	case dnsv2.TypeDHCID:
 		// Target is the base64-encoded DHCID data (zone-file format == API format).
 		req.RecordData = rc.AsDHCID().Digest
-	case "HINFO":
+	case dnsv2.TypeHINFO:
 
 		// Target: "<"cpu"> <"os">" — parse the two quoted character-strings.
 		// cpu, os := parseCharStrings(rc.GetTargetField())
@@ -390,7 +390,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 
 		req.CPU = rc.AsHINFO().Cpu
 		req.OperatingSystem = rc.AsHINFO().Os
-	case "HTTPS":
+	case dnsv2.TypeHTTPS:
 		f := rc.AsHTTPS()
 		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
@@ -400,7 +400,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		}
 		req.TargetName = target
 		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
-	case "KEY":
+	case dnsv2.TypeKEY:
 		// Target: "<flags> <protocol> <algorithm> <pubkey-base64>"
 
 		// parts := strings.Fields(rc.GetTargetField())
@@ -420,7 +420,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Algorithm = new(int(f.Algorithm))
 		req.PublicKey = f.PublicKey
 
-	case "LOC":
+	case dnsv2.TypeLOC:
 		// Convert DNSControl's packed binary LOC fields to Dynu's decimal-degree format.
 		// The packed values are integer arc-milliseconds. We compute total ms first
 		// (avoiding intermediate fractional divisions), then add a +0.5 ms bias before
@@ -451,12 +451,12 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Size = &size
 		req.HorizontalPrecision = &horizPre
 		req.VerticalPrecision = &vertPre
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req.Host = strings.TrimSuffix(f.Mx, ".")
 		pref := int(f.Preference)
 		req.Priority = &pref
-	case "NAPTR":
+	case dnsv2.TypeNAPTR:
 		f := rc.AsNAPTR()
 		order := int(f.Order)
 		pref := int(f.Preference)
@@ -471,14 +471,14 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 			naptrTarget = strings.TrimSuffix(naptrTarget, ".")
 		}
 		req.Replacement = naptrTarget
-	case "OPENPGPKEY":
+	case dnsv2.TypeOPENPGPKEY:
 		// Target is the base64-encoded public key (zone-file format == API format).
 		req.PublicKey = rc.AsOPENPGPKEY().PublicKey
-	case "RP":
+	case dnsv2.TypeRP:
 		rd := rc.AsRP()
 		req.MailBox = rd.Mbox
 		req.TxtDomainName = rd.Txt
-	case "SMIMEA":
+	case dnsv2.TypeSMIMEA:
 
 		// usage := int(rc.SmimeaUsage)
 		// selector := int(rc.SmimeaSelector)
@@ -496,7 +496,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Selector = &selector
 		req.MatchingType = &mtype
 		req.CertificateAssociatedData = hexToBase64(f.Certificate)
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
 		f := rc.AsSRV()
 		srvTarget := strings.TrimSuffix(f.Target, ".")
@@ -510,14 +510,14 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Priority = &prio
 		req.Weight = &weight
 		req.Port = &port
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		f := rc.AsSSHFP()
 		algo := int(f.Algorithm)
 		fptype := int(f.Type)
 		req.Algorithm = &algo
 		req.FingerPrintType = &fptype
 		req.FingerPrint = hexToBase64(f.FingerPrint)
-	case "SVCB":
+	case dnsv2.TypeSVCB:
 		f := rc.AsSVCB()
 		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
 		target := strings.TrimSuffix(f.Target, ".")
@@ -526,7 +526,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		}
 		req.TargetName = target
 		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		f := rc.AsTLSA()
 		usage := int(f.Usage)
 		selector := int(f.Selector)
@@ -535,9 +535,9 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Selector = &selector
 		req.MatchingType = &mtype
 		req.CertificateAssociatedData = hexToBase64(f.Certificate)
-	case "TXT":
+	case dnsv2.TypeTXT:
 		req.TextData = rc.GetTargetTXTJoined()
-	case "URI":
+	case dnsv2.TypeURI:
 		// Target: "<priority> <weight> "<target-uri>""
 
 		// parts := strings.SplitN(strings.TrimSpace(rc.GetTargetField()), " ", 3)

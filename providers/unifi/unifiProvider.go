@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -155,8 +156,8 @@ func (p *unifiProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 	// it and always reads them back as 300), so force those to 300 to avoid a
 	// perpetual TTL diff. Other types keep their TTL, defaulting 0 to 300.
 	for _, record := range dc.Records {
-		switch record.Type {
-		case "MX", "TXT", "SRV":
+		switch record.TypeNum {
+		case dnsv2.TypeMX, dnsv2.TypeTXT, dnsv2.TypeSRV:
 			record.TTL = 300
 		default:
 			if record.TTL == 0 {

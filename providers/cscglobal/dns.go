@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
@@ -127,8 +128,8 @@ func (client *providerClient) GetZoneRecordsCorrections(dc *models.DomainConfig,
 func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
 	var existingTarget string
 
-	switch existing.Type {
-	case "TXT":
+	switch existing.TypeNum {
+	case dnsv2.TypeTXT:
 		existingTarget = existing.GetTargetTXTJoined()
 	default:
 		existingTarget = existing.GetRDATA().String()
@@ -159,25 +160,25 @@ func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
 		NewTTL:     rec.TTL,
 	}
 
-	switch rec.Type {
-	case "CAA":
+	switch rec.TypeNum {
+	case dnsv2.TypeCAA:
 		f := rec.AsCAA()
 		tagValue := f.Tag
 		flagValue := f.Flag
 		zer.NewTag = &tagValue
 		zer.NewFlag = &flagValue
 		zer.NewValue = f.Value
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rec.AsMX()
 		zer.NewPriority = f.Preference
 		zer.NewValue = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rec.AsSRV()
 		zer.NewPriority = f.Priority
 		zer.NewWeight = f.Weight
 		zer.NewPort = f.Port
 		zer.NewValue = f.Target
-	case "TXT":
+	case dnsv2.TypeTXT:
 		zer.NewValue = rec.GetTargetTXTJoined()
 	default:
 		zer.NewValue = rec.GetRDATA().String()
@@ -195,8 +196,8 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 	}
 
 	var oldTarget, recTarget string
-	switch old.Type {
-	case "TXT":
+	switch old.TypeNum {
+	case dnsv2.TypeTXT:
 		oldTarget = old.GetTargetTXTJoined()
 		recTarget = rec.GetTargetTXTJoined()
 	default:
@@ -217,8 +218,8 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 		zer.NewTTL = rec.TTL
 	}
 
-	switch old.Type {
-	case "CAA":
+	switch old.TypeNum {
+	case dnsv2.TypeCAA:
 		of := old.AsCAA()
 		tagValue := of.Tag
 		zer.CurrentTag = &tagValue
@@ -228,11 +229,11 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 			zer.NewTag = new(rec.AsCAA().Tag)
 			zer.NewFlag = new(rec.AsCAA().Flag)
 		}
-	case "MX":
+	case dnsv2.TypeMX:
 		if old.AsMX().Preference != rec.AsMX().Preference {
 			zer.NewPriority = rec.AsMX().Preference
 		}
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rec.AsSRV()
 		zer.NewWeight = f.Weight
 		zer.NewPort = f.Port
