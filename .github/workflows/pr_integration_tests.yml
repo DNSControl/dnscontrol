@@ -116,6 +116,7 @@ jobs:
       - id: gopaths
         shell: bash
         run: |
+          # shellcheck disable=SC2129  # Individual redirects permitted here.
           echo "modcache=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
           echo "buildcache=$(go env GOCACHE)" >> "$GITHUB_OUTPUT"
           echo "cache-key=gomod-${{ hashFiles('go.sum') }}" >> "$GITHUB_OUTPUT"
