@@ -131,8 +131,8 @@ jobs:
         shell: bash
         run: |
           go install gotest.tools/gotestsum@v1.13.0
-          go test -c -o /dev/null ./integrationTest
-          #go test -c -o /dev/null ./...
+          #go test -c -o /dev/null ./integrationTest
+          go test -c -o /dev/null ./...
         working-directory: integrationTest
 
   # integration-tests: Run the integration tests on any provider listed
