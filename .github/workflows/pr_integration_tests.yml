@@ -451,7 +451,7 @@ jobs:
       # compiling the full provider dependency graph itself. Using
       # actions/cache/restore (not actions/cache) avoids 24 parallel jobs
       # each racing to write the same key back.
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           path: |
             ${{ needs.warm-gomod-cache.outputs.modcache }}
