@@ -315,7 +315,6 @@ func fetchZoneRecordsReal(entry InitCredsEntry, zone string) (models.Records, er
 	if err != nil {
 		return nil, err
 	}
-	recs.FixLegacyRecords(zone)
 	return recs, nil
 }
 

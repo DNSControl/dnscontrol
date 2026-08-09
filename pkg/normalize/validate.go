@@ -414,7 +414,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 
 		// Normalize Records.
 		models.PostProcessRecords(domain.Records)
-		// No need to call FixLegacyDC here. These records were created from dnsconfig.js, not from a provider.
 		for _, rec := range domain.Records {
 			if rec.TTL == 0 {
 				rec.TTL = models.DefaultTTL
@@ -456,30 +455,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 
 			// Canonicalize Targets.
 			switch rec.Type { // #rtype_variations
-			// case "ALIAS", "CNAME", "MX", "NS", "SRV":
-			// 	// #rtype_variations
-			// 	// These record types have a target that is a hostname.
-			// 	// We normalize them to a FQDN so there is less variation to handle.  If a
-			// 	// provider API requires a shortname, the provider must do the shortening.
-			// 	origin := domain.Name + "."
-			// 	if rec.SubDomain != "" {
-			// 		origin = rec.SubDomain + "." + origin
-			// 	}
-			// 	before := rec.GetTargetField()
-			// 	after := domain.ToFqdnWithDot(before)
-			// 	if err := rec.SetTarget(after); err != nil {
-			// 		errs = append(errs, err)
-			// 	} else if after != before {
-			// 		// SetTarget only updates the raw target; when
-			// 		// canonicalization actually changed it (e.g. a relative or
-			// 		// "@" target expanded to a FQDN), refresh the cached
-			// 		// RDATA/ComparableV3 so they reflect the new target.
-			// 		rec.RecomputeV3Fields(domain.Name)
-			// 	}
-			// case "A", "AAAA":
-			//if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
-			//	errs = append(errs, err)
-			//}
 			case "PTR":
 				var err error
 				var name string
@@ -1027,7 +1002,6 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := rec.SetTargetIP(newIP); err != nil {
 					return err
 				}
-				// rec.RecomputeV3Fields(domain.Name)
 			} else if i > 0 {
 				// any additional ips need identical records with the alternate ip added to the domain
 				cpy, err := rec.Copy()
@@ -1037,7 +1011,6 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err := cpy.SetTargetIP(newIP); err != nil {
 					return err
 				}
-				// cpy.RecomputeV3Fields(domain.Name)
 				domain.Records = append(domain.Records, cpy)
 			}
 		}

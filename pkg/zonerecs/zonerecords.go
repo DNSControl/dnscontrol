@@ -12,7 +12,6 @@ func CorrectZoneRecords(driver models.DNSProvider, dc *models.DomainConfig) ([]*
 	if err != nil {
 		return nil, nil, 0, err
 	}
-	existingRecords.FixLegacyRecords(dc.Name)
 
 	// downcase
 	models.Downcase(existingRecords)

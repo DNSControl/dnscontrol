@@ -212,7 +212,6 @@ func GetZone(args GetZoneArgs) error {
 		if err != nil {
 			return fmt.Errorf("failed GetZone gzr: %w", err)
 		}
-		recs.FixLegacyRecords(zone) // Call this after GetZoneRecords() to fix providers that haven't been updated for RecordConfigV2.
 		zoneRecs[i] = recs
 	}
 
