@@ -448,7 +448,7 @@ jobs:
           fi
           # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
           # the time about the same as other tests
-          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
+          if [[ "${{ matrix.provider }}" == "HEDNS" ]]; then
             END=10
             echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
