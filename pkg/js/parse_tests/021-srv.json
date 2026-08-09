@@ -16,7 +16,6 @@
             "Target": "zeros.foo.com.",
             "Weight": 0
           },
-          "target": "zeros.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -32,7 +31,6 @@
             "Target": "one.foo.com.",
             "Weight": 100
           },
-          "target": "one.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -48,7 +46,6 @@
             "Target": "two.foo.com.",
             "Weight": 100
           },
-          "target": "two.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -64,7 +61,6 @@
             "Target": "localhost.foo.com.",
             "Weight": 100
           },
-          "target": "localhost.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -80,7 +76,6 @@
             "Target": "three.example.com.",
             "Weight": 100
           },
-          "target": "three.example.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33

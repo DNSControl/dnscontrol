@@ -243,10 +243,10 @@ func (c *cloudnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		// A & AAAA need to be created before NS #2244
 		// NS need to be created before DS #1018
 		// or else errors will be thrown
-		switch m.Desired.Type {
-		case "A", "AAAA":
+		switch m.Desired.TypeNum {
+		case dnsv2.TypeA, dnsv2.TypeAAAA:
 			createARecordCorrections = append(createARecordCorrections, corr)
-		case "NS":
+		case dnsv2.TypeNS:
 			createNSRecordCorrections = append(createNSRecordCorrections, corr)
 		default:
 			createCorrections = append(createCorrections, corr)
@@ -526,45 +526,45 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["geodns-code"] = geodnsCodeFromMetadataValue
 	}
 
-	switch rc.Type {
-	case "CLOUDNS_WR":
+	switch rc.TypeNum {
+	case privatetypes.TypeCLOUDNSWR:
 		f := rc.AsCLOUDNSWR()
 		req["record-type"] = "WR"
 		req["record"] = f.Target
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req["priority"] = strconv.Itoa(int(f.Preference))
 		req["record"] = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		req["priority"] = strconv.Itoa(int(f.Priority))
 		req["weight"] = strconv.Itoa(int(f.Weight))
 		req["port"] = strconv.Itoa(int(f.Port))
 		req["record"] = f.Target
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		req["caa_flag"] = strconv.Itoa(int(f.Flag))
 		req["caa_type"] = f.Tag
 		req["caa_value"] = f.Value
 		req["record"] = rc.GetRDATA().String()
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		f := rc.AsTLSA()
 		req["tlsa_usage"] = strconv.Itoa(int(f.Usage))
 		req["tlsa_selector"] = strconv.Itoa(int(f.Selector))
 		req["tlsa_matching_type"] = strconv.Itoa(int(f.MatchingType))
 		req["record"] = f.Certificate
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		f := rc.AsSSHFP()
 		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
 		req["fptype"] = strconv.Itoa(int(f.Type))
 		req["record"] = f.FingerPrint
-	case "DS":
+	case dnsv2.TypeDS:
 		f := rc.AsDS()
 		req["key-tag"] = strconv.Itoa(int(f.KeyTag))
 		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
 		req["digest-type"] = strconv.Itoa(int(f.DigestType))
 		req["record"] = f.Digest
-	case "LOC":
+	case dnsv2.TypeLOC:
 		parts := strings.Fields(rc.GetRDATA().String())
 		req["lat-deg"] = parts[0]
 		req["lat-min"] = parts[1]
@@ -579,7 +579,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["h-precision"] = formatLocParam(parts[10])
 		req["v-precision"] = formatLocParam(parts[11])
 		req["record"] = rc.GetRDATA().String()
-	case "NAPTR":
+	case dnsv2.TypeNAPTR:
 		f := rc.AsNAPTR()
 		req["order"] = strconv.Itoa(int(f.Order))
 		req["pref"] = strconv.Itoa(int(f.Preference))
@@ -588,7 +588,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["regexp"] = f.Regexp
 		req["replace"] = f.Replacement
 		req["record"] = rc.GetRDATA().String()
-	case "TXT":
+	case dnsv2.TypeTXT:
 		req["record"] = rc.GetTargetTXTJoined()
 	default:
 		req["record"] = rc.GetRDATA().String()

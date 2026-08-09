@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -326,12 +327,12 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 		TTL:  int(rc.TTL),
 	}
 
-	switch rtype := rc.Type; rtype { // #rtype_variations
-	case "CNAME":
+	switch rtype := rc.TypeNum; rtype { // #rtype_variations
+	case dnsv2.TypeCNAME:
 		r.Data = strings.TrimSuffix(rc.AsCNAME().Target, ".")
-	case "NS":
+	case dnsv2.TypeNS:
 		r.Data = strings.TrimSuffix(rc.AsNS().Ns, ".")
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		r.Priority = int(f.Preference)
 		r.Data = strings.TrimSuffix(rc.AsMX().Mx, ".")
@@ -339,7 +340,7 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 			// Vultr represents a null MX (RFC 7505) as a literal ".".
 			r.Data = "."
 		}
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		r.Priority = int(f.Priority)
 		target := strings.TrimSuffix(f.Target, ".")
@@ -347,13 +348,13 @@ func toVultrRecord(rc *models.RecordConfig, vultrID string) *govultr.DomainRecor
 			target = "."
 		}
 		r.Data = fmt.Sprintf("%v %v %s", f.Weight, f.Port, target)
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		r.Data = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		f := rc.AsSSHFP()
 		r.Data = fmt.Sprintf("%d %d %s", f.Algorithm, f.Type, f.FingerPrint)
-	case "TXT":
+	case dnsv2.TypeTXT:
 		r.Data = `"` + rc.GetTargetTXTJoined() + `"` // see the toRecordConfig comment
 	default:
 		r.Data = rc.GetRDATA().String()

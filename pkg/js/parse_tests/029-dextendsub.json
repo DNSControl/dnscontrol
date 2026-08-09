@@ -20,7 +20,6 @@
           "rdata": {
             "Addr": "10.1.1.1"
           },
-          "target": "10.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -34,7 +33,6 @@
             "Addr": "10.3.3.3"
           },
           "subdomain": "bar",
-          "target": "10.3.3.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -48,7 +46,6 @@
             "Addr": "10.4.4.4"
           },
           "subdomain": "bar",
-          "target": "10.4.4.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -62,7 +59,6 @@
             "Addr": "10.25.25.25"
           },
           "subdomain": "a.long.path.of.sub.domains",
-          "target": "10.25.25.25",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -76,7 +72,6 @@
             "Addr": "10.26.26.26"
           },
           "subdomain": "a.long.path.of.sub.domains",
-          "target": "10.26.26.26",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -89,7 +84,6 @@
           "rdata": {
             "Addr": "10.2.2.2"
           },
-          "target": "10.2.2.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -112,7 +106,6 @@
           "rdata": {
             "Addr": "20.5.5.5"
           },
-          "target": "20.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -125,7 +118,6 @@
           "rdata": {
             "Addr": "20.10.10.10"
           },
-          "target": "20.10.10.10",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -138,7 +130,6 @@
           "rdata": {
             "Addr": "20.6.6.6"
           },
-          "target": "20.6.6.6",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -161,7 +152,6 @@
           "rdata": {
             "Addr": "30.7.7.7"
           },
-          "target": "30.7.7.7",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -174,7 +164,6 @@
           "rdata": {
             "Addr": "30.9.9.9"
           },
-          "target": "30.9.9.9",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -187,7 +176,6 @@
           "rdata": {
             "Addr": "30.8.8.8"
           },
-          "target": "30.8.8.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -210,7 +198,6 @@
           "rdata": {
             "Addr": "40.12.12.12"
           },
-          "target": "40.12.12.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -224,7 +211,6 @@
             "Addr": "40.17.17.17"
           },
           "subdomain": "morty",
-          "target": "40.17.17.17",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -238,7 +224,6 @@
             "Addr": "40.18.18.18"
           },
           "subdomain": "morty",
-          "target": "40.18.18.18",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -251,7 +236,6 @@
           "rdata": {
             "Addr": "40.12.12.12"
           },
-          "target": "40.12.12.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -274,7 +258,6 @@
           "rdata": {
             "Addr": "50.13.13.13"
           },
-          "target": "50.13.13.13",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -287,7 +270,6 @@
           "rdata": {
             "Addr": "50.14.14.14"
           },
-          "target": "50.14.14.14",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -301,7 +283,6 @@
             "Addr": "50.15.15.15"
           },
           "subdomain": "zip",
-          "target": "50.15.15.15",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -315,7 +296,6 @@
             "Addr": "50.16.16.16"
           },
           "subdomain": "zip",
-          "target": "50.16.16.16",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -338,7 +318,6 @@
           "rdata": {
             "Addr": "60.19.19.19"
           },
-          "target": "60.19.19.19",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -352,7 +331,6 @@
             "Addr": "60.21.21.21"
           },
           "subdomain": "bar",
-          "target": "60.21.21.21",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -366,7 +344,6 @@
             "Addr": "60.23.23.23"
           },
           "subdomain": "baz.bar",
-          "target": "60.23.23.23",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -380,7 +357,6 @@
             "Addr": "60.24.24.24"
           },
           "subdomain": "baz.bar",
-          "target": "60.24.24.24",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -394,7 +370,6 @@
             "Addr": "60.22.22.22"
           },
           "subdomain": "bar",
-          "target": "60.22.22.22",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -407,7 +382,6 @@
           "rdata": {
             "Addr": "60.20.20.20"
           },
-          "target": "60.20.20.20",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -430,7 +404,6 @@
           "rdata": {
             "Addr": "10.0.0.1"
           },
-          "target": "10.0.0.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -443,7 +416,6 @@
           "rdata": {
             "Addr": "10.0.0.2"
           },
-          "target": "10.0.0.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -457,7 +429,6 @@
             "Addr": "10.0.0.3"
           },
           "subdomain": "xn--dsseldorf-q9a",
-          "target": "10.0.0.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -471,7 +442,6 @@
             "Addr": "10.0.0.4"
           },
           "subdomain": "xn--dsseldorf-q9a",
-          "target": "10.0.0.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -485,7 +455,6 @@
             "Addr": "10.0.0.5"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -499,7 +468,6 @@
             "Addr": "10.0.0.6"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.6",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -522,7 +490,6 @@
           "rdata": {
             "Addr": "10.0.0.7"
           },
-          "target": "10.0.0.7",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -536,7 +503,6 @@
             "Addr": "10.0.0.9"
           },
           "subdomain": "subdomain",
-          "target": "10.0.0.9",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -550,7 +516,6 @@
             "Addr": "10.0.0.10"
           },
           "subdomain": "subdomain",
-          "target": "10.0.0.10",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -563,7 +528,6 @@
           "rdata": {
             "Addr": "10.0.0.8"
           },
-          "target": "10.0.0.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -577,7 +541,6 @@
             "Addr": "10.0.0.11"
           },
           "subdomain": "xn--dsseltal-65a",
-          "target": "10.0.0.11",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -591,7 +554,6 @@
             "Addr": "10.0.0.12"
           },
           "subdomain": "xn--dsseltal-65a",
-          "target": "10.0.0.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -605,7 +567,6 @@
             "Addr": "10.0.0.13"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.13",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -619,7 +580,6 @@
             "Addr": "10.0.0.14"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.14",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -642,7 +602,6 @@
           "rdata": {
             "Addr": "10.0.0.15"
           },
-          "target": "10.0.0.15",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -656,7 +615,6 @@
             "Addr": "10.0.0.17"
           },
           "subdomain": "subdomain",
-          "target": "10.0.0.17",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -670,7 +628,6 @@
             "Addr": "10.0.0.18"
           },
           "subdomain": "subdomain",
-          "target": "10.0.0.18",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -683,7 +640,6 @@
           "rdata": {
             "Addr": "10.0.0.16"
           },
-          "target": "10.0.0.16",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -697,7 +653,6 @@
             "Addr": "10.0.0.19"
           },
           "subdomain": "xn--dsseldorf-q9a",
-          "target": "10.0.0.19",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -711,7 +666,6 @@
             "Addr": "10.0.0.20"
           },
           "subdomain": "xn--dsseldorf-q9a",
-          "target": "10.0.0.20",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -725,7 +679,6 @@
             "Addr": "10.0.0.21"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.21",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -739,7 +692,6 @@
             "Addr": "10.0.0.22"
           },
           "subdomain": "xn--tda",
-          "target": "10.0.0.22",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -763,7 +715,6 @@
             "Target": "b.sub.example.tld."
           },
           "subdomain": "sub",
-          "target": "b.sub.example.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -777,7 +728,6 @@
             "Target": "sub.example.tld."
           },
           "subdomain": "sub",
-          "target": "sub.example.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -791,7 +741,6 @@
             "Target": "sub.example.tld."
           },
           "subdomain": "sub",
-          "target": "sub.example.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -805,7 +754,6 @@
             "Target": "otherdomain.tld."
           },
           "subdomain": "sub",
-          "target": "otherdomain.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5

@@ -312,6 +312,11 @@
     "apiUrl": "$NETNOD_APIURL",
     "domain": "$NETNOD_DOMAIN"
   },
+  "NEXDNS": {
+    "TYPE": "NEXDNS",
+    "api_token": "$NEXDNS_API_TOKEN",
+    "domain": "$NEXDNS_DOMAIN"
+  },
   "NS1": {
     "TYPE": "NS1",
     "api_token": "$NS1_TOKEN",

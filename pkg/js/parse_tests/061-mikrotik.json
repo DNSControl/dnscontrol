@@ -18,7 +18,6 @@
           "rdata": {
             "ForwardTo": "8.8.8.8"
           },
-          "target": "8.8.8.8",
           "ttl": 300,
           "type": "MIKROTIK_FWD",
           "typenum": 65293
@@ -46,7 +45,6 @@
           "rdata": {
             "Target": "10.0.0.53"
           },
-          "target": "10.0.0.53",
           "ttl": 300,
           "type": "MIKROTIK_FORWARDER",
           "typenum": 65321

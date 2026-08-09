@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -41,26 +42,21 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		TTL:  rc.TTL,
 	}
 
-	switch rc.Type {
-	case "MX":
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		r.Priority = intPtr(f.Preference)
 		r.Content = trimDot(f.Mx)
-	case "SRV":
-		f := rc.AsSRV()
+	case dnsrdatav2.SRV:
 		r.Priority = intPtr(f.Priority)
 		r.Weight = intPtr(f.Weight)
 		r.Port = intPtr(f.Port)
 		r.Content = trimDot(f.Target)
-	case "TXT":
+	case dnsrdatav2.TXT:
 		r.Content = rc.GetTargetTXTJoined()
-	case "CNAME":
-		f := rc.AsCNAME()
+	case dnsrdatav2.CNAME:
 		r.Content = trimDot(f.Target)
 	default:
 		r.Content = rc.GetRDATA().String()
-		// TODO(tlim): This was the original:
-		//r.Content = rc.Get TargetField()
 	}
 
 	return r, nil

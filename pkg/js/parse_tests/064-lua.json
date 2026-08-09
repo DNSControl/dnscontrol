@@ -17,7 +17,6 @@
             "LuaPayload": "; return 'ok'",
             "LuaType": "TXT"
           },
-          "target": "; return 'ok'",
           "ttl": 30,
           "type": "LUA",
           "typenum": 65292
@@ -34,7 +33,6 @@
             "LuaPayload": "return_127_0_0_1",
             "LuaType": "A"
           },
-          "target": "return_127_0_0_1",
           "ttl": 60,
           "type": "LUA",
           "typenum": 65292

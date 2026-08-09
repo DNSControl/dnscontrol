@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -38,20 +39,20 @@ func (z *ZoneGenData) Less(i, j int) bool {
 	}
 
 	// sub-sort within type:
-	switch a.Type {
-	case "A":
+	switch a.TypeNum {
+	case dnsv2.TypeA:
 		ta2, tb2 := a.GetTargetIP(), b.GetTargetIP()
 		if ta2.Is4() && tb2.Is4() {
 			return bytes.Compare(ta2.AsSlice(), tb2.AsSlice()) == -1
 		}
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		ta2, tb2 := a.GetTargetIP(), b.GetTargetIP()
 		if !ta2.Is6() || !tb2.Is6() {
 			log.Fatalf("should not happen: Invalid IPv6 address: %s %s",
 				a.GetTargetIP().String(), b.GetTargetIP().String())
 		}
 		return ta2.Compare(tb2) == -1
-	case "MX":
+	case dnsv2.TypeMX:
 		// sort by priority. If they are equal, sort by Mx.
 		fa := a.AsMX()
 		fb := b.AsMX()
@@ -59,7 +60,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 			return fa.Preference < fb.Preference
 		}
 		return fa.Mx < fb.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		fa := a.AsSRV()
 		fb := b.AsSRV()
 		pa, pb := fa.Priority, fb.Priority
@@ -75,7 +76,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 			return ppa < ppb
 		}
 		return fa.Target < fb.Target
-	case "SVCB", "HTTPS":
+	case dnsv2.TypeSVCB, dnsv2.TypeHTTPS:
 		fa := a.AsSVCB()
 		fb := b.AsSVCB()
 		// sort by priority. If they are equal, sort by ASCII
@@ -85,7 +86,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 		if fa.Target != fb.Target {
 			return fa.Target < fb.Target
 		}
-	case "PTR":
+	case dnsv2.TypePTR:
 		fa := a.AsPTR()
 		fb := b.AsPTR()
 		// TODO(tlim): Sort by fancy host sort.
@@ -93,7 +94,7 @@ func (z *ZoneGenData) Less(i, j int) bool {
 		if pa != pb {
 			return pa < pb
 		}
-	case "CAA":
+	case dnsv2.TypeCAA:
 		// ta2, tb2 := a.(*dns.CAA), b.(*dns.CAA)
 		// sort by tag
 		fa := a.AsCAA()
@@ -108,14 +109,14 @@ func (z *ZoneGenData) Less(i, j int) bool {
 			// flag set goes before ones without flag set
 			return flaga > flagb
 		}
-	case "DS":
+	case dnsv2.TypeDS:
 		fa := a.AsDS()
 		fb := b.AsDS()
 		pa, pb := fa.KeyTag, fb.KeyTag
 		if pa != pb {
 			return pa < pb
 		}
-	case "DNSKEY":
+	case dnsv2.TypeDNSKEY:
 		fa := a.AsDNSKEY()
 		fb := b.AsDNSKEY()
 		flga, flgb := fa.Flags, fb.Flags

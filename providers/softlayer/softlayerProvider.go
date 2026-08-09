@@ -290,8 +290,8 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 		changes := false
 		var err error
 
-		switch desired.Type {
-		case "MX":
+		switch desired.TypeNum {
+		case dnsv2.TypeMX:
 			df := desired.AsMX()
 			preference := int(df.Preference)
 			service := services.GetDnsDomainResourceRecordMxTypeService(s.Session)
@@ -325,7 +325,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 
 			_, err = service.Id(*existing.Id).EditObject(&updated)
 
-		case "SRV":
+		case dnsv2.TypeSRV:
 			df := desired.AsSRV()
 			priority, weight, port := int(df.Priority), int(df.Weight), int(df.Port)
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)

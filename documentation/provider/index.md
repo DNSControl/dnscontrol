@@ -71,6 +71,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❌ | ✅ | ❌ |
 | [`NETLIFY`](netlify.md) | ❌ | ✅ | ❌ |
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ❌ |
+| [`NEXDNS`](nexdns.md) | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ❌ | ✅ | ❌ |
 | [`OPENSRS`](opensrs.md) | ❌ | ❌ | ✅ |
 | [`OPENWRT`](openwrt.md) | ❌ | ✅ | ❌ |
@@ -145,6 +146,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❌ | ❌ | ❌ |
 | [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ✅ |
 | [`NETNOD`](netnod.md) | ❔ | ✅ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ❔ | ❌ | ✅ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
 | [`OPENSRS`](opensrs.md) | ❔ | ❔ | ❌ | ❔ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ❌ | ✅ |
@@ -215,6 +217,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❔ | ❌ | ❌ | ❔ |
 | [`NETLIFY`](netlify.md) | ✅ | ❔ | ❌ | ❌ | ❔ |
 | [`NETNOD`](netnod.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`NEXDNS`](nexdns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❌ | ✅ | ❔ |
 | [`OPENWRT`](openwrt.md) | ❌ | ❔ | ❔ | ❔ | ❔ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ❔ |
@@ -283,6 +286,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NETLIFY`](netlify.md) | ❔ | ❌ | ✅ | ❔ |
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ❌ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ✅ | ❔ |
 | [`ORACLE`](oracle.md) | ❔ | ✅ | ✅ | ❔ |
@@ -350,6 +354,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ✅ | ❔ | ❔ | ❔ | ✅ |
 | [`NETLIFY`](netlify.md) | ✅ | ❔ | ❔ | ❌ | ❌ |
 | [`NETNOD`](netnod.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ❌ | ❌ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❔ | ❔ | ✅ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`OVH`](ovh.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
@@ -403,6 +408,7 @@ Jump to a table:
 | [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ |
 | [`NETLIFY`](netlify.md) | ❌ | ❔ | ❌ |
 | [`NETNOD`](netnod.md) | ❌ | ❌ | ❌ |
+| [`NEXDNS`](nexdns.md) | ❔ | ❌ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ❔ | ✅ |
 | [`ORACLE`](oracle.md) | ❔ | ❔ | ❌ |
 | [`PORKBUN`](porkbun.md) | ❌ | ❔ | ❌ |

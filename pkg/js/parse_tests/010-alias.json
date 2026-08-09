@@ -13,7 +13,6 @@
           "rdata": {
             "Target": "foo.com."
           },
-          "target": "foo.com.",
           "ttl": 300,
           "type": "ALIAS",
           "typenum": 65285

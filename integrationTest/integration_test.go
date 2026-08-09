@@ -498,9 +498,10 @@ func makeTests() []*TestGroup {
 				"GANDI_V5",          // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
 				"GIDINET",           // "GIDINET does not support modifying NS records at apex."
 				"JOKER",             // Not supported via the Zone API.
-				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NAMECHEAP",         // cannot handle single NS at apex but does handle dual
+				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NETCUP",            // NS records not currently supported.
+				"NEXDNS",            // The apex NS records follow the zone's nameserver group and are not editable.
 				"NS1",               // Test leaves NS1 in a confused state.
 				"PORKBUN",           // Record ignored.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
@@ -2008,7 +2009,7 @@ func makeTests() []*TestGroup {
 			),
 			tc("Create some records",
 				a("foo", "1.1.1.1"),
-				a("foo", "10.10.10.10"),
+				a("foo", "9.9.9.9"),
 				aaaa("foo", "2003:dd:d7ff::fe71:aaaa"),
 				mx("foo", 10, "aspmx.l.google.com."),
 				mx("foo", 20, "alt1.aspmx.l.google.com."),

@@ -6,6 +6,7 @@ import (
 	"net" // Needed for communicating with provider API.
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/pkg/errors"
 )
@@ -177,8 +178,8 @@ func recordToNative(rc *models.RecordConfig) *record {
 		TTL:     rc.TTL,
 	}
 
-	switch rc.Type {
-	case "TXT":
+	switch rc.TypeNum {
+	case dnsv2.TypeTXT:
 		// TODO(tlim): I think all of this can be replaced by:
 		// record.Content = rc.AsTXT().String()
 
@@ -192,7 +193,7 @@ func recordToNative(rc *models.RecordConfig) *record {
 		}
 
 		record.Content = strings.Join(txtStrings, " ")
-	case "MX":
+	case dnsv2.TypeMX:
 		mx := rc.AsMX()
 		record.Priority = mx.Preference
 		record.Content = strings.TrimSuffix(mx.Mx, ".")
@@ -200,7 +201,7 @@ func recordToNative(rc *models.RecordConfig) *record {
 			record.Type = "NULLMX"
 			record.Priority = 10
 		}
-	case "SRV":
+	case dnsv2.TypeSRV:
 		srv := rc.AsSRV()
 		record.Priority = srv.Priority
 		record.Content = fmt.Sprintf("%d %d %s", srv.Weight, srv.Port, strings.TrimSuffix(srv.Target, "."))

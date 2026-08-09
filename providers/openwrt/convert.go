@@ -114,18 +114,18 @@ func toNative(rc *models.RecordConfig) (nativeRecord, string, error) {
 	var err error
 
 	// omits .type and .name
-	switch rc.Type {
-	case "A", "AAAA":
+	switch rc.TypeNum {
+	case dnsv2.TypeA, dnsv2.TypeAAAA:
 		recType = "domain"
 		r.Name = rc.NameFQDN
 		r.IP = rc.GetTargetIP().String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		recType = "cname"
 		r.Cname = rc.NameFQDN
 		r.Target = rc.AsCNAME().Target
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		recType = "srvhost"
 		r.Srv = rc.NameFQDN
@@ -134,7 +134,7 @@ func toNative(rc *models.RecordConfig) (nativeRecord, string, error) {
 		r.Port = strconv.Itoa(int(f.Port))
 		r.Target = f.Target
 
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		recType = "mxhost"
 		r.Domain = rc.NameFQDN

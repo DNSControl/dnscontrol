@@ -12,8 +12,10 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -537,43 +539,46 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 	var content string
 	priority := 0
 
-	switch rc.Type {
-	case "CNAME", "NS", "PTR", "ALIAS":
+	switch rc.TypeNum {
+	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.
 		// Remove trailing dot for DNScale API
+		TypePTR, privatetypes.TypeALIAS:
+
 		content = strings.TrimSuffix(content, ".")
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		priority = int(f.Preference)
 		content = strings.TrimSuffix(f.Mx, ".")
-	case "SRV":
-		// TODO(tlim): Remove commented out code if new code works.
-		// DNScale API expects full content: "priority weight port target"
-		// target := rc.Get|TargetField()
-		// if !strings.HasSuffix(target, ".") {
-		// 	target = target + "."
-		// }
-		// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
-		content = rc.GetRDATA().String()
+	// case "SRV":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	// DNScale API expects full content: "priority weight port target"
+	// 	// target := rc.Get|TargetField()
+	// 	// if !strings.HasSuffix(target, ".") {
+	// 	// 	target = target + "."
+	// 	// }
+	// 	// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
+	// 	content = rc.GetRDATA().String()
 
-	case "CAA":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
-	case "TLSA":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
-	case "SSHFP":
-		// TODO(tlim): Remove commented out code if new code works.
-		//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
-		content = rc.GetRDATA().String()
-	case "HTTPS", "SVCB":
+	// case "CAA":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
+	// case "TLSA":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
+	// case "SSHFP":
+	// 	// TODO(tlim): Remove commented out code if new code works.
+	// 	//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
+	// 	content = rc.GetRDATA().String()
+	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
 		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns
 		// DNScale API requires selective quote handling for SVCB params:
 		// - alpn="h2,h3" must become alpn=h2,h3 (quotes stripped)
 		// - ech="base64..." must keep quotes (required for base64 values)
+
 		content = stripSvcbQuotesExceptEch(rc.GetRDATA().String())
-	case "TXT":
+	case dnsv2.TypeTXT:
 		content = rc.GetTargetTXTJoined()
 	default:
 		content = rc.GetRDATA().String()

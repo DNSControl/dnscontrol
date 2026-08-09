@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -285,25 +286,25 @@ func (client *Client) createRecordString(rc *models.RecordConfig, domain string)
 
 	var answer string
 
-	switch rc.Type { // #rtype_variations
-	case "LOC":
+	switch rc.TypeNum { // #rtype_variations
+	case dnsv2.TypeLOC:
 		answer = rc.AsLOC().String()
-	case "SVCB", "HTTPS":
+	case dnsv2.TypeSVCB, dnsv2.TypeHTTPS:
 		answer = rc.GetRDATA().String()
 		answer = strings.ReplaceAll(answer, `"`, ``)
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		f := rc.AsSSHFP()
 		answer = fmt.Sprintf(`%v %v %s`, f.Algorithm, f.Type, f.FingerPrint)
-	case "NAPTR":
+	case dnsv2.TypeNAPTR:
 		f := rc.AsNAPTR()
 		answer = fmt.Sprintf(`%v %v "%v" "%v" "%v" %v`, f.Order, f.Preference, f.Flags, f.Service, f.Regexp, f.Replacement)
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		f := rc.AsTLSA()
 		answer = fmt.Sprintf(`%v %v %v %s`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
-	case "SMIMEA":
+	case dnsv2.TypeSMIMEA:
 		f := rc.AsSMIMEA()
 		answer = fmt.Sprintf(`%v %v %v %s`, f.Usage, f.Selector, f.MatchingType, f.Certificate)
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		answer = fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 	default:
@@ -320,16 +321,16 @@ func (client *Client) createRecordString(rc *models.RecordConfig, domain string)
 
 // deleteRecordString constructs the record string based on the provided Record.
 func deleteRecordString(rc *models.RecordConfig) string {
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		return fmt.Sprintf("%s %d IN MX %s", rc.GetLabel(), rc.TTL, rc.AsMX().Mx)
-	case "NS":
+	case dnsv2.TypeNS:
 		return fmt.Sprintf("%s %d NS %s", rc.GetLabel(), rc.TTL, rc.AsNS().Ns)
-	case "SVCB", "HTTPS":
+	case dnsv2.TypeSVCB, dnsv2.TypeHTTPS:
 		d := rc.GetRDATA().String()
 		d = strings.ReplaceAll(d, `"`, ``)
 		return fmt.Sprintf("%s %d IN %s %s", rc.GetLabel(), rc.TTL, rc.Type, d)
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		d := rc.GetRDATA().String()
 		d = strings.ToLower(d)
 		return fmt.Sprintf("%s %d IN %s %s", rc.GetLabel(), rc.TTL, rc.Type, d)

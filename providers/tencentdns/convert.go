@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
@@ -46,21 +47,21 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		}
 		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
-	case "TXT":
-		// TODO(tlim): A few ways that might fix
-		//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
-		//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
-
-		// Try this first:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
-
-		// Try this if the other fails: (probably won't work)
-		//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
-
-		// Or this?
-		//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
-		// You'll need to add this to imports above:
-		// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	// case "TXT":
+	// 	// TODO(tlim): A few ways that might fix
+	// 	//--- FAIL: TestDNSProviders/oomkill.com/27:complex_TXT:a_256-byte_TXT (2.47s)
+	// 	//--- FAIL: TestDNSProviders/oomkill.com/28:TXT_backslashes:TXT_with_backslashs (4.47s)
+	//
+	// 	// Try this first:
+	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+	//
+	// 	// Try this if the other fails: (probably won't work)
+	// 	//rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+	//
+	// 	// Or this?
+	// 	//rc, err = dc.NewRecordConfig(label, ttl, rtype, txtutil.EncodeQuoted(val))
+	// 	// You'll need to add this to imports above:
+	// 	// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 
 	// case "ALIAS":
 	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
@@ -125,13 +126,11 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	}
 
 	var val string
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
-	case dnsv2.TypeTXT:
-		f := rc.AsTXT()
+	case dnsrdatav2.TXT:
 		val = f.String()
 
 	default:
@@ -165,9 +164,8 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 	}
 
 	var val string
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
 
@@ -188,8 +186,7 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 	// 		val = u
 	// 	}
 
-	case dnsv2.TypeTXT:
-		f := rc.AsTXT()
+	case dnsrdatav2.TXT:
 		val = f.String()
 	default:
 		val = rc.GetRDATA().String()

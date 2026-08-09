@@ -300,12 +300,12 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 	req.TTL = int64(rc.TTL)
 	req.Comment = ""
 
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req.MXPriority = int64(f.Preference)
 		req.Value = new(f.Mx)
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		req.SRV = &vercelClient.SRV{
 			Priority: int64(f.Priority),
@@ -317,9 +317,9 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`
 		req.Value = nil
-	case "TXT":
+	case dnsv2.TypeTXT:
 		req.Value = new(rc.GetTargetTXTJoined())
-	case "HTTPS":
+	case dnsv2.TypeHTTPS:
 		f := rc.AsHTTPS()
 		req.HTTPS = &httpsRecord{
 			Priority: int64(f.Priority),
@@ -330,7 +330,7 @@ func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRec
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		req.Value = new(fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value))
 	default:
@@ -353,12 +353,12 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 	req.TTL = new(int64(rc.TTL))
 	req.Comment = ""
 
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req.MXPriority = new(int64(f.Preference))
 		req.Value = new(f.Mx)
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		req.SRV = &vercelClient.SRVUpdate{
 			Priority: new(int64(f.Priority)),
@@ -370,10 +370,10 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`
 		req.Value = nil
-	case "TXT":
+	case dnsv2.TypeTXT:
 		txtValue := rc.GetTargetTXTJoined()
 		req.Value = &txtValue
-	case "HTTPS":
+	case dnsv2.TypeHTTPS:
 		f := rc.AsHTTPS()
 		req.HTTPS = &httpsRecord{
 			Priority: int64(f.Priority),
@@ -384,7 +384,7 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		value := fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
 		req.Value = &value

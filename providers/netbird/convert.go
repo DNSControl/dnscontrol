@@ -3,6 +3,7 @@ package netbird
 import (
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -55,12 +56,12 @@ func recordConfigToNative(rc *models.RecordConfig, _ string) *CreateRecordReques
 	}
 
 	var target string
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		target = rc.AsA().Addr.String()
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		target = rc.AsAAAA().Addr.String()
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		target = rc.AsCNAME().Target
 		// Remove trailing dot
 		if len(target) > 0 && target[len(target)-1] == '.' {

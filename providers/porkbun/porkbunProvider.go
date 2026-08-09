@@ -451,33 +451,33 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["name"] = ""
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "ALIAS", "CNAME":
-		req["content"] = rc.GetRDATA().String()
-	case "TXT":
+	switch rc.TypeNum { // #rtype_variations
+	// case "A", "AAAA", "NS", "ALIAS", "CNAME":
+	// 	req["content"] = rc.GetRDATA().String()
+	case dnsv2.TypeTXT:
 		req["content"] = rc.GetTargetTXTJoined()
-	case "MX":
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req["prio"] = strconv.Itoa(int(f.Preference))
 		req["content"] = f.Mx
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		req["prio"] = strconv.Itoa(int(f.Priority))
 		req["content"] = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		req["content"] = fmt.Sprintf("%d %s \"%s\"", f.Flag, f.Tag, f.Value)
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		f := rc.AsTLSA()
 		req["content"] = fmt.Sprintf("%d %d %d %s",
 			f.Usage, f.Selector, f.MatchingType, f.Certificate)
-	case "HTTPS":
+	case dnsv2.TypeHTTPS:
 		fallthrough
-	case "SVCB":
+	case dnsv2.TypeSVCB:
 		f := rc.AsSVCB()
 		req["content"] = fmt.Sprintf("%d %s %s",
 			f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		req["content"] = rc.AsSSHFP().String()
 	default:
 		req["content"] = rc.GetRDATA().String()

@@ -17,7 +17,6 @@
             "Then": "test-worker",
             "When": "test.foo.com"
           },
-          "target": "test-worker",
           "ttl": 300,
           "type": "CF_WORKER_ROUTE",
           "typenum": 65288

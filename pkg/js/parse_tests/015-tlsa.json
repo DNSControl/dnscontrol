@@ -16,7 +16,6 @@
             "Selector": 1,
             "Usage": 3
           },
-          "target": "MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
           "ttl": 300,
           "type": "TLSA",
           "typenum": 52

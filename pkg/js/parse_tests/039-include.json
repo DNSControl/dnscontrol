@@ -20,7 +20,6 @@
           "rdata": {
             "Addr": "1.2.3.4"
           },
-          "target": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -44,7 +43,6 @@
           "rdata": {
             "Addr": "1.2.3.4"
           },
-          "target": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -57,7 +55,6 @@
           "rdata": {
             "Addr": "127.0.0.1"
           },
-          "target": "127.0.0.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1

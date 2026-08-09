@@ -18,7 +18,6 @@
             "Tag": "iodef",
             "Value": "https://example.com"
           },
-          "target": "https://example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -36,7 +35,6 @@
             "Tag": "iodef",
             "Value": "mailto:test@example.com"
           },
-          "target": "mailto:test@example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -51,7 +49,6 @@
             "Tag": "iodef",
             "Value": "http://example.com"
           },
-          "target": "http://example.com",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -66,7 +63,6 @@
             "Tag": "issue",
             "Value": "letsencrypt.org"
           },
-          "target": "letsencrypt.org",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -81,7 +77,6 @@
             "Tag": "issuewild",
             "Value": ";"
           },
-          "target": ";",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257

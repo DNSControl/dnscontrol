@@ -35,7 +35,6 @@
               }
             ]
           },
-          "target": "[h3,h2 443 123.123.123.123 dead::beaf]",
           "ttl": 300,
           "type": "HTTPS",
           "typenum": 65
@@ -50,7 +49,6 @@
             "Target": ".",
             "Value": null
           },
-          "target": "[]",
           "ttl": 300,
           "type": "SVCB",
           "typenum": 64

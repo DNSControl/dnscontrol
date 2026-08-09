@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
@@ -283,8 +284,8 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 		RecordType: rc.Type,
 		RecordTTL:  rc.TTL,
 	}
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		r.RecordPrio = new(f.Preference)
 		r.RecordValue = strings.TrimSuffix(f.Mx, ".")
@@ -292,7 +293,7 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 	// 	// Send hostname targets without a trailing dot; the API normalizes as
 	// 	// needed and reads are re-dotted in nativeToRecordConfig.
 	// 	r.RecordValue = strings.TrimSuffix(rc.GetTargetField(), ".")
-	case "TXT":
+	case dnsv2.TypeTXT:
 		// txt := rc.GetTargetTXTJoined()
 		// // The API requires values over 255 octets to be sent as RFC1035
 		// // quoted 255-octet chunks: `"aaa...aaa" "bbb"`. Shorter values are

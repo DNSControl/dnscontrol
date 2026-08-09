@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -84,8 +85,8 @@ func toRecordConfig(dc *models.DomainConfig, r dnsRecord) (*models.RecordConfig,
 	var rc *models.RecordConfig
 	var err error
 	switch rtype {
-	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
+	// case "A", "AAAA":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "CNAME", "NS", "DNAME":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, addTrailingDot(target))
@@ -164,28 +165,28 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 
 	// Get the target in the format expected by Infomaniak API
 	var target string
-	switch rc.Type {
+	switch rc.TypeNum {
 	// case "A":
 	// 	target = rc.AsA().Addr.String()
 	// case "AAAA":
 	// 	target = rc.AsAAAA().Addr.String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
-	case "NS":
+	case dnsv2.TypeNS:
 		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
-	case "DNAME":
+	case dnsv2.TypeDNAME:
 		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
-	case "MX":
+	case dnsv2.TypeMX:
 		// Format: "priority target" (without trailing dot)
 		f := rc.AsMX()
 		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		target = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
 		f := rc.AsSRV()
 		target = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, strings.TrimSuffix(f.Target, "."))
@@ -224,51 +225,51 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	// Get the target in the format expected by Infomaniak API
 	var target string
-	switch rc.Type {
-	case "A":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
 		target = rc.AsA().Addr.String()
-	case "AAAA":
+	case dnsv2.TypeAAAA:
 		target = rc.AsAAAA().Addr.String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		// Remove trailing dot for the API
 		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
-	case "NS":
+	case dnsv2.TypeNS:
 		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
-	case "DNAME":
+	case dnsv2.TypeDNAME:
 		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
-	case "MX":
+	case dnsv2.TypeMX:
 		// Format: "priority target" (without trailing dot)
 		f := rc.AsMX()
 		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		target = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
 		f := rc.AsSRV()
 		target = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, strings.TrimSuffix(f.Target, "."))
 
-	case "CAA":
+	case dnsv2.TypeCAA:
 		// Format: "flags tag value"
 		f := rc.AsCAA()
 		target = fmt.Sprintf("%d %s %s", f.Flag, f.Tag, f.Value)
 
-	case "DS":
+	case dnsv2.TypeDS:
 		// Format: "keytag algorithm digesttype digest"
 		f := rc.AsDS()
 		target = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
 
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		// Format: "algorithm fingerprint_type fingerprint"
 		f := rc.AsSSHFP()
 		target = f.String()
 		// If that doesn't work, try this:
 		//target = fmt.Sprintf("%d %d %s", f.Algorithm, f.Type, f.FingerPrint)
 
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		// Format: "usage selector matching_type certificate"
 		f := rc.AsTLSA()
 		target = fmt.Sprintf("%d %d %d %s", f.Usage, f.Selector, f.MatchingType, f.Certificate)

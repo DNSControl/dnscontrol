@@ -220,9 +220,9 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      "name",
 				SubDomain: "sub",
 				NameFQDN:  "namef",
-				target:    "targette",
-				TTL:       12345,
-				Metadata:  map[string]string{"me": "ah", "da": "ta"},
+				// target:    "targette",
+				TTL:      12345,
+				Metadata: map[string]string{"me": "ah", "da": "ta"},
 				// MxPreference:     123,
 				// SrvPriority:  223,
 				// SrvWeight:    345,
@@ -254,10 +254,10 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      tt.fields.Name,
 				SubDomain: tt.fields.SubDomain,
 				NameFQDN:  tt.fields.NameFQDN,
-				target:    tt.fields.target,
-				TTL:       tt.fields.TTL,
-				Metadata:  tt.fields.Metadata,
-				Original:  tt.fields.Original,
+				// target:    tt.fields.target,
+				TTL:      tt.fields.TTL,
+				Metadata: tt.fields.Metadata,
+				Original: tt.fields.Original,
 			}
 			got, err := rc.Copy()
 			if (err != nil) != tt.wantErr {

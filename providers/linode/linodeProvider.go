@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -338,8 +339,8 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 	}
 
 	// Linode uses the same property for MX and SRV priority
-	switch rc.Type {
-	case "MX":
+	switch rc.TypeNum {
+	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		req.Priority = new(int(f.Preference))
 		target := fixTarget(f.Mx, dc.Name)
@@ -349,7 +350,7 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		}
 		req.Target = target
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		f := rc.AsSRV()
 		req.Priority = new(int(f.Priority))
 		req.Weight = int(f.Weight)
@@ -368,14 +369,14 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		req.Name = ""
 		req.Target = f.Target
 
-	case "TXT":
+	case dnsv2.TypeTXT:
 		req.Target = rc.GetTargetTXTJoined()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		f := rc.AsCNAME()
 		req.Target = fixTarget(f.Target, dc.Name)
 
-	case "CAA":
+	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
 		req.Tag = f.Tag
 		req.Target = f.Value

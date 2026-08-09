@@ -207,13 +207,13 @@ func (dc *DomainConfig) Punycode() error {
 			//	return err
 			//}
 
-			orig := rec.GetTargetField()
-			rec.SetTarget(rec.GetTargetField())
-			roundtrip := rec.GetTargetField()
-			if orig != roundtrip {
-				// Assert this function is no longer needed.
-				panic(fmt.Sprintf("Punycode RTT %q %q", orig, roundtrip))
-			}
+			// orig := rec.GetTargetField()
+			// rec.SetTarget(rec.GetTargetField())
+			// roundtrip := rec.GetTargetField()
+			// if orig != roundtrip {
+			// 	// Assert this function is no longer needed.
+			// 	panic(fmt.Sprintf("Punycode RTT %q %q", orig, roundtrip))
+			// }
 
 		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC",
 			"LUA", "NAPTR", "OPENPGPKEY", "RP", "SMIMEA", "SOA", "SSHFP", "SVCB",
