@@ -9,8 +9,6 @@ import (
 func makeRC(rtype, label, target string) *models.RecordConfig {
 	dc := models.MustNewDomainConfig("example.com")
 	switch rtype {
-	// case "TXT":
-	// 	return dc.MustNewRecordConfig(label, 0, rtype, target)
 	case "MX":
 		return dc.MustNewRecordConfig(label, 0, rtype, 10, target)
 	case "SRV":

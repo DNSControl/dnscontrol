@@ -57,8 +57,6 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		r.Content = trimDot(f.Target)
 	default:
 		r.Content = rc.GetRDATA().String()
-		// TODO(tlim): This was the original:
-		//r.Content = rc.Get TargetField()
 	}
 
 	return r, nil
