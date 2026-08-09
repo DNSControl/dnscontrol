@@ -90,17 +90,9 @@ jobs:
           VARS_CONTEXT: ${{ toJson(vars) }}
 
   # warm-gomod-cache: Downloads and compiles the module graph exactly once
-  # (instead of once per matrix job below). integration-tests imports
-  # pkg/providers/_all, so every provider job needs the full dependency
-  # graph (AWS/Azure/GCP/etc SDKs) compiled regardless of which single
-  # provider it actually tests. `go test -c -o /dev/null` builds the same
-  # test binary the matrix jobs build, populating GOCACHE with it.
-  #
-  # The cache key is content-addressed on go.sum only (no branch/runner
-  # component), so this reuses ONE cache entry across all branches and
-  # providers instead of accumulating a new entry per branch - this is
-  # what keeps it well within the repo's 10 GB actions-cache budget
-  # (see the note that used to be on the checkout step below).
+  # (instead of once per matrix job below).
+  # provider it actually tests.
+  # The cache key is content-addressed on go.sum only.
   warm-gomod-cache:
     runs-on: ubuntu-latest
     container:
@@ -130,8 +122,7 @@ jobs:
             ${{ steps.gopaths.outputs.buildcache }}
           key: ${{ steps.gopaths.outputs.cache-key }}
       - name: Set up Go
-        # setup-go caches the Go module + build cache (keyed on go.sum) by
-        # default; no separate actions/|cache step is needed.
+        # setup-go cache is disabled because we use actions/cache.
         uses: actions/setup-go@v7
         with:
           go-version: "stable"
@@ -140,8 +131,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          go mod download
           go install gotest.tools/gotestsum@v1.13.0
-          go test -c -o /dev/null ./...
+          #go test -c -o /dev/null ./integrationTest
+          #go test -c -o /dev/null ./...
         working-directory: integrationTest
 
   # integration-tests: Run the integration tests on any provider listed
