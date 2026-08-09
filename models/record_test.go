@@ -73,9 +73,6 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	// A provider converts the apex ALIAS into a CNAME (CNAME flattening).
 	rc.ChangeType("CNAME", origin)
 
-	// ChangeType installs native CNAME RDATA, so FixRD is now a no-op.
-	// rc.FixRD(origin)
-
 	if rc.GetRDATA() == nil {
 		t.Fatal("RDATA is nil after FixRD")
 	}

@@ -277,9 +277,10 @@ func MakeR53ALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args 
 	return privatetypesrdata.R53ALIAS{
 		AliasType: mustbe.RawString(args[0]),
 		Target:    mustbe.TargetHost(origin, isEnabled, args[1]),
+		// NB(tlim): These are commented out because the integration tests fail with them. Needs investigation.
 		// ZoneID:           mustbe.RawString(args[2]),
 		// EvalTargetHealth: mustbe.RawString(args[3]),
-		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. This is a hack to convert it to the expected format. We should probably change the R53ALIAS type to use a boolean for this field.
+		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. Maybe unify them in the future?
 	}, nil
 }
 
@@ -298,7 +299,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	}
 	// dnsconfig.js's SOA() passes 6 args (no serial): the user can not specify
 	// the serial number, it is managed by DNSControl. Re-deriving the RDATA from
-	// an existing RecordConfig (FixUp) or parsing a zone (e.g. BIND) passes 7
+	// an existing RecordConfig or parsing a zone (e.g. BIND) passes 7
 	// args, with the serial at args[2].
 	// The one exception is that for hermetic builds/tests, "dnscontrol preview --bindserial" exists.
 	var serial any = uint32(0)

@@ -70,7 +70,7 @@ func (config *DNSConfig) ImportRawRecords() error {
 				// The subdomain is converted to IDNA (punycode) once and reused
 				// for the label, the target origin, and rec.SubDomain.
 				subdomain := rawRec.SubDomain
-				if subdomainExcludedType(typeName) {
+				if subdomainExcludedTypes[typeName] {
 					subdomain = ""
 				} else {
 					subdomain, err = subdomainToASCII(subdomain)

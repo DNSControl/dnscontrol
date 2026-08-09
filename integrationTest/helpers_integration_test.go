@@ -108,7 +108,6 @@ func CfFlattenOn() *TestCase {
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
 	dc := models.MustNewDomainConfig(domainName)
 	dc.PostProcess()
-	// dc.FixLegacyDC()
 
 	// fix up nameservers
 	ns, err := prv.GetNameservers(domainName)
@@ -203,7 +202,6 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 			TargetPattern: "",
 		})
 		models.PostProcessRecords(dom.Records)
-		// dom.FixLegacyDC()
 		dom2, _ := dom.Copy()
 
 		if err := providers.AuditRecords(*providerFlag, dom.Records); err != nil {
@@ -558,7 +556,6 @@ func ignore(labelSpec string, typeSpec string, targetSpec string) *models.Record
 	r.Metadata["ignore_LabelPattern"] = labelSpec
 	r.Metadata["ignore_RTypePattern"] = typeSpec
 	r.Metadata["ignore_TargetPattern"] = targetSpec
-	// r.FixRD(globalDC.Name) // Hack. Populates .RDATA and .TypeNum if needed.
 	return r
 }
 
