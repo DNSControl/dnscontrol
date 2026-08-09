@@ -39,16 +39,15 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up Go
-      # setup-go caches the Go module + build cache (keyed on go.sum) by
-      # default; no separate actions/cache step is needed.
       uses: actions/setup-go@v7
       with:
-        go-version: stable
+        go-version: "stable"
     - run: mkdir -p "$TEST_RESULTS"
     - name: Run unit tests
       run: |
         go install gotest.tools/gotestsum@v1.13.0
-        gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
+        # shellcheck disable=SC2086  # PACKAGE_NAMES is an intentionally unquoted, space-separated list of package paths
+        gotestsum --junitfile "${TEST_RESULTS}/gotestsum-report.xml" -- $PACKAGE_NAMES
 #    - name: Enforce Go Formatted Code
 #      run: "[ `go fmt ./... | wc -l` -eq 0 ]"
     - uses: actions/upload-artifact@v7.0.1

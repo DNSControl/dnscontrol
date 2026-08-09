@@ -1,4 +1,4 @@
-name: "PR: Run INTEGRATION tests"
+name: "INTEGRATION tests"
 
 permissions:
   contents: read
@@ -89,6 +89,53 @@ jobs:
           ENV_CONTEXT: ${{ toJson(env) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
 
+  # warm-gomod-cache: Downloads and compiles the module graph exactly once
+  # (instead of once per matrix job).
+  # The cache key is content-addressed on go.sum only.
+  warm-gomod-cache:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.26
+    needs:
+      - integration-test-providers
+    outputs:
+      modcache: ${{ steps.gopaths.outputs.modcache }}
+      buildcache: ${{ steps.gopaths.outputs.buildcache }}
+      cache-key: ${{ steps.gopaths.outputs.cache-key }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: gopaths
+        shell: bash
+        run: |
+          # shellcheck disable=SC2129  # Individual redirects permitted here.
+          echo "modcache=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
+          echo "buildcache=$(go env GOCACHE)" >> "$GITHUB_OUTPUT"
+          echo "cache-key=gomod-${{ hashFiles('go.sum') }}" >> "$GITHUB_OUTPUT"
+          # hashFiles() works in steps, not in job-level `outputs:`. Therefore
+          # we compute it here for later use.
+      - uses: actions/cache@v6
+        id: cache
+        with:
+          path: |
+            ${{ steps.gopaths.outputs.modcache }}
+            ${{ steps.gopaths.outputs.buildcache }}
+          key: ${{ steps.gopaths.outputs.cache-key }}
+      - name: Set up Go
+        # setup-go cache is disabled because we use actions/cache.
+        uses: actions/setup-go@v7
+        with:
+          go-version: "stable"
+          cache: false
+      - name: Prebuild dependencies for the integration test binary
+        if: steps.cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          go mod download
+          go install gotest.tools/gotestsum@v1.13.0
+          #go test -c -o /dev/null ./integrationTest
+          #go test -c -o /dev/null ./...
+        working-directory: integrationTest
+
   # integration-tests: Run the integration tests on any provider listed
   # in needs.integration-test-providers.outputs.integration_test_providers.
   integration-tests:
@@ -101,71 +148,106 @@ jobs:
       image: golang:1.26
     needs:
       - integration-test-providers
+      - warm-gomod-cache
     env:
       TEST_RESULTS: "/tmp/test-results"
       GOTESTSUM_FORMAT: testname
 
       # PROVIDER DOMAIN LIST
-      # These providers will be tested if the env variable is set.
-      # Set it to the domain name to use during the test.
+      # Providers are only tested if their _DOMAIN is set.
+      # (These are "vars".)
+      AED_DOMAIN: ${{ vars.AED_DOMAIN }}
       ALIDNS_DOMAIN: ${{ vars.ALIDNS_DOMAIN }}
-      AXFRDDNS_DOMAIN: ${{ vars.AXFRDDNS_DOMAIN }}
+      AUTODNS_DOMAIN: ${{ vars.AUTODNS_DOMAIN }}
       AXFRDDNS_DNSSEC_DOMAIN: ${{ vars.AXFRDDNS_DNSSEC_DOMAIN }}
+      AXFRDDNS_DOMAIN: ${{ vars.AXFRDDNS_DOMAIN }}
       AZURE_DNS_DOMAIN: ${{ vars.AZURE_DNS_DOMAIN }}
       AZURE_PRIVATE_DNS_DOMAIN: ${{ vars.AZURE_PRIVATE_DNS_DOMAIN }}
       BIND_DOMAIN: ${{ vars.BIND_DOMAIN }}
       BUNNY_DNS_DOMAIN: ${{ vars.BUNNY_DNS_DOMAIN }}
+      CF_DOMAIN: ${{ vars.CF_DOMAIN }}
       CLOUDFLAREAPI_DOMAIN: ${{ vars.CLOUDFLAREAPI_DOMAIN }}
       CLOUDNS_DOMAIN: ${{ vars.CLOUDNS_DOMAIN }}
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
+      DESEC_DOMAIN: ${{ vars.DESEC_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
+      DNSCALE_DOMAIN: ${{ vars.DNSCALE_DOMAIN }}
+      DNSIMPLE_DOMAIN: ${{ vars.DNSIMPLE_DOMAIN }}
+      DNSMADEEASY_DOMAIN: ${{ vars.DNSMADEEASY_DOMAIN }}
+      DOMAINNAMESHOP_DOMAIN: ${{ vars.DOMAINNAMESHOP_DOMAIN }}
       DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
-      FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
+      EXOSCALE_DOMAIN: ${{ vars.EXOSCALE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
       GCLOUD_DOMAIN: ${{ vars.GCLOUD_DOMAIN }}
+      GCORE_DOMAIN: ${{ vars.GCORE_DOMAIN }}
       GIDINET_DOMAIN: ${{ vars.GIDINET_DOMAIN }}
+      GIGAHOST_DOMAIN: ${{ vars.GIGAHOST_DOMAIN }}
       HEDNS_DOMAIN: ${{ vars.HEDNS_DOMAIN }}
       HETZNER_V2_DOMAIN: ${{ vars.HETZNER_V2_DOMAIN }}
+      HOSTINGDE_DOMAIN: ${{ vars.HOSTINGDE_DOMAIN }}
       HUAWEICLOUD_DOMAIN: ${{ vars.HUAWEICLOUD_DOMAIN }}
+      INFOMANIAK_DOMAIN: ${{ vars.INFOMANIAK_DOMAIN }}
+      INWX_DOMAIN: ${{ vars.INWX_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
+      LOOPIA_DOMAIN: ${{ vars.LOOPIA_DOMAIN }}
       LUADNS_DOMAIN: ${{ vars.LUADNS_DOMAIN }}
-      MIKROTIK_DOMAIN: ${{ vars.MIKROTIK_DOMAIN }}
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
+      NAMECHEAP_DOMAIN: ${{ vars.NAMECHEAP_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
+      NETCUP_DOMAIN: ${{ vars.NETCUP_DOMAIN }}
+      NETLIFY_DOMAIN: ${{ vars.NETLIFY_DOMAIN }}
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NEXDNS_DOMAIN: ${{ vars.NEXDNS_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
-      OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
+      ORACLE_DOMAIN: ${{ vars.ORACLE_DOMAIN }}
+      OVH_DOMAIN: ${{ vars.OVH_DOMAIN }}
+      PACKETFRAME_DOMAIN: ${{ vars.PACKETFRAME_DOMAIN }}
+      PORKBUN_DOMAIN: ${{ vars.PORKBUN_DOMAIN }}
       POWERDNS_DOMAIN: ${{ vars.POWERDNS_DOMAIN }}
+      REALTIMEREGISTER_DOMAIN: ${{ vars.REALTIMEREGISTER_DOMAIN }}
       ROUTE53_DOMAIN: ${{ vars.ROUTE53_DOMAIN }}
       SAKURACLOUD_DOMAIN: ${{ vars.SAKURACLOUD_DOMAIN }}
+      SCALEWAY_DOMAIN: ${{ vars.SCALEWAY_DOMAIN }}
+      SL_DOMAIN: ${{ vars.SL_DOMAIN }}
+      TENCENTDNS_DOMAIN: ${{ vars.TENCENTDNS_DOMAIN }}
       TRANSIP_DOMAIN: ${{ vars.TRANSIP_DOMAIN }}
-      UNIFI_DOMAIN: ${{ vars.UNIFI_DOMAIN }}
       VERCEL_DOMAIN: ${{ vars.VERCEL_DOMAIN }}
+      VULTR_DOMAIN: ${{ vars.VULTR_DOMAIN }}
+      WEBSUPPORT_DOMAIN: ${{ vars.WEBSUPPORT_DOMAIN }}
 
       # PROVIDER SECRET LIST
-      # The above providers have additional env variables they
-      # need for credentials and such.
+      # For consistency, these are "secrets" even when they aren't particularly secret.
+      # (The _DOMAIN variables are "vars", not "secrets")
+      #
+      AED_ACCESS_TOKEN: ${{ secrets.AED_ACCESS_TOKEN }}
+      AED_CLIENT_SECRET: ${{ secrets.AED_CLIENT_SECRET }}
+      AED_CLIENT_TOKEN: ${{ secrets.AED_CLIENT_TOKEN }}
+      AED_CONTRACT_ID: ${{ secrets.AED_CONTRACT_ID }}
+      AED_GROUP_ID: ${{ secrets.AED_GROUP_ID }}
+      AED_HOST: ${{ secrets.AED_HOST }}
       #
       ALIDNS_ACCESS_KEY_ID: ${{ secrets.ALIDNS_ACCESS_KEY_ID }}
       ALIDNS_ACCESS_KEY_SECRET: ${{ secrets.ALIDNS_ACCESS_KEY_SECRET }}
       #
-      AXFRDDNS_MASTER: ${{ secrets.AXFRDDNS_MASTER }}
-      AXFRDDNS_NAMESERVERS: ${{ secrets.AXFRDDNS_NAMESERVERS }}
-      AXFRDDNS_TRANSFER_KEY: ${{ secrets.AXFRDDNS_TRANSFER_KEY }}
-      AXFRDDNS_TRANSFER_MODE: ${{ secrets.AXFRDDNS_TRANSFER_MODE }}
-      AXFRDDNS_UPDATE_KEY: ${{ secrets.AXFRDDNS_UPDATE_KEY }}
-      AXFRDDNS_UPDATE_MODE: ${{ secrets.AXFRDDNS_UPDATE_MODE }}
+      AUTODNS_CONTEXT: ${{ secrets.AUTODNS_CONTEXT }}
+      AUTODNS_PASSWORD: ${{ secrets.AUTODNS_PASSWORD }}
+      AUTODNS_TOTP_SECRET: ${{ secrets.AUTODNS_TOTP_SECRET }}
+      AUTODNS_USERNAME: ${{ secrets.AUTODNS_USERNAME }}
       #
       AXFRDDNS_DNSSEC_MASTER: ${{ secrets.AXFRDDNS_DNSSEC_MASTER }}
-      AXFRDDNS_DNSSEC_NAMESERVERS: ${{ secrets.AXFRDDNS_DNSSEC_NAMESERVERS }}
       AXFRDDNS_DNSSEC_TRANSFER_KEY: ${{ secrets.AXFRDDNS_DNSSEC_TRANSFER_KEY }}
       AXFRDDNS_DNSSEC_TRANSFER_MODE: ${{ secrets.AXFRDDNS_DNSSEC_TRANSFER_MODE }}
       AXFRDDNS_DNSSEC_UPDATE_KEY: ${{ secrets.AXFRDDNS_DNSSEC_UPDATE_KEY }}
       AXFRDDNS_DNSSEC_UPDATE_MODE: ${{ secrets.AXFRDDNS_DNSSEC_UPDATE_MODE }}
+      #
+      AXFRDDNS_MASTER: ${{ secrets.AXFRDDNS_MASTER }}
+      AXFRDDNS_TRANSFER_KEY: ${{ secrets.AXFRDDNS_TRANSFER_KEY }}
+      AXFRDDNS_TRANSFER_MODE: ${{ secrets.AXFRDDNS_TRANSFER_MODE }}
+      AXFRDDNS_UPDATE_KEY: ${{ secrets.AXFRDDNS_UPDATE_KEY }}
+      AXFRDDNS_UPDATE_MODE: ${{ secrets.AXFRDDNS_UPDATE_MODE }}
       #
       AZURE_DNS_CLIENT_ID: ${{ secrets.AZURE_DNS_CLIENT_ID }}
       AZURE_DNS_CLIENT_SECRET: ${{ secrets.AZURE_DNS_CLIENT_SECRET }}
@@ -182,27 +264,45 @@ jobs:
       BUNNY_DNS_API_KEY: ${{ secrets.BUNNY_DNS_API_KEY }}
       #
       CLOUDFLAREAPI_ACCOUNTID: ${{ secrets.CLOUDFLAREAPI_ACCOUNTID }}
+      CLOUDFLAREAPI_KEY: ${{ secrets.CLOUDFLAREAPI_KEY }}
       CLOUDFLAREAPI_TOKEN: ${{ secrets.CLOUDFLAREAPI_TOKEN }}
+      CLOUDFLAREAPI_USER: ${{ secrets.CLOUDFLAREAPI_USER }}
       #
       CLOUDNS_AUTH_ID: ${{ secrets.CLOUDNS_AUTH_ID }}
       CLOUDNS_AUTH_PASSWORD: ${{ secrets.CLOUDNS_AUTH_PASSWORD }}
+      CLOUDNS_SUB_AUTH_ID: ${{ secrets.CLOUDNS_SUB_AUTH_ID }}
+      #
+      CNR_DEBUGMODE: ${{ secrets.CNR_DEBUGMODE }}
+      CNR_ENTITY: ${{ secrets.CNR_ENTITY }}
+      CNR_PW: ${{ secrets.CNR_PW }}
+      CNR_UID: ${{ secrets.CNR_UID }}
       #
       CSCGLOBAL_APIKEY: ${{ secrets.CSCGLOBAL_APIKEY }}
+      CSCGLOBAL_NOTIFICATION: ${{ secrets.CSCGLOBAL_NOTIFICATION }}
       CSCGLOBAL_USERTOKEN: ${{ secrets.CSCGLOBAL_USERTOKEN }}
       #
-      CNR_UID: ${{ secrets.CNR_UID }}
-      CNR_PW: ${{ secrets.CNR_PW }}
-      CNR_ENTITY: ${{ secrets.CNR_ENTITY }}
+      DESEC_TOKEN: ${{ secrets.DESEC_TOKEN }}
       #
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
       #
+      DNSCALE_API_KEY: ${{ secrets.DNSCALE_API_KEY }}
+      #
+      DNSIMPLE_BASEURL: ${{ secrets.DNSIMPLE_BASEURL }}
+      DNSIMPLE_TOKEN: ${{ secrets.DNSIMPLE_TOKEN }}
+      #
+      DNSMADEEASY_API_KEY: ${{ secrets.DNSMADEEASY_API_KEY }}
+      DNSMADEEASY_SECRET_KEY: ${{ secrets.DNSMADEEASY_SECRET_KEY }}
+      #
+      DOMAINNAMESHOP_SECRET: ${{ secrets.DOMAINNAMESHOP_SECRET }}
+      DOMAINNAMESHOP_TOKEN: ${{ secrets.DOMAINNAMESHOP_TOKEN }}
+      #
       DYNU_API_KEY: ${{ secrets.DYNU_API_KEY }}
       #
-      FORTIGATE_API_KEY: ${{ secrets.FORTIGATE_API_KEY }}
-      FORTIGATE_VDOM: ${{ secrets.FORTIGATE_VDOM }}
-      FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
+      EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
+      EXOSCALE_SECRET_KEY: ${{ secrets.EXOSCALE_SECRET_KEY }}
       #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
+      GANDI_V5_APIURL: ${{ secrets.GANDI_V5_APIURL }}
       GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
       #
       GCLOUD_EMAIL: ${{ secrets.GCLOUD_EMAIL }}
@@ -210,8 +310,12 @@ jobs:
       GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
       GCLOUD_TYPE: ${{ secrets.GCLOUD_TYPE }}
       #
+      GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
+      #
       GIDINET_PASSWORD: ${{ secrets.GIDINET_PASSWORD }}
       GIDINET_USERNAME: ${{ secrets.GIDINET_USERNAME }}
+      #
+      GIGAHOST_APIKEY: ${{ secrets.GIGAHOST_APIKEY }}
       #
       HEDNS_PASSWORD: ${{ secrets.HEDNS_PASSWORD }}
       HEDNS_TOTP_SECRET: ${{ secrets.HEDNS_TOTP_SECRET }}
@@ -219,30 +323,47 @@ jobs:
       #
       HETZNER_V2_API_TOKEN: ${{ secrets.HETZNER_V2_API_TOKEN }}
       #
-      HUAWEICLOUD_REGION: ${{ secrets.HUAWEICLOUD_REGION }}
-      HUAWEICLOUD_KEY_ID: ${{ secrets.HUAWEICLOUD_KEY_ID }}
-      HUAWEICLOUD_KEY: ${{ secrets.HUAWEICLOUD_KEY }}
+      HOSTINGDE_AUTHTOKEN: ${{ secrets.HOSTINGDE_AUTHTOKEN }}
       #
-      JOKER_USERNAME: ${{ secrets.JOKER_USERNAME }}
+      HUAWEICLOUD_KEY: ${{ secrets.HUAWEICLOUD_KEY }}
+      HUAWEICLOUD_KEY_ID: ${{ secrets.HUAWEICLOUD_KEY_ID }}
+      HUAWEICLOUD_REGION: ${{ secrets.HUAWEICLOUD_REGION }}
+      #
+      INFOMANIAK_TOKEN: ${{ secrets.INFOMANIAK_TOKEN }}
+      #
+      INWX_PASSWORD: ${{ secrets.INWX_PASSWORD }}
+      INWX_USER: ${{ secrets.INWX_USER }}
+      #
       JOKER_PASSWORD: ${{ secrets.JOKER_PASSWORD }}
+      JOKER_USERNAME: ${{ secrets.JOKER_USERNAME }}
       #
       LINODE_TOKEN: ${{ secrets.LINODE_TOKEN }}
       #
-      LUADNS_EMAIL: ${{ secrets.LUADNS_EMAIL }}
-      LUADNS_APIKEY: ${{ secrets.LUADNS_APIKEY }}
+      LOOPIA_PASSWORD: ${{ secrets.LOOPIA_PASSWORD }}
+      LOOPIA_USERNAME: ${{ secrets.LOOPIA_USERNAME }}
       #
-      MIKROTIK_HOST: ${{ secrets.MIKROTIK_HOST }}
-      MIKROTIK_USERNAME: ${{ secrets.MIKROTIK_USERNAME }}
-      MIKROTIK_PASSWORD: ${{ secrets.MIKROTIK_PASSWORD }}
+      LUADNS_APIKEY: ${{ secrets.LUADNS_APIKEY }}
+      LUADNS_EMAIL: ${{ secrets.LUADNS_EMAIL }}
       #
       MYTHICBEASTS_KEYID: ${{ secrets.MYTHICBEASTS_KEYID }}
       MYTHICBEASTS_SECRET: ${{ secrets.MYTHICBEASTS_SECRET }}
+      #
+      NAMECHEAP_BASEURL: ${{ secrets.NAMECHEAP_BASEURL }}
+      NAMECHEAP_KEY: ${{ secrets.NAMECHEAP_KEY }}
+      NAMECHEAP_USER: ${{ secrets.NAMECHEAP_USER }}
       #
       NAMEDOTCOM_KEY: ${{ secrets.NAMEDOTCOM_KEY }}
       NAMEDOTCOM_URL: ${{ secrets.NAMEDOTCOM_URL }}
       NAMEDOTCOM_USER: ${{ secrets.NAMEDOTCOM_USER }}
       #
       NETBIRD_TOKEN: ${{ secrets.NETBIRD_TOKEN }}
+      #
+      NETCUP_CUSTOMER_NUMBER: ${{ secrets.NETCUP_CUSTOMER_NUMBER }}
+      NETCUP_KEY: ${{ secrets.NETCUP_KEY }}
+      NETCUP_PASSWORD: ${{ secrets.NETCUP_PASSWORD }}
+      #
+      NETLIFY_ACCOUNT_SLUG: ${{ secrets.NETLIFY_ACCOUNT_SLUG }}
+      NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
       #
       NETNOD_APIKEY: ${{ secrets.NETNOD_APIKEY }}
       NETNOD_APIURL: ${{ secrets.NETNOD_APIURL }}
@@ -251,32 +372,62 @@ jobs:
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
       #
-      OPENWRT_USERNAME: ${{ secrets.OPENWRT_USERNAME }}
-      OPENWRT_PASSWORD: ${{ secrets.OPENWRT_PASSWORD }}
-      OPENWRT_HOST: ${{ secrets.OPENWRT_HOST }}
+      ORACLE_COMPARTMENT: ${{ secrets.ORACLE_COMPARTMENT }}
+      ORACLE_FINGERPRINT: ${{ secrets.ORACLE_FINGERPRINT }}
+      ORACLE_PRIVATE_KEY: ${{ secrets.ORACLE_PRIVATE_KEY }}
+      ORACLE_REGION: ${{ secrets.ORACLE_REGION }}
+      ORACLE_TENANCY_OCID: ${{ secrets.ORACLE_TENANCY_OCID }}
+      ORACLE_USER_OCID: ${{ secrets.ORACLE_USER_OCID }}
+      #
+      OVH_APP_KEY: ${{ secrets.OVH_APP_KEY }}
+      OVH_APP_SECRET_KEY: ${{ secrets.OVH_APP_SECRET_KEY }}
+      OVH_CONSUMER_KEY: ${{ secrets.OVH_CONSUMER_KEY }}
+      OVH_ENDPOINT: ${{ secrets.OVH_ENDPOINT }}
+      #
+      PACKETFRAME_TOKEN: ${{ secrets.PACKETFRAME_TOKEN }}
+      #
+      PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
+      PORKBUN_MAX_ATTEMPTS: ${{ secrets.PORKBUN_MAX_ATTEMPTS }}
+      PORKBUN_MAX_DURATION: ${{ secrets.PORKBUN_MAX_DURATION }}
+      PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
       #
       POWERDNS_APIKEY: ${{ secrets.POWERDNS_APIKEY }}
       POWERDNS_APIURL: ${{ secrets.POWERDNS_APIURL }}
       POWERDNS_SERVERNAME: ${{ secrets.POWERDNS_SERVERNAME }}
       #
+      REALTIMEREGISTER_APIKEY: ${{ secrets.REALTIMEREGISTER_APIKEY }}
+      REALTIMEREGISTER_PREMIUM: ${{ secrets.REALTIMEREGISTER_PREMIUM }}
+      REALTIMEREGISTER_SANDBOX: ${{ secrets.REALTIMEREGISTER_SANDBOX }}
+      #
       ROUTE53_KEY: ${{ secrets.ROUTE53_KEY }}
       ROUTE53_KEY_ID: ${{ secrets.ROUTE53_KEY_ID }}
+      ROUTE53_REGION: ${{ secrets.ROUTE53_REGION }}
       #
       SAKURACLOUD_ACCESS_TOKEN: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN }}
       SAKURACLOUD_ACCESS_TOKEN_SECRET: ${{ secrets.SAKURACLOUD_ACCESS_TOKEN_SECRET }}
       #
+      SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+      SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+      SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+      #
+      SL_API_KEY: ${{ secrets.SL_API_KEY }}
+      SL_USERNAME: ${{ secrets.SL_USERNAME }}
+      #
+      TENCENTDNS_SECRET_ID: ${{ secrets.TENCENTDNS_SECRET_ID }}
+      TENCENTDNS_SECRET_KEY: ${{ secrets.TENCENTDNS_SECRET_KEY }}
+      TENCENTDNS_SITE: ${{ secrets.TENCENTDNS_SITE }}
+      #
+      TRANSIP_ACCESS_TOKEN: ${{ secrets.TRANSIP_ACCESS_TOKEN }}
       TRANSIP_ACCOUNT_NAME: ${{ secrets.TRANSIP_ACCOUNT_NAME }}
       TRANSIP_PRIVATE_KEY: ${{ secrets.TRANSIP_PRIVATE_KEY }}
       #
-      UNIFI_API_KEY: ${{ secrets.UNIFI_API_KEY }}
-      UNIFI_HOST: ${{ secrets.UNIFI_HOST }}
-      UNIFI_SITE: ${{ secrets.UNIFI_SITE }}
-      UNIFI_SKIP_TLS_VERIFY: ${{ secrets.UNIFI_SKIP_TLS_VERIFY }}
-      #
-      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
-      TENCENTDNS_SECRET_ID: ${{ secrets.TENCENTDNS_SECRET_ID }}
-      TENCENTDNS_SECRET_KEY: ${{ secrets.TENCENTDNS_SECRET_KEY }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      #
+      VULTR_TOKEN: ${{ secrets.VULTR_TOKEN }}
+      #
+      WEBSUPPORT_API_KEY: ${{ secrets.WEBSUPPORT_API_KEY }}
+      WEBSUPPORT_SECRET: ${{ secrets.WEBSUPPORT_SECRET }}
 
     concurrency:
       # Serialize by PROVIDER across the whole repo: each provider's tests share
@@ -294,12 +445,17 @@ jobs:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
       - uses: actions/checkout@v7
-      # No Go cache here on purpose. This job runs in the golang:1.26 container,
-      # where setup-go's cache key resolves to a distinct "...-undefined-..."
-      # family (~0.5 GB/branch) that does NOT share with the host jobs and would
-      # push the repo back over the 10 GB cache limit (causing eviction of the
-      # host jobs' caches). This job is gated (smoke tests) and dominated by
-      # live DNS API calls, so a cold `go` build here is cheap.
+      # Restore (read-only) the module + build cache populated once by
+      # warm-gomod-cache, instead of every matrix job downloading and
+      # compiling the full provider dependency graph itself. Using
+      # actions/cache/restore (not actions/cache) avoids 24 parallel jobs
+      # each racing to write the same key back.
+      - uses: actions/cache/restore@v6
+        with:
+          path: |
+            ${{ needs.warm-gomod-cache.outputs.modcache }}
+            ${{ needs.warm-gomod-cache.outputs.buildcache }}
+          key: ${{ needs.warm-gomod-cache.outputs.cache-key }}
       - run: mkdir -p "$TEST_RESULTS"
       - name: Set END value for PRs
         # For PRs we only run a smoke test (the first 3 tests) to save time.
@@ -308,22 +464,20 @@ jobs:
         shell: bash
         env:
           # Converts label names into a single string for easier grep/matching
-          LABELS: ${{ join(github.event.pull_request.labels.*.name, ' ') }}
+          LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          END=1
-          #echo "END: Default set to $END"
+          END="2"
 
           # Release gate: release_draft.yml calls this via workflow_call with
           # full=true, which forces the entire suite (not just the smoke test).
           if [[ "${{ inputs.full }}" == "true" ]]; then
-            END=999
+            END="999"
             echo "END: full input set (release gate). END=$END"
           # Only for PRs
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Check for 'longtest' label
-            #if [[ "${{ github.event.pull_request.labels.*.name }}" =~ "longtest" ]]; then
             if [[ " $LABELS " =~ " longtest " ]]; then
-              END=999
+              END="999"
               echo "END: Pull request + longtest label. END=$END"
             else
               echo "END: longtest not set. No change. END=$END"
@@ -337,22 +491,22 @@ jobs:
           #           The original statement was created by an LLM and might have been
           #           wrong.
           if [[ "${{ github.ref_name }}" == "main" ]]; then
-            END=999
+            END="999"
             echo "END: github.ref_name is main. END=$END"
           fi
           # VERCEL it limited to 100 updates per hour. Therefore we never run more than the first few tests.
           if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
-            END=3
+            END="3"
             echo "END: Exception for VERCEL: Run fewer tests. END=$END"
           fi
           # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
           # the time about the same as other tests
-          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
-            END=10
+          if [[ "${{ matrix.provider }}" == "HEDNS" ]]; then
+            END="10"
             echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
           echo "END: Final value: END=$END"
-          echo "END=$END" >> $GITHUB_ENV
+          echo "END=$END" >> "$GITHUB_ENV"
 
       - name: Run integration tests for ${{ matrix.provider }} provider
         shell: bash -eo pipefail {0}
@@ -361,19 +515,22 @@ jobs:
           echo "END: Running tests 0 to $END"
           go install gotest.tools/gotestsum@v1.13.0
           if [ -n "$${{ matrix.provider }}_DOMAIN" ] ; then
-            # NB(tlim): THe output of gotestsum needs to go to stdout AND the
-            # gotestsum-output.txt file. That's why "tee" is used.
-            gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- \
-                -timeout 70m -v \
-                -verbose \
-                -profile ${{ matrix.provider }} \
-                -cfworkers=true \
-                -cfredirect=true \
-                -cfflatten=false \
-                -cftags=false \
-                -end $END \
-                ./... >&1 | \
-                tee ${TEST_RESULTS}/gotestsum-output.txt
+            # NB(tlim): THe output of gotestsum is written to two places
+            gotestsum \
+              --junitfile "${TEST_RESULTS}/gotestsum-report.xml"        \
+              --jsonfile "${TEST_RESULTS}/gotestsum-output.txt"         \
+              --                                                        \
+              -timeout 70m                                              \
+              -v                                                        \
+              ./...                                                     \
+              -args                                                     \
+              -verbose                                                  \
+              -profile "${{ matrix.provider }}"                         \
+              -cfworkers=true                                           \
+              -cfredirect=true                                          \
+              -cfflatten=false                                          \
+              -cftags=false                                             \
+              -end "$END"
           else
             echo "Skip test for ${{ matrix.provider }} provider"
           fi
