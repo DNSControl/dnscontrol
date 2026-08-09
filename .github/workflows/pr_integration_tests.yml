@@ -122,7 +122,7 @@ jobs:
           echo "cache-key=gomod-${{ hashFiles('go.sum') }}" >> "$GITHUB_OUTPUT"
           # hashFiles() works in steps, not in job-level `outputs:`. Therefore
           # we compute it here for later use.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: cache
         with:
           path: |
