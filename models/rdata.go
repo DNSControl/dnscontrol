@@ -25,9 +25,6 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 	rc.rdata = rd
 	rc.validateRDATA()
 	rc.generateComparableV3()
-	if err := rc.copyRDtoLegacyFields(); err != nil {
-		panic(err) // Should not happen.
-	}
 }
 
 // GetRDATA is a getter for RecordConfig.rdata.
