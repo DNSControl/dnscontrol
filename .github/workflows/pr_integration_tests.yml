@@ -106,9 +106,8 @@ jobs:
       GOTESTSUM_FORMAT: testname
 
       # PROVIDER DOMAIN LIST
-      # These providers will be tested if the env variable is set.
-      # Set it to the domain name to use during the test.
-      ADGUARDHOME_DOMAIN: ${{ vars.ADGUARDHOME_DOMAIN }}
+      # Providers are only tested if their _DOMAIN is set.
+      # (These are "vars".)
       AED_DOMAIN: ${{ vars.AED_DOMAIN }}
       ALIDNS_DOMAIN: ${{ vars.ALIDNS_DOMAIN }}
       AUTODNS_DOMAIN: ${{ vars.AUTODNS_DOMAIN }}
@@ -170,18 +169,13 @@ jobs:
       SL_DOMAIN: ${{ vars.SL_DOMAIN }}
       TENCENTDNS_DOMAIN: ${{ vars.TENCENTDNS_DOMAIN }}
       TRANSIP_DOMAIN: ${{ vars.TRANSIP_DOMAIN }}
-      UNIFI_DOMAIN: ${{ vars.UNIFI_DOMAIN }}
       VERCEL_DOMAIN: ${{ vars.VERCEL_DOMAIN }}
       VULTR_DOMAIN: ${{ vars.VULTR_DOMAIN }}
       WEBSUPPORT_DOMAIN: ${{ vars.WEBSUPPORT_DOMAIN }}
 
       # PROVIDER SECRET LIST
-      # The above providers have additional env variables they
-      # need for credentials and such.
-      #
-      ADGUARDHOME_HOST: ${{ secrets.ADGUARDHOME_HOST }}
-      ADGUARDHOME_PASSWORD: ${{ secrets.ADGUARDHOME_PASSWORD }}
-      ADGUARDHOME_USERNAME: ${{ secrets.ADGUARDHOME_USERNAME }}
+      # For consistency, these are "secrets" even when they aren't particularly secret.
+      # (The _DOMAIN variables are "vars", not "secrets")
       #
       AED_ACCESS_TOKEN: ${{ secrets.AED_ACCESS_TOKEN }}
       AED_CLIENT_SECRET: ${{ secrets.AED_CLIENT_SECRET }}
@@ -394,12 +388,6 @@ jobs:
       TRANSIP_ACCESS_TOKEN: ${{ secrets.TRANSIP_ACCESS_TOKEN }}
       TRANSIP_ACCOUNT_NAME: ${{ secrets.TRANSIP_ACCOUNT_NAME }}
       TRANSIP_PRIVATE_KEY: ${{ secrets.TRANSIP_PRIVATE_KEY }}
-      #
-      UNIFI_API_KEY: ${{ secrets.UNIFI_API_KEY }}
-      UNIFI_CONSOLE_ID: ${{ secrets.UNIFI_CONSOLE_ID }}
-      UNIFI_HOST: ${{ secrets.UNIFI_HOST }}
-      UNIFI_SITE: ${{ secrets.UNIFI_SITE }}
-      UNIFI_SKIP_TLS_VERIFY: ${{ secrets.UNIFI_SKIP_TLS_VERIFY }}
       #
       VERCEL_API_TOKEN: ${{ secrets.VERCEL_API_TOKEN }}
       VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
