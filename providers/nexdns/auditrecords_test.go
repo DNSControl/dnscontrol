@@ -122,8 +122,5 @@ func auditCAA(t *testing.T, flag uint8, tag, target string) *models.RecordConfig
 
 	dc := models.MustNewDomainConfig(testOrigin)
 	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeCAA, flag, tag, target)
-	// if err := rc.SetTargetCAA(flag, tag, target); err != nil {
-	// 	t.Fatalf("SetTargetCAA() error = %v", err)
-	// }
 	return rc
 }

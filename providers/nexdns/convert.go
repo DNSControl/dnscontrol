@@ -11,16 +11,12 @@ const apexLabel = "@"
 
 // toRecordConfig converts one record of an API response to a RecordConfig.
 // A response carries the assembled rdata in Content ("10 mail.example.com." for
-// an MX), which is what PopulateFromString parses, so no per-type handling is
+// an MX), which is what NewRecordConfigParse parses, so no per-type handling is
 // needed on the way in - except for TXT.
 //
 // TXT is asymmetric: the API accepts a value verbatim but returns it in RFC 1035
 // presentation form, quoted and escaped, and chunked into 255-octet strings when
-// it is longer than that. PopulateFromString cannot undo that - it only strips
-// the outer quotes - so a backslash returned as `\\` would be read back as two
-// characters, written again as four, and doubled on every run until the record
-// no longer says what its owner wrote. txtutil.ParseQuoted is the decoder for
-// this form, and it passes an unquoted value through unchanged.
+// needed.
 func toRecordConfig(dc *models.DomainConfig, r apiRecord) (*models.RecordConfig, error) {
 	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(r.Name), uint32(r.TTL), r.Type, r.Content,
 		nrc.Flags{})
@@ -75,7 +71,6 @@ func fromRecordConfig(rc *models.RecordConfig) recordRequest {
 	case dnsrdatav2.TXT:
 		req.Content = rc.GetTargetTXTJoined()
 	default:
-		// req.Content = rc.GetTargetField()
 		req.Content = rc.GetRDATA().String()
 	}
 

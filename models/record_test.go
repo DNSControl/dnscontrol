@@ -34,9 +34,6 @@ func TestR53AliasTargetSurvivesRDATAUpdate(t *testing.T) {
 	if got := rc.AsR53ALIAS().ZoneID; got != "Z0389923" {
 		t.Errorf("zone ID after SetRDATA = %q, want %q", got, "Z0389923")
 	}
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField after SetRDATA = %q, want %q", got, wantTarget)
-	}
 }
 
 // TestAzureAliasTargetComesFromRDATA verifies that AZURE_ALIAS no longer

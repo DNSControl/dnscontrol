@@ -30,7 +30,8 @@ func TestGetZoneRecords(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	recs, err := p.GetZoneRecords(&models.DomainConfig{Name: "example.com"})
+	dc := models.MustNewDomainConfig("example.com")
+	recs, err := p.GetZoneRecords(dc)
 	if err != nil {
 		t.Fatalf("GetZoneRecords() error = %v", err)
 	}
@@ -74,14 +75,16 @@ func TestEnsureZoneExists(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "example.com"}); err != nil {
+	dc := models.MustNewDomainConfig("example.com")
+	if err := p.EnsureZoneExists(dc); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 0 {
 		t.Errorf("an existing zone was created again: %v", created)
 	}
 
-	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "new.example.com"}); err != nil {
+	ndc := models.MustNewDomainConfig("new.example.com")
+	if err := p.EnsureZoneExists(ndc); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 1 || created[0] != "new.example.com" {

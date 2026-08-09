@@ -208,7 +208,7 @@ func Test_zoneWillBeCreated(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			zone := &models.DomainConfig{Name: "example.com"}
+			zone := models.MustNewDomainConfig("example.com")
 			zone.StorePopulateCorrections(provider, tc.corrections)
 			if got := zoneWillBeCreated(zone, provider); got != tc.want {
 				t.Errorf("zoneWillBeCreated() = %v, want %v", got, tc.want)
@@ -241,7 +241,7 @@ func Test_reportZonePendingCreation(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			zone := &models.DomainConfig{Name: "example.com"}
+			zone := models.MustNewDomainConfig("example.com")
 			zone.StorePopulateCorrections(provider, tc.corrections)
 			if got := reportZonePendingCreation(zone, provider, tc.push, tc.populateOnPreview); got != tc.want {
 				t.Errorf("reportZonePendingCreation() = %v, want %v", got, tc.want)
