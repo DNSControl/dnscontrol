@@ -135,6 +135,7 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: "stable"
+          cache: false
       - name: Prebuild dependencies for the integration test binary
         if: steps.cache.outputs.cache-hit != 'true'
         shell: bash
