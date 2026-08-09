@@ -89,6 +89,50 @@ jobs:
           ENV_CONTEXT: ${{ toJson(env) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
 
+  # warm-gomod-cache: Downloads and compiles the module graph exactly once
+  # (instead of once per matrix job below). integration-tests imports
+  # pkg/providers/_all, so every provider job needs the full dependency
+  # graph (AWS/Azure/GCP/etc SDKs) compiled regardless of which single
+  # provider it actually tests. `go test -c -o /dev/null` builds the same
+  # test binary the matrix jobs build, populating GOCACHE with it.
+  #
+  # The cache key is content-addressed on go.sum only (no branch/runner
+  # component), so this reuses ONE cache entry across all branches and
+  # providers instead of accumulating a new entry per branch - this is
+  # what keeps it well within the repo's 10 GB actions-cache budget
+  # (see the note that used to be on the checkout step below).
+  warm-gomod-cache:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.26
+    needs:
+      - integration-test-providers
+    outputs:
+      modcache: ${{ steps.gopaths.outputs.modcache }}
+      buildcache: ${{ steps.gopaths.outputs.buildcache }}
+      cache-key: gomod-${{ hashFiles('go.sum') }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: gopaths
+        shell: bash
+        run: |
+          echo "modcache=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
+          echo "buildcache=$(go env GOCACHE)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: |
+            ${{ steps.gopaths.outputs.modcache }}
+            ${{ steps.gopaths.outputs.buildcache }}
+          key: gomod-${{ hashFiles('go.sum') }}
+      - name: Prebuild dependencies for the integration test binary
+        if: steps.cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          go install gotest.tools/gotestsum@v1.13.0
+          go test -c -o /dev/null ./...
+        working-directory: integrationTest
+
   # integration-tests: Run the integration tests on any provider listed
   # in needs.integration-test-providers.outputs.integration_test_providers.
   integration-tests:
@@ -101,6 +145,7 @@ jobs:
       image: golang:1.26
     needs:
       - integration-test-providers
+      - warm-gomod-cache
     env:
       TEST_RESULTS: "/tmp/test-results"
       GOTESTSUM_FORMAT: testname
@@ -397,12 +442,17 @@ jobs:
         provider: ${{ fromJson(needs.integration-test-providers.outputs.integration_test_providers )}}
     steps:
       - uses: actions/checkout@v7
-      # No Go cache here on purpose. This job runs in the golang:1.26 container,
-      # where setup-go's cache key resolves to a distinct "...-undefined-..."
-      # family (~0.5 GB/branch) that does NOT share with the host jobs and would
-      # push the repo back over the 10 GB cache limit (causing eviction of the
-      # host jobs' caches). This job is gated (smoke tests) and dominated by
-      # live DNS API calls, so a cold `go` build here is cheap.
+      # Restore (read-only) the module + build cache populated once by
+      # warm-gomod-cache, instead of every matrix job downloading and
+      # compiling the full provider dependency graph itself. Using
+      # actions/cache/restore (not actions/cache) avoids 24 parallel jobs
+      # each racing to write the same key back.
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ needs.warm-gomod-cache.outputs.modcache }}
+            ${{ needs.warm-gomod-cache.outputs.buildcache }}
+          key: ${{ needs.warm-gomod-cache.outputs.cache-key }}
       - run: mkdir -p "$TEST_RESULTS"
       - name: Set END value for PRs
         # For PRs we only run a smoke test (the first 3 tests) to save time.
@@ -418,19 +468,19 @@ jobs:
           # Release gate: release_draft.yml calls this via workflow_call with
           # full=true, which forces the entire suite (not just the smoke test).
           if [[ "${{ inputs.full }}" == "true" ]]; then
-            END=999
+            END="999"
             echo "END: full input set (release gate). END=$END"
           # Only for PRs
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             # Check for 'longtest' label
             if [[ " $LABELS " =~ " longtest " ]]; then
-              END=999
+              END="999"
               echo "END: Pull request + longtest label. END=$END"
             else
               echo "END: longtest not set. No change. END=$END"
             fi
           else
-            echo "END: Not a pull request. No change. END=$END"
+              echo "END: Not a pull request. No change. END=$END"
           fi
           # Check if branch is main
           # NB(tlim): This used to be github.base_ref but it was changed to
@@ -438,18 +488,18 @@ jobs:
           #           The original statement was created by an LLM and might have been
           #           wrong.
           if [[ "${{ github.ref_name }}" == "main" ]]; then
-            END=999
+            END="999"
             echo "END: github.ref_name is main. END=$END"
           fi
           # VERCEL it limited to 100 updates per hour. Therefore we never run more than the first few tests.
           if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
-            END=3
+            END="3"
             echo "END: Exception for VERCEL: Run fewer tests. END=$END"
           fi
           # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
           # the time about the same as other tests
           if [[ "${{ matrix.provider }}" == "HEDNS" ]]; then
-            END=10
+            END="10"
             echo "END: Exception for HEDNS: Run fewer tests. END=$END"
           fi
           echo "END: Final value: END=$END"
