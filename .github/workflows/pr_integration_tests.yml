@@ -130,7 +130,6 @@ jobs:
       DOMAINNAMESHOP_DOMAIN: ${{ vars.DOMAINNAMESHOP_DOMAIN }}
       DYNU_DOMAIN: ${{ vars.DYNU_DOMAIN }}
       EXOSCALE_DOMAIN: ${{ vars.EXOSCALE_DOMAIN }}
-      FORTIGATE_DOMAIN: ${{ vars.FORTIGATE_DOMAIN }}
       GANDI_V5_DOMAIN: ${{ vars.GANDI_V5_DOMAIN }}
       GCLOUD_DOMAIN: ${{ vars.GCLOUD_DOMAIN }}
       GCORE_DOMAIN: ${{ vars.GCORE_DOMAIN }}
@@ -146,7 +145,6 @@ jobs:
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
       LOOPIA_DOMAIN: ${{ vars.LOOPIA_DOMAIN }}
       LUADNS_DOMAIN: ${{ vars.LUADNS_DOMAIN }}
-      MIKROTIK_DOMAIN: ${{ vars.MIKROTIK_DOMAIN }}
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMECHEAP_DOMAIN: ${{ vars.NAMECHEAP_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
@@ -156,7 +154,6 @@ jobs:
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NEXDNS_DOMAIN: ${{ vars.NEXDNS_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
-      OPENWRT_DOMAIN: ${{ vars.OPENWRT_DOMAIN }}
       ORACLE_DOMAIN: ${{ vars.ORACLE_DOMAIN }}
       OVH_DOMAIN: ${{ vars.OVH_DOMAIN }}
       PACKETFRAME_DOMAIN: ${{ vars.PACKETFRAME_DOMAIN }}
@@ -197,6 +194,7 @@ jobs:
       AXFRDDNS_DNSSEC_TRANSFER_MODE: ${{ secrets.AXFRDDNS_DNSSEC_TRANSFER_MODE }}
       AXFRDDNS_DNSSEC_UPDATE_KEY: ${{ secrets.AXFRDDNS_DNSSEC_UPDATE_KEY }}
       AXFRDDNS_DNSSEC_UPDATE_MODE: ${{ secrets.AXFRDDNS_DNSSEC_UPDATE_MODE }}
+      #
       AXFRDDNS_MASTER: ${{ secrets.AXFRDDNS_MASTER }}
       AXFRDDNS_TRANSFER_KEY: ${{ secrets.AXFRDDNS_TRANSFER_KEY }}
       AXFRDDNS_TRANSFER_MODE: ${{ secrets.AXFRDDNS_TRANSFER_MODE }}
@@ -255,12 +253,6 @@ jobs:
       EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
       EXOSCALE_SECRET_KEY: ${{ secrets.EXOSCALE_SECRET_KEY }}
       #
-      FORTIGATE_API_KEY: ${{ secrets.FORTIGATE_API_KEY }}
-      FORTIGATE_DEBUG_HTTP: ${{ secrets.FORTIGATE_DEBUG_HTTP }}
-      FORTIGATE_HOST: ${{ secrets.FORTIGATE_HOST }}
-      FORTIGATE_NO_SSL_VERIFY: ${{ secrets.FORTIGATE_NO_SSL_VERIFY }}
-      FORTIGATE_VDOM: ${{ secrets.FORTIGATE_VDOM }}
-      #
       GANDI_V5_APIKEY: ${{ secrets.GANDI_V5_APIKEY }}
       GANDI_V5_APIURL: ${{ secrets.GANDI_V5_APIURL }}
       GANDI_V5_TOKEN: ${{ secrets.GANDI_V5_TOKEN }}
@@ -305,10 +297,6 @@ jobs:
       LUADNS_APIKEY: ${{ secrets.LUADNS_APIKEY }}
       LUADNS_EMAIL: ${{ secrets.LUADNS_EMAIL }}
       #
-      MIKROTIK_HOST: ${{ secrets.MIKROTIK_HOST }}
-      MIKROTIK_PASSWORD: ${{ secrets.MIKROTIK_PASSWORD }}
-      MIKROTIK_USERNAME: ${{ secrets.MIKROTIK_USERNAME }}
-      #
       MYTHICBEASTS_KEYID: ${{ secrets.MYTHICBEASTS_KEYID }}
       MYTHICBEASTS_SECRET: ${{ secrets.MYTHICBEASTS_SECRET }}
       #
@@ -335,10 +323,6 @@ jobs:
       NEXDNS_API_TOKEN: ${{ secrets.NEXDNS_API_TOKEN }}
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
-      #
-      OPENWRT_HOST: ${{ secrets.OPENWRT_HOST }}
-      OPENWRT_PASSWORD: ${{ secrets.OPENWRT_PASSWORD }}
-      OPENWRT_USERNAME: ${{ secrets.OPENWRT_USERNAME }}
       #
       ORACLE_COMPARTMENT: ${{ secrets.ORACLE_COMPARTMENT }}
       ORACLE_FINGERPRINT: ${{ secrets.ORACLE_FINGERPRINT }}
@@ -429,7 +413,7 @@ jobs:
           # Converts label names into a single string for easier grep/matching
           LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          END="1"
+          END="2"
 
           # Release gate: release_draft.yml calls this via workflow_call with
           # full=true, which forces the entire suite (not just the smoke test).
