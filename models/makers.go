@@ -277,9 +277,10 @@ func MakeR53ALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args 
 	return privatetypesrdata.R53ALIAS{
 		AliasType: mustbe.RawString(args[0]),
 		Target:    mustbe.TargetHost(origin, isEnabled, args[1]),
+		// NB(tlim): These are commented out because the integration tests fail with them. Needs investigation.
 		// ZoneID:           mustbe.RawString(args[2]),
 		// EvalTargetHealth: mustbe.RawString(args[3]),
-		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. This is a hack to convert it to the expected format. We should probably change the R53ALIAS type to use a boolean for this field.
+		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. Maybe unify them in the future?
 	}, nil
 }
 
