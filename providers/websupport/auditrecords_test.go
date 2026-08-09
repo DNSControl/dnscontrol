@@ -54,8 +54,18 @@ func TestAuditRecords(t *testing.T) {
 			wantCount: 1,
 		},
 		{
+			name:      "TXT with a trailing space is rejected",
+			records:   models.Records{makeRC("TXT", "@", "trailing ")},
+			wantCount: 1,
+		},
+		{
 			name:      "SRV with null target is rejected",
 			records:   models.Records{makeRC("SRV", "_sip._tcp", ".")},
+			wantCount: 1,
+		},
+		{
+			name:      "null MX is rejected",
+			records:   models.Records{makeRC("MX", "@", ".")},
 			wantCount: 1,
 		},
 	}

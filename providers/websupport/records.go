@@ -19,6 +19,9 @@ func (c *websupportProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	if err != nil {
 		return nil, err
 	}
+	if err := c.repairMXSRV(dc.Name, nativeRecs); err != nil {
+		return nil, err
+	}
 
 	recs := make(models.Records, 0, len(nativeRecs))
 	for _, n := range nativeRecs {
