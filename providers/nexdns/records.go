@@ -117,7 +117,7 @@ func filterApexNS(dc *models.DomainConfig) {
 	kept := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabel() == apexLabel {
-			target := strings.TrimSuffix(rec.GetTargetField(), ".")
+			target := strings.TrimSuffix(rec.AsNS().Ns, ".")
 			if !declared[target] {
 				printer.Warnf("NEXDNS does not support changing the NS records at the zone apex. %s will not be added.\n", rec.GetTargetField())
 			}

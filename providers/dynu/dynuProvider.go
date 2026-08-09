@@ -339,14 +339,6 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.IPv6Address = rc.AsAAAA().String()
 	case dnsv2.TypeAFSDB:
 		// Target: "<subtype> <hostname>."
-
-		// parts := strings.Fields(rc.GetTargetField())
-		// if len(parts) >= 2 {
-		// 	st, _ := strconv.Atoi(parts[0])
-		// 	req.SubType = &st
-		// 	req.Host = strings.TrimSuffix(parts[1], ".")
-		// }
-
 		f := rc.AsAFSDB()
 		req.SubType = new(int(f.Subtype))
 		req.Host = strings.TrimSuffix(f.Hostname, ".")
@@ -357,19 +349,6 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Tag = f.Tag
 		req.Value = f.Value
 	case dnsv2.TypeCERT:
-
-		// Target: "<type> <keytag> <algorithm> <cert-base64>"
-		// parts := strings.Fields(rc.GetTargetField())
-		// if len(parts) >= 4 {
-		// 	ct := parseCERTType(parts[0])
-		// 	kt, _ := strconv.Atoi(parts[1])
-		// 	algo, _ := strconv.Atoi(parts[2])
-		// 	req.CertificateType = &ct
-		// 	req.KeyTag = &kt
-		// 	req.Algorithm = &algo
-		// 	req.Certificate = parts[3]
-		// }
-
 		f := rc.AsCERT()
 		req.CertificateType = new(int(f.Type))
 		req.KeyTag = new(int(f.KeyTag))
@@ -382,12 +361,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// Target is the base64-encoded DHCID data (zone-file format == API format).
 		req.RecordData = rc.AsDHCID().Digest
 	case dnsv2.TypeHINFO:
-
 		// Target: "<"cpu"> <"os">" — parse the two quoted character-strings.
-		// cpu, os := parseCharStrings(rc.GetTargetField())
-		// req.CPU = cpu
-		// req.OperatingSystem = os
-
 		req.CPU = rc.AsHINFO().Cpu
 		req.OperatingSystem = rc.AsHINFO().Os
 	case dnsv2.TypeHTTPS:
@@ -402,18 +376,6 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
 	case dnsv2.TypeKEY:
 		// Target: "<flags> <protocol> <algorithm> <pubkey-base64>"
-
-		// parts := strings.Fields(rc.GetTargetField())
-		// if len(parts) >= 4 {
-		// 	f, _ := strconv.Atoi(parts[0])
-		// 	proto, _ := strconv.Atoi(parts[1])
-		// 	algo, _ := strconv.Atoi(parts[2])
-		// 	req.Flags = &f
-		// 	req.KeyProtocol = &proto
-		// 	req.Algorithm = &algo
-		// 	req.PublicKey = parts[3]
-		// }
-
 		f := rc.AsKEY()
 		req.Flags = new(int(f.Flags))
 		req.KeyProtocol = new(int(f.Protocol))
@@ -479,15 +441,6 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.MailBox = rd.Mbox
 		req.TxtDomainName = rd.Txt
 	case dnsv2.TypeSMIMEA:
-
-		// usage := int(rc.SmimeaUsage)
-		// selector := int(rc.SmimeaSelector)
-		// mtype := int(rc.SmimeaMatchingType)
-		// req.CertificateUsage = &usage
-		// req.Selector = &selector
-		// req.MatchingType = &mtype
-		// req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
-
 		f := rc.AsSMIMEA()
 		usage := int(f.Usage)
 		selector := int(f.Selector)
@@ -539,16 +492,6 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.TextData = rc.GetTargetTXTJoined()
 	case dnsv2.TypeURI:
 		// Target: "<priority> <weight> "<target-uri>""
-
-		// parts := strings.SplitN(strings.TrimSpace(rc.GetTargetField()), " ", 3)
-		// if len(parts) >= 3 {
-		// 	prio, _ := strconv.Atoi(parts[0])
-		// 	wgt, _ := strconv.Atoi(parts[1])
-		// 	req.Priority = &prio
-		// 	req.Weight = &wgt
-		// 	req.TargetURI = strings.Trim(parts[2], "\"")
-		// }
-
 		f := rc.AsURI()
 		req.Priority = new(int(f.Priority))
 		req.Weight = new(int(f.Weight))
@@ -623,39 +566,6 @@ func svcParamsToString(params []svcParam) string {
 	return strings.Join(parts, " ")
 }
 
-// // locRdata builds the LOC rdata string (rdata-only, no owner/TTL) from Dynu's
-// // decimal-degree and metre fields so it can be passed to Set|TargetLOCString.
-// func locRdata(lat, lon, alt, size, horizPre, vertPre float64) string {
-// 	latD, latM, latS, latHemi := ddToDMS(lat, "N", "S")
-// 	lonD, lonM, lonS, lonHemi := ddToDMS(lon, "E", "W")
-// 	return fmt.Sprintf("%d %d %.3f %s %d %d %.3f %s %.2fm %.2fm %.2fm %.2fm",
-// 		latD, latM, latS, latHemi, lonD, lonM, lonS, lonHemi,
-// 		alt, size, horizPre, vertPre)
-// }
-
-// // ddToDMS converts a signed decimal-degrees value to unsigned degrees, minutes,
-// // seconds, and hemisphere strings (pos/neg for the two possible hemispheres).
-// func ddToDMS(dd float64, pos, neg string) (d uint8, m uint8, s float32, hemi string) {
-// 	hemi = pos
-// 	if dd < 0 {
-// 		hemi = neg
-// 		dd = -dd
-// 	}
-// 	d = uint8(dd)
-// 	minutesTotal := (dd - float64(d)) * 60.0
-// 	m = uint8(minutesTotal)
-// 	s = float32((minutesTotal - float64(m)) * 60.0)
-// 	return
-// }
-
-// // floatOrDefault returns *f if non-nil, otherwise the supplied default.
-// func floatOrDefault(f *float64, def float64) float64 {
-// 	if f == nil {
-// 		return def
-// 	}
-// 	return *f
-// }
-
 // extractRdata strips the owner name, TTL, optional class, and type from a full
 // DNS zone-file line ("hostname. TTL [IN] TYPE rdata") and returns just the rdata.
 // Returns "" if rtype is not found.
@@ -668,58 +578,6 @@ func extractRdata(content, rtype string) string {
 	}
 	return ""
 }
-
-// // parseCharStrings splits a string containing one or two DNS character-strings
-// // (optionally quoted) and returns the first two values.
-// // Used for HINFO: "X86-64" "Linux" → ("X86-64", "Linux").
-// func parseCharStrings(s string) (first, second string) {
-// 	s = strings.TrimSpace(s)
-// 	var parts []string
-// 	for len(s) > 0 {
-// 		s = strings.TrimLeft(s, " \t")
-// 		if len(s) == 0 {
-// 			break
-// 		}
-// 		if s[0] == '"' {
-// 			end := strings.Index(s[1:], "\"")
-// 			if end < 0 {
-// 				parts = append(parts, s[1:])
-// 				break
-// 			}
-// 			parts = append(parts, s[1:end+1])
-// 			s = s[end+2:]
-// 		} else {
-// 			idx := strings.IndexAny(s, " \t")
-// 			if idx < 0 {
-// 				parts = append(parts, s)
-// 				break
-// 			}
-// 			parts = append(parts, s[:idx])
-// 			s = s[idx:]
-// 		}
-// 	}
-// 	if len(parts) >= 1 {
-// 		first = parts[0]
-// 	}
-// 	if len(parts) >= 2 {
-// 		second = parts[1]
-// 	}
-// 	return
-// }
-
-// // parseCERTType converts a CERT type name or number string to its integer value.
-// func parseCERTType(s string) int {
-// 	named := map[string]int{
-// 		"PKIX": 1, "SPKI": 2, "PGP": 3, "IPKIX": 4,
-// 		"ISPKI": 5, "IPGP": 6, "ACPKIX": 7, "IACPKIX": 8,
-// 		"URI": 253, "OID": 254,
-// 	}
-// 	if v, ok := named[strings.ToUpper(s)]; ok {
-// 		return v
-// 	}
-// 	v, _ := strconv.Atoi(s)
-// 	return v
-// }
 
 // parseLOCRdata parses a LOC record rdata string (the part after the type label)
 // into the 12 parameters required by models.RecordConfig.SetLOCParams.

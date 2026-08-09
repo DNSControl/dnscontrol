@@ -24,7 +24,7 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 	rd = normalizeRDATA(rd)
 	rc.rdata = rd
 	rc.validateRDATA()
-	rc.RegenerateComparableV3()
+	rc.generateComparableV3()
 	if err := rc.copyRDtoLegacyFields(); err != nil {
 		panic(err) // Should not happen.
 	}

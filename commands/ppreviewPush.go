@@ -245,10 +245,10 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 		return err
 	}
 
-	// HACK: convert old RC to RCv3 until all old code is converted.
-	for _, domain := range cfg.Domains {
-		domain.FixLegacyDC()
-	}
+	// // HACK: convert old RC to RCv3 until all old code is converted.
+	// for _, domain := range cfg.Domains {
+	// 	domain.FixLegacyDC()
+	// }
 
 	out.PrintfIf(fullMode, "Normalizing and validating 'desired'..\n")
 	errs := normalize.ValidateAndNormalizeConfig(cfg)

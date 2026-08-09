@@ -171,16 +171,12 @@ func TestFilterApexNS(t *testing.T) {
 		t.Fatalf("ToNameservers() error = %v", err)
 	}
 
-	dc := &models.DomainConfig{
-		Name:        testOrigin,
-		Nameservers: nameservers,
-		Records: models.Records{
-			makeRecord(t, "NS", "@", "ns1.example.net."),
-			makeRecord(t, "NS", "@", "ns9.example.org."),
-			makeRecord(t, "NS", "sub", "ns1.example.org."),
-			makeRecord(t, "A", "www", "203.0.113.10"),
-		},
-	}
+	dc := models.MustNewDomainConfig(testOrigin)
+	dc.Nameservers = nameservers
+	dc.AddRecordConfig(makeRecord(t, "NS", testOrigin, "ns1.example.net."))
+	dc.AddRecordConfig(makeRecord(t, "NS", testOrigin, "ns9.example.org."))
+	dc.AddRecordConfig(makeRecord(t, "NS", "sub."+testOrigin, "ns1.example.org."))
+	dc.AddRecordConfig(makeRecord(t, "A", "www."+testOrigin, "203.0.113.10"))
 
 	filterApexNS(dc)
 

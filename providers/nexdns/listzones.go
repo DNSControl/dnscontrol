@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 // ListZones returns every zone the API key can see.
@@ -33,9 +32,9 @@ func (n *nexdnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 	}
 
 	if err := n.client.createZone(dc.Name); err != nil {
-		return fmt.Errorf("NEXDNS: creating zone %s: %w", dc.Name, err)
+		return fmt.Errorf("NEXDNS: error creating zone %s: %w", dc.Name, err)
 	}
 
-	printer.Warnf("NEXDNS: Added zone %s\n", dc.Name)
+	// printer.Warnf("NEXDNS: Added zone %s\n", dc.Name)
 	return nil
 }
