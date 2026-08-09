@@ -144,7 +144,7 @@ func svcbReplaceIGNOREWithData(pairs []svcbv2.Pair, cache map[string][]byte, rec
 		}
 	}
 
-	rec.RegenerateComparableV3()
+	// rec.RegenerateComparableV3()
 
 	return result, found
 }

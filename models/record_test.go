@@ -74,7 +74,7 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	rc.ChangeType("CNAME", origin)
 
 	// ChangeType installs native CNAME RDATA, so FixRD is now a no-op.
-	rc.FixRD(origin)
+	// rc.FixRD(origin)
 
 	if rc.GetRDATA() == nil {
 		t.Fatal("RDATA is nil after FixRD")

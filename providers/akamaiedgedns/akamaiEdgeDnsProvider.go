@@ -276,7 +276,7 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 			if rec.Name == "@" {
 				rec.ChangeType("AKAMAITLC", dc.Name)
 				rec.AnswerType = "DUAL"
-				rec.RecomputeV3Fields(dc.Name)
+				// rec.RecomputeV3Fields(dc.Name)
 			} else {
 				rec.ChangeType("CNAME", dc.Name)
 			}

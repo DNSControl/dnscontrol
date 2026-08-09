@@ -40,6 +40,13 @@ func (config *DNSConfig) ImportRawRecords() error {
 			filePos := FixPosition(rawRec.FilePos)
 			typeName := rawRec.Type
 
+			//			if typeName == "IGNORE" {
+			//				continue
+			//			}
+			//			if typeName == "IMPORT_TRANSFORM" {
+			//				continue
+			//			}
+
 			// NB(tlim): We check if something is a builder first because LOC could be a builder or a dnsrdatav2.
 			if IsBuilder(typeName) {
 				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args, rawRec.SubDomain)
@@ -50,7 +57,7 @@ func (config *DNSConfig) ImportRawRecords() error {
 				for _, record := range records {
 					record.FilePos = filePos
 				}
-				// Generation complete!  Append it.
+				// Generation complete!  Append the results.
 				dc.Records = append(dc.Records, records...)
 			} else {
 				typeNum, err := dnsutilv2.StringToType(typeName)

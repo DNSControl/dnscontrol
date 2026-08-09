@@ -25,7 +25,7 @@ func TestImportTransform(t *testing.T) {
 	d2.Metadata["transform_table"] = transformDouble
 	dcDst.AddRecordConfig(d2)
 
-	d2.FixRD(dcDst.Name)
+	// d2.FixRD(dcDst.Name)
 
 	cfg := &models.DNSConfig{}
 	cfg.Domains = append(cfg.Domains, dcSrc, dcDst)
