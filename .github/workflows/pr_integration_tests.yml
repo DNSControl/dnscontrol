@@ -110,7 +110,7 @@ jobs:
     outputs:
       modcache: ${{ steps.gopaths.outputs.modcache }}
       buildcache: ${{ steps.gopaths.outputs.buildcache }}
-      cache-key: gomod-${{ hashFiles('go.sum') }}
+      cache-key: ${{ steps.gopaths.outputs.cache-key }}
     steps:
       - uses: actions/checkout@v7
       - id: gopaths
@@ -118,13 +118,16 @@ jobs:
         run: |
           echo "modcache=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
           echo "buildcache=$(go env GOCACHE)" >> "$GITHUB_OUTPUT"
+          echo "cache-key=gomod-${{ hashFiles('go.sum') }}" >> "$GITHUB_OUTPUT"
+          # hashFiles() works in steps, not in job-level `outputs:`. Therefore
+          # we compute it here for later use.
       - uses: actions/cache@v4
         id: cache
         with:
           path: |
             ${{ steps.gopaths.outputs.modcache }}
             ${{ steps.gopaths.outputs.buildcache }}
-          key: gomod-${{ hashFiles('go.sum') }}
+          key: ${{ steps.gopaths.outputs.cache-key }}
       - name: Prebuild dependencies for the integration test binary
         if: steps.cache.outputs.cache-hit != 'true'
         shell: bash
