@@ -64,6 +64,12 @@ jobs:
         with:
           sparse-checkout: integrationTest/profiles.json
           sparse-checkout-cone-mode: false
+      - name: Set up Go
+        # setup-go caches the Go module + build cache (keyed on go.sum) by
+        # default; no separate actions/|cache step is needed.
+        uses: actions/setup-go@v7
+        with:
+          go-version: stable
       - name: Set Integration Test Providers
         id: get_integration_test_providers
         shell: bash
