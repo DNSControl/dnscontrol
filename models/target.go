@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	"net/netip"
-	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
@@ -51,17 +50,6 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 		return f.Addr
 	}
 	panic(fmt.Sprintf("wrong type GetTargetIP(%T)", rc.GetRDATA()))
-}
-
-// GetTargetDebug returns a string with the various fields spelled out.
-// NOTE: Deprecated. Use StringWithMeta() instead.
-func (rc *RecordConfig) GetTargetDebug() string {
-	var content strings.Builder
-	fmt.Fprintf(&content, "%s %s %d %q", rc.Type, rc.NameFQDN, rc.TTL, rc.GetRDATA().String())
-	for k, v := range rc.Metadata {
-		fmt.Fprintf(&content, " %s=%q", k, v)
-	}
-	return content.String()
 }
 
 // SetTargetIP sets the target to an IP, verifying this is an appropriate rtype.

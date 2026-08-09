@@ -44,12 +44,6 @@ func (rc *RecordConfig) SetLabelFromFQDN(fqdn, origin string) {
 	rc.NameFQDN = fqdn
 }
 
-// subdomainExcludedType reports whether typeName is excluded from D_EXTEND()
-// subdomain label rewriting.
-func subdomainExcludedType(typeName string) bool {
-	return subdomainExcludedTypes[typeName]
-}
-
 var ipv4LabelRe = regexp.MustCompile(`^\d+\.\d+\.\d+\.\d+$`)
 
 // LabelFromShort takes a label and prepares it for use in a RecordConfig.
