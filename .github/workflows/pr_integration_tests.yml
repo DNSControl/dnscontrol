@@ -1,4 +1,4 @@
-name: "PR: Run INTEGRATION tests"
+name: "INTEGRATION tests"
 
 permissions:
   contents: read
@@ -90,8 +90,7 @@ jobs:
           VARS_CONTEXT: ${{ toJson(vars) }}
 
   # warm-gomod-cache: Downloads and compiles the module graph exactly once
-  # (instead of once per matrix job below).
-  # provider it actually tests.
+  # (instead of once per matrix job).
   # The cache key is content-addressed on go.sum only.
   warm-gomod-cache:
     runs-on: ubuntu-latest
