@@ -39,11 +39,9 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up Go
-      # setup-go caches the Go module + build cache (keyed on go.sum) by
-      # default; no separate actions/|cache step is needed.
       uses: actions/setup-go@v7
       with:
-        go-version: stable
+        go-version: "stable"
     - run: mkdir -p "$TEST_RESULTS"
     - name: Run unit tests
       run: |

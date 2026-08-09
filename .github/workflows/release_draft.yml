@@ -176,7 +176,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version: "stable"
 
       # Stringer is needed because .goreleaser includes "go generate ./..."
       - name: Install stringer
