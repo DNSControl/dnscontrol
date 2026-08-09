@@ -25,7 +25,7 @@ func Test_whichZonesToProcess(t *testing.T) {
 	// This is needed since we aren't calling js.ExecuteJavaScript().
 	for _, dc := range allDC {
 		dc.PostProcess()
-		dc.FixLegacyDC()
+		// dc.FixLegacyDC()
 	}
 
 	type args struct {

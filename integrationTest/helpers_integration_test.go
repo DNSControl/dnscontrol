@@ -108,7 +108,7 @@ func CfFlattenOn() *TestCase {
 func getDomainConfigWithNameservers(t *testing.T, prv providers.DNSServiceProvider, domainName string) *models.DomainConfig {
 	dc := models.MustNewDomainConfig(domainName)
 	dc.PostProcess()
-	dc.FixLegacyDC()
+	// dc.FixLegacyDC()
 
 	// fix up nameservers
 	ns, err := prv.GetNameservers(domainName)
@@ -203,7 +203,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 			TargetPattern: "",
 		})
 		models.PostProcessRecords(dom.Records)
-		dom.FixLegacyDC()
+		// dom.FixLegacyDC()
 		dom2, _ := dom.Copy()
 
 		if err := providers.AuditRecords(*providerFlag, dom.Records); err != nil {

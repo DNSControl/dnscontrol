@@ -127,9 +127,9 @@ func (dc *DomainConfig) PostProcess() {
 }
 
 // FixLegacyDC calls .FixUp() on all records within DC.
-func (dc *DomainConfig) FixLegacyDC() {
-	dc.Records.FixLegacyRecords(dc.Name)
-}
+// func (dc *DomainConfig) FixLegacyDC() {
+// 	dc.Records.FixLegacyRecords(dc.Name)
+// }
 
 // FixLegacyRecords calls .FixUp() on all records in recs.
 func (recs Records) FixLegacyRecords(origin string) {
