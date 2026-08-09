@@ -25,15 +25,12 @@ func TestImportTransform(t *testing.T) {
 	d2.Metadata["transform_table"] = transformDouble
 	dcDst.AddRecordConfig(d2)
 
-	// d2.FixRD(dcDst.Name)
-
 	cfg := &models.DNSConfig{}
 	cfg.Domains = append(cfg.Domains, dcSrc, dcDst)
 	err := cfg.PostProcess()
 	if err != nil {
 		t.Fatal(err)
 	}
-	// No need to call rtypecontrol.FixLegacyDC here.
 
 	if errs := ValidateAndNormalizeConfig(cfg); len(errs) != 0 {
 		for _, err := range errs {

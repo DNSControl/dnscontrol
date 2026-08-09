@@ -126,18 +126,6 @@ func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 func (dc *DomainConfig) PostProcess() {
 }
 
-// FixLegacyDC calls .FixUp() on all records within DC.
-// func (dc *DomainConfig) FixLegacyDC() {
-// 	dc.Records.FixLegacyRecords(dc.Name)
-// }
-
-// FixLegacyRecords calls .FixUp() on all records in recs.
-func (recs Records) FixLegacyRecords(origin string) {
-	// for _, rec := range recs {
-	// 	rec.FixRD(origin)
-	// }
-}
-
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
 // Deprecated: use .Name, .Uniquename, and .Tag directly instead.
 func (dc *DomainConfig) GetSplitHorizonNames() (name, uniquename, tag string) {

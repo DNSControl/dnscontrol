@@ -298,7 +298,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	}
 	// dnsconfig.js's SOA() passes 6 args (no serial): the user can not specify
 	// the serial number, it is managed by DNSControl. Re-deriving the RDATA from
-	// an existing RecordConfig (FixUp) or parsing a zone (e.g. BIND) passes 7
+	// an existing RecordConfig or parsing a zone (e.g. BIND) passes 7
 	// args, with the serial at args[2].
 	// The one exception is that for hermetic builds/tests, "dnscontrol preview --bindserial" exists.
 	var serial any = uint32(0)
