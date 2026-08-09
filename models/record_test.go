@@ -34,9 +34,6 @@ func TestR53AliasTargetSurvivesRDATAUpdate(t *testing.T) {
 	if got := rc.AsR53ALIAS().ZoneID; got != "Z0389923" {
 		t.Errorf("zone ID after SetRDATA = %q, want %q", got, "Z0389923")
 	}
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField after SetRDATA = %q, want %q", got, wantTarget)
-	}
 }
 
 // TestAzureAliasTargetComesFromRDATA verifies that AZURE_ALIAS no longer
@@ -77,7 +74,7 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	rc.ChangeType("CNAME", origin)
 
 	// ChangeType installs native CNAME RDATA, so FixRD is now a no-op.
-	rc.FixRD(origin)
+	// rc.FixRD(origin)
 
 	if rc.GetRDATA() == nil {
 		t.Fatal("RDATA is nil after FixRD")
@@ -220,9 +217,9 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      "name",
 				SubDomain: "sub",
 				NameFQDN:  "namef",
-				target:    "targette",
-				TTL:       12345,
-				Metadata:  map[string]string{"me": "ah", "da": "ta"},
+				// target:    "targette",
+				TTL:      12345,
+				Metadata: map[string]string{"me": "ah", "da": "ta"},
 				// MxPreference:     123,
 				// SrvPriority:  223,
 				// SrvWeight:    345,
@@ -254,10 +251,10 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      tt.fields.Name,
 				SubDomain: tt.fields.SubDomain,
 				NameFQDN:  tt.fields.NameFQDN,
-				target:    tt.fields.target,
-				TTL:       tt.fields.TTL,
-				Metadata:  tt.fields.Metadata,
-				Original:  tt.fields.Original,
+				// target:    tt.fields.target,
+				TTL:      tt.fields.TTL,
+				Metadata: tt.fields.Metadata,
+				Original: tt.fields.Original,
 			}
 			got, err := rc.Copy()
 			if (err != nil) != tt.wantErr {

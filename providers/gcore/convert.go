@@ -15,7 +15,7 @@ import (
 // nativeToRecord takes a DNS record from G-Core and returns a native RecordConfig struct.
 func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
 	var rcs []*models.RecordConfig
-	recName := dc.LabelFromShort(n.Name)
+	recName := dc.LabelFromFQDNWithDot(n.Name)
 	recType := n.Type
 
 	// Split G-Core's RRset into individual records

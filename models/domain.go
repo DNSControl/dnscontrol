@@ -12,7 +12,7 @@ import (
 )
 
 // DomainConfig describes a DNS domain (technically a DNS zone).
-// Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
+// Do not create your own `models.DomainConfig`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
 	NameRaw     string `json:"-"`    // name as entered by user in dnsconfig.js
 	Name        string `json:"name"` // NO trailing "."   Converted to IDN (punycode) early in the pipeline.
@@ -127,15 +127,15 @@ func (dc *DomainConfig) PostProcess() {
 }
 
 // FixLegacyDC calls .FixUp() on all records within DC.
-func (dc *DomainConfig) FixLegacyDC() {
-	dc.Records.FixLegacyRecords(dc.Name)
-}
+// func (dc *DomainConfig) FixLegacyDC() {
+// 	dc.Records.FixLegacyRecords(dc.Name)
+// }
 
 // FixLegacyRecords calls .FixUp() on all records in recs.
 func (recs Records) FixLegacyRecords(origin string) {
-	for _, rec := range recs {
-		rec.FixRD(origin)
-	}
+	// for _, rec := range recs {
+	// 	rec.FixRD(origin)
+	// }
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
@@ -185,7 +185,6 @@ func (dc *DomainConfig) Punycode() error {
 			// Assert this function is no longer needed.
 			panic(fmt.Sprintf("Punycode LABEL %q %q", t, rec.GetLabelFQDN()))
 		}
-		// rec.SetLabelFromFQDN(t, dc.Name)
 
 		// Set the target:
 		switch rec.Type { // #rtype_variations
@@ -195,26 +194,12 @@ func (dc *DomainConfig) Punycode() error {
 			if err != nil {
 				return err
 			}
-			//if err := rec.SetTarget(t); err != nil {
-			//	return err
-			//}
 			if t != rec.GetTargetField() {
 				// Assert this function is no longer needed.
 				panic(fmt.Sprintf(": Punycode TARGET %q %q", t, rec.GetTargetField()))
 			}
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH", "BUNNY_DNS_PZ", "MIKROTIK_FWD", "MIKROTIK_NXDOMAIN", "MIKROTIK_FORWARDER":
-			//if err := rec.SetTarget(rec.GetTargetField()); err != nil {
-			//	return err
-			//}
-
-			orig := rec.GetTargetField()
-			rec.SetTarget(rec.GetTargetField())
-			roundtrip := rec.GetTargetField()
-			if orig != roundtrip {
-				// Assert this function is no longer needed.
-				panic(fmt.Sprintf("Punycode RTT %q %q", orig, roundtrip))
-			}
-
+			// Nothing to do.
 		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC",
 			"LUA", "NAPTR", "OPENPGPKEY", "RP", "SMIMEA", "SOA", "SSHFP", "SVCB",
 			"TXT", "TLSA", "AZURE_ALIAS":

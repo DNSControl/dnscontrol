@@ -14,7 +14,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17
@@ -28,7 +27,6 @@
             "Mbox": "user2.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17
@@ -42,7 +40,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17
@@ -56,7 +53,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 1111,
           "type": "RP",
           "typenum": 17
@@ -70,7 +66,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 2222,
           "type": "RP",
           "typenum": 17
@@ -84,7 +79,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 1111,
           "type": "RP",
           "typenum": 17
@@ -98,7 +92,6 @@
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "target": "mytxt.example.com.",
           "ttl": 3333,
           "type": "RP",
           "typenum": 17
@@ -113,7 +106,6 @@
               "Do not call me on my phone"
             ]
           },
-          "target": "Do not call me on my phone",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16

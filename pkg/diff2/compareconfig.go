@@ -211,7 +211,8 @@ func (cc *CompareConfig) addRecords(recs models.Records, storeInExisting bool) {
 		// cleared. We rebuild the V3 fields here.
 		// When we get rid of FixRD(), we'll have to move the fix to ChangeType().
 		if rec.ComparableV3 == "" {
-			rec.FixRD(cc.origin)
+			panic(fmt.Sprintf("addRecord: should not happen: Cv3 is blank: %v", rec))
+			// rec.FixRD(cc.origin)
 		}
 
 		key := rec.Key()

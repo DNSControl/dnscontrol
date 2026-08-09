@@ -13,7 +13,6 @@
           "rdata": {
             "Addr": "1.1.1.1"
           },
-          "target": "1.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -26,7 +25,6 @@
           "rdata": {
             "Addr": "5.5.5.5"
           },
-          "target": "5.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -47,7 +45,6 @@
           "rdata": {
             "Addr": "4.4.4.101"
           },
-          "target": "4.4.4.101",
           "ttl": 60,
           "type": "A",
           "typenum": 1
@@ -60,7 +57,6 @@
           "rdata": {
             "Addr": "6.6.6.3"
           },
-          "target": "6.6.6.3",
           "ttl": 60,
           "type": "A",
           "typenum": 1
@@ -81,7 +77,6 @@
           "rdata": {
             "Addr": "1.1.1.1"
           },
-          "target": "1.1.1.1",
           "ttl": 99,
           "type": "A",
           "typenum": 1
@@ -94,7 +89,6 @@
           "rdata": {
             "Addr": "7.7.7.7"
           },
-          "target": "7.7.7.7",
           "ttl": 99,
           "type": "A",
           "typenum": 1

@@ -13,9 +13,12 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-06-17
+	a.Add("MX", rejectif.MxNull) // Last verified 2026-08-09: the API rejects the empty content with a 422
 
 	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2026-06-17
+
+	a.Add("TXT", rejectif.TxtIsEmpty)          // Last verified 2026-06-17
+	a.Add("TXT", rejectif.TxtHasTrailingSpace) // Last verified 2026-08-09: the API strips trailing spaces
 
 	// The WebSupport v2 DNS record API silently ignores attempts to create NS
 	// records (it returns success but the record never appears), which would

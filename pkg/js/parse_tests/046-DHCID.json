@@ -13,7 +13,6 @@
           "rdata": {
             "Digest": "Test"
           },
-          "target": "Test",
           "ttl": 300,
           "type": "DHCID",
           "typenum": 49

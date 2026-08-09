@@ -71,7 +71,7 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	target          string // If a name, must end with "."
+	// target          string // If a name, must end with "."
 	AnswerType      string `json:"answer_type,omitempty"`
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
 }
@@ -81,11 +81,11 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	//fmt.Printf("DEBUG: MARSHALING %v\n", rc.Name)
 	recj := &struct {
 		RecordConfig
-		RDATA  dnsv2.RDATA `json:"rdata,omitempty"`
-		Target string      `json:"target,omitempty"`
+		RDATA dnsv2.RDATA `json:"rdata,omitempty"`
+		// Target string      `json:"target,omitempty"`
 	}{
 		RecordConfig: *rc,
-		Target:       rc.GetTargetField(),
+		// Target:       rc.GetTargetField(),
 	}
 	recj.RDATA = rc.GetRDATA()
 	j, err := json.Marshal(*recj)
@@ -100,28 +100,28 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 	recj := &struct {
 		Target string `json:"target,omitempty"`
 
-		Type      string            `json:"type"` // All caps rtype name.
-		Name      string            `json:"name"` // The short name. See above.
-		SubDomain string            `json:"subdomain,omitempty"`
-		NameFQDN  string            `json:"-"` // Must end with ".$origin". See above.
-		target    string            // If a name, must end with "."
-		TTL       uint32            `json:"ttl,omitempty"`
-		Metadata  map[string]string `json:"meta,omitempty"`
-		FilePos   string            `json:"filepos"` // Where in the file this record was defined.
-		Original  any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
-		Args      []any             `json:"args,omitempty"`
+		Type      string `json:"type"` // All caps rtype name.
+		Name      string `json:"name"` // The short name. See above.
+		SubDomain string `json:"subdomain,omitempty"`
+		NameFQDN  string `json:"-"` // Must end with ".$origin". See above.
+		// target    string            // If a name, must end with "."
+		TTL      uint32            `json:"ttl,omitempty"`
+		Metadata map[string]string `json:"meta,omitempty"`
+		FilePos  string            `json:"filepos"` // Where in the file this record was defined.
+		Original any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
+		Args     []any             `json:"args,omitempty"`
 
 		// MxPreference       uint16            `json:"mxpreference,omitempty"`
 		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
 		// SrvWeight    uint16 `json:"srvweight,omitempty"`
 		// SrvPort      uint16 `json:"srvport,omitempty"`
-		CaaTag       string `json:"caatag,omitempty"`
-		CaaFlag      uint8  `json:"caaflag,omitempty"`
-		DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-		DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-		DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-		DsDigest     string `json:"dsdigest,omitempty"`
-		DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
+		// CaaTag       string `json:"caatag,omitempty"`
+		// CaaFlag      uint8  `json:"caaflag,omitempty"`
+		// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
+		// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
+		// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
+		// DsDigest     string `json:"dsdigest,omitempty"`
+		// DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
 		// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
 		// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
 		// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
@@ -142,12 +142,12 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
 		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
 		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-		SvcPriority uint16 `json:"svcpriority,omitempty"`
-		SvcParams   string `json:"svcparams,omitempty"`
+		// SvcPriority uint16 `json:"svcpriority,omitempty"`
+		// SvcParams   string `json:"svcparams,omitempty"`
 		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
 		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
 		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-		AnswerType      string `json:"answer_type,omitempty"`
+		// AnswerType      string `json:"answer_type,omitempty"`
 		UnknownTypeName string `json:"unknown_type_name,omitempty"`
 
 		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
@@ -165,10 +165,10 @@ func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
 	if err := copier.CopyWithOption(&rc, &recj, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
 		return err
 	}
-	// Set each unexported field.
-	if err := rc.SetTarget(recj.Target); err != nil {
-		return err
-	}
+	// // Set each unexported field.
+	// if err := rc.SetTarget(recj.Target); err != nil {
+	// 	return err
+	// }
 
 	// Some sanity checks:
 	if recj.Type != rc.Type {
@@ -206,7 +206,8 @@ func (rc *RecordConfig) Copy() (*RecordConfig, error) {
 	// Copy the exported fields.
 	err := reprint.FromTo(rc, newR) // Deep copy
 	// Set each unexported field.
-	newR.target = rc.target
+	newR.rdata = rc.rdata
+	// newR.target = rc.target
 	return newR, err
 }
 
@@ -437,42 +438,42 @@ func PostProcessRecords(recs []*RecordConfig) {
 // NB(tlim): This should go away once all rtypes are modernized. The Make*()
 // functions should do all downcasing, etc.
 func Downcase(recs []*RecordConfig) {
-	for _, r := range recs {
-		r.Name = strings.ToLower(r.Name)
-		r.NameFQDN = strings.ToLower(r.NameFQDN)
-		switch r.Type { // #rtype_variations
-		case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA":
-			// Target is case insensitive. Downcase it.
-			r0 := r.target
-			r.target = strings.ToLower(r.target)
-			r1 := r.target
-			if r0 != r1 {
-				panic(fmt.Sprintf("assertion failed: Downcase: %q != %q", r0, r1))
-			}
-			// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
-		// case "A", "CAA", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "DHCID", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SSHFP", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
-		// 	// Do nothing. (IP address or case sensitive target)
-		// case "AZURE_ALIAS":
-		// 	// do nothing.
-		default:
-			// TODO: we'd like to panic here, but custom record types complicate things.
-		}
-	}
+	// for _, r := range recs {
+	// 	r.Name = strings.ToLower(r.Name)
+	// 	r.NameFQDN = strings.ToLower(r.NameFQDN)
+	// 	switch r.Type { // #rtype_variations
+	// 	case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA":
+	// 		// Target is case insensitive. Downcase it.
+	// 		r0 := r.target
+	// 		r.target = strings.ToLower(r.target)
+	// 		r1 := r.target
+	// 		if r0 != r1 {
+	// 			panic(fmt.Sprintf("assertion failed: Downcase: %q != %q", r0, r1))
+	// 		}
+	// 		// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
+	// 	// case "A", "CAA", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "DHCID", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SSHFP", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
+	// 	// 	// Do nothing. (IP address or case sensitive target)
+	// 	// case "AZURE_ALIAS":
+	// 	// 	// do nothing.
+	// 	default:
+	// 		// TODO: we'd like to panic here, but custom record types complicate things.
+	// 	}
+	// }
 }
 
 // CanonicalizeTargets turns Targets into FQDNs.
 func CanonicalizeTargets(recs []*RecordConfig, origin string) {
-	originFQDN := origin + "."
+	// originFQDN := origin + "."
 
-	for _, r := range recs {
-		switch r.Type { // #rtype_variations
-		case "ALIAS", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "PTR", "SRV":
-			// Target is a hostname that might be a shortname. Turn it into a FQDN.
-			r.target = nameutil.ToFqdnWithDot(r.target, originFQDN)
-		// case "A", "AKAMAICDN", "AKAMAITLC", "CAA", "DHCID", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "HTTPS", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
-		// 	// Do nothing.
-		default:
-			// TODO: we'd like to panic here, but custom record types complicate things.
-		}
-	}
+	// for _, r := range recs {
+	// 	switch r.Type { // #rtype_variations
+	// 	case "ALIAS", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "PTR", "SRV":
+	// 		// Target is a hostname that might be a shortname. Turn it into a FQDN.
+	// 		// r.target = nameutil.ToFqdnWithDot(r.target, originFQDN)
+	// 	// case "A", "AKAMAICDN", "AKAMAITLC", "CAA", "DHCID", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "HTTPS", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
+	// 	// 	// Do nothing.
+	// 	default:
+	// 		// TODO: we'd like to panic here, but custom record types complicate things.
+	// 	}
+	// }
 }

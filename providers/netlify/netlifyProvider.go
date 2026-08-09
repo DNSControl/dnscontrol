@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
@@ -256,23 +257,20 @@ func toReq(rc *models.RecordConfig) *dnsRecordCreate {
 		TTL:      int64(rc.TTL),
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeCAA:
-		f := rc.AsCAA()
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CAA:
 		r.Tag = f.Tag
 		r.Flag = int64(f.Flag)
 		r.Value = f.Value
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	case dnsrdatav2.MX:
 		r.Priority = int64(f.Preference)
 		r.Value = f.Mx
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	case dnsrdatav2.SRV:
 		r.Priority = int64(f.Priority)
 		r.Port = int64(f.Port)
 		r.Weight = int64(f.Weight)
 		r.Value = f.Target
-	case dnsv2.TypeTXT:
+	case dnsrdatav2.TXT:
 		r.Value = rc.GetTargetTXTJoined()
 	default:
 		r.Value = rc.GetRDATA().String()

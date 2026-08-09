@@ -11,7 +11,7 @@ import (
 // modernized single-target types) were pushed with an empty/origin target.
 // The target now lives in RDATA; the legacy .target field is empty and
 // CanonicalizeTargets rewrites it to the origin, so buildRecord must read the
-// target from RDATA instead of GetTargetField().
+// target from RDATA.
 func TestBuildRecordNSTarget(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 

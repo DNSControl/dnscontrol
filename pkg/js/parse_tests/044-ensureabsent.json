@@ -13,7 +13,6 @@
           "rdata": {
             "Addr": "2.2.2.2"
           },
-          "target": "2.2.2.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -26,7 +25,6 @@
           "rdata": {
             "Addr": "1.1.1.1"
           },
-          "target": "1.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1

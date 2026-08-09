@@ -23,7 +23,6 @@
           "rdata": {
             "Addr": "3.3.3.3"
           },
-          "target": "3.3.3.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -39,7 +38,6 @@
           "rdata": {
             "Addr": "4.4.4.4"
           },
-          "target": "4.4.4.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -55,7 +53,6 @@
           "rdata": {
             "Addr": "5.5.5.5"
           },
-          "target": "5.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
