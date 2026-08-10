@@ -92,7 +92,8 @@ func (config *DNSConfig) ImportRawRecords() error {
 				// legitimately written as full reverse names (e.g. via REV())
 				// and are reduced to relative form later by normalization.
 				if rec.Metadata["skip_fqdn_check"] != "true" && !isReverseZone(dc.Name) && doesStutter(rec.Name, dc.Name) {
-					return fmt.Errorf("stutter error at %s %s(%s)", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
+					// return fmt.Errorf("stutter error at %s %s(%s). Add DISABLE_REPEATED_DOMAIN_CHECK to override", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
+					return stutterError(rec, dc.Name)
 				}
 
 				// Conversion complete!  Append it.

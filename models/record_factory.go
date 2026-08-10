@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"slices"
 	"strings"
 
@@ -130,18 +129,12 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 		targetOrigin = subdomain + "." + dc.Name
 	}
 
-	label, err := dc.LabelFromDnsconfigjs(name, subdomain)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("dnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
 	}
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{}, args...)
-	if err != nil {
-		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
-		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
-	}
-
-	return newRecordConfigHelper(dc.Name, label, ttl, typeNum, rd, metadata)
+	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
 }
 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.

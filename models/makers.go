@@ -209,7 +209,15 @@ func MakeMX(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	if len(args) != 2 {
 		return nil, fmt.Errorf("MakeMX expects exactly 2 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.MX{Preference: mustbe.Uint16(args[0]), Mx: mustbe.TargetHost(origin, isEnabled, args[1])}, nil
+
+	ot := args[1]
+	target := mustbe.TargetHost(origin, isEnabled, ot)
+	if isEnabled.EnforceOneDotPolicy && target == mustbe.ErrorSingleDotViolation {
+		return nil, fmt.Errorf("target (%v) must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", ot)
+	}
+
+	return dnsrdatav2.MX{Preference: mustbe.Uint16(args[0]), Mx: target}, nil
+
 }
 
 func MakeNS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -217,6 +225,14 @@ func MakeNS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeNS expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
+
+	// TODO(tlim): Change signature of TargetHost to include an err.
+	ot := args[0].(string)
+	target := mustbe.TargetHost(origin, isEnabled, ot)
+	if isEnabled.EnforceOneDotPolicy && target == mustbe.ErrorSingleDotViolation {
+		return nil, mustbe.MakeErrorSingleDotViolation(ot)
+	}
+
 	return dnsrdatav2.NS{Ns: mustbe.TargetHost(origin, isEnabled, args[0])}, nil
 }
 func MakeNAPTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

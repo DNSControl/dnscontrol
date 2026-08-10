@@ -61,6 +61,10 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 		return name
 	}
 
+	if isEnabled.EnforceOneDotPolicy && violatesSingleDotPolicy(name) {
+		return ErrorSingleDotViolation
+	}
+
 	// TODO(tlim):
 	// origin == "." is a special flag that means the same thing as
 	// isEnabled.TargetIsFqdnNoDot == true.
@@ -119,5 +123,28 @@ func TargetHostSRV(origin string, isEnabled nrc.Flags, arg any) string {
 		return name
 	}
 
+	if isEnabled.EnforceOneDotPolicy && violatesSingleDotPolicy(name) {
+		return ErrorSingleDotViolation
+	}
+
 	return TargetHost(origin, isEnabled, name)
+}
+
+const ErrorSingleDotViolation = "SINGLE_DOT_ERROR"
+
+func violatesSingleDotPolicy(s string) bool {
+	// FQDN+"." passes.
+	if strings.HasSuffix(s, ".") {
+		return false
+	}
+	// contains even a single dot, fails.
+	if strings.Contains(s, ".") {
+		return true
+	}
+	// Otherwise, passes.
+	return false
+}
+
+func MakeErrorSingleDotViolation(s string) error {
+	return fmt.Errorf("target %q must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", s)
 }
