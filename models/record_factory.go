@@ -131,7 +131,7 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 
 	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
 	if err != nil {
-		return nil, fmt.Errorf("dnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
+		return nil, fmt.Errorf("dnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
 	}
 
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
