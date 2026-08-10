@@ -142,7 +142,12 @@ jobs:
     # invoked as a release gate (workflow_call with full=true) it must run
     # regardless of the branch it was called from.
     if: ${{ inputs.full || (github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main') }}
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    # AXFRDDNS_DNSSEC talks to a self-hosted master that only permits zone
+    # transfers from GitHub-hosted runner addresses: from anywhere else the
+    # AXFR is answered with SERVFAIL ("nameserver refused to transfer the
+    # zone"). That leg therefore stays on GitHub-hosted runners; every other
+    # provider runs on Blacksmith.
+    runs-on: ${{ matrix.provider == 'AXFRDDNS_DNSSEC' && 'ubuntu-latest' || 'blacksmith-4vcpu-ubuntu-2404' }}
     container:
       image: golang:1.26
     needs:
