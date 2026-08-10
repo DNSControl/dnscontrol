@@ -56,7 +56,7 @@ jobs:
   # where integration-tests can pick it up.
   integration-test-providers:
     #needs: build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       integration_test_providers: ${{ steps.get_integration_test_providers.outputs.integration_test_providers }}
     steps:
@@ -93,7 +93,7 @@ jobs:
   # (instead of once per matrix job).
   # The cache key is content-addressed on go.sum only.
   warm-gomod-cache:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     container:
       image: golang:1.26
     needs:
@@ -142,7 +142,7 @@ jobs:
     # invoked as a release gate (workflow_call with full=true) it must run
     # regardless of the branch it was called from.
     if: ${{ inputs.full || (github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main') }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     container:
       image: golang:1.26
     needs:

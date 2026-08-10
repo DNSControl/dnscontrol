@@ -20,7 +20,7 @@ jobs:
     # build cache are warmed once and reused across every command below.
     # A single git-status check verifies none of the commands changed tracked files.
     name: "Check: go (build/fmtjson/mod-tidy/generate/fmt/fix)"
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v7
         with:
@@ -43,7 +43,7 @@ jobs:
 
   prettier:
     name: "Check: prettier"
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v7
         with:

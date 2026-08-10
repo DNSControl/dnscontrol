@@ -33,7 +33,7 @@ jobs:
 # Run unit tests:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       TEST_RESULTS: "/tmp/test-results"
     steps:
