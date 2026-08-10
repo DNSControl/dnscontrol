@@ -36,9 +36,13 @@ func MakeAKAMAITLC(origin string, _ map[string]string, isEnabled nrc.Flags, args
 	if isEnabled.TargetIsFqdnNoDot {
 		origin = "."
 	}
+	targetHost1, err := mustbe.TargetHost(origin, isEnabled, args[1])
+	if err != nil {
+		return nil, err
+	}
 	return AKAMAITLC{
 		AnswerType: mustbe.RawString(args[0]),
-		Target:     mustbe.TargetHost(origin, isEnabled, args[1]),
+		Target:     targetHost1,
 	}, nil
 }
 

@@ -37,7 +37,7 @@ import (
 //   - `$origin.` -> `$origin.`
 //   - `other.com.` -> `other.com.`
 //   - `short` -> `short.$origin`
-func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
+func TargetHost(origin string, isEnabled nrc.Flags, arg any) (string, error) {
 	// Check for programmer error. Origin shouldn't end in ".", unless it == "." which is a special mode.
 	if origin != "." && strings.HasSuffix(origin, ".") {
 		panic(fmt.Sprintf("mustbe.Host must NOT be called with an origin ending with . (origin=%q)", origin))
@@ -56,13 +56,13 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	// Special mode for legacy situations.
 	if origin == "" {
 		if name == "" {
-			return "UNKNOWNORIGIN."
+			return "UNKNOWNORIGIN.", nil
 		}
-		return name
+		return name, nil
 	}
 
 	if isEnabled.EnforceOneDotPolicy && violatesSingleDotPolicy(name) {
-		return ErrorSingleDotViolation
+		return "", MakeErrorSingleDotViolation(name)
 	}
 
 	// TODO(tlim):
@@ -76,13 +76,13 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	// In the future we should eliminate the origin=".".
 
 	if origin == "." && name == "" {
-		return "."
+		return ".", nil
 	}
 
 	// Special symbols:
 	switch name {
 	case "@", "":
-		return origin + "."
+		return origin + ".", nil
 	}
 
 	// Normalize it
@@ -91,23 +91,23 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) string {
 	if isEnabled.TargetIsFqdnNoDot {
 		// The dot is unexpected but we'll allow it.
 		if name[len(name)-1] == '.' {
-			return name
+			return name, nil
 		}
 		// Add the dot.
-		return name + "."
+		return name + ".", nil
 	}
 
 	// Is this already a FQDN? Return it.
 	if strings.HasSuffix(name, ".") {
-		return name
+		return name, nil
 	}
 
 	// This must be a shortname without a dot. Add origin and dot.
-	return name + "." + origin + "."
+	return name + "." + origin + ".", nil
 }
 
 // TargetHostSRV is like TargetHost with the exception that "." and "" have special meaning and are left alone.
-func TargetHostSRV(origin string, isEnabled nrc.Flags, arg any) string {
+func TargetHostSRV(origin string, isEnabled nrc.Flags, arg any) (string, error) {
 
 	var name string
 	switch v := arg.(type) {
@@ -120,17 +120,15 @@ func TargetHostSRV(origin string, isEnabled nrc.Flags, arg any) string {
 	}
 
 	if name == "" || name == "." {
-		return name
+		return name, nil
 	}
 
 	if isEnabled.EnforceOneDotPolicy && violatesSingleDotPolicy(name) {
-		return ErrorSingleDotViolation
+		return "", MakeErrorSingleDotViolation(name)
 	}
 
 	return TargetHost(origin, isEnabled, name)
 }
-
-const ErrorSingleDotViolation = "SINGLE_DOT_ERROR"
 
 func violatesSingleDotPolicy(s string) bool {
 	// FQDN+"." passes.

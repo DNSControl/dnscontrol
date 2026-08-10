@@ -67,7 +67,11 @@ func (rr *R53ALIAS) Parse(tokens []string, s string) error {
 		return fmt.Errorf("R53_ALIAS requires exactly 4 arguments, got %d: %v", len(args), args)
 	}
 	rr.AliasType = mustbe.RawString(args[0])
-	rr.Target = mustbe.TargetHost("", nrc.Flags{}, args[1])
+	targetHost1, err := mustbe.TargetHost("", nrc.Flags{}, args[1])
+	if err != nil {
+		return err
+	}
+	rr.Target = targetHost1
 	rr.EvalTargetHealth = mustbe.RawString(args[2])
 	rr.ZoneID = mustbe.RawString(args[3])
 	return nil
