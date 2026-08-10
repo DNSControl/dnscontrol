@@ -71,17 +71,12 @@ func (config *DNSConfig) ImportRawRecords() error {
 						return fmt.Errorf("subdomain error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 					}
 				}
-				label, err := dc.LabelFromDnsconfigjs(rawRec.Args[0].(string), subdomain)
-				if err != nil {
-					return fmt.Errorf("label error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
-				}
-
 				mm, err := mergeMetas(rawRec.Metas)
 				if err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
 
-				rec, err := dc.newRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm, subdomain)
+				rec, err := dc.newRecordConfigFromDnsconfigjs(rawRec.Args[0].(string), rawRec.TTL, typeNum, rawRec.Args[1:], mm, subdomain)
 				if err != nil {
 					return fmt.Errorf("ImportRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
