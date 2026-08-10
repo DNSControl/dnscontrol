@@ -129,12 +129,17 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 		targetOrigin = subdomain + "." + dc.Name
 	}
 
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
+	label, err := dc.LabelFromDnsconfigjs(name, subdomain)
 	if err != nil {
-		return nil, fmt.Errorf("dnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
+		return nil, err
 	}
 
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
+	if err != nil {
+		return nil, fmt.Errorf("dnsconfigjs: failed to create RDATA for type %s: %w", dnsutilv2.TypeToString(typeNum), err)
+	}
+
+	return newRecordConfigHelper(dc.Name, label, ttl, typeNum, rd, metadata)
 }
 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.
