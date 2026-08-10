@@ -71,8 +71,6 @@ type RecordConfig struct {
 	//// Legacy fields we hope to remove someday
 
 	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
-	// target          string // If a name, must end with "."
-	AnswerType      string `json:"answer_type,omitempty"`
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
 }
 
