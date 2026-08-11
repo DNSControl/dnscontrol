@@ -55,8 +55,6 @@ D("example.com", REG_NONE, DnsProvider(DSP_OPENWRT),
 ```
 {% endcode %}
 
-## Feature Summary
-
 <!-- provider-features-start -->
 - Provider Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌

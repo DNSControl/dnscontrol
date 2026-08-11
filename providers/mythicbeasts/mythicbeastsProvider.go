@@ -12,11 +12,11 @@ import (
 	"net/http"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv1 "github.com/miekg/dns"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
@@ -123,19 +123,18 @@ func (n *mythicBeastsProvider) GetZoneRecords(dc *models.DomainConfig) (models.R
 		body, _ := io.ReadAll(resp.Body)
 		return nil, fmt.Errorf("got HTTP %v, want %v: %v", got, want, string(body))
 	}
-	return zoneFileToRecords(dc, resp.Body)
+	return zoneFileToRecords(resp.Body, domain)
 }
 
-func zoneFileToRecords(dc *models.DomainConfig, r io.Reader) (models.Records, error) {
-	origin := dc.Name
-	zp := dnsv2.NewZoneParser(r, origin, origin)
+func zoneFileToRecords(r io.Reader, origin string) (models.Records, error) {
+	zp := dnsv1.NewZoneParser(r, origin, origin)
 	var records []*models.RecordConfig
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
-		rec, err := dnsrr.RRv2toRC(dc, rr)
+		rec, err := dnsrr.RRtoRC(rr, origin)
 		if err != nil {
 			return nil, err
 		}
-		records = append(records, rec)
+		records = append(records, &rec)
 	}
 
 	if err := zp.Err(); err != nil {
@@ -160,19 +159,11 @@ func (n *mythicBeastsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig
 				F: func() error {
 					var b strings.Builder
 					for _, record := range result.DesiredPlus {
-						switch rr := record.ToRRv2().(type) {
-						case *dnsv2.SSHFP:
+						switch rr := record.ToRR().(type) {
+						case *dnsv1.SSHFP:
 							// "Hex strings [for SSHFP] must be in lower-case", per Mythic Beasts API docs.
-							// miekg's DNS outputs uppercase: https://git hub.com/miekg/dns/blob/48f38ebef989eedc6b57f1869ae849ccc8f5fe29/types.go#L988
-							h := rr.Header()
-							fmt.Fprintf(&b, "%s %d IN SSHFP %d %d %s\n", h.Name, h.TTL,
-								rr.Algorithm, rr.Type, strings.ToLower(rr.FingerPrint))
-						case *dnsv2.TLSA:
-							//fmt.Fprintf(&b, "%v\n", strings.ToLower(rr.String()))
-							h := rr.Header()
-							// MythicBeasts is case-sentitive about "IN" and the certificate (must be lowercase).
-							fmt.Fprintf(&b, "%s %d IN TLSA %d %d %d %s\n", h.Name, h.TTL,
-								rr.Usage, rr.Selector, rr.MatchingType, strings.ToLower(rr.Certificate))
+							// miekg's DNS outputs uppercase: https://github.com/miekg/dns/blob/48f38ebef989eedc6b57f1869ae849ccc8f5fe29/types.go#L988
+							fmt.Fprintf(&b, "%s %d %d %s\n", rr.Header().String(), rr.Algorithm, rr.Type, strings.ToLower(rr.FingerPrint))
 						default:
 							fmt.Fprintf(&b, "%v\n", rr.String())
 						}

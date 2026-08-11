@@ -7,17 +7,18 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/pquerna/otp/totp"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/providers/bind"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/providers/bind"
 )
 
 var features = providers.DocumentationNotes{
@@ -202,43 +203,45 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 	var zoneTTL uint32
 	var resourceRecords []*ResourceRecord
 
-	for _, rc := range recs {
-		if rc.Type == "NS" && rc.Name == "@" {
+	for _, record := range recs {
+		if record.Type == "NS" && record.Name == "@" {
 			// NS records for the APEX should be handled differently
 			nameServers = append(nameServers, &models.Nameserver{
-				Name: strings.TrimSuffix(rc.AsNS().Ns, "."),
+				Name: strings.TrimSuffix(record.GetTargetField(), "."),
 			})
 
-			zoneTTL = rc.TTL
+			zoneTTL = record.TTL
 		} else {
-			name := rc.Name
-			if name == "@" {
-				name = ""
-			}
-
 			resourceRecord := &ResourceRecord{
-				Name: name,
-				TTL:  int64(rc.TTL),
-				Type: rc.Type,
+				Name:  record.Name,
+				TTL:   int64(record.TTL),
+				Type:  record.Type,
+				Value: record.GetTargetField(),
 			}
 
-			switch rc.TypeNum {
-			case dnsv2.TypeMX:
-				f := rc.AsMX()
-				resourceRecord.Pref = int32(f.Preference)
-				resourceRecord.Value = rc.GetRDATA().String()
-				// If that doesn't work, try:
-				//resourceRecord.Pref = int32(f.Preference)
-				//resourceRecord.Value = f.Mx
+			if resourceRecord.Name == "@" {
+				resourceRecord.Name = ""
+			}
 
-			// case dnsv2.TypeSRV:
-			// 	resourceRecord.Value = rc.GetRDATA().String()
+			if record.Type == "MX" {
+				resourceRecord.Pref = int32(record.MxPreference)
+			}
 
-			// case dnsv2.TypeCAA:
-			// 	resourceRecord.Value = rc.GetRDATA().String()
+			if record.Type == "SRV" {
+				resourceRecord.Value = fmt.Sprintf("%d %d %d %s",
+					record.SrvPriority,
+					record.SrvWeight,
+					record.SrvPort,
+					record.GetTargetField(),
+				)
+			}
 
-			default:
-				resourceRecord.Value = rc.GetRDATA().String()
+			if record.Type == "CAA" {
+				resourceRecord.Value = fmt.Sprintf("%d %s \"%s\"",
+					record.CaaFlag,
+					record.CaaTag,
+					record.GetTargetField(),
+				)
 			}
 
 			resourceRecords = append(resourceRecords, resourceRecord)
@@ -269,7 +272,7 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	existingRecords := make([]*models.RecordConfig, len(zone.ResourceRecords))
 	for i, resourceRecord := range zone.ResourceRecords {
 		var err error
-		existingRecords[i], err = toRecordConfig(dc, resourceRecord)
+		existingRecords[i], err = toRecordConfig(domain, resourceRecord)
 		if err != nil {
 			return nil, err
 		}
@@ -281,33 +284,47 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 
 	// AutoDNS doesn't respond with APEX nameserver records as regular RR but rather as a zone property
 	for _, nameServer := range zone.NameServers {
-		// make sure the value for this NS record is suffixed with a dot at the end
-		nameServerRecord, err := dc.NewRecordConfig("@", zone.Soa.TTL, dnsv2.TypeNS, strings.TrimSuffix(nameServer.Name, ".")+".")
-		if err != nil {
-			return nil, err
+		nameServerRecord := &models.RecordConfig{
+			TTL: zone.Soa.TTL,
 		}
+
+		nameServerRecord.SetLabel("", domain)
+
+		// make sure the value for this NS record is suffixed with a dot at the end
+		_ = nameServerRecord.PopulateFromString("NS", strings.TrimSuffix(nameServer.Name, ".")+".", domain)
 
 		existingRecords = append(existingRecords, nameServerRecord)
 	}
 
 	if zone.MainRecord != nil && zone.MainRecord.Value != "" {
-		ttl := uint32(zone.MainRecord.TTL)
+		addressRecord := &models.RecordConfig{
+			TTL: uint32(zone.MainRecord.TTL),
+		}
+
 		// If TTL is not set for an individual RR AutoDNS defaults to the zone TTL defined in SOA
-		if ttl == 0 {
-			ttl = zone.Soa.TTL
+		if addressRecord.TTL == 0 {
+			addressRecord.TTL = zone.Soa.TTL
 		}
-		addressRecord, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeA, zone.MainRecord.Value)
-		if err != nil {
-			return nil, err
-		}
+
+		addressRecord.SetLabel("", domain)
+
+		_ = addressRecord.PopulateFromString("A", zone.MainRecord.Value, domain)
 
 		existingRecords = append(existingRecords, addressRecord)
 
 		if zone.IncludeWwwForMain {
-			prefixedAddressRecord, err := dc.NewRecordConfig(dc.LabelFromShort("www"), ttl, dnsv2.TypeA, zone.MainRecord.Value)
-			if err != nil {
-				return nil, err
+			prefixedAddressRecord := &models.RecordConfig{
+				TTL: uint32(zone.MainRecord.TTL),
 			}
+
+			// If TTL is not set for an individual RR AutoDNS defaults to the zone TTL defined in SOA
+			if prefixedAddressRecord.TTL == 0 {
+				prefixedAddressRecord.TTL = zone.Soa.TTL
+			}
+
+			prefixedAddressRecord.SetLabel("www", domain)
+
+			_ = prefixedAddressRecord.PopulateFromString("A", zone.MainRecord.Value, domain)
 
 			existingRecords = append(existingRecords, prefixedAddressRecord)
 		}
@@ -386,24 +403,65 @@ func (api *autoDNSProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]
 	return nil, nil
 }
 
-func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(record.Name)
-	var rc *models.RecordConfig
-	var err error
-
-	ttl := uint32(record.TTL)
-	switch record.Type {
-	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.Pref), record.Value)
-	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", record.Pref, record.Value))
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, record.Type, record.Value)
+func toRecordConfig(domain string, record *ResourceRecord) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     record.Type,
+		TTL:      uint32(record.TTL),
+		Original: record,
 	}
-	if err != nil {
-		return nil, err
+	rc.SetLabel(record.Name, domain)
+
+	// special record types are handled below, skip the `rc.PopulateFromString` method
+	if record.Type != "MX" && record.Type != "SRV" {
+		if err := rc.PopulateFromString(record.Type, record.Value, domain); err != nil {
+			return nil, err
+		}
 	}
 
-	rc.Original = record
+	if record.Type == "MX" {
+		rc.MxPreference = uint16(record.Pref)
+		if err := rc.SetTarget(record.Value); err != nil {
+			return nil, err
+		}
+	}
+
+	if record.Type == "SRV" {
+		rc.SrvPriority = uint16(record.Pref)
+
+		re := regexp.MustCompile(`(\d+) (\d+) (.+)$`)
+		found := re.FindStringSubmatch(record.Value)
+		if len(found) != 4 {
+			return nil, fmt.Errorf("invalid SRV record value: %s", record.Value)
+		}
+
+		weight, err := strconv.Atoi(found[1])
+		if err != nil {
+			return nil, err
+		}
+		if weight < 0 {
+			rc.SrvWeight = 0
+		} else if weight > 65535 {
+			rc.SrvWeight = 65535
+		} else {
+			rc.SrvWeight = uint16(weight)
+		}
+
+		port, err := strconv.Atoi(found[2])
+		if err != nil {
+			return nil, err
+		}
+		if port < 0 {
+			rc.SrvPort = 0
+		} else if port > 65535 {
+			rc.SrvPort = 65535
+		} else {
+			rc.SrvPort = uint16(port)
+		}
+
+		if err := rc.SetTarget(found[3]); err != nil {
+			return nil, err
+		}
+	}
+
 	return rc, nil
 }

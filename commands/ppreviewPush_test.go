@@ -3,16 +3,17 @@ package commands
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
 )
 
 func Test_whichZonesToProcess(t *testing.T) {
 
-	dcNoTag := models.MustNewDomainConfig("example.com")
-	dcNoTag2 := models.MustNewDomainConfig("example.net")
-	dcTaggedEmpty := models.MustNewDomainConfig("example.com!")
-	dcTaggedGeorge := models.MustNewDomainConfig("example.com!george")
-	dcTaggedJohn := models.MustNewDomainConfig("example.com!john")
+	dcNoTag := &models.DomainConfig{Name: "example.com"}
+	dcNoTag2 := &models.DomainConfig{Name: "example.net"}
+	dcTaggedEmpty := &models.DomainConfig{Name: "example.com!"}
+	dcTaggedGeorge := &models.DomainConfig{Name: "example.com!george"}
+	dcTaggedJohn := &models.DomainConfig{Name: "example.com!john"}
 
 	allDC := []*models.DomainConfig{
 		dcNoTag,
@@ -25,6 +26,7 @@ func Test_whichZonesToProcess(t *testing.T) {
 	// This is needed since we aren't calling js.ExecuteJavaScript().
 	for _, dc := range allDC {
 		dc.PostProcess()
+		rtypecontrol.FixLegacyDC(dc)
 	}
 
 	type args struct {
@@ -207,7 +209,7 @@ func Test_zoneWillBeCreated(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			zone := models.MustNewDomainConfig("example.com")
+			zone := &models.DomainConfig{Name: "example.com"}
 			zone.StorePopulateCorrections(provider, tc.corrections)
 			if got := zoneWillBeCreated(zone, provider); got != tc.want {
 				t.Errorf("zoneWillBeCreated() = %v, want %v", got, tc.want)
@@ -240,7 +242,7 @@ func Test_reportZonePendingCreation(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			zone := models.MustNewDomainConfig("example.com")
+			zone := &models.DomainConfig{Name: "example.com"}
 			zone.StorePopulateCorrections(provider, tc.corrections)
 			if got := reportZonePendingCreation(zone, provider, tc.push, tc.populateOnPreview); got != tc.want {
 				t.Errorf("reportZonePendingCreation() = %v, want %v", got, tc.want)

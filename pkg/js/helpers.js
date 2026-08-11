@@ -306,13 +306,6 @@ function DefaultTTL(v) {
 function makeCAAFlag(value) {
     return function (record) {
         record.caaflag |= value;
-        if (!_.isObject(record.meta)) {
-            record.meta = {};
-        }
-        // Store as a string: meta values cross to Go as strings (see
-        // mergeMetas), otherwise a numeric value would be mangled (e.g. into
-        // "%!s(float64=128)").
-        record.meta['caaflag'] = record.caaflag.toString();
     };
 }
 
@@ -331,45 +324,57 @@ function DnsProvider(name, nsCount) {
     };
 }
 
-// // AKAMAITLC(name, answer_type, target, recordModifiers...)
-// var AKAMAITLC = recordBuilder('AKAMAITLC', {
-//     args: [
-//         ['name', _.isString],
-//         [
-//             'answer_type',
-//             function (value) {
-//                 return (
-//                     _.isString(value) &&
-//                     ['DUAL', 'A', 'AAAA'].indexOf(value) !== -1
-//                 );
-//             },
-//         ],
-//         ['target', _.isString],
-//     ],
-//     transform: function (record, args, modifier) {
-//         record.name = args.name;
-//         record.answer_type = args.answer_type;
-//         record.target = args.target;
-//     },
-// });
+// A(name,ip, recordModifiers...)
+var A = recordBuilder('A');
+
+// AAAA(name,ip, recordModifiers...)
+var AAAA = recordBuilder('AAAA');
+
+// AKAMAICDN(name, target, recordModifiers...)
+var AKAMAICDN = recordBuilder('AKAMAICDN');
+
+// AKAMAITLC(name, answer_type, target, recordModifiers...)
+var AKAMAITLC = recordBuilder('AKAMAITLC', {
+    args: [
+        ['name', _.isString],
+        [
+            'answer_type',
+            function (value) {
+                return (
+                    _.isString(value) &&
+                    ['DUAL', 'A', 'AAAA'].indexOf(value) !== -1
+                );
+            },
+        ],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifier) {
+        record.name = args.name;
+        record.answer_type = args.answer_type;
+        record.target = args.target;
+    },
+});
+
+// ALIAS(name,target, recordModifiers...)
+var ALIAS = recordBuilder('ALIAS');
 
 // AZURE_ALIAS(name, type, target, recordModifiers...)
-// var AZURE_ALIAS = recordBuilder('AZURE_ALIAS', {
-//     args: [
-//         ['name', _.isString],
-//         ['type', validateAzureAliasType],
-//         ['target', _.isString],
-//     ],
-//     transform: function (record, args, modifier) {
-//         record.name = args.name;
-//         record.target = args.target;
-//         if (_.isObject(record.azure_alias)) {
-//             record.azure_alias['type'] = args.type;
-//         } else {
-//             record.azure_alias = { type: args.type };
-//         }
-//     },
-// });
+var AZURE_ALIAS = recordBuilder('AZURE_ALIAS', {
+    args: [
+        ['name', _.isString],
+        ['type', validateAzureAliasType],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifier) {
+        record.name = args.name;
+        record.target = args.target;
+        if (_.isObject(record.azure_alias)) {
+            record.azure_alias['type'] = args.type;
+        } else {
+            record.azure_alias = { type: args.type };
+        }
+    },
+});
 
 function validateAzureAliasType(value) {
     if (!_.isString(value)) {
@@ -378,17 +383,38 @@ function validateAzureAliasType(value) {
     return ['A', 'AAAA', 'CNAME'].indexOf(value) !== -1;
 }
 
+// R53_ALIAS(name, target, type, recordModifiers...)
+var R53_ALIAS = recordBuilder('R53_ALIAS', {
+    args: [
+        ['name', _.isString],
+        ['type', validateR53AliasType],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.target = args.target;
+        if (_.isObject(record.r53_alias)) {
+            record.r53_alias['type'] = args.type;
+            if (!_.isString(record.r53_alias['evaluate_target_health'])) {
+                record.r53_alias['evaluate_target_health'] = 'false';
+            }
+        } else {
+            record.r53_alias = {
+                type: args.type,
+                evaluate_target_health: 'false',
+            };
+        }
+    },
+});
+
 // R53_ZONE(zone_id)
 function R53_ZONE(zone_id) {
     return function (r) {
         if (_isDomain(r)) {
             r.meta.zone_id = zone_id;
-            //console.debug("R53_Opt store zoneid in domainmeta", zone_id);
         } else if (_.isObject(r.r53_alias)) {
             r.r53_alias['zone_id'] = zone_id;
-            //console.debug("R53_Opt store zoneid in recordr53alias", zone_id);
         } else {
-            //console.debug("R53_Opt MAKE  zoneid in recordr53alias", zone_id);
             r.r53_alias = { zone_id: zone_id };
         }
     };
@@ -403,17 +429,6 @@ function R53_EVALUATE_TARGET_HEALTH(enabled) {
             r.r53_alias = { evaluate_target_health: enabled.toString() };
         }
     };
-}
-
-function r53AliasOptions(record, processedArgs, processedMetas) {
-    var replacement = [processedArgs[0], processedArgs[1], '', ''];
-
-    if (_.isObject(record.r53_alias)) {
-        replacement[3] = record.r53_alias['evaluate_target_health'] = 'false';
-        replacement[4] = record.r53_alias['zone_id'] || '';
-    }
-
-    return replacement;
 }
 
 // R53_WEIGHT(weight, set_identifier) configures Route 53 weighted routing.
@@ -473,8 +488,244 @@ function validateR53AliasType(value) {
     );
 }
 
+// CAA(name,tag,value, recordModifiers...)
+var CAA = recordBuilder('CAA', {
+    // TODO(tlim): It should be an error if value is not 0 or 128.
+    args: [
+        ['name', _.isString],
+        ['tag', _.isString],
+        ['value', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.caatag = args.tag;
+        record.target = args.value;
+    },
+    modifierNumber: function (record, value) {
+        record.caaflags |= value;
+    },
+});
+
+// CNAME(name,target, recordModifiers...)
+var CNAME = recordBuilder('CNAME');
+
+// DHCID(name,target, recordModifiers...)
+var DHCID = recordBuilder('DHCID');
+
+// DNAME(name,target, recordModifiers...)
+var DNAME = recordBuilder('DNAME');
+
+// DNSKEY(name, flags, protocol, algorithm, publickey)
+var DNSKEY = recordBuilder('DNSKEY', {
+    args: [
+        ['name', _.isString],
+        ['flags', _.isNumber],
+        ['protocol', _.isNumber],
+        ['algorithm', _.isNumber],
+        ['publickey', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.dnskeyflags = args.flags;
+        record.dnskeyprotocol = args.protocol;
+        record.dnskeyalgorithm = args.algorithm;
+        record.dnskeypublickey = args.publickey;
+        record.target = args.target;
+    },
+});
+
+// name, priority, target, params
+var HTTPS = recordBuilder('HTTPS', {
+    args: [
+        ['name', _.isString],
+        ['priority', _.isNumber],
+        ['target', _.isString],
+        ['params', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.svcpriority = args.priority;
+        record.target = args.target;
+        record.svcparams = args.params;
+    },
+});
+
+// PTR(name,target, recordModifiers...)
+var PTR = recordBuilder('PTR');
+
+// NAPTR(name,order,preference,flags,service,regexp,target, recordModifiers...)
+var NAPTR = recordBuilder('NAPTR', {
+    args: [
+        ['name', _.isString],
+        ['order', _.isNumber],
+        ['preference', _.isNumber],
+        ['flags', _.isString],
+        ['service', _.isString],
+        ['regexp', _.isString],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.naptrorder = args.order;
+        record.naptrpreference = args.preference;
+        record.naptrflags = args.flags;
+        record.naptrservice = args.service;
+        record.naptrregexp = args.regexp;
+        record.target = args.target;
+    },
+});
+
+// OPENPGPKEY(name,target, recordModifiers...)
+var OPENPGPKEY = recordBuilder('OPENPGPKEY');
+
+// name, usage, selector, matchingtype, certificate
+var SMIMEA = recordBuilder('SMIMEA', {
+    args: [
+        ['name', _.isString],
+        ['usage', _.isNumber],
+        ['selector', _.isNumber],
+        ['matchingtype', _.isNumber],
+        ['target', _.isString], // recordBuilder needs a "target" argument
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name + '._smimecert';
+        record.smimeausage = args.usage;
+        record.smimeaselector = args.selector;
+        record.smimeamatchingtype = args.matchingtype;
+        record.target = args.target;
+    },
+});
+
+// SOA(name,ns,mbox,refresh,retry,expire,minimum, recordModifiers...)
+var SOA = recordBuilder('SOA', {
+    args: [
+        ['name', _.isString],
+        ['target', _.isString],
+        ['mbox', _.isString],
+        ['refresh', _.isNumber],
+        ['retry', _.isNumber],
+        ['expire', _.isNumber],
+        ['minttl', _.isNumber],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.target = args.target;
+        record.soambox = args.mbox;
+        record.soarefresh = args.refresh;
+        record.soaretry = args.retry;
+        record.soaexpire = args.expire;
+        record.soaminttl = args.minttl;
+    },
+});
+
+// SRV(name,priority,weight,port,target, recordModifiers...)
+var SRV = recordBuilder('SRV', {
+    args: [
+        ['name', _.isString],
+        ['priority', _.isNumber],
+        ['weight', _.isNumber],
+        ['port', _.isNumber],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.srvpriority = args.priority;
+        record.srvweight = args.weight;
+        record.srvport = args.port;
+        record.target = args.target;
+    },
+});
+
+// SSHFP(name,algorithm,type,value, recordModifiers...)
+var SSHFP = recordBuilder('SSHFP', {
+    args: [
+        ['name', _.isString],
+        ['algorithm', _.isNumber],
+        ['fingerprint', _.isNumber],
+        ['value', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.sshfpalgorithm = args.algorithm;
+        record.sshfpfingerprint = args.fingerprint;
+        record.target = args.value;
+    },
+});
+
+// name, priority, target, params
+var SVCB = recordBuilder('SVCB', {
+    args: [
+        ['name', _.isString],
+        ['priority', _.isNumber],
+        ['target', _.isString],
+        ['params', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.svcpriority = args.priority;
+        record.target = args.target;
+        record.svcparams = args.params;
+    },
+});
+
+// name, usage, selector, matchingtype, certificate
+var TLSA = recordBuilder('TLSA', {
+    args: [
+        ['name', _.isString],
+        ['usage', _.isNumber],
+        ['selector', _.isNumber],
+        ['matchingtype', _.isNumber],
+        ['target', _.isString], // recordBuilder needs a "target" argument
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.tlsausage = args.usage;
+        record.tlsaselector = args.selector;
+        record.tlsamatchingtype = args.matchingtype;
+        record.target = args.target;
+    },
+});
+
+function isStringOrArray(x) {
+    return _.isString(x) || _.isArray(x);
+}
+
 // AUTOSPLIT is deprecated. It is now a no-op.
 var AUTOSPLIT = {};
+
+// TXT(name,target, recordModifiers...)
+var TXT = recordBuilder('TXT', {
+    args: [
+        ['name', _.isString],
+        ['target', isStringOrArray],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        // Store the strings from the user verbatim.
+        if (_.isString(args.target)) {
+            record.target = args.target;
+        } else {
+            record.target = args.target.join('');
+        }
+    },
+});
+
+var LUA = recordBuilder('LUA', {
+    args: [
+        ['name', _.isString],
+        ['rtype', _.isString],
+        ['target', isStringOrArray],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.luartype = args.rtype.toUpperCase();
+        if (_.isString(args.target)) {
+            record.target = args.target;
+        } else {
+            record.target = args.target.join('');
+        }
+    },
+});
 
 // Parses coordinates of the form 41°24'12.2"N 2°10'26.5"E
 function parseDMSCoordinatesString(inputString) {
@@ -696,6 +947,31 @@ function locDMSBuilder(record, args) {
     record.locvertpre = getENotationInt(args.vp);
 }
 
+// LOC(name,d1,m1,s1,ns,d2,m2,s2,ew,alt,siz,hp,vp, recordModifiers...)
+var LOC = recordBuilder('LOC', {
+    args: [
+        ['name', _.isString], //i.e. subdomain
+        ['d1', _.isNumber], // N/S degrees
+        ['m1', _.isNumber], // N/S minutes
+        ['s1', _.isNumber], // N/S seconds
+        ['ns', _.isString], // N/S
+        ['d2', _.isNumber], // E/W degrees
+        ['m2', _.isNumber], // E/W minutes
+        ['s2', _.isNumber], // E/W seconds
+        ['ew', _.isString], // E/W
+        ['alt', _.isNumber], // altitude
+        ['siz', _.isNumber], // size/precision
+        ['hp', _.isNumber], // horizontal precision
+        ['vp', _.isNumber], // vertical precision
+    ],
+    transform: function (record, args, modifiers) {
+        validateIntegers(args);
+
+        record = locStringBuilder(record, args);
+        record = locDMSBuilder(record, args);
+    },
+});
+
 // Post-validation function for LOC that checks if degrees and minutes are integers
 function validateIntegers(args) {
     if (args.d1 % 1 !== 0) {
@@ -761,6 +1037,23 @@ function ConvertDDToDMS(D, longitude) {
         sc: (0 | (((D * 60) % 1) * 60000)) / 1000,
     };
 }
+
+// MX(name,priority,target, recordModifiers...)
+var MX = recordBuilder('MX', {
+    args: [
+        ['name', _.isString],
+        ['priority', _.isNumber],
+        ['target', _.isString],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.mxpreference = args.priority;
+        record.target = args.target;
+    },
+});
+
+// NS(name,target, recordModifiers...)
+var NS = recordBuilder('NS');
 
 // NAMESERVER(name,target)
 function NAMESERVER(name) {
@@ -861,30 +1154,32 @@ function IGNORE_TARGET(target, rType) {
 }
 
 // IMPORT_TRANSFORM(translation_table, domain, ttl)
-function importTransformOptions(record, processedArgs) {
-    return [
-        processedArgs[0],
-        processedArgs[1],
-        processedArgs[3],
-        processedArgs.length === 5 ? processedArgs[4] : '',
-        processedArgs[2],
-    ];
-}
-
-var importTransformRawBuilder = rawrecordBuilder(
-    'IMPORT_TRANSFORM',
-    true,
-    importTransformOptions
-);
-function importTransformBuilder(translation_table) {
-    arguments[0] = format_tt(translation_table);
-    return importTransformRawBuilder.apply(null, arguments);
-}
-
-var IMPORT_TRANSFORM = importTransformBuilder;
+var IMPORT_TRANSFORM = recordBuilder('IMPORT_TRANSFORM', {
+    args: [['translation_table'], ['domain'], ['ttl', _.isNumber]],
+    transform: function (record, args, modifiers) {
+        record.name = '@';
+        record.target = args.domain;
+        record.meta['transform_table'] = format_tt(args.translation_table);
+        record.ttl = args.ttl;
+    },
+});
 
 // IMPORT_TRANSFORM_STRIP(translation_table, domain, ttl, suffixstrip)
-var IMPORT_TRANSFORM_STRIP = importTransformBuilder;
+var IMPORT_TRANSFORM_STRIP = recordBuilder('IMPORT_TRANSFORM', {
+    args: [
+        ['translation_table'],
+        ['domain'],
+        ['ttl', _.isNumber],
+        ['suffixstrip'],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = '@';
+        record.target = args.domain;
+        record.meta['transform_table'] = format_tt(args.translation_table);
+        record.ttl = args.ttl;
+        record.meta['transform_suffixstrip'] = args.suffixstrip;
+    },
+});
 
 // PURGE()
 function PURGE(d) {
@@ -1049,6 +1344,68 @@ function GIDINET_PREMIUM_NS() {
     ];
 }
 
+// CUSTOM, PROVIDER SPECIFIC RECORD TYPES
+
+function _validateCloudflareRedirect(value) {
+    if (!_.isString(value)) {
+        return false;
+    }
+    return value.indexOf(',') === -1;
+}
+
+var CF_WORKER_ROUTE = recordBuilder('CF_WORKER_ROUTE', {
+    args: [
+        ['pattern', _validateCloudflareRedirect],
+        ['script', _validateCloudflareRedirect],
+    ],
+    transform: function (record, args, modifiers) {
+        record.name = '@';
+        record.target = args.pattern + ',' + args.script;
+    },
+});
+
+var ADGUARDHOME_A_PASSTHROUGH = recordBuilder('ADGUARDHOME_A_PASSTHROUGH');
+
+var ADGUARDHOME_AAAA_PASSTHROUGH = recordBuilder(
+    'ADGUARDHOME_AAAA_PASSTHROUGH'
+);
+
+var URL = recordBuilder('URL');
+var URL301 = recordBuilder('URL301');
+var FRAME = recordBuilder('FRAME');
+var CLOUDNS_WR = recordBuilder('CLOUDNS_WR');
+/**
+ * @deprecated Please use URL or URL301 instead
+ */
+var PORKBUN_URLFWD = recordBuilder('PORKBUN_URLFWD');
+var BUNNY_DNS_RDR = recordBuilder('BUNNY_DNS_RDR');
+
+// MIKROTIK_FWD(name, target, modifiers...)
+// RouterOS conditional DNS forwarding entry.
+var MIKROTIK_FWD = recordBuilder('MIKROTIK_FWD');
+
+// MIKROTIK_NXDOMAIN(name, modifiers...)
+// RouterOS NXDOMAIN entry — returns NXDOMAIN for matching queries (DNS blackholing).
+var MIKROTIK_NXDOMAIN = recordBuilder('MIKROTIK_NXDOMAIN', {
+    args: [['name', _.isString]],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.target = 'NXDOMAIN';
+    },
+});
+
+// MIKROTIK_FORWARDER(name, dns_servers, modifiers...)
+// RouterOS named DNS forwarder (/ip/dns/forwarders).
+// Use in the synthetic zone "_forwarders.mikrotik".
+var MIKROTIK_FORWARDER = recordBuilder('MIKROTIK_FORWARDER');
+
+var BUNNY_DNS_PZ = recordBuilder('BUNNY_DNS_PZ', {
+    args: [['name', _.isString], ['pullZoneId']],
+    transform: function (record, args, modifiers) {
+        record.name = args.name;
+        record.target = String(args.pullZoneId);
+    },
+});
 // LOC_BUILDER_DD takes an object:
 // label: The DNS label for the LOC record. (default: '@')
 // x: Decimal X coordinate.
@@ -1971,13 +2328,10 @@ var DISABLE_REPEATED_DOMAIN_CHECK = { skip_fqdn_check: 'true' };
 // Javascript knowledge, and allows us to use the testing platform build into
 // Go.
 
-function rawrecordBuilder(type, noLabel, optionalsFn) {
+function rawrecordBuilder(type) {
     return function () {
+        // Copy the raw args:
         var rawArgs = [];
-        if (noLabel !== undefined && noLabel) {
-            rawArgs.push('@');
-        }
-        // Copy the raw args locally.
         for (var i = 0; i < arguments.length; i++) {
             rawArgs.push(arguments[i]);
         }
@@ -2012,54 +2366,15 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 var r = rawArgs[i];
                 if (_.isFunction(r)) {
                     r(record);
-                } else if (_.isArray(r)) {
-                    // An array argument (e.g. TXT("n", ["a", "b"])) is a set of
-                    // string segments; join them into a single argument,
-                    // mirroring the legacy recordBuilder. Arrays are never
-                    // metadata, so this must be checked before _.isObject()
-                    // (which is true for arrays).
-                    processedArgs.push(r.join(''));
                 } else if (_.isObject(r)) {
-                    // Convert a transform array to its encoded string form
-                    // (see format_tt), mirroring the legacy recordBuilder.
-                    // Otherwise the array crosses to Go as an unparseable
-                    // string and IP() numbers are never converted to dotted
-                    // decimal.
-                    if (r.transform && _.isArray(r.transform)) {
-                        r.transform = format_tt(r.transform);
-                    }
                     processedMetas.push(r);
                 } else {
                     processedArgs.push(r);
                 }
             }
-
-            // Grab meta data that is OptionalsFields
-            if (optionalsFn !== undefined) {
-                //console.debug("FOO", optionalsFn)
-                processedArgs = optionalsFn(
-                    record,
-                    processedArgs,
-                    processedMetas
-                );
-            }
-
-            // Modifier functions (e.g. CAA_CRITICAL) may have written to
-            // record.meta. Capture that so it propagates to Go as a meta;
-            // otherwise it would be silently dropped.
-            if (_.isObject(record.meta) && !_.isEmpty(record.meta)) {
-                processedMetas.push(record.meta);
-            }
-
             // Store the processed args.
             record.args = processedArgs;
             record.metas = processedMetas;
-
-            // Capture the D_EXTEND() subdomain (per-record, at push time).
-            // d.subdomain is domain-level mutable state that each D_EXTEND()
-            // call overwrites, so it must be snapshotted here. The label
-            // rewriting itself is done in Go (models.ImportRawRecords).
-            record.subdomain = d.subdomain;
 
             // Add this raw record to the list of records.
             d.rawrecords.push(record);
@@ -2071,53 +2386,8 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 // PLEASE KEEP THIS LIST ALPHABETICAL!
 
-var A = rawrecordBuilder('A');
-var AAAA = rawrecordBuilder('AAAA');
-var ADGUARDHOME_AAAA_PASSTHROUGH = rawrecordBuilder(
-    'ADGUARDHOME_AAAA_PASSTHROUGH'
-);
-var ADGUARDHOME_A_PASSTHROUGH = rawrecordBuilder('ADGUARDHOME_A_PASSTHROUGH');
-var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
-var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
-var ALIAS = rawrecordBuilder('ALIAS');
-var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
-var BUNNY_DNS_PZ = rawrecordBuilder('BUNNY_DNS_PZ');
-var BUNNY_DNS_RDR = rawrecordBuilder('BUNNY_DNS_RDR');
-var CAA = rawrecordBuilder('CAA');
-var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
-var CF_SINGLE_REDIRECT = rawrecordBuilder(
-    'CLOUDFLAREAPI_SINGLE_REDIRECT',
-    true
-);
-var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
-var CF_WORKER_ROUTE = rawrecordBuilder('CF_WORKER_ROUTE', true);
-var CLOUDNS_WR = rawrecordBuilder('CLOUDNS_WR');
-var CNAME = rawrecordBuilder('CNAME');
-var DHCID = rawrecordBuilder('DHCID');
-var DNAME = rawrecordBuilder('DNAME');
-var DNSKEY = rawrecordBuilder('DNSKEY');
+var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT');
+var CF_SINGLE_REDIRECT = rawrecordBuilder('CLOUDFLAREAPI_SINGLE_REDIRECT');
+var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT');
 var DS = rawrecordBuilder('DS');
-var FRAME = rawrecordBuilder('FRAME');
-var HTTPS = rawrecordBuilder('HTTPS');
-var LOC = rawrecordBuilder('LOC');
-var LUA = rawrecordBuilder('LUA');
-var MIKROTIK_FORWARDER = rawrecordBuilder('MIKROTIK_FORWARDER');
-var MIKROTIK_FWD = rawrecordBuilder('MIKROTIK_FWD');
-var MIKROTIK_NXDOMAIN = rawrecordBuilder('MIKROTIK_NXDOMAIN');
-var MX = rawrecordBuilder('MX');
-var NAPTR = rawrecordBuilder('NAPTR');
-var NS = rawrecordBuilder('NS');
-var OPENPGPKEY = rawrecordBuilder('OPENPGPKEY');
-var PORKBUN_URLFWD = rawrecordBuilder('PORKBUN_URLFWD');
-var PTR = rawrecordBuilder('PTR');
-var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
 var RP = rawrecordBuilder('RP');
-var SMIMEA = rawrecordBuilder('SMIMEA');
-var SOA = rawrecordBuilder('SOA');
-var SRV = rawrecordBuilder('SRV');
-var SSHFP = rawrecordBuilder('SSHFP');
-var SVCB = rawrecordBuilder('SVCB');
-var TLSA = rawrecordBuilder('TLSA');
-var TXT = rawrecordBuilder('TXT');
-var URL = rawrecordBuilder('URL');
-var URL301 = rawrecordBuilder('URL301');

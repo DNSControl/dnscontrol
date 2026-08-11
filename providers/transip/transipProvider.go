@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"slices"
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/transip/gotransip/v6"
 	"github.com/transip/gotransip/v6/domain"
 	"github.com/transip/gotransip/v6/repository"
@@ -26,13 +25,8 @@ Info required in `creds.json`
 */
 
 type transipProvider struct {
-	observer providers.ConversionObserver
-	client   *repository.Client
-	domains  *domain.Repository
-}
-
-func (n *transipProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	n.observer = observer
+	client  *repository.Client
+	domains *domain.Repository
 }
 
 var features = providers.DocumentationNotes{
@@ -182,7 +176,7 @@ func (n *transipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 		{
 			Msg: msg,
 			F: func() error {
-				nativeDNSEntries, err := n.recordsToNativeObserved(result.DesiredPlus)
+				nativeDNSEntries, err := recordsToNative(result.DesiredPlus)
 				if err != nil {
 					return err
 				}
@@ -214,9 +208,9 @@ retry:
 		return nil, err
 	}
 
-	existingRecords := models.Records{}
+	existingRecords := []*models.RecordConfig{}
 	for _, entry := range entries {
-		rts, err := nativeToRecord(entry, dc)
+		rts, err := nativeToRecord(entry, domainName)
 		if err != nil {
 			return nil, err
 		}
@@ -246,33 +240,18 @@ retry:
 	return models.ToNameservers(nss)
 }
 
-// func recordsToNative(records models.Records) ([]domain.DNSEntry, error) {
-// 	entries := make([]domain.DNSEntry, len(records))
-
-// 	for iX, record := range records {
-// 		entry, err := recordToNative(record)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		entries[iX] = entry
-// 	}
-
-// 	return entries, nil
-// }
-
-func (n *transipProvider) recordsToNativeObserved(records models.Records) ([]domain.DNSEntry, error) {
+func recordsToNative(records models.Records) ([]domain.DNSEntry, error) {
 	entries := make([]domain.DNSEntry, len(records))
-	for i, record := range records {
-		input := models.Records{record}
-		before := providers.BeginToNative(n.observer, "recordToNative", input)
+
+	for iX, record := range records {
 		entry, err := recordToNative(record)
-		providers.EndToNative(n.observer, "recordToNative", before, input, entry, err)
 		if err != nil {
 			return nil, err
 		}
-		entries[i] = entry
+
+		entries[iX] = entry
 	}
+
 	return entries, nil
 }
 
@@ -281,26 +260,42 @@ func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
 		Name:    config.Name,
 		Expire:  int(config.TTL),
 		Type:    config.Type,
-		Content: config.GetRDATA().String(),
+		Content: config.GetTargetCombinedFunc(nil),
 	}, nil
 }
 
-func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
-	return dc.NewRecordConfigParse(dc.LabelFromShort(entry.Name), uint32(entry.Expire), entry.Type, entry.Content)
+func nativeToRecord(entry domain.DNSEntry, origin string) (*models.RecordConfig, error) {
+
+	rc := &models.RecordConfig{
+		TTL:      uint32(entry.Expire),
+		Type:     entry.Type,
+		Original: entry,
+	}
+	rc.SetLabel(entry.Name, origin)
+	if err := rc.PopulateFromStringFunc(entry.Type, entry.Content, origin, nil); err != nil {
+		return nil, fmt.Errorf("unparsable record received from TransIP: %w", err)
+	}
+
+	return rc, nil
 }
 
 // removeDomainNameserversFromDomainRecords removes the nameserver records from the dc.Records which are already defined as the Domain nameservers.
 func removeDomainNameserversFromDomainRecords(dc *models.DomainConfig) {
-	var nsList []string
+	nameserverLookup := map[string]any{}
 	for _, nameserver := range dc.Nameservers {
-		nsList = append(nsList, nameserver.Name+".")
+		nameserverLookup[nameserver.Name] = nil
 	}
 
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
-		if rec.Type == "NS" && slices.Contains(nsList, rec.AsNS().Ns) {
+
+		dotLessNameFQDN := strings.TrimRight(rec.GetTargetField(), ".")
+		_, recordInDCNameservers := nameserverLookup[dotLessNameFQDN]
+
+		if rec.Type == "NS" && recordInDCNameservers {
 			continue
 		}
+
 		newList = append(newList, rec)
 	}
 	dc.Records = newList

@@ -6,10 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 // DetermineNameserversForProviders determines all nameservers to be used for a domain. It follows the following rules:
@@ -65,10 +63,18 @@ func AddNSRecords(dc *models.DomainConfig) {
 		}
 	}
 	for _, ns := range dc.Nameservers {
-		rc, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeNS, ns.Name,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-		if err != nil {
-			panic("Should not happen: " + err.Error())
+		rc := &models.RecordConfig{
+			Type:     "NS",
+			Metadata: map[string]string{},
+			TTL:      ttl,
+		}
+		rc.SetLabel("@", dc.Name)
+		t := ns.Name
+		if !strings.HasSuffix(t, ".") {
+			t += "."
+		}
+		if err := rc.SetTarget(t); err != nil {
+			fmt.Printf("failed AddNSRecords rc.SetTarget(%q): %s\n", t, err)
 		}
 
 		dc.Records = append(dc.Records, rc)

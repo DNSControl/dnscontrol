@@ -8,17 +8,15 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/fatih/color"
 	"github.com/nrdcg/goinwx"
 	"github.com/pquerna/otp/totp"
 	"golang.org/x/net/idna"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -200,15 +198,17 @@ func newInwxDsp(m map[string]string, metadata json.RawMessage) (providers.DNSSer
 
 // makeNameserverRecordRequest is a helper function used to convert a RecordConfig to an INWX NS Record Request.
 func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinwx.NameserverRecordRequest {
+	content := rec.GetTargetField()
 
 	req := &goinwx.NameserverRecordRequest{
-		Domain: domain,
-		Type:   rec.Type,
-		Name:   rec.GetLabel(),
-		TTL:    int(rec.TTL),
+		Domain:  domain,
+		Type:    rec.Type,
+		Content: content,
+		Name:    rec.GetLabel(),
+		TTL:     int(rec.TTL),
 	}
 
-	switch rType := rec.TypeNum; rType {
+	switch rType := rec.Type; rType {
 	/*
 	   INWX is a little bit special for CNAME, NS, MX and SRV records:
 	   The API will not accept any target with a final dot but will
@@ -216,41 +216,24 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 	   Records with empty targets (i.e., records with target ".")
 	   are allowed.
 	*/
-	case dnsv2.TypeCNAME:
-		f := rec.AsCNAME()
-		content := f.Target
+	case "CNAME", "NS", "ALIAS":
 		req.Content = content[:len(content)-1]
-	case dnsv2.TypeNS:
-		f := rec.AsNS()
-		content := f.Ns
-		req.Content = content[:len(content)-1]
-	case privatetypes.TypeALIAS:
-		f := rec.AsALIAS()
-		content := f.Target
-		req.Content = content[:len(content)-1]
-	case dnsv2.TypeMX:
-		f := rec.AsMX()
-		req.Priority = int(f.Preference)
-		content := f.Mx
+	case "MX":
+		req.Priority = int(rec.MxPreference)
 		if content == "." {
 			req.Content = content
 		} else {
 			req.Content = content[:len(content)-1]
 		}
-	case dnsv2.TypeSRV:
-		f := rec.AsSRV()
-		req.Priority = int(f.Priority)
-		content := f.Target
+	case "SRV":
+		req.Priority = int(rec.SrvPriority)
 		if content == "." {
-			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content)
+			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content)
 		} else {
-			req.Content = fmt.Sprintf("%d %d %v", f.Weight, f.Port, content[:len(content)-1])
+			req.Content = fmt.Sprintf("%d %d %v", rec.SrvWeight, rec.SrvPort, content[:len(content)-1])
 		}
-	case dnsv2.TypeTXT:
-		req.Content = rec.GetTargetTXTJoined()
-
 	default:
-		req.Content = rec.GetRDATA().String()
+		req.Content = rec.GetTargetCombined()
 	}
 
 	return req
@@ -277,11 +260,7 @@ func (api *inwxAPI) deleteRecord(RecordID string) error {
 
 // isNullMX checks if a record is a null MX record.
 func isNullMX(rec *models.RecordConfig) bool {
-	if rec.TypeNum != dnsv2.TypeMX {
-		return false
-	}
-	f := rec.AsMX()
-	return f.Preference == 0 && f.Mx == "."
+	return rec.Type == "MX" && rec.MxPreference == 0 && rec.GetTargetField() == "."
 }
 
 // AutoDnssecToggle enables and disables AutoDNSSEC for INWX domains.
@@ -350,14 +329,14 @@ func (api *inwxAPI) GetZoneRecordsCorrections(dc *models.DomainConfig, foundReco
 				// changing to or from a Null MX has to be deleted then create
 				deletes = append(deletes, &models.Correction{
 					Msg: color.RedString("- DELETE %s %s %s ttl=%d", oldRec.GetLabelFQDN(), oldRec.Type,
-						oldRec.ComparableV3, oldRec.TTL),
+						oldRec.ToComparableNoTTL(), oldRec.TTL),
 					F: func() error {
 						return api.deleteRecord(oldRec.Original.(goinwx.NameserverRecord).ID)
 					},
 				})
 				deferred = append(deferred, &models.Correction{
 					Msg: color.GreenString("+ CREATE %s %s %s ttl=%d", newRec.GetLabelFQDN(), newRec.Type,
-						newRec.ComparableV3, newRec.TTL),
+						newRec.ToComparableNoTTL(), newRec.TTL),
 					F: func() error {
 						return api.createRecord(dc.Name, newRec)
 					},
@@ -418,76 +397,60 @@ func (api *inwxAPI) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 		return nil, err
 	}
 
-	records := models.Records{}
+	records := []*models.RecordConfig{}
 
 	for _, record := range info.Records {
-		rc, err := toRecordConfig(dc, record)
-		if err != nil {
-			return nil, err
-		}
-		if rc == nil {
+		if record.Type == "SOA" {
 			continue
+		}
+
+		/*
+		   INWX is a little bit special for CNAME,NS,MX and SRV records:
+		   The API will not accept any target with a final dot but will
+		   instead always add this final dot internally.
+		   Records with empty targets (i.e. records with target ".")
+		   are allowed.
+		*/
+		rtypeAddDot := map[string]bool{
+			"ALIAS": true,
+			"CNAME": true,
+			"MX":    true,
+			"NS":    true,
+			"SRV":   true,
+			"PTR":   true,
+		}
+		if rtypeAddDot[record.Type] {
+			if record.Type == "MX" && record.Content == "." {
+				// null records don't need to be modified
+			} else if record.Type == "SRV" && strings.HasSuffix(record.Content, ".") {
+				// null targets don't need to be modified
+			} else {
+				record.Content = record.Content + "."
+			}
+		}
+
+		rc := &models.RecordConfig{
+			TTL:      uint32(record.TTL),
+			Original: record,
+		}
+		rc.SetLabelFromFQDN(record.Name, domain)
+
+		switch rType := record.Type; rType {
+		case "MX":
+			err = rc.SetTargetMX(uint16(record.Priority), record.Content)
+		case "SRV":
+			err = rc.SetTargetSRVPriorityString(uint16(record.Priority), record.Content)
+		default:
+			err = rc.PopulateFromString(rType, record.Content, domain)
+		}
+		if err != nil {
+			return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
 		}
 
 		records = append(records, rc)
 	}
 
 	return records, nil
-}
-
-// toRecordConfig converts an INWX record to a RecordConfig. It returns nil for
-// SOA records, which are not managed.
-func toRecordConfig(dc *models.DomainConfig, record goinwx.NameserverRecord) (*models.RecordConfig, error) {
-	if record.Type == "SOA" {
-		return nil, nil
-	}
-
-	/*
-	   INWX is a little bit special for CNAME,NS,MX and SRV records:
-	   The API will not accept any target with a final dot but will
-	   instead always add this final dot internally.
-	   Records with empty targets (i.e. records with target ".")
-	   are allowed.
-	*/
-	rtypeAddDot := map[string]bool{
-		"ALIAS": true,
-		"CNAME": true,
-		"MX":    true,
-		"NS":    true,
-		"SRV":   true,
-		"PTR":   true,
-	}
-	if rtypeAddDot[record.Type] {
-		if record.Type == "MX" && record.Content == "." {
-			// null records don't need to be modified
-		} else if record.Type == "SRV" && strings.HasSuffix(record.Content, ".") {
-			// null targets don't need to be modified
-		} else {
-			record.Content = record.Content + "."
-		}
-	}
-
-	label := dc.ToShort(record.Name)
-	ttl := uint32(record.TTL)
-
-	var rc *models.RecordConfig
-	var err error
-	switch rType := record.Type; rType {
-	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content)
-	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, rType, record.Priority, record.Content,
-			nrc.Flags{SrvWeirdSplit: true})
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rType, record.Content,
-			nrc.Flags{TxtDontParse: true})
-	}
-	if err != nil {
-		return nil, fmt.Errorf("INWX: unparsable record received: %w", err)
-	}
-	rc.Original = record
-
-	return rc, nil
 }
 
 // ListZones returns the zones configured in INWX.

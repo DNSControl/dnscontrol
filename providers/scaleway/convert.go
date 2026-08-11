@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	domain "github.com/scaleway/scaleway-sdk-go/api/domain/v2beta1"
 )
 
@@ -27,29 +27,32 @@ func nameFromLabel(rc *models.RecordConfig) string {
 }
 
 // toRecordConfig converts a Scaleway Record to a dnscontrol RecordConfig.
-func toRecordConfig(dc *models.DomainConfig, r *domain.Record) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(labelFromName(r.Name))
-	ttl := r.TTL
-	rtype := string(r.Type)
+func toRecordConfig(zone string, r *domain.Record) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     string(r.Type),
+		TTL:      r.TTL,
+		Original: r,
+	}
+	rc.SetLabel(labelFromName(r.Name), zone)
+
 	data := strings.TrimSpace(r.Data)
 
-	var rc *models.RecordConfig
-	var err error
-	switch rtype {
+	switch rc.Type {
 	case "TXT":
 		// Scaleway returns the TXT value wrapped in quotes (BIND-style).
-		unq, unquoteErr := unquoteTXT(data)
-		if unquoteErr != nil {
-			return nil, unquoteErr
+		// SetTargetTXT expects the unquoted single-string value.
+		unq, err := unquoteTXT(data)
+		if err != nil {
+			return nil, err
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, unq)
+		if err := rc.SetTargetTXT(unq); err != nil {
+			return nil, err
+		}
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, data)
+		if err := rc.PopulateFromString(rc.Type, data, zone); err != nil {
+			return nil, fmt.Errorf("SCALEWAY: unparsable %s record %q: %w", rc.Type, data, err)
+		}
 	}
-	if err != nil {
-		return nil, fmt.Errorf("SCALEWAY: unparsable %s record %q: %w", rtype, data, err)
-	}
-	rc.Original = r
 	return rc, nil
 }
 
@@ -63,12 +66,13 @@ func fromRecordConfig(rc *models.RecordConfig) domain.Record {
 	}
 
 	if rc.Type == "TXT" {
-		// Scaleway accepts the TXT data BIND-style quoted, so build that form
+		// Scaleway accepts the TXT data BIND-style quoted; the GetTargetCombined()
+		// for TXT uses the buggy zoneFileQuoted path, so build the quoted form
 		// from the joined value directly.
 		rec.Data = quoteTXT(rc.GetTargetTXTJoined())
 		return rec
 	}
-	rec.Data = rc.GetRDATA().String()
+	rec.Data = rc.GetTargetCombined()
 	return rec
 }
 

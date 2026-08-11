@@ -4,9 +4,8 @@ import (
 	"errors"
 	"unicode"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 	"golang.org/x/net/idna"
 )
 
@@ -37,21 +36,9 @@ func labelConstraint(rc *models.RecordConfig) error {
 // targetConstraint detects target values that contain non-ASCII characters except Chinese characters.
 // This applies to CNAME, MX, NS, SRV targets.
 func targetConstraint(rc *models.RecordConfig) error {
-	var target string
-	switch rc.TypeNum {
-	case dnsv2.TypeCNAME:
-		target = rc.AsCNAME().Target
-	case dnsv2.TypeMX:
-		target = rc.AsMX().Mx
-	case dnsv2.TypeNS:
-		target = rc.AsNS().Ns
-	case dnsv2.TypeSRV:
-		target = rc.AsSRV().Target
-	default:
-		target = rc.GetRDATA().String()
-	}
-	if t, err := idna.ToUnicode(target); err == nil {
-		target = t
+	target, err := idna.ToUnicode(rc.GetTargetField())
+	if err != nil {
+		target = rc.GetTargetField()
 	}
 	if !isValidAliDNSString(target) {
 		return errors.New("target contains non-ASCII characters (only Chinese is allowed)")

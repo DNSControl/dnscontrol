@@ -217,13 +217,11 @@
 
 * [Code Style Guide](advanced-features/styleguide-code.md)
 * [Documentation Style Guide](advanced-features/styleguide-doc.md)
-* [Cookbook](developer-info/cookbook.md)
 * [DNSControl is an opinionated system](advanced-features/opinions.md)
 * [GitHub actions](developer-info/github-actions.md)
 * [Writing new DNS providers](advanced-features/writing-providers.md)
 * [Creating new DNS Resource Types (rtypes)](advanced-features/adding-new-rtypes.md)
 * [Integration Tests](advanced-features/integration-tests.md)
-* [Provider conversion tests](developer-info/provider-conversion-tests.md)
 * [Test a branch](advanced-features/test-a-branch.md)
 * [Unit Testing DNS Data](advanced-features/unittests.md)
 * [Bug Triage Process](advanced-features/bug-triage.md)

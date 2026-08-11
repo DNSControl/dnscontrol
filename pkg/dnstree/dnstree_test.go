@@ -3,7 +3,7 @@ package dnstree_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/dnstree"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnstree"
 )
 
 func Test_domaintree(t *testing.T) {

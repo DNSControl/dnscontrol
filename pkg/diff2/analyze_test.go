@@ -7,8 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/fatih/color"
 	"github.com/kylelemons/godebug/diff"
 )
@@ -33,10 +32,10 @@ func (c Change) String() string {
 		fmt.Fprint(b, "    Hints=OnlyTTL\n", c.Key)
 	}
 	if len(c.Old) != 0 {
-		fmt.Fprintf(b, "    old=%v\n", c.Old.StringEach())
+		fmt.Fprintf(b, "    old=%v\n", c.Old)
 	}
 	if len(c.New) != 0 {
-		fmt.Fprintf(b, "    new=%v\n", c.New.StringEach())
+		fmt.Fprintf(b, "    new=%v\n", c.New)
 	}
 	fmt.Fprintf(b, "    msg=%q\n", c.Msgs)
 
@@ -58,13 +57,13 @@ func (cl ChangeList) String() string {
 // Make sample data
 
 func makeRec(label, rtype, content string) *models.RecordConfig {
-	dc := models.MustNewDomainConfig("f.com")
-	typeNum, err := dnsutilv2.StringToType(rtype)
-	if err != nil {
-		panic(fmt.Sprintf("BUG: makeRec does not support %q", rtype))
+	origin := "f.com"
+	r := models.RecordConfig{TTL: 300}
+	r.SetLabel(label, origin)
+	if err := r.PopulateFromString(rtype, content, origin); err != nil {
+		panic(err)
 	}
-	rec := dc.AddTestRCParse(dc.LabelFromShort(label), 300, typeNum, content)
-	return rec
+	return &r
 }
 
 func makeRecTTL(label, rtype, content string, ttl uint32) *models.RecordConfig {

@@ -1,12 +1,10 @@
 package cscglobal
 
 import (
-	"fmt"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
@@ -20,32 +18,51 @@ func (client *providerClient) GetZoneRecords(dc *models.DomainConfig) (models.Re
 
 	// Convert them to DNScontrol's native format:
 
-	existingRecords := models.Records{}
+	existingRecords := []*models.RecordConfig{}
 
+	// Option 1: One long list.  If your provider returns one long list,
+	// convert each one to RecordType like this:
+	// for _, rr := range records {
+	// 	existingRecords = append(existingRecords, nativeToRecord(rr, domain))
+	//}
+
+	// Option 2: Grouped records. Sometimes the provider returns one item per
+	// label. Each item contains a list of all the records at that label.
+	// You'll need to split them out into one RecordConfig for each record.  An
+	// example of this is the ROUTE53 provider.
+	// for _, rg := range records {
+	// 	for _, rr := range rg {
+	// 		existingRecords = append(existingRecords, nativeToRecords(rg, rr, domain)...)
+	// 	}
+	// }
+
+	// Option 3: Something else.  In this case, we get a big massive structure
+	// which needs to be broken up.  Still, we're generating a list of
+	// RecordConfig structures.
 	defaultTTL := records.Soa.TTL
 	for _, rr := range records.A {
-		existingRecords = append(existingRecords, nativeToRecordA(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordA(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Cname {
-		existingRecords = append(existingRecords, nativeToRecordCNAME(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordCNAME(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Aaaa {
-		existingRecords = append(existingRecords, nativeToRecordAAAA(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordAAAA(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Txt {
-		existingRecords = append(existingRecords, nativeToRecordTXT(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordTXT(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Mx {
-		existingRecords = append(existingRecords, nativeToRecordMX(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordMX(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Ns {
-		existingRecords = append(existingRecords, nativeToRecordNS(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordNS(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Srv {
-		existingRecords = append(existingRecords, nativeToRecordSRV(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordSRV(rr, domain, defaultTTL))
 	}
 	for _, rr := range records.Caa {
-		existingRecords = append(existingRecords, nativeToRecordCAA(rr, dc, defaultTTL))
+		existingRecords = append(existingRecords, nativeToRecordCAA(rr, domain, defaultTTL))
 	}
 
 	return existingRecords, nil
@@ -61,27 +78,12 @@ func (client *providerClient) GetNameservers(domain string) ([]*models.Nameserve
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (client *providerClient) GetZoneRecordsCorrections(dc *models.DomainConfig, foundRecords models.Records) ([]*models.Correction, int, error) {
-	changes, actualChangeCount, err := diff2.ByRecord(foundRecords, dc, nil)
+	toReport, creates, dels, modifications, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(foundRecords)
 	if err != nil {
 		return nil, 0, err
 	}
-
-	var corrections []*models.Correction
-	var creates, dels, modifications diff2.ChangeList
-	for _, change := range changes {
-		switch change.Type {
-		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			creates = append(creates, change)
-		case diff2.DELETE:
-			dels = append(dels, change)
-		case diff2.CHANGE:
-			modifications = append(modifications, change)
-		default:
-			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
-		}
-	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
 	// CSCGlobal has a unique API.  A list of edits is sent in one API
 	// call. Edits aren't permitted if an existing edit is being
@@ -91,16 +93,16 @@ func (client *providerClient) GetZoneRecordsCorrections(dc *models.DomainConfig,
 	var edits []zoneResourceRecordEdit
 	var descriptions []string
 	for _, del := range dels {
-		edits = append(edits, makePurge(del.Old[0]))
-		descriptions = append(descriptions, del.MsgsJoined)
+		edits = append(edits, makePurge(del))
+		descriptions = append(descriptions, del.String())
 	}
 	for _, cre := range creates {
-		edits = append(edits, makeAdd(cre.New[0]))
-		descriptions = append(descriptions, cre.MsgsJoined)
+		edits = append(edits, makeAdd(cre))
+		descriptions = append(descriptions, cre.String())
 	}
 	for _, m := range modifications {
-		edits = append(edits, makeEdit(m.Old[0], m.New[0]))
-		descriptions = append(descriptions, m.MsgsJoined)
+		edits = append(edits, makeEdit(m))
+		descriptions = append(descriptions, m.String())
 	}
 	if len(edits) > 0 {
 		c := &models.Correction{
@@ -125,25 +127,25 @@ func (client *providerClient) GetZoneRecordsCorrections(dc *models.DomainConfig,
 	return corrections, actualChangeCount, nil
 }
 
-func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
+func makePurge(cor diff.Correlation) zoneResourceRecordEdit {
 	var existingTarget string
 
-	switch existing.TypeNum {
-	case dnsv2.TypeTXT:
-		existingTarget = existing.GetTargetTXTJoined()
+	switch cor.Existing.Type {
+	case "TXT":
+		existingTarget = cor.Existing.GetTargetTXTJoined()
 	default:
-		existingTarget = existing.GetRDATA().String()
+		existingTarget = cor.Existing.GetTargetField()
 	}
 
 	zer := zoneResourceRecordEdit{
 		Action:       "PURGE",
-		RecordType:   existing.Type,
-		CurrentKey:   existing.Name,
+		RecordType:   cor.Existing.Type,
+		CurrentKey:   cor.Existing.Name,
 		CurrentValue: existingTarget,
 	}
 
-	if existing.Type == "CAA" {
-		tagValue := existing.AsCAA().Tag
+	if cor.Existing.Type == "CAA" {
+		tagValue := cor.Existing.CaaTag
 		// printer.Printf("DEBUG: CAA TAG = %q\n", tagValue)
 		zer.CurrentTag = &tagValue
 	}
@@ -151,58 +153,59 @@ func makePurge(existing *models.RecordConfig) zoneResourceRecordEdit {
 	return zer
 }
 
-func makeAdd(rec *models.RecordConfig) zoneResourceRecordEdit {
+func makeAdd(cre diff.Correlation) zoneResourceRecordEdit {
+	rec := cre.Desired
+
+	var recTarget string
+	switch rec.Type {
+	case "TXT":
+		recTarget = rec.GetTargetTXTJoined()
+	default:
+		recTarget = rec.GetTargetField()
+	}
 
 	zer := zoneResourceRecordEdit{
 		Action:     "ADD",
 		RecordType: rec.Type,
 		NewKey:     rec.Name,
+		NewValue:   recTarget,
 		NewTTL:     rec.TTL,
 	}
 
-	switch rec.TypeNum {
-	case dnsv2.TypeCAA:
-		f := rec.AsCAA()
-		tagValue := f.Tag
-		flagValue := f.Flag
+	switch rec.Type {
+	case "CAA":
+		tagValue := rec.CaaTag
+		flagValue := rec.CaaFlag
 		zer.NewTag = &tagValue
 		zer.NewFlag = &flagValue
-		zer.NewValue = f.Value
-	case dnsv2.TypeMX:
-		f := rec.AsMX()
-		zer.NewPriority = f.Preference
-		zer.NewValue = f.Mx
-	case dnsv2.TypeSRV:
-		f := rec.AsSRV()
-		zer.NewPriority = f.Priority
-		zer.NewWeight = f.Weight
-		zer.NewPort = f.Port
-		zer.NewValue = f.Target
-	case dnsv2.TypeTXT:
+	case "MX":
+		zer.NewPriority = rec.MxPreference
+	case "SRV":
+		zer.NewPriority = rec.SrvPriority
+		zer.NewWeight = rec.SrvWeight
+		zer.NewPort = rec.SrvPort
+	case "TXT":
 		zer.NewValue = rec.GetTargetTXTJoined()
-	default:
-		zer.NewValue = rec.GetRDATA().String()
+	default: // "A", "CNAME", "NS"
+		// Nothing to do.
 	}
 
 	return zer
 }
 
-func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
-	if old.Type != rec.Type {
-		panic(fmt.Sprintf("record type mismatch: %q != %q", old.Type, rec.Type))
-	}
-	if old.Name != rec.Name {
-		panic(fmt.Sprintf("record name mismatch: %q != %q", old.Name, rec.Name))
-	}
+func makeEdit(m diff.Correlation) zoneResourceRecordEdit {
+	old, rec := m.Existing, m.Desired
+	// TODO: Assert that old.Type == rec.Type
+	// TODO: Assert that old.Name == rec.Name
 
 	var oldTarget, recTarget string
-	switch old.TypeNum {
-	case dnsv2.TypeTXT:
+	switch old.Type {
+	case "TXT":
 		oldTarget = old.GetTargetTXTJoined()
 		recTarget = rec.GetTargetTXTJoined()
 	default:
-		oldTarget = old.GetRDATA().String()
-		recTarget = rec.GetRDATA().String()
+		oldTarget = old.GetTargetField()
+		recTarget = rec.GetTargetField()
 	}
 
 	zer := zoneResourceRecordEdit{
@@ -218,27 +221,24 @@ func makeEdit(old, rec *models.RecordConfig) zoneResourceRecordEdit {
 		zer.NewTTL = rec.TTL
 	}
 
-	switch old.TypeNum {
-	case dnsv2.TypeCAA:
-		of := old.AsCAA()
-		tagValue := of.Tag
+	switch old.Type {
+	case "CAA":
+		tagValue := old.CaaTag
 		zer.CurrentTag = &tagValue
-		if old.AsCAA().Tag != rec.AsCAA().Tag || old.AsCAA().Flag != rec.AsCAA().Flag || old.TTL != rec.TTL {
+		if old.CaaTag != rec.CaaTag || old.CaaFlag != rec.CaaFlag || old.TTL != rec.TTL {
 			// If anything changed, we need to update both tag and flag.
-			zer.NewFlag = new(rec.AsCAA().Flag)
-			zer.NewTag = new(rec.AsCAA().Tag)
-			zer.NewFlag = new(rec.AsCAA().Flag)
+			zer.NewTag = &(rec.CaaTag)
+			zer.NewFlag = &(rec.CaaFlag)
 		}
-	case dnsv2.TypeMX:
-		if old.AsMX().Preference != rec.AsMX().Preference {
-			zer.NewPriority = rec.AsMX().Preference
+	case "MX":
+		if old.MxPreference != rec.MxPreference {
+			zer.NewPriority = rec.MxPreference
 		}
-	case dnsv2.TypeSRV:
-		f := rec.AsSRV()
-		zer.NewWeight = f.Weight
-		zer.NewPort = f.Port
-		zer.NewPriority = f.Priority
-	default:
+	case "SRV":
+		zer.NewWeight = rec.SrvWeight
+		zer.NewPort = rec.SrvPort
+		zer.NewPriority = rec.SrvPriority
+	default: // "A", "CNAME", "NS", "TXT"
 		// Nothing to do.
 	}
 

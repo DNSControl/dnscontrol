@@ -9,12 +9,11 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 const (
@@ -186,7 +185,7 @@ func porkbunURLForwardingMetadata(recordType string, metadata map[string]string)
 	return t, includePath, wildcard
 }
 
-func normalizeURLForwardingRecord(record *models.RecordConfig, _ string) {
+func normalizeURLForwardingRecord(record *models.RecordConfig, origin string) {
 	if !isURLForwardingType(record.Type) {
 		return
 	}
@@ -230,9 +229,7 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		case diff2.REPORT:
 			corr = &models.Correction{Msg: change.MsgsJoined}
 		case diff2.CREATE:
-			before := providers.BeginToNative(c.observer, "toReq", change.New)
 			req, err := toReq(change.New[0])
-			providers.EndToNative(c.observer, "toReq", before, change.New, req, err)
 			if err != nil {
 				return nil, 0, err
 			}
@@ -247,9 +244,7 @@ func (c *porkbunProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 			}
 		case diff2.CHANGE:
 			id := change.Old[0].Original.(*domainRecord).ID
-			before := providers.BeginToNative(c.observer, "toReq", change.New)
 			req, err := toReq(change.New[0])
-			providers.EndToNative(c.observer, "toReq", before, change.New, req, err)
 			if err != nil {
 				return nil, 0, err
 			}
@@ -294,11 +289,11 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make(models.Records, 0)
+	existingRecords := make([]*models.RecordConfig, 0)
 	for i := range records {
 		shouldSkip := false
 		if strings.HasSuffix(records[i].Content, ".porkbun.com") {
-			name := dc.ToShort(records[i].Name)
+			name := dnsutilv1.TrimDomainName(records[i].Name, domain)
 			if name == "@" {
 				name = ""
 			}
@@ -322,9 +317,7 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if shouldSkip {
 			continue
 		}
-		before := providers.BeginToRC(c.observer, "toRc", &records[i])
-		newr, err := toRc(dc, &records[i])
-		providers.EndToRC(c.observer, "toRc", before, &records[i], models.Records{newr}, err)
+		newr, err := toRc(domain, &records[i])
 		if err != nil {
 			return nil, err
 		}
@@ -336,15 +329,18 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if r.Type == "permanent" {
 			recordType = "URL301"
 		}
-		rc, err := dc.NewRecordConfig(dc.LabelFromShort(r.Subdomain), 0, recordType, r.Location)
-		if err != nil {
-			return nil, err
+		rc := &models.RecordConfig{
+			Type:     recordType,
+			Original: r,
+			Metadata: map[string]string{
+				metaType:        r.Type,
+				metaIncludePath: r.IncludePath,
+				metaWildcard:    r.Wildcard,
+			},
 		}
-		rc.Original = r
-		rc.Metadata = map[string]string{
-			metaType:        r.Type,
-			metaIncludePath: r.IncludePath,
-			metaWildcard:    r.Wildcard,
+		rc.SetLabel(r.Subdomain, domain)
+		if err := rc.SetTarget(r.Location); err != nil {
+			return nil, err
 		}
 		existingRecords = append(existingRecords, rc)
 	}
@@ -352,64 +348,74 @@ func (c *porkbunProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 }
 
 // parses the porkbun format into our standard RecordConfig.
-func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
-	ttlValue, _ := strconv.ParseUint(r.TTL, 10, 32)
-	ttl := uint32(ttlValue)
-	priority, _ := strconv.ParseInt(r.Prio, 10, 16)
-	label := dc.LabelFromFQDNNoDot(r.Name)
+func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
+	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
+	priority, _ := strconv.ParseUint(r.Prio, 10, 16)
 
-	var rc *models.RecordConfig
+	rc := &models.RecordConfig{
+		Type:         r.Type,
+		TTL:          uint32(ttl),
+		MxPreference: uint16(priority),
+		SrvPriority:  uint16(priority),
+		Original:     r,
+	}
+	rc.SetLabelFromFQDN(r.Name, domain)
+
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Content)
-	case "MX":
-		target := r.Content
-		if !strings.HasSuffix(target, ".") {
-			target += "."
+		err = rc.SetTargetTXT(r.Content)
+	case "MX", "CNAME", "ALIAS", "NS":
+		if strings.HasSuffix(r.Content, ".") {
+			err = rc.SetTarget(r.Content)
+		} else {
+			err = rc.SetTarget(r.Content + ".")
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, priority, target)
-	case "CNAME", "ALIAS", "NS":
-		target := r.Content
-		if !strings.HasSuffix(target, ".") {
-			target += "."
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 	case "CAA":
 		// 0, issue, "letsencrypt.org"
 		c := strings.Split(r.Content, " ")
 
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, c[0], c[1], strings.ReplaceAll(c[2], "\"", ""))
+		caaFlag, _ := strconv.ParseUint(c[0], 10, 8)
+		rc.CaaFlag = uint8(caaFlag)
+		rc.CaaTag = c[1]
+		err = rc.SetTarget(strings.ReplaceAll(c[2], "\"", ""))
 	case "TLSA":
 		// 0 0 0 00000000000000000000000
 		c := strings.Split(r.Content, " ")
 
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, c[0], c[1], c[2], c[3])
+		tlsaUsage, _ := strconv.ParseUint(c[0], 10, 8)
+		rc.TlsaUsage = uint8(tlsaUsage)
+		tlsaSelector, _ := strconv.ParseUint(c[1], 10, 8)
+		rc.TlsaSelector = uint8(tlsaSelector)
+		tlsaMatchingType, _ := strconv.ParseUint(c[2], 10, 8)
+		rc.TlsaMatchingType = uint8(tlsaMatchingType)
+		err = rc.SetTarget(c[3])
 	case "SRV":
 		// 5 5060 sip.example.com
 		c := strings.Split(r.Content, " ")
 
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, c[0], c[1], c[2])
+		srvWeight, _ := strconv.ParseUint(c[0], 10, 16)
+		rc.SrvWeight = uint16(srvWeight)
+		srvPort, _ := strconv.ParseUint(c[1], 10, 16)
+		rc.SrvPort = uint16(srvPort)
+		err = rc.SetTarget(c[2])
 	case "HTTPS":
 		fallthrough
 	case "SVCB":
 		// 5 . ech=AAAAABBBBB...
 		c := strings.Split(r.Content, " ")
 
-		params := ""
+		svcPriority, _ := strconv.ParseUint(c[0], 10, 16)
+		rc.SvcPriority = uint16(svcPriority)
 		if len(c) > 2 {
-			params = strings.Join(c[2:], " ")
+			rc.SvcParams = strings.Join(c[2:], " ")
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, c[0], c[1], params)
+		err = rc.SetTarget(c[1])
 	case "SSHFP":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSSHFP, r.Content)
+		err = rc.SetTargetSSHFPString(r.Content)
 	default:
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Content)
+		err = rc.SetTarget(r.Content)
 	}
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = r
 	return rc, err
 }
 
@@ -420,20 +426,9 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		if subdomain == "@" {
 			subdomain = ""
 		}
-		var location string
-		switch rd := rc.GetRDATA().(type) {
-		case privatetypesrdata.PORKBUNURLFWD:
-			location = rd.Location
-		case privatetypesrdata.URL:
-			location = rd.Location
-		case privatetypesrdata.URL301:
-			location = rd.Location
-		default:
-			location = rc.GetTargetField()
-		}
 		return requestParams{
 			"subdomain":   subdomain,
-			"location":    location,
+			"location":    rc.GetTargetField(),
 			"type":        rc.Metadata[metaType],
 			"includePath": rc.Metadata[metaIncludePath],
 			"wildcard":    rc.Metadata[metaWildcard],
@@ -441,9 +436,10 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 	}
 
 	req := requestParams{
-		"type": rc.Type,
-		"name": rc.GetLabel(),
-		"ttl":  strconv.Itoa(int(rc.TTL)),
+		"type":    rc.Type,
+		"name":    rc.GetLabel(),
+		"content": rc.GetTargetField(),
+		"ttl":     strconv.Itoa(int(rc.TTL)),
 	}
 
 	// porkbun doesn't use "@", it uses an empty name
@@ -451,49 +447,42 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["name"] = ""
 	}
 
-	switch rc.TypeNum { // #rtype_variations
-	// case "A", "AAAA", "NS", "ALIAS", "CNAME":
-	// 	req["content"] = rc.GetRDATA().String()
-	case dnsv2.TypeTXT:
+	switch rc.Type { // #rtype_variations
+	case "A", "AAAA", "NS", "ALIAS", "CNAME":
+	// Nothing special.
+	case "TXT":
 		req["content"] = rc.GetTargetTXTJoined()
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		req["prio"] = strconv.Itoa(int(f.Preference))
-		req["content"] = f.Mx
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
-		req["prio"] = strconv.Itoa(int(f.Priority))
-		req["content"] = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
-	case dnsv2.TypeCAA:
-		f := rc.AsCAA()
-		req["content"] = fmt.Sprintf("%d %s \"%s\"", f.Flag, f.Tag, f.Value)
-	case dnsv2.TypeTLSA:
-		f := rc.AsTLSA()
+	case "MX":
+		req["prio"] = strconv.Itoa(int(rc.MxPreference))
+	case "SRV":
+		req["prio"] = strconv.Itoa(int(rc.SrvPriority))
+		req["content"] = fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	case "CAA":
+		req["content"] = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+	case "TLSA":
 		req["content"] = fmt.Sprintf("%d %d %d %s",
-			f.Usage, f.Selector, f.MatchingType, f.Certificate)
-	case dnsv2.TypeHTTPS:
+			rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	case "HTTPS":
 		fallthrough
-	case dnsv2.TypeSVCB:
-		f := rc.AsSVCB()
+	case "SVCB":
 		req["content"] = fmt.Sprintf("%d %s %s",
-			f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
-	case dnsv2.TypeSSHFP:
-		req["content"] = rc.AsSSHFP().String()
+			rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
+	case "SSHFP":
+		req["content"] = fmt.Sprintf("%v %v %s",
+			rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
 	default:
-		req["content"] = rc.GetRDATA().String()
-		//return nil, fmt.Errorf("porkbun.toReq rtype %q unimplemented", rc.Type)
+		return nil, fmt.Errorf("porkbun.toReq rtype %q unimplemented", rc.Type)
 	}
 
 	return req, nil
 }
 
 func checkNSModifications(dc *models.DomainConfig) {
-	newList := make(models.Records, 0, len(dc.Records))
+	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
-			target := rec.AsNS().Ns
-			if strings.HasSuffix(target, ".porkbun.com") {
-				printer.Warnf("porkbun does not support modifying NS records on base domain. %s will not be added.\n", target)
+			if strings.HasSuffix(rec.GetTargetField(), ".porkbun.com") {
+				printer.Warnf("porkbun does not support modifying NS records on base domain. %s will not be added.\n", rec.GetTargetField())
 			}
 			continue
 		}

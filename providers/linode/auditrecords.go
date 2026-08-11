@@ -1,8 +1,8 @@
 package linode
 
 import (
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -11,7 +11,6 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("CAA", rejectif.CaaFlagIsNonZero)            // Last verified 2026-07-28
 	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2023-01-15
 
 	return a.Audit(records)

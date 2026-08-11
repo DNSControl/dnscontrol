@@ -10,32 +10,27 @@
       "dnsProviders": {
         "bind": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "8.9.in-addr.arpa",
+        "dnscontrol_nameunicode": "8.9.in-addr.arpa",
+        "dnscontrol_uniquename": "8.9.in-addr.arpa"
+      },
       "name": "8.9.in-addr.arpa",
       "records": [
         {
-          "comparablev3": "ns1.example.com.",
           "filepos": "[line:8:5]",
           "name": "1.2",
-          "name_unicode": "1.2.8.9.in-addr.arpa",
-          "rdata": {
-            "Ns": "ns1.example.com."
-          },
+          "target": "ns1.example.com.",
           "ttl": 300,
-          "type": "NS",
-          "typenum": 2
+          "type": "NS"
         },
         {
-          "comparablev3": "ns2.example.org.",
           "filepos": "[line:11:5]",
           "name": "6.7",
-          "name_unicode": "6.7.8.9.in-addr.arpa",
-          "rdata": {
-            "Ns": "ns2.example.org."
-          },
           "subdomain": "7",
+          "target": "ns2.example.org.",
           "ttl": 300,
-          "type": "NS",
-          "typenum": 2
+          "type": "NS"
         }
       ],
       "registrar": "none",
@@ -45,45 +40,35 @@
       "dnsProviders": {
         "bind": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "example.com",
+        "dnscontrol_nameunicode": "example.com",
+        "dnscontrol_uniquename": "example.com"
+      },
       "name": "example.com",
       "records": [
         {
-          "comparablev3": "ns1.fooexample.com.",
           "filepos": "[line:17:5]",
           "name": "foo",
-          "name_unicode": "foo",
-          "rdata": {
-            "Ns": "ns1.fooexample.com."
-          },
+          "target": "ns1.fooexample.com.",
           "ttl": 300,
-          "type": "NS",
-          "typenum": 2
+          "type": "NS"
         },
         {
-          "comparablev3": "ns1.example.com.",
           "filepos": "[line:20:5]",
           "name": "more.lego",
-          "name_unicode": "more.lego",
-          "rdata": {
-            "Ns": "ns1.example.com."
-          },
           "subdomain": "lego",
+          "target": "ns1.example.com.",
           "ttl": 300,
-          "type": "NS",
-          "typenum": 2
+          "type": "NS"
         },
         {
-          "comparablev3": "ns1.lego.example.com.",
           "filepos": "[line:21:5]",
           "name": "short.lego",
-          "name_unicode": "short.lego",
-          "rdata": {
-            "Ns": "ns1.lego.example.com."
-          },
           "subdomain": "lego",
+          "target": "ns1.lego.example.com.",
           "ttl": 300,
-          "type": "NS",
-          "typenum": 2
+          "type": "NS"
         }
       ],
       "registrar": "none",

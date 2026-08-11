@@ -80,17 +80,6 @@ secret itself is never transmitted.
   * `ALIAS`/`ANAME` — WebSupport only allows `ANAME` at the apex and rejects it
     when other apex records exist, so it cannot be supported generically.
   * `LOC`, `NAPTR`, `PTR`, `SSHFP`, `TLSA`, `DS`.
-* **`TXT` records may not end in a space.** The API silently strips trailing
-  whitespace, so such records are rejected rather than churning forever.
-* **Null MX ([RFC 7505](https://www.rfc-editor.org/rfc/rfc7505.html)) is not
-  supported.** A null MX has an empty target and the API rejects a record with
-  empty `content`, so `MX("@", 0, ".")` is rejected with a clear error.
-* **MX and SRV reads cost one extra API request each.** WebSupport's record
-  listing endpoints return `null` for `priority`, `port` and `weight` on every
-  record, even though the values are stored correctly and served in DNS. The
-  provider re-reads each `MX` and `SRV` record through the v1 single-record
-  endpoint, which still reports them. This is a workaround for a bug on
-  WebSupport's side and stops by itself once they fix the listing.
 * The provider automatically resolves each domain to its numeric WebSupport
   service id (used internally by the v2 API); you only need to supply
   `api_key` and `secret`.

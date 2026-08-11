@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 const apiBase = "https://desec.io/api/v1"

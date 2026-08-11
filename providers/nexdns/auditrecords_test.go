@@ -4,8 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func TestAuditRecords(t *testing.T) {
@@ -100,13 +99,13 @@ func TestRejectUnroutableIP(t *testing.T) {
 				rtype = "AAAA"
 			}
 
-			dc := models.MustNewDomainConfig(testOrigin)
-			rc, err := dc.NewRecordConfig("@", 0, rtype, tt.address)
-			if err != nil {
+			rc := &models.RecordConfig{Type: rtype}
+			rc.SetLabel("@", testOrigin)
+			if err := rc.SetTarget(tt.address); err != nil {
 				t.Fatalf("SetTarget() error = %v", err)
 			}
 
-			err = rejectUnroutableIP(rc)
+			err := rejectUnroutableIP(rc)
 			if tt.reject && err == nil {
 				t.Errorf("%s (%s) was accepted, want rejected", tt.address, tt.what)
 			}
@@ -120,7 +119,10 @@ func TestRejectUnroutableIP(t *testing.T) {
 func auditCAA(t *testing.T, flag uint8, tag, target string) *models.RecordConfig {
 	t.Helper()
 
-	dc := models.MustNewDomainConfig(testOrigin)
-	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeCAA, flag, tag, target)
+	rc := &models.RecordConfig{Type: "CAA"}
+	rc.SetLabel("@", testOrigin)
+	if err := rc.SetTargetCAA(flag, tag, target); err != nil {
+		t.Fatalf("SetTargetCAA() error = %v", err)
+	}
 	return rc
 }

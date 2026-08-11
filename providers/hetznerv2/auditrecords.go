@@ -1,7 +1,7 @@
 package hetznerv2
 
 import (
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // AuditRecords returns a list of errors corresponding to the records

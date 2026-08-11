@@ -1,15 +1,23 @@
 $TTL 300
 @                IN LOC   42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m
-a                IN LOC   42 21 43.950 N 71 05 6.340 W -24.01m 1m 200m 10m
+a                IN LOC   42 21 43.952 N 71 05 6.344 W -24.01m 1m 200m 10m
 b                IN LOC   52 14 5.000 N 00 08 50.000 E 10.33m 0.00m 0.00m 0.00m
-big-ben          IN LOC   51 30 3.030 N 00 07 28.650 W 6m 0.00m 0.00m 0.00m
+big-ben          IN LOC   51 30 3.033 N 00 07 28.651 W 6m 0.00m 0.00m 0.00m
 c                IN LOC   32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m
-d                IN LOC   42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m
-d-alt-highest    IN LOC   42 21 28.760 N 71 00 51.620 W 42849672.95m 2000m 0.00m 0.00m
-d-alt-lowest     IN LOC   42 21 28.760 N 71 00 51.620 W -100000m 2000m 0.00m 0.00m
-d-horizprecision-hi IN LOC 42 21 28.760 N 71 00 51.620 W 0m 1m 90000000m 0.00m
-d-size-hi        IN LOC   42 21 28.760 N 71 00 51.620 W 0m 90000000m 0.00m 0.00m
-d-vertprecision-hi IN LOC 42 21 28.760 N 71 00 51.620 W 0m 1m 0.00m 90000000m
+d                IN LOC   42 21 28.764 N 71 00 51.617 W -44m 2000m 0.00m 0.00m
+d-alt-highest    IN LOC   42 21 28.764 N 71 00 51.617 W 42849672.95m 2000m 0.00m 0.00m
+d-alt-lowest     IN LOC   42 21 28.764 N 71 00 51.617 W -100000m 2000m 0.00m 0.00m
+d-alt-toohigh    IN LOC   42 21 28.764 N 71 00 51.617 W 42849672.95m 2000m 0.00m 0.00m
+d-alt-toolow     IN LOC   42 21 28.764 N 71 00 51.617 W -100000m 2000m 0.00m 0.00m
+d-horizprecision-hi IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 90000000m 0.00m
+d-horizprecision-toohi IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 90000000m 0.00m
+d-horizprecision-toolow IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 0.00m 0.00m
+d-size-hi        IN LOC   42 21 28.764 N 71 00 51.617 W 0m 90000000m 0.00m 0.00m
+d-size-toohi     IN LOC   42 21 28.764 N 71 00 51.617 W 0m 90000000m 0.00m 0.00m
+d-size-toolow    IN LOC   42 21 28.764 N 71 00 51.617 W 0m 0.00m 0.00m 0.00m
+d-vertprecision-hi IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 0.00m 90000000m
+d-vertprecision-toohi IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 0.00m 90000000m
+d-vertprecision-toolow IN LOC 42 21 28.764 N 71 00 51.617 W 0m 1m 0.00m 0.00m
 fraser-island    IN LOC   25 14 24.000 S 153 09 0.000 E 3m 0.00m 0.00m 0.00m
 guinness-brewery IN LOC   53 20 40.000 N 06 17 20.000 W 300m 0.00m 0.00m 0.00m
 hawaii           IN LOC   21 30 0.000 N 158 00 0.000 W 920m 0.00m 0.00m 0.00m
@@ -20,4 +28,4 @@ opera-house3     IN LOC   33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m
 opera-house4     IN LOC   33 51 31.000 S 151 12 51.000 E 4m 0.00m 0.00m 0.00m
 ribblehead-viaduct IN LOC 54 12 38.000 N 02 22 13.000 W 300m 0.00m 0.00m 0.00m
 tasmania         IN LOC   42 00 0.000 S 147 00 0.000 E 3m 0.00m 0.00m 0.00m
-white-house      IN LOC   38 53 51.940 N 77 02 11.580 W 19m 0.00m 0.00m 0.00m
+white-house      IN LOC   38 53 51.935 N 77 02 11.584 W 19m 0.00m 0.00m 0.00m

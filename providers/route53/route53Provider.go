@@ -23,25 +23,20 @@ import (
 	r53dTypes "github.com/aws/aws-sdk-go-v2/service/route53domains/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 type route53Provider struct {
-	observer      providers.ConversionObserver
 	client        *r53.Client
 	registrar     *r53d.Client
 	delegationSet *string
 	zonesMu       sync.Mutex
 	zonesByID     map[string]r53Types.HostedZone
 	zonesByDomain map[string]r53Types.HostedZone
-}
-
-func (r *route53Provider) SetConversionObserver(observer providers.ConversionObserver) {
-	r.observer = observer
 }
 
 func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
@@ -360,7 +355,7 @@ func (r *route53Provider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		if !found {
 			return nil, errZoneNoExist{zoneID}
 		}
-		return r.getZoneRecords(dc, zone)
+		return r.getZoneRecords(zone)
 	}
 
 	//	fmt.Printf("DEBUG: ROUTE53 zones:\n")
@@ -370,7 +365,7 @@ func (r *route53Provider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 
 	// Otherwise, use the domain name to look up the zone.
 	if zone, ok := r.getZoneByDomain(domain); ok {
-		return r.getZoneRecords(dc, zone)
+		return r.getZoneRecords(zone)
 	}
 
 	// Not found there?  Error.
@@ -393,17 +388,15 @@ func (r *route53Provider) getZone(dc *models.DomainConfig) (r53Types.HostedZone,
 	return r53Types.HostedZone{}, errDomainNoExist{dc.Name}
 }
 
-func (r *route53Provider) getZoneRecords(dc *models.DomainConfig, zone r53Types.HostedZone) (models.Records, error) {
+func (r *route53Provider) getZoneRecords(zone r53Types.HostedZone) (models.Records, error) {
 	records, err := r.fetchRecordSets(zone.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	var existingRecords models.Records
+	existingRecords := []*models.RecordConfig{}
 	for _, set := range records {
-		before := providers.BeginToRC(r.observer, "nativeToRecords", set)
-		rts, err := nativeToRecords(dc, set, unescape(zone.Name))
-		providers.EndToRC(r.observer, "nativeToRecords", before, set, rts, err)
+		rts, err := nativeToRecords(set, unescape(zone.Name))
 		if err != nil {
 			return nil, err
 		}
@@ -421,12 +414,8 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 	// update zone_id to current zone.id if not specified by the user
 	for _, want := range dc.Records {
-		if want.Type == "R53_ALIAS" {
-			f := want.AsR53ALIAS()
-			if f.ZoneID == "" {
-				f.ZoneID = getZoneID(zone, want)
-				want.SetRDATA(f)
-			}
+		if want.Type == "R53_ALIAS" && want.R53Alias["zone_id"] == "" {
+			want.R53Alias["zone_id"] = getZoneID(zone, want)
 		}
 	}
 
@@ -488,7 +477,7 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 
 				for _, r := range inst.New {
 					rr := r53Types.ResourceRecord{
-						Value: aws.String(r.GetRDATA().String()),
+						Value: aws.String(r.GetTargetCombinedFunc(txtutil.EncodeQuoted)),
 					}
 					rrset.ResourceRecords = append(rrset.ResourceRecords, rr)
 					i := int64(r.TTL)
@@ -561,26 +550,27 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	return append(reports, corrections...), actualChangeCount, nil
 }
 
-func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, origin string) ([]*models.RecordConfig, error) {
-	if origin != dc.Name {
-		panic(fmt.Sprintf("Obviously I don't understand what's going on. %q != %q", origin, dc.Name))
-	}
-	var results models.Records
+func nativeToRecords(set r53Types.ResourceRecordSet, origin string) ([]*models.RecordConfig, error) {
+	results := []*models.RecordConfig{}
 	if set.AliasTarget != nil {
-
-		rc, err := dc.NewRecordConfig(dc.LabelFromFQDNNoDot(unescape(set.Name)), 300,
-			privatetypes.TypeR53ALIAS,
-			string(set.Type),
-			aws.ToString(set.AliasTarget.DNSName),
-			strconv.FormatBool(set.AliasTarget.EvaluateTargetHealth),
-			aws.ToString(set.AliasTarget.HostedZoneId),
-		)
-		if err != nil {
+		rc := &models.RecordConfig{
+			Type: "R53_ALIAS",
+			TTL:  300,
+			R53Alias: map[string]string{
+				"type":                   string(set.Type),
+				"zone_id":                aws.ToString(set.AliasTarget.HostedZoneId),
+				"evaluate_target_health": strconv.FormatBool(set.AliasTarget.EvaluateTargetHealth),
+			},
+		}
+		rc.SetLabelFromFQDN(unescape(set.Name), origin)
+		if err := rc.SetTarget(aws.ToString(set.AliasTarget.DNSName)); err != nil {
 			return nil, err
 		}
 		applyR53RoutingMeta(rc, set)
+		// rc.Original stores a pointer to the original set for use by
+		// r53Types.ChangeActionDelete and anything else that needs the
+		// native record verbatim.
 		rc.Original = set
-
 		results = append(results, rc)
 	} else if set.TrafficPolicyInstanceId != nil {
 		// skip traffic policy records
@@ -619,22 +609,13 @@ func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, or
 						val = val + "."
 					}
 				}
-				// Update: 2026-07-25:
-				// Decision: Don't use nrc.TARGET_IS_FQDN_NO_DOT to work around this bug.
-				// Why? Too risky. We know the exact situation where a "." is
-				// needed and can target the workaround to that exact situation.
-				// Using nrc.TARGET_IS_FQDN_NO_DOT will work, but will be extra
-				// work for all other records.
 
-				rc, err := dc.NewRecordConfigParse(dc.LabelFromFQDNNoDot(unescape(set.Name)),
-					uint32(aws.ToInt64(set.TTL)),
-					rtypeString,
-					val,
-				)
-				if err != nil {
-					return nil, fmt.Errorf("unparsable record type=%q val=%q received from ROUTE53: %w", rtypeString, val, err)
-				}
+				rc := &models.RecordConfig{TTL: uint32(aws.ToInt64(set.TTL))}
+				rc.SetLabelFromFQDN(unescape(set.Name), origin)
 				rc.Original = set
+				if err := rc.PopulateFromStringFunc(rtypeString, val, origin, txtutil.ParseQuoted); err != nil {
+					return nil, fmt.Errorf("unparsable record type=%q received from ROUTE53: %w", rtypeString, err)
+				}
 				applyR53RoutingMeta(rc, set)
 
 				results = append(results, rc)
@@ -690,15 +671,14 @@ func applyR53RoutingFieldsToRRSet(rrset *r53Types.ResourceRecordSet, rc *models.
 }
 
 func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.ResourceRecordSet {
-	f := r.AsR53ALIAS()
-	target := f.Target
+	target := r.GetTargetField()
 	zoneID := getZoneID(zone, r)
-	evalTargetHealth, err := strconv.ParseBool(f.EvalTargetHealth)
+	evalTargetHealth, err := strconv.ParseBool(r.R53Alias["evaluate_target_health"])
 	if err != nil {
 		evalTargetHealth = false
 	}
 	rrset := &r53Types.ResourceRecordSet{
-		Type: r53Types.RRType(f.AliasType),
+		Type: r53Types.RRType(r.R53Alias["type"]),
 		AliasTarget: &r53Types.AliasTarget{
 			DNSName:              &target,
 			HostedZoneId:         aws.String(zoneID),
@@ -709,7 +689,7 @@ func aliasToRRSet(zone r53Types.HostedZone, r *models.RecordConfig) *r53Types.Re
 }
 
 func getZoneID(zone r53Types.HostedZone, r *models.RecordConfig) string {
-	zoneID := r.AsR53ALIAS().ZoneID
+	zoneID := r.R53Alias["zone_id"]
 	if zoneID == "" {
 		zoneID = aws.ToString(zone.Id)
 	}

@@ -40,7 +40,6 @@ D("example.com", REG_NONE, DnsProvider(DSP_DOMAINNAMESHOP),
 ## Limitations
 
 - Domainnameshop DNS only supports TTLs which are a multiple of 60.
-
 ## Feature Summary
 
 <!-- provider-features-start -->

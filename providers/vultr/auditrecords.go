@@ -1,8 +1,8 @@
 package vultr
 
 import (
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -11,11 +11,13 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-26
+	a.Add("MX", rejectif.MxNull) // Last verified 2020-12-28
 
-	a.Add("CAA", rejectif.CaaHasEmptyTarget) // Last verified 2026-07-26
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2021-03-02
+	// Needs investigation. Could be a dnscontrol issue or
+	// the provider doesn't support double quotes.
 
-	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2026-07-26
+	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2023-01-19
 
 	return a.Audit(records)
 }

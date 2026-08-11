@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	pdns "github.com/mittwald/go-powerdns"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

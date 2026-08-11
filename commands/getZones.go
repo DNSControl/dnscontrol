@@ -7,10 +7,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
-	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+
 	"github.com/urfave/cli/v3"
 )
 
@@ -204,14 +207,20 @@ func GetZone(args GetZoneArgs) error {
 	// fetch all of the records
 	zoneRecs := make([]models.Records, len(zones))
 	for i, zone := range zones {
-		dc, err := models.NewDomainConfig(zone)
-		if err != nil {
-			return fmt.Errorf("failed GetZone NewDC: %w", err)
-		}
-		recs, err := provider.GetZoneRecords(dc)
+		ff := domaintags.MakeDomainNameVarieties(zone)
+		recs, err := provider.GetZoneRecords(
+			&models.DomainConfig{
+				Name: ff.NameASCII,
+				Metadata: map[string]string{
+					models.DomainUniqueName:  ff.UniqueName,
+					models.DomainNameRaw:     ff.NameRaw,
+					models.DomainNameUnicode: ff.NameUnicode,
+				},
+			})
 		if err != nil {
 			return fmt.Errorf("failed GetZone gzr: %w", err)
 		}
+		rtypecontrol.FixLegacyRecords(&recs) // Call this after GetZoneRecords() to fix providers that haven't been updated for RecordConfigV2.
 		zoneRecs[i] = recs
 	}
 
@@ -329,8 +338,6 @@ func GetZone(args GetZoneArgs) error {
 		case "tsv":
 			for _, rec := range recs {
 				providerMeta := ""
-
-				// Cloudflare metadata
 				if cp, ok := rec.Metadata["cloudflare_proxy"]; ok {
 					if cp == "true" {
 						providerMeta += ",cloudflare_proxy=true"
@@ -347,7 +354,6 @@ func GetZone(args GetZoneArgs) error {
 				if tags := rec.Metadata["cloudflare_tags"]; tags != "" {
 					providerMeta += ",cloudflare_tags=" + tags
 				}
-
 				// HEDNS metadata
 				if dyn, ok := rec.Metadata["hedns_dynamic"]; ok && dyn == "on" {
 					providerMeta += ",hedns_dynamic=on"
@@ -355,7 +361,6 @@ func GetZone(args GetZoneArgs) error {
 						providerMeta += ",hedns_ddns_key=" + key
 					}
 				}
-
 				if providerMeta != "" {
 					providerMeta = "\t" + providerMeta[1:] // Remove leading comma, add tab
 				}
@@ -364,15 +369,8 @@ func GetZone(args GetZoneArgs) error {
 				if rec.Type == "UNKNOWN" {
 					ty = rec.UnknownTypeName
 				}
-
-				var content string
-				if rec.HasFormatIdenticalToTXT() {
-					content = rec.GetTargetTXTJoined()
-				} else {
-					content = rec.GetRDATA().String()
-				}
 				fmt.Fprintf(w, "%s\t%s\t%d\tIN\t%s\t%s%s\n",
-					rec.NameFQDN, rec.Name, rec.TTL, ty, content, providerMeta)
+					rec.NameFQDN, rec.Name, rec.TTL, ty, rec.GetTargetCombinedFunc(nil), providerMeta)
 			}
 
 		default:
@@ -393,6 +391,7 @@ func jsonQuoted(i string) string {
 }
 
 func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
+	target := rec.GetTargetCombined()
 
 	ttl := uint32(0)
 	ttlop := ""
@@ -462,33 +461,58 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		}
 	}
 
-	fj, _ := models.RDtoFieldsJS(rec.GetRDATA())
-
-	var target string
-	switch rec.Type {
+	switch rec.Type { // #rtype_variations
 	case "CAA":
 		return makeCaa(rec, ttlop)
+	case "DS":
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.DsKeyTag, rec.DsAlgorithm, rec.DsDigestType, rec.DsDigest)
+	case "DNSKEY":
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.DnskeyFlags, rec.DnskeyProtocol, rec.DnskeyAlgorithm, rec.DnskeyPublicKey)
+	case "MX":
+		target = fmt.Sprintf(`%d, "%s"`, rec.MxPreference, rec.GetTargetField())
+	case "NAPTR":
+		target = fmt.Sprintf(`%d, %d, %s, %s, %s, %s`,
+			rec.NaptrOrder,                   // 1
+			rec.NaptrPreference,              // 10
+			jsonQuoted(rec.NaptrFlags),       // U
+			jsonQuoted(rec.NaptrService),     // E2U+sip
+			jsonQuoted(rec.NaptrRegexp),      // regex
+			jsonQuoted(rec.GetTargetField()), // .
+		)
+	case "SMIMEA":
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SmimeaUsage, rec.SmimeaSelector, rec.SmimeaMatchingType, rec.GetTargetField())
+	case "SSHFP":
+		target = fmt.Sprintf(`%d, %d, "%s"`, rec.SshfpAlgorithm, rec.SshfpFingerprint, rec.GetTargetField())
 	case "SOA":
 		rec.Type = "//SOA"
-		noserial := append(fj[:2], fj[3:]...)
-		target = strings.Join(noserial, ", ")
-		// f.Serial is not included in the SOA() function because DNSControl controls that field.
+		target = fmt.Sprintf(`"%s", "%s", %d, %d, %d, %d`, rec.GetTargetField(), rec.SoaMbox, rec.SoaRefresh, rec.SoaRetry, rec.SoaExpire, rec.SoaMinttl)
+	case "SRV":
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.SrvPriority, rec.SrvWeight, rec.SrvPort, rec.GetTargetField())
+	case "SVCB", "HTTPS":
+		target = fmt.Sprintf(`%d, "%s", "%s"`, rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
+	case "TLSA":
+		target = fmt.Sprintf(`%d, %d, %d, "%s"`, rec.TlsaUsage, rec.TlsaSelector, rec.TlsaMatchingType, rec.GetTargetField())
 	case "TXT":
 		target = jsonQuoted(rec.GetTargetTXTJoined())
 		// TODO(tlim): If this is an SPF record, generate a SPF_BUILDER().
 	case "LUA":
-		target = fmt.Sprintf("%q, %s", rec.AsLUA().LuaType, jsonQuoted(rec.GetTargetTXTJoined()))
+		target = fmt.Sprintf("%q, %s", rec.LuaRType, jsonQuoted(rec.GetTargetTXTJoined()))
 	case "NS":
 		// NS records at the apex should be NAMESERVER() records.
 		// DnsControl uses the API to get this info. NAMESERVER() is just
 		// to override that when needed.
 		if rec.Name == "@" {
-			return fmt.Sprintf(`//NAMESERVER("%s")`, rec.AsNS().Ns)
+			return fmt.Sprintf(`//NAMESERVER("%s")`, target)
 		}
-		target = `"` + rec.AsNS().Ns + `"`
+		target = `"` + target + `"`
+	case "MIKROTIK_FWD":
+		target = `"` + target + `"`
+	case "MIKROTIK_NXDOMAIN":
+		// NXDOMAIN has no target — emit only name + optional metadata + TTL
+		return fmt.Sprintf(`MIKROTIK_NXDOMAIN("%s"%s%s)`, rec.Name, mtmeta, ttlop)
 	case "MIKROTIK_FORWARDER":
 		// Forwarder: target is dns-servers, metadata has doh_servers/verify_doh_cert
-		target = `"` + rec.GetRDATA().String() + `"`
+		target = `"` + target + `"`
 		if rec.Metadata != nil {
 			var fwdParts []string
 			if v := rec.Metadata["doh_servers"]; v != "" {
@@ -506,19 +530,18 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 	case "UNKNOWN":
 		return makeUknown(rec, ttl)
 	default:
-		target = strings.Join(fj, ", ")
+		target = `"` + target + `"`
 	}
 
 	return fmt.Sprintf(`%s("%s", %s%s%s%s%s%s%s%s)`, rec.Type, rec.Name, target, cfproxy, cfflatten, cfcomment, cftags, mtmeta, hednsDynamic, ttlop)
 }
 
 func makeCaa(rec *models.RecordConfig, ttlop string) string {
-	f := rec.AsCAA()
 	var target string
-	if f.Flag == 128 {
-		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, f.Tag, f.Value)
+	if rec.CaaFlag == 128 {
+		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, rec.CaaTag, rec.GetTargetField())
 	} else {
-		target = fmt.Sprintf(`"%s", "%s"`, f.Tag, f.Value)
+		target = fmt.Sprintf(`"%s", "%s"`, rec.CaaTag, rec.GetTargetField())
 	}
 	return fmt.Sprintf(`%s("%s", %s%s)`, rec.Type, rec.Name, target, ttlop)
 
@@ -526,16 +549,15 @@ func makeCaa(rec *models.RecordConfig, ttlop string) string {
 }
 
 func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
-	f := rec.AsR53ALIAS()
 	items := []string{
 		`"` + rec.Name + `"`,
-		`"` + f.AliasType + `"`,
-		`"` + f.Target + `"`,
+		`"` + rec.R53Alias["type"] + `"`,
+		`"` + rec.GetTargetField() + `"`,
 	}
-	if f.ZoneID != "" {
-		items = append(items, `R53_ZONE("`+f.ZoneID+`")`)
+	if z, ok := rec.R53Alias["zone_id"]; ok {
+		items = append(items, `R53_ZONE("`+z+`")`)
 	}
-	if f.EvalTargetHealth == "true" {
+	if e, ok := rec.R53Alias["evaluate_target_health"]; ok && e == "true" {
 		items = append(items, "R53_EVALUATE_TARGET_HEALTH(true)")
 	}
 	if ttl != 0 {
@@ -545,5 +567,5 @@ func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
 }
 
 func makeUknown(rc *models.RecordConfig, ttl uint32) string {
-	return fmt.Sprintf(`// %s("%s", TTL(%d))`, rc.UnknownTypeName, rc.GetRDATA().String(), ttl)
+	return fmt.Sprintf(`// %s("%s", TTL(%d))`, rc.UnknownTypeName, rc.GetTargetField(), ttl)
 }

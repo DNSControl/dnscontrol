@@ -6,23 +6,18 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/version"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/version"
 	cnrcl "github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5/apiclient"
 )
 
 // Client describes a connection to the CNR API.
 type Client struct {
-	observer    providers.ConversionObserver
 	conf        map[string]string
 	APILogin    string
 	APIPassword string
 	APIEntity   string
 	client      *cnrcl.APIClient
-}
-
-func (client *Client) SetConversionObserver(observer providers.ConversionObserver) {
-	client.observer = observer
 }
 
 var features = providers.DocumentationNotes{

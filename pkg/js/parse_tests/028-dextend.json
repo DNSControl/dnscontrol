@@ -10,31 +10,26 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "10.1.1.1",
           "filepos": "[line:6:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.1.1.1"
-          },
+          "target": "10.1.1.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.2.2.2",
           "filepos": "[line:7:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.2.2.2"
-          },
+          "target": "10.2.2.2",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -44,31 +39,26 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "bar.foo.com",
+        "dnscontrol_nameunicode": "bar.foo.com",
+        "dnscontrol_uniquename": "bar.foo.com"
+      },
       "name": "bar.foo.com",
       "records": [
         {
-          "comparablev3": "10.3.3.3",
           "filepos": "[line:10:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.3.3.3"
-          },
+          "target": "10.3.3.3",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.4.4.4",
           "filepos": "[line:11:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.4.4.4"
-          },
+          "target": "10.4.4.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -78,55 +68,40 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.edu",
+        "dnscontrol_nameunicode": "foo.edu",
+        "dnscontrol_uniquename": "foo.edu"
+      },
       "name": "foo.edu",
       "records": [
         {
-          "comparablev3": "10.5.5.5",
           "filepos": "[line:16:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.5.5.5"
-          },
+          "target": "10.5.5.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.7.7.7",
           "filepos": "[line:20:5]",
           "name": "more1",
-          "name_unicode": "more1",
-          "rdata": {
-            "Addr": "10.7.7.7"
-          },
+          "target": "10.7.7.7",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.8.8.8",
           "filepos": "[line:21:5]",
           "name": "more2",
-          "name_unicode": "more2",
-          "rdata": {
-            "Addr": "10.8.8.8"
-          },
+          "target": "10.8.8.8",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.6.6.6",
           "filepos": "[line:17:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.6.6.6"
-          },
+          "target": "10.6.6.6",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",

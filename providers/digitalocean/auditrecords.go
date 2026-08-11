@@ -3,8 +3,8 @@ package digitalocean
 import (
 	"errors"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -44,7 +44,7 @@ func MaxLengthDO(rc *models.RecordConfig) error {
 	// In other words, they're doing the checking on the API protocol
 	// encoded data instead of on the resulting TXT record.  Sigh.
 
-	if len(rc.GetRDATA().String()) > 509 {
+	if len(rc.GetTargetRFC1035Quoted()) > 509 {
 		return errors.New("encoded txt too long")
 	}
 

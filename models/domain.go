@@ -5,13 +5,26 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/qdm12/reprint"
 )
 
+const (
+	// DomainTag is the key used to store a copy of DomainConfig.Tag in the Metadata map.
+	DomainTag = "dnscontrol_tag"
+
+	// DomainUniqueName is the key used to store a copy of DomainConfig.UniqueName in the Metadata map.
+	DomainUniqueName = "dnscontrol_uniquename"
+
+	// DomainNameRaw is the key used to store a copy of DomainConfig.NameRaw in the Metadata map.
+	DomainNameRaw = "dnscontrol_nameraw"
+
+	// DomainNameUnicode is the key used to store a copy of DomainConfig.NameUnicode in the Metadata map.
+	DomainNameUnicode = "dnscontrol_nameunicode"
+)
+
 // DomainConfig describes a DNS domain (technically a DNS zone).
-// Do not create your own `models.DomainConfig`.  Use `models.NewDomainConfig(name)`.
+// Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
 	NameRaw     string `json:"-"`    // name as entered by user in dnsconfig.js
 	Name        string `json:"name"` // NO trailing "."   Converted to IDN (punycode) early in the pipeline.
@@ -121,6 +134,23 @@ func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
+	// Ensure the metadata map is initialized.
+	if dc.Metadata == nil {
+		dc.Metadata = map[string]string{}
+	}
+
+	// Turn the user-supplied name into the fixed forms.
+	ff := domaintags.MakeDomainNameVarieties(dc.Name)
+	dc.Tag, dc.NameRaw, dc.Name, dc.NameUnicode, dc.UniqueName, dc.DisplayName = ff.Tag, ff.NameRaw, ff.NameASCII, ff.NameUnicode, ff.UniqueName, ff.DisplayName
+
+	// Store the FixForms is Metadata so we don't have to change the signature of every function that might need them.
+	// This is a bit ugly but avoids a huge refactor. Please avoid using these to make the future refactor easier.
+	if dc.Tag != "" {
+		dc.Metadata[DomainTag] = dc.Tag
+	}
+	dc.Metadata[DomainNameRaw] = dc.NameRaw
+	dc.Metadata[DomainNameUnicode] = dc.NameUnicode
+	dc.Metadata[DomainUniqueName] = dc.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.

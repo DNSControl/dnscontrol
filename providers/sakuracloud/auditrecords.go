@@ -6,10 +6,9 @@ import (
 	"slices"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	dnsv1 "github.com/miekg/dns"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -49,7 +48,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 	return func(rc *models.RecordConfig) error {
 		m := maxLength
-		if len(rc.AsCAA().Value) > m {
+		if len(rc.GetTargetField()) > m {
 			return fmt.Errorf("CAA record longer than %d octets (chars)", m)
 		}
 		return nil
@@ -59,8 +58,8 @@ func rejectifCaaLongerThan(maxLength int) func(rc *models.RecordConfig) error {
 // rejectifNsPointsToOrigin audits NS records that point to the origin.
 func rejectifNsPointsToOrigin(rc *models.RecordConfig) error {
 	originFQDN := strings.TrimPrefix(rc.GetLabelFQDN(), rc.GetLabel()+".") + "."
-	if originFQDN == rc.AsNS().Ns {
-		return fmt.Errorf("NS record points to the origin: %s", rc.AsNS().Ns)
+	if originFQDN == rc.GetTargetField() {
+		return fmt.Errorf("NS record points to the origin: %s", rc.GetTargetField())
 	}
 	return nil
 }
@@ -68,8 +67,7 @@ func rejectifNsPointsToOrigin(rc *models.RecordConfig) error {
 var labelExampleRe = regexp.MustCompile(`^example[0-9]?$`)
 
 func hasLabelExample(domain string) error {
-	labels := strings.Split(strings.TrimSuffix(domain, "."), ".")
-	if slices.ContainsFunc(labels, labelExampleRe.MatchString) {
+	if slices.ContainsFunc(dnsv1.SplitDomainName(domain), labelExampleRe.MatchString) {
 		return fmt.Errorf("label contains `example`: %s", domain)
 	}
 	return nil
@@ -81,26 +79,7 @@ func hasLabelExample(domain string) error {
 //   - example
 //   - exampleN, where N is a numerical character
 func rejectifTargetHasExample(rc *models.RecordConfig) error {
-	var target string
-	switch rc.TypeNum {
-	case privatetypes.TypeALIAS:
-		target = rc.AsALIAS().Target
-	case dnsv2.TypeCNAME:
-		target = rc.AsCNAME().Target
-	case dnsv2.TypeHTTPS:
-		target = rc.AsHTTPS().Target
-	case dnsv2.TypeMX:
-		target = rc.AsMX().Mx
-	case dnsv2.TypeNS:
-		target = rc.AsNS().Ns
-	case dnsv2.TypePTR:
-		target = rc.AsPTR().Ptr
-	case dnsv2.TypeSRV:
-		target = rc.AsSRV().Target
-	case dnsv2.TypeSVCB:
-		target = rc.AsSVCB().Target
-	}
-	return hasLabelExample(target)
+	return hasLabelExample(rc.GetTargetField())
 }
 
 // rejectifLabelHasExample returns a function that audits owner names

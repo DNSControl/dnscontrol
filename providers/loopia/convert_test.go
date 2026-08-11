@@ -4,27 +4,24 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func TestRecordToNative_1(t *testing.T) {
-	dc, err := models.NewDomainConfig("example.com")
-	if err != nil {
-		t.Fatal(err)
+	rc := &models.RecordConfig{
+		TTL: 3600,
 	}
-	rc := dc.MustNewRecordConfig("foo", 3600, "A", "1.2.3.4")
+	rc.SetLabel("foo", "example.com")
+	rc.MustSetTarget("1.2.3.4")
+	rc.Type = "A"
 
-	nst := reflect.TypeOf(recordToNative(rc)).Kind()
+	nst := reflect.TypeFor[paramStruct]().Kind()
 	if nst != reflect.TypeFor[paramStruct]().Kind() {
 		t.Errorf("recordToNative produced unexpected type")
 	}
 }
 
 func TestNativeToRecord_1(t *testing.T) {
-	dc, err := models.NewDomainConfig("example.com")
-	if err != nil {
-		t.Fatal(err)
-	}
 	zrec := zRec{}
 	zrec.Type = "A"
 	zrec.TTL = 300
@@ -32,14 +29,16 @@ func TestNativeToRecord_1(t *testing.T) {
 	zrec.Priority = 0
 	zrec.RecordID = 0
 
-	rc, err := nativeToRecord(zrec.SetZR(), dc, "www")
+	rc, err := nativeToRecord(zrec.SetZR(), "example.com", "www")
 
 	if rc.Type != "A" {
 		t.Errorf("nativeToRecord produced unexpected type")
 	} else if rc.TTL != 300 {
 		t.Errorf("nativeToRecord produced unexpected TTL")
-	} else if rc.AsA().String() != "1.2.3.4" {
+	} else if rc.GetTargetCombined() != "1.2.3.4" {
 		t.Errorf("nativeToRecord produced unexpected Rdata")
+	} else if rc.SrvPriority != 0 {
+		t.Errorf("nativeToRecord produced unexpected Priority")
 	}
 
 	if err != nil {

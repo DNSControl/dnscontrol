@@ -3,10 +3,14 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "8.8.8.8",
           "filepos": "[line:2:5]",
           "meta": {
             "address_list": "vpn-list",
@@ -14,13 +18,9 @@
             "orig_custom_type": "MIKROTIK_FWD"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "ForwardTo": "8.8.8.8"
-          },
+          "target": "8.8.8.8",
           "ttl": 300,
-          "type": "MIKROTIK_FWD",
-          "typenum": 65293
+          "type": "MIKROTIK_FWD"
         },
         {
           "filepos": "[line:6:5]",
@@ -28,26 +28,19 @@
             "orig_custom_type": "MIKROTIK_NXDOMAIN"
           },
           "name": "blocked",
-          "name_unicode": "blocked",
-          "rdata": {},
+          "target": "NXDOMAIN",
           "ttl": 300,
-          "type": "MIKROTIK_NXDOMAIN",
-          "typenum": 65294
+          "type": "MIKROTIK_NXDOMAIN"
         },
         {
-          "comparablev3": "10.0.0.53",
           "filepos": "[line:7:5]",
           "meta": {
             "orig_custom_type": "MIKROTIK_FORWARDER"
           },
           "name": "corp.example.com",
-          "name_unicode": "corp.example.com",
-          "rdata": {
-            "Target": "10.0.0.53"
-          },
+          "target": "10.0.0.53",
           "ttl": 300,
-          "type": "MIKROTIK_FORWARDER",
-          "typenum": 65321
+          "type": "MIKROTIK_FORWARDER"
         }
       ],
       "registrar": "none",

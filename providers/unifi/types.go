@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // legacyDNSRecord represents a DNS record in the OLD UniFi API format (v2/api/site/{site}/static-dns).
@@ -47,9 +46,8 @@ type dnsPolicyRecord struct {
 	Metadata *dnsPolicyMetadata `json:"metadata,omitempty"` // Metadata (origin, read-only in API responses)
 	Domain   string             `json:"domain"`             // FQDN (e.g., "test.example.com")
 
-	// TTL in seconds. Only A/AAAA/CNAME accept it in the new API; for
-	// MX/TXT/SRV the property is rejected, so it is omitted when zero.
-	TTLSeconds int `json:"ttlSeconds,omitempty"`
+	// TTL in seconds (required by the API, always sent)
+	TTLSeconds int `json:"ttlSeconds"`
 
 	// Type-specific fields
 	IPv4Address      string `json:"ipv4Address,omitempty"`      // A record
@@ -62,12 +60,9 @@ type dnsPolicyRecord struct {
 	// MX/SRV specific
 	Priority int `json:"priority,omitempty"` // MX/SRV priority
 
-	// SRV specific. The new API splits the "_service._proto.name" label into
-	// separate fields; service/protocol keep their leading underscore.
-	Service  string `json:"service,omitempty"`  // SRV service, e.g. "_sip"
-	Protocol string `json:"protocol,omitempty"` // SRV protocol, e.g. "_tcp"
-	Weight   int    `json:"weight,omitempty"`   // SRV weight
-	Port     int    `json:"port,omitempty"`     // SRV port
+	// SRV specific
+	Weight int `json:"weight,omitempty"` // SRV weight
+	Port   int `json:"port,omitempty"`   // SRV port
 }
 
 // dnsPolicyResponse wraps the response from the new API list endpoint.
@@ -83,50 +78,59 @@ type siteInfo struct {
 }
 
 // legacyToRecord converts a UniFi legacy API record to a dnscontrol RecordConfig.
-func legacyToRecord(dc *models.DomainConfig, r *legacyDNSRecord) (*models.RecordConfig, error) {
-	// Set TTL (UniFi uses 0 for default, we map to 300)
-	ttl := uint32(300)
-	if r.TTL > 0 {
-		ttl = uint32(r.TTL)
+func legacyToRecord(domain string, r *legacyDNSRecord) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     r.RecordType,
+		Original: r,
 	}
-	label := dc.LabelFromFQDNNoDot(r.Key)
 
-	var rc *models.RecordConfig
+	// Set TTL (UniFi uses 0 for default, we map to 300)
+	if r.TTL > 0 {
+		rc.TTL = uint32(r.TTL)
+	} else {
+		rc.TTL = 300
+	}
+
+	// Set label from FQDN
+	rc.SetLabelFromFQDN(r.Key, domain)
+
 	var err error
 	switch r.RecordType {
 	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Value)
+		err = rc.SetTarget(r.Value)
 
 	case "CNAME", "NS":
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, target)
+		err = rc.SetTarget(target)
 
 	case "MX":
+		rc.MxPreference = uint16(r.Priority)
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Priority, target)
+		err = rc.SetTarget(target)
 
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Value)
+		err = rc.SetTargetTXT(r.Value)
 
 	case "SRV":
+		rc.SrvPriority = uint16(r.Priority)
+		rc.SrvWeight = uint16(r.Weight)
+		rc.SrvPort = uint16(r.Port)
 		target := r.Value
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, r.RecordType, r.Priority, r.Weight, r.Port, target)
+		err = rc.SetTarget(target)
 
 	default:
 		err = fmt.Errorf("unsupported record type: %s", r.RecordType)
 	}
-	if err == nil {
-		rc.Original = r
-	}
+
 	return rc, err
 }
 
@@ -140,51 +144,50 @@ func recordToLegacyMap(rc *models.RecordConfig) (map[string]any, error) {
 		"value":       "",
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeA:
-		m["value"] = rc.AsA().Addr.String()
+	switch rc.Type {
+	case "A":
+		m["value"] = rc.GetTargetField()
 		// A records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case dnsv2.TypeAAAA:
-		m["value"] = rc.AsAAAA().Addr.String()
+	case "AAAA":
+		m["value"] = rc.GetTargetField()
 		// AAAA records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case dnsv2.TypeCNAME:
-		m["value"] = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case "CNAME":
+		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
 		// CNAME records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case dnsv2.TypeNS:
-		m["value"] = strings.TrimSuffix(rc.AsNS().Ns, ".")
+	case "NS":
+		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
 		// NS records can have TTL
 		if rc.TTL > 0 {
 			m["ttl"] = int(rc.TTL)
 		}
 
-	case dnsv2.TypeMX:
+	case "MX":
 		// MX records: only enabled, key, record_type, value, priority allowed
-		m["value"] = strings.TrimSuffix(rc.AsMX().Mx, ".")
-		m["priority"] = int(rc.AsMX().Preference)
+		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		m["priority"] = int(rc.MxPreference)
 
-	case dnsv2.TypeTXT:
+	case "TXT":
 		// TXT records: only enabled, key, record_type, value allowed
 		m["value"] = rc.GetTargetTXTJoined()
 
-	case dnsv2.TypeSRV:
+	case "SRV":
 		// SRV records: enabled, key, record_type, value, priority, weight, port allowed
-		f := rc.AsSRV()
-		m["value"] = strings.TrimSuffix(f.Target, ".")
-		m["priority"] = int(f.Priority)
-		m["weight"] = int(f.Weight)
-		m["port"] = int(f.Port)
+		m["value"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		m["priority"] = int(rc.SrvPriority)
+		m["weight"] = int(rc.SrvWeight)
+		m["port"] = int(rc.SrvPort)
 
 	default:
 		return nil, fmt.Errorf("unsupported record type: %s", rc.Type)
@@ -208,76 +211,76 @@ func getRecordID(rc *models.RecordConfig) string {
 }
 
 // newToRecord converts a UniFi new API record to a dnscontrol RecordConfig.
-func newToRecord(dc *models.DomainConfig, r *dnsPolicyRecord) (*models.RecordConfig, error) {
+func newToRecord(domain string, r *dnsPolicyRecord) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Original: r,
+	}
+
 	// Map new API type to standard type
-	var rtype string
 	switch r.Type {
 	case NewAPITypeA:
-		rtype = "A"
+		rc.Type = "A"
 	case NewAPITypeAAAA:
-		rtype = "AAAA"
+		rc.Type = "AAAA"
 	case NewAPITypeCNAME:
-		rtype = "CNAME"
+		rc.Type = "CNAME"
 	case NewAPITypeMX:
-		rtype = "MX"
+		rc.Type = "MX"
 	case NewAPITypeTXT:
-		rtype = "TXT"
+		rc.Type = "TXT"
 	case NewAPITypeSRV:
-		rtype = "SRV"
+		rc.Type = "SRV"
 	default:
 		return nil, fmt.Errorf("unsupported new API record type: %s", r.Type)
 	}
 
 	// Set TTL (UniFi uses 0 for default, we map to 300)
-	ttl := uint32(300)
 	if r.TTLSeconds > 0 {
-		ttl = uint32(r.TTLSeconds)
+		rc.TTL = uint32(r.TTLSeconds)
+	} else {
+		rc.TTL = 300
 	}
 
-	// Set label from FQDN. For SRV the new API splits the label, so rebuild
-	// "_service._proto.name" from the separate fields.
-	fqdn := r.Domain
-	if r.Type == NewAPITypeSRV && r.Service != "" && r.Protocol != "" {
-		fqdn = r.Service + "." + r.Protocol + "." + r.Domain
-	}
-	label := dc.LabelFromFQDNNoDot(fqdn)
+	// Set label from FQDN
+	rc.SetLabelFromFQDN(r.Domain, domain)
 
-	var rc *models.RecordConfig
 	var err error
 	switch r.Type {
 	case NewAPITypeA:
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.IPv4Address)
+		err = rc.SetTarget(r.IPv4Address)
 
 	case NewAPITypeAAAA:
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.IPv6Address)
+		err = rc.SetTarget(r.IPv6Address)
 
 	case NewAPITypeCNAME:
 		target := r.TargetDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
+		err = rc.SetTarget(target)
 
 	case NewAPITypeMX:
+		rc.MxPreference = uint16(r.Priority)
 		target := r.MailServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, target)
+		err = rc.SetTarget(target)
 
 	case NewAPITypeTXT:
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Text)
+		err = rc.SetTargetTXT(r.Text)
 
 	case NewAPITypeSRV:
+		rc.SrvPriority = uint16(r.Priority)
+		rc.SrvWeight = uint16(r.Weight)
+		rc.SrvPort = uint16(r.Port)
 		target := r.ServerDomain
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Weight, r.Port, target)
+		err = rc.SetTarget(target)
 	}
-	if err == nil {
-		rc.Original = r
-	}
+
 	return rc, err
 }
 
@@ -288,57 +291,41 @@ func recordToNew(rc *models.RecordConfig) (*dnsPolicyRecord, error) {
 		Domain:  rc.NameFQDN,
 	}
 
-	// The new API only accepts ttlSeconds for A/AAAA/CNAME; sending it for
-	// MX/TXT/SRV is rejected with "Unknown request body property '$.ttlSeconds'".
-	switch rc.TypeNum {
-	case dnsv2.TypeA, dnsv2.TypeAAAA, dnsv2.TypeCNAME:
-		if rc.TTL > 0 {
-			r.TTLSeconds = int(rc.TTL)
-		} else {
-			r.TTLSeconds = 300
-		}
+	// Always send TTL; the API requires ttlSeconds to be non-null.
+	if rc.TTL > 0 {
+		r.TTLSeconds = int(rc.TTL)
+	} else {
+		r.TTLSeconds = 300
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeA:
+	switch rc.Type {
+	case "A":
 		r.Type = NewAPITypeA
-		r.IPv4Address = rc.AsA().Addr.String()
+		r.IPv4Address = rc.GetTargetField()
 
-	case dnsv2.TypeAAAA:
+	case "AAAA":
 		r.Type = NewAPITypeAAAA
-		r.IPv6Address = rc.AsAAAA().Addr.String()
+		r.IPv6Address = rc.GetTargetField()
 
-	case dnsv2.TypeCNAME:
+	case "CNAME":
 		r.Type = NewAPITypeCNAME
-		r.TargetDomain = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+		r.TargetDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
 
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
+	case "MX":
 		r.Type = NewAPITypeMX
-		r.Priority = int(f.Preference)
-		r.MailServerDomain = strings.TrimSuffix(f.Mx, ".")
+		r.Priority = int(rc.MxPreference)
+		r.MailServerDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
 
-	case dnsv2.TypeTXT:
+	case "TXT":
 		r.Type = NewAPITypeTXT
 		r.Text = rc.GetTargetTXTJoined()
 
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	case "SRV":
 		r.Type = NewAPITypeSRV
-		// The new API wants the "_service._proto.name" label split apart, e.g.
-		// "_sip._tcp.example.com" => service="_sip", protocol="_tcp",
-		// domain="example.com".
-		labels := strings.SplitN(rc.NameFQDN, ".", 3)
-		if len(labels) < 3 {
-			return nil, fmt.Errorf("SRV record %q is not in _service._proto.name form", rc.NameFQDN)
-		}
-		r.Service = labels[0]
-		r.Protocol = labels[1]
-		r.Domain = labels[2]
-		r.Priority = int(f.Priority)
-		r.Weight = int(f.Weight)
-		r.Port = int(f.Port)
-		r.ServerDomain = strings.TrimSuffix(f.Target, ".")
+		r.Priority = int(rc.SrvPriority)
+		r.Weight = int(rc.SrvWeight)
+		r.Port = int(rc.SrvPort)
+		r.ServerDomain = strings.TrimSuffix(rc.GetTargetField(), ".")
 
 	default:
 		return nil, fmt.Errorf("unsupported record type for new API: %s", rc.Type)

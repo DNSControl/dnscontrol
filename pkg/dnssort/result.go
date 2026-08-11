@@ -1,6 +1,6 @@
 package dnssort
 
-import "github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
+import "github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
 
 // SortResult is the result of a sort function.
 type SortResult[T dnsgraph.Graphable] struct {

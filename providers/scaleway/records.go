@@ -3,8 +3,8 @@ package scaleway
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	domain "github.com/scaleway/scaleway-sdk-go/api/domain/v2beta1"
 )
 
@@ -32,7 +32,7 @@ func (s *scalewayProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			if string(r.Type) == "SOA" {
 				continue
 			}
-			rc, err := toRecordConfig(dc, r)
+			rc, err := toRecordConfig(zone, r)
 			if err != nil {
 				return nil, err
 			}

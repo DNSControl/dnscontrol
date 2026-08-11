@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/miekg/dns/dnsutil"
 )
 
 /*
@@ -150,7 +150,7 @@ func (c *gidinetProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 			continue
 		}
 
-		rc, err := toRecordConfig(dc, r)
+		rc, err := toRecordConfig(domain, r)
 		if err != nil {
 			return nil, err
 		}
@@ -243,22 +243,30 @@ func (c *gidinetProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 }
 
 // toRecordConfig converts a Gidinet DNS record to a RecordConfig.
-func toRecordConfig(dc *models.DomainConfig, r *DNSRecordListItem) (*models.RecordConfig, error) {
+func toRecordConfig(domain string, r *DNSRecordListItem) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     r.RecordType,
+		TTL:      uint32(r.TTL),
+		Original: r,
+	}
+
 	// Set the label from the hostname
 	// Gidinet returns full hostnames like "www.domain.com"
-	label := fromFQDN(r.HostName, dc.Name)
+	label := fromFQDN(r.HostName, domain)
+	rc.SetLabel(label, domain)
 
 	// Handle different record types
-	var rc *models.RecordConfig
-	var err error
 	switch r.RecordType {
 	case "MX":
+		rc.MxPreference = uint16(r.Priority)
 		// MX target should be FQDN with trailing dot
 		target := r.Data
 		if !strings.HasSuffix(target, ".") {
-			target += "."
+			target = dnsutil.AddOrigin(target+".", domain)
 		}
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.RecordType, r.Priority, target)
+		if err := rc.SetTarget(target); err != nil {
+			return nil, err
+		}
 
 	case "SRV":
 		// SRV records in Gidinet: Data contains "priority weight port target"
@@ -272,7 +280,12 @@ func toRecordConfig(dc *models.DomainConfig, r *DNSRecordListItem) (*models.Reco
 			if !strings.HasSuffix(target, ".") {
 				target = target + "."
 			}
-			rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.RecordType, uint16(priority), uint16(weight), uint16(port), target)
+			rc.SrvPriority = uint16(priority)
+			rc.SrvWeight = uint16(weight)
+			rc.SrvPort = uint16(port)
+			if err := rc.SetTarget(target); err != nil {
+				return nil, err
+			}
 		} else {
 			return nil, fmt.Errorf("invalid SRV data format: %q (expected: priority weight port target)", r.Data)
 		}
@@ -280,23 +293,25 @@ func toRecordConfig(dc *models.DomainConfig, r *DNSRecordListItem) (*models.Reco
 	case "CNAME", "NS":
 		target := r.Data
 		if !strings.HasSuffix(target, ".") {
-			target += "."
+			target = dnsutil.AddOrigin(target+".", domain)
 		}
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.RecordType, target)
+		if err := rc.SetTarget(target); err != nil {
+			return nil, err
+		}
 
 	case "TXT":
 		// Gidinet may return TXT values in chunked format: "chunk1" "chunk2"
 		// Use unchunkTXT to parse back to a single string
 		txtData := unchunkTXT(r.Data)
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.RecordType, txtData)
+		if err := rc.SetTargetTXT(txtData); err != nil {
+			return nil, err
+		}
 
 	default: // A, AAAA, etc.
-		rc, err = dc.NewRecordConfig(label, uint32(r.TTL), r.RecordType, r.Data)
+		if err := rc.SetTarget(r.Data); err != nil {
+			return nil, err
+		}
 	}
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = r
 
 	return rc, nil
 }
@@ -311,41 +326,34 @@ func toGidinetRecord(domain string, rc *models.RecordConfig) *DNSRecord {
 		Priority:   0,
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		rec.Priority = int(f.Preference)
+	switch rc.Type {
+	case "MX":
+		rec.Priority = int(rc.MxPreference)
 		// Remove trailing dot from target
-		target := f.Mx
+		target := rc.GetTargetField()
 		rec.Data = strings.TrimSuffix(target, ".")
 
-	case dnsv2.TypeSRV:
+	case "SRV":
 		// SRV Data format: priority weight port target (with trailing dot per Gidinet spec)
 		// The Priority field is only for MX records
-		f := rc.AsSRV()
 		rec.Priority = 0
-		target := f.Target
+		target := rc.GetTargetField()
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rec.Data = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, target)
+		rec.Data = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
 
-	case dnsv2.TypeCNAME:
+	case "CNAME", "NS":
 		// Remove trailing dot from target
-		target := rc.AsCNAME().Target
+		target := rc.GetTargetField()
 		rec.Data = strings.TrimSuffix(target, ".")
 
-	case dnsv2.TypeNS:
-		// Remove trailing dot from target
-		target := rc.AsNS().Ns
-		rec.Data = strings.TrimSuffix(target, ".")
-
-	case dnsv2.TypeTXT:
+	case "TXT":
 		// Chunk long TXT values into quoted segments for the API
 		rec.Data = chunkTXT(rc.GetTargetTXTJoined())
 
-	default:
-		rec.Data = rc.GetRDATA().String()
+	default: // A, AAAA, etc.
+		rec.Data = rc.GetTargetField()
 	}
 
 	return rec
@@ -367,10 +375,9 @@ func filterApexNS(dc *models.DomainConfig) {
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
-			ns := rec.AsNS().Ns
-			target := strings.TrimSuffix(ns, ".")
+			target := strings.TrimSuffix(rec.GetTargetField(), ".")
 			if !expected[target] {
-				printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added.\n", ns)
+				printer.Warnf("GIDINET does not support modifying NS records at apex. %s will not be added.\n", rec.GetTargetField())
 			}
 			continue
 		}

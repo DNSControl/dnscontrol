@@ -6,11 +6,9 @@ import (
 	"sort"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -132,11 +130,13 @@ func (c *ovhProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, e
 
 	var actual models.Records
 	for _, r := range records {
-		rec, err := nativeToRecord(r, dc)
+		rec, err := nativeToRecord(r, domain)
 		if err != nil {
 			return nil, err
 		}
-		actual = append(actual, rec)
+		if rec != nil {
+			actual = append(actual, rec)
+		}
 	}
 
 	return actual, nil
@@ -204,57 +204,33 @@ func (c *ovhProvider) getDiff2DomainCorrections(dc *models.DomainConfig, actual 
 	return corrections, actualChangeCount, nil
 }
 
-func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
-
+func nativeToRecord(r *Record, origin string) (*models.RecordConfig, error) {
 	if r.FieldType == "SOA" {
 		return nil, nil
 	}
+	rec := &models.RecordConfig{
+		TTL:      uint32(r.TTL),
+		Original: r,
+	}
 
-	// ovh uses a custom type for SPF, DKIM and DMARC.
 	rtype := r.FieldType
+
+	// ovh uses a custom type for SPF, DKIM and DMARC
 	if rtype == "SPF" || rtype == "DKIM" || rtype == "DMARC" {
 		rtype = "TXT"
 	}
 
-	label := dc.LabelFromShort(r.SubDomain)
+	rec.SetLabel(r.SubDomain, origin)
+	if err := rec.PopulateFromString(rtype, r.Target, origin); err != nil {
+		return nil, fmt.Errorf("unparsable record received from ovh: %w", err)
+	}
 
 	// ovh default is 3600
-	ttl := uint32(r.TTL)
-	if ttl == 0 {
-		ttl = 3600
+	if rec.TTL == 0 {
+		rec.TTL = 3600
 	}
 
-	var rc *models.RecordConfig
-	var err error
-
-	switch rtype {
-	case "TXT":
-		var tx string
-		switch r.FieldType {
-		case "DKIM", "DMARC":
-			// Unlike regular TXT and SPF records, OVH stores and returns DKIM
-			// and DMARC targets as raw, unquoted text (see adaptNativeRecord,
-			// which strips quotes before writing them). Running raw text
-			// through the RFC1035 zone-file TXT parser is wrong: an unescaped
-			// ';' is interpreted as the start of a comment, silently
-			// truncating values like "v=DMARC1; p=none; rua=...".
-			tx = r.Target
-		default:
-			tx, err = txtutil.ParseQuoted(r.Target)
-			if err != nil {
-				return nil, err
-			}
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, tx)
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
-	}
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = r
-
-	return rc, nil
+	return rec, nil
 }
 
 func (c *ovhProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {

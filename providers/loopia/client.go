@@ -115,8 +115,8 @@ func NewClient(apiUser, apiPassword string, region string, modifyns bool, fetchn
 		DefaultBaseURL = DefaultBaseNOURL
 	case "rs":
 		DefaultBaseURL = DefaultBaseRSURL
-	// case "se":
-	// 	DefaultBaseURL = DefaultBaseSEURL
+	case "se":
+		DefaultBaseURL = DefaultBaseSEURL
 	default:
 		DefaultBaseURL = DefaultBaseSEURL
 	}

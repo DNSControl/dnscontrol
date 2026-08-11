@@ -9,47 +9,19 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/providers/cloudflare"
+	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/providers/cloudflare"
 )
-
-func TestReplaceIntegrationTargetTokensAzureAlias(t *testing.T) {
-	dc := models.MustNewDomainConfig("example.com")
-	rc := dc.MustNewRecordConfig("alias", 300, privatetypes.TypeAZUREALIAS, "A",
-		"/subscriptions/**subscription-id**/resourceGroups/**resource-group**/providers/Microsoft.Network/dnszones/example.com/A/target")
-
-	replaceIntegrationTargetTokens(rc, "SUB123", "MyResourceGroup")
-
-	want := "/subscriptions/SUB123/resourceGroups/myresourcegroup/providers/Microsoft.Network/dnszones/example.com/A/target"
-	if got := rc.AsAZUREALIAS().Target; got != want {
-		t.Fatalf("AZURE_ALIAS target = %q, want %q", got, want)
-	}
-	if rc.GetRDATA() == nil {
-		t.Fatal("AZURE_ALIAS RDATA is nil after placeholder replacement")
-	}
-	if rc.ComparableV3 == "" {
-		t.Fatal("AZURE_ALIAS ComparableV3 is empty after placeholder replacement")
-	}
-}
 
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
-	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run to the provider's test_data directory")
-	recordDirFlag        = flag.String("recorddir", "", "Directory to record into, and implies -record (default: the provider's test_data directory)")
 	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
 	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
 	enableCFTags         = flag.Bool("cftags", false, "enable CF tag tests (requires paid plan, default false)")
 )
-
-// recorder accumulates the conversion inputs of every provider call made by
-// this run, and is written out when -record is given.
-var recorder = providergolden.NewRecorder()
 
 func init() {
 	testing.Init()
@@ -66,10 +38,6 @@ func panicOnErr(err error) {
 }
 
 func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string]string) {
-	if flag.NArg() != 0 {
-		t.Fatalf("unexpected argument %q; the recording directory is set with -recorddir", flag.Arg(0))
-	}
-
 	if *providerFlag == "" && *profileFlag == "" {
 		t.Log("No -provider or -profile specified")
 		return nil, "", nil
@@ -144,11 +112,7 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		metadata = []byte(`{ ` + strings.Join(items, `, `) + ` }`)
 	}
 
-	var createOptions []providers.CreateOption
-	if *recordFlag || *recordDirFlag != "" {
-		createOptions = append(createOptions, providers.WithConversionObserver(recorder.ForDomain(cfg["domain"])))
-	}
-	provider, err := providers.CreateDNSProvider(profileType, cfg, metadata, createOptions...)
+	provider, err := providers.CreateDNSProvider(profileType, cfg, metadata)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -160,34 +124,5 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 		}
 	}
 
-	if *recordFlag || *recordDirFlag != "" {
-		dir, err := recordingDir(provider)
-		if err != nil {
-			t.Fatal(err)
-		}
-		t.Cleanup(func() { writeRecording(t, dir) })
-		return provider, cfg["domain"], cfg
-	}
-
 	return provider, cfg["domain"], cfg
-}
-
-// recordingDir is where a recording of p is written: -recorddir when it is
-// given, and otherwise p's own test_data directory.
-func recordingDir(p providers.DNSServiceProvider) (string, error) {
-	if *recordDirFlag != "" {
-		return providergolden.ResolveDir(*recordDirFlag)
-	}
-	return providergolden.TestdataDir(p)
-}
-
-// writeRecording writes every observed conversion input/output pair to dir.
-func writeRecording(t *testing.T, dir string) {
-	written, err := recorder.WriteTo(dir)
-	for _, path := range written {
-		t.Logf("Recorded %s", path)
-	}
-	if err != nil {
-		t.Error(err)
-	}
 }

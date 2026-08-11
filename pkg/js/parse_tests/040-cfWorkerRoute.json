@@ -3,23 +3,22 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "test.foo.com \"test-worker\"",
           "filepos": "[line:2:5]",
           "meta": {
             "orig_custom_type": "CF_WORKER_ROUTE"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Then": "test-worker",
-            "When": "test.foo.com"
-          },
+          "target": "test.foo.com,test-worker",
           "ttl": 300,
-          "type": "CF_WORKER_ROUTE",
-          "typenum": 65288
+          "type": "CF_WORKER_ROUTE"
         }
       ],
       "registrar": "none",

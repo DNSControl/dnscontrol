@@ -3,8 +3,7 @@ package dnsmadeeasy
 import (
 	"strconv"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // DNS Made Easy does not allow the system name servers to be edited, and said records appear to always have a fixed TTL of 86400.
@@ -124,40 +123,34 @@ type recordRequestData struct {
 	IssuerCritical int    `json:"issuerCritical"`
 }
 
-func toRecordConfig(dc *models.DomainConfig, record *recordResponseDataEntry) *models.RecordConfig {
-	recordType := record.Type
-	if recordType == "ANAME" {
-		// ANAME is DNS Made Easy's name for ALIAS (inverse of the ALIAS->ANAME
-		// conversion in GetZoneRecordsCorrections).
-		recordType = "ALIAS"
+func toRecordConfig(domain string, record *recordResponseDataEntry) *models.RecordConfig {
+	rc := &models.RecordConfig{
+		Type:     record.Type,
+		TTL:      uint32(record.TTL),
+		Original: record,
 	}
 
-	label := dc.LabelFromShort(record.Name)
-	ttl := uint32(record.TTL)
+	rc.SetLabel(record.Name, domain)
 
-	var rc *models.RecordConfig
 	var err error
-	switch recordType {
+	switch record.Type {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.MxLevel, record.Value)
+		err = rc.SetTargetMX(uint16(record.MxLevel), record.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.Priority, record.Weight, record.Port, record.Value)
+		err = rc.SetTargetSRV(uint16(record.Priority), uint16(record.Weight), uint16(record.Port), record.Value)
 	case "CAA":
 		value, unquoteErr := strconv.Unquote(record.Value)
 		if unquoteErr != nil {
 			panic(unquoteErr)
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.IssuerCritical, record.CaaType, value)
-	case "ALIAS":
-		rc, err = dc.NewRecordConfig(label, ttl, recordType, record.Value)
+		err = rc.SetTargetCAA(uint8(record.IssuerCritical), record.CaaType, value)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, recordType, record.Value)
+		err = rc.PopulateFromString(record.Type, record.Value, domain)
 	}
 
 	if err != nil {
 		panic(err)
 	}
-	rc.Original = record
 
 	return rc
 }
@@ -168,53 +161,38 @@ func fromRecordConfig(rc *models.RecordConfig) *recordRequestData {
 		label = ""
 	}
 
-	recordType := rc.Type
-	if recordType == "ALIAS" {
-		// ALIAS is called ANAME on DNS Made Easy. Converting on write only
-		// keeps the diff comparing ALIAS against ALIAS.
-		recordType = "ANAME"
-	}
-
 	record := &recordRequestData{
-		Type:        recordType,
+		Type:        rc.Type,
 		TTL:         int(rc.TTL),
 		GtdLocation: "DEFAULT",
 		Name:        label,
-		// DNS Made Easy stores TXT as opaque text and mangles multi-chunk
-		// values, so send the whole value as one quoted string.
-	}
-	if recordType == "TXT" {
-		record.Value = txtutil.EncodeSingle(rc.GetTargetTXTJoined())
-	} else {
-		record.Value = rc.GetRDATA().String()
+		Value:       rc.GetTargetCombined(),
 	}
 
 	switch record.Type {
 	case "MX":
-		f := rc.AsMX()
-		record.MxLevel = int(f.Preference)
-		record.Value = f.Mx
+		record.MxLevel = int(rc.MxPreference)
+		record.Value = rc.GetTargetField()
 	case "SRV":
-		f := rc.AsSRV()
-		target := f.Target
+		target := rc.GetTargetField()
 		if target == "." {
 			target += "."
 		}
-		record.Priority = int(f.Priority)
-		record.Weight = int(f.Weight)
-		record.Port = int(f.Port)
+
+		record.Priority = int(rc.SrvPriority)
+		record.Weight = int(rc.SrvWeight)
+		record.Port = int(rc.SrvPort)
 		record.Value = target
 	case "CAA":
-		f := rc.AsCAA()
-		record.IssuerCritical = int(f.Flag)
-		record.CaaType = f.Tag
-		record.Value = f.Value
+		record.IssuerCritical = int(rc.CaaFlag)
+		record.CaaType = rc.CaaTag
+		record.Value = rc.GetTargetField()
 	}
 
 	return record
 }
 
-func systemNameServerToRecordConfig(dc *models.DomainConfig, nameServer string) *models.RecordConfig {
+func systemNameServerToRecordConfig(domain string, nameServer string) *models.RecordConfig {
 	target := nameServer + "."
-	return toRecordConfig(dc, &recordResponseDataEntry{Type: "NS", Value: target, TTL: fixedNameServerRecordTTL})
+	return toRecordConfig(domain, &recordResponseDataEntry{Type: "NS", Value: target, TTL: fixedNameServerRecordTTL})
 }

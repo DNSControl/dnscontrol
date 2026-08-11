@@ -65,8 +65,6 @@ in the console — this provider does not create zones.
 Zones must be created via the Scaleway console or API before they can be
 managed by DNSControl.
 
-## Feature Summary
-
 <!-- provider-features-start -->
 - Provider Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌

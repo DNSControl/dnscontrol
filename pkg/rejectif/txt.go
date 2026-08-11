@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // Keep these in alphabetical order.
@@ -115,17 +115,6 @@ func TxtStartsOrEndsWithSpaces(rc *models.RecordConfig) error {
 	txt := rc.GetTargetTXTJoined()
 	if len(txt) > 0 && (txt[0] == ' ' || txt[len(txt)-1] == ' ') {
 		return errors.New("txtstring starts or ends with spaces")
-	}
-	return nil
-}
-
-// CaaTargetHasSemicolon returns an error if a CAA record's target contains a semicolon.
-func CaaTargetHasSemicolon(rc *models.RecordConfig) error {
-	if rc.Type == "CAA" {
-		f := rc.AsCAA()
-		if strings.Contains(f.Value, ";") {
-			return fmt.Errorf("CAA record target contains semicolon: %s", f.Value)
-		}
 	}
 	return nil
 }

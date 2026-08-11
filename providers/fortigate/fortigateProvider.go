@@ -7,9 +7,9 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 // Feature Declaration
@@ -146,7 +146,7 @@ func (p *fortigateProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 
 	// Convert native records to dnscontrol Records
 	for _, n := range resp.Results[0].DNSEntry {
-		rc, err := nativeToRecord(dc, n)
+		rc, err := nativeToRecord(domain, n)
 		if err != nil {
 			return nil, err
 		}

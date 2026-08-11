@@ -4,36 +4,48 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"golang.org/x/net/idna"
 )
 
 // nativeToRecord – convert an fgDNSRecord coming from FortiGate into a *models.RecordConfig that dnscontrol understands.
-func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfig, error) {
-	rtype := strings.ToUpper(n.Type)
+func nativeToRecord(domain string, n fgDNSRecord) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{}
+	rc.Type = strings.ToUpper(n.Type)
+	rc.Original = n
 
-	var label string
-	hostname := n.Hostname
-	if hostname == "@" || hostname == "" {
-		label = "@"
-	} else if hostname[len(hostname)-1] == '.' {
-		label = dc.LabelFromFQDNWithDot(n.Hostname)
-	} else {
-		label = dc.LabelFromShort(n.Hostname)
+	// Label / Name
+	label := strings.TrimSuffix(n.Hostname, ".")
+	if label == "@" {
+		label = ""
 	}
-	ttl := n.TTL
+	rc.SetLabel(label, domain)
+
+	// TTL
+	if n.TTL == 0 {
+		rc.TTL = 0 // inherit
+	} else {
+		rc.TTL = n.TTL
+	}
+
+	// Status → Metadata
+	if strings.ToLower(n.Status) != "enable" {
+		if rc.Metadata == nil {
+			rc.Metadata = map[string]string{}
+		}
+		rc.Metadata["fortigate_status"] = "disable"
+	}
 
 	// Type-specific fields
-	var rc *models.RecordConfig
-	var err error
-	switch rtype {
+	switch rc.Type {
 	case "A":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.IP)
+		err := rc.SetTarget(n.IP)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv4 address %q in %+v", n.IP, n)
 		}
 
 	case "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.IPv6)
+		err := rc.SetTarget(n.IPv6)
 		if err != nil {
 			return nil, fmt.Errorf("[FORTIGATE] Invalid IPv6 address %q in %+v", n.IPv6, n)
 		}
@@ -42,33 +54,35 @@ func nativeToRecord(dc *models.DomainConfig, n fgDNSRecord) (*models.RecordConfi
 		if n.CanonicalName == "" {
 			return nil, fmt.Errorf("[FORTIGATE] CNAME record without canonical-name (id=%d)", n.ID)
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, n.CanonicalName)
+		if err := rc.SetTarget(n.CanonicalName); err != nil {
+			return nil, err
+		}
 
 	case "NS":
 		if n.Hostname == "" {
 			return nil, fmt.Errorf("[FORTIGATE] NS record missing hostname (id=%d)", n.ID)
 		}
-		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Hostname)
+
+		rc.SetLabel("@", domain)
+		if err := rc.SetTarget(n.Hostname); err != nil {
+			return nil, err
+		}
 
 	case "MX":
 		if n.Hostname == "" {
 			return nil, fmt.Errorf("[FORTIGATE] MX record missing hostname (id=%d)", n.ID)
 		}
-		rc, err = dc.NewRecordConfig("@", ttl, rtype, n.Preference, n.Hostname)
+
+		rc.SetLabel("@", domain)
+		rc.MxPreference = n.Preference
+
+		if err := rc.SetTarget(n.Hostname); err != nil {
+			return nil, err
+		}
 
 	default:
 		// Not supported due to FortiGate limitations
-		return nil, fmt.Errorf("[FORTIGATE] Record type %q is not supported by fortigate provider", rtype)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	rc.Original = n
-
-	// Status → Metadata
-	if strings.ToLower(n.Status) != "enable" {
-		rc.Metadata["fortigate_status"] = "disable"
+		return nil, fmt.Errorf("[FORTIGATE] Record type %q is not supported by fortigate provider", rc.Type)
 	}
 
 	return rc, nil
@@ -129,18 +143,27 @@ func recordsToNative(recs models.Records) ([]*fgDNSRecord, []error) {
 			n.IPv6 = ip.String()
 
 		case "CNAME":
-			target := record.AsCNAME().String()
+			target := record.GetTargetField()
+			if ascii, err := idna.ToASCII(target); err == nil {
+				target = ascii
+			}
 			n.CanonicalName = target
 
 		case "NS":
-			target := record.AsNS().String()
+			target := record.GetTargetField()
+			if ascii, err := idna.ToASCII(target); err == nil {
+				target = ascii
+			}
 			n.Hostname = target
 			n.CanonicalName = ""
 
 		case "MX":
-			mx := record.AsMX()
-			n.Preference = mx.Preference
-			n.Hostname = mx.Mx
+			target := record.GetTargetField()
+			if ascii, err := idna.ToASCII(target); err == nil {
+				target = ascii
+			}
+			n.Hostname = target
+			n.Preference = record.MxPreference
 			n.CanonicalName = ""
 
 		default:

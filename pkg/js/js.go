@@ -9,10 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rfc4183"
-	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
 	"github.com/robertkrimen/otto"              // load underscore js into vm by default
 	_ "github.com/robertkrimen/otto/underscore" // required by otto
 	"github.com/xddxdd/ottoext/fetch"
@@ -120,18 +121,13 @@ func ExecuteJavascriptString(script []byte, devMode bool, variables map[string]s
 		return nil, err
 	}
 
-	// dc.Name and related fields are not populated when the DomainConfig is created from dnsconfig.js.  We need to populate them here.
-	// This includes IDN processing, setting up Tags, stripping the "!tag" from .Name, and more.
-	for _, dc := range conf.Domains {
-		dc.PopulateNamesFromRaw(dc.Name)
-	}
-
 	err = conf.PostProcess()
 	if err != nil {
 		return nil, err
 	}
+	// No need to call FixLegacyDC here. These records were created from dnsconfig.js, not from a provider.
 
-	if err := conf.ImportRawRecords(); err != nil {
+	if err := rtypecontrol.ImportRawRecords(conf.Domains); err != nil {
 		return nil, err
 	}
 

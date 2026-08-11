@@ -3,19 +3,19 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "1.1.1.1",
           "filepos": "[line:7:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.1.1.1"
-          },
+          "target": "1.1.1.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "none",

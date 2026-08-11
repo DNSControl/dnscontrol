@@ -10,96 +10,82 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "test3.foo.com \"test-worker\"",
           "filepos": "[line:11:5]",
           "meta": {
             "orig_custom_type": "CF_WORKER_ROUTE"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Then": "test-worker",
-            "When": "test3.foo.com"
-          },
+          "target": "test3.foo.com,test-worker",
           "ttl": 300,
-          "type": "CF_WORKER_ROUTE",
-          "typenum": 65288
+          "type": "CF_WORKER_ROUTE"
         },
         {
-          "comparablev3": "\"301,test1.foo.com,https://goo.com/$1\" 301 \"http.host eq \\\"test1.foo.com\\\" and http.request.uri.path eq \\\"/\\\"\" \"concat(\\\"https://goo.com\\\", http.request.uri.path)\"",
+          "comparable": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+          "fields": {
+            "code": 301,
+            "sr_display": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+            "sr_name": "301,test1.foo.com,https://goo.com/$1",
+            "sr_then": "concat(\"https://goo.com\", http.request.uri.path)",
+            "sr_when": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
+          },
           "filepos": "[line:9:5]",
           "name": "@",
+          "name_raw": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 301,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "301,test1.foo.com,https://goo.com/$1",
-            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
-            "SRWhen": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
-          },
+          "target": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "typenum": 65289
+          "zonfefilepartial": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))"
         },
         {
-          "comparablev3": "\"302,test2.foo.com,https://goo.com/$1\" 302 \"http.host eq \\\"test2.foo.com\\\" and http.request.uri.path eq \\\"/\\\"\" \"concat(\\\"https://goo.com\\\", http.request.uri.path)\"",
+          "comparable": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+          "fields": {
+            "code": 302,
+            "sr_display": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+            "sr_name": "302,test2.foo.com,https://goo.com/$1",
+            "sr_then": "concat(\"https://goo.com\", http.request.uri.path)",
+            "sr_when": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
+          },
           "filepos": "[line:10:5]",
           "name": "@",
+          "name_raw": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 302,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "302,test2.foo.com,https://goo.com/$1",
-            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
-            "SRWhen": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
-          },
+          "target": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "typenum": 65289
+          "zonfefilepartial": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))"
         },
         {
-          "comparablev3": "10.2.3.1",
           "filepos": "[line:6:5]",
           "name": "test1.foo.com.sub",
-          "name_unicode": "test1.foo.com.sub",
-          "rdata": {
-            "Addr": "10.2.3.1"
-          },
           "subdomain": "sub",
+          "target": "10.2.3.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.2.3.2",
           "filepos": "[line:7:5]",
           "name": "test2.foo.com.sub",
-          "name_unicode": "test2.foo.com.sub",
-          "rdata": {
-            "Addr": "10.2.3.2"
-          },
           "subdomain": "sub",
+          "target": "10.2.3.2",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.2.3.3",
           "filepos": "[line:8:5]",
           "name": "test3.foo.com.sub",
-          "name_unicode": "test3.foo.com.sub",
-          "rdata": {
-            "Addr": "10.2.3.3"
-          },
           "subdomain": "sub",
+          "target": "10.2.3.3",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",

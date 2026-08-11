@@ -10,11 +10,12 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/normalize"
-	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/normalize"
+	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
+	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
 	testifyrequire "github.com/stretchr/testify/require"
 )
 
@@ -105,7 +106,7 @@ func TestParsedFiles(t *testing.T) {
 			if err := os.WriteFile(expectedFile+".ACTUAL", []byte(as), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			testifyrequire.JSONEqf(t, es, as, "ACTUAL %q = \n```\n%s\n```", expectedFile+".ACTUAL", as)
+			testifyrequire.JSONEqf(t, es, as, "EXPECTING %q = \n```\n%s\n```", expectedFile, as)
 
 			// For each domain, if there is a zone file, test against it:
 
@@ -117,9 +118,9 @@ func TestParsedFiles(t *testing.T) {
 				} else {
 					zoneFile = filepath.Join(testDir, testName, dc.Name+".zone")
 				}
+				//fmt.Printf("DEBUG: zonefile = %q\n", zoneFile)
 				expectedZone, err := os.ReadFile(zoneFile)
 				if err != nil {
-					//fmt.Printf("DEBUG: No zone file for domain %q (looking for %q)\n", dc.Name, zoneFile)
 					continue
 				}
 				dCount++
@@ -140,7 +141,7 @@ func TestParsedFiles(t *testing.T) {
 						t.Fatal(err)
 					}
 				}
-				testifyrequire.Equal(t, es, as, "2EXPECTING %q =\n```\n%s```", zoneFile, as)
+				testifyrequire.Equal(t, es, as, "EXPECTING %q =\n```\n%s```", zoneFile, as)
 			}
 			if dCount > 0 && (len(conf.Domains) != dCount) {
 				t.Fatal(fmt.Errorf("only %d of %d domains in %q have zonefiles", dCount, len(conf.Domains), name))

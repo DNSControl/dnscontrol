@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/dns"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
@@ -208,12 +208,27 @@ func (o *oracleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 		}
 
 		for _, record := range getResp.Items {
-			rc, err := toRecordConfig(dc, record)
+			// Hide SOAs
+			if *record.Rtype == "SOA" {
+				continue
+			}
+
+			rc := &models.RecordConfig{
+				Type:     *record.Rtype,
+				TTL:      uint32(*record.Ttl),
+				Original: record,
+			}
+			rc.SetLabelFromFQDN(*record.Domain, zone)
+
+			switch rc.Type {
+			case "ALIAS":
+				err = rc.SetTarget(*record.Rdata)
+			default:
+				err = rc.PopulateFromString(*record.Rtype, *record.Rdata, zone)
+			}
+
 			if err != nil {
 				return nil, err
-			}
-			if rc == nil {
-				continue
 			}
 
 			records = append(records, rc)
@@ -229,35 +244,6 @@ func (o *oracleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 	return records, nil
 }
 
-// toRecordConfig converts an Oracle record to a RecordConfig. It returns nil for
-// SOA records, which are hidden.
-func toRecordConfig(dc *models.DomainConfig, record dns.Record) (*models.RecordConfig, error) {
-	// Hide SOAs
-	if *record.Rtype == "SOA" {
-		return nil, nil
-	}
-
-	label := dc.LabelFromFQDNNoDot(*record.Domain)
-	ttl := uint32(*record.Ttl)
-
-	var rc *models.RecordConfig
-	var err error
-
-	switch *record.Rtype {
-	case "ALIAS":
-		rc, err = dc.NewRecordConfig(label, ttl, *record.Rtype, *record.Rdata)
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, *record.Rtype, *record.Rdata)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = record
-
-	return rc, nil
-}
-
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (o *oracleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	var err error
@@ -268,7 +254,7 @@ func (o *oracleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exis
 			continue
 		}
 
-		recNS := rec.AsNS().Ns
+		recNS := rec.GetTargetField()
 		if rec.GetLabel() == "@" && strings.HasSuffix(recNS, "dns.oraclecloud.com.") {
 			printer.Warnf("Oracle Cloud does not allow changes to built-in apex NS records. Ignoring change to %s...\n", recNS)
 			continue
@@ -370,7 +356,7 @@ func convertToRecordOperation(rec *models.RecordConfig, op dns.RecordOperationOp
 
 	fqdn := rec.GetLabelFQDN()
 	rtype := rec.Type
-	rdata := rec.GetRDATA().String()
+	rdata := rec.GetTargetCombined()
 	ttl := int(rec.TTL)
 
 	return dns.RecordOperation{

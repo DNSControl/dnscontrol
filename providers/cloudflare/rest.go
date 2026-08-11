@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/providers/cloudflare/rtypes/cfsingleredirect"
 	"github.com/cloudflare/cloudflare-go"
 	"golang.org/x/net/idna"
 )
@@ -38,16 +38,14 @@ func (c *cloudflareProvider) fetchAllZones() (map[string]cloudflare.Zone, error)
 }
 
 // get all records for a domain.
-func (c *cloudflareProvider) getRecordsForDomain(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
-	var records models.Records
+func (c *cloudflareProvider) getRecordsForDomain(id string, domain string) ([]*models.RecordConfig, error) {
+	records := []*models.RecordConfig{}
 	rrs, _, err := c.cfClient.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListDNSRecordsParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed fetching record list from cloudflare(%q): %w", c.cfClient.APIEmail, err)
 	}
 	for _, rec := range rrs {
-		before := providers.BeginToRC(c.observer, "nativeToRecord", rec)
-		rt, err := c.nativeToRecord(dc, rec)
-		providers.EndToRC(c.observer, "nativeToRecord", before, rec, models.Records{rt}, err)
+		rt, err := c.nativeToRecord(domain, rec)
 		if err != nil {
 			return nil, err
 		}
@@ -77,84 +75,76 @@ func (c *cloudflareProvider) createZone(domainName string) (string, error) {
 }
 
 func cfDnskeyData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsDNSKEY()
 	return &cfRecData{
-		Algorithm: f.Algorithm,
-		Flags:     f.Flags,
-		Protocol:  f.Protocol,
-		PublicKey: f.PublicKey,
+		Algorithm: rec.DnskeyAlgorithm,
+		Flags:     rec.DnskeyFlags,
+		Protocol:  rec.DnskeyProtocol,
+		PublicKey: rec.DnskeyPublicKey,
 	}
 }
 
 func cfDSData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsDS()
 	return &cfRecData{
-		KeyTag:     f.KeyTag,
-		Algorithm:  f.Algorithm,
-		DigestType: f.DigestType,
-		Digest:     f.Digest,
+		KeyTag:     rec.DsKeyTag,
+		Algorithm:  rec.DsAlgorithm,
+		DigestType: rec.DsDigestType,
+		Digest:     rec.DsDigest,
 	}
 }
 
 func cfSrvData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsSRV()
 	serverParts := strings.Split(rec.GetLabelFQDN(), ".")
 	c := &cfRecData{
 		Service:  serverParts[0],
 		Proto:    serverParts[1],
 		Name:     strings.Join(serverParts[2:], "."),
-		Port:     f.Port,
-		Priority: f.Priority,
-		Weight:   f.Weight,
+		Port:     rec.SrvPort,
+		Priority: rec.SrvPriority,
+		Weight:   rec.SrvWeight,
 	}
-	c.Target = cfTarget(f.Target)
+	c.Target = cfTarget(rec.GetTargetField())
 	return c
 }
 
 func cfCaaData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsCAA()
 	return &cfRecData{
-		Tag:   f.Tag,
-		Flags: uint16(f.Flag),
-		Value: f.Value,
+		Tag:   rec.CaaTag,
+		Flags: uint16(rec.CaaFlag),
+		Value: rec.GetTargetField(),
 	}
 }
 
 func cfTlsaData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsTLSA()
 	return &cfRecData{
-		Usage:        f.Usage,
-		Selector:     f.Selector,
-		MatchingType: f.MatchingType,
-		Certificate:  f.Certificate,
+		Usage:        rec.TlsaUsage,
+		Selector:     rec.TlsaSelector,
+		MatchingType: rec.TlsaMatchingType,
+		Certificate:  rec.GetTargetField(),
 	}
 }
 
 func cfSshfpData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsSSHFP()
 	return &cfRecData{
-		Algorithm:   f.Algorithm,
-		HashType:    f.Type,
-		Fingerprint: f.FingerPrint,
+		Algorithm:   rec.SshfpAlgorithm,
+		HashType:    rec.SshfpFingerprint,
+		Fingerprint: rec.GetTargetField(),
 	}
 }
 
 func cfSvcbData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsSVCB()
 	return &cfRecData{
-		Priority: f.Priority,
-		Target:   cfTarget(f.Target),
-		Value:    models.Svcbv2ValueToString(f.Value),
+		Priority: rec.SvcPriority,
+		Target:   cfTarget(rec.GetTargetField()),
+		Value:    rec.SvcParams,
 	}
 }
 
 func cfLocData(rec *models.RecordConfig) *cfRecData {
-	f := rec.AsLOC()
-	latDir, latDeg, latMin, latSec := models.ReverseLatitude(f.Latitude)
-	longDir, longDeg, longMin, longSec := models.ReverseLongitude(f.Longitude)
+	latDir, latDeg, latMin, latSec := models.ReverseLatitude(rec.LocLatitude)
+	longDir, longDeg, longMin, longSec := models.ReverseLongitude(rec.LocLongitude)
 
 	return &cfRecData{
-		Altitude:      models.ReverseAltitude(f.Altitude),
+		Altitude:      models.ReverseAltitude(rec.LocAltitude),
 		LatDegrees:    latDeg,
 		LatDirection:  latDir,
 		LatMinutes:    latMin,
@@ -163,49 +153,42 @@ func cfLocData(rec *models.RecordConfig) *cfRecData {
 		LongDirection: longDir,
 		LongMinutes:   longMin,
 		LongSeconds:   longSec,
-		PrecisionHorz: models.ReverseENotationInt(f.HorizPre),
-		PrecisionVert: models.ReverseENotationInt(f.VertPre),
-		Size:          models.ReverseENotationInt(f.Size),
+		PrecisionHorz: models.ReverseENotationInt(rec.LocHorizPre),
+		PrecisionVert: models.ReverseENotationInt(rec.LocVertPre),
+		Size:          models.ReverseENotationInt(rec.LocSize),
 	}
 }
 
 func cfNaptrData(rec *models.RecordConfig) *cfNaptrRecData {
-	f := rec.AsNAPTR()
 	return &cfNaptrRecData{
-		Flags:       f.Flags,
-		Order:       f.Order,
-		Preference:  f.Preference,
-		Regex:       f.Regexp,
-		Replacement: f.Replacement,
-		Service:     f.Service,
+		Flags:       rec.NaptrFlags,
+		Order:       rec.NaptrOrder,
+		Preference:  rec.NaptrPreference,
+		Regex:       rec.NaptrRegexp,
+		Replacement: rec.GetTargetField(),
+		Service:     rec.NaptrService,
 	}
 }
 
 func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID string, msg string) []*models.Correction {
-	var content string
-	prio := ""
-	priorityNum := uint16(0)
-	switch rec.TypeNum {
-	case dnsv2.TypeMX:
-		f := rec.AsMX()
-		priorityNum = f.Preference
-		prio = fmt.Sprintf(" %d ", priorityNum)
-		content = f.Mx
-	// case "TXT":
-	// 	content = rec.GetRDATA().String()
-	// case "DS":
-	// 	content = rec.GetRDATA().String()
-	default:
-		content = rec.GetRDATA().String()
-	}
+	content := rec.GetTargetField()
 	if rec.Metadata[metaOriginalIP] != "" {
 		content = rec.Metadata[metaOriginalIP]
+	}
+	prio := ""
+	switch rec.Type {
+	case "MX":
+		prio = fmt.Sprintf(" %d ", rec.MxPreference)
+	case "TXT":
+		content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+	case "DS":
+		content = fmt.Sprintf("%d %d %d %s", rec.DsKeyTag, rec.DsAlgorithm, rec.DsDigestType, rec.DsDigest)
 	}
 	if msg == "" {
 		msg = fmt.Sprintf("CREATE record: %s %s %d%s %s", rec.GetLabel(), rec.Type, rec.TTL, prio, content)
 	}
 	if rec.Metadata[metaProxy] == "on" || rec.Metadata[metaProxy] == "full" {
-		msg = msg + fmt.Sprintf("\nACTIVATE PROXY for new record %s %s %d %s", rec.GetLabel(), rec.Type, rec.TTL, rec.GetRDATA().String())
+		msg = msg + fmt.Sprintf("\nACTIVATE PROXY for new record %s %s %d %s", rec.GetLabel(), rec.Type, rec.TTL, rec.GetTargetField())
 	}
 	if rec.Metadata[metaCNAMEFlatten] == "on" {
 		msg = msg + fmt.Sprintf("\nENABLE CNAME FLATTENING for new record %s %s", rec.GetLabel(), rec.Type)
@@ -224,7 +207,7 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 				Type:     rec.Type,
 				TTL:      int(rec.TTL),
 				Content:  content,
-				Priority: &priorityNum,
+				Priority: &rec.MxPreference,
 			}
 			// Set comment if specified
 			if comment := rec.Metadata[metaComment]; comment != "" {
@@ -239,30 +222,30 @@ func (c *cloudflareProvider) createRecDiff2(rec *models.RecordConfig, domainID s
 				flatten := true
 				cf.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
 			}
-			switch rec.TypeNum {
-			case dnsv2.TypeSRV:
+			switch rec.Type {
+			case "SRV":
 				cf.Data = cfSrvData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case dnsv2.TypeCAA:
+			case "CAA":
 				cf.Data = cfCaaData(rec)
 				cf.Name = rec.GetLabelFQDN()
 				cf.Content = ""
-			case dnsv2.TypeTLSA:
+			case "TLSA":
 				cf.Data = cfTlsaData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case dnsv2.TypeSSHFP:
+			case "SSHFP":
 				cf.Data = cfSshfpData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case dnsv2.TypeDNSKEY:
+			case "DNSKEY":
 				cf.Data = cfDnskeyData(rec)
-			case dnsv2.TypeDS:
+			case "DS":
 				cf.Data = cfDSData(rec)
-			case dnsv2.TypeNAPTR:
+			case "NAPTR":
 				cf.Data = cfNaptrData(rec)
 				cf.Name = rec.GetLabelFQDN()
-			case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
+			case "HTTPS", "SVCB":
 				cf.Data = cfSvcbData(rec)
-			case dnsv2.TypeLOC:
+			case "LOC":
 				cf.Data = cfLocData(rec)
 			}
 			resp, err := c.cfClient.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(domainID), cf)
@@ -287,11 +270,19 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 	}
 
 	r := cloudflare.UpdateDNSRecordParams{
-		ID:      recID,
-		Proxied: new(proxied),
-		Name:    rec.GetLabel(),
-		Type:    rec.Type,
-		TTL:     int(rec.TTL),
+		ID:       recID,
+		Proxied:  &proxied,
+		Name:     rec.GetLabel(),
+		Type:     rec.Type,
+		Content:  rec.GetTargetField(),
+		Priority: &rec.MxPreference,
+		TTL:      int(rec.TTL),
+	}
+
+	// Handle CNAME flattening setting
+	if rec.Type == "CNAME" {
+		flatten := rec.Metadata[metaCNAMEFlatten] == "on"
+		r.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
 	}
 
 	// Set comment if specified (nil keeps current, "" empties it, value sets it)
@@ -307,54 +298,36 @@ func (c *cloudflareProvider) modifyRecord(domainID, recID string, proxied bool, 
 		}
 	}
 
-	switch rec.TypeNum {
-	// case "TXT":
-	// 	r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeMX:
-		f := rec.AsMX()
-		r.Priority = new(f.Preference)
-		r.Content = f.Mx
-	case dnsv2.TypeCNAME:
-		// Handle CNAME flattening setting
-		flatten := rec.Metadata[metaCNAMEFlatten] == "on"
-		r.Settings = cloudflare.DNSRecordSettings{FlattenCNAME: &flatten}
-		r.Content = rec.AsCNAME().Target
-	case dnsv2.TypeSRV:
+	switch rec.Type {
+	case "TXT":
+		r.Content = txtutil.EncodeQuoted(rec.GetTargetTXTJoined())
+	case "SRV":
 		r.Data = cfSrvData(rec)
 		r.Name = rec.GetLabelFQDN()
-		r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeCAA:
+	case "CAA":
 		r.Data = cfCaaData(rec)
 		r.Name = rec.GetLabelFQDN()
 		r.Content = ""
-	case dnsv2.TypeTLSA:
+	case "TLSA":
 		r.Data = cfTlsaData(rec)
 		r.Name = rec.GetLabelFQDN()
-		r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeSSHFP:
+	case "SSHFP":
 		r.Data = cfSshfpData(rec)
 		r.Name = rec.GetLabelFQDN()
-		r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeDNSKEY:
+	case "DNSKEY":
 		r.Data = cfDnskeyData(rec)
 		r.Content = ""
-	case dnsv2.TypeDS:
+	case "DS":
 		r.Data = cfDSData(rec)
 		r.Content = ""
-	case dnsv2.TypeNAPTR:
+	case "NAPTR":
 		r.Data = cfNaptrData(rec)
 		r.Name = rec.GetLabelFQDN()
-		r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
+	case "HTTPS", "SVCB":
 		r.Data = cfSvcbData(rec)
-		r.Content = rec.GetRDATA().String()
-	case dnsv2.TypeLOC:
+	case "LOC":
 		r.Data = cfLocData(rec)
-		r.Content = rec.GetRDATA().String()
-	default:
-		r.Content = rec.GetRDATA().String()
 	}
-
 	_, err := c.cfClient.UpdateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(domainID), r)
 	return err
 }
@@ -371,16 +344,17 @@ func (c *cloudflareProvider) getUniversalSSL(domainID string) (bool, error) {
 	return result.Enabled, err
 }
 
-func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id string) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getSingleRedirects(id string, domain string) ([]*models.RecordConfig, error) {
 	rules, err := c.cfClient.GetEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(id), "http_request_dynamic_redirect")
 	if err != nil {
-		if _, ok := errors.AsType[*cloudflare.NotFoundError](err); ok {
-			return nil, nil
+		var e *cloudflare.NotFoundError
+		if errors.As(err, &e) {
+			return []*models.RecordConfig{}, nil
 		}
 		return nil, fmt.Errorf("failed fetching redirect rule list cloudflare: %w (%T)", err, err)
 	}
 
-	var recs models.Records
+	recs := []*models.RecordConfig{}
 	for _, pr := range rules.Rules {
 		thisPr := pr
 
@@ -390,18 +364,21 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 		srThen := pr.ActionParameters.FromValue.TargetURL.Expression
 		code := uint16(pr.ActionParameters.FromValue.StatusCode)
 
-		// Make the record:
-		rec, err := dc.NewRecordConfig("@", 1, privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT, srName, code, srWhen, srThen)
+		rec, err := rtypecontrol.NewRecordConfigFromRaw(rtypecontrol.FromRawOpts{
+			Type: "CLOUDFLAREAPI_SINGLE_REDIRECT",
+			TTL:  1,
+			Args: []any{srName, code, srWhen, srThen},
+			DCN:  domaintags.MakeDomainNameVarieties(domain),
+		})
 		if err != nil {
 			return nil, err
 		}
 		rec.Original = thisPr
 
 		// Store the IDs. These will be needed for update/delete operations.
-		sr := rec.AsCLOUDFLAREAPISINGLEREDIRECT()
-		sr.RT_SRRRulesetID = rules.ID
-		sr.RT_SRRRulesetRuleID = pr.ID
-		rec.SetRDATA(sr)
+		sr := rec.F.(*cfsingleredirect.SingleRedirectConfig)
+		sr.SRRRulesetID = rules.ID
+		sr.SRRRulesetRuleID = pr.ID
 
 		recs = append(recs, rec)
 	}
@@ -409,7 +386,7 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 	return recs, nil
 }
 
-func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
+func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr cfsingleredirect.SingleRedirectConfig) error {
 	newSingleRedirectRulesActionParameters := cloudflare.RulesetRuleActionParameters{}
 	newSingleRedirectRule := cloudflare.RulesetRule{}
 	newSingleRedirectRules := []cloudflare.RulesetRule{}
@@ -452,10 +429,10 @@ func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatety
 	return err
 }
 
-func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
+func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr cfsingleredirect.SingleRedirectConfig) error {
 	err := c.cfClient.DeleteRulesetRule(context.Background(), cloudflare.ZoneIdentifier(domainID), cloudflare.DeleteRulesetRuleParams{
-		RulesetID:     cfr.RT_SRRRulesetID,
-		RulesetRuleID: cfr.RT_SRRRulesetRuleID,
+		RulesetID:     cfr.SRRRulesetID,
+		RulesetRuleID: cfr.SRRRulesetRuleID,
 	},
 	)
 	// NB(tlim): Yuck. This returns an error even when it is successful. Dig into the JSON for the real status.
@@ -467,27 +444,33 @@ func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatet
 }
 
 func (c *cloudflareProvider) updateSingleRedirect(domainID string, oldrec, newrec *models.RecordConfig) error {
-	if err := c.deleteSingleRedirects(domainID, oldrec.AsCLOUDFLAREAPISINGLEREDIRECT()); err != nil {
+	if err := c.deleteSingleRedirects(domainID, *oldrec.F.(*cfsingleredirect.SingleRedirectConfig)); err != nil {
 		return err
 	}
-	return c.createSingleRedirect(domainID, newrec.AsCLOUDFLAREAPISINGLEREDIRECT())
+	return c.createSingleRedirect(domainID, *newrec.F.(*cfsingleredirect.SingleRedirectConfig))
 }
 
-func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getWorkerRoutes(id string, domain string) ([]*models.RecordConfig, error) {
 	res, err := c.cfClient.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListWorkerRoutesParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed fetching worker route list cloudflare: %w", err)
 	}
 
-	var recs models.Records
+	recs := []*models.RecordConfig{}
 	for _, pr := range res.Routes {
 		thisPr := pr
-
-		r, err := dc.NewRecordConfig("@", 1, privatetypes.TypeCFWORKERROUTE, pr.Pattern, pr.ScriptName)
+		r := &models.RecordConfig{
+			Type:     "WORKER_ROUTE",
+			Original: thisPr,
+			TTL:      1,
+		}
+		r.SetLabel("@", domain)
+		err := r.SetTarget(fmt.Sprintf("%s,%s", // $PATTERN,$SCRIPT
+			pr.Pattern,
+			pr.ScriptName))
 		if err != nil {
 			return nil, err
 		}
-		r.Original = thisPr
 
 		recs = append(recs, r)
 	}
@@ -499,18 +482,22 @@ func (c *cloudflareProvider) deleteWorkerRoute(recordID, domainID string) error 
 	return err
 }
 
-func (c *cloudflareProvider) updateWorkerRoute(recordID, domainID string, rd dnsv2.RDATA) error {
+func (c *cloudflareProvider) updateWorkerRoute(recordID, domainID string, target string) error {
 	if err := c.deleteWorkerRoute(recordID, domainID); err != nil {
 		return err
 	}
-	return c.createWorkerRoute(domainID, rd)
+	return c.createWorkerRoute(domainID, target)
 }
 
-func (c *cloudflareProvider) createWorkerRoute(domainID string, rd dnsv2.RDATA) error {
-	rdwr := rd.(privatetypesrdata.CFWORKERROUTE)
+func (c *cloudflareProvider) createWorkerRoute(domainID string, target string) error {
+	// $PATTERN,$SCRIPT
+	parts := strings.Split(target, ",")
+	if len(parts) != 2 {
+		return fmt.Errorf("unexpected target: '%s' (expected: 'PATTERN,SCRIPT')", target)
+	}
 	wr := cloudflare.CreateWorkerRouteParams{
-		Pattern: rdwr.When,
-		Script:  rdwr.Then,
+		Pattern: parts[0],
+		Script:  parts[1],
 	}
 
 	_, err := c.cfClient.CreateWorkerRoute(context.Background(), cloudflare.ZoneIdentifier(domainID), wr)

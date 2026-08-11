@@ -1,3 +1,0 @@
-$TTL 300
-a                IN ADGUARDHOME_A_PASSTHROUGH ""
-aaaa             IN ADGUARDHOME_AAAA_PASSTHROUGH ""

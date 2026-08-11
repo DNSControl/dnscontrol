@@ -1,8 +1,8 @@
 package powerdns
 
 import (
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -11,7 +11,6 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("DNSKEY", rejectif.DnskeyNotAtApex)
 	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-11
 	a.Add("TXT", rejectif.TxtHasBackslash)    // Last verified 2023-11-11
 	a.Add("HTTPS", rejectPowerDNSSVCBAutoHintsUnsorted)

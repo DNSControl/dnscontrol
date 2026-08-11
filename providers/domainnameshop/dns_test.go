@@ -1,10 +1,6 @@
 package domainnameshop
 
-import (
-	"testing"
-
-	"github.com/DNSControl/dnscontrol/v5/models"
-)
+import "testing"
 
 func TestFixTTL(t *testing.T) {
 	for i, test := range []struct {
@@ -25,39 +21,5 @@ func TestFixTTL(t *testing.T) {
 		if found != test.expected {
 			t.Errorf("Test %d: Expected %d, but was %d", i, test.expected, found)
 		}
-	}
-}
-
-func TestToRecordConfig(t *testing.T) {
-	dc, err := models.NewDomainConfig("example.com")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	tests := []struct {
-		name       string
-		record     domainNameShopRecord
-		wantTarget string
-	}{
-		{"MX", domainNameShopRecord{Host: "@", Type: "MX", Data: "mail.example.net.", TTL: 300, ActualPriority: 10}, "10 mail.example.net."},
-		{"SRV", domainNameShopRecord{Host: "_sip._tcp", Type: "SRV", Data: "sip.example.net.", TTL: 300, ActualPriority: 1, ActualWeight: 2, ActualPort: 5060}, "1 2 5060 sip.example.net."},
-		{"CAA", domainNameShopRecord{Host: "@", Type: "CAA", Data: "letsencrypt.org", TTL: 300, CAATag: "0", CAAFlag: 1}, `1 issue "letsencrypt.org"`},
-		{"TXT", domainNameShopRecord{Host: "@", Type: "TXT", Data: "raw text", TTL: 300}, `"raw text"`},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			record := tc.record
-			rc, err := toRecordConfig(dc, &record)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if got := rc.GetRDATA().String(); got != tc.wantTarget {
-				t.Errorf("target = %q, want %q", got, tc.wantTarget)
-			}
-			if rc.Original != &record {
-				t.Error("original provider record was not retained")
-			}
-		})
 	}
 }

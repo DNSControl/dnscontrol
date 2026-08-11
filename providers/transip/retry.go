@@ -33,12 +33,6 @@ func retryNeeded(err error) bool {
 		return false             // Success! No need to retry.
 	}
 
-	if serr.StatusCode == 502 {
-		// "502 Bad Gateway" seen occasionally when TransIP becomes overloaded.
-		backoff = initialBackoff // Reset
-		return true
-	}
-
 	if serr.StatusCode != 429 {
 		return false
 	}

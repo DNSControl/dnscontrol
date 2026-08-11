@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
 )
 
 /*
@@ -104,9 +104,6 @@ func NewCompareConfig(origin string, existing, desired models.Records, compFn Co
 		keyMap:   map[models.RecordKey]bool{},
 	}
 	cc.addRecords(existing, true) // Must be called first so that CNAME manipulations happen in the correct order.
-	models.SVCBHydrateDesiredEchIgnore(existing, desired)
-	// It is a layering violation to post-process SVCB records here but I can't
-	// find a better place to do it.
 	cc.addRecords(desired, false)
 	cc.verifyCNAMEAssertions()
 	sort.Slice(cc.ldata, func(i, j int) bool {
@@ -173,10 +170,8 @@ func (cc *CompareConfig) verifyCNAMEAssertions() {
 // Generate a string that can be used to compare this record to others
 // for equality.
 func mkCompareBlobs(rc *models.RecordConfig, f func(*models.RecordConfig) string) (string, string) {
-	comp := rc.ComparableV3
-	if comp == "" {
-		panic(fmt.Sprintf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc.GetRDATA().String()))
-	}
+	// Start with the comparable string
+	comp := rc.ToComparableNoTTL()
 
 	// If the custom function exists, add its output
 	if f != nil {
@@ -205,14 +200,6 @@ func (cc *CompareConfig) addRecords(recs models.Records, storeInExisting bool) {
 	z := prettyzone.PrettySort(recs, cc.origin, 0, nil)
 
 	for _, rec := range z.Records {
-		// A record whose type was changed after construction (e.g. a provider
-		// converting ALIAS->CNAME via RecordConfig.ChangeType()
-		// has its cached V3 fields (.rdata/.ComparableV3)
-		// cleared. We rebuild the V3 fields here.
-		if rec.ComparableV3 == "" {
-			panic(fmt.Sprintf("addRecord: should not happen: Cv3 is blank: %v", rec))
-		}
-
 		key := rec.Key()
 		label := key.NameFQDN
 		rtype := key.Type

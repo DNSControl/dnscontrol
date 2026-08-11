@@ -1,8 +1,8 @@
 package transip
 
 import (
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -11,11 +11,21 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtHasBackslash) // Last verified 2026-07-21
+	a.Add("ALIAS", rejectif.LabelNotApex) // Last verified 2024-01-11
 
-	a.Add("TXT", rejectif.TxtHasBackticks) // Last verified 2026-07-21
+	a.Add("MX", rejectif.MxNull) // Last verified 2023-12-04
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-21
+	a.Add("TXT", rejectif.TxtHasBackticks) // Last verified 2024-01-11
+
+	a.Add("TXT", rejectif.TxtHasBackslash) // Last verified 2024-01-11
+
+	a.Add("TXT", rejectif.TxtStartsOrEndsWithSpaces) // Last verified 2024-01-11
+
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2024-01-11
+
+	a.Add("TXT", rejectif.TxtLongerThan(1024)) // Last verified 2024-01-11
+
+	a.Add("TXT", rejectif.TxtHasTrailingSpace) // Last verified 2024-01-11
 
 	return a.Audit(records)
 }

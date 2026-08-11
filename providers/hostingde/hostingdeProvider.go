@@ -9,10 +9,9 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 var defaultNameservers = []string{"ns1.hosting.de", "ns2.hosting.de", "ns3.hosting.de"}
@@ -123,16 +122,16 @@ func (hp *hostingdeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	if err != nil {
 		return nil, err
 	}
-	return hp.APIRecordsToStandardRecordsModel(dc, zone.Records)
+	return hp.APIRecordsToStandardRecordsModel(domain, zone.Records)
 }
 
-func (hp *hostingdeProvider) APIRecordsToStandardRecordsModel(dc *models.DomainConfig, src []record) (models.Records, error) {
-	records := models.Records{}
+func (hp *hostingdeProvider) APIRecordsToStandardRecordsModel(domain string, src []record) (models.Records, error) {
+	records := []*models.RecordConfig{}
 	for _, r := range src {
 		if r.Type == "SOA" {
 			continue
 		}
-		newr, err := r.nativeToRecord(dc)
+		newr, err := r.nativeToRecord(domain)
 		if err != nil {
 			return nil, err
 		}
@@ -167,27 +166,12 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		return nil, 0, err
 	}
 
-	changeset, actualChangeCount, err := diff2.ByRecord(records, dc, nil)
+	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(records)
 	if err != nil {
 		return nil, 0, err
 	}
-
-	var corrections []*models.Correction
-	var create, del, mod diff2.ChangeList
-	for _, change := range changeset {
-		switch change.Type {
-		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			create = append(create, change)
-		case diff2.DELETE:
-			del = append(del, change)
-		case diff2.CHANGE:
-			mod = append(mod, change)
-		default:
-			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
-		}
-	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
 	// NOPURGE
 	if dc.KeepUnknown {
@@ -196,7 +180,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 
 	// remove SOA record from corrections as it is handled separately
 	for i, r := range create {
-		if r.New[0].Type == "SOA" {
+		if r.Desired.Type == "SOA" {
 			create = append(create[:i], create[i+1:]...)
 			break
 		}
@@ -208,7 +192,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 
 	msg := []string{}
 	for _, c := range append(del, append(create, mod...)...) {
-		msg = append(msg, c.MsgsJoined)
+		msg = append(msg, c.String())
 	}
 
 	var desiredSoa *models.RecordConfig
@@ -219,18 +203,20 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		}
 	}
 	if desiredSoa == nil {
-		desiredSoa = dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", 1, 0, 0, 0, 0)
+		desiredSoa = &models.RecordConfig{}
 	}
 
 	defaultSoa := &hp.defaultSoa
-
-	df := desiredSoa.AsSOA()
+	// Commented out because this can not happen:
+	// if defaultSoa == nil {
+	// 	defaultSoa = &soaValues{}
+	// }
 
 	newSOA := soaValues{
-		Refresh:     firstNonZero(df.Refresh, defaultSoa.Refresh, 86400),
-		Retry:       firstNonZero(df.Retry, defaultSoa.Retry, 7200),
-		Expire:      firstNonZero(df.Expire, defaultSoa.Expire, 3600000),
-		NegativeTTL: firstNonZero(df.Minttl, defaultSoa.NegativeTTL, 900),
+		Refresh:     firstNonZero(desiredSoa.SoaRefresh, defaultSoa.Refresh, 86400),
+		Retry:       firstNonZero(desiredSoa.SoaRetry, defaultSoa.Retry, 7200),
+		Expire:      firstNonZero(desiredSoa.SoaExpire, defaultSoa.Expire, 3600000),
+		NegativeTTL: firstNonZero(desiredSoa.SoaMinttl, defaultSoa.NegativeTTL, 900),
 		TTL:         firstNonZero(desiredSoa.TTL, defaultSoa.TTL, 86400),
 	}
 
@@ -240,10 +226,10 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		zoneChanged = true
 	}
 
-	if df.Mbox != "" {
+	if desiredSoa.SoaMbox != "" {
 		desiredMail := ""
-		if df.Mbox[len(df.Mbox)-1] != '.' {
-			desiredMail = df.Mbox + "@" + dc.Name
+		if desiredSoa.SoaMbox[len(desiredSoa.SoaMbox)-1] != '.' {
+			desiredMail = desiredSoa.SoaMbox + "@" + dc.Name
 		}
 		if desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
 			msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))

@@ -3,22 +3,22 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "3 1 1 MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
           "filepos": "[line:2:5]",
           "name": "_443._tcp",
-          "name_unicode": "_443._tcp",
-          "rdata": {
-            "Certificate": "MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
-            "MatchingType": 1,
-            "Selector": 1,
-            "Usage": 3
-          },
+          "target": "mdfiytq3mtljodbinmzlotexyja5mwe3yza1mti0yjy0zwvly2u5njrlmdljmdu4zwy4zjk4mdvkywnhntq2yiaglqo=",
+          "tlsamatchingtype": 1,
+          "tlsaselector": 1,
+          "tlsausage": 3,
           "ttl": 300,
-          "type": "TLSA",
-          "typenum": 52
+          "type": "TLSA"
         }
       ],
       "registrar": "none",

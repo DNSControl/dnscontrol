@@ -4,6 +4,11 @@
     {
       "dnsProviders": {},
       "ignore_external_dns": true,
+      "meta": {
+        "dnscontrol_nameraw": "extdns-default.com",
+        "dnscontrol_nameunicode": "extdns-default.com",
+        "dnscontrol_uniquename": "extdns-default.com"
+      },
       "name": "extdns-default.com",
       "records": [],
       "registrar": "none",
@@ -13,6 +18,11 @@
       "dnsProviders": {},
       "external_dns_prefix": "extdns-",
       "ignore_external_dns": true,
+      "meta": {
+        "dnscontrol_nameraw": "extdns-custom.com",
+        "dnscontrol_nameunicode": "extdns-custom.com",
+        "dnscontrol_uniquename": "extdns-custom.com"
+      },
       "name": "extdns-custom.com",
       "records": [],
       "registrar": "none",
@@ -21,31 +31,26 @@
     {
       "dnsProviders": {},
       "ignore_external_dns": true,
+      "meta": {
+        "dnscontrol_nameraw": "extdns-combined.com",
+        "dnscontrol_nameunicode": "extdns-combined.com",
+        "dnscontrol_uniquename": "extdns-combined.com"
+      },
       "name": "extdns-combined.com",
       "records": [
         {
-          "comparablev3": "www.extdns-combined.com.",
           "filepos": "[line:12:5]",
           "name": "api",
-          "name_unicode": "api",
-          "rdata": {
-            "Target": "www.extdns-combined.com."
-          },
+          "target": "www.extdns-combined.com.",
           "ttl": 300,
-          "type": "CNAME",
-          "typenum": 5
+          "type": "CNAME"
         },
         {
-          "comparablev3": "1.2.3.4",
           "filepos": "[line:11:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "none",

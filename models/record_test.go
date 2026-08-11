@@ -86,12 +86,16 @@ func TestKey(t *testing.T) {
 			RecordKey{Type: "A", NameFQDN: "example.com"},
 		},
 		{
-			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.R53ALIAS{AliasType: "AAAA"}},
-			RecordKey{Type: "R53_ALIAS_AAAA", NameFQDN: "example.com"},
+			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com"},
+			RecordKey{Type: "R53_ALIAS", NameFQDN: "example.com"},
 		},
 		{
-			RecordConfig{Type: "AZURE_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.AZUREALIAS{AliasType: "CNAME"}},
-			RecordKey{Type: "AZURE_ALIAS_CNAME", NameFQDN: "example.com"},
+			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", R53Alias: map[string]string{"foo": "bar"}},
+			RecordKey{Type: "R53_ALIAS", NameFQDN: "example.com"},
+		},
+		{
+			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", R53Alias: map[string]string{"type": "AAAA"}},
+			RecordKey{Type: "R53_ALIAS_AAAA", NameFQDN: "example.com"},
 		},
 	}
 	for i, test := range tests {
@@ -137,6 +141,8 @@ func TestRecordConfig_Copy(t *testing.T) {
 		TlsaUsage        uint8
 		TlsaSelector     uint8
 		TlsaMatchingType uint8
+		R53Alias         map[string]string
+		AzureAlias       map[string]string
 		Original         any
 	}
 	tests := []struct {
@@ -242,51 +248,6 @@ func TestFixPosition(t *testing.T) {
 			got := FixPosition(tt.pos.(string))
 			if got != tt.want {
 				t.Errorf("fixPosition() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_makeLabelNameFQDN(t *testing.T) {
-	tests := []struct {
-		tname string // description of this test case
-		// Named input parameters for target function.
-		origin string
-		name   string
-		want   string
-	}{
-		{"a", "bosun.org", "@", "bosun.org"},
-		{"b", "bosun.org", "foo", "foo.bosun.org"},
-		{"c", "bosun.org", "bosun.org.", "bosun.org"},
-		{"d", "bosun.org", "foo.bosun.org.", "foo.bosun.org"},
-	}
-	for _, tt := range tests {
-		t.Run(tt.tname, func(t *testing.T) {
-			got := makeLabelNameFQDN(tt.origin, tt.name)
-			// TODO: update the condition below to compare got with tt.want.
-			if got != tt.want {
-				t.Errorf("makeNameFQDN(%q) = %v, want %v", tt.name, got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_makeLabelNameUnicode(t *testing.T) {
-	tests := []struct {
-		tname string // description of this test case
-		// Named input parameters for target function.
-		name string
-		want string
-	}{
-		{"a", "foo.com", "foo.com"},
-		{"b", "xn--mnchen-3ya.com", "münchen.com"},
-	}
-	for _, tt := range tests {
-		t.Run(tt.tname, func(t *testing.T) {
-			got, _ := makeLabelNameUnicode(tt.name)
-			// TODO: update the condition below to compare got with tt.want.
-			if got != tt.want {
-				t.Errorf("makeNameUnicode(%q) = %v, want %v", tt.name, got, tt.want)
 			}
 		})
 	}

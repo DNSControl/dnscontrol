@@ -6,9 +6,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
@@ -22,10 +22,10 @@ const (
 )
 
 var features = providers.DocumentationNotes{
-	providers.CanUseAlias:            providers.Can("Enable CNAME flattening for ALIAS to work at the apex. See https://docs.dnspod.com/dns/cname-flattening/"),
+	providers.CanUseAlias:            providers.Can("DNSPod doesn't natively support the ALIAS record type."),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanUseCAA:              providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
+	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
 	providers.DocCreateDomains:       providers.Can(),
 	providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
@@ -179,7 +179,7 @@ func (p *tencentdnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 		if *r.Status != "ENABLE" {
 			continue
 		}
-		rc, err := nativeToRecord(r, dc)
+		rc, err := nativeToRecord(r, dc.Name)
 		if err != nil {
 			return nil, err
 		}

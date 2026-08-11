@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
@@ -136,7 +136,7 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 			continue
 		}
 
-		rc, err := nativeToRecord(r, dc)
+		rc, err := nativeToRecord(r, domain)
 		if err != nil {
 			return nil, err
 		}
@@ -152,10 +152,7 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	}
 
 	for _, ns := range nameservers {
-		rc, err := nativeToRecordNS(ns, dc)
-		if err != nil {
-			return nil, err
-		}
+		rc := nativeToRecordNS(ns, domain)
 		out = append(out, rc)
 	}
 
@@ -174,8 +171,8 @@ func deduplicateNameServerTargets(newRecs models.Records) models.Records {
 	dedupedMap := make(map[string]bool)
 	var deduped models.Records
 	for _, rec := range newRecs {
-		if !dedupedMap[rec.AsNS().Ns] {
-			dedupedMap[rec.AsNS().Ns] = true
+		if !dedupedMap[rec.GetTargetField()] {
+			dedupedMap[rec.GetTargetField()] = true
 			deduped = append(deduped, rec)
 		}
 	}
@@ -263,7 +260,7 @@ func (a *aliDNSDsp) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 			corrections = append(corrections, &models.Correction{
 				Msg: msgs,
 				F: func() error {
-					return a.deleteRecordset(change.Old)
+					return a.deleteRecordset(change.Old, dcn)
 				},
 			})
 		default:
