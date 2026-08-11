@@ -3,22 +3,19 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "\"this string is 255 bytes long.hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnKZogtjOlHoeY8iZ5o5brlPOsj/a2Q9Bopu1kHxlxrdw7tZVL9FzUMngiIYGrl8dbP7Rvk7TLMoxHxVkRZPBtIpsKIab/gOUoPLQVYbrAmzyguHYBwAApi3H/pvjUsK8+XF0dKY17AR96lokAPqvfBaUb+DSx8zNw2hrYWYVqvCtnxHUGEUhT1bTlEZBptH3j\" \"this is the remainder. it is 156 bytes long.mOhl2JmbsFKy+RoMTwbkk0/meRvcEFWLHkr4MSgbnie6OpQvM4Y51+kO6DUVr3rwjrdVO9wpFt+n/hdQ92TNif17RMJtE5AGaQ6BN3yJQIDAQAB;\"",
           "filepos": "[line:2:5]",
           "name": "dkimtest2",
-          "name_unicode": "dkimtest2",
-          "rdata": {
-            "Txt": [
-              "this string is 255 bytes long.hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnKZogtjOlHoeY8iZ5o5brlPOsj/a2Q9Bopu1kHxlxrdw7tZVL9FzUMngiIYGrl8dbP7Rvk7TLMoxHxVkRZPBtIpsKIab/gOUoPLQVYbrAmzyguHYBwAApi3H/pvjUsK8+XF0dKY17AR96lokAPqvfBaUb+DSx8zNw2hrYWYVqvCtnxHUGEUhT1bTlEZBptH3j",
-              "this is the remainder. it is 156 bytes long.mOhl2JmbsFKy+RoMTwbkk0/meRvcEFWLHkr4MSgbnie6OpQvM4Y51+kO6DUVr3rwjrdVO9wpFt+n/hdQ92TNif17RMJtE5AGaQ6BN3yJQIDAQAB;"
-            ]
-          },
+          "target": "this string is 255 bytes long.hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnKZogtjOlHoeY8iZ5o5brlPOsj/a2Q9Bopu1kHxlxrdw7tZVL9FzUMngiIYGrl8dbP7Rvk7TLMoxHxVkRZPBtIpsKIab/gOUoPLQVYbrAmzyguHYBwAApi3H/pvjUsK8+XF0dKY17AR96lokAPqvfBaUb+DSx8zNw2hrYWYVqvCtnxHUGEUhT1bTlEZBptH3jthis is the remainder. it is 156 bytes long.mOhl2JmbsFKy+RoMTwbkk0/meRvcEFWLHkr4MSgbnie6OpQvM4Y51+kO6DUVr3rwjrdVO9wpFt+n/hdQ92TNif17RMJtE5AGaQ6BN3yJQIDAQAB;",
           "ttl": 300,
-          "type": "TXT",
-          "typenum": 16
+          "type": "TXT"
         }
       ],
       "registrar": "none",

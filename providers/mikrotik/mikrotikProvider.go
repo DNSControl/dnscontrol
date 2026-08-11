@@ -8,10 +8,10 @@ import (
 
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -199,7 +199,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	domain := dc.Name
 
 	if domain == ForwarderZone {
-		return p.getForwarderRecords(dc)
+		return p.getForwarderRecords()
 	}
 
 	nativeRecords, err := p.getAllRecords()
@@ -225,7 +225,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		}
 
-		rcs, err := nativeToRecords(nr, dc)
+		rcs, err := nativeToRecords(nr, domain)
 		if err != nil {
 			printer.Warnf("mikrotik: skipping record %q (type=%s): %v\n", nr.Name, nr.Type, err)
 			continue
@@ -236,7 +236,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return records, nil
 }
 
-func (p *mikrotikProvider) getForwarderRecords(dc *models.DomainConfig) (models.Records, error) {
+func (p *mikrotikProvider) getForwarderRecords() (models.Records, error) {
 	fwds, err := p.getAllForwarders()
 	if err != nil {
 		return nil, fmt.Errorf("mikrotik: failed to list forwarders: %w", err)
@@ -247,7 +247,7 @@ func (p *mikrotikProvider) getForwarderRecords(dc *models.DomainConfig) (models.
 		if fwd.Disabled == "true" {
 			continue
 		}
-		records = append(records, forwarderToRecord(dc, fwd))
+		records = append(records, forwarderToRecord(fwd))
 	}
 	return records, nil
 }

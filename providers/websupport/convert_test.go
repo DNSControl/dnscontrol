@@ -3,15 +3,17 @@ package websupport
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 const testDomain = "example.com"
 
-func mkRC(t *testing.T, rtype, label string, args ...any) *models.RecordConfig {
+func mkRC(t *testing.T, rtype, label string, build func(rc *models.RecordConfig)) *models.RecordConfig {
 	t.Helper()
-	dc := models.MustNewDomainConfig(testDomain)
-	return dc.MustNewRecordConfig(label, 3600, rtype, args...)
+	rc := &models.RecordConfig{Type: rtype, TTL: 3600}
+	rc.SetLabel(label, testDomain)
+	build(rc)
+	return rc
 }
 
 func TestRoundTrip(t *testing.T) {
@@ -22,48 +24,48 @@ func TestRoundTrip(t *testing.T) {
 		wantName    string
 		wantContent string
 	}{
-		// {
-		// 	name:        "A apex",
-		// 	rc:          mkRC(t, "A", "@", "1.2.3.4"),
-		// 	wantType:    "A",
-		// 	wantName:    "@",
-		// 	wantContent: "1.2.3.4",
-		// },
+		{
+			name:        "A apex",
+			rc:          mkRC(t, "A", "@", func(rc *models.RecordConfig) { _ = rc.SetTarget("1.2.3.4") }),
+			wantType:    "A",
+			wantName:    "@",
+			wantContent: "1.2.3.4",
+		},
 		{
 			name:        "CNAME strips trailing dot",
-			rc:          mkRC(t, "CNAME", "www", "ghs.example.net."),
+			rc:          mkRC(t, "CNAME", "www", func(rc *models.RecordConfig) { _ = rc.SetTarget("ghs.example.net.") }),
 			wantType:    "CNAME",
 			wantName:    "www",
 			wantContent: "ghs.example.net",
 		},
-		// {
-		// 	name:        "MX",
-		// 	rc:          mkRC(t, "MX", "@", 10, "mail.example.com."),
-		// 	wantType:    "MX",
-		// 	wantName:    "@",
-		// 	wantContent: "mail.example.com",
-		// },
-		// {
-		// 	name:        "SRV",
-		// 	rc:          mkRC(t, "SRV", "_sip._tcp", 10, 20, 5060, "sip.example.com."),
-		// 	wantType:    "SRV",
-		// 	wantName:    "_sip._tcp",
-		// 	wantContent: "sip.example.com",
-		// },
-		// {
-		// 	name:        "AAAA",
-		// 	rc:          mkRC(t, "AAAA", "ipv6", "2a00:4b40:aaaa:2001::6"),
-		// 	wantType:    "AAAA",
-		// 	wantName:    "ipv6",
-		// 	wantContent: "2a00:4b40:aaaa:2001::6",
-		// },
-		// {
-		// 	name:        "TXT",
-		// 	rc:          mkRC(t, "TXT", "@", "hello world"),
-		// 	wantType:    "TXT",
-		// 	wantName:    "@",
-		// 	wantContent: "hello world",
-		// },
+		{
+			name:        "MX",
+			rc:          mkRC(t, "MX", "@", func(rc *models.RecordConfig) { _ = rc.SetTargetMX(10, "mail.example.com.") }),
+			wantType:    "MX",
+			wantName:    "@",
+			wantContent: "mail.example.com",
+		},
+		{
+			name:        "SRV",
+			rc:          mkRC(t, "SRV", "_sip._tcp", func(rc *models.RecordConfig) { _ = rc.SetTargetSRV(10, 20, 5060, "sip.example.com.") }),
+			wantType:    "SRV",
+			wantName:    "_sip._tcp",
+			wantContent: "sip.example.com",
+		},
+		{
+			name:        "AAAA",
+			rc:          mkRC(t, "AAAA", "ipv6", func(rc *models.RecordConfig) { _ = rc.SetTarget("2a00:4b40:aaaa:2001::6") }),
+			wantType:    "AAAA",
+			wantName:    "ipv6",
+			wantContent: "2a00:4b40:aaaa:2001::6",
+		},
+		{
+			name:        "TXT",
+			rc:          mkRC(t, "TXT", "@", func(rc *models.RecordConfig) { _ = rc.SetTargetTXT("hello world") }),
+			wantType:    "TXT",
+			wantName:    "@",
+			wantContent: "hello world",
+		},
 	}
 
 	for _, tc := range tests {
@@ -87,12 +89,11 @@ func TestRoundTrip(t *testing.T) {
 			// even though writes use the relative label.
 			n.ID = 42
 			n.Name = tc.rc.GetLabelFQDN()
-			dc := models.MustNewDomainConfig(testDomain)
-			rc2, err := toRecordConfig(dc, n)
+			rc2, err := toRecordConfig(testDomain, n)
 			if err != nil {
 				t.Fatalf("toRecordConfig: %v", err)
 			}
-			if got, want := rc2.GetRDATA().String(), tc.rc.GetRDATA().String(); got != want {
+			if got, want := rc2.GetTargetCombined(), tc.rc.GetTargetCombined(); got != want {
 				t.Errorf("round-trip target = %q, want %q", got, want)
 			}
 			if rc2.Type != tc.rc.Type {

@@ -4,6 +4,9 @@
     {
       "dnsProviders": {},
       "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com",
         "ns_ttl": "86400"
       },
       "name": "foo.com",
@@ -14,6 +17,9 @@
     {
       "dnsProviders": {},
       "meta": {
+        "dnscontrol_nameraw": "bar.com",
+        "dnscontrol_nameunicode": "bar.com",
+        "dnscontrol_uniquename": "bar.com",
         "ns_ttl": "300"
       },
       "name": "bar.com",

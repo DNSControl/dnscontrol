@@ -1,13 +1,5 @@
 package models
 
-import (
-	"fmt"
-
-	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-)
-
 // ChangeType converts rc to an rc of type newType.  This is only needed when
 // converting from one type to another. Do not use this when initializing a new
 // record.
@@ -16,20 +8,7 @@ import (
 // this function future-proofs the code since eventually such changes will
 // require extra steps.
 func (rc *RecordConfig) ChangeType(newType string, _ string) {
-	alias, aliasToCNAME := rc.GetRDATA().(privatetypesrdata.ALIAS)
-	aliasToCNAME = aliasToCNAME && newType == "CNAME"
 
-	// Change the Type/TypeNum
 	rc.Type = newType
-	tn, err := dnsutilv2.StringToType(rc.Type)
-	if err != nil {
-		panic(fmt.Sprintf("BUG: ChangeType: Unknown type %s", rc.Type))
-	}
-	rc.TypeNum = tn
 
-	// Clear out anything that will need to be fixed.
-	rc.ClearRDATA()
-	if aliasToCNAME {
-		rc.SetRDATA(dnsrdatav2.CNAME{Target: alias.Target})
-	}
 }

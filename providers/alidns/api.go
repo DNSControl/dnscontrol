@@ -3,7 +3,7 @@ package alidns
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
@@ -75,7 +75,7 @@ func (a *aliDNSDsp) getNameservers(domain string) ([]string, error) {
 	return nameservers, nil
 }
 
-func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig) error {
+func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig, domainName string) error {
 	for _, r := range records {
 		req := alidns.CreateDeleteDomainRecordRequest()
 		original, ok := r.Original.(*alidns.Record)
@@ -122,7 +122,7 @@ func (a *aliDNSDsp) updateRecordset(existing, desired []*models.RecordConfig, do
 	// 3. Alibaba Cloud API requires RecordId for updates, which desired records don't have
 
 	// Delete all existing records first
-	if err := a.deleteRecordset(existing); err != nil {
+	if err := a.deleteRecordset(existing, domainName); err != nil {
 		return err
 	}
 

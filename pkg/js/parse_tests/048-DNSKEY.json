@@ -3,23 +3,23 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "257 3 13 AABBCCDD",
+          "dnskeyalgorithm": 13,
+          "dnskeyflags": 257,
+          "dnskeyprotocol": 3,
+          "dnskeypublickey": "AABBCCDD",
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Algorithm": 13,
-            "Flags": 257,
-            "Protocol": 3,
-            "PublicKey": "AABBCCDD",
-            "Tag": 0
-          },
+          "target": "",
           "ttl": 300,
-          "type": "DNSKEY",
-          "typenum": 48
+          "type": "DNSKEY"
         }
       ],
       "registrar": "none",

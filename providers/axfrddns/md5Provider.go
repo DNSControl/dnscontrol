@@ -3,24 +3,35 @@ package axfrddns
 import (
 	"crypto/hmac"
 	"crypto/md5" //#nosec
+	"encoding/base64"
 	"encoding/hex"
 
-	dnsv2 "codeberg.org/miekg/dns"
+	dnsv1 "github.com/miekg/dns"
 )
 
-// md5Provider signs and verifies TSIGs with HMAC-MD5.
-type md5Provider []byte
+type md5Provider string
 
-func (key md5Provider) Key() []byte { return key }
+func fromBase64(s []byte) (buf []byte, err error) {
+	buflen := base64.StdEncoding.DecodedLen(len(s))
+	buf = make([]byte, buflen)
+	n, err := base64.StdEncoding.Decode(buf, s)
+	buf = buf[:n]
+	return
+}
 
-func (key md5Provider) Sign(_ *dnsv2.TSIG, msg []byte, _ dnsv2.TSIGOption) ([]byte, error) {
-	h := hmac.New(md5.New, key)
+func (key md5Provider) Generate(msg []byte, _ *dnsv1.TSIG) ([]byte, error) {
+	rawsecret, err := fromBase64([]byte(key))
+	if err != nil {
+		return nil, err
+	}
+	h := hmac.New(md5.New, rawsecret)
+
 	h.Write(msg)
 	return h.Sum(nil), nil
 }
 
-func (key md5Provider) Verify(t *dnsv2.TSIG, msg []byte, options dnsv2.TSIGOption) error {
-	b, err := key.Sign(t, msg, options)
+func (key md5Provider) Verify(msg []byte, t *dnsv1.TSIG) error {
+	b, err := key.Generate(msg, t)
 	if err != nil {
 		return err
 	}
@@ -29,7 +40,7 @@ func (key md5Provider) Verify(t *dnsv2.TSIG, msg []byte, options dnsv2.TSIGOptio
 		return err
 	}
 	if !hmac.Equal(b, mac) {
-		return dnsv2.ErrSig
+		return dnsv1.ErrSig
 	}
 	return nil
 }

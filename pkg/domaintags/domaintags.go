@@ -54,6 +54,7 @@ func MakeDomainNameVarieties(n string) *DomainNameVarieties {
 		nameASCII = strings.ToLower(nameASCII)
 		// Avoid pointless duplication.
 		if strings.HasPrefix(n, nameASCII) {
+			// Avoid pointless duplication.
 			nameASCII = n[0:len(nameASCII)]
 		}
 	}

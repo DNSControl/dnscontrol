@@ -3,75 +3,60 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" example",
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 100,
-            "Preference": 10,
-            "Regexp": "!^.*$!sip:customer-service@example.com!",
-            "Replacement": "example",
-            "Service": "E2U+sip"
-          },
+          "naptrflags": "U",
+          "naptrorder": 100,
+          "naptrpreference": 10,
+          "naptrregexp": "!^.*$!sip:customer-service@example.com!",
+          "naptrservice": "E2U+sip",
+          "target": "example",
           "ttl": 300,
-          "type": "NAPTR",
-          "typenum": 35
+          "type": "NAPTR"
         },
         {
-          "comparablev3": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" example",
           "filepos": "[line:3:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 102,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": "example",
-            "Service": "E2U+email"
-          },
+          "naptrflags": "U",
+          "naptrorder": 102,
+          "naptrpreference": 10,
+          "naptrregexp": "!^.*$!mailto:information@example.com!",
+          "naptrservice": "E2U+email",
+          "target": "example",
           "ttl": 300,
-          "type": "NAPTR",
-          "typenum": 35
+          "type": "NAPTR"
         },
         {
-          "comparablev3": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
           "filepos": "[line:4:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 103,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": ".",
-            "Service": "E2U+email"
-          },
+          "naptrflags": "U",
+          "naptrorder": 103,
+          "naptrpreference": 10,
+          "naptrregexp": "!^.*$!mailto:information@example.com!",
+          "naptrservice": "E2U+email",
+          "target": ".",
           "ttl": 300,
-          "type": "NAPTR",
-          "typenum": 35
+          "type": "NAPTR"
         },
         {
-          "comparablev3": "104 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
           "filepos": "[line:5:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 104,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": ".",
-            "Service": "E2U+email"
-          },
+          "naptrflags": "U",
+          "naptrorder": 104,
+          "naptrpreference": 10,
+          "naptrregexp": "!^.*$!mailto:information@example.com!",
+          "naptrservice": "E2U+email",
+          "target": ".",
           "ttl": 300,
-          "type": "NAPTR",
-          "typenum": 35
+          "type": "NAPTR"
         }
       ],
       "registrar": "none",

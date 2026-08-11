@@ -5,28 +5,57 @@ package gandiv5
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	"github.com/go-gandi/go-gandi/livedns"
 )
 
 // nativeToRecord takes a DNS record from Gandi and returns a native RecordConfig struct.
-func nativeToRecords(dc *models.DomainConfig, n livedns.DomainRecord) (rcs []*models.RecordConfig, err error) {
+func nativeToRecords(n livedns.DomainRecord, origin string) (rcs []*models.RecordConfig, err error) {
 	// Gandi returns all the values for a given label/rtype pair in each
 	// livedns.DomainRecord.  In other words, if there are multiple A
 	// records for a label, all the IP addresses are listed in
 	// n.RrsetValues rather than having many livedns.DomainRecord's.
 	// We must split them out into individual records, one for each value.
 
+	dcn := domaintags.MakeDomainNameVarieties(origin)
+
 	for _, value := range n.RrsetValues {
-		rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(n.RrsetName), uint32(n.RrsetTTL), n.RrsetType, value)
-		if err != nil {
-			return nil, fmt.Errorf("unparsable record received from gandi (%s): %w", n.RrsetType, err)
+		var rc *models.RecordConfig
+		var err error
+
+		rtype := n.RrsetType
+
+		if rtypeinfo.IsModernType(rtype) {
+			rc, err = rtypecontrol.NewRecordConfigFromString(n.RrsetName, uint32(n.RrsetTTL), rtype, value, dcn)
+			if err != nil {
+				return nil, fmt.Errorf("unparsable record received from gandi: %w", err)
+			}
+			rc.Original = n
+		} else {
+			rc = &models.RecordConfig{
+				TTL:      uint32(n.RrsetTTL),
+				Original: n,
+			}
+			rc.SetLabel(n.RrsetName, origin)
+
+			switch rtype := n.RrsetType; rtype {
+			case "ALIAS":
+				rc.Type = "ALIAS"
+				err = rc.SetTarget(value)
+			default:
+				err = rc.PopulateFromStringFunc(rtype, value, origin, txtutil.ParseQuoted)
+			}
+			if err != nil {
+				return nil, fmt.Errorf("unparsable record received from gandi: %w", err)
+			}
 		}
-
-		rc.Original = n
-
 		rcs = append(rcs, rc)
+
 	}
 
 	return rcs, nil
@@ -53,11 +82,11 @@ func recordsToNative(rcs []*models.RecordConfig, origin string) []livedns.Domain
 				RrsetType:   r.Type,
 				RrsetTTL:    int(r.TTL),
 				RrsetName:   label,
-				RrsetValues: []string{r.GetRDATA().String()},
+				RrsetValues: []string{r.GetTargetCombinedFunc(txtutil.EncodeQuoted)},
 			}
 			keys[key] = &zr
 		} else {
-			zr.RrsetValues = append(zr.RrsetValues, r.GetRDATA().String())
+			zr.RrsetValues = append(zr.RrsetValues, r.GetTargetCombinedFunc(txtutil.EncodeQuoted))
 
 			if r.TTL != uint32(zr.RrsetTTL) {
 				printer.Warnf("All TTLs for a rrset (%v) must be the same. Using smaller of %v and %v.\n", key, r.TTL, zr.RrsetTTL)

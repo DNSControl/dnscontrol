@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 )
 
@@ -64,11 +64,6 @@ func init() {
 
 type nsone struct {
 	*rest.Client
-	observer providers.ConversionObserver
-}
-
-func (n *nsone) SetConversionObserver(observer providers.ConversionObserver) {
-	n.observer = observer
 }
 
 func newProvider(creds map[string]string, meta json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -79,7 +74,7 @@ func newProvider(creds map[string]string, meta json.RawMessage) (providers.DNSSe
 	// Enable Sleep API Rate limit strategy - it will sleep until new tokens are available
 	// see https://help.ns1.com/hc/en-us/articles/360020250573-About-API-rate-limiting
 	// this strategy would imply the least sleep time for non-parallel client requests
-	return &nsone{Client: rest.NewClient(
+	return &nsone{rest.NewClient(
 		http.DefaultClient,
 		rest.SetAPIKey(creds["api_token"]),
 		func(c *rest.Client) {

@@ -15,11 +15,10 @@ import (
 	"fmt"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"codeberg.org/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	vercelClient "github.com/vercel/terraform-provider-vercel/client"
 )
 
@@ -52,7 +51,6 @@ var features = providers.DocumentationNotes{
 
 // vercelProvider stores login credentials and represents and API connection.
 type vercelProvider struct {
-	observer providers.ConversionObserver
 	client   vercelClient.Client
 	apiToken string
 	teamID   string
@@ -63,8 +61,23 @@ type vercelProvider struct {
 	listLimiter   *rateLimiter
 }
 
-func (c *vercelProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	c.observer = observer
+// uint16Zero converts value to uint16 or returns 0, use wisely
+//
+// Vercel's Go SDK implies int64 for almost everything, but since Vercel doesn't actually
+// implement their own NS and instead uses NS1 / Constellix (previously), we'd assume if
+// TTL and Priority are int64, they are in fact uint16 and otherwise be rejected by upstream
+// providers. Under this assumption, we'd convert int64 to uint16 as wells.
+func uint16Zero(value any) uint16 {
+	switch v := value.(type) {
+	case float64:
+		return uint16(v)
+	case uint16:
+		return v
+	case int64:
+		return uint16(v)
+	case nil:
+	}
+	return 0
 }
 
 func init() {
@@ -139,47 +152,64 @@ func (c *vercelProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 			continue
 		}
 
-		before := providers.BeginToRC(c.observer, "vercelRecordToRC", r)
-		rc, err := vercelRecordToRC(dc, r)
-		providers.EndToRC(c.observer, "vercelRecordToRC", before, r, models.Records{rc}, err)
-		if err != nil {
-			return nil, err
+		rc := &models.RecordConfig{
+			TTL:      uint32(r.TTL),
+			Original: r,
 		}
+
+		name := r.Name
+		if name == "@" {
+			name = ""
+		}
+		rc.SetLabel(name, domain)
+
+		if r.Type == "CNAME" || r.Type == "MX" {
+			r.Value = dnsutil.Canonical(r.Value)
+		}
+
+		switch rtype := r.RecordType; rtype {
+		case "MX":
+			if err := rc.SetTargetMX(uint16Zero(r.MXPriority), r.Value); err != nil {
+				return nil, fmt.Errorf("unparsable MX record: %w", err)
+			}
+		case "SRV":
+			// Vercel's API doesn't always return SRV as an SRV object.
+			// It might return priority in the json field, and the srv as a big string `[weight] [port] [domain]` in json 'value' field.
+			// We have to create our own string before passing in.
+			// Fallback to parsing from string if SRV object is missing
+			// r.Value is "weight port target", we need "priority weight port target"
+			if err := rc.PopulateFromString(
+				rtype,
+				fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value),
+				domain,
+			); err != nil {
+				return nil, fmt.Errorf("unparsable SRV record from value: %w", err)
+			}
+		case "HTTPS":
+			// Vercel returns priority in a separate field, and value contains "target params".
+			// We need to combine them for PopulateFromString.
+			if err := rc.PopulateFromString(
+				rtype,
+				fmt.Sprintf("%d %s", uint16Zero(r.Priority), r.Value),
+				domain,
+			); err != nil {
+				return nil, fmt.Errorf("unparsable HTTPS record: %w", err)
+			}
+		case "TXT":
+			err := rc.SetTargetTXT(r.Value)
+			if err != nil {
+				return nil, fmt.Errorf("unparsable TXT record: %w", err)
+			}
+		default:
+			if err := rc.PopulateFromString(rtype, r.Value, domain); err != nil {
+				return nil, fmt.Errorf("unparsable record received from vercel: %w", err)
+			}
+		}
+
 		zoneRecords = append(zoneRecords, rc)
 	}
 
 	return zoneRecords, nil
-}
-
-func vercelRecordToRC(dc *models.DomainConfig, r DNSRecord) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(r.Name)
-	ttl := uint32(r.TTL)
-
-	var rc *models.RecordConfig
-	var err error
-	switch rtype := r.RecordType; rtype {
-	case "CNAME":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.MXPriority, r.Value,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "SRV", "HTTPS", "SVCB":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Priority, r.Value,
-			nrc.Flags{TargetIsFqdnNoDot: true, SrvWeirdSplit: true})
-	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
-	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	}
-	if err != nil {
-		return nil, fmt.Errorf("unparsable %s record received from vercel: %w", r.RecordType, err)
-	}
-
-	rc.Original = r
-
-	return rc, nil
 }
 
 func (c *vercelProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
@@ -221,10 +251,7 @@ func (c *vercelProvider) mkCreateCorrection(domain string, newRec *models.Record
 		Msg: msg,
 		F: func() error {
 			ctx := context.Background()
-			input := models.Records{newRec}
-			before := providers.BeginToNative(c.observer, "toVercelCreateRequest", input)
 			req, err := toVercelCreateRequest(domain, newRec)
-			providers.EndToNative(c.observer, "toVercelCreateRequest", before, input, req, err)
 			if err != nil {
 				return err
 			}
@@ -251,10 +278,7 @@ func (c *vercelProvider) mkChangeCorrection(domain string, oldRec, newRec *model
 				// re-create new record.
 				// luckily, delete and create use different rate limit timers
 				// thus we are most likely can go through both.
-				input := models.Records{newRec}
-				before := providers.BeginToNative(c.observer, "toVercelCreateRequest", input)
 				req, err := toVercelCreateRequest(domain, newRec)
-				providers.EndToNative(c.observer, "toVercelCreateRequest", before, input, req, err)
 				if err != nil {
 					return err
 				}
@@ -262,10 +286,7 @@ func (c *vercelProvider) mkChangeCorrection(domain string, oldRec, newRec *model
 				return err
 			}
 
-			input := models.Records{newRec}
-			before := providers.BeginToNative(c.observer, "toVercelUpdateRequest", input)
 			req, err := toVercelUpdateRequest(newRec)
-			providers.EndToNative(c.observer, "toVercelUpdateRequest", before, input, req, err)
 			if err != nil {
 				return err
 			}
@@ -290,51 +311,46 @@ func (c *vercelProvider) mkDeleteCorrection(domain string, oldRec *models.Record
 func toVercelCreateRequest(domain string, rc *models.RecordConfig) (createDNSRecordRequest, error) {
 	req := createDNSRecordRequest{}
 
+	req.Domain = domain
+
 	name := rc.GetLabel()
 	if name == "@" {
 		name = ""
 	}
 	req.Name = name
-	req.Domain = domain
 	req.Type = rc.Type
+	req.Value = new(rc.GetTargetField())
 	req.TTL = int64(rc.TTL)
 	req.Comment = ""
 
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		req.MXPriority = int64(f.Preference)
-		req.Value = new(f.Mx)
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	switch rc.Type {
+	case "MX":
+		req.MXPriority = int64(rc.MxPreference)
+	case "SRV":
 		req.SRV = &vercelClient.SRV{
-			Priority: int64(f.Priority),
-			Weight:   int64(f.Weight),
-			Port:     int64(f.Port),
-			Target:   f.Target,
+			Priority: int64(rc.SrvPriority),
+			Weight:   int64(rc.SrvWeight),
+			Port:     int64(rc.SrvPort),
+			Target:   rc.GetTargetField(),
 		}
 		// When dealing with SRV records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`
 		req.Value = nil
-	case dnsv2.TypeTXT:
+	case "TXT":
 		req.Value = new(rc.GetTargetTXTJoined())
-	case dnsv2.TypeHTTPS:
-		f := rc.AsHTTPS()
+	case "HTTPS":
 		req.HTTPS = &httpsRecord{
-			Priority: int64(f.Priority),
-			Target:   f.Target,
-			Params:   models.Svcbv2ValueToString(rc.AsHTTPS().Value),
+			Priority: int64(rc.SvcPriority),
+			Target:   rc.GetTargetField(),
+			Params:   rc.SvcParams,
 		}
 		// When dealing with HTTPS records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
-	case dnsv2.TypeCAA:
-		f := rc.AsCAA()
-		req.Value = new(fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value))
-	default:
-		req.Value = new(rc.GetRDATA().String())
+	case "CAA":
+		req.Value = new(fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField()))
 	}
 
 	return req, nil
@@ -350,46 +366,41 @@ func toVercelUpdateRequest(rc *models.RecordConfig) (updateDNSRecordRequest, err
 	}
 	req.Name = &name
 
+	value := rc.GetTargetField()
+	req.Value = &value
+
 	req.TTL = new(int64(rc.TTL))
 	req.Comment = ""
 
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		req.MXPriority = new(int64(f.Preference))
-		req.Value = new(f.Mx)
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
+	switch rc.Type {
+	case "MX":
+		req.MXPriority = new(int64(rc.MxPreference))
+	case "SRV":
 		req.SRV = &vercelClient.SRVUpdate{
-			Priority: new(int64(f.Priority)),
-			Weight:   new(int64(f.Weight)),
-			Port:     new(int64(f.Port)),
-			Target:   new(f.Target),
+			Priority: new(int64(rc.SrvPriority)),
+			Weight:   new(int64(rc.SrvWeight)),
+			Port:     new(int64(rc.SrvPort)),
+			Target:   &value,
 		}
 		// When dealing with SRV records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`
 		req.Value = nil
-	case dnsv2.TypeTXT:
+	case "TXT":
 		txtValue := rc.GetTargetTXTJoined()
 		req.Value = &txtValue
-	case dnsv2.TypeHTTPS:
-		f := rc.AsHTTPS()
+	case "HTTPS":
 		req.HTTPS = &httpsRecord{
-			Priority: int64(f.Priority),
-			Target:   f.Target,
-			Params:   models.Svcbv2ValueToString(f.Value),
+			Priority: int64(rc.SvcPriority),
+			Target:   rc.GetTargetField(),
+			Params:   rc.SvcParams,
 		}
 		// When dealing with HTTPS records, we must not set the Value fields,
 		// otherwise the API throws an error:
 		// bad_request - Invalid request: should NOT have additional property `value`.
 		req.Value = nil
-	case dnsv2.TypeCAA:
-		f := rc.AsCAA()
-		value := fmt.Sprintf(`%v %s "%s"`, f.Flag, f.Tag, f.Value)
-		req.Value = &value
-	default:
-		value := rc.GetRDATA().String()
+	case "CAA":
+		value := fmt.Sprintf(`%v %s "%s"`, rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
 		req.Value = &value
 	}
 

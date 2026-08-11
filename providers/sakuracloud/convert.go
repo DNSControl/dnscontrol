@@ -1,58 +1,47 @@
 package sakuracloud
 
 import (
-	"strings"
-
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 const defaultTTL = uint32(3600)
 
-func toRc(dc *models.DomainConfig, r domainRecord) (*models.RecordConfig, error) {
-	ttl := r.TTL
-	if ttl == 0 {
-		ttl = defaultTTL
+func toRc(domain string, r domainRecord) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     r.Type,
+		TTL:      r.TTL,
+		Original: r,
 	}
-	label := dc.LabelFromShort(r.Name)
+	if r.TTL == 0 {
+		rc.TTL = defaultTTL
+	}
 
-	var rc *models.RecordConfig
+	rc.SetLabel(r.Name, domain)
+
 	var err error
 	switch r.Type {
 	case "TXT":
 		// TXT records are stored verbatim; no quoting/escaping to parse.
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.RData)
+		err = rc.SetTargetTXT(r.RData)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.RData)
+		err = rc.PopulateFromString(r.Type, r.RData, domain)
 	}
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = r
-	return rc, nil
+	return rc, err
 }
 
 func toNative(rc *models.RecordConfig) domainRecord {
-	contentsOrig := rc.GetRDATA().String()
-	contents := strings.ReplaceAll(contentsOrig, `"`, ``)
 	rr := domainRecord{
 		Name:  rc.GetLabel(),
 		Type:  rc.Type,
-		RData: contents,
+		RData: rc.String(),
 	}
 	if rc.TTL != defaultTTL {
 		rr.TTL = rc.TTL
 	}
 
-	switch rc.TypeNum {
-	case dnsv2.TypeTXT:
+	switch rc.Type {
+	case "TXT":
 		rr.RData = rc.GetTargetTXTJoined()
-	case dnsv2.TypeCAA:
-		// SakuraCloud requires the CAA value to remain quoted, e.g.
-		// `0 issue "letsencrypt.org"`. The generic quote-stripping above
-		// produces `0 issue letsencrypt.org`, which the API rejects as
-		// malformed.
-		rr.RData = contentsOrig
 	}
 	return rr
 }

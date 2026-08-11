@@ -3,6 +3,11 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "nothing.com",
+        "dnscontrol_nameunicode": "nothing.com",
+        "dnscontrol_uniquename": "nothing.com"
+      },
       "name": "nothing.com",
       "records": [],
       "registrar": "none",
@@ -11,6 +16,11 @@
     {
       "auto_dnssec": "on",
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "with.com",
+        "dnscontrol_nameunicode": "with.com",
+        "dnscontrol_uniquename": "with.com"
+      },
       "name": "with.com",
       "records": [],
       "registrar": "none",
@@ -19,6 +29,11 @@
     {
       "auto_dnssec": "off",
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "without.com",
+        "dnscontrol_nameunicode": "without.com",
+        "dnscontrol_uniquename": "without.com"
+      },
       "name": "without.com",
       "records": [],
       "registrar": "none",

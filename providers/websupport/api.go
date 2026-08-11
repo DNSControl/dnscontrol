@@ -32,6 +32,7 @@ type nativeRecord struct {
 	Priority *int   `json:"priority,omitempty"`
 	Port     *int   `json:"port,omitempty"`
 	Weight   *int   `json:"weight,omitempty"`
+	Note     string `json:"note,omitempty"`
 }
 
 // recordPage is one page of GET /v2/service/{service}/dns/record.
@@ -52,14 +53,6 @@ type v1Service struct {
 
 type v1ServiceList struct {
 	Items []v1Service `json:"items"`
-}
-
-// v1Record holds the only fields the record listings fail to return. v1 spells
-// priority "prio".
-type v1Record struct {
-	Prio   *int `json:"prio"`
-	Port   *int `json:"port"`
-	Weight *int `json:"weight"`
 }
 
 type apiError struct {
@@ -188,33 +181,6 @@ func (c *websupportProvider) getAllRecords(serviceID int64) ([]nativeRecord, err
 		page++
 	}
 	return all, nil
-}
-
-// repairMXSRV fills in the priority, port and weight of MX and SRV records,
-// which the record listings report as null on every record even though the
-// values are stored correctly. The v1 single-record endpoint still reports
-// them, so re-read those few records one at a time. Last verified 2026-08-09.
-func (c *websupportProvider) repairMXSRV(zone string, recs []nativeRecord) error {
-	for i := range recs {
-		r := &recs[i]
-		if r.Type != "MX" && r.Type != "SRV" {
-			continue
-		}
-		if r.Priority != nil {
-			continue // WebSupport fixed the listing; nothing to repair.
-		}
-
-		var v1 v1Record
-		endpoint := "/v1/user/self/zone/" + zone + "/record/" + strconv.FormatInt(r.ID, 10)
-		if err := c.do("Date", http.MethodGet, endpoint, nil, &v1); err != nil {
-			if isNotFound(err) {
-				continue // Deleted between the listing and this request.
-			}
-			return fmt.Errorf("WEBSUPPORT: re-reading record %d: %w", r.ID, err)
-		}
-		r.Priority, r.Port, r.Weight = v1.Prio, v1.Port, v1.Weight
-	}
-	return nil
 }
 
 func (c *websupportProvider) createRecord(serviceID int64, r nativeRecord) error {

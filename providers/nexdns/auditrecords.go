@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // caaTags are the property tags the API accepts in a CAA record.
@@ -103,8 +103,8 @@ func rejectTxtLeadingSpace(rc *models.RecordConfig) error {
 
 // rejectCaaTag rejects CAA records whose property tag the API does not accept.
 func rejectCaaTag(rc *models.RecordConfig) error {
-	if !slices.Contains(caaTags, rc.AsCAA().Tag) {
-		return fmt.Errorf("caa tag %q is not supported", rc.AsCAA().Tag)
+	if !slices.Contains(caaTags, rc.CaaTag) {
+		return fmt.Errorf("caa tag %q is not supported", rc.CaaTag)
 	}
 	return nil
 }

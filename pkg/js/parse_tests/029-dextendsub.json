@@ -10,83 +10,58 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.net",
+        "dnscontrol_nameunicode": "foo.net",
+        "dnscontrol_uniquename": "foo.net"
+      },
       "name": "foo.net",
       "records": [
         {
-          "comparablev3": "10.1.1.1",
           "filepos": "[line:7:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.1.1.1"
-          },
+          "target": "10.1.1.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.3.3.3",
           "filepos": "[line:11:5]",
           "name": "bar",
-          "name_unicode": "bar",
-          "rdata": {
-            "Addr": "10.3.3.3"
-          },
           "subdomain": "bar",
+          "target": "10.3.3.3",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.4.4.4",
           "filepos": "[line:12:5]",
           "name": "www.bar",
-          "name_unicode": "www.bar",
-          "rdata": {
-            "Addr": "10.4.4.4"
-          },
           "subdomain": "bar",
+          "target": "10.4.4.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.25.25.25",
           "filepos": "[line:70:5]",
           "name": "a.long.path.of.sub.domains",
-          "name_unicode": "a.long.path.of.sub.domains",
-          "rdata": {
-            "Addr": "10.25.25.25"
-          },
           "subdomain": "a.long.path.of.sub.domains",
+          "target": "10.25.25.25",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.26.26.26",
           "filepos": "[line:71:5]",
           "name": "www.a.long.path.of.sub.domains",
-          "name_unicode": "www.a.long.path.of.sub.domains",
-          "rdata": {
-            "Addr": "10.26.26.26"
-          },
           "subdomain": "a.long.path.of.sub.domains",
+          "target": "10.26.26.26",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.2.2.2",
           "filepos": "[line:8:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.2.2.2"
-          },
+          "target": "10.2.2.2",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -96,43 +71,33 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.tld",
+        "dnscontrol_nameunicode": "foo.tld",
+        "dnscontrol_uniquename": "foo.tld"
+      },
       "name": "foo.tld",
       "records": [
         {
-          "comparablev3": "20.5.5.5",
           "filepos": "[line:18:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "20.5.5.5"
-          },
+          "target": "20.5.5.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "20.10.10.10",
           "filepos": "[line:30:5]",
           "name": "a",
-          "name_unicode": "a",
-          "rdata": {
-            "Addr": "20.10.10.10"
-          },
+          "target": "20.10.10.10",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "20.6.6.6",
           "filepos": "[line:19:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "20.6.6.6"
-          },
+          "target": "20.6.6.6",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -142,43 +107,33 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "bar.foo.tld",
+        "dnscontrol_nameunicode": "bar.foo.tld",
+        "dnscontrol_uniquename": "bar.foo.tld"
+      },
       "name": "bar.foo.tld",
       "records": [
         {
-          "comparablev3": "30.7.7.7",
           "filepos": "[line:23:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "30.7.7.7"
-          },
+          "target": "30.7.7.7",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "30.9.9.9",
           "filepos": "[line:27:5]",
           "name": "a",
-          "name_unicode": "a",
-          "rdata": {
-            "Addr": "30.9.9.9"
-          },
+          "target": "30.9.9.9",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "30.8.8.8",
           "filepos": "[line:24:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "30.8.8.8"
-          },
+          "target": "30.8.8.8",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -188,57 +143,42 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.help",
+        "dnscontrol_nameunicode": "foo.help",
+        "dnscontrol_uniquename": "foo.help"
+      },
       "name": "foo.help",
       "records": [
         {
-          "comparablev3": "40.12.12.12",
           "filepos": "[line:36:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "40.12.12.12"
-          },
+          "target": "40.12.12.12",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "40.17.17.17",
           "filepos": "[line:49:5]",
           "name": "morty",
-          "name_unicode": "morty",
-          "rdata": {
-            "Addr": "40.17.17.17"
-          },
           "subdomain": "morty",
+          "target": "40.17.17.17",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "40.18.18.18",
           "filepos": "[line:50:5]",
           "name": "www.morty",
-          "name_unicode": "www.morty",
-          "rdata": {
-            "Addr": "40.18.18.18"
-          },
           "subdomain": "morty",
+          "target": "40.18.18.18",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "40.12.12.12",
           "filepos": "[line:37:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "40.12.12.12"
-          },
+          "target": "40.12.12.12",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -248,57 +188,42 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "bar.foo.help",
+        "dnscontrol_nameunicode": "bar.foo.help",
+        "dnscontrol_uniquename": "bar.foo.help"
+      },
       "name": "bar.foo.help",
       "records": [
         {
-          "comparablev3": "50.13.13.13",
           "filepos": "[line:41:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "50.13.13.13"
-          },
+          "target": "50.13.13.13",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "50.14.14.14",
           "filepos": "[line:42:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "50.14.14.14"
-          },
+          "target": "50.14.14.14",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "50.15.15.15",
           "filepos": "[line:45:5]",
           "name": "zip",
-          "name_unicode": "zip",
-          "rdata": {
-            "Addr": "50.15.15.15"
-          },
           "subdomain": "zip",
+          "target": "50.15.15.15",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "50.16.16.16",
           "filepos": "[line:46:5]",
           "name": "www.zip",
-          "name_unicode": "www.zip",
-          "rdata": {
-            "Addr": "50.16.16.16"
-          },
           "subdomain": "zip",
+          "target": "50.16.16.16",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -308,83 +233,58 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.here",
+        "dnscontrol_nameunicode": "foo.here",
+        "dnscontrol_uniquename": "foo.here"
+      },
       "name": "foo.here",
       "records": [
         {
-          "comparablev3": "60.19.19.19",
           "filepos": "[line:56:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "60.19.19.19"
-          },
+          "target": "60.19.19.19",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "60.21.21.21",
           "filepos": "[line:60:5]",
           "name": "bar",
-          "name_unicode": "bar",
-          "rdata": {
-            "Addr": "60.21.21.21"
-          },
           "subdomain": "bar",
+          "target": "60.21.21.21",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "60.23.23.23",
           "filepos": "[line:64:5]",
           "name": "baz.bar",
-          "name_unicode": "baz.bar",
-          "rdata": {
-            "Addr": "60.23.23.23"
-          },
           "subdomain": "baz.bar",
+          "target": "60.23.23.23",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "60.24.24.24",
           "filepos": "[line:65:5]",
           "name": "www.baz.bar",
-          "name_unicode": "www.baz.bar",
-          "rdata": {
-            "Addr": "60.24.24.24"
-          },
           "subdomain": "baz.bar",
+          "target": "60.24.24.24",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "60.22.22.22",
           "filepos": "[line:61:5]",
           "name": "www.bar",
-          "name_unicode": "www.bar",
-          "rdata": {
-            "Addr": "60.22.22.22"
-          },
           "subdomain": "bar",
+          "target": "60.22.22.22",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "60.20.20.20",
           "filepos": "[line:57:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "60.20.20.20"
-          },
+          "target": "60.20.20.20",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -394,83 +294,58 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "example.com",
+        "dnscontrol_nameunicode": "example.com",
+        "dnscontrol_uniquename": "example.com"
+      },
       "name": "example.com",
       "records": [
         {
-          "comparablev3": "10.0.0.1",
           "filepos": "[line:77:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.1"
-          },
+          "target": "10.0.0.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.2",
+          "filepos": "[line:82:5]",
+          "name": "d\u00fcsseldorf",
+          "subdomain": "d\u00fcsseldorf",
+          "target": "10.0.0.3",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
+          "filepos": "[line:83:5]",
+          "name": "www.d\u00fcsseldorf",
+          "subdomain": "d\u00fcsseldorf",
+          "target": "10.0.0.4",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
           "filepos": "[line:78:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.2"
-          },
+          "target": "10.0.0.2",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.3",
-          "filepos": "[line:82:5]",
-          "name": "xn--dsseldorf-q9a",
-          "name_unicode": "d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.3"
-          },
-          "subdomain": "xn--dsseldorf-q9a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.4",
-          "filepos": "[line:83:5]",
-          "name": "www.xn--dsseldorf-q9a",
-          "name_unicode": "www.d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.4"
-          },
-          "subdomain": "xn--dsseldorf-q9a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.5",
           "filepos": "[line:87:5]",
-          "name": "xn--tda",
-          "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.5"
-          },
-          "subdomain": "xn--tda",
+          "name": "\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.6",
           "filepos": "[line:88:5]",
-          "name": "www.xn--tda",
-          "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.6"
-          },
-          "subdomain": "xn--tda",
+          "name": "www.\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.6",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -480,109 +355,74 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "d\u00fcsseldorf.example.net",
+        "dnscontrol_nameunicode": "d\u00fcsseldorf.example.net",
+        "dnscontrol_uniquename": "xn--dsseldorf-q9a.example.net"
+      },
       "name": "xn--dsseldorf-q9a.example.net",
       "records": [
         {
-          "comparablev3": "10.0.0.7",
           "filepos": "[line:94:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.7"
-          },
+          "target": "10.0.0.7",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.9",
+          "filepos": "[line:104:5]",
+          "name": "d\u00fcsseltal",
+          "subdomain": "d\u00fcsseltal",
+          "target": "10.0.0.11",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
+          "filepos": "[line:105:5]",
+          "name": "www.d\u00fcsseltal",
+          "subdomain": "d\u00fcsseltal",
+          "target": "10.0.0.12",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
           "filepos": "[line:99:5]",
           "name": "subdomain",
-          "name_unicode": "subdomain",
-          "rdata": {
-            "Addr": "10.0.0.9"
-          },
           "subdomain": "subdomain",
+          "target": "10.0.0.9",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.10",
           "filepos": "[line:100:5]",
           "name": "www.subdomain",
-          "name_unicode": "www.subdomain",
-          "rdata": {
-            "Addr": "10.0.0.10"
-          },
           "subdomain": "subdomain",
+          "target": "10.0.0.10",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.8",
           "filepos": "[line:95:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.8"
-          },
+          "target": "10.0.0.8",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.11",
-          "filepos": "[line:104:5]",
-          "name": "xn--dsseltal-65a",
-          "name_unicode": "d\u00fcsseltal",
-          "rdata": {
-            "Addr": "10.0.0.11"
-          },
-          "subdomain": "xn--dsseltal-65a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.12",
-          "filepos": "[line:105:5]",
-          "name": "www.xn--dsseltal-65a",
-          "name_unicode": "www.d\u00fcsseltal",
-          "rdata": {
-            "Addr": "10.0.0.12"
-          },
-          "subdomain": "xn--dsseltal-65a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.13",
           "filepos": "[line:109:5]",
-          "name": "xn--tda",
-          "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.13"
-          },
-          "subdomain": "xn--tda",
+          "name": "\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.13",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.14",
           "filepos": "[line:110:5]",
-          "name": "www.xn--tda",
-          "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.14"
-          },
-          "subdomain": "xn--tda",
+          "name": "www.\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.14",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -592,109 +432,74 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "\u00fc.example.net",
+        "dnscontrol_nameunicode": "\u00fc.example.net",
+        "dnscontrol_uniquename": "xn--tda.example.net"
+      },
       "name": "xn--tda.example.net",
       "records": [
         {
-          "comparablev3": "10.0.0.15",
           "filepos": "[line:116:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.15"
-          },
+          "target": "10.0.0.15",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.17",
+          "filepos": "[line:126:5]",
+          "name": "d\u00fcsseldorf",
+          "subdomain": "d\u00fcsseldorf",
+          "target": "10.0.0.19",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
+          "filepos": "[line:127:5]",
+          "name": "www.d\u00fcsseldorf",
+          "subdomain": "d\u00fcsseldorf",
+          "target": "10.0.0.20",
+          "ttl": 300,
+          "type": "A"
+        },
+        {
           "filepos": "[line:121:5]",
           "name": "subdomain",
-          "name_unicode": "subdomain",
-          "rdata": {
-            "Addr": "10.0.0.17"
-          },
           "subdomain": "subdomain",
+          "target": "10.0.0.17",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.18",
           "filepos": "[line:122:5]",
           "name": "www.subdomain",
-          "name_unicode": "www.subdomain",
-          "rdata": {
-            "Addr": "10.0.0.18"
-          },
           "subdomain": "subdomain",
+          "target": "10.0.0.18",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.16",
           "filepos": "[line:117:5]",
           "name": "www",
-          "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.16"
-          },
+          "target": "10.0.0.16",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.19",
-          "filepos": "[line:126:5]",
-          "name": "xn--dsseldorf-q9a",
-          "name_unicode": "d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.19"
-          },
-          "subdomain": "xn--dsseldorf-q9a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.20",
-          "filepos": "[line:127:5]",
-          "name": "www.xn--dsseldorf-q9a",
-          "name_unicode": "www.d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.20"
-          },
-          "subdomain": "xn--dsseldorf-q9a",
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "10.0.0.21",
           "filepos": "[line:131:5]",
-          "name": "xn--tda",
-          "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.21"
-          },
-          "subdomain": "xn--tda",
+          "name": "\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.21",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "10.0.0.22",
           "filepos": "[line:132:5]",
-          "name": "www.xn--tda",
-          "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.22"
-          },
-          "subdomain": "xn--tda",
+          "name": "www.\u00fc",
+          "subdomain": "\u00fc",
+          "target": "10.0.0.22",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -704,59 +509,44 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "example.tld",
+        "dnscontrol_nameunicode": "example.tld",
+        "dnscontrol_uniquename": "example.tld"
+      },
       "name": "example.tld",
       "records": [
         {
-          "comparablev3": "b.sub.example.tld.",
           "filepos": "[line:138:5]",
           "name": "a.sub",
-          "name_unicode": "a.sub",
-          "rdata": {
-            "Target": "b.sub.example.tld."
-          },
           "subdomain": "sub",
+          "target": "b.sub.example.tld.",
           "ttl": 300,
-          "type": "CNAME",
-          "typenum": 5
+          "type": "CNAME"
         },
         {
-          "comparablev3": "sub.example.tld.",
           "filepos": "[line:139:5]",
           "name": "b.sub",
-          "name_unicode": "b.sub",
-          "rdata": {
-            "Target": "sub.example.tld."
-          },
           "subdomain": "sub",
+          "target": "sub.example.tld.",
           "ttl": 300,
-          "type": "CNAME",
-          "typenum": 5
+          "type": "CNAME"
         },
         {
-          "comparablev3": "sub.example.tld.",
           "filepos": "[line:140:5]",
           "name": "c.sub",
-          "name_unicode": "c.sub",
-          "rdata": {
-            "Target": "sub.example.tld."
-          },
           "subdomain": "sub",
+          "target": "sub.example.tld.",
           "ttl": 300,
-          "type": "CNAME",
-          "typenum": 5
+          "type": "CNAME"
         },
         {
-          "comparablev3": "otherdomain.tld.",
           "filepos": "[line:142:5]",
           "name": "e.sub",
-          "name_unicode": "e.sub",
-          "rdata": {
-            "Target": "otherdomain.tld."
-          },
           "subdomain": "sub",
+          "target": "otherdomain.tld.",
           "ttl": 300,
-          "type": "CNAME",
-          "typenum": 5
+          "type": "CNAME"
         }
       ],
       "registrar": "Third-Party",

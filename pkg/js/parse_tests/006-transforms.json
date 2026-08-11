@@ -10,52 +10,42 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "3.3.3.3",
           "filepos": "[line:18:5]",
           "meta": {
             "transform": "0.0.0.0 ~ 1.1.1.0 ~ 2.2.2.2 ~  ; 1.1.1.1 ~ 2.2.2.2 ~  ~ 3.3.3.3,4.4.4.4,5.5.5.5"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "3.3.3.3"
-          },
+          "target": "3.3.3.3",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "4.4.4.4",
           "filepos": "[line:18:5]",
           "meta": {
             "transform": "0.0.0.0 ~ 1.1.1.0 ~ 2.2.2.2 ~  ; 1.1.1.1 ~ 2.2.2.2 ~  ~ 3.3.3.3,4.4.4.4,5.5.5.5"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "4.4.4.4"
-          },
+          "target": "4.4.4.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "5.5.5.5",
           "filepos": "[line:18:5]",
           "meta": {
             "transform": "0.0.0.0 ~ 1.1.1.0 ~ 2.2.2.2 ~  ; 1.1.1.1 ~ 2.2.2.2 ~  ~ 3.3.3.3,4.4.4.4,5.5.5.5"
           },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "5.5.5.5"
-          },
+          "target": "5.5.5.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",

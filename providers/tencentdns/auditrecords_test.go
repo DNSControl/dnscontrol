@@ -3,28 +3,25 @@ package tencentdns
 import (
 	"testing"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAuditRecords(t *testing.T) {
-	dc := models.MustNewDomainConfig("example.com")
+	mxNull := &models.RecordConfig{Type: "MX"}
+	assert.NoError(t, mxNull.SetTargetMX(0, "."))
 
-	mxNull, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeMX, 10, ".")
-	assert.NoError(t, err)
+	txtEmpty := &models.RecordConfig{Type: "TXT"}
+	assert.NoError(t, txtEmpty.SetTargetTXT(""))
 
-	txtEmpty, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, "")
-	assert.NoError(t, err)
+	srvNull := &models.RecordConfig{Type: "SRV"}
+	assert.NoError(t, srvNull.SetTargetSRV(0, 0, 1, "."))
 
-	srvNull, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeSRV, 0, 0, 1, ".")
-	assert.NoError(t, err)
+	srvEmpty := &models.RecordConfig{Type: "SRV"}
+	assert.NoError(t, srvEmpty.SetTargetSRV(0, 0, 1, ""))
 
-	srvEmpty, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeSRV, 0, 0, 1, "")
-	assert.NoError(t, err)
-
-	validA, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeA, "1.2.3.4")
-	assert.NoError(t, err)
+	validA := &models.RecordConfig{Type: "A"}
+	validA.SetTarget("1.2.3.4")
 
 	errs := AuditRecords(models.Records{mxNull, txtEmpty, srvNull, srvEmpty, validA})
 
@@ -51,11 +48,13 @@ func TestAuditRecordsValidatesWeight(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			dc := models.MustNewDomainConfig("example.com")
-			rc := dc.MustNewRecordConfig("@", 0, "A", "1.2.3.4")
-			rc.Metadata = map[string]string{
-				metaRecordWeight: tc.weight,
+			rc := &models.RecordConfig{
+				Type: "A",
+				Metadata: map[string]string{
+					metaRecordWeight: tc.weight,
+				},
 			}
+			rc.SetTarget("1.2.3.4")
 
 			errs := AuditRecords(models.Records{rc})
 			if tc.wantError {

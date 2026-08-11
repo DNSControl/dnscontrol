@@ -3,7 +3,7 @@ package netnod
 import (
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 
 	netnodPrimaryDNS "github.com/netnod/netnod-primary-dns-client"
 )
@@ -36,13 +36,13 @@ func (dsp *netnodProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		if rrset.Type == "SOA" {
 			continue
 		}
-		var ttl uint32
+		ttl := 0
 		if rrset.TTL != nil {
-			ttl = uint32(*rrset.TTL)
+			ttl = int(*rrset.TTL)
 		}
 		// loop over single records of this group and create records
 		for _, record := range rrset.Records {
-			r, err := toRecordConfig(dc, record, ttl, rrset.Name, rrset.Type)
+			r, err := toRecordConfig(domain, record, ttl, rrset.Name, rrset.Type)
 			if err != nil {
 				return nil, err
 			}

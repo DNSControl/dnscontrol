@@ -3,55 +3,29 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "2 . alpn=\"h3,h2\" port=\"443\" ipv4hint=\"123.123.123.123\" ipv6hint=\"dead::beaf\"",
           "filepos": "[line:3:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Priority": 2,
-            "Target": ".",
-            "Value": [
-              {
-                "Alpn": [
-                  "h3",
-                  "h2"
-                ]
-              },
-              {
-                "Port": 443
-              },
-              {
-                "Hint": [
-                  "123.123.123.123"
-                ]
-              },
-              {
-                "Hint": [
-                  "dead::beaf"
-                ]
-              }
-            ]
-          },
+          "svcparams": "alpn=\"h3,h2\" port=443 ipv4hint=123.123.123.123 ipv6hint=dead::beaf",
+          "svcpriority": 2,
+          "target": ".",
           "ttl": 300,
-          "type": "HTTPS",
-          "typenum": 65
+          "type": "HTTPS"
         },
         {
-          "comparablev3": "1 .",
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Priority": 1,
-            "Target": ".",
-            "Value": null
-          },
+          "svcpriority": 1,
+          "target": ".",
           "ttl": 300,
-          "type": "SVCB",
-          "typenum": 64
+          "type": "SVCB"
         }
       ],
       "registrar": "none",

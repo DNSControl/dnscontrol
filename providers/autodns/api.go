@@ -12,7 +12,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // ZoneListFilter describes a JSON list filter.

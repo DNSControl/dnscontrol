@@ -2,15 +2,13 @@ package bunnydns
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"slices"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 var fqdnTypes = []recordType{recordTypeCNAME, recordTypeHTTPS, recordTypeMX, recordTypeNS, recordTypePTR, recordTypeSRV, recordTypeSVCB}
@@ -18,46 +16,39 @@ var nullTypes = []recordType{recordTypeHTTPS, recordTypeMX, recordTypeSVCB}
 
 func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 	r := record{
-		Type: recordTypeFromString(rc.Type),
-		Name: rc.GetLabel(),
-		TTL:  rc.TTL,
+		Type:  recordTypeFromString(rc.Type),
+		Name:  rc.GetLabel(),
+		Value: rc.GetTargetField(),
+		TTL:   rc.TTL,
 	}
 
 	switch r.Type {
+	case recordTypeNS:
+		if r.Name == "" {
+			r.TTL = 0
+		}
 	case recordTypeSRV:
-		rd := rc.GetRDATA().(dnsrdatav2.SRV)
-		r.Priority = rd.Priority
-		r.Weight = rd.Weight
-		r.Port = rd.Port
-		r.Value = rd.Target
+		r.Priority = rc.SrvPriority
+		r.Weight = rc.SrvWeight
+		r.Port = rc.SrvPort
 	case recordTypeCAA:
-		rd := rc.GetRDATA().(dnsrdatav2.CAA)
-		r.Flags = rd.Flag
-		r.Tag = rd.Tag
-		r.Value = rd.Value
+		r.Flags = rc.CaaFlag
+		r.Tag = rc.CaaTag
 	case recordTypeMX:
-		rd := rc.GetRDATA().(dnsrdatav2.MX)
-		r.Priority = rd.Preference
-		r.Value = rd.Mx
+		r.Priority = rc.MxPreference
 	case recordTypeSVCB, recordTypeHTTPS:
-		rd := rc.GetRDATA().(dnsrdatav2.SVCB)
-		r.Priority = rd.Priority
-		r.Value = rd.Target
-	// case recordTypeTLSA:
-	// 	r.Value = rc.GetRDATA().String()
+		r.Priority = rc.SvcPriority
+	case recordTypeTLSA:
+		r.Value = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
 	case recordTypePullZone:
 		// When creating Pull Zone records, the API expects an integer PullZoneId field,
 		// while the Value field should be empty.
-		rdata, ok := rc.GetRDATA().(privatetypesrdata.BUNNYDNSPZ)
-		if !ok {
-			return nil, fmt.Errorf("invalid RDATA for BUNNY_DNS_PZ")
+		pullZoneID, err := strconv.ParseInt(rc.GetTargetField(), 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("invalid Pull Zone ID for BUNNY_DNS_PZ: %w", err)
 		}
-		r.PullZoneID = rdata.PullZoneID
+		r.PullZoneID = pullZoneID
 		r.Value = ""
-	case recordTypeRedirect:
-		r.Value = rc.AsBUNNYDNSRDR().Target
-	default:
-		r.Value = rc.GetRDATA().String()
 	}
 
 	// While Bunny DNS does not use trailing dots, it still accepts and even preserves them for certain record types.
@@ -68,16 +59,10 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 	}
 
 	switch r.Type {
-	case recordTypeSVCB:
+	case recordTypeSVCB, recordTypeHTTPS:
 		// In the case of SVCB/HTTPS records, the Target is part of the Value.
 		// After removing trailing dots for said target, we can add the params to the value.
-		f := rc.AsSVCB()
-		r.Value = fmt.Sprintf("%s %s", r.Value, models.Svcbv2ValueToString(f.Value))
-	case recordTypeHTTPS:
-		// In the case of SVCB/HTTPS records, the Target is part of the Value.
-		// After removing trailing dots for said target, we can add the params to the value.
-		f := rc.AsHTTPS()
-		r.Value = fmt.Sprintf("%s %s", r.Value, models.Svcbv2ValueToString(f.Value))
+		r.Value = fmt.Sprintf("%s %s", r.Value, rc.SvcParams)
 	case recordTypeSRV:
 		// SRV empty target is represented as "."
 		if r.Value == "" {
@@ -88,9 +73,13 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 	return &r, nil
 }
 
-func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, error) {
-	rtype := recordTypeToString(r.Type)
-	label := dc.LabelFromShort(r.Name)
+func toRecordConfig(domain string, r *record) (*models.RecordConfig, error) {
+	rc := models.RecordConfig{
+		Type:     recordTypeToString(r.Type),
+		TTL:      r.TTL,
+		Original: r,
+	}
+	rc.SetLabel(r.Name, domain)
 
 	// Bunny DNS always operates with fully-qualified names and does not use any trailing dots.
 	// If a record already contains a trailing dot, which the provider UI also accepts, the record value is left as-is.
@@ -100,42 +89,38 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 	recordParts := strings.SplitN(recordValue, " ", 2)
 
 	if slices.Contains(fqdnTypes, r.Type) && !strings.HasSuffix(recordParts[0], ".") {
-		recordParts[0] = dc.ToFqdnWithDot(recordParts[0] + ".")
+		recordParts[0] = dnsutilv1.AddOrigin(recordParts[0]+".", domain)
 		recordValue = strings.Join(recordParts, " ")
 	}
 
-	var rc *models.RecordConfig
 	var err error
-	switch rtype {
+	switch rc.Type {
 	case "BUNNY_DNS_PZ":
 		// When reading Pull Zone records, the API provides the PullZoneId in the LinkName field as string.
 		if r.LinkName == "" {
 			return nil, fmt.Errorf("missing Pull Zone ID (LinkName) for BUNNY_DNS_PZ")
 		}
-		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSPZ, r.LinkName)
+		err = rc.SetTarget(r.LinkName)
 	case "BUNNY_DNS_RDR":
-		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSRDR, recordValue)
+		err = rc.SetTarget(r.Value)
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeCAA, r.Flags, r.Tag, recordValue)
+		err = rc.SetTargetCAA(r.Flags, r.Tag, recordValue)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, r.Priority, recordValue)
+		err = rc.SetTargetMX(r.Priority, recordValue)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, recordValue)
+		err = rc.SetTargetSRV(r.Priority, r.Weight, r.Port, recordValue)
 	case "SVCB", "HTTPS":
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, fmt.Sprintf("%d %s", r.Priority, recordValue))
+		err = rc.SetTargetSVCBString(r.Name, fmt.Sprintf("%d %s", r.Priority, recordValue))
 	case "TLSA":
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeTLSA, recordValue)
-	case "TXT":
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, dnsv2.TypeTXT, recordValue)
+		err = rc.SetTargetTLSAString(recordValue)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, recordValue)
+		err = rc.PopulateFromStringFunc(rc.Type, recordValue, domain, nil)
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	rc.Original = r.ID
-	return rc, nil
+	return &rc, nil
 }
 
 type recordType int

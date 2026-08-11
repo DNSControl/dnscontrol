@@ -10,7 +10,8 @@ import (
 
 	"slices"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 const (
@@ -24,6 +25,10 @@ type zone struct {
 	Nameserver1 string `json:"Nameserver1"`
 	Nameserver2 string `json:"Nameserver2"`
 	HasDNSSEC   bool   `json:"DnsSecEnabled"`
+}
+
+func (zone *zone) Nameservers() []string {
+	return []string{zone.Nameserver1, zone.Nameserver2}
 }
 
 type record struct {
@@ -54,6 +59,27 @@ type getZoneResponse struct {
 }
 
 type queryParams map[string]string
+
+func (b *bunnydnsProvider) getImplicitRecordConfigs(zone *zone) (models.Records, error) {
+	nameservers := zone.Nameservers()
+	records := make(models.Records, 0, len(nameservers))
+
+	// NS records on the zone apex must be implicitly added, as Bunny DNS does not expose them via API
+	for _, ns := range nameservers {
+		rc := &models.RecordConfig{
+			Type:     "NS",
+			Original: &record{},
+		}
+		rc.SetLabelFromFQDN(zone.Domain, zone.Domain)
+		if err := rc.SetTarget(ns + "."); err != nil {
+			return nil, err
+		}
+
+		records = append(records, rc)
+	}
+
+	return records, nil
+}
 
 func (b *bunnydnsProvider) findZoneByDomain(domain string) (*zone, error) {
 	if b.zones == nil {

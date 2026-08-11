@@ -10,19 +10,20 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_tag": "external",
+        "dnscontrol_uniquename": "foo.com!external"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "1.2.3.4",
           "filepos": "[line:5:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",
@@ -33,31 +34,27 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_tag": "internal",
+        "dnscontrol_uniquename": "foo.com!internal"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "1.2.3.4",
           "filepos": "[line:5:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "127.0.0.1",
           "filepos": "[line:10:5]",
           "name": "local",
-          "name_unicode": "local",
-          "rdata": {
-            "Addr": "127.0.0.1"
-          },
+          "target": "127.0.0.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "Third-Party",

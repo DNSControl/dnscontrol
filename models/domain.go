@@ -5,14 +5,27 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
 	"github.com/qdm12/reprint"
 	"golang.org/x/net/idna"
 )
 
+const (
+	// DomainTag is the key used to store a copy of DomainConfig.Tag in the Metadata map.
+	DomainTag = "dnscontrol_tag"
+
+	// DomainUniqueName is the key used to store a copy of DomainConfig.UniqueName in the Metadata map.
+	DomainUniqueName = "dnscontrol_uniquename"
+
+	// DomainNameRaw is the key used to store a copy of DomainConfig.NameRaw in the Metadata map.
+	DomainNameRaw = "dnscontrol_nameraw"
+
+	// DomainNameUnicode is the key used to store a copy of DomainConfig.NameUnicode in the Metadata map.
+	DomainNameUnicode = "dnscontrol_nameunicode"
+)
+
 // DomainConfig describes a DNS domain (technically a DNS zone).
-// Do not create your own `models.DomainConfig`.  Use `models.NewDomainConfig(name)`.
+// Do not create your own `&models.DomainConfig{}`.  Use `models.NewDomainConfig(name)`.
 type DomainConfig struct {
 	NameRaw     string `json:"-"`    // name as entered by user in dnsconfig.js
 	Name        string `json:"name"` // NO trailing "."   Converted to IDN (punycode) early in the pipeline.
@@ -83,34 +96,6 @@ func MustNewDomainConfig(name string) *DomainConfig {
 	return dc
 }
 
-// ToFqdnWithDot converts a shortname to a FQDN+".".
-// (Assume dc.Name == "bar.com")
-// ToFqdnWithDot("foo")      = "foo.bar.com."   // Typical use.
-// ToFqdnWithDot("@")        = "bar.com."       // Apex returns the apex.
-// ToFqdnWithDot("")         = "bar.com."       // Apex returns the apex.
-// ToFqdnWithDot("foo.com.") = "foo.com."       // FQDNs are unmodified.
-// ToFqdnWithDot("foo"")     = "foo.bar.com."   // If origin ends with a ".", DTRT.
-// Replaces dnsutilv1.AddOrigin().
-// Similar to nameutil.ToFqdnWithDot() but uses the domain name from dc.
-func (dc *DomainConfig) ToFqdnWithDot(s string) string {
-	return nameutil.ToFqdnWithDot(s, dc.Name)
-}
-
-// ToFqdnNoDot is the same as ToFqdnWithDot but the result does not include a trailing ".".
-// Replaces dnsutilv1.AddOrigin().
-// Similar to DomainConfig.ToFqdnNoDot() but it takes origin from dc.Name.
-func (dc *DomainConfig) ToFqdnNoDot(s string) string {
-	return nameutil.ToFqdnNoDot(s, dc.Name)
-}
-
-// ToShort returns the shortname by stripping the domain's name from "name". If name is not below dc.Name, name is returned unchanged.
-// If the name was shortened, it does not end with a ".". If the name was untouched, it ends with a ".".
-// Calling ToShort on a string that is already a shortname is unsupported. Names that do not end with "." are assumed to be FQDNs without a trailing ".".
-// Similar to name.ToShort() but uses the domain name from dc.
-func (dc *DomainConfig) ToShort(name string) string {
-	return nameutil.ToShort(name, dc.Name)
-}
-
 func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 	dcn := domaintags.MakeDomainNameVarieties(rawname)
 	dc.Name = dcn.NameASCII
@@ -124,6 +109,23 @@ func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 // It is called by dns.go's PostProcess() function.
 func (dc *DomainConfig) PostProcess() {
+	// Ensure the metadata map is initialized.
+	if dc.Metadata == nil {
+		dc.Metadata = map[string]string{}
+	}
+
+	// Turn the user-supplied name into the fixed forms.
+	ff := domaintags.MakeDomainNameVarieties(dc.Name)
+	dc.Tag, dc.NameRaw, dc.Name, dc.NameUnicode, dc.UniqueName, dc.DisplayName = ff.Tag, ff.NameRaw, ff.NameASCII, ff.NameUnicode, ff.UniqueName, ff.DisplayName
+
+	// Store the FixForms is Metadata so we don't have to change the signature of every function that might need them.
+	// This is a bit ugly but avoids a huge refactor. Please avoid using these to make the future refactor easier.
+	if dc.Tag != "" {
+		dc.Metadata[DomainTag] = dc.Tag
+	}
+	dc.Metadata[DomainNameRaw] = dc.NameRaw
+	dc.Metadata[DomainNameUnicode] = dc.NameUnicode
+	dc.Metadata[DomainUniqueName] = dc.UniqueName
 }
 
 // GetSplitHorizonNames returns the domain's name, uniquename, and tag.
@@ -164,15 +166,16 @@ func (dc *DomainConfig) Filter(f func(r *RecordConfig) bool) {
 // NOTE: This will go away when RCv3 is adopted.
 func (dc *DomainConfig) Punycode() error {
 	for _, rec := range dc.Records {
+		if rec.IsModernType() {
+			continue // Modern types handle punycode themselves.
+		}
+
 		// Update the label:
 		t, err := idna.ToASCII(rec.GetLabelFQDN())
 		if err != nil {
 			return err
 		}
-		if t != rec.GetLabelFQDN() {
-			// Assert this function is no longer needed.
-			panic(fmt.Sprintf("Punycode LABEL %q %q", t, rec.GetLabelFQDN()))
-		}
+		rec.SetLabelFromFQDN(t, dc.Name)
 
 		// Set the target:
 		switch rec.Type { // #rtype_variations
@@ -182,15 +185,14 @@ func (dc *DomainConfig) Punycode() error {
 			if err != nil {
 				return err
 			}
-			if t != rec.GetTargetField() {
-				// Assert this function is no longer needed.
-				panic(fmt.Sprintf(": Punycode TARGET %q %q", t, rec.GetTargetField()))
+			if err := rec.SetTarget(t); err != nil {
+				return err
 			}
 		case "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH", "BUNNY_DNS_PZ", "MIKROTIK_FWD", "MIKROTIK_NXDOMAIN", "MIKROTIK_FORWARDER":
-			// Nothing to do.
-		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC",
-			"LUA", "NAPTR", "OPENPGPKEY", "RP", "SMIMEA", "SOA", "SSHFP", "SVCB",
-			"TXT", "TLSA", "AZURE_ALIAS":
+			if err := rec.SetTarget(rec.GetTargetField()); err != nil {
+				return err
+			}
+		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC", "LUA", "NAPTR", "OPENPGPKEY", "SMIMEA", "SOA", "SSHFP", "SVCB", "TXT", "TLSA", "AZURE_ALIAS":
 			// Nothing to do.
 		default:
 			return fmt.Errorf("Punycode rtype %v unimplemented", rec.Type)

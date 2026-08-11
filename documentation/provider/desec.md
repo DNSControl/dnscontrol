@@ -76,5 +76,5 @@ Upon domain creation, the DNSKEY and DS records needed for DNSSEC setup are prin
 - DNSSEC
   - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
   - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ✅
-  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ✅
 <!-- provider-features-end -->

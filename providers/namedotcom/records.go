@@ -1,14 +1,12 @@
 package namedotcom
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
 	"github.com/namedotcom/go/namecom"
 )
 
@@ -23,9 +21,7 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	actual := make([]*models.RecordConfig, len(records))
 	for i, r := range records {
-		before := providers.BeginToRC(n.observer, "toRecord", r)
-		actual[i], err = toRecord(r, dc)
-		providers.EndToRC(n.observer, "toRecord", before, r, models.Records{actual[i]}, err)
+		actual[i], err = toRecord(r, domain)
 		if err != nil {
 			return nil, err
 		}
@@ -38,44 +34,40 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 func (n *namedotcomProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
 	checkNSModifications(dc)
 
-	changes, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
+	for _, rec := range dc.Records {
+		if rec.Type == "ALIAS" {
+			rec.ChangeType("ANAME", dc.Name)
+		}
+	}
+
+	toReport, create, del, mod, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
 		return nil, 0, err
 	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
-	var corrections []*models.Correction
-	for _, change := range changes {
-		switch change.Type {
-		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			newRec := change.New[0]
-			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F:   func() error { return n.createRecord(newRec, dc.Name) },
-			})
-		case diff2.DELETE:
-			oldRec := change.Old[0].Original.(*namecom.Record)
-			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F:   func() error { return n.deleteRecord(oldRec.ID, dc.Name) },
-			})
-		case diff2.CHANGE:
-			// name.com has no update API; modify by deleting then recreating.
-			oldRec := change.Old[0].Original.(*namecom.Record)
-			newRec := change.New[0]
-			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F: func() error {
-					if err := n.deleteRecord(oldRec.ID, dc.Name); err != nil {
-						return err
-					}
-					return n.createRecord(newRec, dc.Name)
-				},
-			})
-		default:
-			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
-		}
+	for _, d := range del {
+		rec := d.Existing.Original.(*namecom.Record)
+		c := &models.Correction{Msg: d.String(), F: func() error { return n.deleteRecord(rec.ID, dc.Name) }}
+		corrections = append(corrections, c)
+	}
+	for _, cre := range create {
+		rec := cre.Desired
+		c := &models.Correction{Msg: cre.String(), F: func() error { return n.createRecord(rec, dc.Name) }}
+		corrections = append(corrections, c)
+	}
+	for _, chng := range mod {
+		oldRec := chng.Existing.Original.(*namecom.Record)
+		newRec := chng.Desired
+		c := &models.Correction{Msg: chng.String(), F: func() error {
+			err := n.deleteRecord(oldRec.ID, dc.Name)
+			if err != nil {
+				return err
+			}
+			return n.createRecord(newRec, dc.Name)
+		}}
+		corrections = append(corrections, c)
 	}
 
 	return corrections, actualChangeCount, nil
@@ -92,29 +84,32 @@ func checkNSModifications(dc *models.DomainConfig) {
 	dc.Records = newList
 }
 
-func toRecord(r *namecom.Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
-	label := dc.LabelFromFQDNWithDot(r.Fqdn)
-
-	var rc *models.RecordConfig
+func toRecord(r *namecom.Record, origin string) (*models.RecordConfig, error) {
+	heapr := r // NB(tlim): Unsure if this is actually needed.
+	rc := &models.RecordConfig{
+		Type:     r.Type,
+		TTL:      r.TTL,
+		Original: heapr,
+	}
+	if !strings.HasSuffix(r.Fqdn, ".") {
+		panic(fmt.Errorf("namedotcom suddenly changed protocol. Bailing. (%v)", r.Fqdn))
+	}
+	fqdn := r.Fqdn[:len(r.Fqdn)-1]
+	rc.SetLabelFromFQDN(fqdn, origin)
 	var err error
 	switch rtype := r.Type; rtype { // #rtype_variations
-	case "ANAME":
-		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeALIAS, r.Answer)
+	case "TXT":
+		err = rc.SetTargetTXT(r.Answer)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeMX, r.Priority, r.Answer)
+		err = rc.SetTargetMX(uint16(r.Priority), r.Answer)
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, r.TTL, dnsv2.TypeSRV, r.Priority, r.Answer,
-			nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
-	default:
-		rc, err = dc.NewRecordConfigParse(label, r.TTL, rtype, r.Answer,
-			nrc.Flags{TxtDontParse: true})
+		err = rc.SetTargetSRVPriorityString(uint16(r.Priority), r.Answer+".")
+	default: // "A", "AAAA", "ANAME", "CNAME", "NS"
+		err = rc.PopulateFromString(rtype, r.Answer, r.Fqdn)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from ndc: %w", err)
 	}
-
-	rc.Original = r
-
 	return rc, nil
 }
 
@@ -149,37 +144,30 @@ func (n *namedotcomProvider) getRecords(domain string) ([]*namecom.Record, error
 }
 
 func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string) error {
-
-	rtype := rc.Type
-	answer := rc.GetTargetField()
-	var priority uint32
-
-	switch rc.TypeNum {
-	case privatetypes.TypeALIAS:
-		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
-		rtype = "ANAME"
-	case dnsv2.TypeTXT:
-		answer = rc.GetTargetTXTJoined()
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		priority = uint32(f.Preference)
-		answer = f.Mx
-	case dnsv2.TypeSRV:
-		// SRV records with empty targets are not supported (as of 2019-11-05, the API returns 'Parameter Value Error - Invalid Srv Format'
-		f := rc.AsSRV()
-		priority = uint32(f.Priority)
-		answer = fmt.Sprintf("%d %d %v", f.Weight, f.Port, f.Target)
-	}
-
 	record := &namecom.Record{
 		DomainName: domain,
 		Host:       rc.GetLabel(),
-		Type:       rtype,
-		Answer:     answer,
+		Type:       rc.Type,
+		Answer:     rc.GetTargetField(),
 		TTL:        rc.TTL,
-		Priority:   priority,
+		Priority:   uint32(rc.MxPreference),
 	}
-
+	switch rc.Type { // #rtype_variations
+	case "A", "AAAA", "ANAME", "CNAME", "MX", "NS":
+	// nothing
+	case "TXT":
+		record.Answer = rc.GetTargetTXTJoined()
+	case "SRV":
+		if rc.GetTargetField() == "." {
+			return errors.New("SRV records with empty targets are not supported (as of 2019-11-05, the API returns 'Parameter Value Error - Invalid Srv Format')")
+		}
+		record.Answer = fmt.Sprintf("%d %d %v", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+		record.Priority = uint32(rc.SrvPriority)
+	default:
+		panic(fmt.Sprintf("createRecord rtype %v unimplemented", rc.Type))
+		// We panic so that we quickly find any switch statements
+		// that have not been updated for a new RR type.
+	}
 	_, err := n.client.CreateRecord(record)
 	return err
 }

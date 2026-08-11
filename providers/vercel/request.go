@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	vercelClient "github.com/vercel/terraform-provider-vercel/client"
 )
 

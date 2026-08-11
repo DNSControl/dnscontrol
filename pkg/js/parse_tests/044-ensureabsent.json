@@ -3,31 +3,27 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "example.com",
+        "dnscontrol_nameunicode": "example.com",
+        "dnscontrol_uniquename": "example.com"
+      },
       "name": "example.com",
       "records": [
         {
-          "comparablev3": "2.2.2.2",
-          "filepos": "[line:3:5]",
-          "name": "helper",
-          "name_unicode": "helper",
-          "rdata": {
-            "Addr": "2.2.2.2"
-          },
-          "ttl": 300,
-          "type": "A",
-          "typenum": 1
-        },
-        {
-          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "normal",
-          "name_unicode": "normal",
-          "rdata": {
-            "Addr": "1.1.1.1"
-          },
+          "target": "1.1.1.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
+        }
+      ],
+      "recordsabsent": [
+        {
+          "filepos": "[line:3:5]",
+          "name": "helper",
+          "target": "2.2.2.2",
+          "type": "A"
         }
       ],
       "registrar": "none",

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -47,7 +47,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 }
 
 func rejectifCaaTargetContainsUnsupportedFields(rc *models.RecordConfig) error {
-	target := rc.AsCAA().Value
+	target := rc.GetTargetField()
 	if !strings.Contains(target, ";") {
 		return nil
 	}

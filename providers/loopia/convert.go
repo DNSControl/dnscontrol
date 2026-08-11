@@ -5,32 +5,40 @@ package loopia
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // nativeToRecord takes a DNS record from Loopia and returns a native RecordConfig struct.
-func nativeToRecord(zr zoneRecord, dc *models.DomainConfig, subdomain string) (rc *models.RecordConfig, err error) {
+func nativeToRecord(zr zoneRecord, origin string, subdomain string) (rc *models.RecordConfig, err error) {
 	record := zr.GetZR()
-	label := subdomain
-	ttl := record.TTL
+
+	rc = &models.RecordConfig{
+		TTL:      record.TTL,
+		Original: record,
+		Type:     record.Type,
+	}
+	rc.SetLabel(subdomain, origin)
+	if err := rc.SetTarget(record.Rdata); err != nil {
+		return nil, err
+	}
 
 	switch rtype := record.Type; rtype {
-	// case "CAA":
-	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
+	case "CAA":
+		err = rc.SetTargetCAAString(record.Rdata)
 	case "MX":
 		// See dnscontrol issue #2218
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, record.Priority, dc.ToFqdnWithDot(record.Rdata))
-	// case "NAPTR":
-	// 	rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
+		err = rc.SetTargetMX(record.Priority, dnsutilv1.AddOrigin(record.Rdata, origin)+".")
+	case "NAPTR":
+		err = rc.SetTargetNAPTRString(record.Rdata)
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, record.Rdata)
+		err = rc.SetTargetTXT(record.Rdata)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Rdata)
+		err = rc.PopulateFromString(rtype, record.Rdata, origin)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record received from loopia: %w", err)
 	}
-	rc.Original = record
 
 	return rc, nil
 }
@@ -40,7 +48,7 @@ func recordToNative(rc *models.RecordConfig, id ...uint32) paramStruct {
 	zrec := zRec{}
 	zrec.Type = rc.Type
 	zrec.TTL = rc.TTL
-	zrec.Rdata = rc.GetRDATA().String()
+	zrec.Rdata = rc.GetTargetCombined()
 
 	if rc.Original != nil {
 		zrec.RecordID = rc.Original.(*zRec).RecordID
@@ -51,15 +59,10 @@ func recordToNative(rc *models.RecordConfig, id ...uint32) paramStruct {
 	case "TXT":
 		zrec.Rdata = rc.GetTargetTXTJoined()
 	case "MX":
-		f := rc.AsMX()
-		zrec.Priority = f.Preference
-		zrec.Rdata = f.Mx
+		zrec.Priority = rc.MxPreference
+		zrec.Rdata = rc.GetTargetField()
 	case "SRV":
-		f := rc.AsSRV()
-		zrec.Priority = f.Priority
-		zrec.Rdata = f.Target
-		// if that doesn't work, try:
-		//zrec.Rdata = fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
+		zrec.Priority = rc.SrvPriority
 	}
 	// fmt.Printf("r2n:zr %+v\n", zrec)
 

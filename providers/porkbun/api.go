@@ -11,8 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"github.com/failsafe-go/failsafe-go"
 	"github.com/failsafe-go/failsafe-go/failsafehttp"
 	"github.com/failsafe-go/failsafe-go/retrypolicy"
@@ -23,16 +22,11 @@ const (
 )
 
 type porkbunProvider struct {
-	observer  providers.ConversionObserver
 	apiKey    string
 	secretKey string
 
 	maxAttempts int
 	maxDuration time.Duration
-}
-
-func (c *porkbunProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	c.observer = observer
 }
 
 type requestParams map[string]any

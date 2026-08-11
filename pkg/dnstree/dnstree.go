@@ -1,7 +1,6 @@
 package dnstree
 
 import (
-	"slices"
 	"strings"
 )
 
@@ -71,8 +70,8 @@ func (tree *DomainTree[T]) Get(fqdn string) T {
 	var mostSpecificNode *domainNode[T]
 	ptr := (*domainNode[T])(tree)
 
-	for _, domainPart := range slices.Backward(domainParts) {
-		node, ok := ptr.Children[domainPart]
+	for iX := len(domainParts) - 1; iX >= 0; iX-- {
+		node, ok := ptr.Children[domainParts[iX]]
 		if !ok {
 			if mostSpecificNode != nil {
 				return mostSpecificNode.data
@@ -105,8 +104,8 @@ func (tree *DomainTree[T]) Has(fqdn string) bool {
 	var mostSpecificNode *domainNode[T]
 	ptr := (*domainNode[T])(tree)
 
-	for _, domainPart := range slices.Backward(domainParts) {
-		node, ok := ptr.Children[domainPart]
+	for iX := len(domainParts) - 1; iX >= 0; iX-- {
+		node, ok := ptr.Children[domainParts[iX]]
 		if !ok {
 			return mostSpecificNode != nil
 		}

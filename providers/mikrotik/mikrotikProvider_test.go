@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 // --- belongsToDomain ---
@@ -178,8 +178,7 @@ func TestMetaCompFunc(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc := new(models.RecordConfig)
-			rc.Metadata = tt.metadata
+			rc := &models.RecordConfig{Metadata: tt.metadata}
 			got := metaCompFunc(rc)
 			if got != tt.want {
 				t.Errorf("metaCompFunc() = %q, want %q", got, tt.want)
@@ -205,8 +204,7 @@ func TestForwarderCompFunc(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc := new(models.RecordConfig)
-			rc.Metadata = tt.metadata
+			rc := &models.RecordConfig{Metadata: tt.metadata}
 			got := forwarderCompFunc(rc)
 			if got != tt.want {
 				t.Errorf("forwarderCompFunc() = %q, want %q", got, tt.want)

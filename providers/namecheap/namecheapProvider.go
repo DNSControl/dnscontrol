@@ -14,11 +14,10 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	nc "github.com/willpower232/go-namecheap"
 	"golang.org/x/net/publicsuffix"
 )
@@ -208,21 +207,22 @@ func (n *namecheapProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		}
 	}
 
-	recordModels, err := toRecords(records, dc)
+	recordModels, err := toRecords(records, domain)
+
 	if err != nil {
 		return nil, err
 	}
 
-	// If there are no SRV records, we're done.
 	if srvRecords == nil {
 		return recordModels, nil
 	}
 
-	srvRecordModels, err := toSRVRecords(srvRecords, dc)
+	srvRecordModels, err := toSRVRecords(srvRecords, domain)
+
 	if err != nil {
 		return nil, err
 	}
-	// Append the regular and SRV records and return them together.
+
 	return append(recordModels, srvRecordModels...), nil
 }
 
@@ -231,9 +231,8 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	// namecheap does not allow setting @ NS with basic DNS
 	dc.Filter(func(r *models.RecordConfig) bool {
 		if r.Type == "NS" && r.GetLabel() == "@" {
-			target := r.AsNS().Ns
-			if !strings.HasSuffix(target, "registrar-servers.com.") {
-				printer.Println("\n", target, "Namecheap does not support changing apex NS records. Skipping.")
+			if !strings.HasSuffix(r.GetTargetField(), "registrar-servers.com.") {
+				printer.Println("\n", r.GetTargetField(), "Namecheap does not support changing apex NS records. Skipping.")
 			}
 			return false
 		}
@@ -242,7 +241,7 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 
 	// namecheap does not believe in TTLs for SRV records,
 	// zero off what was provided to avoid infinite push loop
-	recs := models.Records{}
+	recs := []*models.RecordConfig{}
 	for _, r := range dc.Records {
 		if r.Type == "SRV" {
 			r.TTL = 0
@@ -251,25 +250,27 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	}
 	dc.Records = recs
 
-	result, err := diff2.ByZone(actual, dc, nil)
+	toReport, toCreate, toDelete, toModify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
 	if err != nil {
 		return nil, 0, err
 	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
 	// because namecheap doesn't have selective create, delete, modify,
-	// we bundle them all up to send the whole zone at once. We *do* want
-	// to see the changes though.
-	var corrections []*models.Correction
+	// we bundle them all up to send at once.  We *do* want to see the
+	// changes though
+
 	var desc []string
-	for _, inst := range result.Instructions {
-		if inst.Type == diff2.REPORT {
-			// Reports are shown but don't trigger a zone regeneration.
-			corrections = append(corrections, &models.Correction{Msg: inst.MsgsJoined})
-			continue
-		}
-		desc = append(desc, "\n"+inst.MsgsJoined)
+	for _, i := range toCreate {
+		desc = append(desc, "\n"+i.String())
 	}
-	actualChangeCount := result.ActualChangeCount
+	for _, i := range toDelete {
+		desc = append(desc, "\n"+i.String())
+	}
+	for _, i := range toModify {
+		desc = append(desc, "\n"+i.String())
+	}
 
 	// only create corrections if there are changes
 	if len(desc) > 0 {
@@ -286,42 +287,50 @@ func (n *namecheapProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 	return corrections, actualChangeCount, nil
 }
 
-func toRecords(result *nc.DomainDNSGetHostsResult, dc *models.DomainConfig) (models.Records, error) {
-	var records models.Records
+func toRecords(result *nc.DomainDNSGetHostsResult, origin string) ([]*models.RecordConfig, error) {
+	var records []*models.RecordConfig
 	for _, dnsHost := range result.Hosts {
-		label := dc.LabelFromShort(dnsHost.Name)
-		ttl := uint32(dnsHost.TTL)
-		var record *models.RecordConfig
+		record := models.RecordConfig{
+			Type:         dnsHost.Type,
+			TTL:          uint32(dnsHost.TTL),
+			MxPreference: uint16(dnsHost.MXPref),
+			Name:         dnsHost.Name,
+		}
+		record.SetLabel(dnsHost.Name, origin)
+
 		var err error
 		switch dnsHost.Type {
 		case "MX":
-			record, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, dnsHost.MXPref, dnsHost.Address)
+			err = record.SetTargetMX(uint16(dnsHost.MXPref), dnsHost.Address)
 		case "FRAME", "URL", "URL301":
-			record, err = dc.NewRecordConfig(label, ttl, dnsHost.Type, dnsHost.Address)
-		case "TXT":
-			record, err = dc.NewRecordConfig(label, ttl, dnsHost.Type, dnsHost.Address)
+			err = record.SetTarget(dnsHost.Address)
 		default:
-			record, err = dc.NewRecordConfigParse(label, ttl, dnsHost.Type, dnsHost.Address)
+			err = record.PopulateFromString(dnsHost.Type, dnsHost.Address, origin)
 		}
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record)
+		records = append(records, &record)
 	}
 
 	return records, nil
 }
 
-func toSRVRecords(result *nc.DomainSRVGetRecordsResult, dc *models.DomainConfig) (models.Records, error) {
-	var records models.Records
+func toSRVRecords(result *nc.DomainSRVGetRecordsResult, origin string) ([]*models.RecordConfig, error) {
+	var records []*models.RecordConfig
 	for _, srvRecord := range result.Records {
-		label := dc.LabelFromShort(srvRecord.Service + srvRecord.Protocol)
-		record, err := dc.NewRecordConfig(label, 0,
-			dnsv2.TypeSRV,
-			srvRecord.Priority,
-			srvRecord.Weight,
-			srvRecord.Port,
+		record := models.RecordConfig{
+			Type: "SRV",
+			Name: srvRecord.Service + srvRecord.Protocol,
+		}
+
+		record.SetLabel(srvRecord.Service+srvRecord.Protocol, origin)
+
+		err := record.SetTargetSRVStrings(
+			strconv.Itoa(srvRecord.Priority),
+			strconv.Itoa(srvRecord.Weight),
+			strconv.Itoa(srvRecord.Port),
 			srvRecord.Target,
 		)
 
@@ -329,7 +338,7 @@ func toSRVRecords(result *nc.DomainSRVGetRecordsResult, dc *models.DomainConfig)
 			return nil, err
 		}
 
-		records = append(records, record)
+		records = append(records, &record)
 	}
 
 	return records, nil
@@ -340,43 +349,39 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 	var srvRecs []nc.DomainSRVRecord
 
 	id := 1
-	for _, rc := range dc.Records {
+	for _, r := range dc.Records {
+		var value string
 
-		if rc.Type == "SRV" {
-			recServiceAndProtocol := strings.SplitAfterN(rc.GetLabel(), ".", 2)
+		if r.Type == "SRV" {
+			recServiceAndProtocol := strings.SplitAfterN(r.GetLabel(), ".", 2)
 			recService, recProtocol := recServiceAndProtocol[0], recServiceAndProtocol[1]
 
-			f := rc.AsSRV()
 			rec := nc.DomainSRVRecord{
 				Service:  recService,
 				Protocol: recProtocol,
-				Priority: int(f.Priority),
-				Port:     int(f.Port),
-				Target:   f.Target,
-				Weight:   int(f.Weight),
+				Priority: int(r.SrvPriority),
+				Port:     int(r.SrvPort),
+				Target:   r.GetTargetField(),
+				Weight:   int(r.SrvWeight),
 			}
 
 			srvRecs = append(srvRecs, rec)
 		} else {
+			switch rtype := r.Type; rtype { // #rtype_variations
+			case "CAA":
+				value = r.GetTargetCombined()
+			default:
+				value = r.GetTargetField()
+			}
 
 			rec := nc.DomainDNSHost{
-				ID:   id,
-				Name: rc.GetLabel(),
-				Type: rc.Type,
-				TTL:  int(rc.TTL),
+				ID:      id,
+				Name:    r.GetLabel(),
+				Type:    r.Type,
+				Address: value,
+				MXPref:  int(r.MxPreference),
+				TTL:     int(r.TTL),
 			}
-
-			switch rtype := rc.TypeNum; rtype {
-			case dnsv2.TypeCAA:
-				rec.Address = rc.GetRDATA().String()
-			case dnsv2.TypeMX:
-				f := rc.AsMX()
-				rec.MXPref = int(f.Preference)
-				rec.Address = f.Mx
-			default:
-				rec.Address = rc.GetTargetField()
-			}
-
 			recs = append(recs, rec)
 		}
 

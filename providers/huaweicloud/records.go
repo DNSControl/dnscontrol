@@ -5,8 +5,8 @@ import (
 	"net/url"
 	"slices"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/model"
 )
 
@@ -27,12 +27,12 @@ func (c *huaweicloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 	}
 
 	// Convert rrsets to DNSControl's RecordConfig
-	existingRecords := models.Records{}
+	existingRecords := []*models.RecordConfig{}
 	for _, rec := range *records {
 		if *rec.Type == "SOA" {
 			continue
 		}
-		nativeRecords, err := nativeToRecords(&rec, dc)
+		nativeRecords, err := nativeToRecords(&rec, domain)
 		if err != nil {
 			return nil, err
 		}

@@ -3,11 +3,8 @@ package mikrotik
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
-
-var testDomain = models.MustNewDomainConfig("example.com")
 
 // --- Duration parsing/formatting ---
 
@@ -135,7 +132,7 @@ func TestNativeToRecords_A(t *testing.T) {
 		Address: "192.168.1.1",
 		TTL:     "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -153,7 +150,7 @@ func TestNativeToRecords_AAAA(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "v6.example.com", Type: "AAAA", Address: "2001:db8::1", TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -165,13 +162,13 @@ func TestNativeToRecords_CNAME(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "alias.example.com", Type: "CNAME", CName: "target.example.com", TTL: "5m",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "CNAME")
-	assertStr(t, "Target", rc.AsCNAME().Target, "target.example.com.")
+	assertStr(t, "Target", rc.GetTargetField(), "target.example.com.")
 	assertUint32(t, "TTL", rc.TTL, 300)
 }
 
@@ -179,29 +176,29 @@ func TestNativeToRecords_MX(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "example.com", Type: "MX", MxExchange: "mail.example.com", MxPreference: "10", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "MX")
-	if rc.AsMX().Preference != 10 {
-		t.Errorf("MxPreference = %d, want 10", rc.AsMX().Preference)
+	if rc.MxPreference != 10 {
+		t.Errorf("MxPreference = %d, want 10", rc.MxPreference)
 	}
-	assertStr(t, "Target", rc.AsMX().Mx, "mail.example.com.")
+	assertStr(t, "Target", rc.GetTargetField(), "mail.example.com.")
 }
 
 func TestNativeToRecords_NS(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "sub.example.com", Type: "NS", NS: "ns1.example.com", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "NS")
-	assertStr(t, "Target", rc.AsNS().Ns, "ns1.example.com.")
+	assertStr(t, "Target", rc.GetTargetField(), "ns1.example.com.")
 }
 
 func TestNativeToRecords_SRV(t *testing.T) {
@@ -210,29 +207,29 @@ func TestNativeToRecords_SRV(t *testing.T) {
 		SrvTarget: "sipserver.example.com", SrvPort: "5060", SrvPriority: "10", SrvWeight: "20",
 		TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "SRV")
-	if rc.AsSRV().Priority != 10 {
-		t.Errorf("SrvPriority = %d, want 10", rc.AsSRV().Priority)
+	if rc.SrvPriority != 10 {
+		t.Errorf("SrvPriority = %d, want 10", rc.SrvPriority)
 	}
-	if rc.AsSRV().Weight != 20 {
-		t.Errorf("SrvWeight = %d, want 20", rc.AsSRV().Weight)
+	if rc.SrvWeight != 20 {
+		t.Errorf("SrvWeight = %d, want 20", rc.SrvWeight)
 	}
-	if rc.AsSRV().Port != 5060 {
-		t.Errorf("SrvPort = %d, want 5060", rc.AsSRV().Port)
+	if rc.SrvPort != 5060 {
+		t.Errorf("SrvPort = %d, want 5060", rc.SrvPort)
 	}
-	assertStr(t, "Target", rc.AsSRV().Target, "sipserver.example.com.")
+	assertStr(t, "Target", rc.GetTargetField(), "sipserver.example.com.")
 }
 
 func TestNativeToRecords_TXT(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "example.com", Type: "TXT", Text: "v=spf1 include:example.com ~all", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -246,13 +243,13 @@ func TestNativeToRecords_FWD(t *testing.T) {
 		Name: "example.com", Type: "FWD", ForwardTo: "8.8.8.8",
 		MatchSubdomain: "true", AddressList: "vpn-list", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "MIKROTIK_FWD")
-	assertStr(t, "Target", rc.AsMIKROTIKFWD().ForwardTo, "8.8.8.8")
+	assertStr(t, "Target", rc.GetTargetField(), "8.8.8.8")
 	assertMeta(t, rc, "match_subdomain", "true")
 	assertMeta(t, rc, "address_list", "vpn-list")
 }
@@ -262,7 +259,7 @@ func TestNativeToRecords_FWD_WithRegexp(t *testing.T) {
 		Name: "example.com", Type: "FWD", ForwardTo: "8.8.8.8",
 		Regexp: `.*\.test$`, TTL: "1h",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -274,12 +271,13 @@ func TestNativeToRecords_NXDOMAIN(t *testing.T) {
 		Name: "blocked.example.com", Type: "NXDOMAIN",
 		MatchSubdomain: "true", Comment: "blocked domain", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	rc := rcs[0]
 	assertStr(t, "Type", rc.Type, "MIKROTIK_NXDOMAIN")
+	assertStr(t, "Target", rc.GetTargetField(), "NXDOMAIN")
 	assertMeta(t, rc, "match_subdomain", "true")
 	assertMeta(t, rc, "comment", "blocked domain")
 }
@@ -289,7 +287,7 @@ func TestNativeToRecords_MetadataOnStandardTypes(t *testing.T) {
 		Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "1d",
 		MatchSubdomain: "true", AddressList: "my-list", Comment: "test comment",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -306,18 +304,18 @@ func TestNativeToRecords_NoMetadata(t *testing.T) {
 	nr := dnsStaticRecord{
 		Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "1d",
 	}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if len(rcs[0].Metadata) != 0 {
+	if rcs[0].Metadata != nil {
 		t.Errorf("Metadata = %v, want nil", rcs[0].Metadata)
 	}
 }
 
 func TestNativeToRecords_UnsupportedType(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "BOGUS", TTL: "1d"}
-	_, err := nativeToRecords(nr, testDomain)
+	_, err := nativeToRecords(nr, "example.com")
 	if err == nil {
 		t.Error("expected error for unsupported type")
 	}
@@ -325,7 +323,7 @@ func TestNativeToRecords_UnsupportedType(t *testing.T) {
 
 func TestNativeToRecords_InvalidAddress(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "A", Address: "not-an-ip", TTL: "1d"}
-	_, err := nativeToRecords(nr, testDomain)
+	_, err := nativeToRecords(nr, "example.com")
 	if err == nil {
 		t.Error("expected error for invalid IP address")
 	}
@@ -333,7 +331,7 @@ func TestNativeToRecords_InvalidAddress(t *testing.T) {
 
 func TestNativeToRecords_InvalidTTL(t *testing.T) {
 	nr := dnsStaticRecord{Name: "host.example.com", Type: "A", Address: "10.0.0.1", TTL: "bogus"}
-	_, err := nativeToRecords(nr, testDomain)
+	_, err := nativeToRecords(nr, "example.com")
 	if err == nil {
 		t.Error("expected error for invalid TTL")
 	}
@@ -341,7 +339,7 @@ func TestNativeToRecords_InvalidTTL(t *testing.T) {
 
 func TestNativeToRecords_ApexRecord(t *testing.T) {
 	nr := dnsStaticRecord{Name: "example.com", Type: "A", Address: "10.0.0.1", TTL: "1d"}
-	rcs, err := nativeToRecords(nr, testDomain)
+	rcs, err := nativeToRecords(nr, "example.com")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -384,7 +382,11 @@ func TestRecordToNative_CNAME(t *testing.T) {
 }
 
 func TestRecordToNative_FWD(t *testing.T) {
-	rc := testDomain.MustNewRecordConfig("@", 86400, "MIKROTIK_FWD", "8.8.8.8")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("@", "example.com")
+	rc.Type = "MIKROTIK_FWD"
+	_ = rc.SetTarget("8.8.8.8")
+	rc.TTL = 86400
 	rc.Metadata = map[string]string{
 		"match_subdomain": "true",
 		"address_list":    "vpn-list",
@@ -403,7 +405,11 @@ func TestRecordToNative_FWD(t *testing.T) {
 }
 
 func TestRecordToNative_NXDOMAIN(t *testing.T) {
-	rc := testDomain.MustNewRecordConfig("blocked", 86400, "MIKROTIK_NXDOMAIN")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("blocked", "example.com")
+	rc.Type = "MIKROTIK_NXDOMAIN"
+	_ = rc.SetTarget("NXDOMAIN")
+	rc.TTL = 86400
 	rc.Metadata = map[string]string{
 		"match_subdomain": "true",
 		"comment":         "blocked",
@@ -419,7 +425,11 @@ func TestRecordToNative_NXDOMAIN(t *testing.T) {
 }
 
 func TestRecordToNative_MX(t *testing.T) {
-	rc := testDomain.MustNewRecordConfig("@", 86400, "MX", 10, "mail.example.com.")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("@", "example.com")
+	rc.Type = "MX"
+	_ = rc.SetTargetMX(10, "mail.example.com.")
+	rc.TTL = 86400
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -431,7 +441,11 @@ func TestRecordToNative_MX(t *testing.T) {
 }
 
 func TestRecordToNative_SRV(t *testing.T) {
-	rc := testDomain.MustNewRecordConfig("_sip._tcp", 3600, "SRV", 10, 20, 5060, "sipserver.example.com.")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("_sip._tcp", "example.com")
+	rc.Type = "SRV"
+	_ = rc.SetTargetSRV(10, 20, 5060, "sipserver.example.com.")
+	rc.TTL = 3600
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -445,7 +459,11 @@ func TestRecordToNative_SRV(t *testing.T) {
 }
 
 func TestRecordToNative_TXT(t *testing.T) {
-	rc := testDomain.MustNewRecordConfig("@", 86400, "TXT", "v=spf1 ~all")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("@", "example.com")
+	rc.Type = "TXT"
+	_ = rc.SetTargetTXT("v=spf1 ~all")
+	rc.TTL = 86400
 
 	nr, err := recordToNative(rc)
 	if err != nil {
@@ -472,21 +490,17 @@ func TestRecordToNative_MetadataOnStandardTypes(t *testing.T) {
 	assertStr(t, "Comment", nr.Comment, "my comment")
 }
 
-// NB(tlim): Commenting this out because bogus types shouldn't happen in the new
-// v5. world. However, in the future when we support the RFCs for UNKNOWN types,
-// we might bring this test back.
-//
-// func TestRecordToNative_UnsupportedType(t *testing.T) {
-// 	rc := new(models.RecordConfig)
-// 	rc.SetLabel("@", "example.com")
-// 	rc.Type = "BOGUS"
-// 	_ = rc.Set Target("whatever")
+func TestRecordToNative_UnsupportedType(t *testing.T) {
+	rc := &models.RecordConfig{}
+	rc.SetLabel("@", "example.com")
+	rc.Type = "BOGUS"
+	_ = rc.SetTarget("whatever")
 
-// 	_, err := recordToNative(rc)
-// 	if err == nil {
-// 		t.Error("expected error for unsupported type")
-// 	}
-// }
+	_, err := recordToNative(rc)
+	if err == nil {
+		t.Error("expected error for unsupported type")
+	}
+}
 
 // --- Round-trip conversion ---
 
@@ -496,7 +510,7 @@ func TestNativeRoundTrip_A(t *testing.T) {
 		MatchSubdomain: "true", AddressList: "my-list", Comment: "round trip",
 	}
 
-	rcs, err := nativeToRecords(original, testDomain)
+	rcs, err := nativeToRecords(original, "example.com")
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -520,7 +534,7 @@ func TestNativeRoundTrip_FWD(t *testing.T) {
 		MatchSubdomain: "true", AddressList: "vpn-list", Regexp: `.*\.test`,
 	}
 
-	rcs, err := nativeToRecords(original, testDomain)
+	rcs, err := nativeToRecords(original, "example.com")
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -542,7 +556,7 @@ func TestNativeRoundTrip_NXDOMAIN(t *testing.T) {
 		MatchSubdomain: "true", Comment: "blocked",
 	}
 
-	rcs, err := nativeToRecords(original, testDomain)
+	rcs, err := nativeToRecords(original, "example.com")
 	if err != nil {
 		t.Fatalf("nativeToRecords: %v", err)
 	}
@@ -564,11 +578,10 @@ func TestForwarderToRecord(t *testing.T) {
 		DohServers: "https://dns.google/dns-query", VerifyDohCert: "true",
 	}
 
-	dc := models.MustNewDomainConfig(ForwarderZone)
-	rc := forwarderToRecord(dc, fwd)
+	rc := forwarderToRecord(fwd)
 	assertStr(t, "Type", rc.Type, "MIKROTIK_FORWARDER")
 	assertStr(t, "Label", rc.GetLabel(), "my-forwarder")
-	assertStr(t, "Target", rc.GetRDATA().(privatetypesrdata.MIKROTIKFORWARDER).Target, "1.1.1.1,8.8.8.8")
+	assertStr(t, "Target", rc.GetTargetField(), "1.1.1.1,8.8.8.8")
 	assertUint32(t, "TTL", rc.TTL, 300)
 	assertMeta(t, rc, "doh_servers", "https://dns.google/dns-query")
 	assertMeta(t, rc, "verify_doh_cert", "true")
@@ -576,9 +589,8 @@ func TestForwarderToRecord(t *testing.T) {
 
 func TestForwarderToRecord_Minimal(t *testing.T) {
 	fwd := dnsForwarder{Name: "simple", DNSServers: "1.1.1.1"}
-	dc := models.MustNewDomainConfig(ForwarderZone)
-	rc := forwarderToRecord(dc, fwd)
-	assertStr(t, "Target", rc.AsMIKROTIKFORWARDER().Target, "1.1.1.1")
+	rc := forwarderToRecord(fwd)
+	assertStr(t, "Target", rc.GetTargetField(), "1.1.1.1")
 	if v, ok := rc.Metadata["doh_servers"]; ok {
 		t.Errorf("doh_servers should not be present, got %q", v)
 	}
@@ -588,8 +600,10 @@ func TestForwarderToRecord_Minimal(t *testing.T) {
 }
 
 func TestRecordToForwarder(t *testing.T) {
-	dc := models.MustNewDomainConfig(ForwarderZone)
-	rc := dc.MustNewRecordConfig("my-fwd", 0, "MIKROTIK_FORWARDER", "1.1.1.1,8.8.8.8")
+	rc := &models.RecordConfig{}
+	rc.SetLabel("my-fwd", ForwarderZone)
+	rc.Type = "MIKROTIK_FORWARDER"
+	_ = rc.SetTarget("1.1.1.1,8.8.8.8")
 	rc.Metadata = map[string]string{
 		"doh_servers":     "https://dns.google/dns-query",
 		"verify_doh_cert": "true",
@@ -608,8 +622,7 @@ func TestForwarderRoundTrip(t *testing.T) {
 		DohServers: "https://dns.google/dns-query", VerifyDohCert: "true",
 	}
 
-	dc := models.MustNewDomainConfig(ForwarderZone)
-	rc := forwarderToRecord(dc, original)
+	rc := forwarderToRecord(original)
 	f := recordToForwarder(rc)
 
 	assertStr(t, "Name", f.Name, "fwd1")
@@ -621,8 +634,18 @@ func TestForwarderRoundTrip(t *testing.T) {
 // --- Test helpers ---
 
 func makeRC(rtype, label, origin, target string) *models.RecordConfig {
-	dc := models.MustNewDomainConfig(origin)
-	return dc.MustNewRecordConfig(label, 0, rtype, target)
+	rc := &models.RecordConfig{}
+	rc.SetLabel(label, origin)
+	rc.Type = rtype
+	switch rtype {
+	case "A", "AAAA":
+		rc.MustSetTarget(target)
+	case "TXT":
+		_ = rc.SetTargetTXT(target)
+	default:
+		_ = rc.SetTarget(target)
+	}
+	return rc
 }
 
 func assertStr(t *testing.T, field, got, want string) {

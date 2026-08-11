@@ -3,8 +3,8 @@ package websupport
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
@@ -13,12 +13,9 @@ import (
 func AuditRecords(records []*models.RecordConfig) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("MX", rejectif.MxNull) // Last verified 2026-08-09: the API rejects the empty content with a 422
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-06-17
 
 	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2026-06-17
-
-	a.Add("TXT", rejectif.TxtIsEmpty)          // Last verified 2026-06-17
-	a.Add("TXT", rejectif.TxtHasTrailingSpace) // Last verified 2026-08-09: the API strips trailing spaces
 
 	// The WebSupport v2 DNS record API silently ignores attempts to create NS
 	// records (it returns success but the record never appears), which would

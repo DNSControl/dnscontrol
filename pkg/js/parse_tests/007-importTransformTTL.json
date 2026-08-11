@@ -3,31 +3,26 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo1.com",
+        "dnscontrol_nameunicode": "foo1.com",
+        "dnscontrol_uniquename": "foo1.com"
+      },
       "name": "foo1.com",
       "records": [
         {
-          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "bar",
-          "name_unicode": "bar",
-          "rdata": {
-            "Addr": "1.1.1.1"
-          },
+          "target": "1.1.1.1",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "5.5.5.5",
           "filepos": "[line:3:5]",
           "name": "foo",
-          "name_unicode": "foo",
-          "rdata": {
-            "Addr": "5.5.5.5"
-          },
+          "target": "5.5.5.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "reg",
@@ -35,31 +30,26 @@
     },
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "inny",
+        "dnscontrol_nameunicode": "inny",
+        "dnscontrol_uniquename": "inny"
+      },
       "name": "inny",
       "records": [
         {
-          "comparablev3": "4.4.4.101",
           "filepos": "[line:2:5]",
           "name": "bar.foo1.com",
-          "name_unicode": "bar",
-          "rdata": {
-            "Addr": "4.4.4.101"
-          },
+          "target": "4.4.4.101",
           "ttl": 60,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "6.6.6.3",
           "filepos": "[line:3:5]",
           "name": "foo.foo1.com",
-          "name_unicode": "foo",
-          "rdata": {
-            "Addr": "6.6.6.3"
-          },
+          "target": "6.6.6.3",
           "ttl": 60,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "reg",
@@ -67,31 +57,26 @@
     },
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "com.inny",
+        "dnscontrol_nameunicode": "com.inny",
+        "dnscontrol_uniquename": "com.inny"
+      },
       "name": "com.inny",
       "records": [
         {
-          "comparablev3": "1.1.1.1",
           "filepos": "[line:2:5]",
           "name": "bar.foo1",
-          "name_unicode": "bar",
-          "rdata": {
-            "Addr": "1.1.1.1"
-          },
+          "target": "1.1.1.1",
           "ttl": 99,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "7.7.7.7",
           "filepos": "[line:3:5]",
           "name": "foo.foo1",
-          "name_unicode": "foo",
-          "rdata": {
-            "Addr": "7.7.7.7"
-          },
+          "target": "7.7.7.7",
           "ttl": 99,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "reg",

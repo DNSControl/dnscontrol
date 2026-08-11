@@ -7,12 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 	"gopkg.in/ns1/ns1-go.v2/rest"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/dns"
 	"gopkg.in/ns1/ns1-go.v2/rest/model/filter"
@@ -36,9 +33,7 @@ func (n *nsone) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) 
 
 	found := models.Records{}
 	for _, r := range z.Records {
-		before := providers.BeginToRC(n.observer, "convert", r)
-		zrs, err := convert(r, dc)
-		providers.EndToRC(n.observer, "convert", before, r, zrs, err)
+		zrs, err := convert(r, domain)
 		if err != nil {
 			return nil, err
 		}
@@ -133,74 +128,49 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 		Filters: []*filter.Filter{}, // Work through a bug in the NS1 API library that causes 400 Input validation failed (Value None for field '<obj>.filters' is not of type array)
 	}
 	for _, r := range recs {
-		switch r.TypeNum {
-		case dnsv2.TypeMX:
-			f := r.AsMX()
-			//rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
-			rec.AddAnswer(&dns.Answer{Rdata: []string{strconv.FormatInt(int64(f.Preference), 10), f.Mx}})
-		case dnsv2.TypeTXT:
+		switch r.Type {
+		case "MX":
+			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
+		case "TXT":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{r.GetTargetTXTJoined()}})
-		case dnsv2.TypeCAA:
-			f := r.AsCAA()
+		case "CAA":
 			rec.AddAnswer(&dns.Answer{
 				Rdata: []string{
-					strconv.FormatUint(uint64(f.Flag), 10),
-					f.Tag,
-					f.Value,
+					strconv.FormatUint(uint64(r.CaaFlag), 10),
+					r.CaaTag,
+					r.GetTargetField(),
 				},
 			})
-		case dnsv2.TypeSRV:
-			f := r.AsSRV()
+		case "SRV":
+			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
+		case "NAPTR":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.FormatInt(int64(f.Priority), 10),
-				strconv.FormatInt(int64(f.Weight), 10),
-				strconv.FormatInt(int64(f.Port), 10),
-				f.Target}})
-			// If that doesn't work, try this:
-			// f := r.AsSRV()
-			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", f.Priority, f.Weight, f.Port, f.Target))})
-			//
-			// Here's the original for comparison:
-			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
-		case dnsv2.TypeNAPTR:
-			f := r.AsNAPTR()
-			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(f.Order)),
-				strconv.Itoa(int(f.Preference)),
-				f.Flags,
-				f.Service,
-				f.Regexp,
-				f.Replacement,
+				strconv.Itoa(int(r.NaptrOrder)),
+				strconv.Itoa(int(r.NaptrPreference)),
+				r.NaptrFlags,
+				r.NaptrService,
+				r.NaptrRegexp,
+				r.GetTargetField(),
 			}})
-		case dnsv2.TypeDS:
-			f := r.AsDS()
+		case "DS":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(f.KeyTag)),
-				strconv.Itoa(int(f.Algorithm)),
-				strconv.Itoa(int(f.DigestType)),
-				f.Digest,
+				strconv.Itoa(int(r.DsKeyTag)),
+				strconv.Itoa(int(r.DsAlgorithm)),
+				strconv.Itoa(int(r.DsDigestType)),
+				r.DsDigest,
 			}})
-		case dnsv2.TypeSVCB:
-			f := r.AsSVCB()
+		case "SVCB", "HTTPS":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(f.Priority)),
-				f.Target,
-				models.Svcbv2ValueToString(f.Value),
+				strconv.Itoa(int(r.SvcPriority)),
+				r.GetTargetField(),
+				r.SvcParams,
 			}})
-		case dnsv2.TypeHTTPS:
-			f := r.AsHTTPS()
+		case "TLSA":
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(f.Priority)),
-				f.Target,
-				models.Svcbv2ValueToString(f.Value),
-			}})
-		case dnsv2.TypeTLSA:
-			f := r.AsTLSA()
-			rec.AddAnswer(&dns.Answer{Rdata: []string{
-				strconv.Itoa(int(f.Usage)),
-				strconv.Itoa(int(f.Selector)),
-				strconv.Itoa(int(f.MatchingType)),
-				f.Certificate,
+				strconv.Itoa(int(r.TlsaUsage)),
+				strconv.Itoa(int(r.TlsaSelector)),
+				strconv.Itoa(int(r.TlsaMatchingType)),
+				r.GetTargetField(),
 			}})
 		default:
 			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetTargetField())})
@@ -209,33 +179,39 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 	return rec
 }
 
-func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error) {
-	found := models.Records{}
+func convert(zr *dns.ZoneRecord, domain string) ([]*models.RecordConfig, error) {
+	found := []*models.RecordConfig{}
 	for _, ans := range zr.ShortAns {
-
-		label := dc.LabelFromFQDNNoDot(zr.Domain)
-		ttl := uint32(zr.TTL)
-
-		var rec *models.RecordConfig
-		var err error
+		rec := &models.RecordConfig{
+			TTL:      uint32(zr.TTL),
+			Original: zr,
+		}
+		rec.SetLabelFromFQDN(zr.Domain, domain)
 		switch rtype := zr.Type; rtype {
 		case "DNSKEY", "RRSIG":
 			// if a zone is enabled for DNSSEC, NS1 autoconfigures DNSKEY & RRSIG records.
 			// these entries are not modifiable via the API though, so we have to ignore them while converting.
 			// 	ie. API returns "405 Operation on DNSSEC record is not allowed" on such operations
 			continue
-		// case "ALIAS":
-		// 	rec, err = dc.NewRecordConfig(label, ttl, rtype, ans)
+		case "ALIAS":
+			rec.Type = rtype
+			if err := rec.SetTarget(ans); err != nil {
+				return nil, fmt.Errorf("unparsable %s record received from ns1: %w", rtype, err)
+			}
 		case "CAA":
 			// dnscontrol expects quotes around multivalue CAA entries, API doesn't add them
 			xAns := strings.SplitN(ans, " ", 3)
-			rec, err = dc.NewRecordConfig(label, ttl, rtype, xAns[0], xAns[1], xAns[2])
-		case "NAPTR":
-			ans, err = ns1NAPTRAnswer(ans)
-			if err != nil {
-				break
+			if err := rec.SetTargetCAAStrings(xAns[0], xAns[1], xAns[2]); err != nil {
+				return nil, fmt.Errorf("unparsable %s record received from ns1: %w", rtype, err)
 			}
-			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans)
+		case "NAPTR":
+			// NB(tlim): This is a stupid hack.  NS1 doesn't quote a missing
+			// parameter properly. Therefore we look for 2 spaces and assume there is
+			// a missing item.
+			ans = strings.ReplaceAll(ans, "  ", ` "" `)
+			if err := rec.PopulateFromString(rtype, ans, domain); err != nil {
+				return nil, fmt.Errorf("unparsable record received from ns1: %w", err)
+			}
 		case "REDIRECT":
 			// NS1 returns REDIRECTs as records, but there is only one and dummy answer:
 			// "NS1 MANAGED RECORD"
@@ -245,16 +221,10 @@ func convert(zr *dns.ZoneRecord, dc *models.DomainConfig) (models.Records, error
 			printer.Warnf("NS1_REDIRECT is NOT supported by dnscontrol and all existing redirects are ignored.\n")
 			continue
 		default:
-			// NS1 returns TXT values as plain strings, not RFC1035 quoted presentation.
-			rec, err = dc.NewRecordConfigParse(label, ttl, rtype, ans,
-				nrc.Flags{TxtDontParse: true})
+			if err := rec.PopulateFromString(rtype, ans, domain); err != nil {
+				return nil, fmt.Errorf("unparsable record received from ns1: %w", err)
+			}
 		}
-		if err != nil {
-			return nil, fmt.Errorf("unparsable %s record received from ns1: %w", zr.Type, err)
-		}
-
-		rec.Original = zr
-
 		found = append(found, rec)
 	}
 	return found, nil

@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func TestGetZoneRecords(t *testing.T) {
@@ -30,8 +30,7 @@ func TestGetZoneRecords(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	dc := models.MustNewDomainConfig("example.com")
-	recs, err := p.GetZoneRecords(dc)
+	recs, err := p.GetZoneRecords(&models.DomainConfig{Name: "example.com"})
 	if err != nil {
 		t.Fatalf("GetZoneRecords() error = %v", err)
 	}
@@ -75,16 +74,14 @@ func TestEnsureZoneExists(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	dc := models.MustNewDomainConfig("example.com")
-	if err := p.EnsureZoneExists(dc); err != nil {
+	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "example.com"}); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 0 {
 		t.Errorf("an existing zone was created again: %v", created)
 	}
 
-	ndc := models.MustNewDomainConfig("new.example.com")
-	if err := p.EnsureZoneExists(ndc); err != nil {
+	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "new.example.com"}); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 1 || created[0] != "new.example.com" {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
@@ -34,7 +34,7 @@ func (n *nexdnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 			continue
 		}
 
-		rc, err := toRecordConfig(dc, nativeRec)
+		rc, err := toRecordConfig(nativeRec, dc.Name)
 		if err != nil {
 			return nil, fmt.Errorf("NEXDNS: %s %s: %w", nativeRec.Type, nativeRec.Name, err)
 		}
@@ -117,7 +117,7 @@ func filterApexNS(dc *models.DomainConfig) {
 	kept := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabel() == apexLabel {
-			target := strings.TrimSuffix(rec.AsNS().Ns, ".")
+			target := strings.TrimSuffix(rec.GetTargetField(), ".")
 			if !declared[target] {
 				printer.Warnf("NEXDNS does not support changing the NS records at the zone apex. %s will not be added.\n", rec.GetTargetField())
 			}

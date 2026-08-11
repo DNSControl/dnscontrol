@@ -13,11 +13,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
 )
 
@@ -27,6 +28,7 @@ var features = providers.DocumentationNotes{
 	providers.CanAutoDNSSEC:          providers.Can(),
 	providers.CanConcur:              providers.Unimplemented(),
 	providers.CanGetZones:            providers.Can(),
+	providers.CanOnlyDiff1Features:   providers.Can(),
 	providers.CanUseAKAMAICDN:        providers.Can(),
 	providers.CanUseAKAMAITLC:        providers.Can(),
 	providers.CanUseAlias:            providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
@@ -170,41 +172,74 @@ func (a *edgeDNSProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		return nil, 0, err
 	}
 
-	changes, actualChangeCount, err := diff2.ByRecordSet(existingRecords, dc, nil)
+	keysToUpdate, toReport, actualChangeCount, err := diff.NewCompat(dc).ChangedGroups(existingRecords)
 	if err != nil {
 		return nil, 0, err
 	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
-	var corrections []*models.Correction
+	existingRecordsMap := make(map[models.RecordKey][]*models.RecordConfig)
+	for _, r := range existingRecords {
+		key := models.RecordKey{NameFQDN: r.NameFQDN, Type: r.Type}
+		existingRecordsMap[key] = append(existingRecordsMap[key], r)
+	}
 
-	for _, change := range changes {
-		switch change.Type {
-		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
+	desiredRecordsMap := dc.Records.GroupedByKey()
+
+	// Deletes must occur first. For example, if replacing a existing CNAME with an A of the same name:
+	//    DELETE CNAME foo.example.net
+	// must occur before
+	//    CREATE A foo.example.net
+	// because both an A and a CNAME for the same name is not allowed.
+
+	lastCorrections := []*models.Correction{} // creates and replaces last
+
+	for key, msg := range keysToUpdate {
+		existing, okExisting := existingRecordsMap[key]
+		desired, okDesired := desiredRecordsMap[key]
+
+		if okExisting && !okDesired {
+			// In the existing map but not in the desired map: Delete
 			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F:   func() error { return a.createRecordset(ctx, change.New, dc.Name) },
+				Msg: strings.Join(msg, "\n   "),
+				F: func() error {
+					return a.deleteRecordset(ctx, existing, dc.Name)
+				},
 			})
-		case diff2.CHANGE:
-			ttl := managedTTL(dc, change.New[0].NameFQDN, change.New[0].Type)
-			for _, r := range change.New {
-				if r.TTL != ttl {
-					printer.Warnf("TTL mismatch in %s %s: using %d (managed), ignoring %d\n", change.New[0].NameFQDN, change.New[0].Type, ttl, r.TTL)
-					break
-				}
+			printer.Debugf("deleteRecordset: %s %s\n", key.NameFQDN, key.Type)
+			for _, rdata := range existing {
+				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
 			}
-			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F:   func() error { return a.replaceRecordset(ctx, change.New, ttl, dc.Name) },
+		} else if !okExisting && okDesired {
+			// Not in the existing map but in the desired map: Create
+			lastCorrections = append(lastCorrections, &models.Correction{
+				Msg: strings.Join(msg, "\n   "),
+				F: func() error {
+					return a.createRecordset(ctx, desired, dc.Name)
+				},
 			})
-		case diff2.DELETE:
-			corrections = append(corrections, &models.Correction{
-				Msg: change.MsgsJoined,
-				F:   func() error { return a.deleteRecordset(ctx, change.Old, dc.Name) },
+			printer.Debugf("createRecordset: %s %s\n", key.NameFQDN, key.Type)
+			for _, rdata := range desired {
+				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
+			}
+		} else if okExisting && okDesired {
+			// In the existing map and in the desired map: Replace
+			lastCorrections = append(lastCorrections, &models.Correction{
+				Msg: strings.Join(msg, "\n   "),
+				F: func() error {
+					return a.replaceRecordset(ctx, desired, dc.Name)
+				},
 			})
+			printer.Debugf("replaceRecordset: %s %s\n", key.NameFQDN, key.Type)
+			for _, rdata := range desired {
+				printer.Debugf("  Rdata: %s\n", rdata.GetTargetCombined())
+			}
 		}
 	}
+
+	// Deletes first, then creates and replaces
+	corrections = append(corrections, lastCorrections...)
 
 	// AutoDnsSec correction
 	existingAutoDNSSecEnabled, err := a.isAutoDNSSecEnabled(ctx, dc.Name)
@@ -215,15 +250,23 @@ func (a *edgeDNSProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	desiredAutoDNSSecEnabled := dc.AutoDNSSEC == "on"
 
 	if !existingAutoDNSSecEnabled && desiredAutoDNSSecEnabled {
+		// Existing false (disabled), Desired true (enabled)
 		corrections = append(corrections, &models.Correction{
 			Msg: "Enable AutoDnsSec\n",
-			F:   func() error { return a.autoDNSSecEnable(ctx, true, dc.Name) },
+			F: func() error {
+				return a.autoDNSSecEnable(ctx, true, dc.Name)
+			},
 		})
+		printer.Debugf("autoDNSSecEnable: Enable AutoDnsSec for zone %s\n", dc.Name)
 	} else if existingAutoDNSSecEnabled && !desiredAutoDNSSecEnabled {
+		// Existing true (enabled), Desired false (disabled)
 		corrections = append(corrections, &models.Correction{
 			Msg: "Disable AutoDnsSec\n",
-			F:   func() error { return a.autoDNSSecEnable(ctx, false, dc.Name) },
+			F: func() error {
+				return a.autoDNSSecEnable(ctx, false, dc.Name)
+			},
 		})
+		printer.Debugf("autoDNSSecEnable: Disable AutoDnsSec for zone %s\n", dc.Name)
 	}
 
 	return corrections, actualChangeCount, nil
@@ -241,8 +284,10 @@ func (a *edgeDNSProvider) GetNameservers(domain string) ([]*models.Nameserver, e
 
 // GetZoneRecords returns an array of RecordConfig structs for a zone.
 func (a *edgeDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
+
 	ctx := context.Background()
-	records, err := a.getRecords(ctx, dc)
+	records, err := a.getRecords(ctx, domain)
 	if err != nil {
 		return nil, err
 	}
@@ -259,15 +304,6 @@ func (a *edgeDNSProvider) ListZones() ([]string, error) {
 	return zones, nil
 }
 
-func managedTTL(dc *models.DomainConfig, fqdn, rtype string) uint32 {
-	for _, r := range dc.Records {
-		if r.NameFQDN == fqdn && r.Type == rtype {
-			return r.TTL
-		}
-	}
-	return 0
-}
-
 func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 	for _, rec := range dc.Records {
 		// Convert ALIAS records to the Akamai equivalents. AKAMAITLC is only valid
@@ -276,7 +312,6 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 			if rec.Name == "@" {
 				rec.ChangeType("AKAMAITLC", dc.Name)
 				rec.AnswerType = "DUAL"
-				// rec.RecomputeV3Fields(dc.Name)
 			} else {
 				rec.ChangeType("CNAME", dc.Name)
 			}

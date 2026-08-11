@@ -12,11 +12,9 @@ import (
 	"strings"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 )
 
 /*
@@ -176,7 +174,7 @@ func (p *dnscaleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 			continue
 		}
 
-		rc, err := toRecordConfig(dc, rec)
+		rc, err := toRecordConfig(domain, rec)
 		if err != nil {
 			return nil, fmt.Errorf("failed to convert record: %w", err)
 		}
@@ -206,7 +204,7 @@ func (p *dnscaleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 		case diff2.REPORT:
 			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 		case diff2.CREATE:
-			rec := fromRecordConfig(change.New[0])
+			rec := fromRecordConfig(change.New[0], dc.Name)
 			corrections = append(corrections, &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {
@@ -215,7 +213,7 @@ func (p *dnscaleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, cur
 			})
 		case diff2.CHANGE:
 			oldRec := change.Old[0].Original.(Record)
-			rec := fromRecordConfig(change.New[0])
+			rec := fromRecordConfig(change.New[0], dc.Name)
 			corrections = append(corrections, &models.Correction{
 				Msg: fmt.Sprintf("%s; DNScale RecordID: %v", change.Msgs[0], oldRec.ID),
 				F: func() error {
@@ -418,10 +416,13 @@ func (p *dnscaleProvider) deleteRecord(zoneID, recordID string) error {
 // Record conversion functions
 
 // toRecordConfig converts a DNScale Record to a RecordConfig.
-func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, error) {
-	// Extract label from full record name
-	domain := dc.Name
+func toRecordConfig(domain string, r Record) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		TTL:      uint32(r.TTL),
+		Original: r,
+	}
 
+	// Extract label from full record name
 	name := strings.TrimSuffix(r.Name, ".")
 	domainWithDot := domain + "."
 	if before, ok := strings.CutSuffix(r.Name, domainWithDot); ok {
@@ -433,33 +434,22 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 	if name == "" {
 		name = "@"
 	}
-	label := dc.LabelFromShort(name)
-
-	// TODO(tom): The above code can probably be replaced with the following line, but I haven't tested it yet.
-	//label := dc.LabelFromFQDNWithDot(r.Name)
-	// And if that doesn't work... try this:
-	//label := dc.LabelFromFQDNNoDot(r.Name)
+	rc.SetLabel(name, domain)
 
 	content := r.Content
-	ttl := uint32(r.TTL)
-	var rc *models.RecordConfig
-	var err error
 
 	switch r.Type {
 	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
+		rc.Type = r.Type
+		return rc, rc.SetTarget(content)
 	case "CNAME", "NS", "PTR", "ALIAS":
-		// TODO(tlim): Test without this "if". It may no longer be needed.
-
+		rc.Type = r.Type
 		// Ensure FQDN
 		if !strings.HasSuffix(content, ".") {
 			content = content + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
+		return rc, rc.SetTarget(content)
 	case "MX":
-		// TODO(tlim): Test replacing this with simply:
-		// rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
-
 		// DNScale API returns MX as "priority target" in content field
 		// If priority field is 0, parse it from content
 		priority := uint16(r.Priority)
@@ -476,112 +466,96 @@ func toRecordConfig(dc *models.DomainConfig, r Record) (*models.RecordConfig, er
 		if !strings.HasSuffix(target, ".") {
 			target = target + "."
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, priority, target)
+		return rc, rc.SetTargetMX(priority, target)
 	case "TXT":
 		// DNScale returns TXT content without surrounding quotes
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, content)
+		return rc, rc.SetTargetTXT(content)
 	case "SRV":
 		// DNScale API returns SRV as "priority weight port target"
-
-		// TODO(tlim): If the NEW version works, please remove the commented out "OLD" version.
-
-		// OLD:
-
-		// // Set|TargetSRV expects priority, weight, port, target separately
-		// parts := strings.Fields(content)
-		// if len(parts) != 4 {
-		// 	return nil, fmt.Errorf("SRV value does not contain 4 fields: (%q)", content)
-		// }
-		// priority, parseErr := strconv.ParseUint(parts[0], 10, 16)
-		// if parseErr != nil {
-		// 	return nil, fmt.Errorf("SRV priority parse error: %w", parseErr)
-		// }
-		// weight, parseErr := strconv.ParseUint(parts[1], 10, 16)
-		// if parseErr != nil {
-		// 	return nil, fmt.Errorf("SRV weight parse error: %w", parseErr)
-		// }
-		// port, parseErr := strconv.ParseUint(parts[2], 10, 16)
-		// if parseErr != nil {
-		// 	return nil, fmt.Errorf("SRV port parse error: %w", parseErr)
-		// }
-		// target := parts[3]
-		// if !strings.HasSuffix(target, ".") {
-		// 	target = target + "."
-		// }
-		// rc, err = dc.NewRecordConfig(label, ttl, r.Type, uint16(priority), uint16(weight), uint16(port), target)
-
-		// NEW:
-		if !strings.HasSuffix(content, ".") {
-			content = content + "."
+		// SetTargetSRV expects priority, weight, port, target separately
+		parts := strings.Fields(content)
+		if len(parts) != 4 {
+			return nil, fmt.Errorf("SRV value does not contain 4 fields: (%q)", content)
 		}
-		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
-
+		priority, err := strconv.ParseUint(parts[0], 10, 16)
+		if err != nil {
+			return nil, fmt.Errorf("SRV priority parse error: %w", err)
+		}
+		weight, err := strconv.ParseUint(parts[1], 10, 16)
+		if err != nil {
+			return nil, fmt.Errorf("SRV weight parse error: %w", err)
+		}
+		port, err := strconv.ParseUint(parts[2], 10, 16)
+		if err != nil {
+			return nil, fmt.Errorf("SRV port parse error: %w", err)
+		}
+		target := parts[3]
+		if !strings.HasSuffix(target, ".") {
+			target = target + "."
+		}
+		return rc, rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), target)
+	case "CAA":
+		// DNScale returns CAA as "flag tag value"
+		return rc, rc.SetTargetCAAString(content)
+	case "TLSA":
+		// DNScale returns TLSA as "usage selector matchingType certificate"
+		return rc, rc.SetTargetTLSAString(content)
+	case "SSHFP":
+		// DNScale returns SSHFP as "algorithm fpType fingerprint"
+		return rc, rc.SetTargetSSHFPString(content)
+	case "HTTPS":
+		// DNScale returns HTTPS as "priority target params"
+		// Must set Type before calling SetTargetSVCBString (it defaults to SVCB if empty)
+		rc.Type = "HTTPS"
+		return rc, rc.SetTargetSVCBString(domain, content)
+	case "SVCB":
+		// DNScale returns SVCB as "priority target params"
+		rc.Type = "SVCB"
+		return rc, rc.SetTargetSVCBString(domain, content)
 	default:
-		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, content)
+		return rc, rc.PopulateFromString(r.Type, content, domain)
 	}
-	if err != nil {
-		return nil, err
-	}
-	rc.Original = r
-	return rc, nil
 }
 
 // fromRecordConfig converts a RecordConfig to a DNScale Record.
-func fromRecordConfig(rc *models.RecordConfig) Record {
+func fromRecordConfig(rc *models.RecordConfig, domain string) Record {
 	name := rc.GetLabel()
-
-	// TODO(tlim): Is this needed? Seems like a no-op.
 	// DNScale uses "@" for apex
 	if name == "@" {
 		name = "@"
 	}
 
-	var content string
+	content := rc.GetTargetField()
 	priority := 0
 
-	switch rc.TypeNum {
-	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.
+	switch rc.Type {
+	case "CNAME", "NS", "PTR", "ALIAS":
 		// Remove trailing dot for DNScale API
-		TypePTR, privatetypes.TypeALIAS:
-
 		content = strings.TrimSuffix(content, ".")
-	case dnsv2.TypeMX:
-		f := rc.AsMX()
-		priority = int(f.Preference)
-		content = strings.TrimSuffix(f.Mx, ".")
-	// case "SRV":
-	// 	// TODO(tlim): Remove commented out code if new code works.
-	// 	// DNScale API expects full content: "priority weight port target"
-	// 	// target := rc.Get|TargetField()
-	// 	// if !strings.HasSuffix(target, ".") {
-	// 	// 	target = target + "."
-	// 	// }
-	// 	// content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
-	// 	content = rc.GetRDATA().String()
-
-	// case "CAA":
-	// 	// TODO(tlim): Remove commented out code if new code works.
-	// 	//content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.Get|TargetField())
-	// 	content = rc.GetRDATA().String()
-	// case "TLSA":
-	// 	// TODO(tlim): Remove commented out code if new code works.
-	// 	//content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.Get|TargetField())
-	// 	content = rc.GetRDATA().String()
-	// case "SSHFP":
-	// 	// TODO(tlim): Remove commented out code if new code works.
-	// 	//content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.Get|TargetField())
-	// 	content = rc.GetRDATA().String()
-	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
-		// Use GetRDATA().String() which formats SVCB/HTTPS records correctly via miekg/dns
+	case "MX":
+		priority = int(rc.MxPreference)
+		content = strings.TrimSuffix(content, ".")
+	case "SRV":
+		// DNScale API expects full content: "priority weight port target"
+		target := rc.GetTargetField()
+		if !strings.HasSuffix(target, ".") {
+			target = target + "."
+		}
+		content = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, target)
+	case "CAA":
+		content = fmt.Sprintf("%d %s \"%s\"", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+	case "TLSA":
+		content = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	case "SSHFP":
+		content = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+	case "HTTPS", "SVCB":
+		// Use GetTargetCombined() which formats SVCB/HTTPS records correctly via miekg/dns
 		// DNScale API requires selective quote handling for SVCB params:
 		// - alpn="h2,h3" must become alpn=h2,h3 (quotes stripped)
 		// - ech="base64..." must keep quotes (required for base64 values)
-
-		content = stripSvcbQuotesExceptEch(rc.GetRDATA().String())
-	case dnsv2.TypeTXT:
-		content = rc.GetTargetTXTJoined()
-	default:
-		content = rc.GetRDATA().String()
+		content = stripSvcbQuotesExceptEch(rc.GetTargetCombined())
+	case "TXT":
+		content = strings.Join(rc.GetTargetTXTSegmented(), "")
 	}
 
 	return Record{

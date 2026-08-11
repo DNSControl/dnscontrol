@@ -3,6 +3,11 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "a9993e364706816aba3e25717850c26c9cd0d89d",
+        "dnscontrol_nameunicode": "a9993e364706816aba3e25717850c26c9cd0d89d",
+        "dnscontrol_uniquename": "a9993e364706816aba3e25717850c26c9cd0d89d"
+      },
       "name": "a9993e364706816aba3e25717850c26c9cd0d89d",
       "records": [],
       "registrar": "reg",

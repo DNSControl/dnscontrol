@@ -1,21 +1,38 @@
 package models
 
 import (
-	"fmt"
-	"log"
-	"os"
 	"strings"
 	"unicode"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 /*
-For notes on how TXT records are handled, see documentation/developer-info/cookbook.md
+Sadly many providers handle TXT records in strange and unexpeected
+ways.  DNSControl has to handle all of them.  Over the years we've
+tried many things.  This explain the current state of the code.
+
+DNSControl stores the TXT record target as a single string of any length.
+Providers take care of any splitting, excaping, or quoting.
+
+NOTE: Older versions of DNSControl stored the TXT record as
+represented by the provider, which could be a single string, a series
+of smaller strings, or a single string that is quoted/escaped.  This
+created tons of edge-cases and other distractions.
+
+If a provider doesn't support certain characters in a TXT record, use
+the providers/$PROVIDER/auditrecords.go file to indicate this.
+DNSControl uses this information to warn users of unsupporrted input,
+and to skip related integration tests.
+
+There are 2 ways to create a TXT record:
+	SetTargetTXT():  Create from a string.
+	SetTargetTXTs(): Create from an array of strings that need to be joined.
+
+There are 2 ways to get the value (target) of a TXT record:
+	GetTargetTXTJoined(): Returns one big string
+	GetTargetTXTSegmented(): Returns an array 255-octet segments.
+
 */
 
 // HasFormatIdenticalToTXT returns if a RecordConfig has a format which is
@@ -26,116 +43,44 @@ func (rc *RecordConfig) HasFormatIdenticalToTXT() bool {
 }
 
 // SetTargetTXT sets the TXT fields when there is 1 string.
-//
-// LUA records reuse the TXT accessors (their payload is a TXT-format string).
-// When .Type is "LUA", preserve its emitted record type while replacing the
-// payload in its RDATA.
 func (rc *RecordConfig) SetTargetTXT(s string) error {
-	if rc.Type == "LUA" {
-		rd := rc.AsLUA()
-		rd.LuaPayload = s
-		rc.SetRDATA(rd)
-		return nil
+	if rc.Type == "" {
+		rc.Type = "TXT"
+	} else if !rc.HasFormatIdenticalToTXT() {
+		panic("assertion failed: SetTargetTXT called when .Type is not TXT or compatible type")
 	}
-	return legacySetTargetArgsTXT(rc, s)
+
+	return rc.SetTarget(s)
 }
 
-func legacySetTargetArgsTXT(rc *RecordConfig, args ...any) error {
-
-	rc.TypeNum = dnsv2.TypeTXT
-	rc.Type = "TXT"
-
-	if rc.Metadata == nil {
-		rc.Metadata = map[string]string{}
-	}
-
-	rd, err := MakeTXT("", nil, nrc.Flags{}, args...)
-	if err != nil {
-		log.Fatalf("legacySetTargetArgs: Failed to create RDATA for type %s: %+v", rc.Type, err)
-	}
-	rc.SetRDATA(rd)
-
-	return nil
-}
-
-// SetTargetTXTs joins the supplied TXT fields and stores canonical 255-octet segments.
+// SetTargetTXTs sets the TXT fields when there are many strings. They are stored concatenated.
 func (rc *RecordConfig) SetTargetTXTs(s []string) error {
 	return rc.SetTargetTXT(strings.Join(s, ""))
 }
 
-// TXTJoined returns all the character-strings in a TXT RDATA as one string.
-func TXTJoined(rd dnsrdatav2.TXT) string {
-	return strings.Join(rd.Txt, "")
-}
-
-// TXTSegmented returns a TXT RDATA in DNSControl's canonical form: the
-// character-strings are joined and then split into 255-octet segments. Empty
-// input is represented by one empty segment.
-func TXTSegmented(rd dnsrdatav2.TXT) []string {
-	return splitChunks(TXTJoined(rd), 255)
-}
-
-// txtProperlySegmented returns true the TXT segments are properly segmented.
-//   - There must be at least one segment.
-//   - If there is one segment, it may be empty. It must be 255 octets or less.
-//   - If there is more than 1 segment, all but the last must be exactly 255
-//     octets. The last segment must be 255 octets or less but can not be empty.
-func txtProperlySegmented(txts []string) bool {
-	if len(txts) == 0 {
-		return false
-	}
-	if len(txts) == 1 {
-		return len(txts[0]) <= 255
-	}
-	for i := 0; i < len(txts)-1; i++ {
-		if len(txts[i]) != 255 {
-			return false
-		}
-	}
-	last := txts[len(txts)-1]
-	return len(last) > 0 && len(last) <= 255
-}
-
-// txtPayload returns the record's TXT payload as one string. It supports both
-// TXT rdata and LUA rdata (whose payload is TXT-format).
-func (rc *RecordConfig) txtPayload() string {
-	switch rd := rc.GetRDATA().(type) {
-	case dnsrdatav2.TXT:
-		return TXTJoined(rd)
-	case privatetypesrdata.LUA:
-		return rd.LuaPayload
-	}
-	return ""
-}
-
 // GetTargetTXTJoined returns the TXT target as one string.
 func (rc *RecordConfig) GetTargetTXTJoined() string {
-	return rc.txtPayload()
+	return rc.target
 }
 
 // GetTargetTXTSegmented returns the TXT target as 255-octet segments, with the remainder in the last segment.
 func (rc *RecordConfig) GetTargetTXTSegmented() []string {
-	if rd, ok := rc.rdata.(dnsrdatav2.TXT); ok {
-		if !txtProperlySegmented(rd.Txt) {
-			fmt.Fprintf(os.Stderr, "WARNING: GetTargetTXTSegmented: TXT record not properly segmented. Someone is not using SetRDATA? txt=%+v\n", rd.Txt)
-			return splitChunks(rc.txtPayload(), 255)
-		}
-		return rd.Txt
-	}
-	return splitChunks(rc.txtPayload(), 255)
+	return splitChunks(rc.target, 255)
 }
 
 // GetTargetTXTSegmentCount returns the number of 255-octet segments required to store TXT target.
 func (rc *RecordConfig) GetTargetTXTSegmentCount() int {
-	return len(rc.GetTargetTXTSegmented())
+	total := len(rc.target)
+	segs := total / 255 // integer division, decimals are truncated
+	if (total % 255) > 0 {
+		return segs + 1
+	}
+	return segs
 }
 
 func splitChunks(buf string, lim int) []string {
 	if len(buf) == 0 {
-		return []string{""}
-	}
-	if len(buf) <= lim {
-		return []string{buf}
+		return nil
 	}
 
 	var chunk string

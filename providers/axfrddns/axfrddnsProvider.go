@@ -12,7 +12,6 @@ axfrddns -
 */
 
 import (
-	"context"
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
@@ -23,13 +22,13 @@ import (
 	"sync"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	"codeberg.org/miekg/dns/dnsutil"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv1 "github.com/miekg/dns"
 )
 
 const (
@@ -204,7 +203,7 @@ type Param struct {
 type Key struct {
 	algo   string
 	id     string
-	secret []byte
+	secret string
 }
 
 func readKey(raw string, kind string) (*Key, error) {
@@ -218,39 +217,26 @@ func readKey(raw string, kind string) (*Key, error) {
 	var algo string
 	switch arr[0] {
 	case "hmac-md5", "md5":
-		algo = dnsv2.HmacMD5
+		algo = dnsv1.HmacMD5
 	case "hmac-sha1", "sha1":
-		algo = dnsv2.HmacSHA1
+		algo = dnsv1.HmacSHA1
 	case "hmac-sha224", "sha224":
-		algo = dnsv2.HmacSHA224
+		algo = dnsv1.HmacSHA224
 	case "hmac-sha256", "sha256":
-		algo = dnsv2.HmacSHA256
+		algo = dnsv1.HmacSHA256
 	case "hmac-sha384", "sha384":
-		algo = dnsv2.HmacSHA384
+		algo = dnsv1.HmacSHA384
 	case "hmac-sha512", "sha512":
-		algo = dnsv2.HmacSHA512
+		algo = dnsv1.HmacSHA512
 	default:
 		return nil, fmt.Errorf("unknown algorithm (%s) in AXFRDDNS.TSIG", kind)
 	}
-	secret, err := base64.StdEncoding.DecodeString(arr[2])
+	_, err := base64.StdEncoding.DecodeString(arr[2])
 	if err != nil {
 		return nil, fmt.Errorf("cannot decode Base64 secret (%s) in AXFRDDNS.TSIG", kind)
 	}
 	id := dnsutil.Canonical(arr[1])
-	return &Key{algo: algo, id: id, secret: secret}, nil
-}
-
-// signer returns the TSIG signer for the key.
-func (k *Key) signer() dnsv2.TSIGSigner {
-	if k.algo == dnsv2.HmacMD5 {
-		return md5Provider(k.secret)
-	}
-	return dnsv2.HmacTSIG{Secret: k.secret}
-}
-
-// stub returns the unsigned TSIG record to attach to a message signed with the key.
-func (k *Key) stub() dnsv2.RR {
-	return dnsv2.NewTSIG(k.id, k.algo, 300)
+	return &Key{algo: algo, id: id, secret: arr[2]}, nil
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -258,62 +244,62 @@ func (c *axfrddnsProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 	return c.nameservers, nil
 }
 
-func (c *axfrddnsProvider) getAxfrConnection() (net.Conn, error) {
+func (c *axfrddnsProvider) getAxfrConnection() (*dnsv1.Transfer, error) {
+	var con net.Conn
+	var err error
 	switch c.transferMode {
 	case "tcp-tls":
 		// RFC 9103 "DNS Zone Transfer over TLS" section 7.1 requires "dot"
-		return tls.Dial("tcp", c.transferServer, &tls.Config{NextProtos: []string{"dot"}})
+		con, err = tls.Dial("tcp", c.transferServer, &tls.Config{NextProtos: []string{"dot"}})
 	case "unix":
-		return net.Dial("unix", c.transferServer)
+		con, err = net.Dial("unix", c.transferServer)
 	default:
-		return net.Dial("tcp", c.transferServer)
+		con, err = net.Dial("tcp", c.transferServer)
 	}
+	if err != nil {
+		return nil, err
+	}
+	dnscon := &dnsv1.Conn{Conn: con}
+	transfer := &dnsv1.Transfer{Conn: dnscon}
+	return transfer, nil
 }
 
 // FetchZoneRecords gets the records of a zone and returns them in dns.RR format.
-func (c *axfrddnsProvider) FetchZoneRecords(domain string) ([]dnsv2.RR, error) {
-	con, err := c.getAxfrConnection()
+func (c *axfrddnsProvider) FetchZoneRecords(domain string) ([]dnsv1.RR, error) {
+	transfer, err := c.getAxfrConnection()
 	if err != nil {
 		return nil, err
 	}
+	transfer.DialTimeout = dnsTimeout
+	transfer.ReadTimeout = dnsTimeout
 
-	client := dnsv2.NewClient()
-	client.ReadTimeout = dnsTimeout
-
-	request := dnsv2.NewMsg(domain+".", dnsv2.TypeAXFR)
-	request.RecursionDesired = false
+	request := new(dnsv1.Msg)
+	request.SetAxfr(domain + ".")
 
 	if c.transferKey != nil {
-		request.Pseudo = []dnsv2.RR{c.transferKey.stub()}
-		client.Transfer = &dnsv2.Transfer{TSIGSigner: c.transferKey.signer()}
+		transfer.TsigSecret = map[string]string{c.transferKey.id: c.transferKey.secret}
+		request.SetTsig(c.transferKey.id, c.transferKey.algo, 300, time.Now().Unix())
+		if c.transferKey.algo == dnsv1.HmacMD5 {
+			transfer.TsigProvider = md5Provider(c.transferKey.secret)
+		}
 	}
 
-	envelope, err := client.TransferInWithConn(context.Background(), request, con)
+	envelope, err := transfer.In(request, c.transferServer)
 	if err != nil {
 		return nil, err
 	}
 
-	// RFC 5936 section 2.2: a complete AXFR answer ends with the SOA it began
-	// with. The connection is closed on that SOA and the remaining envelopes
-	// are drained.
-	var rawRecords []dnsv2.RR
-	var complete bool
+	var rawRecords []dnsv1.RR
 	for msg := range envelope {
-		if complete {
-			continue
-		}
 		if msg.Error != nil {
-			return nil, fmt.Errorf("[Error] AXFRDDNS: nameserver refused to transfer the zone %s: %s", domain, msg.Error)
+			// Fragile but more "user-friendly" error-handling
+			err := msg.Error.Error()
+			if err == "dns: bad xfr rcode: 9" {
+				err = "NOT AUTH (9)"
+			}
+			return nil, fmt.Errorf("[Error] AXFRDDNS: nameserver refused to transfer the zone %s: %s", domain, err)
 		}
-		rawRecords = append(rawRecords, msg.Answer...)
-		if len(rawRecords) >= 2 && dnsv2.RRToType(rawRecords[len(rawRecords)-1]) == dnsv2.TypeSOA {
-			complete = true
-			con.Close()
-		}
-	}
-
-	if !complete {
-		return nil, fmt.Errorf("[Error] AXFRDDNS: incomplete transfer of the zone %s: the answer does not end with the SOA record", domain)
+		rawRecords = append(rawRecords, msg.RR...)
 	}
 	return rawRecords, nil
 }
@@ -330,15 +316,15 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	var foundDNSSecRecords *models.RecordConfig
 	foundRecords := models.Records{}
 	for _, rr := range rawRecords {
-		switch dnsv2.RRToType(rr) {
-		case dnsv2.TypeRRSIG,
-			dnsv2.TypeDNSKEY,
-			dnsv2.TypeCDNSKEY,
-			dnsv2.TypeCDS,
-			dnsv2.TypeNSEC,
-			dnsv2.TypeNSEC3,
-			dnsv2.TypeNSEC3PARAM,
-			dnsv2.TypeZONEMD,
+		switch rr.Header().Rrtype {
+		case dnsv1.TypeRRSIG,
+			dnsv1.TypeDNSKEY,
+			dnsv1.TypeCDNSKEY,
+			dnsv1.TypeCDS,
+			dnsv1.TypeNSEC,
+			dnsv1.TypeNSEC3,
+			dnsv1.TypeNSEC3PARAM,
+			dnsv1.TypeZONEMD,
 			65281,
 			65534:
 			// Ignoring DNSSec RRs, but replacing it with a single
@@ -347,18 +333,21 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			// Also ignoring spurious TYPE65534, see:
 			// https://bind9-users.isc.narkive.com/zX29ay0j/rndc-signing-list-not-working#post2
 			if foundDNSSecRecords == nil {
-				foundDNSSecRecords, err = dc.NewRecordConfig(dc.LabelFromShort(dnssecDummyLabel), 0, dnsv2.TypeTXT, dnssecDummyTxt)
+				foundDNSSecRecords = new(models.RecordConfig)
+				foundDNSSecRecords.Type = "TXT"
+				foundDNSSecRecords.SetLabel(dnssecDummyLabel, domain)
+				err = foundDNSSecRecords.SetTargetTXT(dnssecDummyTxt)
 				if err != nil {
 					return nil, err
 				}
 			}
 			continue
 		default:
-			rec, err := dnsrr.RRv2toRC(dc, rr)
+			rec, err := dnsrr.RRtoRC(rr, domain)
 			if err != nil {
 				return nil, err
 			}
-			foundRecords = append(foundRecords, rec)
+			foundRecords = append(foundRecords, &rec)
 		}
 	}
 
@@ -389,7 +378,7 @@ func (c *axfrddnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 }
 
 // BuildCorrection return a Correction for a given set of DDNS update and the corresponding message.
-func (c *axfrddnsProvider) BuildCorrection(dc *models.DomainConfig, msgs []string, updates []*dnsv2.Msg) *models.Correction {
+func (c *axfrddnsProvider) BuildCorrection(dc *models.DomainConfig, msgs []string, updates []*dnsv1.Msg) *models.Correction {
 	if updates == nil {
 		return &models.Correction{
 			Msg: fmt.Sprintf("DDNS UPDATES to '%s' (primary master: '%s'). Changes:\n%s", dc.Name, c.master, strings.Join(msgs, "\n")),
@@ -398,44 +387,26 @@ func (c *axfrddnsProvider) BuildCorrection(dc *models.DomainConfig, msgs []strin
 	return &models.Correction{
 		Msg: fmt.Sprintf("DDNS UPDATES to '%s' (primary master: '%s'). Changes:\n%s", dc.Name, c.master, strings.Join(msgs, "\n")),
 		F: func() error {
-			client := dnsv2.NewClient()
-			client.Dialer = &net.Dialer{Timeout: dnsTimeout}
-			client.ReadTimeout = dnsTimeout
-			network := c.updateMode
-			switch network {
-			case "":
-				network = "udp"
-			case "tcp-tls":
-				network = "tcp"
-				client.TLSConfig = &tls.Config{}
-			}
-
-			var signer dnsv2.TSIGSigner
-			if c.updateKey != nil {
-				signer = c.updateKey.signer()
-			}
-
 			for _, update := range updates {
-				option := dnsv2.TSIGOption{}
-				if signer != nil {
-					update.Pseudo = []dnsv2.RR{c.updateKey.stub()}
-					if err := dnsv2.TSIGSign(update, signer, &option); err != nil {
-						return err
+				update.Compress = true
+				client := new(dnsv1.Client)
+				client.Net = c.updateMode
+				client.Timeout = dnsTimeout
+				if c.updateKey != nil {
+					client.TsigSecret = map[string]string{c.updateKey.id: c.updateKey.secret}
+					update.SetTsig(c.updateKey.id, c.updateKey.algo, 300, time.Now().Unix())
+					if c.updateKey.algo == dnsv1.HmacMD5 {
+						client.TsigProvider = md5Provider(c.updateKey.secret)
 					}
 				}
 
-				msg, _, err := client.Exchange(context.Background(), update, network, c.master)
+				msg, _, err := client.Exchange(update, c.master)
 				if err != nil {
 					return err
 				}
-				if signer != nil && isSigned(msg) {
-					if err := dnsv2.TSIGVerify(msg, signer, &option); err != nil {
-						return err
-					}
-				}
 				if msg.Rcode != 0 {
 					return fmt.Errorf("[Error] AXFRDDNS: nameserver refused to update the zone: %s (%d)",
-						dnsv2.RcodeToString[msg.Rcode],
+						dnsv1.RcodeToString[msg.Rcode],
 						msg.Rcode)
 				}
 			}
@@ -443,45 +414,6 @@ func (c *axfrddnsProvider) BuildCorrection(dc *models.DomainConfig, msgs []strin
 			return nil
 		},
 	}
-}
-
-// isSigned reports whether msg carries a TSIG record.
-func isSigned(msg *dnsv2.Msg) bool {
-	for _, rr := range msg.Pseudo {
-		if _, ok := rr.(*dnsv2.TSIG); ok {
-			return true
-		}
-	}
-	return false
-}
-
-// newUpdate returns an empty DDNS update whose zone section is zone, see RFC 2136 section 2.3.
-func newUpdate(zone string) *dnsv2.Msg {
-	update := dnsv2.NewMsg(zone, dnsv2.TypeSOA)
-	update.Opcode = dnsv2.OpcodeUpdate
-	update.RecursionDesired = false
-	return update
-}
-
-// insert adds rr to the update section as an addition, see RFC 2136 section 2.5.1.
-func insert(update *dnsv2.Msg, rr dnsv2.RR) {
-	rr.Header().Class = dnsv2.ClassINET
-	update.Ns = append(update.Ns, rr)
-}
-
-// remove adds rr to the update section as the deletion of that single RR, see
-// RFC 2136 section 2.5.4.
-func remove(update *dnsv2.Msg, rr dnsv2.RR) {
-	hdr := rr.Header()
-	hdr.Class = dnsv2.ClassNONE
-	hdr.TTL = 0
-	update.Ns = append(update.Ns, rr)
-}
-
-// removeName adds rr to the update section as the deletion of every RRset owned
-// by its name, see RFC 2136 section 2.5.3.
-func removeName(update *dnsv2.Msg, rr dnsv2.RR) {
-	update.Ns = append(update.Ns, &dnsv2.ANY{Hdr: dnsv2.Header{Name: rr.Header().Name, Class: dnsv2.ClassANY}})
 }
 
 // hasNSDeletion returns true if there exist a correction that deletes or changes an NS record.
@@ -535,13 +467,13 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 
 	var msgs []string
 	var reports []string
-	updates := []*dnsv2.Msg{}
+	updates := []*dnsv1.Msg{}
 
-	dummyNs1, err := dnsv2.New(dc.Name + ". IN NS dnscontrol.invalid.")
+	dummyNs1, err := dnsv1.NewRR(dc.Name + ". IN NS dnscontrol.invalid.")
 	if err != nil {
 		return nil, 0, err
 	}
-	dummyNs2, err := dnsv2.New(dc.Name + ". IN NS dnscontrol.invalid.")
+	dummyNs2, err := dnsv1.NewRR(dc.Name + ". IN NS dnscontrol.invalid.")
 	if err != nil {
 		return nil, 0, err
 	}
@@ -554,7 +486,8 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 		return nil, 0, nil
 	}
 
-	update := newUpdate(dc.Name + ".")
+	update := new(dnsv1.Msg)
+	update.SetUpdate(dc.Name + ".")
 
 	// A DNS server should silently ignore a DDNS update that removes
 	// the last NS record of a zone. Since modifying a record is
@@ -571,7 +504,7 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 	hasNSDeletion := hasNSDeletion(changes)
 
 	if hasNSDeletion {
-		insert(update, dummyNs1)
+		update.Insert([]dnsv1.RR{dummyNs1})
 	}
 
 	i := 1
@@ -584,28 +517,28 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 			// It's semantically invalid for any RRs to exist alongside a
 			// CNAME RR
 			if change.Old[0].Type == "CNAME" {
-				removeName(update, change.Old[0].ToRRv2())
+				update.RemoveName([]dnsv1.RR{change.Old[0].ToRR()})
 			} else {
-				remove(update, change.Old[0].ToRRv2())
+				update.Remove([]dnsv1.RR{change.Old[0].ToRR()})
 			}
 		case diff2.CREATE:
 			msgs = append(msgs, change.Msgs[0])
 			// It's semantically invalid for any RRs to exist alongside a
 			// CNAME RR
 			if change.New[0].Type == "CNAME" {
-				removeName(update, change.New[0].ToRRv2())
+				update.RemoveName([]dnsv1.RR{change.New[0].ToRR()})
 			}
-			insert(update, change.New[0].ToRRv2())
+			update.Insert([]dnsv1.RR{change.New[0].ToRR()})
 		case diff2.CHANGE:
 			msgs = append(msgs, change.Msgs[0])
 			// It's semantically invalid for any RRs to exist alongside a
 			// CNAME RR
 			if (change.New[0].Type == "CNAME") || (change.Old[0].Type == "CNAME") {
-				removeName(update, change.Old[0].ToRRv2())
+				update.RemoveName([]dnsv1.RR{change.Old[0].ToRR()})
 			} else {
-				remove(update, change.Old[0].ToRRv2())
+				update.Remove([]dnsv1.RR{change.Old[0].ToRR()})
 			}
-			insert(update, change.New[0].ToRRv2())
+			update.Insert([]dnsv1.RR{change.New[0].ToRR()})
 		case diff2.REPORT:
 			reports = append(reports, change.Msgs...)
 		}
@@ -615,7 +548,8 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 		// This is a compromise, succeeding whenever RRs are not bigger than about 64 KiB - 16 KiB = 48 KiB.
 		if update.Len() >= 2<<13 {
 			updates = append(updates, update)
-			update = newUpdate(dc.Name + ".")
+			update = new(dnsv1.Msg)
+			update.SetUpdate(dc.Name + ".")
 			appendFinalUpdate = false
 			i = 1
 		} else {
@@ -625,7 +559,7 @@ func (c *axfrddnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, fo
 	}
 
 	if hasNSDeletion {
-		remove(update, dummyNs2)
+		update.Remove([]dnsv1.RR{dummyNs2})
 		appendFinalUpdate = true
 	}
 

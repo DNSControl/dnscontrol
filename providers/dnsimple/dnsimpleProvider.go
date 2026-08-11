@@ -11,12 +11,11 @@ import (
 	"strings"
 	"sync"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
 	"golang.org/x/oauth2"
 )
@@ -124,12 +123,45 @@ func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 
 	var cleanedRecords models.Records
 	for _, r := range records {
-		switch r.Type {
-		case "SOA", "DNSKEY", "CDNSKEY", "CDS":
+		if r.Type == "SOA" {
 			continue
 		}
 
-		rec, err := toRecordConfig(dc, r)
+		if r.Name == "" {
+			r.Name = "@"
+		}
+
+		if r.Type == "CNAME" || r.Type == "ALIAS" || r.Type == "NS" {
+			r.Content += "."
+		} else if r.Type == "MX" && r.Content != "." {
+			r.Content += "."
+		}
+
+		rec := &models.RecordConfig{
+			TTL:      uint32(r.TTL),
+			Original: r,
+		}
+		rec.SetLabel(r.Name, domain)
+
+		var err error
+		switch rtype := r.Type; rtype {
+		case "DNSKEY", "CDNSKEY", "CDS":
+			continue
+		case "ALIAS", "URL":
+			rec.Type = r.Type
+			err = rec.SetTarget(r.Content)
+		case "DS":
+			err = rec.SetTargetDSString(r.Content)
+		case "MX":
+			err = rec.SetTargetMX(uint16(r.Priority), r.Content)
+		case "SRV":
+			err = rec.SetTargetSRVPriorityString(uint16(r.Priority), r.Content)
+		case "TXT":
+			err = rec.PopulateFromStringFunc(r.Type, r.Content, domain, txtutil.ParseQuoted)
+		default:
+			err = rec.PopulateFromString(r.Type, r.Content, domain)
+		}
+
 		if err != nil {
 			return nil, fmt.Errorf("unparsable record received from dnsimple: %w", err)
 		}
@@ -141,51 +173,6 @@ func (c *dnsimpleProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	cleanedRecords = removeApexNS(cleanedRecords)
 
 	return cleanedRecords, nil
-}
-
-func qualifySVCBTarget(content string) string {
-	fields := strings.SplitN(content, " ", 3)
-	if len(fields) < 2 {
-		return content
-	}
-	if target := fields[1]; !strings.HasSuffix(target, ".") {
-		fields[1] = target + "."
-	}
-	return strings.Join(fields, " ")
-}
-
-func toRecordConfig(dc *models.DomainConfig, r dnsimpleapi.ZoneRecord) (*models.RecordConfig, error) {
-	label := dc.LabelFromShort(r.Name)
-	ttl := uint32(r.TTL)
-
-	var rec *models.RecordConfig
-	var err error
-
-	switch r.Type {
-	case "ALIAS", "URL":
-		rec, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "MX":
-		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Content,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "SRV":
-		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Content,
-			nrc.Flags{SrvWeirdSplit: true})
-	case "SVCB", "HTTPS":
-		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, qualifySVCBTarget(r.Content),
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	default:
-		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	rec.Original = r
-
-	return rec, nil
 }
 
 func (c *dnsimpleProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, actual models.Records) ([]*models.Correction, int, error) {
@@ -530,7 +517,7 @@ func (c *dnsimpleProvider) recordUpdate(old *dnsimpleapi.ZoneRecord, rc *models.
 	// priority:0 from the PATCH payload. Without an explicit priority,
 	// the API keeps the old (non-zero) priority and rejects the update.
 	// Work around this by deleting and recreating the record.
-	if rc.TypeNum == dnsv2.TypeMX && rc.AsMX().Mx == "." {
+	if rc.Type == "MX" && rc.GetTargetField() == "." {
 		if err := c.recordDelete(old.ID, domainName); err != nil {
 			return err
 		}
@@ -616,13 +603,13 @@ func newProvider(m map[string]string, _ json.RawMessage) (*dnsimpleProvider, err
 func removeOtherApexNS(dc *models.DomainConfig) {
 	newList := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
-		if rec.TypeNum == dnsv2.TypeNS {
+		if rec.Type == "NS" {
 			// apex NS inside dnsimple are expected.
 			// We ignore them, warning as needed.
 			// Child delegations are supported so we allow non-apex NS records.
 			if rec.GetLabelFQDN() == dc.Name {
-				if !isDnsimpleNameServerDomain(rec.AsNS().Ns) {
-					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.AsNS().Ns)
+				if !isDnsimpleNameServerDomain(rec.GetTargetField()) {
+					printer.Printf("Warning: dnsimple.com does not allow NS records to be modified. %s will not be added.\n", rec.GetTargetField())
 				}
 				continue
 			}
@@ -633,57 +620,53 @@ func removeOtherApexNS(dc *models.DomainConfig) {
 }
 
 // Returns the correct combined content for all special record types, Target for everything else
-// Using RecordConfig.GetRDATA().String() returns priority in the string, which we do not allow.
-// NB(tlim): For SRV this returns the fields in the order weight, port, target.
-// The priority is not included in the string, but is returned separately by
-// getTargetRecordPriority.
+// Using RecordConfig.GetTargetCombined returns priority in the string, which we do not allow.
 func getTargetRecordContent(rc *models.RecordConfig) string {
-	switch rc.TypeNum {
-	case dnsv2.TypeHTTPS:
+	switch rtype := rc.Type; rtype {
+	case "CAA":
+		return rc.GetTargetCombined()
+	case "DS":
+		return fmt.Sprintf("%d %d %d %s", rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+	case "HTTPS", "SVCB":
 		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
 		// Preserve "." for AliasMode (priority 0) self-referencing records.
-		f := rc.AsHTTPS()
-		target := f.Target
+		target := rc.GetTargetField()
 		if target != "." {
 			target = strings.TrimSuffix(target, ".")
 		}
-		if len(f.Value) != 0 {
-			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
+		if rc.SvcParams != "" {
+			return fmt.Sprintf("%d %s %s", rc.SvcPriority, target, rc.SvcParams)
 		}
-		return fmt.Sprintf("%d %s", f.Priority, target)
-	case dnsv2.TypeSVCB:
-		// DNSimple API does not accept FQDN trailing dots in SVCB/HTTPS targets.
-		// Preserve "." for AliasMode (priority 0) self-referencing records.
-		f := rc.AsSVCB()
-		target := f.Target
-		if target != "." {
-			target = strings.TrimSuffix(target, ".")
-		}
-		if len(f.Value) != 0 {
-			return fmt.Sprintf("%d %s %s", f.Priority, target, models.Svcbv2ValueToString(f.Value))
-		}
-		return fmt.Sprintf("%d %s", f.Priority, target)
-	case dnsv2.TypeMX:
-		return rc.AsMX().Mx
-	case dnsv2.TypeSRV:
-		f := rc.AsSRV()
-		return fmt.Sprintf("%d %d %s", f.Weight, f.Port, f.Target)
-	case dnsv2.TypeTXT:
-		return rc.AsTXT().String()
+		return fmt.Sprintf("%d %s", rc.SvcPriority, target)
+	case "MX":
+		return rc.GetTargetField()
+	case "NAPTR":
+		return fmt.Sprintf(`%d %d "%s" "%s" "%s" %s`,
+			rc.NaptrOrder, rc.NaptrPreference, rc.NaptrFlags, rc.NaptrService, rc.NaptrRegexp,
+			rc.GetTargetField())
+	case "SSHFP":
+		return fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+	case "SRV":
+		return fmt.Sprintf("%d %d %s", rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	case "TLSA":
+		return fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	case "TXT":
+		return rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
+	default:
+		return rc.GetTargetField()
 	}
-	return rc.GetRDATA().String()
 }
 
 // Returns the correct priority for the record type, 0 for records without priority.
 func getTargetRecordPriority(rc *models.RecordConfig) int {
-	switch rc.TypeNum {
-	case dnsv2.TypeMX:
-		return int(rc.AsMX().Preference)
-	case dnsv2.TypeSRV:
-		return int(rc.AsSRV().Priority)
-	// case dnsv2.TypeNAPTR:
-	// 	// Neither order nor preference
-	// 	return 0
+	switch rtype := rc.Type; rtype {
+	case "MX":
+		return int(rc.MxPreference)
+	case "SRV":
+		return int(rc.SrvPriority)
+	case "NAPTR":
+		// Neither order nor preference
+		return 0
 	default:
 		return 0
 	}
@@ -692,7 +675,8 @@ func getTargetRecordPriority(rc *models.RecordConfig) int {
 // wrapError converts a DNSimple API ErrorResponse into a compiled error message,
 // or returns the original error if it is not an ErrorResponse.
 func wrapError(err error) error {
-	if errorResponse, ok := errors.AsType[*dnsimpleapi.ErrorResponse](err); ok {
+	var errorResponse *dnsimpleapi.ErrorResponse
+	if errors.As(err, &errorResponse) {
 		return compileAttributeErrors(errorResponse)
 	}
 	return err

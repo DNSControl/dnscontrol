@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 type adguardHomeProvider struct {

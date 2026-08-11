@@ -3,15 +3,20 @@ package diff2
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v4/models"
 )
 
 func makeTestRecord(name, rtype, target, domain string) *models.RecordConfig {
-	dc := models.MustNewDomainConfig(domain)
-	if rtype == "TXT" {
-		return dc.MustNewRecordConfig(dc.LabelFromShort(name), 0, rtype, target)
+	rc := &models.RecordConfig{
+		Type: rtype,
 	}
-	return dc.MustNewRecordConfigParse(dc.LabelFromShort(name), 0, rtype, target)
+	rc.SetLabel(name, domain)
+	if rtype == "TXT" {
+		rc.SetTargetTXT(target)
+	} else {
+		rc.SetTarget(target)
+	}
+	return rc
 }
 
 func TestIsExternalDNSTxtRecord(t *testing.T) {
@@ -201,7 +206,7 @@ func TestFindExternalDNSManagedRecords(t *testing.T) {
 		// Non-external-dns records
 		makeTestRecord("static", "A", "1.2.3.4", domain),
 		makeTestRecord("@", "TXT", "v=spf1 -all", domain),
-		makeTestRecord("@", "MX", "10 mail.example.com.", domain),
+		makeTestRecord("@", "MX", "mail.example.com.", domain),
 	}
 
 	managed := findExternalDNSManagedRecords(existing, domain, "")
@@ -485,7 +490,7 @@ func TestGetExternalDNSIgnoredRecords_PeriodFormatApex(t *testing.T) {
 		makeTestRecord("extdns-aaaa", "TXT", "heritage=external-dns,external-dns/owner=k3s-cluster", domain),
 		makeTestRecord("@", "AAAA", "::1", domain),
 		// Non-external-dns apex records (should not be ignored)
-		makeTestRecord("@", "MX", "10 mail.example.com.", domain),
+		makeTestRecord("@", "MX", "mail.example.com.", domain),
 		makeTestRecord("@", "TXT", "v=spf1 -all", domain),
 	}
 

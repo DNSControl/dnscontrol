@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	"golang.org/x/net/idna"
 )
 
 /*
@@ -39,8 +41,7 @@ var features = providers.DocumentationNotes{
 	providers.CanUseAlias:            providers.Unimplemented("Apex aliasing is supported via new SVCB and HTTPS record types. For details, check the deSEC docs."),
 	providers.CanUseCAA:              providers.Can(),
 	providers.CanUseDNSKEY:           providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Can(),
+	providers.CanUseDS:               providers.Can(),
 	providers.CanUseHTTPS:            providers.Can(),
 	providers.CanUseLOC:              providers.Can(),
 	providers.CanUseNAPTR:            providers.Can(),
@@ -94,16 +95,23 @@ func (c *desecProvider) GetNameservers(domain string) ([]*models.Nameserver, err
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *desecProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	records, err := c.getRecords(dc.Name)
+	domain := dc.Name
+
+	punycodeDomain, err := idna.ToASCII(domain)
+	if err != nil {
+		return nil, err
+	}
+
+	records, err := c.getRecords(punycodeDomain)
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert them to DNScontrol's native format:
-	existingRecords := models.Records{}
+	existingRecords := []*models.RecordConfig{}
 	// spew.Dump(records)
 	for _, rr := range records {
-		existingRecords = append(existingRecords, nativeToRecords(rr, dc)...)
+		existingRecords = append(existingRecords, nativeToRecords(rr, punycodeDomain)...)
 	}
 
 	return existingRecords, nil
@@ -131,15 +139,7 @@ func PrepDesiredRecords(dc *models.DomainConfig, minTTL uint32) {
 	// provider.  We try to do minimal changes otherwise it gets
 	// confusing.
 
-	// TODO(tlim): We shouldn't modify rec's because if the same rec is used
-	// for another provider, there will be confusion. Right now we use a
-	// little memory by making a copy of every record for each provider, but
-	// we'd like to not do that in the future.
-	// If possible, it would be better to eliminate this function
-	// and instead:
-	// * ALIAS: Skip them in recordsToNative()
-	// * minTTL: recordsToNative() should return records with fixed TTLs.
-
+	// dc.Punycode()
 	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
@@ -160,7 +160,12 @@ func PrepDesiredRecords(dc *models.DomainConfig, minTTL uint32) {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	minTTL, ok, err := c.searchDomainIndex(dc.Name)
+	punycodeName, err := idna.ToASCII(dc.Name)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	minTTL, ok, err := c.searchDomainIndex(punycodeName)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -170,51 +175,58 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 
 	PrepDesiredRecords(dc, minTTL)
 
-	changes, actualChangeCount, err := diff2.ByRecordSet(existing, dc, nil)
+	keysToUpdate, toReport, actualChangeCount, err := diff.NewCompat(dc).ChangedGroups(existing)
 	if err != nil {
 		return nil, 0, err
 	}
+	// Start corrections with the reports
+	corrections := diff.GenerateMessageCorrections(toReport)
 
-	var corrections []*models.Correction
+	if len(corrections) == 0 && len(keysToUpdate) == 0 {
+		return nil, 0, nil
+	}
+
+	desiredRecords := dc.Records.GroupedByKey()
 	var rrs []resourceRecord
 	buf := &bytes.Buffer{}
-	// For any rrset with an update, delete or replace those records. deSEC's
-	// API is rrset-oriented: a single upsert call replaces the whole rrset (an
-	// empty record list deletes it).
-	for _, change := range changes {
-		switch change.Type {
-		case diff2.REPORT:
-			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-
-		case diff2.DELETE:
-			// An empty array of records deletes this rrset.
-			rc := resourceRecord{}
-			rc.Type = change.Key.Type
-			rc.Records = make([]string, 0)
-			rc.TTL = 3600
-			shortname := dc.ToShort(change.Key.NameFQDN)
-			if shortname == "@" {
-				shortname = ""
+	// For any key with an update, delete or replace those records.
+	for label := range keysToUpdate {
+		if _, ok := desiredRecords[label]; !ok {
+			// we could not find this RecordKey in the desiredRecords
+			// this means it must be deleted
+			for i, msg := range keysToUpdate[label] {
+				if i == 0 {
+					rc := resourceRecord{}
+					rc.Type = label.Type
+					rc.Records = make([]string, 0) // empty array of records should delete this rrset
+					rc.TTL = 3600
+					shortname := dnsutilv1.TrimDomainName(label.NameFQDN, punycodeName)
+					if shortname == "@" {
+						shortname = ""
+					}
+					rc.Subname = shortname
+					fmt.Fprintln(buf, msg)
+					rrs = append(rrs, rc)
+				} else {
+					// just add the message
+					fmt.Fprintln(buf, msg)
+				}
 			}
-			rc.Subname = shortname
-			rrs = append(rrs, rc)
-			for _, msg := range change.Msgs {
-				fmt.Fprintln(buf, msg)
-			}
-
-		case diff2.CREATE, diff2.CHANGE:
-			// A create or update are both done with the same api call.
-			ns := recordsToNative(change.New)
+		} else {
+			// it must be an update or create, both can be done with the same api call.
+			ns := recordsToNative(desiredRecords[label], punycodeName)
 			if len(ns) > 1 {
 				panic("we got more than one resource record to create / modify")
 			}
-			rrs = append(rrs, ns[0])
-			for _, msg := range change.Msgs {
-				fmt.Fprintln(buf, msg)
+			for i, msg := range keysToUpdate[label] {
+				if i == 0 {
+					rrs = append(rrs, ns[0])
+					fmt.Fprintln(buf, msg)
+				} else {
+					// noop just for printing the additional messages
+					fmt.Fprintln(buf, msg)
+				}
 			}
-
-		default:
-			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
 	}
 
@@ -226,7 +238,7 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 				Msg: msg,
 				F: func() error {
 					rc := rrs
-					err := c.upsertRR(rc, dc.Name)
+					err := c.upsertRR(rc, punycodeName)
 					if err != nil {
 						return err
 					}

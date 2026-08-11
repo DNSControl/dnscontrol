@@ -1,12 +1,13 @@
 package bunnydns
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
 )
 
 func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
@@ -22,7 +23,13 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		return nil, err
 	}
 
-	recs := make(models.Records, 0, len(nativeRecs))
+	implicitRecs, err := b.getImplicitRecordConfigs(zone)
+	if err != nil {
+		return nil, err
+	}
+
+	recs := make(models.Records, 0, len(nativeRecs)+len(implicitRecs))
+	recs = append(recs, implicitRecs...)
 
 	// Define a list of record types that are currently not supported by this provider.
 	unsupportedTypes := []recordType{
@@ -38,7 +45,7 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		}
 
-		rc, err := toRecordConfig(dc, nativeRec)
+		rc, err := toRecordConfig(zone.Domain, nativeRec)
 		if err != nil {
 			return nil, err
 		}
@@ -126,7 +133,11 @@ func (b *bunnydnsProvider) mkChangeCorrection(zoneID int64, oldRec, newRec *mode
 	return &models.Correction{
 		Msg: msg,
 		F: func() error {
-			existingID := oldRec.Original.(int64)
+			existingID := oldRec.Original.(*record).ID
+			if existingID == 0 {
+				return errors.New("BUNNY_DNS: cannot change implicit records")
+			}
+
 			desired, err := fromRecordConfig(newRec)
 			if err != nil {
 				return err
@@ -141,7 +152,11 @@ func (b *bunnydnsProvider) mkDeleteCorrection(zoneID int64, oldRec *models.Recor
 	return &models.Correction{
 		Msg: msg,
 		F: func() error {
-			existingID := oldRec.Original.(int64)
+			existingID := oldRec.Original.(*record).ID
+			if existingID == 0 {
+				return errors.New("BUNNY_DNS: cannot delete implicit records")
+			}
+
 			return b.deleteRecord(zoneID, existingID)
 		},
 	}

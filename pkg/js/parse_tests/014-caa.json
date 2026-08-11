@@ -3,83 +3,54 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "128 iodef \"https://example.com\"",
+          "caaflag": 128,
+          "caatag": "iodef",
           "filepos": "[line:12:5]",
-          "meta": {
-            "caaflag": "128"
-          },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flag": 128,
-            "Tag": "iodef",
-            "Value": "https://example.com"
-          },
+          "target": "https://example.com",
           "ttl": 300,
-          "type": "CAA",
-          "typenum": 257
+          "type": "CAA"
         },
         {
-          "comparablev3": "128 iodef \"mailto:test@example.com\"",
+          "caaflag": 128,
+          "caatag": "iodef",
           "filepos": "[line:8:5]",
-          "meta": {
-            "caaflag": "128"
-          },
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flag": 128,
-            "Tag": "iodef",
-            "Value": "mailto:test@example.com"
-          },
+          "target": "mailto:test@example.com",
           "ttl": 300,
-          "type": "CAA",
-          "typenum": 257
+          "type": "CAA"
         },
         {
-          "comparablev3": "0 iodef \"http://example.com\"",
+          "caatag": "iodef",
           "filepos": "[line:10:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "iodef",
-            "Value": "http://example.com"
-          },
+          "target": "http://example.com",
           "ttl": 300,
-          "type": "CAA",
-          "typenum": 257
+          "type": "CAA"
         },
         {
-          "comparablev3": "0 issue \"letsencrypt.org\"",
+          "caatag": "issue",
           "filepos": "[line:3:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "issue",
-            "Value": "letsencrypt.org"
-          },
+          "target": "letsencrypt.org",
           "ttl": 300,
-          "type": "CAA",
-          "typenum": 257
+          "type": "CAA"
         },
         {
-          "comparablev3": "0 issuewild \";\"",
+          "caatag": "issuewild",
           "filepos": "[line:5:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "issuewild",
-            "Value": ";"
-          },
+          "target": ";",
           "ttl": 300,
-          "type": "CAA",
-          "typenum": 257
+          "type": "CAA"
         }
       ],
       "registrar": "none",

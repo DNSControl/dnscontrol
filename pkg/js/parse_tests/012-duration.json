@@ -3,67 +3,47 @@
   "domains": [
     {
       "dnsProviders": {},
+      "meta": {
+        "dnscontrol_nameraw": "foo.com",
+        "dnscontrol_nameunicode": "foo.com",
+        "dnscontrol_uniquename": "foo.com"
+      },
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "1.2.3.4",
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "target": "1.2.3.4",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "1.2.3.5",
           "filepos": "[line:3:5]",
           "name": "a",
-          "name_unicode": "a",
-          "rdata": {
-            "Addr": "1.2.3.5"
-          },
+          "target": "1.2.3.5",
           "ttl": 300,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "1.2.3.6",
           "filepos": "[line:4:5]",
           "name": "b",
-          "name_unicode": "b",
-          "rdata": {
-            "Addr": "1.2.3.6"
-          },
+          "target": "1.2.3.6",
           "ttl": 180,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "1.2.3.7",
           "filepos": "[line:5:5]",
           "name": "c",
-          "name_unicode": "c",
-          "rdata": {
-            "Addr": "1.2.3.7"
-          },
+          "target": "1.2.3.7",
           "ttl": 10800,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         },
         {
-          "comparablev3": "1.2.3.8",
           "filepos": "[line:6:5]",
           "name": "d",
-          "name_unicode": "d",
-          "rdata": {
-            "Addr": "1.2.3.8"
-          },
+          "target": "1.2.3.8",
           "ttl": 259200,
-          "type": "A",
-          "typenum": 1
+          "type": "A"
         }
       ],
       "registrar": "none",

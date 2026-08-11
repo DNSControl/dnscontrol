@@ -1,9 +1,10 @@
 package nexdns
 
 import (
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"fmt"
+
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
 )
 
 // apexLabel is how both DNSControl and the API name the zone apex.
@@ -11,20 +12,39 @@ const apexLabel = "@"
 
 // toRecordConfig converts one record of an API response to a RecordConfig.
 // A response carries the assembled rdata in Content ("10 mail.example.com." for
-// an MX), which is what NewRecordConfigParse parses, so no per-type handling is
+// an MX), which is what PopulateFromString parses, so no per-type handling is
 // needed on the way in - except for TXT.
 //
 // TXT is asymmetric: the API accepts a value verbatim but returns it in RFC 1035
 // presentation form, quoted and escaped, and chunked into 255-octet strings when
-// needed.
-func toRecordConfig(dc *models.DomainConfig, r apiRecord) (*models.RecordConfig, error) {
-	rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(r.Name), uint32(r.TTL), r.Type, r.Content,
-		nrc.Flags{})
-	if err != nil {
-		return nil, err
+// it is longer than that. PopulateFromString cannot undo that - it only strips
+// the outer quotes - so a backslash returned as `\\` would be read back as two
+// characters, written again as four, and doubled on every run until the record
+// no longer says what its owner wrote. txtutil.ParseQuoted is the decoder for
+// this form, and it passes an unquoted value through unchanged.
+func toRecordConfig(r apiRecord, origin string) (*models.RecordConfig, error) {
+	rc := &models.RecordConfig{
+		Type:     r.Type,
+		TTL:      uint32(r.TTL),
+		Original: r,
+	}
+	rc.SetLabel(r.Name, origin)
+
+	if r.Type == "TXT" {
+		value, err := txtutil.ParseQuoted(r.Content)
+		if err != nil {
+			return nil, fmt.Errorf("unparsable TXT value %q: %w", r.Content, err)
+		}
+		if err := rc.SetTargetTXT(value); err != nil {
+			return nil, err
+		}
+
+		return rc, nil
 	}
 
-	rc.Original = r
+	if err := rc.PopulateFromString(r.Type, r.Content, origin); err != nil {
+		return nil, err
+	}
 
 	return rc, nil
 }
@@ -43,35 +63,35 @@ func fromRecordConfig(rc *models.RecordConfig) recordRequest {
 		TTL:  int(rc.TTL),
 	}
 
-	switch f := rc.GetRDATA().(type) {
-	case dnsrdatav2.MX:
-		req.Priority = new(int(f.Preference))
-		req.Content = f.Mx
-	case dnsrdatav2.SRV:
-		req.Priority = new(int(f.Priority))
-		req.Weight = new(int(f.Weight))
-		req.Port = new(int(f.Port))
-		req.Content = f.Target
-	case dnsrdatav2.CAA:
-		req.Flags = new(int(f.Flag))
-		req.Tag = f.Tag
-		req.Content = f.Value
-	case dnsrdatav2.DS:
-		req.KeyTag = new(int(f.KeyTag))
-		req.Algorithm = new(int(f.Algorithm))
-		req.DigestType = new(int(f.DigestType))
-		req.Content = f.Digest
-	case dnsrdatav2.TLSA:
+	switch rc.Type {
+	case "MX":
+		req.Content = rc.GetTargetField()
+		req.Priority = new(int(rc.MxPreference))
+	case "SRV":
+		req.Content = rc.GetTargetField()
+		req.Priority = new(int(rc.SrvPriority))
+		req.Weight = new(int(rc.SrvWeight))
+		req.Port = new(int(rc.SrvPort))
+	case "CAA":
+		req.Content = rc.GetTargetField()
+		req.Flags = new(int(rc.CaaFlag))
+		req.Tag = rc.CaaTag
+	case "DS":
+		req.Content = rc.DsDigest
+		req.KeyTag = new(int(rc.DsKeyTag))
+		req.Algorithm = new(int(rc.DsAlgorithm))
+		req.DigestType = new(int(rc.DsDigestType))
+	case "TLSA":
 		// The certificate association data is the target; the three selectors
 		// are separate fields in the model as well as in the request.
-		req.Usage = new(int(f.Usage))
-		req.Selector = new(int(f.Selector))
-		req.MatchingType = new(int(f.MatchingType))
-		req.Content = f.Certificate
-	case dnsrdatav2.TXT:
+		req.Content = rc.GetTargetField()
+		req.Usage = new(int(rc.TlsaUsage))
+		req.Selector = new(int(rc.TlsaSelector))
+		req.MatchingType = new(int(rc.TlsaMatchingType))
+	case "TXT":
 		req.Content = rc.GetTargetTXTJoined()
 	default:
-		req.Content = rc.GetRDATA().String()
+		req.Content = rc.GetTargetField()
 	}
 
 	return req

@@ -9,13 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	dnsv2 "codeberg.org/miekg/dns"
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
-	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
 	"github.com/digitalocean/godo"
+	dnsutilv1 "github.com/miekg/dns/dnsutil"
 	"golang.org/x/oauth2"
 )
 
@@ -30,12 +28,7 @@ Info required in `creds.json`:
 
 // digitaloceanProvider is the handle for operations.
 type digitaloceanProvider struct {
-	observer providers.ConversionObserver
-	client   *godo.Client
-}
-
-func (api *digitaloceanProvider) SetConversionObserver(observer providers.ConversionObserver) {
-	api.observer = observer
+	client *godo.Client
 }
 
 var defaultNameServerNames = []string{
@@ -202,14 +195,12 @@ func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models
 
 	var existingRecords []*models.RecordConfig
 	for i := range records {
-		if records[i].Type == "SOA" {
-			continue
-		}
-		before := providers.BeginToRC(api.observer, "toRc", &records[i])
-		r, err := toRc(dc, &records[i])
-		providers.EndToRC(api.observer, "toRc", before, &records[i], models.Records{r}, err)
+		r, err := toRc(domain, &records[i])
 		if err != nil {
 			return nil, err
+		}
+		if r.Type == "SOA" {
+			continue
 		}
 		existingRecords = append(existingRecords, r)
 	}
@@ -255,10 +246,7 @@ func (api *digitaloceanProvider) GetZoneRecordsCorrections(dc *models.DomainConf
 			continue
 
 		case diff2.CREATE:
-			input := models.Records{inst.New[0]}
-			before := providers.BeginToNative(api.observer, "toReq", input)
 			req := toReq(inst.New[0])
-			providers.EndToNative(api.observer, "toReq", before, input, req, nil)
 			addCorrection(inst.MsgsJoined, func() (*godo.Response, error) {
 				_, resp, err := api.client.Domains.CreateRecord(ctx, dc.Name, req)
 				return resp, err
@@ -266,10 +254,7 @@ func (api *digitaloceanProvider) GetZoneRecordsCorrections(dc *models.DomainConf
 
 		case diff2.CHANGE:
 			id := inst.Old[0].Original.(*godo.DomainRecord).ID
-			input := models.Records{inst.New[0]}
-			before := providers.BeginToNative(api.observer, "toReq", input)
 			req := toReq(inst.New[0])
-			providers.EndToNative(api.observer, "toReq", before, input, req, nil)
 			addCorrection(inst.MsgsJoined, func() (*godo.Response, error) {
 				_, resp, err := api.client.Domains.EditRecord(ctx, dc.Name, id, req)
 				return resp, err
@@ -322,72 +307,82 @@ retry:
 	return records, nil
 }
 
-func toRc(dc *models.DomainConfig, r *godo.DomainRecord) (*models.RecordConfig, error) {
+func toRc(domain string, r *godo.DomainRecord) (*models.RecordConfig, error) {
+	// This handles "@" etc.
+	name := dnsutilv1.AddOrigin(r.Name, domain)
 
-	label := dc.LabelFromShort(r.Name)
-	ttl := uint32(r.TTL)
+	target := r.Data
+	// Make target FQDN (#rtype_variations)
+	if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" || r.Type == "SRV" {
+		// If target is the domainname, e.g. cname foo.example.com -> example.com,
+		// DO returns "@" on read even if fqdn was written.
+		switch target {
+		case "@":
+			target = domain
+		case ".":
+			target = ""
+		}
+		target = target + "."
+	}
 
-	var rc *models.RecordConfig
-	var err error
+	t := &models.RecordConfig{
+		Type:         r.Type,
+		TTL:          uint32(r.TTL),
+		MxPreference: uint16(r.Priority),
+		SrvPriority:  uint16(r.Priority),
+		SrvWeight:    uint16(r.Weight),
+		SrvPort:      uint16(r.Port),
+		Original:     r,
+		CaaTag:       r.Tag,
+		CaaFlag:      uint8(r.Flags),
+	}
+	t.SetLabelFromFQDN(name, domain)
 	switch rtype := r.Type; rtype {
-	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(r.Priority), r.Data,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(r.Priority), uint16(r.Weight), uint16(r.Port), r.Data,
-			nrc.Flags{TargetIsFqdnNoDot: true})
-	case "CAA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, uint8(r.Flags), r.Tag, r.Data,
-			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "TXT":
+		if err := t.SetTargetTXT(target); err != nil {
+			return nil, err
+		}
 	default:
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Data,
-			nrc.Flags{TargetIsFqdnNoDot: true})
+		if err := t.SetTarget(target); err != nil {
+			return nil, err
+		}
 	}
-	if err != nil {
-		return nil, err
-	}
-
-	rc.Original = r
-
-	return rc, nil
+	return t, nil
 }
 
 func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
-	name := rc.GetLabel() // DO wants the short name or "@" for apex.
+	name := rc.GetLabel()         // DO wants the short name or "@" for apex.
+	target := rc.GetTargetField() // DO uses the target field only for a single value
+	priority := 0                 // DO uses the same property for MX and SRV priority
 
-	r := &godo.DomainRecordEditRequest{
-		Type: rc.Type,
-		Name: name,
-		TTL:  int(rc.TTL),
-	}
-
-	switch f := rc.GetRDATA().(type) {
-	case dnsrdatav2.CAA:
+	switch rc.Type { // #rtype_variations
+	case "CAA":
 		// DO API requires that a CAA target ends in dot.
 		// Interestingly enough, the value returned from API doesn't
 		// contain a trailing dot.
-		// r.Data = target + "."
-		r.Tag = f.Tag
-		r.Flags = int(f.Flag)
-		r.Data = f.Value + "."
-	case dnsrdatav2.MX:
-		// DO uses the same field for MX and SRV priority
-		r.Priority = int(f.Preference)
-		r.Data = f.Mx
-	case dnsrdatav2.SRV:
-		// DO uses the same field for MX and SRV priority
-		r.Priority = int(f.Priority)
-		r.Weight = int(f.Weight)
-		r.Port = int(f.Port)
-		r.Data = f.Target
-	case dnsrdatav2.TXT:
+		target = target + "."
+	case "MX":
+		priority = int(rc.MxPreference)
+	case "SRV":
+		priority = int(rc.SrvPriority)
+	case "TXT":
 		// TXT records are the one place where DO combines many items into one field.
-		r.Data = rc.GetTargetTXTJoined()
+		target = rc.GetTargetTXTJoined()
 	default:
-		r.Data = rc.GetRDATA().String() // DO uses the target field only for a single value
+		// no action required
 	}
 
-	return r
+	return &godo.DomainRecordEditRequest{
+		Type:     rc.Type,
+		Name:     name,
+		Data:     target,
+		TTL:      int(rc.TTL),
+		Priority: priority,
+		Port:     int(rc.SrvPort),
+		Weight:   int(rc.SrvWeight),
+		Tag:      rc.CaaTag,
+		Flags:    int(rc.CaaFlag),
+	}
 }
 
 // backoff is the amount of time to sleep if a 429 or 504 is received.

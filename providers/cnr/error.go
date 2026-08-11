@@ -7,6 +7,6 @@ import (
 )
 
 // GetAPIError returns an error including API error code and error description.
-func (client *Client) GetAPIError(format string, objectid string, r *response.Response) error {
+func (n *Client) GetAPIError(format string, objectid string, r *response.Response) error {
 	return fmt.Errorf(format+" %q. [%v %s]", objectid, r.GetCode(), r.GetDescription())
 }
