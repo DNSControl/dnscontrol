@@ -9,7 +9,7 @@ import (
 )
 
 func TestPreprocessConfigConvertsAliasRDATA(t *testing.T) {
-	dc := &models.DomainConfig{Name: "example.com"}
+	dc := models.MustNewDomainConfig("example.com")
 	apex := dc.MustNewRecordConfig("@", 300, privatetypes.TypeALIAS, "target.example.")
 	nonApex := dc.MustNewRecordConfig("www", 300, privatetypes.TypeALIAS, "target.example.")
 	dc.Records = models.Records{apex, nonApex}

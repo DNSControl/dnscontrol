@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -85,15 +86,12 @@ func TestAliasToCnameChangeType(t *testing.T) {
 }
 
 func TestHasRecordTypeName(t *testing.T) {
-	x := &RecordConfig{
-		Type: "A",
-		Name: "@",
-	}
+	dc := MustNewDomainConfig("example.com")
 	recs := Records{}
 	if recs.HasRecordTypeName("A", "@") {
 		t.Errorf("%v: expected (%v) got (%v)\n", recs, false, true)
 	}
-	recs = append(recs, x)
+	recs = append(recs, dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4"))
 	if !recs.HasRecordTypeName("A", "@") {
 		t.Errorf("%v: expected (%v) got (%v)\n", recs, true, false)
 	}

@@ -20,10 +20,12 @@ func TestDowncase(t *testing.T) {
 	if !dc.Records.HasRecordTypeName("MX", "upper") {
 		t.Errorf("%v: expected (%v) got (%v)\n", dc.Records, false, true)
 	}
-	if dc.Records[0].GetTargetField() != "targetmx.example.com." {
-		t.Errorf("%v: target0 expected (%v) got (%v)\n", dc.Records, "targetmx.example.com.", dc.Records[0].GetTargetField())
+	got0 := dc.Records[0].AsMX().Mx
+	if got0 != "targetmx.example.com." {
+		t.Errorf("%v: target0 expected (%v) got (%v)\n", dc.Records, "targetmx.example.com.", got0)
 	}
-	if dc.Records[1].GetTargetField() != "targetmx.example.com." {
-		t.Errorf("%v: target1 expected (%v) got (%v)\n", dc.Records, "targetmx.example.com.", dc.Records[1].GetTargetField())
+	got1 := dc.Records[1].AsMX().Mx
+	if got1 != "targetmx.example.com." {
+		t.Errorf("%v: target1 expected (%v) got (%v)\n", dc.Records, "targetmx.example.com.", got1)
 	}
 }

@@ -552,6 +552,8 @@ func ignore(labelSpec string, typeSpec string, targetSpec string) *models.Record
 		Metadata: map[string]string{},
 	}
 
+	// We stash the *Spec values in Metadata temporarily. Later in tc() we
+	// pluck them out and install them in the DomainConfig.
 	r.Metadata["ignore_LabelPattern"] = labelSpec
 	r.Metadata["ignore_RTypePattern"] = typeSpec
 	r.Metadata["ignore_TargetPattern"] = targetSpec

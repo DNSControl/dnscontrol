@@ -151,7 +151,7 @@ func (n *namedotcomProvider) getRecords(domain string) ([]*namecom.Record, error
 func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string) error {
 
 	rtype := rc.Type
-	answer := rc.GetTargetField()
+	var answer string
 	var priority uint32
 
 	switch rc.TypeNum {
@@ -169,6 +169,8 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		f := rc.AsSRV()
 		priority = uint32(f.Priority)
 		answer = fmt.Sprintf("%d %d %v", f.Weight, f.Port, f.Target)
+	default:
+		answer = rc.GetTargetField()
 	}
 
 	record := &namecom.Record{

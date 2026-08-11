@@ -8,7 +8,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
-	"github.com/jinzhu/copier"
 	"github.com/qdm12/reprint"
 )
 
@@ -80,10 +79,8 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	recj := &struct {
 		RecordConfig
 		RDATA dnsv2.RDATA `json:"rdata,omitempty"`
-		// Target string      `json:"target,omitempty"`
 	}{
 		RecordConfig: *rc,
-		// Target:       rc.GetTargetField(),
 	}
 	recj.RDATA = rc.GetRDATA()
 	j, err := json.Marshal(*recj)
@@ -93,94 +90,94 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	return j, nil
 }
 
-// UnmarshalJSON unmarshals RecordConfig.
-func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
-	recj := &struct {
-		Target string `json:"target,omitempty"`
-
-		Type      string `json:"type"` // All caps rtype name.
-		Name      string `json:"name"` // The short name. See above.
-		SubDomain string `json:"subdomain,omitempty"`
-		NameFQDN  string `json:"-"` // Must end with ".$origin". See above.
-		// target    string            // If a name, must end with "."
-		TTL      uint32            `json:"ttl,omitempty"`
-		Metadata map[string]string `json:"meta,omitempty"`
-		FilePos  string            `json:"filepos"` // Where in the file this record was defined.
-		Original any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
-		Args     []any             `json:"args,omitempty"`
-
-		// MxPreference       uint16            `json:"mxpreference,omitempty"`
-		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
-		// SrvWeight    uint16 `json:"srvweight,omitempty"`
-		// SrvPort      uint16 `json:"srvport,omitempty"`
-		// CaaTag       string `json:"caatag,omitempty"`
-		// CaaFlag      uint8  `json:"caaflag,omitempty"`
-		// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-		// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-		// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-		// DsDigest     string `json:"dsdigest,omitempty"`
-		// DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
-		// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
-		// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
-		// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
-		// LocVersion         uint8             `json:"locversion,omitempty"`
-		// LocSize            uint8             `json:"locsize,omitempty"`
-		// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
-		// LocVertPre         uint8             `json:"locvertpre,omitempty"`
-		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
-		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
-		// LocAltitude        uint32            `json:"localtitude,omitempty"`
-		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-		// NaptrFlags      string `json:"naptrflags,omitempty"`
-		// NaptrService    string `json:"naptrservice,omitempty"`
-		// NaptrRegexp     string `json:"naptrregexp,omitempty"`
-		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
-		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
-		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-		// SvcPriority uint16 `json:"svcpriority,omitempty"`
-		// SvcParams   string `json:"svcparams,omitempty"`
-		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-		// AnswerType      string `json:"answer_type,omitempty"`
-		UnknownTypeName string `json:"unknown_type_name,omitempty"`
-
-		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
-
-		// NB(tlim): If anyone can figure out how to do this without listing all
-		// the fields, please let us know!
-	}{}
-	if err := json.Unmarshal(b, &recj); err != nil {
-		return err
-	}
-
-	recj.FilePos = FixPosition(recj.FilePos)
-
-	// Copy the exported fields.
-	if err := copier.CopyWithOption(&rc, &recj, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
-		return err
-	}
-	// // Set each unexported field.
-	// if err := rc.SetTarget(recj.Target); err != nil {
-	// 	return err
-	// }
-
-	// Some sanity checks:
-	if recj.Type != rc.Type {
-		panic("DEBUG: TYPE NOT COPIED\n")
-	}
-	if recj.Type == "" {
-		panic("DEBUG: TYPE BLANK\n")
-	}
-	if recj.Name != rc.Name {
-		panic("DEBUG: NAME NOT COPIED\n")
-	}
-
-	return nil
-}
+//// UnmarshalJSON unmarshals RecordConfig.
+//func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
+//	recj := &struct {
+//		Target string `json:"target,omitempty"`
+//
+//		Type      string `json:"type"` // All caps rtype name.
+//		Name      string `json:"name"` // The short name. See above.
+//		SubDomain string `json:"subdomain,omitempty"`
+//		NameFQDN  string `json:"-"` // Must end with ".$origin". See above.
+//		// target    string            // If a name, must end with "."
+//		TTL      uint32            `json:"ttl,omitempty"`
+//		Metadata map[string]string `json:"meta,omitempty"`
+//		FilePos  string            `json:"filepos"` // Where in the file this record was defined.
+//		Original any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
+//		Args     []any             `json:"args,omitempty"`
+//
+//		// MxPreference       uint16            `json:"mxpreference,omitempty"`
+//		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
+//		// SrvWeight    uint16 `json:"srvweight,omitempty"`
+//		// SrvPort      uint16 `json:"srvport,omitempty"`
+//		// CaaTag       string `json:"caatag,omitempty"`
+//		// CaaFlag      uint8  `json:"caaflag,omitempty"`
+//		// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
+//		// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
+//		// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
+//		// DsDigest     string `json:"dsdigest,omitempty"`
+//		// DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
+//		// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
+//		// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
+//		// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
+//		// LocVersion         uint8             `json:"locversion,omitempty"`
+//		// LocSize            uint8             `json:"locsize,omitempty"`
+//		// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
+//		// LocVertPre         uint8             `json:"locvertpre,omitempty"`
+//		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
+//		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
+//		// LocAltitude        uint32            `json:"localtitude,omitempty"`
+//		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
+//		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
+//		// NaptrFlags      string `json:"naptrflags,omitempty"`
+//		// NaptrService    string `json:"naptrservice,omitempty"`
+//		// NaptrRegexp     string `json:"naptrregexp,omitempty"`
+//		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
+//		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
+//		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
+//		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
+//		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
+//		// SvcPriority uint16 `json:"svcpriority,omitempty"`
+//		// SvcParams   string `json:"svcparams,omitempty"`
+//		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
+//		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
+//		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
+//		// AnswerType      string `json:"answer_type,omitempty"`
+//		UnknownTypeName string `json:"unknown_type_name,omitempty"`
+//
+//		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
+//
+//		// NB(tlim): If anyone can figure out how to do this without listing all
+//		// the fields, please let us know!
+//	}{}
+//	if err := json.Unmarshal(b, &recj); err != nil {
+//		return err
+//	}
+//
+//	recj.FilePos = FixPosition(recj.FilePos)
+//
+//	// Copy the exported fields.
+//	if err := copier.CopyWithOption(&rc, &recj, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
+//		return err
+//	}
+//	// // Set each unexported field.
+//	// if err := rc.SetTarget(recj.Target); err != nil {
+//	// 	return err
+//	// }
+//
+//	// Some sanity checks:
+//	if recj.Type != rc.Type {
+//		panic("DEBUG: TYPE NOT COPIED\n")
+//	}
+//	if recj.Type == "" {
+//		panic("DEBUG: TYPE BLANK\n")
+//	}
+//	if recj.Name != rc.Name {
+//		panic("DEBUG: NAME NOT COPIED\n")
+//	}
+//
+//	return nil
+//}
 
 // FixPosition takes the string representation of a position in a file that
 // comes from dnsconfig.js's initial execution, and reduces it down to just the
