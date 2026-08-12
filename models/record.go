@@ -106,7 +106,7 @@ func FixPosition(str string) string {
 }
 
 // Copy returns a deep copy of a RecordConfig.
-func (rc *RecordConfig) xCopy() (*RecordConfig, error) {
+func (rc *RecordConfig) Copy() (*RecordConfig, error) {
 	newR := &RecordConfig{}
 	// Copy the exported fields.
 	err := reprint.FromTo(rc, newR) // Deep copy
