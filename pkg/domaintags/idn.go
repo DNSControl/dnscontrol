@@ -22,18 +22,3 @@ func EfficientToASCII(name string) string {
 	}
 	return nameIDN
 }
-
-// EfficientToUnicode converts a domain name to its Unicode representation
-// using IDNA, on error returns the original name, and avoids allocating new
-// memory when possible.
-func EfficientToUnicode(name string) string {
-	nameUnicode, err := idna.ToUnicode(name)
-	if err != nil {
-		return name // Fallback to raw name on error.
-	}
-	// Avoid pointless duplication.
-	if nameUnicode == name {
-		return name
-	}
-	return nameUnicode
-}

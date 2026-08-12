@@ -53,13 +53,13 @@ func TargetHost(origin string, isEnabled nrc.Flags, arg any) (string, error) {
 		name = fmt.Sprintf("%v", arg)
 	}
 
-	// Special mode for legacy situations.
-	if origin == "" {
-		if name == "" {
-			return "UNKNOWNORIGIN.", nil
-		}
-		return name, nil
-	}
+	// // Special mode for legacy situations.
+	// if origin == "" {
+	// 	if name == "" {
+	// 		return "UNKNOWNORIGIN.", nil
+	// 	}
+	// 	return name, nil
+	// }
 
 	if isEnabled.EnforceOneDotPolicy && violatesSingleDotPolicy(name) {
 		return "", MakeErrorSingleDotViolation(name)

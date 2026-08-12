@@ -226,9 +226,6 @@ compFn: <nil>
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			models.CanonicalizeTargets(tt.args.desired, "f.com")
-			models.CanonicalizeTargets(tt.args.existing, "f.com")
-
 			cc := NewCompareConfig(tt.args.origin, tt.args.existing, tt.args.desired, tt.args.compFn)
 			got := strings.TrimSpace(cc.String())
 			tt.want = strings.TrimSpace(tt.want)

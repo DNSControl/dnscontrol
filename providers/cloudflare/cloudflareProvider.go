@@ -238,9 +238,6 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	records = append(records, redirectRes.records...)
 	records = append(records, workerRes.records...)
 
-	// Normalize
-	models.PostProcessRecords(records)
-
 	return records, nil
 }
 
