@@ -401,22 +401,22 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	case "TXT":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+".")) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+".")) // ignore:legacyfield
 	case "SRV":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+".")) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+".")) // ignore:legacyfield
 	case "ALIAS":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
 	case "CNAME", "DNAME", "NS", "PTR":
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, dc.ToFqdnWithDot(r.Target+"."))
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue) // ignore:legacyfield
 	case "TLSA":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target) // ignore:legacyfield
 	case "SSHFP":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target) // ignore:legacyfield
 	case "DS":
 		// SshfpAlgorithm and DS algorithm both use the API's "algorithm" field.
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target) // ignore:legacyfield
 	case "CLOUD_WR":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeCLOUDNSWR, r.Target)
 	case "LOC":
@@ -430,12 +430,12 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 			return nil, err
 		}
 
-		altitude, err := parseFloat32(r.LocAltitude) // ignore:oldfields
+		altitude, err := parseFloat32(r.LocAltitude) // ignore:legacyfield
 		if err != nil {
 			return nil, err
 		}
 
-		size, err := parseFloat32(r.LocSize) // ignore:oldfields
+		size, err := parseFloat32(r.LocSize) // ignore:legacyfield
 		if err != nil {
 			return nil, err
 		}
@@ -460,7 +460,7 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 
 	case "NAPTR":
 		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target) // ignore:oldfields
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target) // ignore:legacyfield
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}

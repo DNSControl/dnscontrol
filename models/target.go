@@ -9,11 +9,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 )
 
-/* .target is kind of a mess.
-If an rType has more than one field, one field goes in .target and the remaining are stored in bespoke fields.
-Not the best design, but we're stuck with it until we re-do RecordConfig, possibly using generics.
-*/
-
 // GetTargetField returns the "target" field. That is, the field in RDATA that is a hostname.
 // We hard-code certain types and others we guess by picking the last field in the struct.
 // NOTE: Deprecated. No new code should use this. Get the field you need instead.
@@ -23,9 +18,7 @@ func (rc *RecordConfig) GetTargetField() string {
 	case "TXT":
 		return rc.GetTargetTXTJoined()
 	case "R53_ALIAS":
-		// R53_ALIAS's target (DNSName) is not the last field of the RDATA
-		// (that's the zone_id), so the "last field" heuristic below is wrong
-		// for it.
+		// R53_ALIAS's target (DNSName) is not the last field of the RDATA.
 		return rc.AsR53ALIAS().Target
 	}
 
@@ -53,6 +46,7 @@ func (rc *RecordConfig) GetTargetIP() netip.Addr {
 }
 
 // SetTargetIP sets the target to an IP, verifying this is an appropriate rtype.
+// NOTE: Deprecated. No new code should use this.
 func (rc *RecordConfig) SetTargetIP(ip netip.Addr) error {
 	// TODO(tlim): Verify the rtype is appropriate for an IP.
 	//return rc.SetTarget(ip.String())

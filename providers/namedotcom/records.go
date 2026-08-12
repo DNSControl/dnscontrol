@@ -149,15 +149,22 @@ func (n *namedotcomProvider) getRecords(domain string) ([]*namecom.Record, error
 }
 
 func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string) error {
+	record := toNative(rc, domain)
+	_, err := n.client.CreateRecord(record)
+	return err
+}
+
+func toNative(rc *models.RecordConfig, domain string) *namecom.Record {
 
 	rtype := rc.Type
-	answer := rc.GetTargetField()
+	var answer string
 	var priority uint32
 
 	switch rc.TypeNum {
 	case privatetypes.TypeALIAS:
 		// NDC uses "ANAME" for aliases. We switch .Type at the last chance.
 		rtype = "ANAME"
+		answer = rc.AsALIAS().Target
 	case dnsv2.TypeTXT:
 		answer = rc.GetTargetTXTJoined()
 	case dnsv2.TypeMX:
@@ -169,9 +176,11 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		f := rc.AsSRV()
 		priority = uint32(f.Priority)
 		answer = fmt.Sprintf("%d %d %v", f.Weight, f.Port, f.Target)
+	default:
+		answer = rc.GetRDATA().String()
 	}
 
-	record := &namecom.Record{
+	return &namecom.Record{
 		DomainName: domain,
 		Host:       rc.GetLabel(),
 		Type:       rtype,
@@ -179,9 +188,6 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		TTL:        rc.TTL,
 		Priority:   priority,
 	}
-
-	_, err := n.client.CreateRecord(record)
-	return err
 }
 
 func (n *namedotcomProvider) deleteRecord(id int32, domain string) error {

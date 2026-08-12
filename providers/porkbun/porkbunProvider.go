@@ -429,7 +429,7 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		case privatetypesrdata.URL301:
 			location = rd.Location
 		default:
-			location = rc.GetTargetField()
+			location = rc.GetTargetField() // FIXME(): GetTargetField() is deprecated.
 		}
 		return requestParams{
 			"subdomain":   subdomain,

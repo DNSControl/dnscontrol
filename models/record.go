@@ -8,7 +8,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
-	"github.com/jinzhu/copier"
 	"github.com/qdm12/reprint"
 )
 
@@ -16,29 +15,20 @@ import (
 // a provider's API ("actual") or from user input in dndsconfig.js ("desired").
 type RecordConfig struct {
 
+	// TypeNum is the assigned number of the record's type. 1 for A, 5 for CNAME, etc. See dnsv2.TypeToString and dnsv2.StringToType.
+	TypeNum uint16 `json:"typenum,omitempty"`
+
 	// Type is the DNS record type (rtype), all caps, "A", "MX", etc. (Deprecated. Use .TypeNum)
 	Type string `json:"type"`
 
-	// TypeNum is the assigned number of the record's type. 1 for A, 5 for CNAME, etc. See dnsv2.TypeToString and dnsv2.StringToType.
-	// NB(tlim): Not currently used. Placeholder for future feature.
-	TypeNum uint16 `json:"typenum,omitempty"`
-
 	// rdata is the fields of the record.
 	rdata dnsv2.RDATA
-
-	// ComparableV3 is an opaque string that can be used to compare two
-	// RecordConfigs for equality. Typically this is the Zonefile line
-	// minus the label and TTL.
-	// The V3 distingues itself from .Comparable, which it will eventually replace.
-	// NB(tlim): Not currently used. Placeholder for future feature.
-	ComparableV3 string `json:"comparablev3,omitempty"`
 
 	// TTL is the DNS record's TTL in seconds. 0 means provider default.
 	TTL uint32 `json:"ttl,omitempty"`
 
 	// Name is the shortname i.e. the FQDN without the parent domains's suffix.
 	// It should never be "".  Record at the apex (naked domain) are represented by "@".
-	//NameRaw     string `json:"name_raw,omitempty"`     // .Name as the user entered it in dnsconfig.js
 	Name        string `json:"name"`                   // The short name, PunyCode. See above.
 	NameUnicode string `json:"name_unicode,omitempty"` // .Name as Unicode (downcased, then convertedot Unicode).
 
@@ -46,6 +36,13 @@ type RecordConfig struct {
 	//NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
+
+	// ComparableV3 is an opaque string that can be used to compare two
+	// RecordConfigs for equality. Typically this is the Zonefile line
+	// minus the label and TTL.
+	// The V3 distingues itself from .Comparable, which it will eventually replace.
+	// NB(tlim): Not currently used. Placeholder for future feature.
+	ComparableV3 string `json:"comparablev3,omitempty"`
 
 	//// Fields only relevant when RecordConfig was created from data in dnsconfig.js:
 
@@ -70,8 +67,9 @@ type RecordConfig struct {
 
 	//// Legacy fields we hope to remove someday
 
-	// If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
+
+	// FYI: If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
 }
 
 // MarshalJSON marshals RecordConfig.
@@ -80,10 +78,8 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	recj := &struct {
 		RecordConfig
 		RDATA dnsv2.RDATA `json:"rdata,omitempty"`
-		// Target string      `json:"target,omitempty"`
 	}{
 		RecordConfig: *rc,
-		// Target:       rc.GetTargetField(),
 	}
 	recj.RDATA = rc.GetRDATA()
 	j, err := json.Marshal(*recj)
@@ -93,100 +89,11 @@ func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	return j, nil
 }
 
-// UnmarshalJSON unmarshals RecordConfig.
-func (rc *RecordConfig) UnmarshalJSON(b []byte) error {
-	recj := &struct {
-		Target string `json:"target,omitempty"`
-
-		Type      string `json:"type"` // All caps rtype name.
-		Name      string `json:"name"` // The short name. See above.
-		SubDomain string `json:"subdomain,omitempty"`
-		NameFQDN  string `json:"-"` // Must end with ".$origin". See above.
-		// target    string            // If a name, must end with "."
-		TTL      uint32            `json:"ttl,omitempty"`
-		Metadata map[string]string `json:"meta,omitempty"`
-		FilePos  string            `json:"filepos"` // Where in the file this record was defined.
-		Original any               `json:"-"`       // Store pointer to provider-specific record object. Used in diffing.
-		Args     []any             `json:"args,omitempty"`
-
-		// MxPreference       uint16            `json:"mxpreference,omitempty"`
-		// SrvPriority  uint16 `json:"srvpriority,omitempty"`
-		// SrvWeight    uint16 `json:"srvweight,omitempty"`
-		// SrvPort      uint16 `json:"srvport,omitempty"`
-		// CaaTag       string `json:"caatag,omitempty"`
-		// CaaFlag      uint8  `json:"caaflag,omitempty"`
-		// DsKeyTag     uint16 `json:"dskeytag,omitempty"`
-		// DsAlgorithm  uint8  `json:"dsalgorithm,omitempty"`
-		// DsDigestType uint8  `json:"dsdigesttype,omitempty"`
-		// DsDigest     string `json:"dsdigest,omitempty"`
-		// DnskeyFlags  uint16 `json:"dnskeyflags,omitempty"`
-		// DnskeyProtocol     uint8             `json:"dnskeyprotocol,omitempty"`
-		// DnskeyAlgorithm    uint8             `json:"dnskeyalgorithm,omitempty"`
-		// DnskeyPublicKey    string            `json:"dnskeypublickey,omitempty"`
-		// LocVersion         uint8             `json:"locversion,omitempty"`
-		// LocSize            uint8             `json:"locsize,omitempty"`
-		// LocHorizPre        uint8             `json:"lochorizpre,omitempty"`
-		// LocVertPre         uint8             `json:"locvertpre,omitempty"`
-		// LocLatitude        uint32            `json:"loclatitude,omitempty"`
-		// LocLongitude       uint32            `json:"loclongitude,omitempty"`
-		// LocAltitude        uint32            `json:"localtitude,omitempty"`
-		// NaptrOrder      uint16 `json:"naptrorder,omitempty"`
-		// NaptrPreference uint16 `json:"naptrpreference,omitempty"`
-		// NaptrFlags      string `json:"naptrflags,omitempty"`
-		// NaptrService    string `json:"naptrservice,omitempty"`
-		// NaptrRegexp     string `json:"naptrregexp,omitempty"`
-		// SmimeaUsage        uint8             `json:"smimeausage,omitempty"`
-		// SmimeaSelector     uint8             `json:"smimeaselector,omitempty"`
-		// SmimeaMatchingType uint8             `json:"smimeamatchingtype,omitempty"`
-		// SshfpAlgorithm   uint8             `json:"sshfpalgorithm,omitempty"`
-		// SshfpFingerprint uint8             `json:"sshfpfingerprint,omitempty"`
-		// SvcPriority uint16 `json:"svcpriority,omitempty"`
-		// SvcParams   string `json:"svcparams,omitempty"`
-		// TlsaUsage        uint8             `json:"tlsausage,omitempty"`
-		// TlsaSelector     uint8             `json:"tlsaselector,omitempty"`
-		// TlsaMatchingType uint8             `json:"tlsamatchingtype,omitempty"`
-		// AnswerType      string `json:"answer_type,omitempty"`
-		UnknownTypeName string `json:"unknown_type_name,omitempty"`
-
-		EnsureAbsent bool `json:"ensure_absent,omitempty"` // Override NO_PURGE and delete this record
-
-		// NB(tlim): If anyone can figure out how to do this without listing all
-		// the fields, please let us know!
-	}{}
-	if err := json.Unmarshal(b, &recj); err != nil {
-		return err
-	}
-
-	recj.FilePos = FixPosition(recj.FilePos)
-
-	// Copy the exported fields.
-	if err := copier.CopyWithOption(&rc, &recj, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
-		return err
-	}
-	// // Set each unexported field.
-	// if err := rc.SetTarget(recj.Target); err != nil {
-	// 	return err
-	// }
-
-	// Some sanity checks:
-	if recj.Type != rc.Type {
-		panic("DEBUG: TYPE NOT COPIED\n")
-	}
-	if recj.Type == "" {
-		panic("DEBUG: TYPE BLANK\n")
-	}
-	if recj.Name != rc.Name {
-		panic("DEBUG: NAME NOT COPIED\n")
-	}
-
-	return nil
-}
-
 // FixPosition takes the string representation of a position in a file that
 // comes from dnsconfig.js's initial execution, and reduces it down to just the
 // line/position we display to the user. The input is not well-defined, thus if
 // we find something we don't expect, we just return the original input.
-// TODO: Move this to rtypecontrol or a similar package.
+// TODO: Move this closer to where it is used.
 func FixPosition(str string) string {
 	if str == "" {
 		return ""
@@ -205,7 +112,6 @@ func (rc *RecordConfig) Copy() (*RecordConfig, error) {
 	err := reprint.FromTo(rc, newR) // Deep copy
 	// Set each unexported field.
 	newR.rdata = rc.rdata
-	// newR.target = rc.target
 	return newR, err
 }
 
@@ -242,6 +148,7 @@ func (rc *RecordConfig) SetLabel(short, origin string) {
 		rc.Name = short
 		rc.NameFQDN = nameutil.ToFqdnNoDot(short, origin)
 	}
+	// TODO(tlim): This also needs to make .NameUnicode / .NameFQDNUnicode
 }
 
 // GetLabel returns the shortname of the label associated with this RecordConfig.
@@ -393,27 +300,14 @@ func (recs Records) GetByType(typeName string) Records {
 	return results
 }
 
-// GroupedByKey returns a map of keys to records.
-func (recs Records) GroupedByKey() map[RecordKey]Records {
-	groups := map[RecordKey]Records{}
-	for _, rec := range recs {
-		groups[rec.Key()] = append(groups[rec.Key()], rec)
-	}
-	return groups
-}
-
 // GroupedByFQDN returns a map of keys to records, grouped by FQDN.
-func (recs Records) GroupedByFQDN() ([]string, map[string]Records) {
-	order := []string{}
+func (recs Records) GroupedByFQDN() map[string]Records {
 	groups := map[string]Records{}
 	for _, rec := range recs {
 		namefqdn := rec.GetLabelFQDN()
-		if _, found := groups[namefqdn]; !found {
-			order = append(order, namefqdn)
-		}
 		groups[namefqdn] = append(groups[namefqdn], rec)
 	}
-	return order, groups
+	return groups
 }
 
 // GetAllDependencies concatinates all dependencies of all records.
@@ -424,54 +318,4 @@ func (recs Records) GetAllDependencies() []string {
 	}
 
 	return dependencies
-}
-
-// PostProcessRecords does any post-processing of the downloaded DNS records.
-// Deprecated. zonerecords.CorrectZoneRecords() calls Downcase directly.
-func PostProcessRecords(recs []*RecordConfig) {
-	Downcase(recs)
-}
-
-// Downcase converts all labels and targets to lowercase in a list of RecordConfig.
-// NB(tlim): This should go away once all rtypes are modernized. The Make*()
-// functions should do all downcasing, etc.
-func Downcase(recs []*RecordConfig) {
-	// for _, r := range recs {
-	// 	r.Name = strings.ToLower(r.Name)
-	// 	r.NameFQDN = strings.ToLower(r.NameFQDN)
-	// 	switch r.Type { // #rtype_variations
-	// 	case "AKAMAICDN", "AKAMAITLC", "ALIAS", "AAAA", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "SMIMEA", "PTR", "SRV", "TLSA":
-	// 		// Target is case insensitive. Downcase it.
-	// 		r0 := r.target
-	// 		r.target = strings.ToLower(r.target)
-	// 		r1 := r.target
-	// 		if r0 != r1 {
-	// 			panic(fmt.Sprintf("assertion failed: Downcase: %q != %q", r0, r1))
-	// 		}
-	// 		// BUGFIX(tlim): isn't ALIAS in the wrong case statement?
-	// 	// case "A", "CAA", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "DHCID", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SSHFP", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
-	// 	// 	// Do nothing. (IP address or case sensitive target)
-	// 	// case "AZURE_ALIAS":
-	// 	// 	// do nothing.
-	// 	default:
-	// 		// TODO: we'd like to panic here, but custom record types complicate things.
-	// 	}
-	// }
-}
-
-// CanonicalizeTargets turns Targets into FQDNs.
-func CanonicalizeTargets(recs []*RecordConfig, origin string) {
-	// originFQDN := origin + "."
-
-	// for _, r := range recs {
-	// 	switch r.Type { // #rtype_variations
-	// 	case "ALIAS", "ANAME", "CNAME", "DNAME", "DS", "DNSKEY", "MX", "NS", "NAPTR", "PTR", "SRV":
-	// 		// Target is a hostname that might be a shortname. Turn it into a FQDN.
-	// 		// r.target = nameutil.ToFqdnWithDot(r.target, originFQDN)
-	// 	// case "A", "AKAMAICDN", "AKAMAITLC", "CAA", "DHCID", "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "HTTPS", "IMPORT_TRANSFORM", "LOC", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH":
-	// 	// 	// Do nothing.
-	// 	default:
-	// 		// TODO: we'd like to panic here, but custom record types complicate things.
-	// 	}
-	// }
 }

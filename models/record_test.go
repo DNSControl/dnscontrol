@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -36,27 +37,6 @@ func TestR53AliasTargetSurvivesRDATAUpdate(t *testing.T) {
 	}
 }
 
-// TestAzureAliasTargetComesFromRDATA verifies that AZURE_ALIAS no longer
-// depends on the legacy AzureAlias map or target field.
-func TestAzureAliasTargetComesFromRDATA(t *testing.T) {
-	const origin = "example.com"
-	const wantTarget = "/subscriptions/sub/resourceGroups/rg/providers/Microsoft.Network/dnszones/example.com/A/kyle"
-
-	dc := MustNewDomainConfig(origin)
-	rc, err := dc.NewRecordConfig("kenny", 300, "AZURE_ALIAS", "A", wantTarget)
-	if err != nil {
-		t.Fatalf("NewRecordConfig: %v", err)
-	}
-
-	if got := rc.AsAZUREALIAS().Target; got != wantTarget {
-		t.Fatalf("target after construction = %q, want %q", got, wantTarget)
-	}
-
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField = %q, want %q", got, wantTarget)
-	}
-}
-
 // TestAliasToCnameChangeType reproduces the bug where converting an ALIAS to a
 // CNAME via ChangeType() (as CLOUDFLAREAPI and other flattening providers do)
 // panicked ("FixUp: .RDATA is nil for type CNAME") and/or lost the target.
@@ -79,21 +59,15 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	if got := rc.AsCNAME().Target; got != wantTarget {
 		t.Errorf("CNAME target = %q, want %q", got, wantTarget)
 	}
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField = %q, want %q", got, wantTarget)
-	}
 }
 
 func TestHasRecordTypeName(t *testing.T) {
-	x := &RecordConfig{
-		Type: "A",
-		Name: "@",
-	}
+	dc := MustNewDomainConfig("example.com")
 	recs := Records{}
 	if recs.HasRecordTypeName("A", "@") {
 		t.Errorf("%v: expected (%v) got (%v)\n", recs, false, true)
 	}
-	recs = append(recs, x)
+	recs = append(recs, dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4"))
 	if !recs.HasRecordTypeName("A", "@") {
 		t.Errorf("%v: expected (%v) got (%v)\n", recs, true, false)
 	}
@@ -207,7 +181,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				TlsaUsage:        1,
 				TlsaSelector:     2,
 				TlsaMatchingType: 3,
-				// Original         any,
 			},
 			want: &RecordConfig{
 				Type:      "type",
@@ -217,27 +190,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				// target:    "targette",
 				TTL:      12345,
 				Metadata: map[string]string{"me": "ah", "da": "ta"},
-				// MxPreference:     123,
-				// SrvPriority:  223,
-				// SrvWeight:    345,
-				// SrvPort:      456,
-				// CaaTag:       "caata",
-				// CaaFlag:      100,
-				// DsKeyTag:     12341,
-				// DsAlgorithm:  99,
-				// DsDigestType: 98,
-				// DsDigest:     "dsdig",
-				// NaptrOrder:   10000,
-				// NaptrPreference:  12220,
-				// NaptrFlags:       "naptrfl",
-				// NaptrService:     "naptrser",
-				// NaptrRegexp:      "naptrreg",
-				// SshfpAlgorithm:   4,
-				// SshfpFingerprint: 5,
-				// TlsaUsage:        1,
-				// TlsaSelector:     2,
-				// TlsaMatchingType: 3,
-				// Original         any,
 			},
 		},
 	}
@@ -248,10 +200,9 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      tt.fields.Name,
 				SubDomain: tt.fields.SubDomain,
 				NameFQDN:  tt.fields.NameFQDN,
-				// target:    tt.fields.target,
-				TTL:      tt.fields.TTL,
-				Metadata: tt.fields.Metadata,
-				Original: tt.fields.Original,
+				TTL:       tt.fields.TTL,
+				Metadata:  tt.fields.Metadata,
+				Original:  tt.fields.Original,
 			}
 			got, err := rc.Copy()
 			if (err != nil) != tt.wantErr {

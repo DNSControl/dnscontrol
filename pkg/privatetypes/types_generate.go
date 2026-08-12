@@ -388,7 +388,9 @@ func generateTypeFile(t *TypeDef) error {
 	for i, f := range t.Fields {
 		ti := info(f.Type)
 		if ti.NeedsOrigin {
-			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(\"\", nrc.Flags{}, args[%d])\n", f.Name, f.Type, i)
+			fmt.Fprintf(&buf, "\ttargetHost%d, err := mustbe.%s(\"\", nrc.Flags{}, args[%d])\n", i, f.Type, i)
+			buf.WriteString("\tif err != nil {\n\t\treturn err\n\t}\n")
+			fmt.Fprintf(&buf, "\trr.%s = targetHost%d\n", f.Name, i)
 		} else {
 			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(args[%d])\n", f.Name, f.Type, i)
 		}
@@ -397,7 +399,9 @@ func generateTypeFile(t *TypeDef) error {
 		ti := info(f.Type)
 		argIndex := len(t.Fields) + i
 		if ti.NeedsOrigin {
-			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(\"\", nrc.Flags{}, args[%d])\n", f.Name, f.Type, argIndex)
+			fmt.Fprintf(&buf, "\ttargetHost%d, err := mustbe.%s(\"\", nrc.Flags{}, args[%d])\n", argIndex, f.Type, argIndex)
+			buf.WriteString("\tif err != nil {\n\t\treturn err\n\t}\n")
+			fmt.Fprintf(&buf, "\trr.%s = targetHost%d\n", f.Name, argIndex)
 		} else {
 			fmt.Fprintf(&buf, "\trr.%s = mustbe.%s(args[%d])\n", f.Name, f.Type, argIndex)
 		}
@@ -624,11 +628,17 @@ func generateRdataFile(t *TypeDef) error {
 		if needsNrc(t.Fields) || needsNrc(t.OptionalFields) || needsNrc(t.RuntimeFields) {
 			fmt.Fprint(&buf, "\tif isEnabled.TargetIsFqdnNoDot {\n\t\torigin = \".\"\n\t}\n")
 		}
+		for i, f := range append(t.Fields, t.OptionalFields...) {
+			if info(f.Type).NeedsOrigin {
+				fmt.Fprintf(&buf, "\ttargetHost%d, err := mustbe.%s(origin, isEnabled, args[%d])\n", i, f.Type, i)
+				buf.WriteString("\tif err != nil {\n\t\treturn nil, err\n\t}\n")
+			}
+		}
 		fmt.Fprintf(&buf, "\treturn %s{\n", typeName)
 		for i, f := range append(t.Fields, t.OptionalFields...) {
 			ti := info(f.Type)
 			if ti.NeedsOrigin {
-				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(origin, isEnabled, args[%d]),\n", f.Name, f.Type, i)
+				fmt.Fprintf(&buf, "\t\t%s: targetHost%d,\n", f.Name, i)
 			} else {
 				fmt.Fprintf(&buf, "\t\t%s: mustbe.%s(args[%d]),\n", f.Name, f.Type, i)
 			}

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -19,4 +20,17 @@ func doesStutter(name, origin string) bool {
 		return true
 	}
 	return false
+}
+
+func stutterError(rc *RecordConfig, domain string) error {
+	label := rc.Name
+	shortname := strings.TrimSuffix(label, "."+domain)
+	return fmt.Errorf(
+		`%s The target name "%s.%s." is an error (repeats the domain). Possible fixes: Replace %q with %q or %q or add DISABLE_REPEATED_DOMAIN_CHECK to this record to override`,
+		rc.FilePos,
+		label, domain,
+		label,
+		shortname,
+		label+".",
+	)
 }

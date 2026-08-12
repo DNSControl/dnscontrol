@@ -21,11 +21,6 @@ func TestBuildRecordNSTarget(t *testing.T) {
 	}
 	recs := models.Records{rc}
 
-	// Mimic the normalization that CorrectZoneRecords applies before push.
-	// CanonicalizeTargets corrupts the (empty) legacy .target to the origin.
-	models.Downcase(recs)
-	models.CanonicalizeTargets(recs, dc.Name)
-
 	rec := buildRecord(recs, dc.Name, "")
 	if len(rec.Answers) != 1 {
 		t.Fatalf("len(answers) = %d, want 1", len(rec.Answers))

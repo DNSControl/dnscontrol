@@ -289,21 +289,7 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 		f := rc.AsMX()
 		r.RecordPrio = new(f.Preference)
 		r.RecordValue = strings.TrimSuffix(f.Mx, ".")
-	// case "CNAME", "NS", "ALIAS", "PTR", "DNAME":
-	// 	// Send hostname targets without a trailing dot; the API normalizes as
-	// 	// needed and reads are re-dotted in nativeToRecordConfig.
-	// 	r.RecordValue = strings.TrimSuffix(rc.GetTargetField(), ".")
 	case dnsv2.TypeTXT:
-		// txt := rc.GetTargetTXTJoined()
-		// // The API requires values over 255 octets to be sent as RFC1035
-		// // quoted 255-octet chunks: `"aaa...aaa" "bbb"`. Shorter values are
-		// // sent raw and stored verbatim. (Values with double quotes are
-		// // rejected by AuditRecords: the API cannot round-trip them.)
-		// if len(txt) > 255 {
-		// 	txt = txtutil.EncodeQuoted(txt)
-		// }
-		// r.RecordValue = txt
-
 		txt := rc.GetTargetTXTJoined()
 		if len(txt) > 255 {
 			r.RecordValue = rc.AsTXT().String()
@@ -311,9 +297,6 @@ func recordConfigToRequest(rc *models.RecordConfig) *recordRequest {
 			r.RecordValue = txt
 		}
 
-	// case "CAA", "SRV", "NAPTR":
-	// 	// These are stored as full RFC1035 presentation strings in record_value.
-	// 	r.RecordValue = rc.GetRDATA().String()
 	default:
 		r.RecordValue = rc.GetRDATA().String()
 	}

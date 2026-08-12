@@ -60,7 +60,11 @@ func (rr *ALIAS) Parse(tokens []string, s string) error {
 	if len(args) != 1 {
 		return fmt.Errorf("ALIAS requires exactly 1 arguments, got %d: %v", len(args), args)
 	}
-	rr.Target = mustbe.TargetHost("", nrc.Flags{}, args[0])
+	targetHost0, err := mustbe.TargetHost("", nrc.Flags{}, args[0])
+	if err != nil {
+		return err
+	}
+	rr.Target = targetHost0
 	return nil
 }
 

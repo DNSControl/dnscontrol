@@ -39,7 +39,9 @@ function initialize() {
 
 function _isDomain(d) {
     return (
-        _.isArray(d.nameservers) && _.isArray(d.records) && _.isString(d.name)
+        _.isArray(d.nameservers) &&
+        _.isArray(d.rawrecords) &&
+        _.isString(d.name)
     );
 }
 
@@ -110,14 +112,11 @@ function newDomain(name, registrar) {
         subdomain: '',
         registrar: registrar,
         meta: {},
-        records: [],
         rawrecords: [],
         recordsabsent: [],
         dnsProviders: {},
         defaultTTL: 0,
         nameservers: [],
-        ignored_names: [],
-        ignored_targets: [],
         unmanaged: [],
     };
 }
@@ -183,7 +182,6 @@ function INCLUDE(name) {
         );
     }
     return function (d) {
-        d.records.push.apply(d.records, domain.obj.records);
         // New-style record types live in rawrecords (processed in Go), so they
         // must be copied too. Each domain re-serializes these objects to its own
         // IR, so sharing the references here is safe.
@@ -964,213 +962,6 @@ function getModifiers(args, start) {
     }
     return mods;
 }
-
-// /**
-//  * Record type builder
-//  * @param {string} type Record type
-//  * @param {string} opts.args[][0] Argument name
-//  * @param {function=} opts.args[][1] Optional validator
-//  * @param {function=} opts.transform Function to apply arguments to record.
-//  *        Take (record, args, modifier) as arguments. Any modifiers will be
-//  *        applied before this function. It should mutate the given record.
-//  * @param {function=} opts.applyModifier Function to apply modifiers to the record
-//  */
-// function recordBuilder(type, opts) {
-//     opts = _.defaults({}, opts, {
-//         args: [['name', _.isString], ['target']],
-
-//         transform: function (record, args, modifiers) {
-//             // record will have modifiers already applied
-//             // args will be an object for parameters defined
-//             record.name = args.name;
-//             if (_.isNumber(args.target)) {
-//                 record.target = num2dot(args.target);
-//             } else {
-//                 record.target = args.target;
-//             }
-//         },
-
-//         applyModifier: function (record, modifiers) {
-//             for (var i = 0; i < modifiers.length; i++) {
-//                 var mod = modifiers[i];
-
-//                 if (_.isFunction(mod)) {
-//                     mod(record);
-//                 } else if (_.isObject(mod)) {
-//                     // convert transforms to strings
-//                     if (mod.transform && _.isArray(mod.transform)) {
-//                         mod.transform = format_tt(mod.transform);
-//                     }
-//                     _.extend(record.meta, mod);
-//                 } else {
-//                     throw 'ERROR: Unknown modifier type';
-//                 }
-//             }
-//         },
-//     });
-
-//     return function () {
-//         var parsedArgs = {};
-//         var modifiers = [];
-
-//         if (arguments.length < opts.args.length) {
-//             var argumentsList = opts.args
-//                 .map(function (item) {
-//                     return item[0];
-//                 })
-//                 .join(', ');
-//             throw (
-//                 type +
-//                 ' record requires ' +
-//                 opts.args.length +
-//                 ' arguments (' +
-//                 argumentsList +
-//                 '). Only ' +
-//                 arguments.length +
-//                 ' were supplied'
-//             );
-//             return;
-//         }
-
-//         // collect arguments
-//         for (var i = 0; i < opts.args.length; i++) {
-//             var argDefinition = opts.args[i];
-//             var value = arguments[i];
-//             if (argDefinition.length > 1) {
-//                 // run validator if supplied
-//                 if (!argDefinition[1](value)) {
-//                     throw (
-//                         type +
-//                         ' record ' +
-//                         argDefinition[0] +
-//                         ' argument validation failed'
-//                     );
-//                 }
-//             }
-//             parsedArgs[argDefinition[0]] = value;
-//         }
-
-//         // collect modifiers
-//         for (var i = opts.args.length; i < arguments.length; i++) {
-//             modifiers.push(arguments[i]);
-//         }
-
-//         // Record which line called this record type.
-//         // NB(tlim): Hopefully we can find a better way to do this in the
-//         // future. Right now we're faking that there was an error just to parse
-//         // out the line number. That's inefficient but I can't find anything better.
-//         // This will certainly break if we change to a different Javascript interpreter.
-//         // Hopefully any other interpreter will have a better way to do this.
-//         var positionLines = new Error().stack.split('\n');
-//         var position = positionLines[positionLines.length - 2];
-
-//         return function (d) {
-//             var record = {
-//                 type: type,
-//                 meta: {},
-//                 ttl: d.defaultTTL,
-//                 filepos: position,
-//             };
-
-//             opts.applyModifier(record, modifiers);
-//             opts.transform(record, parsedArgs, modifiers);
-
-//             // Handle D_EXTEND() with subdomains.
-//             // Fix the labels.  (Fixing targets is done in pkg/normalize/validate.go)
-//             if (
-//                 d.subdomain &&
-//                 record.type != 'CF_SINGLE_REDIRECT' &&
-//                 record.type != 'CF_WORKER_ROUTE' &&
-//                 record.type != 'ADGUARDHOME_A_PASSTHROUGH' &&
-//                 record.type != 'ADGUARDHOME_AAAA_PASSTHROUGH' &&
-//                 record.type != 'MIKROTIK_FWD' &&
-//                 record.type != 'MIKROTIK_NXDOMAIN' &&
-//                 record.type != 'MIKROTIK_FORWARDER'
-//             ) {
-//                 record.subdomain = d.subdomain;
-
-//                 // @ sub dom                  ->   sub sub
-//                 // one two dom                ->   one.two
-//                 // 4.3.2.1.in-addr.arpa 4.3   ->   4.3 2.1.in-addr.arpa
-//                 // 1.2.3.4  sub               ->   1.2.3.4 sub
-
-//                 if (record.name == '@') {
-//                     record.name = d.subdomain;
-//                 } else if (record.name.match(/^\d+\.\d+\.\d+\.\d+$/)) {
-//                     // leave it alone
-//                 } else if (d.name.endsWith('.ip6.arpa')) {
-//                     record.name = d.subdomain;
-//                     d.subdomain = undefined;
-//                 } else if (record.name.endsWith('.in-addr.arpa')) {
-//                     if (record.name.endsWith(d.subdomain)) {
-//                         record.name = record.name.slice(
-//                             0,
-//                             -d.subdomain.length - 1
-//                         );
-//                     }
-//                 } else {
-//                     record.name = record.name + '.' + d.subdomain;
-//                 }
-//             }
-
-//             // Now we finally have the record. If it is a normal record, we add
-//             // it to "records". If it is an ENSURE_ABSENT record, we add it to
-//             // the ensure_absent list.
-//             if (record.ensure_absent) {
-//                 d.recordsabsent.push(record);
-//             } else {
-//                 d.records.push(record);
-//             }
-
-//             return record;
-//         };
-//     };
-// }
-
-// /**
-//  * @deprecated
-//  */
-// function addRecord(d, type, name, target, mods) {
-//     // if target is number, assume ip address. convert it.
-//     if (_.isNumber(target)) {
-//         target = num2dot(target);
-//     }
-//     var rec = {
-//         type: type,
-//         name: name,
-//         target: target,
-//         ttl: d.defaultTTL,
-//         priority: 0,
-//         meta: {},
-//     };
-//     // for each modifier, decide based on type:
-//     // - Function: call is with the record as the argument
-//     // - Object: merge it into the metadata
-//     // - Number: IF MX record assume it is priority
-//     if (mods) {
-//         for (var i = 0; i < mods.length; i++) {
-//             var m = mods[i];
-//             if (_.isFunction(m)) {
-//                 m(rec);
-//             } else if (_.isObject(m)) {
-//                 // convert transforms to strings
-//                 if (m.transform && _.isArray(m.transform)) {
-//                     m.transform = format_tt(m.transform);
-//                 }
-//                 _.extend(rec.meta, m);
-//                 _.extend(rec.meta, m);
-//             } else {
-//                 console.log(
-//                     'WARNING: Modifier type unsupported:',
-//                     typeof m,
-//                     '(Skipping!)'
-//                 );
-//             }
-//         }
-//     }
-//     d.records.push(rec);
-//     return rec;
-// }
 
 // ip conversion functions from http://stackoverflow.com/a/8105740/121660
 // via http://javascript.about.com/library/blipconvert.htm

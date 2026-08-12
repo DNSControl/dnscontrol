@@ -44,8 +44,8 @@ func TestGetZoneRecords(t *testing.T) {
 	if recs[0].Type != "NS" || recs[0].GetLabel() != "sub" {
 		t.Errorf("first record = %s %s, want NS sub", recs[0].Type, recs[0].GetLabel())
 	}
-	if recs[1].Type != "A" || recs[1].GetTargetField() != "203.0.113.10" {
-		t.Errorf("second record = %s %s, want A 203.0.113.10", recs[1].Type, recs[1].GetTargetField())
+	if recs[1].Type != "A" || recs[1].AsA().Addr.String() != "203.0.113.10" {
+		t.Errorf("second record = %s %s, want A 203.0.113.10", recs[1].Type, recs[1].AsA().Addr.String())
 	}
 	if recs[1].Original.(apiRecord).ID != "r4" {
 		t.Errorf("record id was not carried over: %v", recs[1].Original)

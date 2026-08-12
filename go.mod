@@ -95,7 +95,6 @@ require (
 	github.com/hetznercloud/hcloud-go/v2 v2.47.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.210
 	github.com/influxdata/tdigest v0.0.1 // indirect
-	github.com/jinzhu/copier v0.4.0
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.13-0.20220915233716-71ac16282d12 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect

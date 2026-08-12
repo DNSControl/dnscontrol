@@ -1,6 +1,12 @@
 package nrc
 
 type Flags struct {
+	// EnforceOneDotPolicy instructs mustbe.Target* functions to return an error
+	// if it looks like the user forgot the trailing dot. This is enforced by
+	// the rule, "If a hostname contains any dots (even a single dot), there
+	// must be a trailing dot."
+	EnforceOneDotPolicy bool
+
 	// SrvWeirdSplit the last field contains multiple fields.
 	// Only for use with NewRecordConfigParse() && rtype=="SRV" && len(args) == 2.
 	// Some APIs deliver SRV fields as two strings: "priority" and "weight port hostname."

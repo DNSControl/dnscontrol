@@ -3,7 +3,6 @@ package normalize
 import (
 	"errors"
 	"fmt"
-	"net/netip"
 	"slices"
 	"sort"
 	"strconv"
@@ -17,28 +16,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
-// Returns false if target does not validate.
-func checkIPv4(label string) error {
-	if addr, err := netip.ParseAddr(label); err != nil || !addr.Is4() {
-		return fmt.Errorf("WARNING: target (%v) is not an IPv4 address", label)
-	}
-	return nil
-}
-
-// Returns false if target does not validate.
-func checkIPv6(label string) error {
-	if addr, err := netip.ParseAddr(label); err != nil || !addr.Is6() {
-		return fmt.Errorf("WARNING: target (%v) is not an IPv6 address", label)
-	}
-	return nil
-}
-
 // make sure target is valid reference for cnames, mx, etc.
 func checkTarget(target string) error {
-	// In V5, the target shouldn't be "@". It should be $origin+"."
-	// if target == "@" {
-	// 	return nil
-	// }
+	// The target shouldn't be "@". It should be $origin+"."
 	if target == "" {
 		return errors.New("empty target (\"\"). Did you mean \"@\" instead?")
 	}
@@ -47,10 +27,6 @@ func checkTarget(target string) error {
 	}
 	if !strings.HasSuffix(target, ".in-addr.arpa.") && strings.Contains(target, "/") {
 		return fmt.Errorf("target (%v) includes invalid char", target)
-	}
-	// If it contains a ".", it must end in a ".".
-	if strings.ContainsRune(target, '.') && target[len(target)-1] != '.' {
-		return fmt.Errorf("target (%v) must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", target)
 	}
 	return nil
 }
@@ -188,7 +164,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	}
 
 	label := rec.GetLabel()
-	// target := rec.GetTargetField()
 	check := func(e error) {
 		if e != nil {
 			err := fmt.Errorf("%s: %s %s: %s", rec.FilePos, rec.Type, rec.GetLabelFQDN(), e.Error())
@@ -199,16 +174,19 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		}
 	}
 	switch rec.Type { // #rtype_variations
+
+	// No longer needed
 	case "A":
-		check(checkIPv4(rec.AsA().String()))
 	case "AAAA":
-		check(checkIPv6(rec.AsAAAA().String()))
+	case "LOC":
+	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
+
 	case "ALIAS":
 		check(checkTarget(rec.AsALIAS().Target))
 	case "CNAME":
 		check(checkTarget(rec.AsCNAME().Target))
 		if label == "@" {
-			check(errors.New("cannot create CNAME record for bare domain"))
+			check(errors.New("cannot create CNAME record for bare domain. Use ALIAS"))
 		}
 		labelFQDN := nameutil.ToFqdnNoDot(label, domain)
 		targetFQDN := nameutil.ToFqdnNoDot(rec.AsCNAME().Target, domain)
@@ -217,7 +195,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		}
 	case "DNAME":
 		check(checkTarget(rec.AsDNAME().Target))
-	case "LOC":
 	case "MX":
 		check(checkTarget(rec.AsMX().Mx))
 	case "NAPTR":
@@ -251,7 +228,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		if _, ok := dnsv2.StringToType[upper]; !ok {
 			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", f.LuaType))
 		}
-	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
 	default:
 		if rec.Metadata["orig_custom_type"] != "" {
 			// it is a valid custom type. We perform no validation on target
@@ -413,7 +389,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		}
 
 		// Normalize Records.
-		models.PostProcessRecords(domain.Records)
 		for _, rec := range domain.Records {
 			if rec.TTL == 0 {
 				rec.TTL = models.DefaultTTL
@@ -537,19 +512,11 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	for _, domain := range config.Domains {
 		for _, rec := range domain.Records {
 			if rec.Type == "IMPORT_TRANSFORM" {
-				suffixstrip := rec.Metadata["transform_suffixstrip"]
-				transformTable := rec.Metadata["transform_table"]
-				ttl := rec.TTL
-				var targetDomain string
-				if rec.GetRDATA() != nil {
-					rd := rec.AsIMPORTTRANSFORM()
-					transformTable = rd.TransformTable
-					ttl = uint32(rd.TTL)
-					suffixstrip = rd.SuffixStrip
-					targetDomain = rd.TargetDomain
-				} else {
-					targetDomain = rec.GetTargetField()
-				}
+				rd := rec.AsIMPORTTRANSFORM()
+				transformTable := rd.TransformTable
+				ttl := uint32(rd.TTL)
+				suffixstrip := rd.SuffixStrip
+				targetDomain := rd.TargetDomain
 				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
 					errs = append(errs, err)

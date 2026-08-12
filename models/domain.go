@@ -8,7 +8,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/qdm12/reprint"
-	"golang.org/x/net/idna"
 )
 
 // DomainConfig describes a DNS domain (technically a DNS zone).
@@ -90,14 +89,12 @@ func MustNewDomainConfig(name string) *DomainConfig {
 // ToFqdnWithDot("")         = "bar.com."       // Apex returns the apex.
 // ToFqdnWithDot("foo.com.") = "foo.com."       // FQDNs are unmodified.
 // ToFqdnWithDot("foo"")     = "foo.bar.com."   // If origin ends with a ".", DTRT.
-// Replaces dnsutilv1.AddOrigin().
 // Similar to nameutil.ToFqdnWithDot() but uses the domain name from dc.
 func (dc *DomainConfig) ToFqdnWithDot(s string) string {
 	return nameutil.ToFqdnWithDot(s, dc.Name)
 }
 
 // ToFqdnNoDot is the same as ToFqdnWithDot but the result does not include a trailing ".".
-// Replaces dnsutilv1.AddOrigin().
 // Similar to DomainConfig.ToFqdnNoDot() but it takes origin from dc.Name.
 func (dc *DomainConfig) ToFqdnNoDot(s string) string {
 	return nameutil.ToFqdnNoDot(s, dc.Name)
@@ -147,56 +144,13 @@ func (dc *DomainConfig) Copy() (*DomainConfig, error) {
 
 // Filter removes all records that don't match the filter f.
 func (dc *DomainConfig) Filter(f func(r *RecordConfig) bool) {
-	recs := []*RecordConfig{}
+	var recs Records
 	for _, r := range dc.Records {
 		if f(r) {
 			recs = append(recs, r)
 		}
 	}
 	dc.Records = recs
-}
-
-// Punycode will convert all records to punycode format.
-// It will encode:
-// - Name
-// - NameFQDN
-// - Target (CNAME and MX only).
-// NOTE: This will go away when RCv3 is adopted.
-func (dc *DomainConfig) Punycode() error {
-	for _, rec := range dc.Records {
-		// Update the label:
-		t, err := idna.ToASCII(rec.GetLabelFQDN())
-		if err != nil {
-			return err
-		}
-		if t != rec.GetLabelFQDN() {
-			// Assert this function is no longer needed.
-			panic(fmt.Sprintf("Punycode LABEL %q %q", t, rec.GetLabelFQDN()))
-		}
-
-		// Set the target:
-		switch rec.Type { // #rtype_variations
-		case "ALIAS", "MX", "NS", "CNAME", "DNAME", "PTR", "SRV", "URL", "URL301", "FRAME", "R53_ALIAS", "AKAMAICDN", "AKAMAITLC", "CLOUDNS_WR", "PORKBUN_URLFWD", "BUNNY_DNS_RDR":
-			// These rtypes are hostnames, therefore need to be converted (unlike, for example, an AAAA record)
-			t, err := idna.ToASCII(rec.GetTargetField())
-			if err != nil {
-				return err
-			}
-			if t != rec.GetTargetField() {
-				// Assert this function is no longer needed.
-				panic(fmt.Sprintf(": Punycode TARGET %q %q", t, rec.GetTargetField()))
-			}
-		case "CLOUDFLAREAPI_SINGLE_REDIRECT", "CF_REDIRECT", "CF_TEMP_REDIRECT", "CF_WORKER_ROUTE", "ADGUARDHOME_A_PASSTHROUGH", "ADGUARDHOME_AAAA_PASSTHROUGH", "BUNNY_DNS_PZ", "MIKROTIK_FWD", "MIKROTIK_NXDOMAIN", "MIKROTIK_FORWARDER":
-			// Nothing to do.
-		case "A", "AAAA", "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "LOC",
-			"LUA", "NAPTR", "OPENPGPKEY", "RP", "SMIMEA", "SOA", "SSHFP", "SVCB",
-			"TXT", "TLSA", "AZURE_ALIAS":
-			// Nothing to do.
-		default:
-			return fmt.Errorf("Punycode rtype %v unimplemented", rec.Type)
-		}
-	}
-	return nil
 }
 
 // StoreCorrections accumulates corrections in a thread-safe way.

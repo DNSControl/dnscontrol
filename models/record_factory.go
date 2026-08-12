@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"slices"
 	"strings"
 
@@ -112,28 +111,6 @@ func (dc *DomainConfig) NewRecordConfigForRRv2toRC(name string, ttl uint32, type
 	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, nil)
 }
 
-// NewRecordConfigForRRtoRC is only for use by dnsrr.go. Do not use this. The signature may change at any time.
-func NewRecordConfigForRRtoRC(origin, name string, ttl uint32, typeNum uint16, args ...any) (*RecordConfig, error) {
-	mustbe.ValidArgs(args)
-
-	// Make sure label is a shortname.
-	name = strings.ToLower(name)
-	if before, found := strings.CutSuffix(name, "."+origin+"."); found {
-		name = before
-	}
-	if name == origin+"." {
-		name = "@"
-	}
-
-	isEnabled := nrc.Flags{}
-
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](origin, nil, isEnabled, args...)
-	if err != nil {
-		log.Fatalf("NewRecordConfigForRRtoRC: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
-	}
-	return newRecordConfigHelper(origin, name, ttl, typeNum, rd, nil)
-}
-
 // newRecordConfigFromDnsconfigjs is only for use by models.ImportRawRecords().
 //
 // This is similar to NewRecordConfig plus:
@@ -151,12 +128,18 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 	if subdomain != "" {
 		targetOrigin = subdomain + "." + dc.Name
 	}
-	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{}, args...)
+
+	label, err := dc.LabelFromDnsconfigjs(name, subdomain)
 	if err != nil {
-		fmt.Printf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v\n", dnsutilv2.TypeToString(typeNum), err)
-		log.Fatalf("NewRecordConfigFromDnsconfigjs: Failed to create RDATA for type %s: %v", dnsutilv2.TypeToString(typeNum), err)
+		return nil, err
 	}
-	return newRecordConfigHelper(dc.Name, name, ttl, typeNum, rd, metadata)
+
+	rd, err := privatetypes.TypeToMakeRDATA[typeNum](targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
+	if err != nil {
+		return nil, fmt.Errorf("dnsconfigjs: failed to create RDATA for type %s: %w", dnsutilv2.TypeToString(typeNum), err)
+	}
+
+	return newRecordConfigHelper(dc.Name, label, ttl, typeNum, rd, metadata)
 }
 
 // newRecordConfigHelper is a helper.  if rd != nil, args is ignored.

@@ -58,7 +58,10 @@ func TestTargetHost(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := mustbe.TargetHost(tt.origin, nrc.Flags{TargetIsFqdnNoDot: false}, tt.arg)
+			got, err := mustbe.TargetHost(tt.origin, nrc.Flags{TargetIsFqdnNoDot: false}, tt.arg)
+			if err != nil {
+				t.Fatal(err)
+			}
 			if got != tt.want {
 				t.Errorf("Host() = %v, want %v", got, tt.want)
 			}
@@ -67,10 +70,29 @@ func TestTargetHost(t *testing.T) {
 			if wanted == "" {
 				wanted = tt.want
 			}
-			got = mustbe.TargetHost(tt.origin, nrc.Flags{TargetIsFqdnNoDot: true}, tt.arg)
+			got, err = mustbe.TargetHost(tt.origin, nrc.Flags{TargetIsFqdnNoDot: true}, tt.arg)
+			if err != nil {
+				t.Fatal(err)
+			}
 			if got != wanted {
 				t.Errorf("Host(ENABLED) = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestTargetHostSingleDotViolation(t *testing.T) {
+	for _, targetHost := range []func(string, nrc.Flags, any) (string, error){mustbe.TargetHost, mustbe.TargetHostSRV} {
+		got, err := targetHost("example.com", nrc.Flags{EnforceOneDotPolicy: true}, "www.example.com")
+		if err == nil {
+			t.Fatal("expected single-dot violation error")
+		}
+		if got != "" {
+			t.Errorf("TargetHost() = %q on error, want empty string", got)
+		}
+		want := `target "www.example.com" must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]`
+		if err.Error() != want {
+			t.Errorf("TargetHost() error = %q, want %q", err, want)
+		}
 	}
 }

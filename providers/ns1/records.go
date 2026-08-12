@@ -136,7 +136,6 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 		switch r.TypeNum {
 		case dnsv2.TypeMX:
 			f := r.AsMX()
-			//rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %v", r.MxPreference, r.GetTargetField()))})
 			rec.AddAnswer(&dns.Answer{Rdata: []string{strconv.FormatInt(int64(f.Preference), 10), f.Mx}})
 		case dnsv2.TypeTXT:
 			rec.AddAnswer(&dns.Answer{Rdata: []string{r.GetTargetTXTJoined()}})
@@ -156,12 +155,6 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				strconv.FormatInt(int64(f.Weight), 10),
 				strconv.FormatInt(int64(f.Port), 10),
 				f.Target}})
-			// If that doesn't work, try this:
-			// f := r.AsSRV()
-			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", f.Priority, f.Weight, f.Port, f.Target))})
-			//
-			// Here's the original for comparison:
-			// rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(fmt.Sprintf("%d %d %d %v", r.SrvPriority, r.SrvWeight, r.SrvPort, r.GetTargetField()))})
 		case dnsv2.TypeNAPTR:
 			f := r.AsNAPTR()
 			rec.AddAnswer(&dns.Answer{Rdata: []string{
@@ -203,7 +196,7 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				f.Certificate,
 			}})
 		default:
-			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetTargetField())})
+			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetRDATA().String())})
 		}
 	}
 	return rec

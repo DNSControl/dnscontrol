@@ -12,14 +12,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
-// DetermineNameservers will find all nameservers we should use for a domain. It follows the following rules:
+// DetermineNameserversForProviders determines all nameservers to be used for a domain. It follows the following rules:
 // 1. All explicitly defined NAMESERVER records will be used.
 // 2. Each DSP declares how many nameservers to use. Default is all. 0 indicates to use none.
-func DetermineNameservers(dc *models.DomainConfig) ([]*models.Nameserver, error) {
-	return DetermineNameserversForProviders(dc, dc.DNSProviderInstances, false)
-}
-
-// DetermineNameserversForProviders is like DetermineNameservers, for a subset of providers.
 func DetermineNameserversForProviders(dc *models.DomainConfig, providers []*models.DNSProviderInstance, silent bool) ([]*models.Nameserver, error) {
 	// start with the nameservers that have been explicitly added:
 	ns := dc.Nameservers

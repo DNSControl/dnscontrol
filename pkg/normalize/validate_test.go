@@ -149,33 +149,13 @@ func checkError(t *testing.T, err error, shouldError bool, experiment string) {
 	}
 }
 
-func Test_assert_valid_ipv4(t *testing.T) {
-	tests := []struct {
-		experiment string
-		isError    bool
-	}{
-		{"1.2.3.4", false},
-		{"1.2.3.4/10", true},
-		{"1.2.3", true},
-		{"foo", true},
-	}
-
-	for _, test := range tests {
-		err := checkIPv4(test.experiment)
-		checkError(t, err, test.isError, test.experiment)
-	}
-}
-
 func Test_assert_valid_target(t *testing.T) {
 	tests := []struct {
 		experiment string
 		isError    bool
 	}{
-		// {"@", false}, // In v5, target hosts are never "@".
 		{"foo", false},
-		{"foo.bar.", false},
 		{"foo.", false},
-		{"foo.bar", true},
 		{"foo&bar", true},
 		{"foo bar", true},
 		{"elb21.freshdesk.com/", true},
@@ -288,8 +268,6 @@ func TestNSAtRoot(t *testing.T) {
 	dc := models.MustNewDomainConfig("foo.com")
 	// do not allow ns records for @
 	rec := dc.MustNewRecordConfig(dc.LabelFromShort("test"), 0, dnsv2.TypeNS, "ns1.name.com.")
-	// rec.SetLabel("test", "foo.com")
-	// rec.MustSetTarget("ns1.name.com.")
 	errs := checkTargets(rec, "foo.com")
 	if len(errs) > 0 {
 		t.Error("Expect no error with ns record on subdomain")
@@ -335,37 +313,6 @@ func TestTransforms(t *testing.T) {
 		}
 	}
 }
-
-// This is obsolete.  A and CNAME check targets at the Make*() functions.
-// func TestCNAMEMutex(t *testing.T) {
-// 	dc := models.MustNewDomainConfig("example.com")
-// 	recA := dc.MustNewRecordConfig("foo", 0, dnsv2.TypeCNAME, "example.com.")
-// 	tests := []struct {
-// 		rType string
-// 		name  string
-// 		fail  bool
-// 	}{
-// 		{"A", "1.2.3.4", true},
-// 		{"A", "3.4.5.6", true},
-// 		{"CNAME", "foo", true},
-// 		{"CNAME", "foo2", true},
-// 	}
-// 	for _, tst := range tests {
-// 		t.Run(fmt.Sprintf("%s %s", tst.rType, tst.name), func(t *testing.T) {
-// 			dc := models.MustNewDomainConfig("example.com")
-// 			recB := dc.MustNewRecordConfig(tst.name, 0, tst.rType, tst.name)
-// 			dc.AddRecordConfig(recA)
-// 			dc.AddRecordConfig(recB)
-// 			errs := checkCNAMEs(dc)
-// 			if errs != nil && !tst.fail {
-// 				t.Error("Got error but expected none")
-// 			}
-// 			if errs == nil && tst.fail {
-// 				t.Error("Expected error but got none")
-// 			}
-// 		})
-// 	}
-// }
 
 func TestCNAMECloudflareProxied(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")

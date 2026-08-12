@@ -77,8 +77,8 @@ type labelConfig struct {
 type rTypeConfig struct {
 	rType string // The rType for all records in this group (A, CNAME, etc)
 	// The records stored as lists:
-	existingRecs []*models.RecordConfig
-	desiredRecs  []*models.RecordConfig
+	existingRecs models.Records
+	desiredRecs  models.Records
 	// The records stored as compareable/rec tuples:
 	existingTargets []targetConfig
 	desiredTargets  []targetConfig

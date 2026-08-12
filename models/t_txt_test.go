@@ -1,6 +1,7 @@
 package models
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -56,38 +57,8 @@ func TestTXTSegmented(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := TXTSegmented(dnsrdatav2.TXT{Txt: tt.txt})
-			if !equalStrings(got, tt.want) {
+			if !slices.Equal(got, tt.want) {
 				t.Fatalf("TXTSegmented() = %#v, want %#v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestRecordConfigSetRDATANormalizesTXT(t *testing.T) {
-	tests := []struct {
-		name string
-		txt  []string
-		want []string
-	}{
-		{
-			name: "removes empty segments and resegments",
-			txt:  []string{"", strings.Repeat("x", 200), "", strings.Repeat("y", 56)},
-			want: []string{strings.Repeat("x", 200) + strings.Repeat("y", 55), "y"},
-		},
-		{
-			name: "adds an empty segment to an empty record",
-			txt:  []string{},
-			want: []string{""},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rc := &RecordConfig{Type: "TXT", TypeNum: dnsv2.TypeTXT}
-			rc.SetRDATA(dnsrdatav2.TXT{Txt: tt.txt})
-			got := rc.AsTXT().Txt
-			if !equalStrings(got, tt.want) {
-				t.Fatalf("SetRDATA stored %#v, want %#v", got, tt.want)
 			}
 		})
 	}
@@ -128,7 +99,7 @@ func TestRecordConfigGetTargetTXTSegmented(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := testTXTRecord(t, tt.value)
 			got := rc.GetTargetTXTSegmented()
-			if !equalStrings(got, tt.want) {
+			if !slices.Equal(got, tt.want) {
 				t.Fatalf("GetTargetTXTSegmented() = %#v, want %#v", got, tt.want)
 			}
 		})
@@ -150,37 +121,8 @@ func TestRecordConfigSetTargetTXT(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := testTXTRecord(t, tt.value)
 			rd := rc.AsTXT()
-			if !equalStrings(rd.Txt, tt.want) {
+			if !slices.Equal(rd.Txt, tt.want) {
 				t.Fatalf("SetTargetTXT stored %#v, want %#v", rd.Txt, tt.want)
-			}
-		})
-	}
-}
-
-func TestRecordConfigSetTargetTXTs(t *testing.T) {
-	tests := []struct {
-		name string
-		txt  []string
-		want []string
-	}{
-		{name: "no segments", txt: []string{}, want: []string{""}},
-		{name: "one segment", txt: []string{"one"}, want: []string{"one"}},
-		{
-			name: "removes empty segments and resegments",
-			txt:  []string{"", strings.Repeat("x", 200), "", strings.Repeat("y", 56), ""},
-			want: []string{strings.Repeat("x", 200) + strings.Repeat("y", 55), "y"},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			rc := &RecordConfig{Type: "TXT", TypeNum: dnsv2.TypeTXT}
-			if err := rc.SetTargetTXTs(tt.txt); err != nil {
-				t.Fatalf("SetTargetTXTs: %v", err)
-			}
-			rd := rc.AsTXT()
-			if !equalStrings(rd.Txt, tt.want) {
-				t.Fatalf("SetTargetTXTs stored %#v, want %#v", rd.Txt, tt.want)
 			}
 		})
 	}
@@ -199,8 +141,8 @@ func TestRecordConfigGetTargetFieldTXT(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := testTXTRecord(t, tt.value)
-			if got, want := rc.GetTargetField(), rc.GetTargetTXTJoined(); got != want {
-				t.Fatalf("GetTargetField() = %q, want %q", got, want)
+			if got, want := strings.Join(rc.GetTargetTXTSegmented(), ""), rc.GetTargetTXTJoined(); got != want {
+				t.Fatalf("GetTargetTXTSegmented() = %q, want %q", got, want)
 			}
 		})
 	}
@@ -216,14 +158,14 @@ func TestRecordConfigGetTargetIPTXT(t *testing.T) {
 	rc.GetTargetIP()
 }
 
-func equalStrings(a, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
-}
+// func equalStrings(a, b []string) bool {
+// 	if len(a) != len(b) {
+// 		return false
+// 	}
+// 	for i := range a {
+// 		if a[i] != b[i] {
+// 			return false
+// 		}
+// 	}
+// 	return true
+// }
