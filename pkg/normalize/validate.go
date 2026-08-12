@@ -512,15 +512,11 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	for _, domain := range config.Domains {
 		for _, rec := range domain.Records {
 			if rec.Type == "IMPORT_TRANSFORM" {
-				suffixstrip := rec.Metadata["transform_suffixstrip"]
-				transformTable := rec.Metadata["transform_table"]
-				ttl := rec.TTL
-				var targetDomain string
 				rd := rec.AsIMPORTTRANSFORM()
-				transformTable = rd.TransformTable
-				ttl = uint32(rd.TTL)
-				suffixstrip = rd.SuffixStrip
-				targetDomain = rd.TargetDomain
+				transformTable := rd.TransformTable
+				ttl := uint32(rd.TTL)
+				suffixstrip := rd.SuffixStrip
+				targetDomain := rd.TargetDomain
 				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
 					errs = append(errs, err)

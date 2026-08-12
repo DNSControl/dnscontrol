@@ -305,8 +305,6 @@ func (recs Records) GroupedByFQDN() map[string]Records {
 	groups := map[string]Records{}
 	for _, rec := range recs {
 		namefqdn := rec.GetLabelFQDN()
-		if _, found := groups[namefqdn]; !found {
-		}
 		groups[namefqdn] = append(groups[namefqdn], rec)
 	}
 	return groups
