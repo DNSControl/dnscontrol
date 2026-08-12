@@ -89,14 +89,12 @@ func MustNewDomainConfig(name string) *DomainConfig {
 // ToFqdnWithDot("")         = "bar.com."       // Apex returns the apex.
 // ToFqdnWithDot("foo.com.") = "foo.com."       // FQDNs are unmodified.
 // ToFqdnWithDot("foo"")     = "foo.bar.com."   // If origin ends with a ".", DTRT.
-// Replaces dnsutilv1.AddOrigin().
 // Similar to nameutil.ToFqdnWithDot() but uses the domain name from dc.
 func (dc *DomainConfig) ToFqdnWithDot(s string) string {
 	return nameutil.ToFqdnWithDot(s, dc.Name)
 }
 
 // ToFqdnNoDot is the same as ToFqdnWithDot but the result does not include a trailing ".".
-// Replaces dnsutilv1.AddOrigin().
 // Similar to DomainConfig.ToFqdnNoDot() but it takes origin from dc.Name.
 func (dc *DomainConfig) ToFqdnNoDot(s string) string {
 	return nameutil.ToFqdnNoDot(s, dc.Name)

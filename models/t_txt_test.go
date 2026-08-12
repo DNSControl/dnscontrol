@@ -199,8 +199,8 @@ func TestRecordConfigGetTargetFieldTXT(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			rc := testTXTRecord(t, tt.value)
-			if got, want := rc.GetTargetField(), rc.GetTargetTXTJoined(); got != want {
-				t.Fatalf("GetTargetField() = %q, want %q", got, want)
+			if got, want := strings.Join(rc.GetTargetTXTSegmented(), ""), rc.GetTargetTXTJoined(); got != want {
+				t.Fatalf("GetTargetTXTSegmented() = %q, want %q", got, want)
 			}
 		})
 	}

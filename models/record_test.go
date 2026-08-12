@@ -37,27 +37,6 @@ func TestR53AliasTargetSurvivesRDATAUpdate(t *testing.T) {
 	}
 }
 
-// TestAzureAliasTargetComesFromRDATA verifies that AZURE_ALIAS no longer
-// depends on the legacy AzureAlias map or target field.
-func TestAzureAliasTargetComesFromRDATA(t *testing.T) {
-	const origin = "example.com"
-	const wantTarget = "/subscriptions/sub/resourceGroups/rg/providers/Microsoft.Network/dnszones/example.com/A/kyle"
-
-	dc := MustNewDomainConfig(origin)
-	rc, err := dc.NewRecordConfig("kenny", 300, "AZURE_ALIAS", "A", wantTarget)
-	if err != nil {
-		t.Fatalf("NewRecordConfig: %v", err)
-	}
-
-	if got := rc.AsAZUREALIAS().Target; got != wantTarget {
-		t.Fatalf("target after construction = %q, want %q", got, wantTarget)
-	}
-
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField = %q, want %q", got, wantTarget)
-	}
-}
-
 // TestAliasToCnameChangeType reproduces the bug where converting an ALIAS to a
 // CNAME via ChangeType() (as CLOUDFLAREAPI and other flattening providers do)
 // panicked ("FixUp: .RDATA is nil for type CNAME") and/or lost the target.

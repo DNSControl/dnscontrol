@@ -27,7 +27,12 @@ have one that is extra fast but panics if there is no "." at the end.
 An easy thing would be to move the part of pkg/normalize/validate.go and validate_test.go into pkg/normalize/transform{,_test}.go.
 The more difficult thing would be to move all or most of the code to pkg/transform.
 
+* All the LOC() builders should be in Go, not helpers.js.
+
 Bad decisions to reverse:
+
+* Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
+something that is both a Reg and a DSP.
 
 * mustbe.TargetHost() accepts "." as a special flag. This can probably be replaced by nrc.Flags{}
 
