@@ -374,6 +374,7 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 				rec.MXPref = int(f.Preference)
 				rec.Address = f.Mx
 			default:
+				// TODO(tlim): GetTargetField() is deprecated.
 				rec.Address = rc.GetTargetField()
 			}
 

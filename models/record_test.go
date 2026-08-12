@@ -59,9 +59,6 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	if got := rc.AsCNAME().Target; got != wantTarget {
 		t.Errorf("CNAME target = %q, want %q", got, wantTarget)
 	}
-	if got := rc.GetTargetField(); got != wantTarget {
-		t.Errorf("GetTargetField = %q, want %q", got, wantTarget)
-	}
 }
 
 func TestHasRecordTypeName(t *testing.T) {
@@ -184,7 +181,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				TlsaUsage:        1,
 				TlsaSelector:     2,
 				TlsaMatchingType: 3,
-				// Original         any,
 			},
 			want: &RecordConfig{
 				Type:      "type",
@@ -194,27 +190,6 @@ func TestRecordConfig_Copy(t *testing.T) {
 				// target:    "targette",
 				TTL:      12345,
 				Metadata: map[string]string{"me": "ah", "da": "ta"},
-				// MxPreference:     123,
-				// SrvPriority:  223,
-				// SrvWeight:    345,
-				// SrvPort:      456,
-				// CaaTag:       "caata",
-				// CaaFlag:      100,
-				// DsKeyTag:     12341,
-				// DsAlgorithm:  99,
-				// DsDigestType: 98,
-				// DsDigest:     "dsdig",
-				// NaptrOrder:   10000,
-				// NaptrPreference:  12220,
-				// NaptrFlags:       "naptrfl",
-				// NaptrService:     "naptrser",
-				// NaptrRegexp:      "naptrreg",
-				// SshfpAlgorithm:   4,
-				// SshfpFingerprint: 5,
-				// TlsaUsage:        1,
-				// TlsaSelector:     2,
-				// TlsaMatchingType: 3,
-				// Original         any,
 			},
 		},
 	}
@@ -225,10 +200,9 @@ func TestRecordConfig_Copy(t *testing.T) {
 				Name:      tt.fields.Name,
 				SubDomain: tt.fields.SubDomain,
 				NameFQDN:  tt.fields.NameFQDN,
-				// target:    tt.fields.target,
-				TTL:      tt.fields.TTL,
-				Metadata: tt.fields.Metadata,
-				Original: tt.fields.Original,
+				TTL:       tt.fields.TTL,
+				Metadata:  tt.fields.Metadata,
+				Original:  tt.fields.Original,
 			}
 			got, err := rc.Copy()
 			if (err != nil) != tt.wantErr {

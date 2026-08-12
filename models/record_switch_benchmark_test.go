@@ -67,7 +67,7 @@ func dispatchByRDATAType(rc *RecordConfig) uint64 {
 }
 
 func BenchmarkRecordConfigSwitchDispatch(b *testing.B) {
-	records := []*RecordConfig{
+	records := Records{
 		{TypeNum: dnsv2.TypeA, rdata: dnsrdatav2.A{Addr: netip.MustParseAddr("192.0.2.1")}},
 		{TypeNum: dnsv2.TypeAAAA, rdata: dnsrdatav2.AAAA{Addr: netip.MustParseAddr("2001:db8::1")}},
 		{TypeNum: dnsv2.TypeCNAME, rdata: dnsrdatav2.CNAME{Target: "target.example."}},
@@ -77,7 +77,7 @@ func BenchmarkRecordConfigSwitchDispatch(b *testing.B) {
 		{TypeNum: dnsv2.TypeTXT, rdata: dnsrdatav2.TXT{Txt: []string{"benchmark"}}},
 		{TypeNum: dnsv2.TypeCAA, rdata: dnsrdatav2.CAA{Tag: "issue", Value: "ca.example"}},
 	}
-	defaultRecord := []*RecordConfig{
+	defaultRecord := Records{
 		{TypeNum: dnsv2.TypePTR, rdata: dnsrdatav2.PTR{}},
 	}
 

@@ -1,16 +1,20 @@
-# TODO
+# Refactoring
 
 Useful refactoring projects. Please feel free to pick up any of these.
 
-## Refactoring
 
-Code that can probably be deleted:
+## Super easy
+
+Anywhere `[]*models.RecordConfig` exists can be replaced by `models.Records`
+
+## Code that can probably be deleted
 
 * RegisterCustomRecordType()/GetCustomRecordType() is no longer needed. Remove.
 
 * I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
 
-Rewrites needed:
+
+## Rewrites needed
 
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
 cleaner and more testable. Plus it will consolidate the code into one place instead
@@ -29,7 +33,8 @@ The more difficult thing would be to move all or most of the code to pkg/transfo
 
 * All the LOC() builders should be in Go, not helpers.js.
 
-Bad decisions to reverse:
+
+## Bad decisions to reverse
 
 * Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
 something that is both a Reg and a DSP.
@@ -40,7 +45,8 @@ something that is both a Reg and a DSP.
 
 * Replace ChangeType() with ChangeTypeToCNAME(t string).  This may also enable us to eliminate ClearRDATA().
 
-Actual new features:
+
+## Actual new features:
 
 * Handle "unknown types". dnsv2 has a way to managing unknown types. Investigate it and replace the half-written version (see rc.UnknownTypeName)
 

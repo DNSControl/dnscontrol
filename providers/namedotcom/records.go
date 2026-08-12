@@ -170,7 +170,7 @@ func (n *namedotcomProvider) createRecord(rc *models.RecordConfig, domain string
 		priority = uint32(f.Priority)
 		answer = fmt.Sprintf("%d %d %v", f.Weight, f.Port, f.Target)
 	default:
-		answer = rc.GetTargetField()
+		answer = rc.GetRDATA().String()
 	}
 
 	record := &namecom.Record{

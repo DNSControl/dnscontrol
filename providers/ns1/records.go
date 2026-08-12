@@ -196,7 +196,7 @@ func buildRecord(recs models.Records, domain string, id string) *dns.Record {
 				f.Certificate,
 			}})
 		default:
-			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetTargetField())})
+			rec.AddAnswer(&dns.Answer{Rdata: strings.Fields(r.GetRDATA().String())})
 		}
 	}
 	return rec

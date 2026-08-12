@@ -144,7 +144,7 @@ func (dc *DomainConfig) Copy() (*DomainConfig, error) {
 
 // Filter removes all records that don't match the filter f.
 func (dc *DomainConfig) Filter(f func(r *RecordConfig) bool) {
-	recs := []*RecordConfig{}
+	var recs Records
 	for _, r := range dc.Records {
 		if f(r) {
 			recs = append(recs, r)

@@ -261,7 +261,11 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 }
 
 func replaceIntegrationTargetTokens(rc *models.RecordConfig, subscriptionID, resourceGroup string) {
-	originalTarget := rc.GetTargetField()
+	if rc.Type != "AZURE_ALIAS" {
+		return
+	}
+
+	originalTarget := rc.AsAZUREALIAS().Target
 	target := strings.NewReplacer(
 		"**subscription-id**", subscriptionID,
 		"**resource-group**", strings.ToLower(resourceGroup),
@@ -351,7 +355,7 @@ type TestGroup struct {
 
 type TestCase struct {
 	Desc            string
-	Records         []*models.RecordConfig
+	Records         models.Records
 	Unmanaged       []*models.UnmanagedConfig
 	UnmanagedUnsafe bool // DISABLE_IGNORE_SAFETY_CHECK
 	Changeless      bool // set to true if any changes would be an error
@@ -546,10 +550,10 @@ func ignoreTarget(targetSpec string, typeSpec string) *models.RecordConfig {
 }
 
 func ignore(labelSpec string, typeSpec string, targetSpec string) *models.RecordConfig {
-	r := &models.RecordConfig{
-		Type:     "IGNORE",
-		Metadata: map[string]string{},
-	}
+	// There is no "ignore" record.  IGNORE is a macro in helpers.js that records info
+	// into the DomainConfig.  Since we want to be able to test it, we stash the info
+	// in Metadata then later we pluck it out and put it on the domain in test.
+	r := &models.RecordConfig{Type: "IGNORE", Metadata: map[string]string{}}
 
 	// We stash the *Spec values in Metadata temporarily. Later in tc() we
 	// pluck them out and install them in the DomainConfig.
@@ -567,7 +571,7 @@ func loc(name string, d1 uint8, m1 uint8, s1 float32, ns string,
 	return r
 }
 
-func manyA(namePattern, target string, n int) []*models.RecordConfig {
+func manyA(namePattern, target string, n int) models.Records {
 	recs := models.Records{}
 	for i := range n {
 		r, err := globalDC.NewRecordConfig(fmt.Sprintf(namePattern, i), defaultTTL, dnsv2.TypeA, target)

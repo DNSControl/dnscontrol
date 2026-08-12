@@ -68,7 +68,7 @@ func recordConfigToNative(rc *models.RecordConfig, _ string) *CreateRecordReques
 			target = target[:len(target)-1]
 		}
 	default:
-		target = rc.GetTargetField()
+		target = rc.GetRDATA().String()
 	}
 
 	return &CreateRecordRequest{
