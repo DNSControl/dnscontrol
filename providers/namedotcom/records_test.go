@@ -5,8 +5,22 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namedotcom/go/namecom"
 )
+
+func TestToNativeALIAS(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("@", 300, privatetypes.TypeALIAS, "foo.com.")
+
+	got := toNative(rc, dc.Name)
+	if got.Type != "ANAME" {
+		t.Errorf("type = %q, want ANAME", got.Type)
+	}
+	if got.Answer != "foo.com." {
+		t.Errorf("answer = %q, want foo.com.", got.Answer)
+	}
+}
 
 func TestToRecordUsesV3RecordConfig(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
