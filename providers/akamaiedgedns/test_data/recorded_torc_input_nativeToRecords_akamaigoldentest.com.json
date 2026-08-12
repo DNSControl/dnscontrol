@@ -1,0 +1,5430 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "name": "*.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "name": "4.akamaigoldentest.com",
+      "type": "PTR",
+      "ttl": 300,
+      "rdata": [
+        "bar.com."
+      ]
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "name": "4.akamaigoldentest.com",
+      "type": "PTR",
+      "ttl": 300,
+      "rdata": [
+        "foo.com."
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
+      ]
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 ."
+      ]
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 62 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 62 72 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "15 65 75 foo3.com."
+      ]
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "15 65 75 foo4.com."
+      ]
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "5 60 70 foo2.com.",
+        "15 65 75 foo3.com."
+      ]
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "5 60 70 foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 333,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 4400,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.com."
+      ]
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 43.950 N 71 5 6.340 W -24.-33m 1m 200m 10m"
+      ]
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 1000,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.2"
+      ]
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 500,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 666,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo.com."
+      ]
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\""
+      ]
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issue \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \";\""
+      ]
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \"example.com\""
+      ]
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "128 issue \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54 N 71 6 18 W -24.-05m 30m 0m 0m"
+      ]
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54 N 71 6 18 W -24.-06m 30m 10m 0m"
+      ]
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54 N 71 6 18 W -24m 30m 0m 0m"
+      ]
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "2 akamaigoldentest.com.",
+        "8 www.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net.",
+        "ns1.foo.com.",
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net.",
+        "ns1.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net."
+      ]
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net."
+      ]
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081000 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081001 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081002 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081003 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081004 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081005 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081006 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081007 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081009 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081010 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081011 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081012 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081013 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081014 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081015 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081016 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081017 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081019 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081021 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081022 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081023 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081025 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081026 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081027 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081028 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081029 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081030 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081031 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081032 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081033 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081034 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081035 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081036 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081037 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081038 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081039 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081041 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081043 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081044 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081045 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081046 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081048 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081049 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081050 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081051 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081053 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081054 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081055 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081057 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081059 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081060 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081061 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081062 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081063 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081065 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081067 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081068 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081069 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081071 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081073 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081074 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081076 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081078 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081080 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081082 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081085 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081086 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081087 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081090 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081093 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081094 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081095 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081098 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081099 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081100 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081103 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081105 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081106 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081107 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081108 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081109 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081111 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081113 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081115 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081117 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081119 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081121 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081123 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081125 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081127 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081129 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081131 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081133 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081135 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081137 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081139 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081141 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081142 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081143 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081144 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081145 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081146 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081148 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081149 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081150 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081151 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081152 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081153 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081156 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081157 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081158 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081159 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081162 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081163 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081164 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081166 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081168 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081169 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081170 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081171 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081270 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081271 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081272 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081373 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081374 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081375 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081376 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081377 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081378 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081379 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081380 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081381 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081382 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081383 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081384 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081389 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081394 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081395 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081396 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081397 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081398 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081399 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081400 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081401 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081402 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081403 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081404 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081405 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081406 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081407 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081408 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081409 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081410 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081411 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081412 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081413 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081414 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081415 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081416 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081417 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081418 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081419 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081420 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081421 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081422 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081423 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081424 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081425 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081426 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081427 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081428 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081429 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081430 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081431 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081432 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081433 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081434 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081435 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081436 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081437 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081439 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081440 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081441 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081442 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081443 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081444 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081446 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081448 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081449 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081450 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081451 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081455 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081459 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081463 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081467 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081471 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081475 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081479 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081483 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081488 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081489 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081490 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081491 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081492 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081497 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081499 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081501 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081505 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081509 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081511 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081512 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081514 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081515 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081516 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SOA",
+      "ttl": 86400,
+      "rdata": [
+        "a1-98.akam.net. hostmaster.akamaigoldentest.com. 2026081517 3600 600 604800 300"
+      ]
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+      ]
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+      ]
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC"
+      ]
+    }
+  },
+  {
+    "index": 268,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"asimple\""
+      ]
+    }
+  },
+  {
+    "index": 269,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 270,
+    "value": {
+      "name": "another-child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44",
+        "1501 14 4 109BB6B5B6D5547C1CE03C7A8BD7D8F80C1CB0957F50C4F7FDA04692079917E4F9CAD52B878F3D8234E1A170B154B72D",
+        "1502 8 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED",
+        "65535 13 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED"
+      ]
+    }
+  },
+  {
+    "index": 271,
+    "value": {
+      "name": "another-child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 272,
+    "value": {
+      "name": "b.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "52 14 5 N 0 8 50 E 10.22m 0m 0m 0m"
+      ]
+    }
+  },
+  {
+    "index": 273,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 274,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 275,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact2.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 276,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 277,
+    "value": {
+      "name": "bar.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 278,
+    "value": {
+      "name": "c.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "32 7 19 S 116 2 25 E 10m 0m 0m 0m"
+      ]
+    }
+  },
+  {
+    "index": 279,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "1 14 4 417212FD1C8BC5896FEFD8DB58AF824545E85B0D0546409366A30AEF7269FAE258173BD185FB262C86F3BB86FBA04368"
+      ]
+    }
+  },
+  {
+    "index": 280,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 281,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 14 4 3115238F89E0BF5252D9718113B1B9FFF854608D84BE94EEFB9210DC1CC0B4F3557342A27465CFACC42EF137AE9A5489"
+      ]
+    }
+  },
+  {
+    "index": 282,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 283,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "8857 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 284,
+    "value": {
+      "name": "d.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 28.760 N 71 0 51.620 W -44m 2000m 0m 0m"
+      ]
+    }
+  },
+  {
+    "index": 285,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 286,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 287,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 288,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.1"
+      ]
+    }
+  },
+  {
+    "index": 289,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff:0:0:0:fe71:ce77"
+      ]
+    }
+  },
+  {
+    "index": 290,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.2"
+      ]
+    }
+  },
+  {
+    "index": 291,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff:0:0:0:fe71:ce78"
+      ]
+    }
+  },
+  {
+    "index": 292,
+    "value": {
+      "name": "final.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"TestDNSProviders was successful!\""
+      ]
+    }
+  },
+  {
+    "index": 293,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "11.11.11.11"
+      ]
+    }
+  },
+  {
+    "index": 294,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "12.12.12.12"
+      ]
+    }
+  },
+  {
+    "index": 295,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "13.13.13.13"
+      ]
+    }
+  },
+  {
+    "index": 296,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "14.14.14.14"
+      ]
+    }
+  },
+  {
+    "index": 297,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "9.9.9.9"
+      ]
+    }
+  },
+  {
+    "index": 298,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 299,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "3.4.5.6"
+      ]
+    }
+  },
+  {
+    "index": 300,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 301,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5",
+        "3.4.5.6"
+      ]
+    }
+  },
+  {
+    "index": 302,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5",
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 303,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 304,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.5.6.7"
+      ]
+    }
+  },
+  {
+    "index": 305,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff:0:0:0:fe71:aaaa"
+      ]
+    }
+  },
+  {
+    "index": 306,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 307,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google.com."
+      ]
+    }
+  },
+  {
+    "index": 308,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google2.com."
+      ]
+    }
+  },
+  {
+    "index": 309,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact1.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 310,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 aspmx.l.google.com.",
+        "20 alt1.aspmx.l.google.com."
+      ]
+    }
+  },
+  {
+    "index": 311,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 foo.akamaigoldentest.com.",
+        "20 bar.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 312,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 mx.google.com."
+      ]
+    }
+  },
+  {
+    "index": 313,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "8 akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 314,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 315,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 316,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"v=spf1 ip4:99.99.99.99 -all\""
+      ]
+    }
+  },
+  {
+    "index": 317,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 318,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 319,
+    "value": {
+      "name": "foo0.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"\""
+      ]
+    }
+  },
+  {
+    "index": 320,
+    "value": {
+      "name": "foo254.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+      ]
+    }
+  },
+  {
+    "index": 321,
+    "value": {
+      "name": "foo255.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\""
+      ]
+    }
+  },
+  {
+    "index": 322,
+    "value": {
+      "name": "foo256.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\""
+      ]
+    }
+  },
+  {
+    "index": 323,
+    "value": {
+      "name": "foo509.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\""
+      ]
+    }
+  },
+  {
+    "index": 324,
+    "value": {
+      "name": "foo510.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\""
+      ]
+    }
+  },
+  {
+    "index": 325,
+    "value": {
+      "name": "foo511.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\""
+      ]
+    }
+  },
+  {
+    "index": 326,
+    "value": {
+      "name": "foo764.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\""
+      ]
+    }
+  },
+  {
+    "index": 327,
+    "value": {
+      "name": "foo765.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\""
+      ]
+    }
+  },
+  {
+    "index": 328,
+    "value": {
+      "name": "foo766.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\""
+      ]
+    }
+  },
+  {
+    "index": 329,
+    "value": {
+      "name": "foobt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"blah`blah\""
+      ]
+    }
+  },
+  {
+    "index": 330,
+    "value": {
+      "name": "foosc1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"semi;colon\""
+      ]
+    }
+  },
+  {
+    "index": 331,
+    "value": {
+      "name": "foosc2.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"wssemi ; colon\""
+      ]
+    }
+  },
+  {
+    "index": 332,
+    "value": {
+      "name": "foosp.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"with spaces\""
+      ]
+    }
+  },
+  {
+    "index": 333,
+    "value": {
+      "name": "foosq.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"quo'te\""
+      ]
+    }
+  },
+  {
+    "index": 334,
+    "value": {
+      "name": "foows1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"trailingws \""
+      ]
+    }
+  },
+  {
+    "index": 335,
+    "value": {
+      "name": "mail.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 336,
+    "value": {
+      "name": "mail.bat.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 337,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.3"
+      ]
+    }
+  },
+  {
+    "index": 338,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 339,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "3 nmx.akamaigoldentest.com.",
+        "9 www.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 340,
+    "value": {
+      "name": "pager101-rec0000.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 341,
+    "value": {
+      "name": "pager101-rec0001.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 342,
+    "value": {
+      "name": "pager101-rec0002.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 343,
+    "value": {
+      "name": "pager101-rec0003.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 344,
+    "value": {
+      "name": "pager101-rec0004.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 345,
+    "value": {
+      "name": "pager101-rec0005.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 346,
+    "value": {
+      "name": "pager101-rec0006.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 347,
+    "value": {
+      "name": "pager101-rec0007.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 348,
+    "value": {
+      "name": "pager101-rec0008.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 349,
+    "value": {
+      "name": "pager101-rec0009.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 350,
+    "value": {
+      "name": "pager101-rec0010.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 351,
+    "value": {
+      "name": "pager101-rec0011.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 352,
+    "value": {
+      "name": "pager101-rec0012.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 353,
+    "value": {
+      "name": "pager101-rec0013.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 354,
+    "value": {
+      "name": "pager101-rec0014.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 355,
+    "value": {
+      "name": "pager101-rec0015.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 356,
+    "value": {
+      "name": "pager101-rec0016.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 357,
+    "value": {
+      "name": "pager101-rec0017.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 358,
+    "value": {
+      "name": "pager101-rec0018.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 359,
+    "value": {
+      "name": "pager101-rec0019.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 360,
+    "value": {
+      "name": "pager101-rec0020.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 361,
+    "value": {
+      "name": "pager101-rec0021.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 362,
+    "value": {
+      "name": "pager101-rec0022.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 363,
+    "value": {
+      "name": "pager101-rec0023.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 364,
+    "value": {
+      "name": "pager101-rec0024.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 365,
+    "value": {
+      "name": "pager101-rec0025.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 366,
+    "value": {
+      "name": "pager101-rec0026.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 367,
+    "value": {
+      "name": "pager101-rec0027.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 368,
+    "value": {
+      "name": "pager101-rec0028.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 369,
+    "value": {
+      "name": "pager101-rec0029.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 370,
+    "value": {
+      "name": "pager101-rec0030.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 371,
+    "value": {
+      "name": "pager101-rec0031.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 372,
+    "value": {
+      "name": "pager101-rec0032.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 373,
+    "value": {
+      "name": "pager101-rec0033.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 374,
+    "value": {
+      "name": "pager101-rec0034.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 375,
+    "value": {
+      "name": "pager101-rec0035.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 376,
+    "value": {
+      "name": "pager101-rec0036.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 377,
+    "value": {
+      "name": "pager101-rec0037.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 378,
+    "value": {
+      "name": "pager101-rec0038.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 379,
+    "value": {
+      "name": "pager101-rec0039.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 380,
+    "value": {
+      "name": "pager101-rec0040.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 381,
+    "value": {
+      "name": "pager101-rec0041.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 382,
+    "value": {
+      "name": "pager101-rec0042.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 383,
+    "value": {
+      "name": "pager101-rec0043.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 384,
+    "value": {
+      "name": "pager101-rec0044.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 385,
+    "value": {
+      "name": "pager101-rec0045.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 386,
+    "value": {
+      "name": "pager101-rec0046.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 387,
+    "value": {
+      "name": "pager101-rec0047.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 388,
+    "value": {
+      "name": "pager101-rec0048.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 389,
+    "value": {
+      "name": "pager101-rec0049.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 390,
+    "value": {
+      "name": "pager101-rec0050.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 391,
+    "value": {
+      "name": "pager101-rec0051.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 392,
+    "value": {
+      "name": "pager101-rec0052.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 393,
+    "value": {
+      "name": "pager101-rec0053.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 394,
+    "value": {
+      "name": "pager101-rec0054.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 395,
+    "value": {
+      "name": "pager101-rec0055.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 396,
+    "value": {
+      "name": "pager101-rec0056.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 397,
+    "value": {
+      "name": "pager101-rec0057.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 398,
+    "value": {
+      "name": "pager101-rec0058.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 399,
+    "value": {
+      "name": "pager101-rec0059.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 400,
+    "value": {
+      "name": "pager101-rec0060.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 401,
+    "value": {
+      "name": "pager101-rec0061.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 402,
+    "value": {
+      "name": "pager101-rec0062.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 403,
+    "value": {
+      "name": "pager101-rec0063.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 404,
+    "value": {
+      "name": "pager101-rec0064.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 405,
+    "value": {
+      "name": "pager101-rec0065.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 406,
+    "value": {
+      "name": "pager101-rec0066.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 407,
+    "value": {
+      "name": "pager101-rec0067.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 408,
+    "value": {
+      "name": "pager101-rec0068.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 409,
+    "value": {
+      "name": "pager101-rec0069.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 410,
+    "value": {
+      "name": "pager101-rec0070.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 411,
+    "value": {
+      "name": "pager101-rec0071.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 412,
+    "value": {
+      "name": "pager101-rec0072.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 413,
+    "value": {
+      "name": "pager101-rec0073.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 414,
+    "value": {
+      "name": "pager101-rec0074.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 415,
+    "value": {
+      "name": "pager101-rec0075.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 416,
+    "value": {
+      "name": "pager101-rec0076.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 417,
+    "value": {
+      "name": "pager101-rec0077.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 418,
+    "value": {
+      "name": "pager101-rec0078.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 419,
+    "value": {
+      "name": "pager101-rec0079.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 420,
+    "value": {
+      "name": "pager101-rec0080.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 421,
+    "value": {
+      "name": "pager101-rec0081.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 422,
+    "value": {
+      "name": "pager101-rec0082.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 423,
+    "value": {
+      "name": "pager101-rec0083.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 424,
+    "value": {
+      "name": "pager101-rec0084.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 425,
+    "value": {
+      "name": "pager101-rec0085.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 426,
+    "value": {
+      "name": "pager101-rec0086.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 427,
+    "value": {
+      "name": "pager101-rec0087.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 428,
+    "value": {
+      "name": "pager101-rec0088.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 429,
+    "value": {
+      "name": "pager101-rec0089.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 430,
+    "value": {
+      "name": "pager101-rec0090.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 431,
+    "value": {
+      "name": "pager101-rec0091.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 432,
+    "value": {
+      "name": "pager101-rec0092.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 433,
+    "value": {
+      "name": "pager101-rec0093.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 434,
+    "value": {
+      "name": "pager101-rec0094.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 435,
+    "value": {
+      "name": "pager101-rec0095.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 436,
+    "value": {
+      "name": "pager101-rec0096.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 437,
+    "value": {
+      "name": "pager101-rec0097.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 438,
+    "value": {
+      "name": "pager101-rec0098.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 439,
+    "value": {
+      "name": "pager101-rec0099.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 440,
+    "value": {
+      "name": "pager101-rec0100.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 441,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo.com."
+      ]
+    }
+  },
+  {
+    "index": 442,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 443,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+        "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 444,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 445,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 446,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 447,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 448,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 449,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 450,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 451,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 452,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 453,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 454,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 333,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 455,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 999,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 456,
+    "value": {
+      "name": "testaaaa.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2607:f8b0:4006:820:0:0:0:2006"
+      ]
+    }
+  },
+  {
+    "index": 457,
+    "value": {
+      "name": "testaaaa.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2607:f8b0:4006:820:0:0:0:2013"
+      ]
+    }
+  },
+  {
+    "index": 458,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 459,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "www.google.com."
+      ]
+    }
+  },
+  {
+    "index": 460,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "www.yahoo.com."
+      ]
+    }
+  },
+  {
+    "index": 461,
+    "value": {
+      "name": "testdefined.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 462,
+    "value": {
+      "name": "testdefined.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "9.9.9.9"
+      ]
+    }
+  },
+  {
+    "index": 463,
+    "value": {
+      "name": "testignore.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 464,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "100 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 465,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 466,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com.",
+        "100 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 467,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 468,
+    "value": {
+      "name": "testtxt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"changed\""
+      ]
+    }
+  },
+  {
+    "index": 469,
+    "value": {
+      "name": "testtxt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 470,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "2.2.2.2",
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 471,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 472,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 473,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 474,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.8"
+      ]
+    }
+  },
+  {
+    "index": 475,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.9"
+      ]
+    }
+  },
+  {
+    "index": 476,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 477,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 478,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 400,
+      "rdata": [
+        "2.2.2.2",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 479,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 400,
+      "rdata": [
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 480,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 700,
+      "rdata": [
+        "1.2.3.4",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 481,
+    "value": {
+      "name": "xn--fiq228c.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 482,
+    "value": {
+      "name": "xn--ndaaa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 483,
+    "value": {
+      "name": "xn--ndaaa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 484,
+    "value": {
+      "name": "xn--o-0gab.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.xn--vhquv."
+      ]
+    }
+  },
+  {
+    "index": 485,
+    "value": {
+      "name": "xyz.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "ns1.foo.com.",
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 486,
+    "value": {
+      "name": "xyz.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 487,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3",
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 488,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff:0:0:0:fe71:cccc"
+      ]
+    }
+  }
+]

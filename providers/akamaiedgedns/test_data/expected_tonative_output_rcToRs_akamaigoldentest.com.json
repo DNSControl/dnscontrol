@@ -1,0 +1,5345 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "name": "*.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "name": "*.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "name": "4.akamaigoldentest.com",
+      "type": "PTR",
+      "ttl": 300,
+      "rdata": [
+        "bar.com."
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "name": "4.akamaigoldentest.com",
+      "type": "PTR",
+      "ttl": 300,
+      "rdata": [
+        "bar.com."
+      ]
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "name": "4.akamaigoldentest.com",
+      "type": "PTR",
+      "ttl": 300,
+      "rdata": [
+        "foo.com."
+      ]
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 1000,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.2"
+      ]
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.2"
+      ]
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo.com."
+      ]
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "AKAMAITLC",
+      "ttl": 300,
+      "rdata": [
+        "DUAL foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issue \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\""
+      ]
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\""
+      ]
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \";\""
+      ]
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \"example.com\""
+      ]
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "0 issuewild \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "128 issue \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "CAA",
+      "ttl": 300,
+      "rdata": [
+        "128 issue \"letsencrypt.org\""
+      ]
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54.000 N 71 06 18.000 W -24.05m 30m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54.000 N 71 06 18.000 W -24.06m 30m 10m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "2 akamaigoldentest.com.",
+        "8 www.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net."
+      ]
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net.",
+        "ns1.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "a1-98.akam.net.",
+        "a12-65.akam.net.",
+        "a13-65.akam.net.",
+        "a2-64.akam.net.",
+        "a3-64.akam.net.",
+        "a4-65.akam.net.",
+        "ns1.foo.com.",
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+      ]
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+      ]
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC"
+      ]
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "SSHFP",
+      "ttl": 300,
+      "rdata": [
+        "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC"
+      ]
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"asimple\""
+      ]
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"asimple\""
+      ]
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 500,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 500,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "name": "akamaigoldentest.com",
+      "type": "A",
+      "ttl": 666,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
+      ]
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
+      ]
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "name": "_443._tcp.akamaigoldentest.com",
+      "type": "TLSA",
+      "ttl": 300,
+      "rdata": [
+        "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+      ]
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 ."
+      ]
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 ."
+      ]
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 62 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 62 72 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "15 65 75 foo4.com.",
+        "52 62 72 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "15 65 75 foo3.com."
+      ]
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "15 65 75 foo4.com."
+      ]
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "5 60 70 foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 300,
+      "rdata": [
+        "5 6 7 foo.com.",
+        "5 60 70 foo2.com.",
+        "15 65 75 foo3.com."
+      ]
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 333,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 4400,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "name": "_sip._tcp.akamaigoldentest.com",
+      "type": "SRV",
+      "ttl": 4400,
+      "rdata": [
+        "5 6 7 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.com."
+      ]
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.com."
+      ]
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m"
+      ]
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "name": "a.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m"
+      ]
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "name": "another-child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "name": "another-child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44",
+        "1501 14 4 109BB6B5B6D5547C1CE03C7A8BD7D8F80C1CB0957F50C4F7FDA04692079917E4F9CAD52B878F3D8234E1A170B154B72D",
+        "1502 8 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED",
+        "65535 13 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED"
+      ]
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "name": "another-child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "44 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44",
+        "1501 14 4 109BB6B5B6D5547C1CE03C7A8BD7D8F80C1CB0957F50C4F7FDA04692079917E4F9CAD52B878F3D8234E1A170B154B72D",
+        "1502 8 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED",
+        "65535 13 2 2FA14F53E6B15CAC9AC77846C7BE87862C2A7E9EC0C6CEA319DB939317F126ED"
+      ]
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "name": "b.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "name": "b.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact2.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact2.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "name": "bar.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "name": "bar.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "name": "bar.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "name": "c.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "name": "c.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "1 14 4 417212FD1C8BC5896FEFD8DB58AF824545E85B0D0546409366A30AEF7269FAE258173BD185FB262C86F3BB86FBA04368"
+      ]
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 14 4 3115238F89E0BF5252D9718113B1B9FFF854608D84BE94EEFB9210DC1CC0B4F3557342A27465CFACC42EF137AE9A5489"
+      ]
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 14 4 3115238F89E0BF5252D9718113B1B9FFF854608D84BE94EEFB9210DC1CC0B4F3557342A27465CFACC42EF137AE9A5489"
+      ]
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "3 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "name": "child.akamaigoldentest.com",
+      "type": "DS",
+      "ttl": 300,
+      "rdata": [
+        "8857 8 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44"
+      ]
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "name": "d.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "name": "d.akamaigoldentest.com",
+      "type": "LOC",
+      "ttl": 300,
+      "rdata": [
+        "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m"
+      ]
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "name": "decoy.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.1"
+      ]
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.1"
+      ]
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:ce77"
+      ]
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "name": "dyndns-city1.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:ce77"
+      ]
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.2"
+      ]
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "91.42.1.2"
+      ]
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:ce78"
+      ]
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "name": "dyndns-city2.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:ce78"
+      ]
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "name": "final.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"TestDNSProviders was successful!\""
+      ]
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "name": "final.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"TestDNSProviders was successful!\""
+      ]
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "11.11.11.11"
+      ]
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "12.12.12.12"
+      ]
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "13.13.13.13"
+      ]
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "9.9.9.9"
+      ]
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "14.14.14.14"
+      ]
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "14.14.14.14"
+      ]
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "3.4.5.6"
+      ]
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "3.4.5.6"
+      ]
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5",
+        "3.4.5.6"
+      ]
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5",
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.3.4.5",
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.5.6.7"
+      ]
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "4.5.6.7"
+      ]
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:aaaa"
+      ]
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:aaaa"
+      ]
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google.com."
+      ]
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google.com."
+      ]
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google2.com."
+      ]
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "google2.com."
+      ]
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact1.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "redact1.acm-validations.aws."
+      ]
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 aspmx.l.google.com.",
+        "20 alt1.aspmx.l.google.com."
+      ]
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 aspmx.l.google.com.",
+        "20 alt1.aspmx.l.google.com."
+      ]
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 foo.akamaigoldentest.com.",
+        "20 bar.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "10 foo.akamaigoldentest.com.",
+        "20 bar.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 mx.google.com."
+      ]
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 mx.google.com."
+      ]
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "8 akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "8 akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"v=spf1 ip4:99.99.99.99 -all\""
+      ]
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "name": "foo.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"v=spf1 ip4:99.99.99.99 -all\""
+      ]
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "2.3.4.5"
+      ]
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "name": "foo.bat.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "name": "foo0.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"\""
+      ]
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "name": "foo0.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"\""
+      ]
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "name": "foo254.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+      ]
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "name": "foo254.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+      ]
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "name": "foo255.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\""
+      ]
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "name": "foo255.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\""
+      ]
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "name": "foo256.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\""
+      ]
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "name": "foo256.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\""
+      ]
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "name": "foo509.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\""
+      ]
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "name": "foo509.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\""
+      ]
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "name": "foo510.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\""
+      ]
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "name": "foo510.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\""
+      ]
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "name": "foo511.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\""
+      ]
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "name": "foo511.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\""
+      ]
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "name": "foo764.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\""
+      ]
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "name": "foo764.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\""
+      ]
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "name": "foo765.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\""
+      ]
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "name": "foo765.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\""
+      ]
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "name": "foo766.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\""
+      ]
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "name": "foo766.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\""
+      ]
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "name": "foobt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"blah`blah\""
+      ]
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "name": "foobt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"blah`blah\""
+      ]
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "name": "foosc1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"semi;colon\""
+      ]
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "name": "foosc1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"semi;colon\""
+      ]
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "name": "foosc2.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"wssemi ; colon\""
+      ]
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "name": "foosc2.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"wssemi ; colon\""
+      ]
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "name": "foosp.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"with spaces\""
+      ]
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "name": "foosp.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"with spaces\""
+      ]
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "name": "foosq.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"quo'te\""
+      ]
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "name": "foosq.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"quo'te\""
+      ]
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "name": "foows1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"trailingws \""
+      ]
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "name": "foows1.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"trailingws \""
+      ]
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "name": "mail.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "name": "mail.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "name": "mail.bat.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "name": "mail.bat.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "ghs.googlehosted.com."
+      ]
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.3"
+      ]
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.3"
+      ]
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "0 ."
+      ]
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "name": "nmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "3 nmx.akamaigoldentest.com.",
+        "9 www.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "name": "pager101-rec0000.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "name": "pager101-rec0000.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "name": "pager101-rec0001.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "name": "pager101-rec0001.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "name": "pager101-rec0002.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "name": "pager101-rec0002.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "name": "pager101-rec0003.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "name": "pager101-rec0003.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "name": "pager101-rec0004.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "name": "pager101-rec0004.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "name": "pager101-rec0005.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "name": "pager101-rec0005.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "name": "pager101-rec0006.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "name": "pager101-rec0006.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "name": "pager101-rec0007.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "name": "pager101-rec0007.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "name": "pager101-rec0008.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "name": "pager101-rec0008.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "name": "pager101-rec0009.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "name": "pager101-rec0009.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "name": "pager101-rec0010.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "name": "pager101-rec0010.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "name": "pager101-rec0011.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "name": "pager101-rec0011.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "name": "pager101-rec0012.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "name": "pager101-rec0012.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "name": "pager101-rec0013.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "name": "pager101-rec0013.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "name": "pager101-rec0014.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "name": "pager101-rec0014.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "name": "pager101-rec0015.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "name": "pager101-rec0015.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "name": "pager101-rec0016.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "name": "pager101-rec0016.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "name": "pager101-rec0017.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "name": "pager101-rec0017.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "name": "pager101-rec0018.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "name": "pager101-rec0018.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "name": "pager101-rec0019.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "name": "pager101-rec0019.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "name": "pager101-rec0020.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "name": "pager101-rec0020.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "name": "pager101-rec0021.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "name": "pager101-rec0021.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "name": "pager101-rec0022.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "name": "pager101-rec0022.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "name": "pager101-rec0023.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "name": "pager101-rec0023.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "name": "pager101-rec0024.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "name": "pager101-rec0024.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "name": "pager101-rec0025.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "name": "pager101-rec0025.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "name": "pager101-rec0026.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "name": "pager101-rec0026.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "name": "pager101-rec0027.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "name": "pager101-rec0027.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "name": "pager101-rec0028.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "name": "pager101-rec0028.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "name": "pager101-rec0029.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "name": "pager101-rec0029.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "name": "pager101-rec0030.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "name": "pager101-rec0030.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "name": "pager101-rec0031.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "name": "pager101-rec0031.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 268,
+    "value": {
+      "name": "pager101-rec0032.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 269,
+    "value": {
+      "name": "pager101-rec0032.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 270,
+    "value": {
+      "name": "pager101-rec0033.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 271,
+    "value": {
+      "name": "pager101-rec0033.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 272,
+    "value": {
+      "name": "pager101-rec0034.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 273,
+    "value": {
+      "name": "pager101-rec0034.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 274,
+    "value": {
+      "name": "pager101-rec0035.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 275,
+    "value": {
+      "name": "pager101-rec0035.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 276,
+    "value": {
+      "name": "pager101-rec0036.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 277,
+    "value": {
+      "name": "pager101-rec0036.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 278,
+    "value": {
+      "name": "pager101-rec0037.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 279,
+    "value": {
+      "name": "pager101-rec0037.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 280,
+    "value": {
+      "name": "pager101-rec0038.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 281,
+    "value": {
+      "name": "pager101-rec0038.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 282,
+    "value": {
+      "name": "pager101-rec0039.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 283,
+    "value": {
+      "name": "pager101-rec0039.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 284,
+    "value": {
+      "name": "pager101-rec0040.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 285,
+    "value": {
+      "name": "pager101-rec0040.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 286,
+    "value": {
+      "name": "pager101-rec0041.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 287,
+    "value": {
+      "name": "pager101-rec0041.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 288,
+    "value": {
+      "name": "pager101-rec0042.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 289,
+    "value": {
+      "name": "pager101-rec0042.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 290,
+    "value": {
+      "name": "pager101-rec0043.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 291,
+    "value": {
+      "name": "pager101-rec0043.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 292,
+    "value": {
+      "name": "pager101-rec0044.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 293,
+    "value": {
+      "name": "pager101-rec0044.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 294,
+    "value": {
+      "name": "pager101-rec0045.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 295,
+    "value": {
+      "name": "pager101-rec0045.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 296,
+    "value": {
+      "name": "pager101-rec0046.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 297,
+    "value": {
+      "name": "pager101-rec0046.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 298,
+    "value": {
+      "name": "pager101-rec0047.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 299,
+    "value": {
+      "name": "pager101-rec0047.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 300,
+    "value": {
+      "name": "pager101-rec0048.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 301,
+    "value": {
+      "name": "pager101-rec0048.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 302,
+    "value": {
+      "name": "pager101-rec0049.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 303,
+    "value": {
+      "name": "pager101-rec0049.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 304,
+    "value": {
+      "name": "pager101-rec0050.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 305,
+    "value": {
+      "name": "pager101-rec0050.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 306,
+    "value": {
+      "name": "pager101-rec0051.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 307,
+    "value": {
+      "name": "pager101-rec0051.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 308,
+    "value": {
+      "name": "pager101-rec0052.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 309,
+    "value": {
+      "name": "pager101-rec0052.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 310,
+    "value": {
+      "name": "pager101-rec0053.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 311,
+    "value": {
+      "name": "pager101-rec0053.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 312,
+    "value": {
+      "name": "pager101-rec0054.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 313,
+    "value": {
+      "name": "pager101-rec0054.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 314,
+    "value": {
+      "name": "pager101-rec0055.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 315,
+    "value": {
+      "name": "pager101-rec0055.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 316,
+    "value": {
+      "name": "pager101-rec0056.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 317,
+    "value": {
+      "name": "pager101-rec0056.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 318,
+    "value": {
+      "name": "pager101-rec0057.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 319,
+    "value": {
+      "name": "pager101-rec0057.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 320,
+    "value": {
+      "name": "pager101-rec0058.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 321,
+    "value": {
+      "name": "pager101-rec0058.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 322,
+    "value": {
+      "name": "pager101-rec0059.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 323,
+    "value": {
+      "name": "pager101-rec0059.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 324,
+    "value": {
+      "name": "pager101-rec0060.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 325,
+    "value": {
+      "name": "pager101-rec0060.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 326,
+    "value": {
+      "name": "pager101-rec0061.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 327,
+    "value": {
+      "name": "pager101-rec0061.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 328,
+    "value": {
+      "name": "pager101-rec0062.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 329,
+    "value": {
+      "name": "pager101-rec0062.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 330,
+    "value": {
+      "name": "pager101-rec0063.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 331,
+    "value": {
+      "name": "pager101-rec0063.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 332,
+    "value": {
+      "name": "pager101-rec0064.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 333,
+    "value": {
+      "name": "pager101-rec0064.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 334,
+    "value": {
+      "name": "pager101-rec0065.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 335,
+    "value": {
+      "name": "pager101-rec0065.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 336,
+    "value": {
+      "name": "pager101-rec0066.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 337,
+    "value": {
+      "name": "pager101-rec0066.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 338,
+    "value": {
+      "name": "pager101-rec0067.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 339,
+    "value": {
+      "name": "pager101-rec0067.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 340,
+    "value": {
+      "name": "pager101-rec0068.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 341,
+    "value": {
+      "name": "pager101-rec0068.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 342,
+    "value": {
+      "name": "pager101-rec0069.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 343,
+    "value": {
+      "name": "pager101-rec0069.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 344,
+    "value": {
+      "name": "pager101-rec0070.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 345,
+    "value": {
+      "name": "pager101-rec0070.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 346,
+    "value": {
+      "name": "pager101-rec0071.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 347,
+    "value": {
+      "name": "pager101-rec0071.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 348,
+    "value": {
+      "name": "pager101-rec0072.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 349,
+    "value": {
+      "name": "pager101-rec0072.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 350,
+    "value": {
+      "name": "pager101-rec0073.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 351,
+    "value": {
+      "name": "pager101-rec0073.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 352,
+    "value": {
+      "name": "pager101-rec0074.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 353,
+    "value": {
+      "name": "pager101-rec0074.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 354,
+    "value": {
+      "name": "pager101-rec0075.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 355,
+    "value": {
+      "name": "pager101-rec0075.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 356,
+    "value": {
+      "name": "pager101-rec0076.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 357,
+    "value": {
+      "name": "pager101-rec0076.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 358,
+    "value": {
+      "name": "pager101-rec0077.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 359,
+    "value": {
+      "name": "pager101-rec0077.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 360,
+    "value": {
+      "name": "pager101-rec0078.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 361,
+    "value": {
+      "name": "pager101-rec0078.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 362,
+    "value": {
+      "name": "pager101-rec0079.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 363,
+    "value": {
+      "name": "pager101-rec0079.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 364,
+    "value": {
+      "name": "pager101-rec0080.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 365,
+    "value": {
+      "name": "pager101-rec0080.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 366,
+    "value": {
+      "name": "pager101-rec0081.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 367,
+    "value": {
+      "name": "pager101-rec0081.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 368,
+    "value": {
+      "name": "pager101-rec0082.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 369,
+    "value": {
+      "name": "pager101-rec0082.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 370,
+    "value": {
+      "name": "pager101-rec0083.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 371,
+    "value": {
+      "name": "pager101-rec0083.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 372,
+    "value": {
+      "name": "pager101-rec0084.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 373,
+    "value": {
+      "name": "pager101-rec0084.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 374,
+    "value": {
+      "name": "pager101-rec0085.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 375,
+    "value": {
+      "name": "pager101-rec0085.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 376,
+    "value": {
+      "name": "pager101-rec0086.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 377,
+    "value": {
+      "name": "pager101-rec0086.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 378,
+    "value": {
+      "name": "pager101-rec0087.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 379,
+    "value": {
+      "name": "pager101-rec0087.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 380,
+    "value": {
+      "name": "pager101-rec0088.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 381,
+    "value": {
+      "name": "pager101-rec0088.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 382,
+    "value": {
+      "name": "pager101-rec0089.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 383,
+    "value": {
+      "name": "pager101-rec0089.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 384,
+    "value": {
+      "name": "pager101-rec0090.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 385,
+    "value": {
+      "name": "pager101-rec0090.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 386,
+    "value": {
+      "name": "pager101-rec0091.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 387,
+    "value": {
+      "name": "pager101-rec0091.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 388,
+    "value": {
+      "name": "pager101-rec0092.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 389,
+    "value": {
+      "name": "pager101-rec0092.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 390,
+    "value": {
+      "name": "pager101-rec0093.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 391,
+    "value": {
+      "name": "pager101-rec0093.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 392,
+    "value": {
+      "name": "pager101-rec0094.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 393,
+    "value": {
+      "name": "pager101-rec0094.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 394,
+    "value": {
+      "name": "pager101-rec0095.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 395,
+    "value": {
+      "name": "pager101-rec0095.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 396,
+    "value": {
+      "name": "pager101-rec0096.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 397,
+    "value": {
+      "name": "pager101-rec0096.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 398,
+    "value": {
+      "name": "pager101-rec0097.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 399,
+    "value": {
+      "name": "pager101-rec0097.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 400,
+    "value": {
+      "name": "pager101-rec0098.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 401,
+    "value": {
+      "name": "pager101-rec0098.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 402,
+    "value": {
+      "name": "pager101-rec0099.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 403,
+    "value": {
+      "name": "pager101-rec0099.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 404,
+    "value": {
+      "name": "pager101-rec0100.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 405,
+    "value": {
+      "name": "pager101-rec0100.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 406,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo.com."
+      ]
+    }
+  },
+  {
+    "index": 407,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 408,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo2.com."
+      ]
+    }
+  },
+  {
+    "index": 409,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 410,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" .",
+        "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 411,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 412,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 413,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 414,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 415,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"\" example.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 416,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 417,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 418,
+    "value": {
+      "name": "test.akamaigoldentest.com",
+      "type": "NAPTR",
+      "ttl": 300,
+      "rdata": [
+        "103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+      ]
+    }
+  },
+  {
+    "index": 419,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 420,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 421,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 422,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 333,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 423,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 999,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 424,
+    "value": {
+      "name": "testa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 999,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 425,
+    "value": {
+      "name": "testaaaa.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2607:f8b0:4006:820::2006"
+      ]
+    }
+  },
+  {
+    "index": 426,
+    "value": {
+      "name": "testaaaa.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2607:f8b0:4006:820::2013"
+      ]
+    }
+  },
+  {
+    "index": 427,
+    "value": {
+      "name": "testaaaa.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2607:f8b0:4006:820::2013"
+      ]
+    }
+  },
+  {
+    "index": 428,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 429,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "foo.akamaigoldentest.com."
+      ]
+    }
+  },
+  {
+    "index": 430,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "www.google.com."
+      ]
+    }
+  },
+  {
+    "index": 431,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "www.yahoo.com."
+      ]
+    }
+  },
+  {
+    "index": 432,
+    "value": {
+      "name": "testcname.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "www.yahoo.com."
+      ]
+    }
+  },
+  {
+    "index": 433,
+    "value": {
+      "name": "testdefined.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 434,
+    "value": {
+      "name": "testdefined.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 435,
+    "value": {
+      "name": "testdefined.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "9.9.9.9"
+      ]
+    }
+  },
+  {
+    "index": 436,
+    "value": {
+      "name": "testignore.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 437,
+    "value": {
+      "name": "testignore.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "8.8.8.8"
+      ]
+    }
+  },
+  {
+    "index": 438,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "100 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 439,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "100 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 440,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 441,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 442,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com."
+      ]
+    }
+  },
+  {
+    "index": 443,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com.",
+        "100 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 444,
+    "value": {
+      "name": "testmx.akamaigoldentest.com",
+      "type": "MX",
+      "ttl": 300,
+      "rdata": [
+        "5 foo.com.",
+        "100 bar.com."
+      ]
+    }
+  },
+  {
+    "index": 445,
+    "value": {
+      "name": "testtxt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"changed\""
+      ]
+    }
+  },
+  {
+    "index": 446,
+    "value": {
+      "name": "testtxt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"changed\""
+      ]
+    }
+  },
+  {
+    "index": 447,
+    "value": {
+      "name": "testtxt.akamaigoldentest.com",
+      "type": "TXT",
+      "ttl": 300,
+      "rdata": [
+        "\"simple\""
+      ]
+    }
+  },
+  {
+    "index": 448,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 449,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 450,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "2.2.2.2",
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 451,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1"
+      ]
+    }
+  },
+  {
+    "index": 452,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.1.1.1",
+        "2.2.2.2",
+        "3.3.3.3"
+      ]
+    }
+  },
+  {
+    "index": 453,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 454,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.8"
+      ]
+    }
+  },
+  {
+    "index": 455,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.8"
+      ]
+    }
+  },
+  {
+    "index": 456,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.9"
+      ]
+    }
+  },
+  {
+    "index": 457,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.9"
+      ]
+    }
+  },
+  {
+    "index": 458,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 459,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 460,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "5.5.5.5"
+      ]
+    }
+  },
+  {
+    "index": 461,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 400,
+      "rdata": [
+        "2.2.2.2",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 462,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 400,
+      "rdata": [
+        "2.2.2.2",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 463,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 400,
+      "rdata": [
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 464,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 700,
+      "rdata": [
+        "1.2.3.4",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 465,
+    "value": {
+      "name": "www.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 700,
+      "rdata": [
+        "1.2.3.4",
+        "5.6.7.8"
+      ]
+    }
+  },
+  {
+    "index": 466,
+    "value": {
+      "name": "xn--fiq228c.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 467,
+    "value": {
+      "name": "xn--fiq228c.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 468,
+    "value": {
+      "name": "xn--ndaaa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "1.2.3.4"
+      ]
+    }
+  },
+  {
+    "index": 469,
+    "value": {
+      "name": "xn--ndaaa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 470,
+    "value": {
+      "name": "xn--ndaaa.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "2.2.2.2"
+      ]
+    }
+  },
+  {
+    "index": 471,
+    "value": {
+      "name": "xn--o-0gab.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.xn--vhquv."
+      ]
+    }
+  },
+  {
+    "index": 472,
+    "value": {
+      "name": "xn--o-0gab.akamaigoldentest.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "rdata": [
+        "xn--ndaaa.xn--vhquv."
+      ]
+    }
+  },
+  {
+    "index": 473,
+    "value": {
+      "name": "xyz.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "ns1.foo.com.",
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 474,
+    "value": {
+      "name": "xyz.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "ns1.foo.com.",
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 475,
+    "value": {
+      "name": "xyz.akamaigoldentest.com",
+      "type": "NS",
+      "ttl": 300,
+      "rdata": [
+        "ns2.foo.com."
+      ]
+    }
+  },
+  {
+    "index": 476,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3",
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 477,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "A",
+      "ttl": 300,
+      "rdata": [
+        "3.3.3.3",
+        "4.4.4.4"
+      ]
+    }
+  },
+  {
+    "index": 478,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:cccc"
+      ]
+    }
+  },
+  {
+    "index": 479,
+    "value": {
+      "name": "zzz.akamaigoldentest.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "rdata": [
+        "2003:dd:d7ff::fe71:cccc"
+      ]
+    }
+  }
+]

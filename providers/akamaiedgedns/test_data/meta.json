@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "akamaigoldentest.com",
+      "to_rc": [
+        "nativeToRecords"
+      ],
+      "to_native": [
+        "rcToRs"
+      ]
+    }
+  ]
+}
