@@ -339,7 +339,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 	}
 
 	// Determine which subdomains become extinct. Delete them.
-	_, desiredRecords := dc.Records.GroupedByFQDN()
+	desiredRecords := dc.Records.GroupedByFQDN()
 
 	for fqdn := range affectedLabels {
 		if len(desiredRecords[fqdn]) == 0 {

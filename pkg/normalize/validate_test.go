@@ -154,11 +154,8 @@ func Test_assert_valid_target(t *testing.T) {
 		experiment string
 		isError    bool
 	}{
-		// {"@", false}, // In v5, target hosts are never "@".
 		{"foo", false},
-		// {"foo.bar.", false},
 		{"foo.", false},
-		// {"foo.bar", true},
 		{"foo&bar", true},
 		{"foo bar", true},
 		{"elb21.freshdesk.com/", true},
@@ -271,8 +268,6 @@ func TestNSAtRoot(t *testing.T) {
 	dc := models.MustNewDomainConfig("foo.com")
 	// do not allow ns records for @
 	rec := dc.MustNewRecordConfig(dc.LabelFromShort("test"), 0, dnsv2.TypeNS, "ns1.name.com.")
-	// rec.SetLabel("test", "foo.com")
-	// rec.MustSetTarget("ns1.name.com.")
 	errs := checkTargets(rec, "foo.com")
 	if len(errs) > 0 {
 		t.Error("Expect no error with ns record on subdomain")
