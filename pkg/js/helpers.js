@@ -39,7 +39,9 @@ function initialize() {
 
 function _isDomain(d) {
     return (
-        _.isArray(d.nameservers) && _.isArray(d.rawrecords) && _.isString(d.name)
+        _.isArray(d.nameservers) &&
+        _.isArray(d.rawrecords) &&
+        _.isString(d.name)
     );
 }
 
