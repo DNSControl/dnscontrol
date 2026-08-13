@@ -198,8 +198,9 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 }
 
 // Dependency is a record another record depends on. NameFQDN picks the label;
-// OnlyType restricts to that record type there ("" = any). E.g. a DS depends on
-// {NameFQDN: its label, OnlyType: "NS"}.
+// OnlyType restricts to that record type there ("" = any).
+// E.g. a CNAME depends on {NameFQDN: its *target*, OnlyType: ""}.
+// E.g. a DS depends on the NS record at the same label: {NameFQDN: its *label*, OnlyType: "NS"}.
 type Dependency struct {
 	NameFQDN string
 	OnlyType string
@@ -209,7 +210,7 @@ type Dependency struct {
 // For example, some providers won't create a CNAME until the target already exists.
 // DNSControl will assure that the target exists before the CNAME is created if
 // this function returns the target name when called on a CNAME record.
-// The reverse is true for deletions. DNSControl will delete the records for
+// The reverse is true for deletions: DNSControl will delete the records for
 // rc.GetDependencies() before deleting the rc.
 func (rc *RecordConfig) GetDependencies() []Dependency {
 	switch rc.Type {
@@ -230,10 +231,12 @@ func (rc *RecordConfig) GetDependencies() []Dependency {
 	case "R53_ALIAS":
 		return []Dependency{{NameFQDN: rc.AsR53ALIAS().Target}}
 	case "DS":
-		// A DS delegation signs the NS records at the same label: the NS must
-		// exist before the DS is created, and the DS must be removed before the
-		// NS is deleted. OnlyType restricts this to the NS (not sibling DS
-		// records, which would otherwise form a false circular dependency).
+		// A DS delegation signs the NS records at the same label: the
+		// NS must exist before the DS is created, and the DS must be
+		// removed before the NS is deleted. OnlyType restricts this to
+		// the NS (There are also DS records at the same label, so
+		// OnlyType is used otherwise we'd get a false circular
+		// dependency).
 		return []Dependency{{NameFQDN: rc.GetLabelFQDN(), OnlyType: "NS"}}
 	}
 

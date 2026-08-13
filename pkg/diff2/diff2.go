@@ -73,8 +73,9 @@ func (c Change) GetDependencies() []dnsgraph.Dependency {
 	return dependencies
 }
 
-// toGraphDependencies converts model dependencies into graph dependencies,
-// tagging each with the given direction and preserving any OnlyType filter.
+// toGraphDependencies converts model.Dependency dependencies into
+// graph.Dependency dependencies, tagging each with the given direction and
+// preserving any OnlyType filter.
 func toGraphDependencies(deps []models.Dependency, direction dnsgraph.DependencyType) []dnsgraph.Dependency {
 	result := make([]dnsgraph.Dependency, 0, len(deps))
 	for _, dep := range deps {
