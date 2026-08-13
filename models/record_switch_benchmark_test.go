@@ -83,7 +83,7 @@ func BenchmarkRecordConfigSwitchDispatch(b *testing.B) {
 
 	benchmarks := []struct {
 		name    string
-		records []*RecordConfig
+		records Records
 	}{
 		{name: "single", records: records[:1]},
 		{name: "mixed", records: records},
