@@ -395,18 +395,18 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			}
 
 			// Canonicalize Label:
-			if rec.GetLabel() == (domain.Name + ".") {
-				// If label == ${domain}DOT, change to "@"
-				rec.SetLabel("@", domain.Name)
-			} else if lab, suf := rec.GetLabel(), "."+domain.Name+"."; strings.HasSuffix(lab, suf) {
-				// If label ends with DOT${domain}DOT, strip it to a short name.
-				rec.SetLabel(lab[:len(lab)-len(suf)], domain.Name)
-			}
+			//if rec.GetLabel() == (domain.Name + ".") {
+			//	// If label == ${domain}DOT, change to "@"
+			//	rec.SetLabel("@", domain.Name)
+			//} else if lab, suf := rec.GetLabel(), "."+domain.Name+"."; strings.HasSuffix(lab, suf) {
+			//	// If label ends with DOT${domain}DOT, strip it to a short name.
+			//	rec.SetLabel(lab[:len(lab)-len(suf)], domain.Name)
+			//}
 			// If label ends with dot, add to the list of errors.
-			if strings.HasSuffix(rec.GetLabel(), ".") {
-				errs = append(errs, fmt.Errorf("label %q does not match D(%q)", rec.GetLabel(), domain.Name))
-				return errs // Exit early.
-			}
+			//if strings.HasSuffix(rec.GetLabel(), ".") {
+			//	errs = append(errs, fmt.Errorf("label %q does not match D(%q)", rec.GetLabel(), domain.Name))
+			//	return errs // Exit early.
+			//}
 
 			// in-addr.arpa magic
 			if strings.HasSuffix(domain.Name, ".in-addr.arpa") || strings.HasSuffix(domain.Name, ".ip6.arpa") {
