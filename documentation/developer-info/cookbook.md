@@ -319,6 +319,37 @@ If you call the wrong getter, usually the right thing happens:
 * `rc.GetTargetJS()`: Uses the JSON tags on the structs to output JSON of the fields.
 * `rc.GetTargetIP()`: Panics if called on a TXT record.
 
+## How to change the rtype of a RecordConfig
+
+Suppose you have a models.RecordConfig{} but the type needs to change.
+For example, the provider doesn't support ALIAS but they call it a CNAME.
+
+```go
+    rc = rc.ChangeTypeToCNAME(dc, rc.AsALIAS().Target)
+```
+
+For any other transformation:
+
+1. Set .Type and .TypeNum
+
+2.  Create the RDATA using a MakeFOO() function and use the SetRDATA() to store
+    it.  Be sure to use SetDATA() last since it rebuilds any pre-computed
+    strings.
+
+Example:
+
+```go
+    rec.Type = "AKAMAITLC"
+	rec.TypeNum = privatetypes.TypeAKAMAITLC
+	rd, err := privatetypesrdata.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target)
+	if err != nil {
+		return err
+	}
+	rec.SetRDATA(rd)
+```
+
+Doing it this way preserves all other fields such as `.Metadata`.
+
 ## How to label imports
 
 To avoid confusion between old and new DNS modules, we always import them with explicit `v1` and `v2` names.

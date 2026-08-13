@@ -16,6 +16,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
@@ -279,13 +280,19 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 	for _, rec := range dc.Records {
 		// Convert ALIAS records to the Akamai equivalents. AKAMAITLC is only valid
 		// at the apex, so any other ALIAS must be converted to CNAME.
-		if rec.Type == "ALIAS" {
+		if rec.TypeNum == privatetypes.TypeALIAS {
 			target := rec.AsALIAS().Target
 			if rec.Name == "@" {
+				// AKAMAITLC works at the domain's apex.
 				rec.Type = "AKAMAITLC"
 				rec.TypeNum = privatetypes.TypeAKAMAITLC
-				rec.SetRDATA(privatetypesrdata.AKAMAITLC{AnswerType: "DUAL", Target: target})
+				rd, err := privatetypesrdata.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target)
+				if err != nil {
+					return err
+				}
+				rec.SetRDATA(rd)
 			} else {
+				// Non-apex uses a CNAME.
 				rec.ChangeTypeToCNAME(dc, target)
 			}
 		}
