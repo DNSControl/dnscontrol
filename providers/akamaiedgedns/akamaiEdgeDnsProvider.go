@@ -284,7 +284,7 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 			if rec.Name == "@" {
 				rec.Type = "AKAMAITLC"
 				rec.TypeNum = privatetypes.TypeAKAMAITLC
-				rec.SetRDATA(privatetypesrdata.AKAMAITLC{AnswerType: "DUAL", Target: target})
+				rec.SetRDATA(privatetypesrdata.MakeAKAMAITLC("DUAL", target))
 			} else {
 				rec.ChangeTypeToCNAME(dc, target)
 			}
