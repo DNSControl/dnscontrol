@@ -99,6 +99,13 @@ func (graph *Graph[T]) AddEdge(sourceNode *Node[T], dependency Dependency) {
 			continue
 		}
 
+		// A type-restricted dependency only links to destination nodes of the
+		// requested record type (e.g. a DS depends on the NS at its label, not
+		// on sibling DS records).
+		if dependency.OnlyType != "" && destinationNode.Data.GetRecordType() != dependency.OnlyType {
+			continue
+		}
+
 		if sourceNode.Edges.Contains(destinationNode, OutgoingEdge) {
 			continue
 		}

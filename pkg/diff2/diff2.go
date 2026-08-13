@@ -64,13 +64,41 @@ func (c Change) GetDependencies() []dnsgraph.Dependency {
 	var dependencies []dnsgraph.Dependency
 
 	if c.Type == CHANGE || c.Type == DELETE {
-		dependencies = append(dependencies, dnsgraph.CreateDependencies(c.Old.GetAllDependencies(), dnsgraph.BackwardDependency)...)
+		dependencies = append(dependencies, toGraphDependencies(c.Old.GetAllDependencies(), dnsgraph.BackwardDependency)...)
 	}
 	if c.Type == CHANGE || c.Type == CREATE {
-		dependencies = append(dependencies, dnsgraph.CreateDependencies(c.New.GetAllDependencies(), dnsgraph.ForwardDependency)...)
+		dependencies = append(dependencies, toGraphDependencies(c.New.GetAllDependencies(), dnsgraph.ForwardDependency)...)
 	}
 
 	return dependencies
+}
+
+// toGraphDependencies converts model.Dependency dependencies into
+// graph.Dependency dependencies, tagging each with the given direction and
+// preserving any OnlyType filter.
+func toGraphDependencies(deps []models.Dependency, direction dnsgraph.DependencyType) []dnsgraph.Dependency {
+	result := make([]dnsgraph.Dependency, 0, len(deps))
+	for _, dep := range deps {
+		result = append(result, dnsgraph.Dependency{
+			NameFQDN: dep.NameFQDN,
+			Type:     direction,
+			OnlyType: dep.OnlyType,
+		})
+	}
+	return result
+}
+
+// GetRecordType returns the DNS record type of the change, used to satisfy
+// dnsgraph Dependency.OnlyType filters. Change.Key.Type is only populated for
+// ByRecordSet, so fall back to the records themselves.
+func (c Change) GetRecordType() string {
+	if len(c.New) > 0 {
+		return c.New[0].Type
+	}
+	if len(c.Old) > 0 {
+		return c.Old[0].Type
+	}
+	return c.Key.Type
 }
 
 /*

@@ -24,12 +24,26 @@ const (
 type Dependency struct {
 	NameFQDN string
 	Type     DependencyType
+	// CNAME would generate Dependency{NameFQDN: target, OnlyType: ""}
+	// because the dependency is on the target.
+	//
+	// However a DS's dependency is on its own label, not the target.
+	// A DS needs to specify that the dependency is on the NS record at the same label.
+	// Therefore a DS record returns Dependency{NameFQDN: label, OnlyType: "NS"}
+	// to indicate that the dependency is only for NS records.
+	// If OnlyType were "", a DS would also depend on the *other* DS records at its
+	// label; with two or more DS there, they'd depend on each other and dnsgraph
+	// reports a cycle.
+	OnlyType string
 }
 
 // Graphable is an interface for things that can be in a graph.
 type Graphable interface {
 	GetType() NodeType
 	GetName() string
+	// GetRecordType returns the DNS record type (e.g. "NS", "DS") of the node.
+	// It is used to satisfy Dependency.OnlyType filters.
+	GetRecordType() string
 	GetDependencies() []Dependency
 }
 

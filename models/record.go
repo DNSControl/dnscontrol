@@ -197,33 +197,50 @@ func (rc *RecordConfig) ToRRv2() dnsv2.RR {
 	return rr
 }
 
-// GetDependencies returns the FQDNs on which this record dependents.
+// Dependency is a record another record depends on. NameFQDN picks the label;
+// OnlyType restricts to that record type there ("" = any).
+// E.g. a CNAME depends on {NameFQDN: its *target*, OnlyType: ""}.
+// E.g. a DS depends on the NS record at the same label: {NameFQDN: its *label*, OnlyType: "NS"}.
+type Dependency struct {
+	NameFQDN string
+	OnlyType string
+}
+
+// GetDependencies returns the records on which this record depends.
 // For example, some providers won't create a CNAME until the target already exists.
 // DNSControl will assure that the target exists before the CNAME is created if
 // this function returns the target name when called on a CNAME record.
-// The reverse is true for deletions. DNSControl will delete the records for
+// The reverse is true for deletions: DNSControl will delete the records for
 // rc.GetDependencies() before deleting the rc.
-func (rc *RecordConfig) GetDependencies() []string {
+func (rc *RecordConfig) GetDependencies() []Dependency {
 	switch rc.Type {
 	case "NS":
-		return []string{rc.AsNS().Ns}
+		return []Dependency{{NameFQDN: rc.AsNS().Ns}}
 	case "SRV":
-		return []string{rc.AsSRV().Target}
+		return []Dependency{{NameFQDN: rc.AsSRV().Target}}
 	case "CNAME":
-		return []string{rc.AsCNAME().Target}
+		return []Dependency{{NameFQDN: rc.AsCNAME().Target}}
 	case "DNAME":
-		return []string{rc.AsDNAME().Target}
+		return []Dependency{{NameFQDN: rc.AsDNAME().Target}}
 	case "MX":
-		return []string{rc.AsMX().Mx}
+		return []Dependency{{NameFQDN: rc.AsMX().Mx}}
 	case "ALIAS":
-		return []string{rc.AsALIAS().Target}
+		return []Dependency{{NameFQDN: rc.AsALIAS().Target}}
 	case "AZURE_ALIAS":
-		return []string{rc.AsAZUREALIAS().Target}
+		return []Dependency{{NameFQDN: rc.AsAZUREALIAS().Target}}
 	case "R53_ALIAS":
-		return []string{rc.AsR53ALIAS().Target}
+		return []Dependency{{NameFQDN: rc.AsR53ALIAS().Target}}
+	case "DS":
+		// A DS delegation signs the NS records at the same label: the
+		// NS must exist before the DS is created, and the DS must be
+		// removed before the NS is deleted. OnlyType restricts this to
+		// the NS (There are also DS records at the same label, so
+		// OnlyType is used otherwise we'd get a false circular
+		// dependency).
+		return []Dependency{{NameFQDN: rc.GetLabelFQDN(), OnlyType: "NS"}}
 	}
 
-	return []string{}
+	return nil
 }
 
 // RecordKey represents a resource record in a format used by some systems.
@@ -311,8 +328,8 @@ func (recs Records) GroupedByFQDN() map[string]Records {
 }
 
 // GetAllDependencies concatinates all dependencies of all records.
-func (recs Records) GetAllDependencies() []string {
-	var dependencies []string
+func (recs Records) GetAllDependencies() []Dependency {
+	var dependencies []Dependency
 	for _, rec := range recs {
 		dependencies = append(dependencies, rec.GetDependencies()...)
 	}
