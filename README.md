@@ -112,7 +112,7 @@ DNSControl can be installed via packages for macOS, Linux and Windows, or from s
 
 ## Via GitHub Actions (GHA)
 
-See [dnscontrol-action](https://github.com/koenrh/dnscontrol-action) or [gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol).
+See [dnscontrol-action](https://github.com/metabrainz/dnscontrol-action) or [gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol).
 
 ## Deprecation warnings (updated 2025-11-21)
 
