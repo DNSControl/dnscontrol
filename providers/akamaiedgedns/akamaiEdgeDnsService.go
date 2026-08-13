@@ -322,8 +322,8 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfi
 		return nil, fmt.Errorf("recordset list retrieval failed. error: %s", err.Error())
 	}
 
-	akaRecordsets := rsetResp.RecordSets     // what we have
-	var recordConfigs models.Records // what we return
+	akaRecordsets := rsetResp.RecordSets // what we have
+	var recordConfigs models.Records     // what we return
 
 	// For each AkamaiEdgeDNS recordset...
 	for _, akarecset := range akaRecordsets {
