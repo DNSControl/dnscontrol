@@ -4,5 +4,8 @@
   },
   "devDependencies": {
     "prettier": "3.9.5"
+  },
+  "allowScripts": {
+    "puppeteer@25.6.0": true
   }
 }
