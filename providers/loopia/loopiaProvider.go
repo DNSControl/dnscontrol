@@ -257,7 +257,7 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 		if rec.Type == "ALIAS" {
 			// Loopia does not support ALIAS.
 			// Therefore, we change this to a CNAME.
-			rec.ChangeType("CNAME", dc.Name)
+			rec.ChangeTypeToCNAME(dc, rec.AsALIAS().Target)
 		}
 		if rec.TTL < 300 {
 			/* you can submit TTL lower than 300 but the dig results are normalized to 300 */

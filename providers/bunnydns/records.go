@@ -61,7 +61,7 @@ func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		}
 
 		if rc.Type == "ALIAS" {
-			rc.ChangeType("CNAME", dc.Name)
+			rc.ChangeTypeToCNAME(dc, rc.AsALIAS().Target)
 		}
 	}
 

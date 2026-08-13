@@ -51,7 +51,7 @@ func TestAliasToCnameChangeType(t *testing.T) {
 	}
 
 	// A provider converts the apex ALIAS into a CNAME (CNAME flattening).
-	rc.ChangeType("CNAME", origin)
+	rc.ChangeTypeToCNAME(dc, rc.AsALIAS().Target)
 
 	if rc.GetRDATA() == nil {
 		t.Fatal("RDATA is nil after FixRD")

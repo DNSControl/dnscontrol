@@ -14,10 +14,10 @@ import (
 	"encoding/json"
 	"errors"
 
-	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
@@ -282,11 +282,11 @@ func (a *edgeDNSProvider) preprocessConfig(dc *models.DomainConfig) error {
 		if rec.Type == "ALIAS" {
 			target := rec.AsALIAS().Target
 			if rec.Name == "@" {
-				rec.ChangeType("AKAMAITLC", dc.Name)
+				rec.Type = "AKAMAITLC"
+				rec.TypeNum = privatetypes.TypeAKAMAITLC
 				rec.SetRDATA(privatetypesrdata.AKAMAITLC{AnswerType: "DUAL", Target: target})
 			} else {
-				rec.ChangeType("CNAME", dc.Name)
-				rec.SetRDATA(dnsrdatav2.CNAME{Target: target})
+				rec.ChangeTypeToCNAME(dc, target)
 			}
 		}
 	}

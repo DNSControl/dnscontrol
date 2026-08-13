@@ -167,7 +167,7 @@ func (c *gcoreProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 	// Gcore auto uses ALIAS for apex zone CNAME records, just like CloudFlare
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
-			rec.ChangeType("CNAME", dc.Name)
+			rec.ChangeTypeToCNAME(dc, rec.AsALIAS().Target)
 		}
 	}
 
