@@ -139,7 +139,7 @@ func (c *gidinetProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 		return nil, err
 	}
 
-	var existingRecords []*models.RecordConfig
+	var existingRecords models.Records
 	for _, r := range records {
 		// Skip read-only records (usually NS records at apex managed by registrar)
 		if r.ReadOnly {
@@ -364,7 +364,7 @@ func filterApexNS(dc *models.DomainConfig) {
 		expected[strings.TrimSuffix(ns.Name, ".")] = true
 	}
 
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == dc.Name {
 			ns := rec.AsNS().Ns

@@ -118,7 +118,7 @@ func (c *vercelProvider) GetNameservers(_ string) ([]*models.Nameserver, error) 
 func (c *vercelProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	var zoneRecords []*models.RecordConfig
+	var zoneRecords models.Records
 
 	records, err := c.ListDNSRecords(context.Background(), domain)
 	if err != nil {

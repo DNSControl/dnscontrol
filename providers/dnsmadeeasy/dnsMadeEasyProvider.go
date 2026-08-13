@@ -224,7 +224,7 @@ func (api *dnsMadeEasyProvider) GetZoneRecords(dc *models.DomainConfig) (models.
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, 0, len(records))
+	existingRecords := make(models.Records, 0, len(records))
 	for i := range records {
 		// Ignore HTTPRED and SPF records
 		if records[i].Type == "HTTPRED" || records[i].Type == "SPF" {

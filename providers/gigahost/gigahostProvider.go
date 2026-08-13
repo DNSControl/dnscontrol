@@ -69,7 +69,7 @@ func newGigahost(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 
 // AuditRecords returns a list of errors corresponding to the records that
 // aren't supported by this provider.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 	a.Add("MX", rejectif.MxNull) // The API rejects a "." target ("MX record value must be a valid mail server hostname").
 	a.Add("TXT", rejectif.TxtIsEmpty)

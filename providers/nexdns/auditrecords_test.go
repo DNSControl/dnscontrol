@@ -43,7 +43,7 @@ func TestAuditRecords(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			errs := AuditRecords([]*models.RecordConfig{tt.record})
+			errs := AuditRecords(models.Records{tt.record})
 			if len(errs) != tt.wantCount {
 				t.Errorf("AuditRecords() returned %d errors, want %d: %v", len(errs), tt.wantCount, errs)
 			}

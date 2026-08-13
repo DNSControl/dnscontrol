@@ -114,7 +114,7 @@ func filterApexNS(dc *models.DomainConfig) {
 		declared[strings.TrimSuffix(ns.Name, ".")] = true
 	}
 
-	kept := make([]*models.RecordConfig, 0, len(dc.Records))
+	kept := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabel() == apexLabel {
 			target := strings.TrimSuffix(rec.AsNS().Ns, ".")

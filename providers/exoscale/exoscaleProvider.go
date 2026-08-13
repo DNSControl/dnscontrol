@@ -113,7 +113,7 @@ func (provider *exoscaleProvider) GetZoneRecords(domainConfig *models.DomainConf
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, 0, len(records.DNSDomainRecords))
+	existingRecords := make(models.Records, 0, len(records.DNSDomainRecords))
 	for i := range records.DNSDomainRecords {
 		recordConfig, err := nativeToRecord(&records.DNSDomainRecords[i], domainConfig)
 		if err != nil {
@@ -352,7 +352,7 @@ func defaultNSSUffix(defNS string) bool {
 // remove all non-exoscale NS records from our desired state.
 // if any are found, print a warning.
 func removeOtherNS(domainConfig *models.DomainConfig) {
-	recordConfigs := make([]*models.RecordConfig, 0, len(domainConfig.Records))
+	recordConfigs := make(models.Records, 0, len(domainConfig.Records))
 	for _, recordConfig := range domainConfig.Records {
 		if recordConfig.Type == "NS" {
 			// apex NS inside exoscale are expected.

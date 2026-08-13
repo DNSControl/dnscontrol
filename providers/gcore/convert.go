@@ -13,8 +13,8 @@ import (
 )
 
 // nativeToRecord takes a DNS record from G-Core and returns a native RecordConfig struct.
-func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
-	var rcs []*models.RecordConfig
+func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) (models.Records, error) {
+	var rcs models.Records
 	recName := dc.LabelFromFQDNWithDot(n.Name)
 	recType := n.Type
 
@@ -60,7 +60,7 @@ func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) ([]*models.R
 	return rcs, nil
 }
 
-func recordsToNative(rcs []*models.RecordConfig, expectedKey models.RecordKey) (*dnssdk.RRSet, error) {
+func recordsToNative(rcs models.Records, expectedKey models.RecordKey) (*dnssdk.RRSet, error) {
 	// Merge DNSControl records into G-Core RRsets
 
 	var result *dnssdk.RRSet

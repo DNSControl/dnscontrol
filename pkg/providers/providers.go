@@ -48,7 +48,7 @@ type DspInitializerWithOptions func(map[string]string, json.RawMessage, CreateOp
 // RecordAuditor is a function that verifies that all the records
 // are supportable by this provider. It returns a list of errors
 // detailing records that this provider can not support.
-type RecordAuditor func([]*models.RecordConfig) []error
+type RecordAuditor func(models.Records) []error
 
 // DspFuncs lists functions registered with a provider.
 type DspFuncs struct {

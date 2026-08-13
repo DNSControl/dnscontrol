@@ -10,7 +10,7 @@ import (
 
 func TestConvertGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "convert",
-		func(dc *models.DomainConfig, native dns.ZoneRecord) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native dns.ZoneRecord) (models.Records, error) {
 			return convert(&native, dc)
 		})
 }

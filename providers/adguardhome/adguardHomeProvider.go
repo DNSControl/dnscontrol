@@ -143,7 +143,7 @@ func (c *adguardHomeProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, 0, len(records))
+	existingRecords := make(models.Records, 0, len(records))
 	for _, r := range records {
 		newRec, err := toRc(dc, r)
 		if err != nil {

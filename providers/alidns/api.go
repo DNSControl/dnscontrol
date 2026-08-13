@@ -75,7 +75,7 @@ func (a *aliDNSDsp) getNameservers(domain string) ([]string, error) {
 	return nameservers, nil
 }
 
-func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig) error {
+func (a *aliDNSDsp) deleteRecordset(records models.Records) error {
 	for _, r := range records {
 		req := alidns.CreateDeleteDomainRecordRequest()
 		original, ok := r.Original.(*alidns.Record)
@@ -92,7 +92,7 @@ func (a *aliDNSDsp) deleteRecordset(records []*models.RecordConfig) error {
 	return nil
 }
 
-func (a *aliDNSDsp) createRecordset(records []*models.RecordConfig, domainName string) error {
+func (a *aliDNSDsp) createRecordset(records models.Records, domainName string) error {
 	for _, r := range records {
 		req := alidns.CreateAddDomainRecordRequest()
 		req.DomainName = domainName
@@ -114,7 +114,7 @@ func (a *aliDNSDsp) createRecordset(records []*models.RecordConfig, domainName s
 	return nil
 }
 
-func (a *aliDNSDsp) updateRecordset(existing, desired []*models.RecordConfig, domainName string) error {
+func (a *aliDNSDsp) updateRecordset(existing, desired models.Records, domainName string) error {
 	// Strategy: Delete all existing records, then create all desired records.
 	// This is the simplest and most reliable approach because:
 	// 1. The number of records in a recordset may change

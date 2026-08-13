@@ -140,7 +140,7 @@ func PrepDesiredRecords(dc *models.DomainConfig, minTTL uint32) {
 	// * ALIAS: Skip them in recordsToNative()
 	// * minTTL: recordsToNative() should return records with fixed TTLs.
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
 			// deSEC does not permit ALIAS records, just ignore it

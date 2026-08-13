@@ -673,7 +673,7 @@ func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
 	return
 }
 
-func checkDuplicates(records []*models.RecordConfig) (errs []error) {
+func checkDuplicates(records models.Records) (errs []error) {
 	seen := make(map[string]*models.RecordConfig)
 	for _, r := range records {
 		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
@@ -686,7 +686,7 @@ func checkDuplicates(records []*models.RecordConfig) (errs []error) {
 	return errs
 }
 
-func checkRecordSetHasMultipleTTLs(records []*models.RecordConfig) (errs []error) {
+func checkRecordSetHasMultipleTTLs(records models.Records) (errs []error) {
 	// The RFCs say that all records at a particular recordset should have
 	// the same TTL.  Most providers don't care, and if they do the
 	// dnscontrol provider code usually picks the lowest TTL for all of them.
@@ -779,7 +779,7 @@ func commaSepInts(list []int) string {
 // checkR53WeightedGroupConsistency validates that all records sharing the same
 // label+type+set_identifier have identical weight and health_check_id, since
 // they map to a single Route 53 ResourceRecordSet.
-func checkR53WeightedGroupConsistency(records []*models.RecordConfig) (errs []error) {
+func checkR53WeightedGroupConsistency(records models.Records) (errs []error) {
 	type groupMeta struct {
 		weight      string
 		healthCheck string

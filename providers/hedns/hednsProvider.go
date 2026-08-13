@@ -423,7 +423,7 @@ func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, _ string, record *
 func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	var zoneRecords []*models.RecordConfig
+	var zoneRecords models.Records
 
 	// Get Domain ID
 	domainID, err := c.zoneCache.GetZone(domain)

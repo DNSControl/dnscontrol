@@ -348,7 +348,7 @@ func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
 		before := providers.BeginToRC(c.observer, "toRc", &records[i])
 		existingRecords[i], err = toRc(dc, &records[i])

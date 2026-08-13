@@ -129,7 +129,7 @@ func (n *mythicBeastsProvider) GetZoneRecords(dc *models.DomainConfig) (models.R
 func zoneFileToRecords(dc *models.DomainConfig, r io.Reader) (models.Records, error) {
 	origin := dc.Name
 	zp := dnsv2.NewZoneParser(r, origin, origin)
-	var records []*models.RecordConfig
+	var records models.Records
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
 		rec, err := dnsrr.RRv2toRC(dc, rr)
 		if err != nil {

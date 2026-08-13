@@ -9,8 +9,8 @@ import (
 
 func TestRecordToRCGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "recordToRC",
-		func(dc *models.DomainConfig, native Record) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native Record) (models.Records, error) {
 			rc, err := recordToRC(dc, native)
-			return []*models.RecordConfig{rc}, err
+			return models.Records{rc}, err
 		})
 }

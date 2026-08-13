@@ -10,7 +10,7 @@ import (
 
 func TestNativeToRecordsGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "nativeToRecords",
-		func(dc *models.DomainConfig, native adns.RecordSet) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native adns.RecordSet) (models.Records, error) {
 			return nativeToRecords(&native, dc), nil
 		})
 }

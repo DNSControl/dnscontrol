@@ -34,7 +34,7 @@ func TestPreprocessConfigConvertsAliasRDATA(t *testing.T) {
 		t.Fatalf("non-apex target = %q, want %q", got, "target.example.")
 	}
 
-	rs, err := p.rcToRs([]*models.RecordConfig{apex})
+	rs, err := p.rcToRs(models.Records{apex})
 	if err != nil {
 		t.Fatalf("rcToRs: %v", err)
 	}

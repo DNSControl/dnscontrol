@@ -200,7 +200,7 @@ func (api *digitaloceanProvider) GetZoneRecords(dc *models.DomainConfig) (models
 		return nil, err
 	}
 
-	var existingRecords []*models.RecordConfig
+	var existingRecords models.Records
 	for i := range records {
 		if records[i].Type == "SOA" {
 			continue

@@ -11,9 +11,9 @@ import (
 
 func TestNativeToRecordGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "nativeToRecord",
-		func(dc *models.DomainConfig, native api.Record) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native api.Record) (models.Records, error) {
 			rc, err := nativeToRecord(dc, &native)
-			return []*models.RecordConfig{rc}, err
+			return models.Records{rc}, err
 		})
 }
 

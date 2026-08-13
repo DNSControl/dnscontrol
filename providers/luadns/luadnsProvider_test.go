@@ -60,7 +60,7 @@ func TestRecordsToNativeHTTPS(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			rrs := recordsToNative([]*models.RecordConfig{rc})
+			rrs := recordsToNative(models.Records{rc})
 			if len(rrs) != 1 {
 				t.Fatalf("recordsToNative returned %d records, want 1", len(rrs))
 			}

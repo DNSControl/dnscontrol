@@ -266,7 +266,7 @@ func (api *autoDNSProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, len(zone.ResourceRecords))
+	existingRecords := make(models.Records, len(zone.ResourceRecords))
 	for i, resourceRecord := range zone.ResourceRecords {
 		var err error
 		existingRecords[i], err = toRecordConfig(dc, resourceRecord)

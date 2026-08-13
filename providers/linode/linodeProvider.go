@@ -277,7 +277,7 @@ func (api *linodeProvider) getRecordsForDomain(domainID int, dc *models.DomainCo
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, len(records), len(records)+len(defaultNameServerNames))
+	existingRecords := make(models.Records, len(records), len(records)+len(defaultNameServerNames))
 	for i := range records {
 		existingRecords[i], err = toRc(dc, &records[i])
 		if err != nil {

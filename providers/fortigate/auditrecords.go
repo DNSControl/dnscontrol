@@ -9,7 +9,7 @@ import (
 )
 
 // AuditRecords performs basic validation and returns warnings for known limitations.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	var problems []error
 
 	for _, rc := range records {

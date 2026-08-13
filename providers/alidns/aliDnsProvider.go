@@ -189,7 +189,7 @@ func (a *aliDNSDsp) PrepDesiredRecords(dc *models.DomainConfig) {
 		return
 	}
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
 
 	for _, rec := range dc.Records {
 		// If TTL is 0 (not set), use the minimum TTL as default

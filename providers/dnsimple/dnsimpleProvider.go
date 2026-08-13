@@ -614,7 +614,7 @@ func newProvider(m map[string]string, _ json.RawMessage) (*dnsimpleProvider, err
 // Removes all non-dnsimple NS records from our desired state.
 // If any are found, print a warning.
 func removeOtherApexNS(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.TypeNum == dnsv2.TypeNS {
 			// apex NS inside dnsimple are expected.

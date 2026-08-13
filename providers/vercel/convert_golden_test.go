@@ -9,9 +9,9 @@ import (
 
 func TestVercelRecordToRCGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "vercelRecordToRC",
-		func(dc *models.DomainConfig, native DNSRecord) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native DNSRecord) (models.Records, error) {
 			rc, err := vercelRecordToRC(dc, native)
-			return []*models.RecordConfig{rc}, err
+			return models.Records{rc}, err
 		})
 }
 

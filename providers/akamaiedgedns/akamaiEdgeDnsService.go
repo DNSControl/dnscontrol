@@ -211,7 +211,7 @@ func (a *edgeDNSProvider) getAuthorities(ctx context.Context, contractID string)
 }
 
 // rcToRs converts DNSControl RecordConfig records to an AkamaiEdgeDNS recordset.
-func (a *edgeDNSProvider) rcToRs(records []*models.RecordConfig) (*dns.RecordBody, error) {
+func (a *edgeDNSProvider) rcToRs(records models.Records) (*dns.RecordBody, error) {
 	input := models.Records(records)
 	before := providers.BeginToNative(a.observer, "rcToRs", input)
 	if len(records) == 0 {
@@ -240,7 +240,7 @@ func (a *edgeDNSProvider) rcToRs(records []*models.RecordConfig) (*dns.RecordBod
 }
 
 // createRecordset creates a new AkamaiEdgeDNS recordset in the zone.
-func (a *edgeDNSProvider) createRecordset(ctx context.Context, records []*models.RecordConfig, zonename string) error {
+func (a *edgeDNSProvider) createRecordset(ctx context.Context, records models.Records, zonename string) error {
 	akaRecord, err := a.rcToRs(records)
 	if err != nil {
 		return err
@@ -257,7 +257,7 @@ func (a *edgeDNSProvider) createRecordset(ctx context.Context, records []*models
 }
 
 // replaceRecordset replaces an existing AkamaiEdgeDNS recordset in the zone.
-func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records []*models.RecordConfig, ttl uint32, zonename string) error {
+func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records models.Records, ttl uint32, zonename string) error {
 	akaRecord, err := a.rcToRs(records)
 	if err != nil {
 		return err
@@ -275,7 +275,7 @@ func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records []*model
 }
 
 // deleteRecordset deletes an existing AkamaiEdgeDNS recordset in the zone.
-func (a *edgeDNSProvider) deleteRecordset(ctx context.Context, records []*models.RecordConfig, zonename string) error {
+func (a *edgeDNSProvider) deleteRecordset(ctx context.Context, records models.Records, zonename string) error {
 	akaRecord, err := a.rcToRs(records)
 	if err != nil {
 		return err
@@ -310,7 +310,7 @@ func (a *edgeDNSProvider) deleteRecordset(ctx context.Context, records []*models
 */
 
 // getRecords returns all RecordConfig records in the zone.
-func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfig) (models.Records, error) {
 	zonename := dc.Name
 	queryArgs := dns.RecordSetQueryArgs{ShowAll: true}
 
@@ -323,7 +323,7 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfi
 	}
 
 	akaRecordsets := rsetResp.RecordSets     // what we have
-	var recordConfigs []*models.RecordConfig // what we return
+	var recordConfigs models.Records // what we return
 
 	// For each AkamaiEdgeDNS recordset...
 	for _, akarecset := range akaRecordsets {
@@ -342,7 +342,7 @@ func (a *edgeDNSProvider) getRecords(ctx context.Context, dc *models.DomainConfi
 // nativeToRecords converts an AkamaiEdgeDNS recordset into 1 or more
 // RecordConfig structs. It returns nothing for an SOA recordset, whose existence
 // is not reported (because DnsControl will try to delete the SOA record).
-func nativeToRecords(dc *models.DomainConfig, akarecset dns.RecordSet) ([]*models.RecordConfig, error) {
+func nativeToRecords(dc *models.DomainConfig, akarecset dns.RecordSet) (models.Records, error) {
 	akaname := akarecset.Name
 	akatype := akarecset.Type
 	akattl := akarecset.TTL
@@ -364,10 +364,10 @@ func nativeToRecords(dc *models.DomainConfig, akarecset dns.RecordSet) ([]*model
 			return nil, err
 		}
 		rc.Metadata = map[string]string{"akamai_raw_rdata": combined}
-		return []*models.RecordConfig{rc}, nil
+		return models.Records{rc}, nil
 	}
 
-	var recordConfigs []*models.RecordConfig
+	var recordConfigs models.Records
 	for _, r := range akarecset.Rdata {
 		data := r
 		if akatype == "LOC" {

@@ -9,9 +9,9 @@ import (
 
 func TestToRcGolden(t *testing.T) {
 	providergolden.CheckToRC(t, "toRc",
-		func(dc *models.DomainConfig, native domainRecord) ([]*models.RecordConfig, error) {
+		func(dc *models.DomainConfig, native domainRecord) (models.Records, error) {
 			rc, err := toRc(dc, &native)
-			return []*models.RecordConfig{rc}, err
+			return models.Records{rc}, err
 		})
 }
 

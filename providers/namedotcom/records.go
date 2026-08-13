@@ -21,7 +21,7 @@ func (n *namedotcomProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 		return nil, err
 	}
 
-	actual := make([]*models.RecordConfig, len(records))
+	actual := make(models.Records, len(records))
 	for i, r := range records {
 		before := providers.BeginToRC(n.observer, "toRecord", r)
 		actual[i], err = toRecord(r, dc)
@@ -82,7 +82,7 @@ func (n *namedotcomProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 }
 
 func checkNSModifications(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabel() == "@" {
 			continue // Apex NS records are automatically created for the domain's nameservers and cannot be managed otherwise via the name.com API.

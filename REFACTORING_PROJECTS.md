@@ -3,10 +3,6 @@
 Useful refactoring projects. Please feel free to pick up any of these.
 
 
-## Super easy
-
-Anywhere `[]*models.RecordConfig` exists can be replaced by `models.Records`
-
 ## Code that can probably be deleted
 
 * RegisterCustomRecordType()/GetCustomRecordType() is no longer needed. Remove.

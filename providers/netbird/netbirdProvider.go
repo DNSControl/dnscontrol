@@ -120,7 +120,7 @@ func init() {
 }
 
 // AuditRecords returns a list of errors for records that aren't supported.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	var errs []error
 	for _, rc := range records {
 		if !supportedRecordTypes[rc.Type] {

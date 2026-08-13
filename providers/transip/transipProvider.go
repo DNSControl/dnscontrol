@@ -296,7 +296,7 @@ func removeDomainNameserversFromDomainRecords(dc *models.DomainConfig) {
 		nsList = append(nsList, nameserver.Name+".")
 	}
 
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && slices.Contains(nsList, rec.AsNS().Ns) {
 			continue

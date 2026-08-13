@@ -561,7 +561,7 @@ func (r *route53Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 	return append(reports, corrections...), actualChangeCount, nil
 }
 
-func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, origin string) ([]*models.RecordConfig, error) {
+func nativeToRecords(dc *models.DomainConfig, set r53Types.ResourceRecordSet, origin string) (models.Records, error) {
 	if origin != dc.Name {
 		panic(fmt.Sprintf("Obviously I don't understand what's going on. %q != %q", origin, dc.Name))
 	}

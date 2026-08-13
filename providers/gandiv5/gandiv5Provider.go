@@ -219,7 +219,7 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	// provider.  We try to do minimal changes otherwise it gets
 	// confusing.
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
 	var err error
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" && rec.Name != "@" {
@@ -354,7 +354,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 }
 
 // debugRecords prints a list of RecordConfig.
-func debugRecords(note string, recs []*models.RecordConfig) {
+func debugRecords(note string, recs models.Records) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
 		printer.Printf("   %v: %s %s %d %s\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())

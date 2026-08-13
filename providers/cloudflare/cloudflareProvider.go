@@ -475,7 +475,7 @@ func (c *cloudflareProvider) mkDeleteCorrection(recType string, origRec *models.
 }
 
 func checkNSModifications(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 
 	punyRoot, err := idna.ToASCII(dc.Name)
 	if err != nil {

@@ -38,7 +38,7 @@ func (c *cloudflareProvider) fetchAllZones() (map[string]cloudflare.Zone, error)
 }
 
 // get all records for a domain.
-func (c *cloudflareProvider) getRecordsForDomain(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getRecordsForDomain(id string, dc *models.DomainConfig) (models.Records, error) {
 	var records models.Records
 	rrs, _, err := c.cfClient.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListDNSRecordsParams{})
 	if err != nil {
@@ -371,7 +371,7 @@ func (c *cloudflareProvider) getUniversalSSL(domainID string) (bool, error) {
 	return result.Enabled, err
 }
 
-func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id string) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id string) (models.Records, error) {
 	rules, err := c.cfClient.GetEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(id), "http_request_dynamic_redirect")
 	if err != nil {
 		if _, ok := errors.AsType[*cloudflare.NotFoundError](err); ok {
@@ -473,7 +473,7 @@ func (c *cloudflareProvider) updateSingleRedirect(domainID string, oldrec, newre
 	return c.createSingleRedirect(domainID, newrec.AsCLOUDFLAREAPISINGLEREDIRECT())
 }
 
-func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig) ([]*models.RecordConfig, error) {
+func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig) (models.Records, error) {
 	res, err := c.cfClient.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(id), cloudflare.ListWorkerRoutesParams{})
 	if err != nil {
 		return nil, fmt.Errorf("failed fetching worker route list cloudflare: %w", err)

@@ -494,8 +494,8 @@ func safeTarget(t *string) string {
 	return *t
 }
 
-func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) []*models.RecordConfig {
-	var results []*models.RecordConfig
+func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) models.Records {
+	var results models.Records
 	label := dc.LabelFromFQDNWithDot(*set.Properties.Fqdn)
 	ttl := uint32(*set.Properties.TTL)
 	switch rtype := *set.Type; rtype {
@@ -596,7 +596,7 @@ func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) []*models.Rec
 
 // NOTE recordToNativeDiff2 is really "convert []RecordConfig to rrset".
 
-func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recordConfig []*models.RecordConfig) (*adns.RecordSet, adns.RecordType, error) {
+func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recordConfig models.Records) (*adns.RecordSet, adns.RecordType, error) {
 	recordKeyType := recordKey.Type
 	//	if recordKeyType == "AZURE_ALIAS" {
 	//		fmt.Fprintf(os.Stderr, "DEBUG: XXXXXXXXXXXXXXXXXXXXXXX %v\n", recordKeyType)

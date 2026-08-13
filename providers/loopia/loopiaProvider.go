@@ -252,7 +252,7 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	// provider.  We try to do minimal changes otherwise it gets
 	// confusing.
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
 			// Loopia does not support ALIAS.
@@ -403,7 +403,7 @@ func (c *APIClient) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 }
 
 // debugRecords prints a list of RecordConfig.
-func debugRecords(note string, recs []*models.RecordConfig) {
+func debugRecords(note string, recs models.Records) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
 		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())

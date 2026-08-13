@@ -10,7 +10,7 @@ import (
 )
 
 // nativeToRecord takes a DNS record from deSEC and returns a native RecordConfig struct.
-func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.RecordConfig) {
+func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs models.Records) {
 	// deSEC returns all the values for a given label/rtype pair in each
 	// resourceRecord.  In other words, if there are multiple A
 	// records for a label, all the IP addresses are listed in
@@ -31,7 +31,7 @@ func nativeToRecords(n resourceRecord, dc *models.DomainConfig) (rcs []*models.R
 	return rcs
 }
 
-func recordsToNative(rcs []*models.RecordConfig) []resourceRecord {
+func recordsToNative(rcs models.Records) []resourceRecord {
 	// Take a list of RecordConfig and return an equivalent list of resourceRecord.
 	// deSEC requires one resourceRecord for each label:key tuple, therefore we
 	// might collapse many RecordConfig into one resourceRecord.
