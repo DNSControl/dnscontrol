@@ -339,9 +339,13 @@ For any other transformation:
 Example:
 
 ```go
-	rec.Type = "AKAMAITLC"
+    rec.Type = "AKAMAITLC"
 	rec.TypeNum = privatetypes.TypeAKAMAITLC
-	rec.SetRDATA(privatetypes.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target})
+	rd, err := privatetypesrdata.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target)
+	if err != nil {
+		return err
+	}
+	rec.SetRDATA(rd)
 ```
 
 Doing it this way preserves all other fields such as `.Metadata`.

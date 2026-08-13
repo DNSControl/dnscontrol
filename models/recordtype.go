@@ -13,7 +13,7 @@ func (rc *RecordConfig) ChangeTypeToCNAME(dc *DomainConfig, target string) {
 	rc.TypeNum = dnsv2.TypeCNAME
 
 	// Store the new RDATA:
-	rd, err := MakeCNAME(dc.Name, nil, nrc.Flags{}, dc.LabelFromShort(target))
+	rd, err := MakeCNAME(dc.Name, nil, nrc.Flags{}, target)
 	if err != nil {
 		panic(fmt.Sprintf("failed ChangeTypeToCNAME: err=%s", err)) // Should not happen.
 	}
