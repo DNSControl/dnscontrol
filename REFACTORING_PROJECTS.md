@@ -5,6 +5,8 @@ Useful refactoring projects. Please feel free to pick up any of these.
 
 ## Code that can probably be deleted
 
+* pkg/diff/
+
 * RegisterCustomRecordType()/GetCustomRecordType() is no longer needed. Remove.
 
 * I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
