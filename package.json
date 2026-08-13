@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@umbrelladocs/linkspector": "^0.3.13"
+    "@umbrelladocs/linkspector": "^0.5.6"
   },
   "devDependencies": {
     "prettier": "3.9.5"
