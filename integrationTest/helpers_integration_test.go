@@ -180,12 +180,22 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 			maps.Copy(dom.Metadata, domainMeta)
 		}
 
+		// testRecords holds only the records this test case contributes. dom
+		// additionally contains the zone's delegation NS records, which
+		// getDomainConfigWithNameservers() synthesized via
+		// nameservers.AddNSRecords(). Those must not be audited: in production
+		// AuditRecords() runs in pkg/normalize on the user's records, long
+		// before generateDelegationCorrections() synthesizes the apex NS
+		// records. Auditing them here makes a provider that rejects apex NS
+		// records (or NS records generally) skip every test in the suite.
+		testRecords := make(models.Records, 0, len(tst.Records))
 		for _, r := range tst.Records {
 			rc := models.RecordConfig(*r)
 
 			replaceIntegrationTargetTokens(&rc, origConfig["SubscriptionID"], origConfig["ResourceGroup"])
 
 			dom.Records = append(dom.Records, &rc)
+			testRecords = append(testRecords, &rc)
 		}
 		dom.Unmanaged = tst.Unmanaged
 		dom.UnmanagedUnsafe = tst.UnmanagedUnsafe
@@ -203,7 +213,9 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 		})
 		dom2, _ := dom.Copy()
 
-		if err := providers.AuditRecords(*providerFlag, dom.Records); err != nil {
+		// testRecords shares its pointers with dom.Records, so the records
+		// audited here are the same objects this test will push.
+		if err := providers.AuditRecords(*providerFlag, testRecords); err != nil {
 			t.Skipf("***SKIPPED(PROVIDER DOES NOT SUPPORT '%s' ::%q)", err, desc)
 			return
 		}
