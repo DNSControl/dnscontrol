@@ -543,8 +543,7 @@ func fromRecordConfig(rc *models.RecordConfig) Record {
 	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.
 		// Remove trailing dot for DNScale API
 		TypePTR, privatetypes.TypeALIAS:
-
-		content = strings.TrimSuffix(content, ".")
+		content = strings.TrimSuffix(rc.GetRDATA().String(), ".")
 	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		priority = int(f.Preference)
