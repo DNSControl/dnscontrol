@@ -1757,9 +1757,9 @@ func makeTests() []*TestGroup {
 
 		// Same as "main" but with an apex ("@") record.
 		testgroup("IGNORE apex",
+			not("FORTIGATE"), // TXT records not supported
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
 			not("NETBIRD"), // MX/TXT records not supported
 			not("OPENWRT"), // OpenWRT does not support TXT records
 			tc("Create some records",
