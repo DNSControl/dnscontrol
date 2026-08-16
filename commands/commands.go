@@ -26,6 +26,11 @@ const (
 
 var commands = []*cli.Command{}
 
+func commandNotFound(ctx context.Context, c *cli.Command, command string) {
+	fmt.Fprintf(c.Root().ErrWriter, "Unknown command: %s\n", command)
+	cli.OsExiter(1)
+}
+
 func cmd(cat string, c *cli.Command) bool {
 	c.Category = cat
 	commands = append(commands, c)
@@ -54,6 +59,7 @@ func Run(v string) int {
 		Usage:   "DNSControl is a compiler and DSL for managing dns zones",
 		Version: v,
 	}
+	app.CommandNotFound = commandNotFound
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
 			Name:        "debug",
