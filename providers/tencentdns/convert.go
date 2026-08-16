@@ -1,13 +1,13 @@
 package tencentdns
 
 import (
-	"fmt"
 	"strconv"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
+	"golang.org/x/net/idna"
 )
 
 func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.RecordConfig, error) {
@@ -45,7 +45,7 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 		if r.MX != nil {
 			p = *r.MX
 		}
-		fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
+		//fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
 	// case "TXT":
 	// 	// TODO(tlim): A few ways that might fix
@@ -63,8 +63,8 @@ func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.
 	// 	// You'll need to add this to imports above:
 	// 	// "github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 
-	// case "ALIAS":
-	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, val)
+	case "ALIAS":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, val)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
 	}
@@ -127,14 +127,25 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 
 	var val string
 	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CNAME:
+		var err error
+		val, err = idna.ToUnicode(f.Target)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Target
+		}
 	case dnsrdatav2.MX:
-		val = f.Mx
 		req.MX = new(uint64(f.Preference))
+		var err error
+		val, err = idna.ToUnicode(f.Mx)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Mx
+		}
 	case dnsrdatav2.TXT:
-		val = f.String()
-
-	default:
 		val = rc.GetTargetTXTJoined()
+	default:
+		val = rc.GetRDATA().String()
 	}
 
 	req.Value = new(val)
@@ -165,29 +176,18 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 
 	var val string
 	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CNAME:
+		var err error
+		val, err = idna.ToUnicode(f.Target)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Target
+		}
 	case dnsrdatav2.MX:
 		val = f.Mx
 		req.MX = new(uint64(f.Preference))
-
-	// TODO(tlim): Try this if unicode required for MX targets.
-	// You'll need to add this import: "golang.org/x/net/idna"
-	// u, err := idna.ToUnicode(val)
-	// if err == nil {
-	// 	val = u
-	// }
-
-	// TODO(tlim): Try this if unicode is required for CNAME targets.
-	// You'll need to add this import: "golang.org/x/net/idna"
-	// case dnsv2.TypeCNAME:
-	// 	f := rc.AsCNAME()
-	// 	val := f.Target
-	// 	u, err := idna.ToUnicode(val)
-	// 	if err == nil {
-	// 		val = u
-	// 	}
-
 	case dnsrdatav2.TXT:
-		val = f.String()
+		val = rc.GetTargetTXTJoined()
 	default:
 		val = rc.GetRDATA().String()
 	}
