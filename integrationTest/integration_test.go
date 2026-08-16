@@ -188,7 +188,8 @@ func makeTests() []*TestGroup {
 				"NAMECHEAP",
 			),
 			tc("Create MX", mx("testmx", 5, "foo.com.")),
-			tc("Change MX p", mx("testmx", 100, "foo.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("Change MX p", mx("testmx", 50, "foo.com.")),
 		),
 
 		testgroup("RP",
@@ -233,7 +234,8 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("manyTypesAtOnce",
-			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 100, "bar.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 50, "bar.com.")),
 			tcEmptyZone(),
 			tc("Create an A record", a("www", "1.1.1.1")),
 			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com.")),

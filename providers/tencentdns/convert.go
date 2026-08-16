@@ -134,7 +134,7 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 		val = f.String()
 
 	default:
-		val = rc.GetRDATA().String()
+		val = rc.GetTargetTXTJoined()
 	}
 
 	req.Value = new(val)
