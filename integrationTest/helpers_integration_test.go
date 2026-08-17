@@ -37,6 +37,8 @@ var globalDC *models.DomainConfig
 // Global variable to hold the current DomainConfig     for use in FromRaw calls.
 var globalDCN *domaintags.DomainNameVarieties
 
+var globalCfg map[string]string
+
 // Default TTL used in integration tests.
 var defaultTTL = uint32(300)
 
@@ -299,6 +301,7 @@ func replaceIntegrationTargetTokens(rc *models.RecordConfig, subscriptionID, res
 func runTests(t *testing.T, prv providers.DNSServiceProvider, domainName string, origConfig map[string]string) {
 	dc := getDomainConfigWithNameservers(t, prv, domainName)
 	globalDC = dc
+	globalCfg = origConfig
 
 	testGroups := makeTests()
 

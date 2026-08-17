@@ -32,6 +32,7 @@ func TestMakeTests(t *testing.T) {
 	}
 	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
+	globalCfg = map[string]string{}
 
 	_ = makeTests()
 }
@@ -136,8 +137,8 @@ func makeTests() []*TestGroup {
 		// Same test, but do it with a wildcard.
 		testgroup("Protocol-Wildcard",
 			not("HEDNS"), // Not supported by dns.he.net due to abuse
-			tc("Create wildcard", a("*", "3.3.3.3"), a("www", "5.5.5.5")),
-			tc("Delete wildcard", a("www", "5.5.5.5")),
+			tc("Create wildcard", a("*", "3.3.3.3"), a("www", "5.4.5.4")),
+			tc("Delete wildcard", a("www", "5.4.5.4")),
 		),
 
 		///// Test the basic DNS types
@@ -188,7 +189,8 @@ func makeTests() []*TestGroup {
 				"NAMECHEAP",
 			),
 			tc("Create MX", mx("testmx", 5, "foo.com.")),
-			tc("Change MX p", mx("testmx", 100, "foo.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("Change MX p", mx("testmx", 50, "foo.com.")),
 		),
 
 		testgroup("RP",
@@ -233,11 +235,12 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("manyTypesAtOnce",
-			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 100, "bar.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 50, "bar.com.")),
 			tcEmptyZone(),
 			tc("Create an A record", a("www", "1.1.1.1")),
 			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com.")),
-			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 100, "bar.com.")),
+			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 50, "bar.com.")),
 		),
 
 		// Exercise TTL operations.
@@ -432,7 +435,6 @@ func makeTests() []*TestGroup {
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
 				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
-				"VERCEL",  // Vercel doesn't support NullMX and is slow. Skip to save time.
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -456,7 +458,6 @@ func makeTests() []*TestGroup {
 		testgroup("NullMXApex",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
-				"VERCEL",  // Vercel doesn't support NullMX and is slow. Skip to save time.
 			),
 			tc("create", // Install a Null MX.
 				a("@", "1.2.3.2"),   // Install this so it is ready for the next tc()
@@ -1323,8 +1324,10 @@ func makeTests() []*TestGroup {
 		),
 
 		// Tencent Cloud DNSPod resolution lines and weighted routing.
+		// China site line list: https://cloud.tencent.com/document/product/1427/56167
 		testgroup("TENCENTDNS_LINE_WEIGHT",
 			only("TENCENTDNS"),
+			alltrue(!strings.EqualFold(globalCfg["site"], "intl")),
 			tc("create records on the default and telecom lines",
 				a("tencent-line", "1.2.3.4"),
 				withMeta(a("tencent-line", "1.2.3.4"), map[string]string{
@@ -1619,7 +1622,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			),
 
@@ -1630,7 +1633,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				// txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "", ""),
 			).ExpectNoChanges(),
@@ -1638,7 +1641,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1646,7 +1649,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "A", ""),
 			).ExpectNoChanges(),
@@ -1654,7 +1657,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1662,7 +1665,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "A", "1.2.3.4"),
 			).ExpectNoChanges(),
@@ -1670,7 +1673,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1678,7 +1681,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", ""),
 			).ExpectNoChanges(),
@@ -1686,7 +1689,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1694,7 +1697,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1702,7 +1705,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1710,7 +1713,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1718,7 +1721,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1727,7 +1730,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				// txt("foo", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A,TXT", ""),
 			).ExpectNoChanges(),
@@ -1735,7 +1738,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1744,7 +1747,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				// cname("mail", "ghs.googlehosted.com."),
 				ignore("", "CNAME", "*.googlehosted.com."),
 			).ExpectNoChanges(),
@@ -1752,7 +1755,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),
@@ -1768,7 +1771,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			),
 
@@ -1779,7 +1782,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				// txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "", ""),
 				// ignore("", "NS", ""),
@@ -1791,7 +1794,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1799,7 +1802,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "A", ""),
 			).ExpectNoChanges(),
@@ -1807,7 +1810,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1815,7 +1818,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "A", "1.2.3.4"),
 				// NB(tlim): .UnsafeIgnore is needed because the NS records
@@ -1826,7 +1829,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1834,7 +1837,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", ""),
 			).ExpectNoChanges(),
@@ -1842,7 +1845,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1850,7 +1853,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1858,7 +1861,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1866,7 +1869,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1874,7 +1877,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1883,7 +1886,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				// txt("@", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A,TXT", ""),
 			).ExpectNoChanges(),
@@ -1891,7 +1894,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),
@@ -1950,7 +1953,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			),
 
@@ -1958,7 +1961,7 @@ func makeTests() []*TestGroup {
 				// a("foo.bat", "1.2.3.4"),
 				// a("foo.bat", "2.3.4.5"),
 				// txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("foo.*", "", ""),
 			).ExpectNoChanges(),
@@ -1966,7 +1969,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1974,7 +1977,7 @@ func makeTests() []*TestGroup {
 				// a("foo.bat", "1.2.3.4"),
 				// a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				// a("bar.bat", "5.5.5.5"),
+				// a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("*.bat", "A", ""),
 			).ExpectNoChanges(),
@@ -1982,7 +1985,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1990,7 +1993,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				// cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("", "", "*.googlehosted.com."),
 			).ExpectNoChanges(),
@@ -1998,7 +2001,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),

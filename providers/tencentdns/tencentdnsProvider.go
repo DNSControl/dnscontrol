@@ -22,7 +22,7 @@ const (
 )
 
 var features = providers.DocumentationNotes{
-	providers.CanUseAlias:            providers.Can("Enable CNAME flattening for ALIAS to work at the apex. See https://docs.dnspod.com/dns/cname-flattening/"),
+	providers.CanUseAlias:            providers.Cannot(),
 	providers.CanGetZones:            providers.Can(),
 	providers.CanUseCAA:              providers.Can(),
 	providers.CanUsePTR:              providers.Cannot(),

@@ -17,6 +17,18 @@ func TestAuditRecords(t *testing.T) {
 	txtEmpty, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, "")
 	assert.NoError(t, err)
 
+	txtSingleQuote, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, "quo'te")
+	assert.NoError(t, err)
+
+	txtDoubleQuote, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, `in"side`)
+	assert.NoError(t, err)
+
+	txtBackslash, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, `foo\bar`)
+	assert.NoError(t, err)
+
+	txtTrailingSpace, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeTXT, "trailingws ")
+	assert.NoError(t, err)
+
 	srvNull, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeSRV, 0, 0, 1, ".")
 	assert.NoError(t, err)
 
@@ -26,13 +38,17 @@ func TestAuditRecords(t *testing.T) {
 	validA, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeA, "1.2.3.4")
 	assert.NoError(t, err)
 
-	errs := AuditRecords(models.Records{mxNull, txtEmpty, srvNull, srvEmpty, validA})
+	errs := AuditRecords(models.Records{mxNull, txtEmpty, txtSingleQuote, txtDoubleQuote, txtBackslash, txtTrailingSpace, srvNull, srvEmpty, validA})
 
-	assert.Len(t, errs, 4)
+	assert.Len(t, errs, 8)
 	assert.Contains(t, errs[0].Error(), "mx has null target")
 	assert.Contains(t, errs[1].Error(), "txtstring is empty")
-	assert.Contains(t, errs[2].Error(), "srv has empty target")
-	assert.Contains(t, errs[3].Error(), "srv has empty target")
+	assert.Contains(t, errs[2].Error(), "txtstring contains single-quotes")
+	assert.Contains(t, errs[3].Error(), "txtstring contains doublequotes")
+	assert.Contains(t, errs[4].Error(), "txtstring contains backslashes")
+	assert.Contains(t, errs[5].Error(), "txtstring ends with space")
+	assert.Contains(t, errs[6].Error(), "srv has empty target")
+	assert.Contains(t, errs[7].Error(), "srv has empty target")
 }
 
 func TestAuditRecordsValidatesWeight(t *testing.T) {
@@ -67,4 +83,47 @@ func TestAuditRecordsValidatesWeight(t *testing.T) {
 			assert.Empty(t, errs)
 		})
 	}
+}
+
+func TestTargetConstraint(t *testing.T) {
+	tests := []struct {
+		name    string
+		target  string
+		wantErr bool
+	}{
+		{
+			name:   "ascii target",
+			target: "www.example.com.",
+		},
+		{
+			name:   "chinese target",
+			target: "xn--55qx5d.",
+		},
+		{
+			name:    "non-chinese idn target",
+			target:  "xn--ndaaa.com.",
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dc := models.MustNewDomainConfig("example.com")
+			rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, tt.target)
+
+			err := targetConstraint(rc)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("targetConstraint() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestAuditRecordsRejectsNonChineseIDNCNAMETarget(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, "xn--ndaaa.com.")
+
+	errs := AuditRecords(models.Records{rc})
+	assert.Len(t, errs, 1)
+	assert.Contains(t, errs[0].Error(), "target contains non-ASCII characters")
 }
