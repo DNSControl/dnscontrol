@@ -432,6 +432,7 @@ func makeTests() []*TestGroup {
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
 				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
+				"VERCEL",  // Vercel doesn't support NullMX and is slow. Skip to save time.
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -455,6 +456,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMXApex",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"VERCEL",  // Vercel doesn't support NullMX and is slow. Skip to save time.
 			),
 			tc("create", // Install a Null MX.
 				a("@", "1.2.3.2"),   // Install this so it is ready for the next tc()
