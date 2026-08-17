@@ -166,7 +166,7 @@ release:
     ## Deprecation warnings
 
     > [!WARNING]
-    > - **REV() will switch from RFC2317 to RFC4183 in v5.0.**  This is a breaking change. Warnings are output if your configuration is affected. No date has been announced for v5.0. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
+    > - **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
     > - **NAMEDOTCOM, OPENSRS and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes.
 
     ## Install

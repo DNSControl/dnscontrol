@@ -17,10 +17,10 @@ extensible, so more providers can be added.
 
 ```js
 // define our registrar and providers
-var REG_NAMECOM = NewRegistrar("name.com");
-var r53 = NewDnsProvider("r53")
+var REG_NAMECOM = NewRegistrar("ndc_main");
+var DSP_ROUTE53 = NewDnsProvider("r53_main")
 
-D("example.com", REG_NAMECOM, DnsProvider(r53),
+D("example.com", REG_NAMECOM, DnsProvider(DSP_ROUTE53),
   A("@", "1.2.3.4"),
   CNAME("www","@"),
   MX("@",5,"mail.myserver.com."),
@@ -37,6 +37,8 @@ The easiest way to run DNSControl is to use the Docker container:
 ```shell
 docker run --rm -it -v "$(pwd):/dns"  ghcr.io/dnscontrol/dnscontrol preview
 ```
+
+Want full "GitOps" control of your DNS data?  Clone this repo to get started!  [github.com/DNSControl/dns-config](https://github.com/DNSControl/dns-config)
 
 See [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on documentation site to get started!
 
@@ -63,15 +65,6 @@ DNSControl supports 65 DNS providers and registrars:
 
 ¹also supports registrar functions
 ²registrar only
-
-Stack Overflow uses this system to manage hundreds of domains
-and subdomains across multiple registrars and DNS providers.
-
-You can think of it as a DNS compiler.  The configuration files are
-written in a DSL that looks a lot like JavaScript.  It is compiled
-to an intermediate representation (IR).  Compiler back-ends use the
-IR to update your DNS zones on services such as Route53, Cloudflare,
-and Gandi, or systems such as BIND.
 
 ## Benefits
 
@@ -121,7 +114,7 @@ Others have been created such as:
 
 ## Deprecation warnings (updated 2025-11-21)
 
-- **REV() will switch from RFC2317 to RFC4183 in v5.1.**  This is a breaking change. Warnings are output if your configuration is affected. No date has been announced for v5.0. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
+- **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
 - **NAMEDOTCOM, OPENSRS, and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes. Interested in being a hero and adopting them?  Contact tal at what exit dot org.
 
 ## Contributing
