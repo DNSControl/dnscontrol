@@ -52,7 +52,7 @@ providers/ns1 @costasd
 providers/openwrt @huskyistaken
 providers/oracle @kallsyms
 providers/ovh @masterzen
-providers/packetframe @hamptonmoore
+# providers/packetframe NEEDS VOLUNTEER
 providers/porkbun @imlonghao
 providers/powerdns @jpbede
 providers/realtimeregister @PJEilers
