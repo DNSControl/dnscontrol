@@ -428,7 +428,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Services = f.Service
 		req.RegExp = f.Regexp
 		// Preserve "." as-is (null replacement); strip trailing dot from real FQDNs.
-		naptrTarget := f.Service
+		naptrTarget := f.Replacement
 		if naptrTarget != "." {
 			naptrTarget = strings.TrimSuffix(naptrTarget, ".")
 		}
@@ -437,9 +437,18 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// Target is the base64-encoded public key (zone-file format == API format).
 		req.PublicKey = rc.AsOPENPGPKEY().PublicKey
 	case dnsv2.TypeRP:
+		// Preserve "." as-is (null name); strip trailing dot from real FQDNs.
 		rd := rc.AsRP()
-		req.MailBox = rd.Mbox
-		req.TxtDomainName = rd.Txt
+		mbox := rd.Mbox
+		if mbox != "." {
+			mbox = strings.TrimSuffix(mbox, ".")
+		}
+		txt := rd.Txt
+		if txt != "." {
+			txt = strings.TrimSuffix(txt, ".")
+		}
+		req.MailBox = mbox
+		req.TxtDomainName = txt
 	case dnsv2.TypeSMIMEA:
 		f := rc.AsSMIMEA()
 		usage := int(f.Usage)
