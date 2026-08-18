@@ -74,7 +74,7 @@ func analyzeByLabel(cc *CompareConfig) (ChangeList, int) {
 		if len(accMsgs) == 0 { // Nothing changed.
 		} else if len(accDesired) == 0 { // No new records at the label? This must be a delete.
 			instructions = append(instructions, mkDelete(label, "", accMsgs, accExisting))
-		} else if len(accExisting) == 0 { // No old records at the label? This must be a change.
+		} else if len(accExisting) == 0 { // No old records at the label? This must be a create.
 			c := mkAdd(label, "", accMsgs, accDesired)
 			c.MsgsByKey = msgsByKey
 			instructions = append(instructions, c)

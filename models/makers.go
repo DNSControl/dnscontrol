@@ -432,7 +432,7 @@ func MakeSVCB(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
-		return nil, fmt.Errorf("MakeTLSA expects exactly 5 arguments, got %d: %+v", len(args), args)
+		return nil, fmt.Errorf("MakeTLSA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToUpperRawString(args[3])}, nil
 }

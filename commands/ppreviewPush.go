@@ -434,7 +434,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 
 // stats returns a JSON string with memory usage statistics.
 // These stats are unofficial and subject to change without notice.
-// "average_mem_per_record" is misleading because it includes all memory overhead.
+// "benchmark1" is misleading because it includes all memory overhead.
 func stats(cfg *models.DNSConfig) string {
 
 	// https://www.datadoghq.com/blog/go-memory-metrics/

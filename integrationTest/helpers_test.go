@@ -39,10 +39,10 @@ func TestReplaceIntegrationTargetTokensAzureAlias(t *testing.T) {
 var (
 	providerFlag         = flag.String("provider", "", "Provider to run (if empty, deduced from -profile)")
 	profileFlag          = flag.String("profile", "", "Entry in profiles.json to use (if empty, copied from -provider)")
-	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run to the provider's test_data directory")
+	recordFlag           = flag.Bool("record", false, "Write the record conversion inputs seen during the run")
 	recordDirFlag        = flag.String("recorddir", "", "Directory to record into, and implies -record (default: the provider's test_data directory)")
-	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default false)")
-	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default false)")
+	enableCFWorkers      = flag.Bool("cfworkers", true, "enable CF worker tests (default true)")
+	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default true)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
 	enableCFTags         = flag.Bool("cftags", false, "enable CF tag tests (requires paid plan, default false)")
 )

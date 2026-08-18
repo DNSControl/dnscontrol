@@ -177,39 +177,39 @@ func matrixData() *FeatureMatrix {
 			"DNSSEC",
 		},
 		FeatureTables: [][]string{
-			[]string{ // provider type
+			{ // provider type
 				OfficialSupport,
 				ProviderDNSProvider,
 				ProviderRegistrar,
 			},
-			[]string{ // provider API
+			{ // provider API
 				ProviderThreadSafe,
 				DualHost,
 				CreateDomains,
 				// NoPurge,
 				GetZones,
 			},
-			[]string{ // DNS extensions
+			{ // DNS extensions
 				DomainModifierAlias,
 				DomainModifierDname,
 				DomainModifierLoc,
 				DomainModifierPtr,
 				DomainModifierSoa,
 			},
-			[]string{ // service discovery
+			{ // service discovery
 				DomainModifierDhcid,
 				DomainModifierNaptr,
 				DomainModifierSrv,
 				DomainModifierSvcb,
 			},
-			[]string{ // security
+			{ // security
 				DomainModifierCaa,
 				DomainModifierHTTPS,
 				DomainModifierSMIMEA,
 				DomainModifierSshfp,
 				DomainModifierTlsa,
 			},
-			[]string{ // dnssec
+			{ // dnssec
 				DomainModifierDnssec,
 				DomainModifierDnskey,
 				DomainModifierDs,

@@ -137,7 +137,7 @@ func (nodes dnsGraphNodes[T]) RemoveNode(toRemove *Node[T]) dnsGraphNodes[T] {
 	return newNodes
 }
 
-// RemoveNode removes a node from a graph.
+// RemoveNode removes a node edges.
 func (edges Edges[T]) RemoveNode(toRemove *Node[T]) Edges[T] {
 	var newEdges Edges[T]
 

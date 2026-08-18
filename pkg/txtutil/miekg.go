@@ -20,7 +20,7 @@ func ZoneifyQuoted(txts []string) string {
 // Zoneify is like ZoneifyQuoted, but omits the quotes when not needed. (Note:
 // It might quote things that don't strictly need quoting, but it won't fail to
 // quote things that do need quoting.)
-// Example: []string{"one", "tw o", "three"} outputs: `one "t wo" three`.
+// Example: []string{"one", "tw o", "three"} outputs: `one "tw o" three`.
 func Zoneify(txts []string) string {
 	sb := builderPool.Get()
 	defer builderPool.Put(sb)

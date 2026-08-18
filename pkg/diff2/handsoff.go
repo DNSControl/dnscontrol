@@ -71,7 +71,7 @@ Here is how we intend to implement these features:
   * Take the list of existing records. If any match one of the IGNORE glob
       patterns, add it to the "ignored list".
   * If any item on the "ignored list" is also in "desired" (match on
-      label:rtype), output a warning (defeault) or declare an error (if
+      label:rtype), detail an error (default) or output a warning (if
       DISABLE_IGNORE_SAFETY_CHECK is true).
   * When we're done, add the "ignore list" records to desired.
 

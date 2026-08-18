@@ -104,12 +104,13 @@ func (c Change) GetRecordType() string {
 /*
 General instructions:
 
-Every provider updates their zones in one of three granularities: record, recordset, label, or zone.
+Every provider updates their zones in one of four granularities: record, recordset, label, or zone.
 Identify which your provider is, and use the appropriate "By*" call. (ByZone is different, see its documentation.)
 
   changes, err := diff2.ByRecord(existing, dc, nil)
   //changes, err := diff2.ByRecordSet(existing, dc, nil)
   //changes, err := diff2.ByLabel(existing, dc, nil)
+  // diff2.ByZone's boilerplate is different. See ByZone.
   if err != nil {
     return nil, err
   }

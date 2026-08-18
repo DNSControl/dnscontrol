@@ -83,6 +83,7 @@ var _ = cmd(catUtils, func() *cli.Command {
 			// This takes one or two command-line args.
 			// Starting in v3.16: Using it with 2 args will generate a warning.
 			// Starting in v4.0: Using it with 2 args might be an error.
+			// After v5.0, it will be an error. (FIXME(tlim): Make it an error)
 			if c.NArg() == 1 {
 				arg0 = c.Args().Get(0)
 				arg1 = ""

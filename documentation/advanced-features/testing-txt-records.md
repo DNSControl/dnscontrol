@@ -8,8 +8,6 @@ The problem relates to TXT records that have a string with quotes in them.
 
 If a user creates a TXT record whose contents are `"something"` (yes, with double quotes), some APIs get confused.
 
-This bug is most likely to appear in a provider that uses `RecordConfig.PopulateFromString()` (see `models/t_parse.go`) to create TXT records. That function assumes the string should always have the quotes stripped, though it is more likely that the string should be taken verbatim.
-
 # The test
 
 To complete this test, you will need a test domain that you can add records to. It won't be modified otherwise.
@@ -64,3 +62,11 @@ Refresh your provider's web UI and you should see the changes as expected: t1 sh
 ## Step 5: That's it!
 
 Remove the lines from `dnsconfig.js` and run `dnscontrol push` to clean up.
+
+## Fixing a failed test
+
+If the test fails, this bug is most likely to be that the provider is processing TXT records incorrectly.
+
+If the provider uses `dc.NewRecordConfigParse()` to create TXT records, it might be more appropriate to use `dc.NewRecordConfig()` instead (which does no parsing).  You can also use `dc.NewRecordConfigParse()` with `nrc.Flags{TxtDontParse: true}`.
+
+If that doesn't work, please open an issue and we'll assist you.

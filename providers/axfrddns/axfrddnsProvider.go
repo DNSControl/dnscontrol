@@ -484,7 +484,7 @@ func removeName(update *dnsv2.Msg, rr dnsv2.RR) {
 	update.Ns = append(update.Ns, &dnsv2.ANY{Hdr: dnsv2.Header{Name: rr.Header().Name, Class: dnsv2.ClassANY}})
 }
 
-// hasNSDeletion returns true if there exist a correction that deletes or changes an NS record.
+// hasNSDeletion returns true if there exist a correction that deletes or changes an apex NS record.
 func hasNSDeletion(changes diff2.ChangeList) bool {
 	for _, change := range changes {
 		switch change.Type {

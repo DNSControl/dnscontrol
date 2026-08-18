@@ -125,7 +125,7 @@ func renderDnsconfigJS(choice InitDnsconfigChoice) []byte {
 }
 
 // jsVarName builds a safe JavaScript variable name from a provider type.
-// "CLOUDFLAREAPI" -> "CLOUDFLAREAPI", "HETZNER_V2" -> "HETZNER_V2".
+// "CLOUDFLAREAPI" -> "DNS_CLOUDFLAREAPI", "HETZNER_V2" -> "REG_HETZNER_V2".
 func jsVarName(prefix, providerType string) string {
 	clean := strings.Map(func(char rune) rune {
 		switch {
