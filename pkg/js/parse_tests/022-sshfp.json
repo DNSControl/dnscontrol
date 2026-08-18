@@ -3,84 +3,119 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "filepos": "[line:2:5]",
           "name": "@",
-          "sshfpalgorithm": 1,
-          "sshfpfingerprint": 1,
-          "target": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 1,
+            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "Type": 1
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "1 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "filepos": "[line:3:5]",
           "name": "@",
-          "sshfpalgorithm": 1,
-          "sshfpfingerprint": 2,
-          "target": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 1,
+            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "Type": 2
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "filepos": "[line:4:5]",
           "name": "@",
-          "sshfpalgorithm": 2,
-          "sshfpfingerprint": 1,
-          "target": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 2,
+            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "Type": 1
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "filepos": "[line:5:5]",
           "name": "@",
-          "sshfpalgorithm": 2,
-          "sshfpfingerprint": 2,
-          "target": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 2,
+            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "Type": 2
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "3 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "filepos": "[line:6:5]",
           "name": "@",
-          "sshfpalgorithm": 3,
-          "sshfpfingerprint": 1,
-          "target": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 3,
+            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "Type": 1
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "3 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "filepos": "[line:7:5]",
           "name": "@",
-          "sshfpalgorithm": 3,
-          "sshfpfingerprint": 2,
-          "target": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 3,
+            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "Type": 2
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "4 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
           "filepos": "[line:8:5]",
           "name": "@",
-          "sshfpalgorithm": 4,
-          "sshfpfingerprint": 1,
-          "target": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 4,
+            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "Type": 1
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         },
         {
+          "comparablev3": "4 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
           "filepos": "[line:9:5]",
           "name": "@",
-          "sshfpalgorithm": 4,
-          "sshfpfingerprint": 2,
-          "target": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
+          "name_unicode": "@",
+          "rdata": {
+            "Algorithm": 4,
+            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "Type": 2
+          },
           "ttl": 300,
-          "type": "SSHFP"
+          "type": "SSHFP",
+          "typenum": 44
         }
       ],
       "registrar": "none",

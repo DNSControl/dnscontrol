@@ -3,7 +3,7 @@ package rejectif
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // Auditor stores a list of checks to be executed during Audit().

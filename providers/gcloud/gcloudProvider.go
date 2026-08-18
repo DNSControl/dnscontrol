@@ -8,11 +8,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	gauth "golang.org/x/oauth2/google"
 	gdns "google.golang.org/api/dns/v1"
 	"google.golang.org/api/googleapi"
@@ -47,11 +46,6 @@ var (
 	networkURLCheck  = regexp.MustCompile("^" + regexp.QuoteMeta(selfLinkBasePath) + "[a-z][-a-z0-9]{4,28}[a-z0-9]/global/networks/[a-z]([-a-z0-9]{0,61}[a-z0-9])?$")
 	networkNameCheck = regexp.MustCompile("^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$")
 )
-
-// //go:fix inline
-// func sPtr(s string) *string {
-// 	return new(s)
-// }
 
 func init() {
 	const providerName = "GCLOUD"
@@ -100,6 +94,7 @@ func init() {
 }
 
 type gcloudProvider struct {
+	observer      providers.ConversionObserver
 	client        *gdns.Service
 	project       string
 	nameServerSet *string
@@ -107,6 +102,10 @@ type gcloudProvider struct {
 	// provider metadata fields
 	Visibility string   `json:"visibility"`
 	Networks   []string `json:"networks"`
+}
+
+func (g *gcloudProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	g.observer = observer
 }
 
 type errNoExist struct {
@@ -249,30 +248,33 @@ func keyFor(r *gdns.ResourceRecordSet) key {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (g *gcloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	existingRecords, err := g.getZoneSets(domain)
+	existingRecords, err := g.getZoneSets(dc)
 	return existingRecords, err
 }
 
-func (g *gcloudProvider) getZoneSets(domain string) (models.Records, error) {
+func (g *gcloudProvider) getZoneSets(dc *models.DomainConfig) (models.Records, error) {
+	domain := dc.Name
 	rrs, err := g.getRecords(domain)
 	if err != nil {
 		return nil, err
 	}
 	// convert to dnscontrol RecordConfig format
-	existingRecords := []*models.RecordConfig{}
+	var existingRecords models.Records
 	oldRRs := map[key]*gdns.ResourceRecordSet{}
 	for _, set := range rrs {
 		oldRRs[keyFor(set)] = set
+		before := providers.BeginToRC(g.observer, "nativeToRecord", set)
+		var converted models.Records
 		for _, rec := range set.Rrdatas {
-			rt, err := nativeToRecord(set, rec, domain)
+			rt, err := nativeToRecord(set, rec, dc)
 			if err != nil {
+				providers.EndToRC(g.observer, "nativeToRecord", before, set, converted, err)
 				return nil, err
 			}
-
-			existingRecords = append(existingRecords, rt)
+			converted = append(converted, rt)
 		}
+		providers.EndToRC(g.observer, "nativeToRecord", before, set, converted, nil)
+		existingRecords = append(existingRecords, converted...)
 	}
 
 	return existingRecords, err
@@ -370,7 +372,7 @@ func mkRRSs(name, rType string, recs models.Records) *gdns.ResourceRecordSet {
 	}
 
 	for _, r := range recs {
-		newRRS.Rrdatas = append(newRRS.Rrdatas, r.GetTargetCombinedFunc(txtutil.EncodeQuoted))
+		newRRS.Rrdatas = append(newRRS.Rrdatas, r.GetRDATA().String())
 	}
 
 	return newRRS
@@ -445,16 +447,12 @@ retry:
 	return nil
 }
 
-func nativeToRecord(set *gdns.ResourceRecordSet, rec, origin string) (*models.RecordConfig, error) {
-	r := &models.RecordConfig{}
-	r.SetLabelFromFQDN(set.Name, origin)
-	r.TTL = uint32(set.Ttl)
-	rtype := set.Type
-	r.Original = set
-	err := r.PopulateFromStringFunc(rtype, rec, origin, txtutil.ParseQuoted)
+func nativeToRecord(set *gdns.ResourceRecordSet, rec string, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	r, err := dc.NewRecordConfigParse(dc.LabelFromFQDNWithDot(set.Name), uint32(set.Ttl), set.Type, rec)
 	if err != nil {
-		return nil, fmt.Errorf("unparsable record %q received from GCLOUD: %w", rtype, err)
+		return nil, fmt.Errorf("unparsable record %q received from GCLOUD: %w", set.Type, err)
 	}
+	r.Original = set
 	return r, nil
 }
 

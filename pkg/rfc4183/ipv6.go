@@ -2,7 +2,7 @@ package rfc4183
 
 import "errors"
 
-// reverseIPv6 returns the ipv6.arpa string suitable for reverse DNS lookups.
+// reverseIPv6 returns the ip6.arpa string suitable for reverse DNS lookups.
 func reverseIPv6(ip []byte, maskbits int) (arpa string, err error) {
 	// Must be IPv6
 	if len(ip) != 16 {

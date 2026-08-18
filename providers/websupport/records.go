@@ -3,8 +3,9 @@ package websupport
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // GetZoneRecords returns the current records for a zone.
@@ -18,10 +19,15 @@ func (c *websupportProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	if err != nil {
 		return nil, err
 	}
+	if err := c.repairMXSRV(dc.Name, nativeRecs); err != nil {
+		return nil, err
+	}
 
 	recs := make(models.Records, 0, len(nativeRecs))
 	for _, n := range nativeRecs {
-		rc, err := toRecordConfig(dc.Name, n)
+		before := providers.BeginToRC(c.observer, "toRecordConfig", n)
+		rc, err := toRecordConfig(dc, n)
+		providers.EndToRC(c.observer, "toRecordConfig", before, n, models.Records{rc}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -66,7 +72,10 @@ func (c *websupportProvider) mkCreateCorrection(svcID int64, newRec *models.Reco
 	return &models.Correction{
 		Msg: msg,
 		F: func() error {
+			input := models.Records{newRec}
+			before := providers.BeginToNative(c.observer, "toNative", input)
 			n, err := toNative(newRec)
+			providers.EndToNative(c.observer, "toNative", before, input, n, err)
 			if err != nil {
 				return err
 			}
@@ -83,7 +92,10 @@ func (c *websupportProvider) mkChangeCorrection(svcID int64, oldRec, newRec *mod
 			if id == 0 {
 				return fmt.Errorf("WEBSUPPORT: cannot update record without an id")
 			}
+			input := models.Records{newRec}
+			before := providers.BeginToNative(c.observer, "toNative", input)
 			n, err := toNative(newRec)
+			providers.EndToNative(c.observer, "toNative", before, input, n, err)
 			if err != nil {
 				return err
 			}

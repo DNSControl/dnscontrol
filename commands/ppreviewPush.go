@@ -17,17 +17,17 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/bindserial"
-	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/normalize"
-	"github.com/DNSControl/dnscontrol/v4/pkg/notifications"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/bindserial"
+	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameservers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/normalize"
+	"github.com/DNSControl/dnscontrol/v5/pkg/notifications"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonerecs"
 	"github.com/dustin/go-humanize"
 	"github.com/nozzle/throttler"
 	"github.com/urfave/cli/v3"
@@ -434,7 +434,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 
 // stats returns a JSON string with memory usage statistics.
 // These stats are unofficial and subject to change without notice.
-// "average_mem_per_record" is misleading because it includes all memory overhead.
+// "benchmark1" is misleading because it includes all memory overhead.
 func stats(cfg *models.DNSConfig) string {
 
 	// https://www.datadoghq.com/blog/go-memory-metrics/

@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestGetZoneRecords(t *testing.T) {
@@ -30,7 +30,8 @@ func TestGetZoneRecords(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	recs, err := p.GetZoneRecords(&models.DomainConfig{Name: "example.com"})
+	dc := models.MustNewDomainConfig("example.com")
+	recs, err := p.GetZoneRecords(dc)
 	if err != nil {
 		t.Fatalf("GetZoneRecords() error = %v", err)
 	}
@@ -43,8 +44,8 @@ func TestGetZoneRecords(t *testing.T) {
 	if recs[0].Type != "NS" || recs[0].GetLabel() != "sub" {
 		t.Errorf("first record = %s %s, want NS sub", recs[0].Type, recs[0].GetLabel())
 	}
-	if recs[1].Type != "A" || recs[1].GetTargetField() != "203.0.113.10" {
-		t.Errorf("second record = %s %s, want A 203.0.113.10", recs[1].Type, recs[1].GetTargetField())
+	if recs[1].Type != "A" || recs[1].AsA().Addr.String() != "203.0.113.10" {
+		t.Errorf("second record = %s %s, want A 203.0.113.10", recs[1].Type, recs[1].AsA().Addr.String())
 	}
 	if recs[1].Original.(apiRecord).ID != "r4" {
 		t.Errorf("record id was not carried over: %v", recs[1].Original)
@@ -74,14 +75,16 @@ func TestEnsureZoneExists(t *testing.T) {
 	defer server.Close()
 
 	p := testProvider(server.URL)
-	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "example.com"}); err != nil {
+	dc := models.MustNewDomainConfig("example.com")
+	if err := p.EnsureZoneExists(dc); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 0 {
 		t.Errorf("an existing zone was created again: %v", created)
 	}
 
-	if err := p.EnsureZoneExists(&models.DomainConfig{Name: "new.example.com"}); err != nil {
+	ndc := models.MustNewDomainConfig("new.example.com")
+	if err := p.EnsureZoneExists(ndc); err != nil {
 		t.Fatalf("EnsureZoneExists() error = %v", err)
 	}
 	if len(created) != 1 || created[0] != "new.example.com" {

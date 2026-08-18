@@ -3,8 +3,8 @@ package diff
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // NewCompat is a constructor that uses the new pkg/diff2 system
@@ -32,7 +32,7 @@ type differCompat struct {
 
 // IncrementalDiff usees pkg/diff2 to generate output compatible with systems
 // still using NewCompat().
-func (d *differCompat) IncrementalDiff(existing []*models.RecordConfig) (reportMsgs []string, toCreate, toDelete, toModify Changeset, actualChangeCount int, err error) {
+func (d *differCompat) IncrementalDiff(existing models.Records) (reportMsgs []string, toCreate, toDelete, toModify Changeset, actualChangeCount int, err error) {
 	instructions, actualChangeCount, err := diff2.ByRecord(existing, d.dc, nil)
 	if err != nil {
 		return nil, nil, nil, nil, 0, err
@@ -84,7 +84,7 @@ func GenerateMessageCorrections(msgs []string) (corrections []*models.Correction
 }
 
 // ChangedGroups provides the same results as IncrementalDiff but grouped by key.
-func (d *differCompat) ChangedGroups(existing []*models.RecordConfig) (map[models.RecordKey][]string, []string, int, error) {
+func (d *differCompat) ChangedGroups(existing models.Records) (map[models.RecordKey][]string, []string, int, error) {
 	changedKeys := map[models.RecordKey][]string{}
 	toReport, toCreate, toDelete, toModify, actualChangeCount, err := d.IncrementalDiff(existing)
 	if err != nil {

@@ -1,12 +1,13 @@
 package testutils
 
-import "github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+import "github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
 
 // StubRecord stub.
 type StubRecord struct {
 	NameFQDN     string
 	Dependencies []dnsgraph.Dependency
 	Type         dnsgraph.NodeType
+	RecordType   string
 }
 
 // GetType stub.
@@ -17,6 +18,11 @@ func (record StubRecord) GetType() dnsgraph.NodeType {
 // GetName stub.
 func (record StubRecord) GetName() string {
 	return record.NameFQDN
+}
+
+// GetRecordType stub.
+func (record StubRecord) GetRecordType() string {
+	return record.RecordType
 }
 
 // GetDependencies stub.

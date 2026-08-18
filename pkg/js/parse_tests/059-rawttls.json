@@ -3,173 +3,112 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_uniquename": "example.com"
-      },
       "name": "example.com",
       "records": [
         {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 300
-            },
+          "comparablev3": "user.example.com. mytxt.example.com.",
+          "filepos": "[line:6:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "filepos": "[line:6:5]",
-          "name": "@",
-          "name_raw": "@",
-          "name_unicode": "@",
-          "target": "",
           "ttl": 300,
           "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
+          "typenum": 17
         },
         {
-          "comparable": "user2.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 300
-            },
+          "comparablev3": "user2.example.com. mytxt.example.com.",
+          "filepos": "[line:7:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
             "Mbox": "user2.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "filepos": "[line:7:5]",
-          "name": "@",
-          "name_raw": "@",
-          "name_unicode": "@",
-          "target": "",
           "ttl": 300,
           "type": "RP",
-          "zonfefilepartial": "user2.example.com. mytxt.example.com."
+          "typenum": 17
         },
         {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "aaa300.example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 300
-            },
-            "Mbox": "user.example.com.",
-            "Txt": "mytxt.example.com."
-          },
+          "comparablev3": "user.example.com. mytxt.example.com.",
           "filepos": "[line:10:5]",
           "name": "aaa300",
-          "name_raw": "aaa300",
           "name_unicode": "aaa300",
-          "target": "",
-          "ttl": 300,
-          "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
-        },
-        {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "bbb1.example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 1111
-            },
+          "rdata": {
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
+          "ttl": 300,
+          "type": "RP",
+          "typenum": 17
+        },
+        {
+          "comparablev3": "user.example.com. mytxt.example.com.",
           "filepos": "[line:14:5]",
           "name": "bbb1",
-          "name_raw": "bbb1",
           "name_unicode": "bbb1",
-          "target": "",
-          "ttl": 1111,
-          "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
-        },
-        {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "ccc2.example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 2222
-            },
+          "rdata": {
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
+          "ttl": 1111,
+          "type": "RP",
+          "typenum": 17
+        },
+        {
+          "comparablev3": "user.example.com. mytxt.example.com.",
           "filepos": "[line:17:5]",
           "name": "ccc2",
-          "name_raw": "ccc2",
           "name_unicode": "ccc2",
-          "target": "",
+          "rdata": {
+            "Mbox": "user.example.com.",
+            "Txt": "mytxt.example.com."
+          },
           "ttl": 2222,
           "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
+          "typenum": 17
         },
         {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "ddd1.example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 1111
-            },
-            "Mbox": "user.example.com.",
-            "Txt": "mytxt.example.com."
-          },
+          "comparablev3": "user.example.com. mytxt.example.com.",
           "filepos": "[line:20:5]",
           "name": "ddd1",
-          "name_raw": "ddd1",
           "name_unicode": "ddd1",
-          "target": "",
-          "ttl": 1111,
-          "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
-        },
-        {
-          "comparable": "user.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "eee3.example.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 3333
-            },
+          "rdata": {
             "Mbox": "user.example.com.",
             "Txt": "mytxt.example.com."
           },
-          "filepos": "[line:24:5]",
-          "name": "eee3",
-          "name_raw": "eee3",
-          "name_unicode": "eee3",
-          "target": "",
-          "ttl": 3333,
+          "ttl": 1111,
           "type": "RP",
-          "zonfefilepartial": "user.example.com. mytxt.example.com."
+          "typenum": 17
         },
         {
+          "comparablev3": "user.example.com. mytxt.example.com.",
+          "filepos": "[line:24:5]",
+          "name": "eee3",
+          "name_unicode": "eee3",
+          "rdata": {
+            "Mbox": "user.example.com.",
+            "Txt": "mytxt.example.com."
+          },
+          "ttl": 3333,
+          "type": "RP",
+          "typenum": 17
+        },
+        {
+          "comparablev3": "\"Do not call me on my phone\"",
           "filepos": "[line:3:5]",
           "name": "mytxt",
-          "target": "Do not call me on my phone",
+          "name_unicode": "mytxt",
+          "rdata": {
+            "Txt": [
+              "Do not call me on my phone"
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         }
       ],
       "registrar": "none",

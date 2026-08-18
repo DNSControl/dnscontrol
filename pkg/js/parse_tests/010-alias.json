@@ -3,19 +3,19 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:2:5]",
           "name": "@",
-          "target": "foo.com.",
+          "name_unicode": "@",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "ALIAS"
+          "type": "ALIAS",
+          "typenum": 65285
         }
       ],
       "registrar": "none",

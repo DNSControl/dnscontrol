@@ -8,12 +8,11 @@ import (
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 	"golang.org/x/net/idna"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/version"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/version"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 )
 
 var features = providers.DocumentationNotes{
@@ -54,7 +53,7 @@ func init() {
 		DisplayName: "Hetzner DNS",
 		Kind:        providers.KindDNS,
 		DocsURL:     "https://docs.dnscontrol.org/provider/hetzner_v2",
-		PortalURL:   "https://dns.hetzner.com/settings/api-token", // TODO: Verify
+		PortalURL:   "https://console.hetzner.com/projects",
 		Fields: []providers.CredsField{
 			{
 				Key:      "api_token",
@@ -104,16 +103,11 @@ func (h *hetznerv2Provider) fetchAllZones() (map[string]*hcloud.Zone, error) {
 
 // EnsureZoneExists creates a zone if it does not exist.
 func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
-	domain := dc.Name
-	encoded, err := idna.ToASCII(domain)
-	if err != nil {
-		return err
-	}
-	if ok, err2 := h.zoneCache.HasZone(encoded); err2 != nil || ok {
+	if ok, err2 := h.zoneCache.HasZone(dc.Name); err2 != nil || ok {
 		return err2
 	}
 	result, _, err := h.client.Zone.Create(context.Background(), hcloud.ZoneCreateOpts{
-		Name: encoded,
+		Name: dc.Name,
 		Mode: hcloud.ZoneModePrimary,
 	})
 	if err != nil {
@@ -127,18 +121,13 @@ func (h *hetznerv2Provider) EnsureZoneExists(dc *models.DomainConfig) error {
 	if err != nil {
 		return err
 	}
-	h.zoneCache.SetZone(encoded, z)
+	h.zoneCache.SetZone(dc.Name, z)
 	return nil
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (h *hetznerv2Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
-	encoded, err := idna.ToASCII(dc.Name)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	z, err := h.zoneCache.GetZone(encoded)
+	z, err := h.zoneCache.GetZone(dc.Name)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -168,7 +157,7 @@ func (h *hetznerv2Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 			}
 			for _, r := range instruction.New {
 				opts.Records = append(opts.Records, hcloud.ZoneRRSetRecord{
-					Value: r.GetTargetCombinedFunc(txtutil.EncodeQuoted),
+					Value: r.GetRDATA().String(),
 				})
 			}
 			reports = append(reports, &models.Correction{
@@ -194,7 +183,7 @@ func (h *hetznerv2Provider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 					opts := hcloud.ZoneRRSetSetRecordsOpts{}
 					for _, r := range instruction.New {
 						opts.Records = append(opts.Records, hcloud.ZoneRRSetRecord{
-							Value: r.GetTargetCombinedFunc(txtutil.EncodeQuoted),
+							Value: r.GetRDATA().String(),
 						})
 					}
 					_, _, err2 := h.client.Zone.SetRRSetRecords(context.Background(), rrSet, opts)
@@ -232,13 +221,7 @@ func (h *hetznerv2Provider) GetNameservers(domain string) ([]*models.Nameserver,
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	encoded, err := idna.ToASCII(domain)
-	if err != nil {
-		return nil, err
-	}
-	z, err := h.zoneCache.GetZone(encoded)
+	z, err := h.zoneCache.GetZone(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -248,32 +231,40 @@ func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, 0, len(records))
+	existingRecords := make(models.Records, 0, len(records))
 	for _, rrSet := range records {
-		if rrSet.Type == hcloud.ZoneRRSetTypeSOA {
-			// SOA records are not available for editing, hide them.
-			continue
+		recs, err := nativeToRecords(dc, rrSet, uint32(z.TTL))
+		if err != nil {
+			return nil, err
 		}
-		base := models.RecordConfig{
-			Type:     string(rrSet.Type),
-			Original: rrSet,
-		}
-		base.SetLabel(rrSet.Name, z.Name)
-		if rrSet.TTL != nil {
-			base.TTL = uint32(*rrSet.TTL)
-		} else {
-			base.TTL = uint32(z.TTL)
-		}
-
-		for _, r := range rrSet.Records {
-			rc := base
-			if err = rc.PopulateFromStringFunc(rc.Type, r.Value, z.Name, txtutil.ParseQuoted); err != nil {
-				return nil, err
-			}
-			existingRecords = append(existingRecords, &rc)
-		}
+		existingRecords = append(existingRecords, recs...)
 	}
 	return existingRecords, nil
+}
+
+// nativeToRecords converts a Hetzner RRSet to RecordConfigs, one per value.
+// zoneTTL is the TTL of the zone the RRSet belongs to, used when the RRSet does
+// not carry one of its own. It returns nothing for SOA RRSets, which are hidden.
+func nativeToRecords(dc *models.DomainConfig, rrSet *hcloud.ZoneRRSet, zoneTTL uint32) (models.Records, error) {
+	if rrSet.Type == hcloud.ZoneRRSetTypeSOA {
+		// SOA records are not available for editing, hide them.
+		return nil, nil
+	}
+	ttl := zoneTTL
+	if rrSet.TTL != nil {
+		ttl = uint32(*rrSet.TTL)
+	}
+
+	recs := make(models.Records, 0, len(rrSet.Records))
+	for _, r := range rrSet.Records {
+		rc, err := dc.NewRecordConfigParse(dc.LabelFromShort(rrSet.Name), ttl, string(rrSet.Type), r.Value)
+		if err != nil {
+			return nil, err
+		}
+		rc.Original = rrSet
+		recs = append(recs, rc)
+	}
+	return recs, nil
 }
 
 // ListZones lists the zones on this account.

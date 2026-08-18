@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/miekg/dns/dnsutil"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // infomaniakProvider is the handle for operations.
@@ -71,101 +71,86 @@ func addTrailingDot(target string) string {
 }
 
 // toRecordConfig converts a DNS record from Infomaniak API to RecordConfig.
-func toRecordConfig(domain string, r dnsRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-
+func toRecordConfig(dc *models.DomainConfig, r dnsRecord) (*models.RecordConfig, error) {
 	// Handle the source/label - Infomaniak uses empty string or "." for apex
 	label := r.Source
 	if label == "" || label == "." {
 		label = "@"
 	}
-	rc.SetLabel(label, domain)
-
 	// Parse the target based on record type
 	rtype := r.Type
 	target := r.Target
+	ttl := uint32(r.TTL)
 
+	var rc *models.RecordConfig
 	var err error
 	switch rtype {
-	case "A", "AAAA":
-		rc.Type = rtype
-		err = rc.SetTarget(target)
+	// case "A", "AAAA":
+	// 	rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "CNAME", "NS", "DNAME":
-		rc.Type = rtype
-		// Add trailing dot and use AddOrigin to properly qualify the target
-		err = rc.SetTarget(dnsutil.AddOrigin(addTrailingDot(target), domain))
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, addTrailingDot(target))
 
 	case "MX":
 		// Infomaniak returns MX as "priority target" (e.g., "5 mta-gw.infomaniak.ch")
-		rc.Type = rtype
-		err = rc.SetTargetMXString(addTrailingDot(target))
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, addTrailingDot(target))
 
 	case "TXT":
-		rc.Type = rtype
 		// Infomaniak API returns TXT values wrapped in quotes, strip them
 		if len(target) >= 2 && strings.HasPrefix(target, "\"") && strings.HasSuffix(target, "\"") {
 			target = target[1 : len(target)-1]
 		}
-		err = rc.SetTargetTXT(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 
 	case "SRV":
 		// Infomaniak returns SRV as "priority weight port target"
-		rc.Type = rtype
-		err = rc.SetTargetSRVString(addTrailingDot(target))
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, addTrailingDot(target))
 
 	case "CAA":
 		// Infomaniak returns CAA as "flags tag value" (e.g., "0 issue letsencrypt.org")
-		rc.Type = rtype
-		err = rc.SetTargetCAAString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "DS":
 		// Infomaniak returns DS as "keytag algorithm digesttype digest"
 		// Note: Infomaniak may split long digest data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 4 {
 			// Rejoin all parts after the first 3 (keytag, algorithm, digesttype) as the digest
 			digest := strings.Join(parts[3:], "")
 			target = fmt.Sprintf("%s %s %s %s", parts[0], parts[1], parts[2], digest)
 		}
-		err = rc.SetTargetDSString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "SSHFP":
 		// Infomaniak returns SSHFP as "algorithm fingerprint_type fingerprint"
 		// Note: Infomaniak may split long fingerprint data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 3 {
 			// Rejoin all parts after the first 2 (algorithm, fingerprint_type) as the fingerprint
 			fingerprint := strings.Join(parts[2:], "")
 			target = fmt.Sprintf("%s %s %s", parts[0], parts[1], fingerprint)
 		}
-		err = rc.SetTargetSSHFPString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "TLSA":
 		// Infomaniak returns TLSA as "usage selector matching_type certificate"
 		// Note: Infomaniak may split long certificate data with spaces, so we need to rejoin them
-		rc.Type = rtype
 		parts := strings.Fields(target)
 		if len(parts) >= 4 {
 			// Rejoin all parts after the first 3 (usage, selector, matching_type) as the certificate
 			certificate := strings.Join(parts[3:], "")
 			target = fmt.Sprintf("%s %s %s %s", parts[0], parts[1], parts[2], certificate)
 		}
-		err = rc.SetTargetTLSAString(target)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	default:
-		rc.Type = rtype
-		err = rc.SetTarget(target)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
 	}
 
 	if err != nil {
 		return nil, fmt.Errorf("unparsable record type=%q target=%q received from Infomaniak: %w", rtype, target, err)
 	}
+	rc.Original = r
 
 	return rc, nil
 }
@@ -180,43 +165,52 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 
 	// Get the target in the format expected by Infomaniak API
 	var target string
-	switch rc.Type {
-	case "A", "AAAA":
-		target = rc.GetTargetField()
+	switch rc.TypeNum {
+	// case "A":
+	// 	target = rc.AsA().Addr.String()
+	// case "AAAA":
+	// 	target = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "NS", "DNAME":
-		// Remove trailing dot for the API
-		target = strings.TrimSuffix(rc.GetTargetField(), ".")
+	case dnsv2.TypeCNAME:
+		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case dnsv2.TypeNS:
+		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
+	case dnsv2.TypeDNAME:
+		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
-	case "MX":
+	case dnsv2.TypeMX:
 		// Format: "priority target" (without trailing dot)
-		target = fmt.Sprintf("%d %s", rc.MxPreference, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsMX()
+		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
-	case "TXT":
-		target = rc.GetTargetField()
+	case dnsv2.TypeTXT:
+		target = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
-		target = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsSRV()
+		target = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, strings.TrimSuffix(f.Target, "."))
 
-	case "CAA":
-		// Format: "flags tag value"
-		target = fmt.Sprintf("%d %s %s", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+	// case "CAA":
+	// 	// Format: "flags tag value"
+	// 	target = rc.GetRDATA().String()
 
-	case "DS":
-		// Format: "keytag algorithm digesttype digest"
-		target = fmt.Sprintf("%d %d %d %s", rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+	// case "DS":
+	// 	// Format: "keytag algorithm digesttype digest"
+	// 	target = rc.GetRDATA().String()
 
-	case "SSHFP":
-		// Format: "algorithm fingerprint_type fingerprint"
-		target = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+	// case "SSHFP":
+	// 	// Format: "algorithm fingerprint_type fingerprint"
+	// 	target = rc.GetRDATA().String()
 
-	case "TLSA":
-		// Format: "usage selector matching_type certificate"
-		target = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+	// case "TLSA":
+	// 	// Format: "usage selector matching_type certificate"
+	// 	target = rc.GetRDATA().String()
+
+	// TODO(): If tests pass, removed the above comments.
 
 	default:
-		target = rc.GetTargetField()
+		target = rc.GetRDATA().String()
 	}
 
 	return &dnsRecordCreate{
@@ -231,43 +225,57 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	// Get the target in the format expected by Infomaniak API
 	var target string
-	switch rc.Type {
-	case "A", "AAAA":
-		target = rc.GetTargetField()
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
+		target = rc.AsA().Addr.String()
+	case dnsv2.TypeAAAA:
+		target = rc.AsAAAA().Addr.String()
 
-	case "CNAME", "NS", "DNAME":
+	case dnsv2.TypeCNAME:
 		// Remove trailing dot for the API
-		target = strings.TrimSuffix(rc.GetTargetField(), ".")
+		target = strings.TrimSuffix(rc.AsCNAME().Target, ".")
+	case dnsv2.TypeNS:
+		target = strings.TrimSuffix(rc.AsNS().Ns, ".")
+	case dnsv2.TypeDNAME:
+		target = strings.TrimSuffix(rc.AsDNAME().Target, ".")
 
-	case "MX":
+	case dnsv2.TypeMX:
 		// Format: "priority target" (without trailing dot)
-		target = fmt.Sprintf("%d %s", rc.MxPreference, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsMX()
+		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
-	case "TXT":
-		target = rc.GetTargetField()
+	case dnsv2.TypeTXT:
+		target = rc.GetTargetTXTJoined()
 
-	case "SRV":
+	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
-		target = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, strings.TrimSuffix(rc.GetTargetField(), "."))
+		f := rc.AsSRV()
+		target = fmt.Sprintf("%d %d %d %s", f.Priority, f.Weight, f.Port, strings.TrimSuffix(f.Target, "."))
 
-	case "CAA":
+	case dnsv2.TypeCAA:
 		// Format: "flags tag value"
-		target = fmt.Sprintf("%d %s %s", rc.CaaFlag, rc.CaaTag, rc.GetTargetField())
+		f := rc.AsCAA()
+		target = fmt.Sprintf("%d %s %s", f.Flag, f.Tag, f.Value)
 
-	case "DS":
+	case dnsv2.TypeDS:
 		// Format: "keytag algorithm digesttype digest"
-		target = fmt.Sprintf("%d %d %d %s", rc.DsKeyTag, rc.DsAlgorithm, rc.DsDigestType, rc.DsDigest)
+		f := rc.AsDS()
+		target = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
 
-	case "SSHFP":
+	case dnsv2.TypeSSHFP:
 		// Format: "algorithm fingerprint_type fingerprint"
-		target = fmt.Sprintf("%d %d %s", rc.SshfpAlgorithm, rc.SshfpFingerprint, rc.GetTargetField())
+		f := rc.AsSSHFP()
+		target = f.String()
+		// If that doesn't work, try this:
+		//target = fmt.Sprintf("%d %d %s", f.Algorithm, f.Type, f.FingerPrint)
 
-	case "TLSA":
+	case dnsv2.TypeTLSA:
 		// Format: "usage selector matching_type certificate"
-		target = fmt.Sprintf("%d %d %d %s", rc.TlsaUsage, rc.TlsaSelector, rc.TlsaMatchingType, rc.GetTargetField())
+		f := rc.AsTLSA()
+		target = fmt.Sprintf("%d %d %d %s", f.Usage, f.Selector, f.MatchingType, f.Certificate)
 
 	default:
-		target = rc.GetTargetField()
+		target = rc.GetRDATA().String()
 	}
 
 	return &dnsRecordUpdate{
@@ -287,7 +295,7 @@ func (p *infomaniakProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	cleanRecords := make(models.Records, 0, len(records))
 
 	for _, r := range records {
-		recConfig, err := toRecordConfig(domain, r)
+		recConfig, err := toRecordConfig(dc, r)
 		if err != nil {
 			return nil, err
 		}

@@ -1,0 +1,166 @@
+1	@ 300 IN NS ns1.digitalocean.com.
+2	@ 300 IN NS ns2.digitalocean.com.
+3	@ 300 IN NS ns3.digitalocean.com.
+4	testa 300 IN A 1.1.1.1
+5	testa 300 IN A 3.3.3.3
+6	@ 300 IN A 2.2.2.2
+7	@ 300 IN A 4.4.4.4
+8	* 300 IN A 3.3.3.3
+9	www 300 IN A 5.5.5.5
+10	testaaaa 300 IN AAAA 2607:f8b0:4006:820::2006
+11	testaaaa 300 IN AAAA 2607:f8b0:4006:820::2013
+12	testcname 300 IN CNAME www.google.com.
+13	testcname 300 IN CNAME www.yahoo.com.
+14	foo 300 IN A 1.2.3.4
+15	testcname 300 IN CNAME foo.dnscontroltest-digitalocean.com.
+16	@ 300 IN MX 5 bar.com.
+17	@ 300 IN MX 5 foo.com.
+18	testmx 300 IN MX 5 bar.com.
+19	testmx 300 IN MX 5 foo.com.
+20	testmx 300 IN MX 100 foo.com.
+21	testmx 300 IN MX 5 foo.com.
+22	testtxt 300 IN TXT "changed"
+23	testtxt 300 IN TXT "simple"
+24	www 300 IN A 1.1.1.1
+25	www 300 IN A 2.2.2.2
+26	www 300 IN A 3.3.3.3
+27	www 300 IN A 1.1.1.1
+28	www 300 IN A 2.2.2.2
+29	www 300 IN A 3.3.3.3
+30	testmx 300 IN MX 100 bar.com.
+31	testmx 300 IN MX 5 foo.com.
+32	www 300 IN A 1.1.1.1
+33	www 300 IN A 1.1.1.1
+34	testmx 300 IN MX 5 foo.com.
+35	testmx 300 IN MX 100 bar.com.
+36	testa 333 IN A 1.1.1.1
+37	testa 999 IN A 1.1.1.1
+38	@ 1000 IN A 8.8.8.8
+39	@ 500 IN A 8.8.8.8
+40	@ 666 IN A 8.8.8.8
+41	www 300 IN A 1.2.3.4
+42	www 300 IN A 2.2.2.2
+43	www 400 IN A 2.2.2.2
+44	www 300 IN A 5.6.7.8
+45	www 400 IN A 5.6.7.8
+46	www 400 IN A 5.6.7.8
+47	www 700 IN A 5.6.7.8
+48	www 700 IN A 1.2.3.4
+49	foo 300 IN A 1.2.3.4
+50	foo 300 IN MX 5 mx.google.com.
+51	foo 300 IN A 4.5.6.7
+52	foo 300 IN CNAME google.com.
+53	foo 300 IN A 1.2.3.4
+54	foo 300 IN CNAME google2.com.
+55	@ 300 IN A 1.2.3.4
+56	foo 300 IN CNAME dnscontroltest-digitalocean.com.
+57	@ 300 IN A 1.2.3.4
+58	foo 300 IN MX 8 dnscontroltest-digitalocean.com.
+59	nmx 300 IN A 1.2.3.3
+60	www 300 IN A 1.2.3.9
+61	nmx 300 IN MX 9 www.dnscontroltest-digitalocean.com.
+62	nmx 300 IN MX 3 nmx.dnscontroltest-digitalocean.com.
+63	@ 300 IN A 1.2.3.2
+64	www 300 IN A 1.2.3.8
+65	@ 300 IN MX 8 www.dnscontroltest-digitalocean.com.
+66	@ 300 IN MX 2 dnscontroltest-digitalocean.com.
+67	xyz 300 IN NS ns2.foo.com.
+68	xyz 300 IN NS ns1.foo.com.
+69	@ 300 IN A 1.2.3.4
+70	foo 300 IN NS dnscontroltest-digitalocean.com.
+71	@ 300 IN NS ns1.foo.com.
+72	@ 300 IN NS ns2.foo.com.
+73	foo254 300 IN TXT "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+74	foo255 300 IN TXT "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+75	foo256 300 IN TXT "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" "C"
+76	foosq 300 IN TXT "quo'te"
+77	foobt 300 IN TXT "blah`blah"
+78	foodq 300 IN TXT "in\"side"
+79	foodqs 300 IN TXT "\"left"
+80	foodqs 300 IN TXT "in\"ter\"ior"
+81	foodqs 300 IN TXT "right\""
+82	foosc1 300 IN TXT "semi;colon"
+83	foosc2 300 IN TXT "wssemi ; colon"
+84	foosp 300 IN TXT "with spaces"
+85	foows1 300 IN TXT "trailingws "
+86	foo 300 IN TXT "v=spf1 ip4:99.99.99.99 -all"
+87	bar 300 IN MX 5 bar.com.
+88	decoy 300 IN A 1.1.1.1
+89	decoy 300 IN A 2.2.2.2
+90	decoy 300 IN A 3.3.3.3
+91	foo 300 IN A 1.2.3.4
+92	foo 300 IN A 2.3.4.5
+93	foo 300 IN A 3.4.5.6
+94	foo 300 IN A 3.4.5.6
+95	bar 300 IN A 1.2.3.4
+96	foo 300 IN A 2.3.4.5
+97	foo 300 IN A 3.4.5.6
+98	foo 300 IN A 8.8.8.8
+99	foo 300 IN MX 20 bar.dnscontroltest-digitalocean.com.
+100	foo 300 IN MX 10 foo.dnscontroltest-digitalocean.com.
+101	foo 300 IN A 8.8.8.8
+102	xn--ndaaa 300 IN A 1.2.3.4
+103	xn--ndaaa 300 IN A 2.2.2.2
+104	xn--fiq228c 300 IN A 1.2.3.4
+105	a 300 IN CNAME xn--ndaaa.com.
+106	xn--o-0gab 300 IN CNAME xn--ndaaa.xn--vhquv.
+107	@ 300 IN CAA 0 issuewild ";"
+108	@ 300 IN CAA 0 issuewild "example.com"
+109	@ 300 IN CAA 0 issue "letsencrypt.org"
+110	@ 300 IN CAA 0 issuewild "letsencrypt.org"
+111	@ 300 IN CAA 0 issue "letsencrypt.org"
+112	@ 300 IN CAA 128 issue "letsencrypt.org"
+113	_sip._tcp 300 IN SRV 5 6 7 foo.com.
+114	_sip._tcp 300 IN SRV 52 6 7 foo.com.
+115	_sip._tcp 300 IN SRV 52 62 7 foo.com.
+116	_sip._tcp 300 IN SRV 52 62 72 foo.com.
+117	_sip._tcp 300 IN SRV 5 60 70 foo2.com.
+118	_sip._tcp 300 IN SRV 15 65 75 foo3.com.
+119	_sip._tcp 300 IN SRV 15 65 75 foo4.com.
+120	_sip._tcp 300 IN SRV 15 65 75 .
+121	_sip._tcp 333 IN SRV 5 6 7 foo.com.
+122	_sip._tcp 4400 IN SRV 5 6 7 foo.com.
+123	bar 300 IN A 5.5.5.5
+124	foo 300 IN A 1.2.3.4
+125	foo 300 IN A 2.3.4.5
+126	foo 300 IN TXT "simple"
+127	mail 300 IN CNAME ghs.googlehosted.com.
+128	@ 300 IN A 1.2.3.4
+129	@ 300 IN A 2.3.4.5
+130	@ 300 IN TXT "simple"
+131	bar 300 IN A 5.5.5.5
+132	mail 300 IN CNAME ghs.googlehosted.com.
+133	@ 300 IN A 2.2.2.2
+134	@ 300 IN TXT "asimple"
+135	foo 300 IN A 1.2.3.4
+136	foo 300 IN TXT "simple"
+137	bar.bat 300 IN A 5.5.5.5
+138	foo.bat 300 IN A 1.2.3.4
+139	foo.bat 300 IN A 2.3.4.5
+140	foo.bat 300 IN TXT "simple"
+141	mail.bat 300 IN CNAME ghs.googlehosted.com.
+142	foo 300 IN A 1.1.1.1
+143	foo 300 IN A 10.10.10.10
+144	foo 300 IN A 11.11.11.11
+145	foo 300 IN A 12.12.12.12
+146	foo 300 IN A 13.13.13.13
+147	foo 300 IN A 14.14.14.14
+148	foo 300 IN AAAA 2003:dd:d7ff::fe71:aaaa
+149	foo 300 IN MX 10 aspmx.l.google.com.
+150	foo 300 IN MX 20 alt1.aspmx.l.google.com.
+151	zzz 300 IN A 3.3.3.3
+152	zzz 300 IN A 4.4.4.4
+153	zzz 300 IN AAAA 2003:dd:d7ff::fe71:cccc
+154	bar 300 IN CNAME redact2.acm-validations.aws.
+155	foo 300 IN CNAME redact1.acm-validations.aws.
+156	dyndns-city1 300 IN A 91.42.1.1
+157	dyndns-city1 300 IN AAAA 2003:dd:d7ff::fe71:ce77
+158	dyndns-city2 300 IN A 91.42.1.2
+159	dyndns-city2 300 IN AAAA 2003:dd:d7ff::fe71:ce78
+160	testdefined 300 IN A 2.2.2.2
+161	testdefined 300 IN A 9.9.9.9
+162	testignore 300 IN A 8.8.8.8
+163	final 300 IN TXT "TestDNSProviders was successful!"
+164	final 300 IN TXT "TestDNSProviders was successful!"
+165	@ 300 IN NS ns1.example.com.
+166	@ 300 IN NS ns2.example.com.

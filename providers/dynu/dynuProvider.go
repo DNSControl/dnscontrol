@@ -1,7 +1,7 @@
 // Package dynu implements a DNSControl provider for Dynu (https://www.dynu.com).
 // API docs: https://www.dynu.com/en-US/Resources/API
 // Auth: set api_key in creds.json.
-// Module: github.com/DNSControl/dnscontrol/v4
+// Module: github.com/DNSControl/dnscontrol/v5
 package dynu
 
 import (
@@ -12,10 +12,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	dnsv1 "github.com/miekg/dns"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -92,7 +92,7 @@ func (d *dynuProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, 
 	}
 	var existing models.Records
 	for _, r := range records {
-		rc, err := toRc(r, dc.Name)
+		rc, err := toRc(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -183,40 +183,36 @@ func (d *dynuProvider) GetZones() ([]string, error) {
 // NOTE: r.Content from the Dynu API is the full zone-file line (hostname TTL class
 // type rdata), not just the rdata. We therefore always use the individual structured
 // fields returned by Dynu rather than r.Content.
-func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
+func toRc(r *dynuRecord, dc *models.DomainConfig) (*models.RecordConfig, error) {
 	switch r.RecordType {
 	case "SOA", "WCA":
 		return nil, nil
 	}
 
-	rc := &models.RecordConfig{
-		Type:     r.RecordType,
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-	rc.SetLabel(r.NodeName, domain)
-
+	domain := dc.Name
+	var rc *models.RecordConfig
 	var err error
+	label := dc.LabelFromShort(r.NodeName)
+	ttl := uint32(r.TTL)
 	switch r.RecordType {
 	case "A":
-		err = rc.SetTarget(r.IPv4Address)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeA, r.IPv4Address)
 	case "AAAA":
-		err = rc.SetTarget(r.IPv6Address)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, r.IPv6Address)
 	case "AFSDB":
-		err = rc.SetTarget(fmt.Sprintf("%d %s", intOrZero(r.SubType), ensureTrailingDot(r.Host)))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeAFSDB, fmt.Sprintf("%d %s", intOrZero(r.SubType), ensureTrailingDot(r.Host)))
 	case "CAA":
-		err = rc.SetTargetCAA(uint8(intOrZero(r.Flags)), r.Tag, r.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, intOrZero(r.Flags), r.Tag, r.Value)
 	case "CERT":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %d %s",
-			intOrZero(r.CertificateType), intOrZero(r.KeyTag), intOrZero(r.Algorithm), r.Certificate))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeCERT, fmt.Sprintf("%d %d %d %s", intOrZero(r.CertificateType), intOrZero(r.KeyTag), intOrZero(r.Algorithm), r.Certificate))
 	case "CNAME":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, ensureTrailingDot(r.Host))
 	case "DHCID":
-		err = rc.SetTarget(r.RecordData)
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeDHCID, r.RecordData)
 	case "DNAME":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDNAME, ensureTrailingDot(r.Host))
 	case "HINFO":
-		err = rc.SetTarget(fmt.Sprintf("%q %q", r.CPU, r.OperatingSystem))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeHINFO, fmt.Sprintf("%q %q", r.CPU, r.OperatingSystem))
 	case "HTTPS", "SVCB":
 		// Build rdata from individual structured Dynu fields.
 		// targetName is returned by Dynu with a trailing dot already.
@@ -224,14 +220,13 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		if target == "" {
 			target = "."
 		}
-		rdata := fmt.Sprintf("%d %s", intOrZero(r.SvcPriority), target)
-		if ps := svcParamsToString(r.SvcParams); ps != "" {
+		rdata := fmt.Sprintf("%d %s", intOrZero(r.SvcPriority), target) // ignore:legacyfield
+		if ps := svcParamsToString(r.SvcParams); ps != "" {             // ignore:legacyfield
 			rdata += " " + ps
 		}
-		err = rc.SetTargetSVCBString(domain, rdata)
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.RecordType, rdata)
 	case "KEY":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %d %s",
-			intOrZero(r.Flags), intOrZero(r.KeyProtocol), intOrZero(r.Algorithm), r.PublicKey))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeKEY, fmt.Sprintf("%d %d %d %s", intOrZero(r.Flags), intOrZero(r.KeyProtocol), intOrZero(r.Algorithm), r.PublicKey))
 	case "LOC":
 		// Parse DMS components from the content string (avoids miekg precision issues).
 		// Use Dynu's individual metric fields (r.Altitude, r.Size, r.Horizontal/
@@ -259,70 +254,61 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 		if r.VerticalPrecision != nil {
 			vp = float32(*r.VerticalPrecision)
 		}
-		err = rc.SetLOCParams(d1, m1, s1, ns, d2, m2, s2, ew, al, sz, hp, vp)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC, d1, m1, s1, ns, d2, m2, s2, ew, float64(al), sz, hp, vp)
 	case "MX":
 		host := r.Host
 		// Dynu stores null MX (priority 0, target ".") by returning the zone name as host.
 		if intOrZero(r.Priority) == 0 && (host == "" || strings.TrimSuffix(host, ".") == domain) {
 			host = "."
 		}
-		err = rc.SetTargetMX(uint16(intOrZero(r.Priority)), ensureTrailingDot(host))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, intOrZero(r.Priority), ensureTrailingDot(host))
 	case "NAPTR":
 		// Dynu stores the null replacement (".") as an empty string.
 		naptrReplacement := r.Replacement
 		if naptrReplacement == "" {
 			naptrReplacement = "."
 		}
-		err = rc.SetTargetNAPTR(uint16(intOrZero(r.Order)), uint16(intOrZero(r.Preference)),
-			r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR,
+			intOrZero(r.Order), intOrZero(r.Preference), r.NaptrFlags, r.Services, r.RegExp, ensureTrailingDot(naptrReplacement)) // ignore:legacyfield
 	case "NS":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, ensureTrailingDot(r.Host))
 	case "OPENPGPKEY":
-		err = rc.SetTarget(r.PublicKey)
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeOPENPGPKEY, r.PublicKey)
 	case "PTR":
-		err = rc.SetTarget(ensureTrailingDot(r.Host))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypePTR, ensureTrailingDot(r.Host))
 	case "RP":
-		// RP uses the modern rc.F-based system. We also set ZonefilePartial and
-		// Comparable directly so comparison works even if CopyFromLegacyFields
-		// cannot derive them (e.g. when the rtype package init has not run).
 		mbox := ensureTrailingDot(r.MailBox)
 		txt := ensureTrailingDot(r.TxtDomainName)
-		rc.F = &dnsv1.RP{
-			Mbox: mbox,
-			Txt:  txt,
-		}
-		rc.ZonefilePartial = mbox + " " + txt
-		rc.Comparable = rc.ZonefilePartial
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeRP, mbox, txt)
 	case "SMIMEA":
 		certHex, convErr := base64ToHex(r.CertificateAssociatedData)
 		if convErr != nil {
 			return nil, fmt.Errorf("SMIMEA certAssocData base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetSMIMEA(uint8(intOrZero(r.CertificateUsage)), uint8(intOrZero(r.Selector)), uint8(intOrZero(r.MatchingType)), certHex)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSMIMEA, intOrZero(r.CertificateUsage), intOrZero(r.Selector), intOrZero(r.MatchingType), certHex)
 	case "SPF", "TXT":
-		rc.Type = "TXT"
-		err = rc.SetTargetTXT(r.TextData)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.TextData)
 	case "SRV":
 		// Dynu stores the null SRV target (".") as an empty host string.
 		srvHost := r.Host
 		if srvHost == "" {
 			srvHost = "."
 		}
-		err = rc.SetTargetSRV(uint16(intOrZero(r.Priority)), uint16(intOrZero(r.Weight)), uint16(intOrZero(r.Port)), ensureTrailingDot(srvHost))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, intOrZero(r.Priority), intOrZero(r.Weight), intOrZero(r.Port), ensureTrailingDot(srvHost))
 	case "SSHFP":
 		fpHex, convErr := base64ToHex(r.FingerPrint)
 		if convErr != nil {
 			return nil, fmt.Errorf("SSHFP fingerprint base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetSSHFP(uint8(intOrZero(r.Algorithm)), uint8(intOrZero(r.FingerPrintType)), fpHex)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, intOrZero(r.Algorithm), intOrZero(r.FingerPrintType), fpHex)
 	case "TLSA":
 		certHex, convErr := base64ToHex(r.CertificateAssociatedData)
 		if convErr != nil {
 			return nil, fmt.Errorf("TLSA certAssocData base64 decode for %s: %w", r.Hostname, convErr)
 		}
-		err = rc.SetTargetTLSA(uint8(intOrZero(r.CertificateUsage)), uint8(intOrZero(r.Selector)), uint8(intOrZero(r.MatchingType)), certHex)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, intOrZero(r.CertificateUsage), intOrZero(r.Selector), intOrZero(r.MatchingType), certHex)
 	case "URI":
-		err = rc.SetTarget(fmt.Sprintf("%d %d %q", intOrZero(r.Priority), intOrZero(r.Weight), r.TargetURI))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeURI, fmt.Sprintf("%d %d %q", intOrZero(r.Priority), intOrZero(r.Weight), r.TargetURI))
 	default:
 		return nil, nil
 	}
@@ -330,6 +316,7 @@ func toRc(r *dynuRecord, domain string) (*models.RecordConfig, error) {
 	if err != nil {
 		return nil, fmt.Errorf("record %s %s: %w", r.RecordType, r.Hostname, err)
 	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -345,69 +332,57 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		TTL:        int(rc.TTL),
 		State:      true,
 	}
-	switch rc.Type {
-	case "A":
-		req.IPv4Address = rc.GetTargetField()
-	case "AAAA":
-		req.IPv6Address = rc.GetTargetField()
-	case "AFSDB":
+	switch rc.TypeNum {
+	case dnsv2.TypeA:
+		req.IPv4Address = rc.AsA().String()
+	case dnsv2.TypeAAAA:
+		req.IPv6Address = rc.AsAAAA().String()
+	case dnsv2.TypeAFSDB:
 		// Target: "<subtype> <hostname>."
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 2 {
-			st, _ := strconv.Atoi(parts[0])
-			req.SubType = &st
-			req.Host = strings.TrimSuffix(parts[1], ".")
-		}
-	case "CAA":
-		flags := int(rc.CaaFlag)
+		f := rc.AsAFSDB()
+		req.SubType = new(int(f.Subtype))
+		req.Host = strings.TrimSuffix(f.Hostname, ".")
+	case dnsv2.TypeCAA:
+		f := rc.AsCAA()
+		flags := int(f.Flag)
 		req.Flags = &flags
-		req.Tag = rc.CaaTag
-		req.Value = rc.GetTargetField()
-	case "CERT":
-		// Target: "<type> <keytag> <algorithm> <cert-base64>"
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 4 {
-			ct := parseCERTType(parts[0])
-			kt, _ := strconv.Atoi(parts[1])
-			algo, _ := strconv.Atoi(parts[2])
-			req.CertificateType = &ct
-			req.KeyTag = &kt
-			req.Algorithm = &algo
-			req.Certificate = parts[3]
-		}
-	case "CNAME", "NS", "PTR", "DNAME":
-		req.Host = strings.TrimSuffix(rc.GetTargetField(), ".")
-	case "DHCID":
+		req.Tag = f.Tag
+		req.Value = f.Value
+	case dnsv2.TypeCERT:
+		f := rc.AsCERT()
+		req.CertificateType = new(int(f.Type))
+		req.KeyTag = new(int(f.KeyTag))
+		req.Algorithm = new(int(f.Algorithm))
+		req.Certificate = f.Certificate
+
+	case dnsv2.TypeCNAME, dnsv2.TypeNS, dnsv2.TypePTR, dnsv2.TypeDNAME:
+		req.Host = strings.TrimSuffix(rc.GetRDATA().String(), ".")
+	case dnsv2.TypeDHCID:
 		// Target is the base64-encoded DHCID data (zone-file format == API format).
-		req.RecordData = rc.GetTargetField()
-	case "HINFO":
+		req.RecordData = rc.AsDHCID().Digest
+	case dnsv2.TypeHINFO:
 		// Target: "<"cpu"> <"os">" — parse the two quoted character-strings.
-		cpu, os := parseCharStrings(rc.GetTargetField())
-		req.CPU = cpu
-		req.OperatingSystem = os
-	case "HTTPS":
-		svcPrio := int(rc.SvcPriority)
-		req.SvcPriority = &svcPrio
+		req.CPU = rc.AsHINFO().Cpu
+		req.OperatingSystem = rc.AsHINFO().Os
+	case dnsv2.TypeHTTPS:
+		f := rc.AsHTTPS()
+		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
-		target := strings.TrimSuffix(rc.GetTargetField(), ".")
+		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(rc.SvcParams)
-	case "KEY":
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
+	case dnsv2.TypeKEY:
 		// Target: "<flags> <protocol> <algorithm> <pubkey-base64>"
-		parts := strings.Fields(rc.GetTargetField())
-		if len(parts) >= 4 {
-			f, _ := strconv.Atoi(parts[0])
-			proto, _ := strconv.Atoi(parts[1])
-			algo, _ := strconv.Atoi(parts[2])
-			req.Flags = &f
-			req.KeyProtocol = &proto
-			req.Algorithm = &algo
-			req.PublicKey = parts[3]
-		}
-	case "LOC":
+		f := rc.AsKEY()
+		req.Flags = new(int(f.Flags))
+		req.KeyProtocol = new(int(f.Protocol))
+		req.Algorithm = new(int(f.Algorithm))
+		req.PublicKey = f.PublicKey
+
+	case dnsv2.TypeLOC:
 		// Convert DNSControl's packed binary LOC fields to Dynu's decimal-degree format.
 		// The packed values are integer arc-milliseconds. We compute total ms first
 		// (avoiding intermediate fractional divisions), then add a +0.5 ms bias before
@@ -415,112 +390,113 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		// rounds to the correct integer millisecond (e.g. 71°06'18.000" rather than
 		// 71°06'17.999" when the float64 representation of 71.105 is slightly below exact).
 		const locMsPerDegree = 3600000.0
-		latHemi, latDeg, latMin, latSec := models.ReverseLatitude(rc.LocLatitude)
+		f := rc.AsLOC()
+		latHemi, latDeg, latMin, latSec := models.ReverseLatitude(f.Latitude)
 		latMs := float64(latDeg)*locMsPerDegree + float64(latMin)*60000 + latSec*1000
 		lat := (latMs + 0.5) / locMsPerDegree
 		if latHemi == "S" {
 			lat = -lat
 		}
-		lonHemi, lonDeg, lonMin, lonSec := models.ReverseLongitude(rc.LocLongitude)
+		lonHemi, lonDeg, lonMin, lonSec := models.ReverseLongitude(f.Longitude)
 		lonMs := float64(lonDeg)*locMsPerDegree + float64(lonMin)*60000 + lonSec*1000
 		lon := (lonMs + 0.5) / locMsPerDegree
 		if lonHemi == "W" {
 			lon = -lon
 		}
-		alt := models.ReverseAltitude(rc.LocAltitude)
-		size := models.ReverseENotationInt(rc.LocSize)
-		horizPre := models.ReverseENotationInt(rc.LocHorizPre)
-		vertPre := models.ReverseENotationInt(rc.LocVertPre)
+		alt := models.ReverseAltitude(f.Altitude)
+		size := models.ReverseENotationInt(f.Size)
+		horizPre := models.ReverseENotationInt(f.HorizPre)
+		vertPre := models.ReverseENotationInt(f.VertPre)
 		req.Latitude = &lat
 		req.Longitude = &lon
 		req.Altitude = &alt
 		req.Size = &size
 		req.HorizontalPrecision = &horizPre
 		req.VerticalPrecision = &vertPre
-	case "MX":
-		req.Host = strings.TrimSuffix(rc.GetTargetField(), ".")
-		pref := int(rc.MxPreference)
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		req.Host = strings.TrimSuffix(f.Mx, ".")
+		pref := int(f.Preference)
 		req.Priority = &pref
-	case "NAPTR":
-		order := int(rc.NaptrOrder)
-		pref := int(rc.NaptrPreference)
+	case dnsv2.TypeNAPTR:
+		f := rc.AsNAPTR()
+		order := int(f.Order)
+		pref := int(f.Preference)
 		req.Order = &order
 		req.Preference = &pref
-		req.NaptrFlags = rc.NaptrFlags
-		req.Services = rc.NaptrService
-		req.RegExp = rc.NaptrRegexp
+		req.NaptrFlags = f.Flags // ignore:legacyfield
+		req.Services = f.Service
+		req.RegExp = f.Regexp
 		// Preserve "." as-is (null replacement); strip trailing dot from real FQDNs.
-		naptrTarget := rc.GetTargetField()
+		naptrTarget := f.Service
 		if naptrTarget != "." {
 			naptrTarget = strings.TrimSuffix(naptrTarget, ".")
 		}
 		req.Replacement = naptrTarget
-	case "OPENPGPKEY":
+	case dnsv2.TypeOPENPGPKEY:
 		// Target is the base64-encoded public key (zone-file format == API format).
-		req.PublicKey = rc.GetTargetField()
-	case "RP":
-		// rc.ZonefilePartial contains "mailbox. txtdomain." set by FromStruct/CopyFromLegacyFields.
-		parts := strings.Fields(rc.ZonefilePartial)
-		if len(parts) >= 2 {
-			req.MailBox = strings.TrimSuffix(parts[0], ".")
-			req.TxtDomainName = strings.TrimSuffix(parts[1], ".")
-		}
-	case "SMIMEA":
-		usage := int(rc.SmimeaUsage)
-		selector := int(rc.SmimeaSelector)
-		mtype := int(rc.SmimeaMatchingType)
+		req.PublicKey = rc.AsOPENPGPKEY().PublicKey
+	case dnsv2.TypeRP:
+		rd := rc.AsRP()
+		req.MailBox = rd.Mbox
+		req.TxtDomainName = rd.Txt
+	case dnsv2.TypeSMIMEA:
+		f := rc.AsSMIMEA()
+		usage := int(f.Usage)
+		selector := int(f.Selector)
+		mtype := int(f.MatchingType)
 		req.CertificateUsage = &usage
 		req.Selector = &selector
 		req.MatchingType = &mtype
-		req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
-	case "SRV":
+		req.CertificateAssociatedData = hexToBase64(f.Certificate)
+	case dnsv2.TypeSRV:
 		// Preserve "." for the null target; strip trailing dot from real hostnames.
-		srvTarget := strings.TrimSuffix(rc.GetTargetField(), ".")
+		f := rc.AsSRV()
+		srvTarget := strings.TrimSuffix(f.Target, ".")
 		if srvTarget == "" {
 			srvTarget = "."
 		}
 		req.Host = srvTarget
-		prio := int(rc.SrvPriority)
-		weight := int(rc.SrvWeight)
-		port := int(rc.SrvPort)
+		prio := int(f.Priority)
+		weight := int(f.Weight)
+		port := int(f.Port)
 		req.Priority = &prio
 		req.Weight = &weight
 		req.Port = &port
-	case "SSHFP":
-		algo := int(rc.SshfpAlgorithm)
-		fptype := int(rc.SshfpFingerprint)
+	case dnsv2.TypeSSHFP:
+		f := rc.AsSSHFP()
+		algo := int(f.Algorithm)
+		fptype := int(f.Type)
 		req.Algorithm = &algo
 		req.FingerPrintType = &fptype
-		req.FingerPrint = hexToBase64(rc.GetTargetField())
-	case "SVCB":
-		svcPrio := int(rc.SvcPriority)
-		req.SvcPriority = &svcPrio
-		target := strings.TrimSuffix(rc.GetTargetField(), ".")
+		req.FingerPrint = hexToBase64(f.FingerPrint)
+	case dnsv2.TypeSVCB:
+		f := rc.AsSVCB()
+		req.SvcPriority = new(int(f.Priority)) // ignore:legacyfield
+		target := strings.TrimSuffix(f.Target, ".")
 		if target == "" {
 			target = "."
 		}
 		req.TargetName = target
-		req.SvcParams = parseSvcParams(rc.SvcParams)
-	case "TLSA":
-		usage := int(rc.TlsaUsage)
-		selector := int(rc.TlsaSelector)
-		mtype := int(rc.TlsaMatchingType)
+		req.SvcParams = parseSvcParams(models.Svcbv2ValueToString(f.Value)) // ignore:legacyfield
+	case dnsv2.TypeTLSA:
+		f := rc.AsTLSA()
+		usage := int(f.Usage)
+		selector := int(f.Selector)
+		mtype := int(f.MatchingType)
 		req.CertificateUsage = &usage
 		req.Selector = &selector
 		req.MatchingType = &mtype
-		req.CertificateAssociatedData = hexToBase64(rc.GetTargetField())
-	case "TXT":
+		req.CertificateAssociatedData = hexToBase64(f.Certificate)
+	case dnsv2.TypeTXT:
 		req.TextData = rc.GetTargetTXTJoined()
-	case "URI":
+	case dnsv2.TypeURI:
 		// Target: "<priority> <weight> "<target-uri>""
-		parts := strings.SplitN(strings.TrimSpace(rc.GetTargetField()), " ", 3)
-		if len(parts) >= 3 {
-			prio, _ := strconv.Atoi(parts[0])
-			wgt, _ := strconv.Atoi(parts[1])
-			req.Priority = &prio
-			req.Weight = &wgt
-			req.TargetURI = strings.Trim(parts[2], "\"")
-		}
+		f := rc.AsURI()
+		req.Priority = new(int(f.Priority))
+		req.Weight = new(int(f.Weight))
+		req.TargetURI = strings.Trim(f.Target, "\"")
+
 	}
 	return req
 }
@@ -590,39 +566,6 @@ func svcParamsToString(params []svcParam) string {
 	return strings.Join(parts, " ")
 }
 
-// // locRdata builds the LOC rdata string (rdata-only, no owner/TTL) from Dynu's
-// // decimal-degree and metre fields so it can be passed to SetTargetLOCString.
-// func locRdata(lat, lon, alt, size, horizPre, vertPre float64) string {
-// 	latD, latM, latS, latHemi := ddToDMS(lat, "N", "S")
-// 	lonD, lonM, lonS, lonHemi := ddToDMS(lon, "E", "W")
-// 	return fmt.Sprintf("%d %d %.3f %s %d %d %.3f %s %.2fm %.2fm %.2fm %.2fm",
-// 		latD, latM, latS, latHemi, lonD, lonM, lonS, lonHemi,
-// 		alt, size, horizPre, vertPre)
-// }
-
-// // ddToDMS converts a signed decimal-degrees value to unsigned degrees, minutes,
-// // seconds, and hemisphere strings (pos/neg for the two possible hemispheres).
-// func ddToDMS(dd float64, pos, neg string) (d uint8, m uint8, s float32, hemi string) {
-// 	hemi = pos
-// 	if dd < 0 {
-// 		hemi = neg
-// 		dd = -dd
-// 	}
-// 	d = uint8(dd)
-// 	minutesTotal := (dd - float64(d)) * 60.0
-// 	m = uint8(minutesTotal)
-// 	s = float32((minutesTotal - float64(m)) * 60.0)
-// 	return
-// }
-
-// // floatOrDefault returns *f if non-nil, otherwise the supplied default.
-// func floatOrDefault(f *float64, def float64) float64 {
-// 	if f == nil {
-// 		return def
-// 	}
-// 	return *f
-// }
-
 // extractRdata strips the owner name, TTL, optional class, and type from a full
 // DNS zone-file line ("hostname. TTL [IN] TYPE rdata") and returns just the rdata.
 // Returns "" if rtype is not found.
@@ -634,58 +577,6 @@ func extractRdata(content, rtype string) string {
 		}
 	}
 	return ""
-}
-
-// parseCharStrings splits a string containing one or two DNS character-strings
-// (optionally quoted) and returns the first two values.
-// Used for HINFO: "X86-64" "Linux" → ("X86-64", "Linux").
-func parseCharStrings(s string) (first, second string) {
-	s = strings.TrimSpace(s)
-	var parts []string
-	for len(s) > 0 {
-		s = strings.TrimLeft(s, " \t")
-		if len(s) == 0 {
-			break
-		}
-		if s[0] == '"' {
-			end := strings.Index(s[1:], "\"")
-			if end < 0 {
-				parts = append(parts, s[1:])
-				break
-			}
-			parts = append(parts, s[1:end+1])
-			s = s[end+2:]
-		} else {
-			idx := strings.IndexAny(s, " \t")
-			if idx < 0 {
-				parts = append(parts, s)
-				break
-			}
-			parts = append(parts, s[:idx])
-			s = s[idx:]
-		}
-	}
-	if len(parts) >= 1 {
-		first = parts[0]
-	}
-	if len(parts) >= 2 {
-		second = parts[1]
-	}
-	return
-}
-
-// parseCERTType converts a CERT type name or number string to its integer value.
-func parseCERTType(s string) int {
-	named := map[string]int{
-		"PKIX": 1, "SPKI": 2, "PGP": 3, "IPKIX": 4,
-		"ISPKI": 5, "IPGP": 6, "ACPKIX": 7, "IACPKIX": 8,
-		"URI": 253, "OID": 254,
-	}
-	if v, ok := named[strings.ToUpper(s)]; ok {
-		return v
-	}
-	v, _ := strconv.Atoi(s)
-	return v
 }
 
 // parseLOCRdata parses a LOC record rdata string (the part after the type label)

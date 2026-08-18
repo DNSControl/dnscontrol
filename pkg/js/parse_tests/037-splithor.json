@@ -18,26 +18,31 @@
       "dnsProviders": {
         "otherconfig": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_uniquename": "example.com"
-      },
       "name": "example.com",
       "records": [
         {
+          "comparablev3": "3.3.3.3",
           "filepos": "[line:7:5]",
           "name": "main",
-          "target": "3.3.3.3",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "3.3.3.3"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "33.33.33.33",
           "filepos": "[line:19:5]",
           "name": "www",
-          "target": "33.33.33.33",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "33.33.33.33"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -47,27 +52,31 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_tag": "inside",
-        "dnscontrol_uniquename": "example.com!inside"
-      },
       "name": "example.com",
       "records": [
         {
+          "comparablev3": "1.1.1.1",
           "filepos": "[line:11:5]",
           "name": "main",
-          "target": "1.1.1.1",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "1.1.1.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "11.11.11.11",
           "filepos": "[line:23:5]",
           "name": "main",
-          "target": "11.11.11.11",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "11.11.11.11"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -78,20 +87,19 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.com",
-        "dnscontrol_nameunicode": "example.com",
-        "dnscontrol_tag": "outside",
-        "dnscontrol_uniquename": "example.com!outside"
-      },
       "name": "example.com",
       "records": [
         {
+          "comparablev3": "8.8.8.8",
           "filepos": "[line:15:5]",
           "name": "main",
-          "target": "8.8.8.8",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "8.8.8.8"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -102,26 +110,31 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_uniquename": "example.net"
-      },
       "name": "example.net",
       "records": [
         {
+          "comparablev3": "203.0.113.12",
           "filepos": "[line:31:5]",
           "name": "main",
-          "target": "203.0.113.12",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.12"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.1",
           "filepos": "[line:27:5]",
           "name": "www",
-          "target": "203.0.113.1",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "203.0.113.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -131,34 +144,43 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_tag": "inside",
-        "dnscontrol_uniquename": "example.net!inside"
-      },
       "name": "example.net",
       "records": [
         {
+          "comparablev3": "192.0.2.1",
           "filepos": "[line:36:5]",
           "name": "main",
-          "target": "192.0.2.1",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "192.0.2.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.12",
           "filepos": "[line:31:5]",
           "name": "main",
-          "target": "203.0.113.12",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.12"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.1",
           "filepos": "[line:27:5]",
           "name": "www",
-          "target": "203.0.113.1",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "203.0.113.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -169,34 +191,43 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example.net",
-        "dnscontrol_nameunicode": "example.net",
-        "dnscontrol_tag": "outside",
-        "dnscontrol_uniquename": "example.net!outside"
-      },
       "name": "example.net",
       "records": [
         {
+          "comparablev3": "203.0.113.1",
           "filepos": "[line:41:5]",
           "name": "main",
-          "target": "203.0.113.1",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.12",
           "filepos": "[line:31:5]",
           "name": "main",
-          "target": "203.0.113.12",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.12"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.1",
           "filepos": "[line:27:5]",
           "name": "www",
-          "target": "203.0.113.1",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "203.0.113.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -207,26 +238,31 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "empty.example.net",
-        "dnscontrol_nameunicode": "empty.example.net",
-        "dnscontrol_uniquename": "empty.example.net"
-      },
       "name": "empty.example.net",
       "records": [
         {
+          "comparablev3": "203.0.113.22",
           "filepos": "[line:49:5]",
           "name": "main",
-          "target": "203.0.113.22",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.22"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.2",
           "filepos": "[line:45:5]",
           "name": "www",
-          "target": "203.0.113.2",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "203.0.113.2"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
@@ -236,26 +272,31 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "example-b.net",
-        "dnscontrol_nameunicode": "example-b.net",
-        "dnscontrol_uniquename": "example-b.net!"
-      },
       "name": "example-b.net",
       "records": [
         {
+          "comparablev3": "203.0.113.12",
           "filepos": "[line:57:5]",
           "name": "main",
-          "target": "203.0.113.12",
+          "name_unicode": "main",
+          "rdata": {
+            "Addr": "203.0.113.12"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.1",
           "filepos": "[line:53:5]",
           "name": "www",
-          "target": "203.0.113.1",
+          "name_unicode": "www",
+          "rdata": {
+            "Addr": "203.0.113.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",

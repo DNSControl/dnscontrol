@@ -2,13 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
-	"github.com/andreyvit/diff"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestFormatTypes(t *testing.T) {
@@ -35,9 +33,11 @@ func testFormat(t *testing.T, domain, format string) {
 
 	outfile, err := os.CreateTemp(t.TempDir(), outputFiletmpl)
 	if err != nil {
-		log.Fatal(fmt.Errorf("gz can't TempFile %q: %w", outputFiletmpl, err))
+		t.Fatalf("gz can't TempFile %q: %v", outputFiletmpl, err)
 	}
-	defer os.Remove(outfile.Name())
+	if err := outfile.Close(); err != nil {
+		t.Fatalf("gz can't close TempFile %q: %v", outfile.Name(), err)
+	}
 
 	// Convert test data to the experiment output.
 	gzargs := GetZoneArgs{
@@ -52,27 +52,27 @@ func testFormat(t *testing.T, domain, format string) {
 	// Read the zonefile and convert
 	err = GetZone(gzargs)
 	if err != nil {
-		log.Fatal(fmt.Errorf("can't GetZone: %w", err))
+		t.Fatalf("can't GetZone: %v", err)
 	}
 
 	// Read the actual result:
 	got, err := os.ReadFile(outfile.Name())
 	if err != nil {
-		log.Fatal(fmt.Errorf("can't read actuals %q: %w", outfile.Name(), err))
+		t.Fatalf("can't read actuals %q: %v", outfile.Name(), err)
 	}
 
 	// Read the expected result
 	want, err := os.ReadFile(expectedFilename)
 	if err != nil {
-		log.Fatal(fmt.Errorf("can't read expected %q: %w", expectedFilename, err))
+		t.Fatalf("can't read expected %q: %v", expectedFilename, err)
 	}
 
-	if w, g := string(want), string(got); w != g {
+	if diff := cmp.Diff(string(got), string(want)); diff != "" {
 		// If the test fails, output a file showing "got"
 		err = os.WriteFile(expectedFilename+".ACTUAL", got, 0o644)
 		if err != nil {
-			log.Fatal(err)
+			t.Fatalf("can't write actual output: %v", err)
 		}
-		t.Errorf("testFormat mismatch (-got +want):\n%s", diff.LineDiff(g, w))
+		t.Errorf("testFormat mismatch (-got +want):\n%s", diff)
 	}
 }

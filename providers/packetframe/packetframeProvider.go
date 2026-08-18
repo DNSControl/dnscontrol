@@ -6,20 +6,25 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // packetframeProvider is the handle for this provider.
 type packetframeProvider struct {
+	observer    providers.ConversionObserver
 	client      *http.Client
 	baseURL     *url.URL
 	token       string
 	domainIndex map[string]zoneInfo
+}
+
+func (api *packetframeProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	api.observer = observer
 }
 
 // newPacketframe creates the provider.
@@ -95,10 +100,12 @@ func (api *packetframeProvider) GetZoneRecords(dc *models.DomainConfig) (models.
 		return nil, fmt.Errorf("could not load records for domain %q", domain)
 	}
 
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 
 	for i := range records {
+		before := providers.BeginToRC(api.observer, "toRc", &records[i])
 		existingRecords[i], err = toRc(dc, &records[i])
+		providers.EndToRC(api.observer, "toRc", before, &records[i], models.Records{existingRecords[i]}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -114,60 +121,66 @@ func (api *packetframeProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 		return nil, 0, fmt.Errorf("no such zone %q in Packetframe account", dc.Name)
 	}
 
-	toReport, create, dels, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, m := range create {
-		req, err := toReq(zone.ID, m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				_, err := api.createRecord(req)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, m := range dels {
-		original := m.Existing.Original.(*domainRecord)
-		if original.ID == "0" { // Skip the default nameservers
-			continue
-		}
+		case diff2.CREATE:
+			before := providers.BeginToNative(api.observer, "toReq", change.New)
+			req, err := toReq(zone.ID, change.New[0])
+			providers.EndToNative(api.observer, "toReq", before, change.New, req, err)
+			if err != nil {
+				return nil, 0, err
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					_, err := api.createRecord(req)
+					return err
+				},
+			})
 
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				err := api.deleteRecord(zone.ID, original.ID)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+		case diff2.DELETE:
+			original := change.Old[0].Original.(*domainRecord)
+			if original.ID == "0" { // Skip the default nameservers
+				continue
+			}
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return api.deleteRecord(zone.ID, original.ID)
+				},
+			})
 
-	for _, m := range modify {
-		original := m.Existing.Original.(*domainRecord)
-		if original.ID == "0" { // Skip the default nameservers
-			continue
-		}
+		case diff2.CHANGE:
+			original := change.Old[0].Original.(*domainRecord)
+			if original.ID == "0" { // Skip the default nameservers
+				continue
+			}
+			before := providers.BeginToNative(api.observer, "toReq", change.New)
+			req, err := toReq(zone.ID, change.New[0])
+			providers.EndToNative(api.observer, "toReq", before, change.New, req, err)
+			if err != nil {
+				return nil, 0, err
+			}
+			req.ID = original.ID
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return api.modifyRecord(req)
+				},
+			})
 
-		req, _ := toReq(zone.ID, m.Desired)
-		req.ID = original.ID
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				err := api.modifyRecord(req)
-				return err
-			},
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
@@ -181,50 +194,33 @@ func toReq(zoneID string, rc *models.RecordConfig) (*domainRecord, error) {
 		Zone:  zoneID,
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "PTR", "TXT", "CNAME", "NS":
-		req.Value = rc.GetTargetField()
-	case "MX":
-		req.Value = fmt.Sprintf("%d %s", rc.MxPreference, rc.GetTargetField())
-	case "SRV":
-		req.Value = fmt.Sprintf("%d %d %d %s", rc.SrvPriority, rc.SrvWeight, rc.SrvPort, rc.GetTargetField())
+	switch rc.TypeNum {
+	case dnsv2.TypeTXT:
+		req.Value = rc.GetTargetTXTJoined()
 	default:
-		return nil, fmt.Errorf("packetframe.toReq rtype %q unimplemented", rc.Type)
+		req.Value = rc.GetRDATA().String()
 	}
 
 	return req, nil
 }
 
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
-
 	label := strings.TrimSuffix(r.Label, dc.Name+".")
 	label = strings.TrimSuffix(label, ".")
-	if label == "" {
-		label = "@"
-	}
-	rc.SetLabel(label, dc.Name)
+	label = dc.LabelFromShort(label)
+	ttl := uint32(r.TTL)
 
+	var rc *models.RecordConfig
 	var err error
-	switch rtype := r.Type; rtype { // #rtype_variations
+	switch rtype := r.Type; rtype {
 	case "TXT":
-		err = rc.SetTargetTXT(r.Value)
-	case "SRV":
-		spl := strings.Split(r.Value, " ")
-		prio, _ := strconv.ParseUint(spl[0], 10, 16)
-		weight, _ := strconv.ParseUint(spl[1], 10, 16)
-		port, _ := strconv.ParseUint(spl[2], 10, 16)
-		err = rc.SetTargetSRV(uint16(prio), uint16(weight), uint16(port), spl[3])
-	case "MX":
-		spl := strings.Split(r.Value, " ")
-		prio, _ := strconv.ParseUint(spl[0], 10, 16)
-		err = rc.SetTargetMX(uint16(prio), spl[1])
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Value)
 	default:
-		err = rc.SetTarget(r.Value)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Value)
 	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
 	return rc, err
 }

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "dnscontroltest-r53.com",
+      "to_rc": [
+        "nativeToRecords"
+      ]
+    }
+  ]
+}

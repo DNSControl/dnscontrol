@@ -7,10 +7,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/softlayer/softlayer-go/datatypes"
 	"github.com/softlayer/softlayer-go/filter"
 	"github.com/softlayer/softlayer-go/services"
@@ -76,7 +77,7 @@ func (s *softlayerProvider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 		return nil, err
 	}
 
-	actual, err := s.getExistingRecords(domain)
+	actual, err := s.getExistingRecords(dc, domain.ResourceRecords)
 	if err != nil {
 		return nil, err
 	}
@@ -91,34 +92,40 @@ func (s *softlayerProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, a
 		return nil, 0, err
 	}
 
-	toReport, create, deletes, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(actual)
+	changes, actualChangeCount, err := diff2.ByRecord(actual, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
-	for _, del := range deletes {
-		existing := del.Existing.Original.(datatypes.Dns_Domain_ResourceRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: del.String(),
-			F:   s.deleteRecordFunc(*existing.Id),
-		})
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, cre := range create {
-		corrections = append(corrections, &models.Correction{
-			Msg: cre.String(),
-			F:   s.createRecordFunc(cre.Desired, domain),
-		})
-	}
+		case diff2.CREATE:
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.createRecordFunc(change.New[0], domain),
+			})
 
-	for _, mod := range modify {
-		existing := mod.Existing.Original.(datatypes.Dns_Domain_ResourceRecord)
-		corrections = append(corrections, &models.Correction{
-			Msg: mod.String(),
-			F:   s.updateRecordFunc(&existing, mod.Desired),
-		})
+		case diff2.DELETE:
+			existing := change.Old[0].Original.(datatypes.Dns_Domain_ResourceRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.deleteRecordFunc(*existing.Id),
+			})
+
+		case diff2.CHANGE:
+			existing := change.Old[0].Original.(datatypes.Dns_Domain_ResourceRecord)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F:   s.updateRecordFunc(&existing, change.New[0]),
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	return corrections, actualChangeCount, nil
@@ -144,37 +151,32 @@ func (s *softlayerProvider) getDomain(name *string) (*datatypes.Dns_Domain, erro
 	return &domains[0], nil
 }
 
-func (s *softlayerProvider) getExistingRecords(domain *datatypes.Dns_Domain) (models.Records, error) {
-	actual := []*models.RecordConfig{}
+func (s *softlayerProvider) getExistingRecords(dc *models.DomainConfig, resourceRecords []datatypes.Dns_Domain_ResourceRecord) (models.Records, error) {
+	actual := models.Records{}
 
-	for _, record := range domain.ResourceRecords {
+	for _, record := range resourceRecords {
 		recType := strings.ToUpper(*record.Type)
 
 		if recType == "SOA" {
 			continue
 		}
 
-		recConfig := &models.RecordConfig{
-			Type:     recType,
-			TTL:      uint32(*record.Ttl),
-			Original: record,
-		}
-		if err := recConfig.SetTarget(*record.Data); err != nil {
-			return nil, err
-		}
-
+		ttl := uint32(*record.Ttl)
+		label := dc.LabelFromShort(*record.Host)
+		var recConfig *models.RecordConfig
+		var err error
 		switch recType {
 		case "SRV":
 			service, protocol := "", "_tcp"
-
+			weight, port, priority := 0, 0, 0
 			if record.Weight != nil {
-				recConfig.SrvWeight = uint16(*record.Weight)
+				weight = *record.Weight
 			}
 			if record.Port != nil {
-				recConfig.SrvPort = uint16(*record.Port)
+				port = *record.Port
 			}
 			if record.Priority != nil {
-				recConfig.SrvPriority = uint16(*record.Priority)
+				priority = *record.Priority
 			}
 			if record.Protocol != nil {
 				protocol = *record.Protocol
@@ -182,23 +184,23 @@ func (s *softlayerProvider) getExistingRecords(domain *datatypes.Dns_Domain) (mo
 			if record.Service != nil {
 				service = *record.Service
 			}
-			recConfig.SetLabel(fmt.Sprintf("%s.%s", service, strings.ToLower(protocol)), *domain.Name)
+			label = dc.LabelFromShort(fmt.Sprintf("%s.%s", service, strings.ToLower(protocol)))
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, priority, weight, port, *record.Data)
 		case "TXT":
-			// OLD: recConfig.TxtStrings = append(recConfig.TxtStrings, *record.Data)
-			if err := recConfig.SetTargetTXTs(append(recConfig.GetTargetTXTSegmented(), *record.Data)); err != nil {
-				return nil, err
-			}
-			// NB(tlim) The above code seems too complex.  Can it be simplied to this?
-			// recConfig.SetTargetTXT(*record.Data)
-			fallthrough
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, *record.Data)
 		case "MX":
+			preference := 0
 			if record.MxPriority != nil {
-				recConfig.MxPreference = uint16(*record.MxPriority)
+				preference = *record.MxPriority
 			}
-			fallthrough
+			recConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, preference, *record.Data)
 		default:
-			recConfig.SetLabel(*record.Host, *domain.Name)
+			recConfig, err = dc.NewRecordConfig(label, ttl, recType, *record.Data)
 		}
+		if err != nil {
+			return nil, err
+		}
+		recConfig.Original = record
 
 		actual = append(actual, recConfig)
 	}
@@ -207,9 +209,13 @@ func (s *softlayerProvider) getExistingRecords(domain *datatypes.Dns_Domain) (mo
 }
 
 func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domain *datatypes.Dns_Domain) func() error {
-	ttl, preference, domainID := verifyMinTTL(int(desired.TTL)), int(desired.MxPreference), *domain.Id
-	weight, priority, port := int(desired.SrvWeight), int(desired.SrvPriority), int(desired.SrvPort)
-	host, data, newType := desired.GetLabel(), desired.GetTargetField(), desired.Type
+
+	ttl := verifyMinTTL(int(desired.TTL))
+	domainID := *domain.Id
+
+	host := desired.GetLabel()
+	newType := desired.Type
+
 	var err error
 
 	srvRegexp := regexp.MustCompile(`^_(?P<Service>\w+)\.\_(?P<Protocol>\w+)$`)
@@ -219,7 +225,6 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 			DomainId: &domainID,
 			Ttl:      &ttl,
 			Type:     &newType,
-			Data:     &data,
 			Host:     &host,
 		}
 
@@ -227,36 +232,38 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 		case "MX":
 			service := services.GetDnsDomainResourceRecordMxTypeService(s.Session)
 
-			newRecord.MxPriority = &preference
+			f := desired.AsMX()
+			newRecord.MxPriority = new(int(f.Preference))
+			newRecord.Data = new(f.Mx)
 
 			newMx := datatypes.Dns_Domain_ResourceRecord_MxType{
 				Dns_Domain_ResourceRecord: newRecord,
 			}
-
 			_, err = service.CreateObject(&newMx)
 
 		case "SRV":
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)
-			result := srvRegexp.FindStringSubmatch(host)
 
+			result := srvRegexp.FindStringSubmatch(host)
 			if len(result) != 3 {
 				return fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", host)
 			}
-
 			serviceName, protocol := result[1], strings.ToLower(result[2])
 
+			f := desired.AsSRV()
+			newRecord.Data = new(f.Target)
 			newSrv := datatypes.Dns_Domain_ResourceRecord_SrvType{
 				Dns_Domain_ResourceRecord: newRecord,
 				Service:                   &serviceName,
-				Port:                      &port,
-				Priority:                  &priority,
+				Port:                      new(int(f.Port)),
+				Priority:                  new(int(f.Priority)),
 				Protocol:                  &protocol,
-				Weight:                    &weight,
+				Weight:                    new(int(f.Weight)),
 			}
-
 			_, err = service.CreateObject(&newSrv)
 
 		default:
+			newRecord.Data = new(desired.GetRDATA().String())
 			service := services.GetDnsDomainResourceRecordService(s.Session)
 			_, err = service.CreateObject(&newRecord)
 		}
@@ -277,15 +284,16 @@ func (s *softlayerProvider) deleteRecordFunc(resID int) func() error {
 }
 
 func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_ResourceRecord, desired *models.RecordConfig) func() error {
-	ttl, preference := verifyMinTTL(int(desired.TTL)), int(desired.MxPreference)
-	priority, weight, port := int(desired.SrvPriority), int(desired.SrvWeight), int(desired.SrvPort)
+	ttl := verifyMinTTL(int(desired.TTL))
 
 	return func() error {
 		changes := false
 		var err error
 
-		switch desired.Type {
-		case "MX":
+		switch desired.TypeNum {
+		case dnsv2.TypeMX:
+			df := desired.AsMX()
+			preference := int(df.Preference)
 			service := services.GetDnsDomainResourceRecordMxTypeService(s.Session)
 			updated := datatypes.Dns_Domain_ResourceRecord_MxType{}
 
@@ -295,7 +303,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.AsMX().Mx
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true
@@ -317,7 +325,9 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 
 			_, err = service.Id(*existing.Id).EditObject(&updated)
 
-		case "SRV":
+		case dnsv2.TypeSRV:
+			df := desired.AsSRV()
+			priority, weight, port := int(df.Priority), int(df.Weight), int(df.Port)
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)
 			updated := datatypes.Dns_Domain_ResourceRecord_SrvType{}
 
@@ -327,7 +337,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.AsSRV().Target
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true
@@ -372,7 +382,7 @@ func (s *softlayerProvider) updateRecordFunc(existing *datatypes.Dns_Domain_Reso
 				changes = true
 			}
 
-			target := desired.GetTargetField()
+			target := desired.GetRDATA().String()
 			if target != *existing.Data {
 				updated.Data = &target
 				changes = true

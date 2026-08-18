@@ -8,10 +8,10 @@ import (
 
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 /*
@@ -28,7 +28,8 @@ RouterOS DNS is a flat list of static entries (no zone concept).
 The provider filters records by the domain suffix to emulate zones.
 
 Supported record types: A, AAAA, CNAME, MX, NS, SRV, TXT
-Custom record type: MIKROTIK_FWD (RouterOS FWD entries for conditional forwarding)
+Custom record types: MIKROTIK_FWD (RouterOS FWD entries for conditional
+forwarding), MIKROTIK_NXDOMAIN, and MIKROTIK_FORWARDER.
 */
 
 var features = providers.DocumentationNotes{
@@ -199,7 +200,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	domain := dc.Name
 
 	if domain == ForwarderZone {
-		return p.getForwarderRecords()
+		return p.getForwarderRecords(dc)
 	}
 
 	nativeRecords, err := p.getAllRecords()
@@ -225,7 +226,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		}
 
-		rcs, err := nativeToRecords(nr, domain)
+		rcs, err := nativeToRecords(nr, dc)
 		if err != nil {
 			printer.Warnf("mikrotik: skipping record %q (type=%s): %v\n", nr.Name, nr.Type, err)
 			continue
@@ -236,7 +237,7 @@ func (p *mikrotikProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return records, nil
 }
 
-func (p *mikrotikProvider) getForwarderRecords() (models.Records, error) {
+func (p *mikrotikProvider) getForwarderRecords(dc *models.DomainConfig) (models.Records, error) {
 	fwds, err := p.getAllForwarders()
 	if err != nil {
 		return nil, fmt.Errorf("mikrotik: failed to list forwarders: %w", err)
@@ -247,7 +248,7 @@ func (p *mikrotikProvider) getForwarderRecords() (models.Records, error) {
 		if fwd.Disabled == "true" {
 			continue
 		}
-		records = append(records, forwarderToRecord(fwd))
+		records = append(records, forwarderToRecord(dc, fwd))
 	}
 	return records, nil
 }

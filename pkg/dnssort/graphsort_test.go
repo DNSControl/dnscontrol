@@ -3,9 +3,9 @@ package dnssort_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph/testutils"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnssort"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph/testutils"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnssort"
 )
 
 func Test_graphsort(t *testing.T) {
@@ -32,6 +32,22 @@ func Test_graphsort(t *testing.T) {
 			[]string{
 				"example.com",
 				"www.example.com",
+			},
+			[]string{},
+		),
+	)
+
+	t.Run("Multi-round dependency chain resolves when tail is last",
+		executeGraphSort(
+			[]testutils.StubRecord{
+				{NameFQDN: "d.example.com", Dependencies: []dnsgraph.Dependency{{Type: dnsgraph.ForwardDependency, NameFQDN: "e.example.com"}}},
+				{NameFQDN: "e.example.com", Dependencies: []dnsgraph.Dependency{}},
+				{NameFQDN: "l.example.com", Dependencies: []dnsgraph.Dependency{{Type: dnsgraph.ForwardDependency, NameFQDN: "d.example.com"}}},
+			},
+			[]string{
+				"e.example.com",
+				"d.example.com",
+				"l.example.com",
 			},
 			[]string{},
 		),

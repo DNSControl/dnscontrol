@@ -3,47 +3,41 @@ package bind
 import (
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/soautil"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/soautil"
 )
 
-func makeSoa(origin string, defSoa *SoaDefaults, existing, desired *models.RecordConfig) (*models.RecordConfig, uint32) {
-	// Create a SOA record.  Take data from desired, existing, default,
-	// or hardcoded defaults.
-	soaRec := models.RecordConfig{}
-	soaRec.SetLabel("@", origin)
-
-	if defSoa == nil {
-		defSoa = &SoaDefaults{}
-	}
-	if existing == nil {
-		existing = &models.RecordConfig{}
+func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {
+	// Exit if SOA already exists.
+	for _, rec := range dc.Records {
+		if rec.Type == "SOA" {
+			return
+		}
 	}
 
-	if desired == nil {
-		desired = &models.RecordConfig{}
-	}
-
-	soaMail := firstNonNull(desired.SoaMbox, existing.SoaMbox, defSoa.Mbox, "DEFAULT_NOT_SET.")
+	soaMail := firstNonNull(defaultSoaValues.Mbox, "default_not_set.")
 	if strings.Contains(soaMail, "@") {
 		soaMail = soautil.RFC5322MailToBind(soaMail)
 	}
 
-	soaRec.TTL = firstNonZero(desired.TTL, defSoa.TTL, existing.TTL, models.DefaultTTL)
-	err := soaRec.SetTargetSOA(
-		firstNonNull(desired.GetTargetField(), existing.GetTargetField(), defSoa.Ns, "DEFAULT_NOT_SET."),
+	soaRec, err := dc.NewRecordConfig(
+		"@",
+		firstNonZero(defaultSoaValues.TTL, models.DefaultTTL),
+		dnsv2.TypeSOA,
+		firstNonNull(defaultSoaValues.Ns, "default_not_set."),
 		soaMail,
-		firstNonZero(desired.SoaSerial, existing.SoaSerial, defSoa.Serial, 1),
-		firstNonZero(desired.SoaRefresh, existing.SoaRefresh, defSoa.Refresh, 3600),
-		firstNonZero(desired.SoaRetry, existing.SoaRetry, defSoa.Retry, 600),
-		firstNonZero(desired.SoaExpire, existing.SoaExpire, defSoa.Expire, 604800),
-		firstNonZero(desired.SoaMinttl, existing.SoaMinttl, defSoa.Minttl, 1440),
+		firstNonZero(defaultSoaValues.Serial, 1),
+		firstNonZero(defaultSoaValues.Refresh, 3600),
+		firstNonZero(defaultSoaValues.Retry, 600),
+		firstNonZero(defaultSoaValues.Expire, 604800),
+		firstNonZero(defaultSoaValues.Minttl, 1440),
 	)
 	if err != nil {
 		panic(err) // Should never happen.
 	}
 
-	return &soaRec, generateSerial(soaRec.SoaSerial)
+	dc.AddRecordConfig(soaRec)
 }
 
 func firstNonNull(items ...string) string {
