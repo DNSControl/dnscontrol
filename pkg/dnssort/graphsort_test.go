@@ -37,6 +37,22 @@ func Test_graphsort(t *testing.T) {
 		),
 	)
 
+	t.Run("Multi-round dependency chain resolves when tail is last",
+		executeGraphSort(
+			[]testutils.StubRecord{
+				{NameFQDN: "d.example.com", Dependencies: []dnsgraph.Dependency{{Type: dnsgraph.ForwardDependency, NameFQDN: "e.example.com"}}},
+				{NameFQDN: "e.example.com", Dependencies: []dnsgraph.Dependency{}},
+				{NameFQDN: "l.example.com", Dependencies: []dnsgraph.Dependency{{Type: dnsgraph.ForwardDependency, NameFQDN: "d.example.com"}}},
+			},
+			[]string{
+				"e.example.com",
+				"d.example.com",
+				"l.example.com",
+			},
+			[]string{},
+		),
+	)
+
 	t.Run("Use wildcards",
 		executeGraphSort(
 			[]testutils.StubRecord{
