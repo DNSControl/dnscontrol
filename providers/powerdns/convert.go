@@ -76,7 +76,7 @@ func newPowerDNSSVCBAutoHintRecord(dc *models.DomainConfig, label string, ttl ui
 	if err != nil {
 		return nil, err
 	}
-	rc.Metadata["powerdnsOriginalSVCBParams"] = strings.Join(fields[2:], " ")
+	rc.Metadata[powerdnsOriginalSVCBParams] = strings.Join(fields[2:], " ")
 
 	return rc, nil
 }
