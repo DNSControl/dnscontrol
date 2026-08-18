@@ -428,7 +428,7 @@ func toReq(rc *models.RecordConfig) *dynuRecord {
 		req.Services = f.Service
 		req.RegExp = f.Regexp
 		// Preserve "." as-is (null replacement); strip trailing dot from real FQDNs.
-		naptrTarget := f.Service
+		naptrTarget := f.Replacement
 		if naptrTarget != "." {
 			naptrTarget = strings.TrimSuffix(naptrTarget, ".")
 		}
