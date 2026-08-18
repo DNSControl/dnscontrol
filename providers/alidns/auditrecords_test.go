@@ -42,9 +42,8 @@ func TestLabelConstraint(t *testing.T) {
 }
 
 func TestAuditRecordsRejectsNonChineseIDNLabel(t *testing.T) {
-	rc := &models.RecordConfig{Type: "A"}
-	rc.SetLabel("xn--ndaaa", "example.com")
-	rc.MustSetTarget("1.2.3.4")
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("xn--ndaaa", 0, dnsv2.TypeA, "1.2.3.4")
 
 	errs := AuditRecords([]*models.RecordConfig{rc})
 	if len(errs) != 1 {
