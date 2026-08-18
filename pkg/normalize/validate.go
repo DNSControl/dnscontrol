@@ -31,7 +31,8 @@ func checkTarget(target string) error {
 	return nil
 }
 
-// validateRecordTypes list of valid rec.Type values. Returns true if this is a real DNS record type, false means it is a pseudo-type used internally.
+// validateRecordTypes returns an error if this type is incompatible with the provider.
+// FIXME(tlim): Is this needed any more?
 func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
 	switch rec.Type {
 	// RCv3 records do not need this validation step.
@@ -134,6 +135,8 @@ func checkLabel(label string, rType string, domain string, meta map[string]strin
 	return nil
 }
 
+// checkSoa checks the elements of an SOA.
+// FIXME(tlim): Move this to MakeSOA(). (Note to self: API-downloaded items aren't run through validate).
 func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox string) error {
 	if expire <= 0 {
 		return errors.New("SOA Expire must be > 0")
@@ -156,7 +159,8 @@ func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox s
 	return nil
 }
 
-// checkTargets returns true if rec.Target is valid for the rec.Type.
+// checkTargets returns zero or more errors when problems are found.
+// FYI: Many of these checks are obsolete since Make*() does the same thing. We'll be removing the duplicate checks over time.
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	switch rec.Type {
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":

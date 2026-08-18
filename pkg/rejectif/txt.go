@@ -57,7 +57,7 @@ func TxtHasDoubleQuotes(rc *models.RecordConfig) error {
 	return nil
 }
 
-// TxtHasSemicolon audits TXT records for strings that contain backticks.
+// TxtHasSemicolon audits TXT records for strings that contain semicolons.
 func TxtHasSemicolon(rc *models.RecordConfig) error {
 	if strings.Contains(rc.GetTargetTXTJoined(), ";") {
 		return errors.New("txtstring contains semicolon")

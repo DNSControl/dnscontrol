@@ -51,7 +51,7 @@ func WriteZoneFileRC(w io.Writer, records models.Records, origin string, default
 	//   be easy to read and pleasant to the eye.
 	// * Within a label, SOA and NS records are listed first.
 	// * MX records are sorted numericly by preference value.
-	// * SRV records are sorted numericly by port, then priority, then weight.
+	// * SRV records are sorted numericly by priority, then weight, then port.
 	// * A records are sorted by IP address, not lexicographically.
 	// * Repeated labels are removed.
 	// * $TTL is used to eliminate clutter. The most common TTL value is used.

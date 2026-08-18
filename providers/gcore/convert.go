@@ -46,7 +46,7 @@ func nativeToRecords(n gcoreRRSetExtended, dc *models.DomainConfig) (models.Reco
 		case "SCVB": // GCore mistypes "SVCB" as "SCVB"
 			rc, err = dc.NewRecordConfigParse(recName, uint32(n.TTL), "SVCB", value.ContentToString())
 
-		default: //  "A", "AAAA", "CAA", "NS", "CNAME", "MX", "PTR", "SRV"
+		default:
 			rc, err = dc.NewRecordConfigParse(recName, uint32(n.TTL), recType, value.ContentToString())
 		}
 		if err != nil {

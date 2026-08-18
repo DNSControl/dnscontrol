@@ -15,8 +15,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
-// features describes the capabilities of the Gigahost provider. Start with
-// zero optional capabilities; only A/AAAA/CNAME/MX/TXT/NS are handled.
+// features describes the capabilities of the Gigahost provider.
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
 	// See providers/capabilities.go for the entire list of capabilities.

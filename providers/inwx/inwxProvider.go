@@ -256,21 +256,21 @@ func makeNameserverRecordRequest(domain string, rec *models.RecordConfig) *goinw
 	return req
 }
 
-// createRecord is used by GetDomainCorrections to create a new record.
+// createRecord is used by GetZoneRecordsCorrections to create a new record.
 func (api *inwxAPI) createRecord(domain string, rec *models.RecordConfig) error {
 	req := makeNameserverRecordRequest(domain, rec)
 	_, err := api.client.Nameservers.CreateRecord(req)
 	return err
 }
 
-// updateRecord is used by GetDomainCorrections to update an existing record.
+// updateRecord is used by GetZoneRecordsCorrections to update an existing record.
 func (api *inwxAPI) updateRecord(RecordID string, rec *models.RecordConfig) error {
 	req := makeNameserverRecordRequest("", rec)
 	err := api.client.Nameservers.UpdateRecord(RecordID, req)
 	return err
 }
 
-// deleteRecord is used by GetDomainCorrections to delete a record.
+// deleteRecord is used by GetZoneRecordsCorrections to delete a record.
 func (api *inwxAPI) deleteRecord(RecordID string) error {
 	return api.client.Nameservers.DeleteRecord(RecordID)
 }

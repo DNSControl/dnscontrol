@@ -13,7 +13,7 @@ var nowFunc = time.Now
 // generateSerial takes an old SOA serial number and increments it.
 func generateSerial(oldSerial uint32) uint32 {
 	// Serial numbers are in the format yyyymmddvv
-	// where vv is a version count that starts at 01 each day.
+	// where vv is a version count that starts at 00 each day.
 	// Multiple serial numbers generated on the same day increase vv.
 	// If the old serial number is not in this format, it gets replaced
 	// with the new format. However if that would mean a new serial number

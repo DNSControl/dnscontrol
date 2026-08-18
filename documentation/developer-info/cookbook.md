@@ -22,9 +22,13 @@ Recommended:
 
 ```go
 dc, err := models.NewDomainConfig(zone)
-dc.AddRecordConfig(models.MakeTestRC(label, ttl, type, args))
-dc.AddRecordConfig(models.MakeTestRCParse(label, ttl, type, args))
+dc.AddTestRC(t, label, ttl, type, arg, arg1, arg2, ...)
+dc.AddTestRCParse(t, label, ttl, type, arg)
 fmt.Printf("Count: %d", len(dc.Records))
+
+// Make individual RCs:
+rc1 := dc.MustNewRecordConfig(label, ttl, type, arg, arg1, arg2, ...)
+rc2 := dc.MustNewRecordConfigParse(label, ttl, type, arg)
 ```
 
 Deprecated:
@@ -50,19 +54,19 @@ rc2, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
 - `NewRecordConfigParse()` takes the arguments as one long string, which is parsed. If your provider returns (for example) the MX record data as `10 mx.example.com.` and the SRV record data as `4 100 123 three.example.com.`, you can just send the whole string to this function. This replaces `models.PopulateFromString()`
 
 - `LABEL`: Must be the output of one of these functions:
-  - `models.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
-  - `models.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
-  - `models.LabelFromFQDNWithDot()`: Use this if your provider always give syou the FQDN+"." (`foo.example.com.`)
+  - `dc.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
+  - `dc.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
+  - `dc.LabelFromFQDNWithDot()`: Use this if your provider always give syou the FQDN+"." (`foo.example.com.`)
 - Which to use?
-  - Unsurer? Try LabelFromFQDNWithDot() and watch for errors.
+  - Unsurer? Try LabelFromFQDNWithDot() and watch for errors. They often suggest what function to use.
   - Errors like `DEBUG: LabelFromFQDNWithDot(quux.a.dnscontrol-azure.com) called WRONG.'
   - In this case, the hostname (`quux.a.dnscontrol-azure.com`) indicates `LabelFromFQDNNoDot` is more appropriate.
-  - If you see a shortname, use `LabelFromShort`
+  - If you see a shortname, use `dc.LabelFromShort()`
   - If the integration tests for IGNORE() fail, you've probably picked the wrong function.
 - Why 3 functions? Can't NewRecordConfig figure it out?
-  - There are ambiguous cases that make it impossible to guess.
+  - There are ambiguous cases that make it impossible to guess with 100 percent accurately.
   - It is faster and more accurate to simply have multiple functions, one for each situation.
-  - The truth is that your provider's API is going to only deliver the label one way. They're not going to change, as that would break too much code.
+  - The truth is that your provider's API is going to only deliver the label one way. They're not going to change.
 
 - `TTL` must be the desired TTL or `0` if it is unknown. Unknown TTLs are converted into the default TTL.
 
@@ -272,52 +276,31 @@ To manage this, we have getters and setters that assure the above rules happen t
 
 ### TXT functions
 
-Creating TXT records:
+Reading TXT data:
+
+```go
+j := rc.GetTargetTXTJoined() // One big string
+s := rc.GetTargetTXTSegmented() // []string with each element 255-octets except the last.
+```
+
+Creating TXT records from scratch:
 
 ```go
 rc1, err := dc.NewRecordConfig(LABEL, TTL, dnsv2.TypeTXT, "raw bytes")
 rc2, err := dc.NewRecordConfigParse(LABEL, TTL, dnsv2.TypeTXT, `"quoted" "like" "from" "zonefile"`)
 ```
 
-FYI: dc.NewRecordConfig*() will will re-segment if needed.
+Updating existing records:
 
-Reading TXT data:
+* `SetTargetTXT(string)`:  Takes one (possibly long) string.
+* `SetTargetTXTs([]string)`: Takes a []string.  Will re-segment if needed.
 
-```go
-rd := rc.GetRDATA()             // Get the record's fields.  Prints warning to stderr if Txt is not segmented properly.
-rdtxt := rd.(dnsrdatav2.TXT)    // Cast it as a TXT record.
-q := rdtxt.String()             // Like a zonefile: "quoted" "like" "from" "zonefile"
-j := models.TXTJoined(rdtxt)    // One big string
-s := models.TXTSegmented(rdtxt) // The segments
+FYI: The above functions will re-segment the text such that each segment is 255
+octets long, except the last one which contains the remainder. If a record is
+(for example) 3 segments of length 200, 200, and 200 each, they will be merged
+and resegmented to lengths 255, 255, and 90.
 
-# FYI: If you know this is a TXT record, you can take shortcuts:
-rdtxt := rc.GetRDATA().(dnsrdatav2.TXT)    
-q := rc.GetRDATA().(dnsrdatav2.TXT).String()
-j := models.TXTJoined(rc.GetRDATA().(dnsrdatav2.TXT).Txt)
-s := models.TXTSegmented(rc.GetRDATA().(dnsrdatav2.TXT).Txt)
-```
-
-Legacy functions that work, but will be replaced over time. New code should not use these.
-
-Getters:
-
-* `rc.GetTargetTXTJoined()`: Returns one big string
-* `rc.GetTargetTXTSegmented()`: Returns an array of 255-octet segments (the last segment will hold the remainder)
-
-Setters:
-
-* `SetTargetTXT(string)`:  Setter. Takes a string. Will segment into 255-octet segments.
-* `SetTargetTXTs([]string)`: Setter. Takes a []string.  Will re-segment and clean up if needed.
-
-If you call the wrong getter, usually the right thing happens:
-
-* `rc.GetTargetField()`: For TXT records, same as `GetTargetTXTJoined()`
-* `rc.GetTargetCombinedFunc()`: For TXT records, calls encodeFn otherwise is the same as `GetTargetTXTJoined()`
-* `rc.GetTargetCombined()`: For TXT records, returns txt encoded via `txtutil.EncodeQuoted()`
-* `rc.GetTargetRFC1035Quoted()`: Same as `rd.String()`
-* `rc.GetTargetDebug()`: For TXT records, same as rd.String()
-* `rc.GetTargetJS()`: Uses the JSON tags on the structs to output JSON of the fields.
-* `rc.GetTargetIP()`: Panics if called on a TXT record.
+Please do not use `rc.GetTargetField()` on TXT records.
 
 ## How to change the rtype of a RecordConfig
 

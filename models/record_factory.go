@@ -18,9 +18,7 @@ import (
 // It may seem odd that this is a method of DomainConfig but it makes sense if
 // you consider that a RecordConfig lives in the context of its DomainConfig.
 // For example, the need to shorten a FQDN requires knowing the domain's name,
-// which is stored in a DomainConfig. If you need to create a RecordConfig
-// outside of a DomainConfig, consider using models.MakeTestRC() or
-// models.MakeTestRCParse() (both in record_helpers_test.go).
+// which is stored in a DomainConfig.
 // Behavior can be modified by sending an optional nrc.Flag struct as the last arg.
 func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, args ...any) (*RecordConfig, error) {
 	mustbe.ValidArgs(args)
@@ -65,7 +63,7 @@ func (dc *DomainConfig) NewRecordConfig(name string, ttl uint32, typeAny any, ar
 
 // NewRecordConfigParse is like NewRecordConfig but the fields of the record
 // come from parsing data which is assumed to be in RFC1038 Zonefile format.
-// Behavior can be modified by sending an optional rfc.Flag struct.
+// Behavior can be modified by sending an optional nrc.Flag struct.
 func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny any, data string, rcflag ...nrc.Flags) (*RecordConfig, error) {
 	typeNum, err := anyToTypeNum(typeAny)
 	if err != nil {

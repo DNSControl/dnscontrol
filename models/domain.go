@@ -101,9 +101,9 @@ func (dc *DomainConfig) ToFqdnNoDot(s string) string {
 }
 
 // ToShort returns the shortname by stripping the domain's name from "name". If name is not below dc.Name, name is returned unchanged.
-// If the name was shortened, it does not end with a ".". If the name was untouched, it ends with a ".".
+// If the name was shortened, the result never ends with a ".". If the name was untouched, it always ends with a ".".
 // Calling ToShort on a string that is already a shortname is unsupported. Names that do not end with "." are assumed to be FQDNs without a trailing ".".
-// Similar to name.ToShort() but uses the domain name from dc.
+// Similar to nameutil.ToShort() but uses the domain name from dc.
 func (dc *DomainConfig) ToShort(name string) string {
 	return nameutil.ToShort(name, dc.Name)
 }
