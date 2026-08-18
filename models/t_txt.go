@@ -64,6 +64,7 @@ func (rc *RecordConfig) SetTargetTXTs(s []string) error {
 }
 
 // TXTJoined returns all the character-strings in a TXT RDATA as one string.
+// FIXME(tlim): Unexport.
 func TXTJoined(rd dnsrdatav2.TXT) string {
 	return strings.Join(rd.Txt, "")
 }
@@ -71,6 +72,7 @@ func TXTJoined(rd dnsrdatav2.TXT) string {
 // TXTSegmented returns a TXT RDATA in DNSControl's canonical form: the
 // character-strings are joined and then split into 255-octet segments. Empty
 // input is represented by one empty segment.
+// FIXME(tlim): Unexport.
 func TXTSegmented(rd dnsrdatav2.TXT) []string {
 	return splitChunks(TXTJoined(rd), 255)
 }

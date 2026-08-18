@@ -391,7 +391,7 @@ func toReq(rc *models.RecordConfig) *godo.DomainRecordEditRequest {
 }
 
 // backoff is the amount of time to sleep if a 429 or 504 is received.
-// It is doubled after each use.
+// It is increased by 1.5x after each use.
 var backoff = time.Second * 5
 
 const maxBackoff = time.Minute * 3

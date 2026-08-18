@@ -870,7 +870,7 @@ func (c cfTarget) MarshalJSON() ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-// DNSControlString returns cfTarget normalized to be a FQDN. Null targets are
+// FQDN returns cfTarget normalized to be a FQDN. Null targets are
 // represented by a single period.
 func (c cfTarget) FQDN() string {
 	return strings.TrimRight(string(c), ".") + "."

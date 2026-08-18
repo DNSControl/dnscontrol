@@ -233,8 +233,7 @@ func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, e
 		switch r.FieldType {
 		case "DKIM", "DMARC":
 			// Unlike regular TXT and SPF records, OVH stores and returns DKIM
-			// and DMARC targets as raw, unquoted text (see adaptNativeRecord,
-			// which strips quotes before writing them). Running raw text
+			// and DMARC targets as raw, unquoted text. Running raw text
 			// through the RFC1035 zone-file TXT parser is wrong: an unescaped
 			// ';' is interpreted as the start of a comment, silently
 			// truncating values like "v=DMARC1; p=none; rua=...".

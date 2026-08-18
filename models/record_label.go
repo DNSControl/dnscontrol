@@ -123,16 +123,19 @@ func (dc *DomainConfig) LabelFromFQDNWithDot(name string) string {
 	return newName
 }
 
-// LabelFromDnsconfigjs is like LabelFromDnsconfigjs but additionally
-// applies D_EXTEND() subdomain label rewriting (mirroring the legacy
-// recordBuilder logic in pkg/js/helpers.js). All string manipulation is done on
-// post-IDNA (ASCII) strings, then any concatenation is performed. The returned
-// label is relative to the zone (dc.Name).
+// LabelFromDnsconfigjs processes labels from `dnsconfig.js`.
+//
+// nameRaw can be any string that is acceptable in dnsconfig.js, including "@", "foo", "foo.bar", "foo.bar.baz.", etc.
 //
 // subdomainASCII must already be in IDNA (punycode, lowercase) form; the caller
 // converts and memoizes it (see DNSConfig.ImportRawRecords), since the same
-// subdomain is shared by every record in a D_EXTEND block. If subdomainASCII is
-// empty, this is equivalent to LabelFromDnsconfigjs.
+// subdomain is shared by every record in a D_EXTEND block.
+//
+// It enforces the "single dot" rule.
+//
+// It applies D_EXTEND() subdomain label rewriting.
+//
+// The returned label is relative to the zone (dc.Name).
 func (dc *DomainConfig) LabelFromDnsconfigjs(rawLabel, subdomainASCII string) (string, error) {
 	if subdomainASCII == "" {
 		return dc.labelFromDnsconfigjsHelper(rawLabel)
@@ -171,14 +174,7 @@ func (dc *DomainConfig) LabelFromDnsconfigjs(rawLabel, subdomainASCII string) (s
 	}
 }
 
-// labelFromDnsconfigjsHelper takes a label from dnsconfig.js and prepares it for use in a RecordConfig.
-//
-// nameRaw can be any string that is acceptable in dnsconfig.js, including "@", "foo", "foo.bar", "foo.bar.baz", etc.
-//
-// - Unicode is converted to ASCII via IDNA (PunyCode).
-// - An error is returned if this name is not in this zone.
-//
-// This does not check for stuttering. That should be done by the caller.
+// labelFromDnsconfigjsHelper implements LabelFromDnsconfigjs's case when D_EXTEND() is not in play.
 func (dc *DomainConfig) labelFromDnsconfigjsHelper(nameRaw string) (string, error) {
 
 	name := nameRaw

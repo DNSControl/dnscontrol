@@ -207,10 +207,10 @@ func (api *domainNameShopProvider) sendChangeRequest(method string, uri string, 
 
 	switch resp.StatusCode {
 	case http.StatusCreated:
-		// Record is deleted
+		// Created successfully
 		return nil
 	case http.StatusNoContent:
-		// Update successful
+		// Updated successful
 		return nil
 	case http.StatusBadRequest:
 		return errors.New("DNS record failed validation")

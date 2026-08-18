@@ -22,7 +22,7 @@ func sortedKeys[K cmp.Ordered, V any](m map[K]V) []K {
 	return keys
 }
 
-// hasSpfRecords returns true if this record requests SPF unrolling.
+// flattenSPFs flattens SPF records.
 func flattenSPFs(cfg *models.DNSConfig) []error {
 	var cache spflib.CachingResolver
 	var errs []error

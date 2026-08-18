@@ -53,7 +53,7 @@ func (s *sakuracloudProvider) GetZoneRecords(dc *models.DomainConfig) (models.Re
 	return existingRecords, nil
 }
 
-// GetZoneRecordsCorrections gets the records of a zone and returns them in RecordConfig format.
+// GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (s *sakuracloudProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 

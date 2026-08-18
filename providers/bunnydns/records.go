@@ -49,7 +49,6 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 }
 
 func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	// Bunny DNS never returns NS records for the apex domain, so these are artificially added when retrieving records.
 	// As no TTL can be configured or retrieved for these NS records, we set it to 0 to avoid unnecessary updates.
 	for _, rc := range dc.Records {
 		if rc.Name == "@" && rc.Type == "NS" {

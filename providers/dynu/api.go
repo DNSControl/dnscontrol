@@ -60,11 +60,11 @@ type dynuRecord struct {
 	IPv6Address string `json:"ipv6Address,omitempty"`
 	// CNAME / DNAME / MX / NS / PTR / SRV / NAPTR (replacement) / AFSDB
 	Host string `json:"host,omitempty"`
-	// MX / SRV / URI / NAPTR (order) / CERT (certificateType stored here by Dynu)
+	// MX / SRV / URI
 	Priority *int `json:"priority,omitempty"`
-	// SRV / SSHFP (fingerprint type) / NAPTR / URI
+	// SRV / SSHFP (fingerprint type) / URI
 	Weight *int `json:"weight,omitempty"`
-	// SRV / TLSA (matchingType) / SMIMEA
+	// SRV
 	Port *int `json:"port,omitempty"`
 	// CAA / KEY
 	Flags *int `json:"flags,omitempty"`

@@ -28,7 +28,8 @@ RouterOS DNS is a flat list of static entries (no zone concept).
 The provider filters records by the domain suffix to emulate zones.
 
 Supported record types: A, AAAA, CNAME, MX, NS, SRV, TXT
-Custom record type: MIKROTIK_FWD (RouterOS FWD entries for conditional forwarding)
+Custom record types: MIKROTIK_FWD (RouterOS FWD entries for conditional
+forwarding), MIKROTIK_NXDOMAIN, and MIKROTIK_FORWARDER.
 */
 
 var features = providers.DocumentationNotes{

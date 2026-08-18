@@ -149,7 +149,7 @@ func generateFunctionTypes() (string, error) {
 
 			params := []Param{}
 			for _, p := range paramNames {
-				// start with supplied type, fall back to defaultParamType
+				// start with supplied type, fall back to "unknown".
 				paramType := suppliedParamTypes[p]
 				if paramType == "" {
 					println("WARNING:", fPath+":", "no type for parameter ", "'"+p+"'")

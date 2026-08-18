@@ -72,7 +72,7 @@ func makeTests() []*TestGroup {
 	// whether or not a certain kind of record can be created and
 	// deleted.
 
-	// emptyzone() is the same as tc("Empty").  It removes all records.
+	// tcEmptyZone() is the same as tc("Empty").  It removes all records.
 	// Each testgroup() begins with tcEmptyZone() automagically. You do not
 	// have to include the tcEmptyZone() in each testgroup().
 

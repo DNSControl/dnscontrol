@@ -9,7 +9,7 @@ import (
 
 // Keep these in alphabetical order.
 
-// CaaFlagIsNonZero identifies CAA records where tag is no zero.
+// CaaFlagIsNonZero identifies CAA records where flag is no zero.
 func CaaFlagIsNonZero(rc *models.RecordConfig) error {
 	if rc.AsCAA().Flag != 0 {
 		return errors.New("caa flag is non-zero")
