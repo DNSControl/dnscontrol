@@ -98,3 +98,40 @@ func TestToReqNAPTR(t *testing.T) {
 		})
 	}
 }
+
+// TestToReqRP verifies that toReq strips the trailing dot from the RP mailbox
+// and TXT domain name. The Dynu API validates both as hostnames and rejects a
+// trailing dot with "Invalid content.". DNSControl fully qualifies relative
+// names, so both fields always arrive here with a trailing dot.
+func TestToReqRP(t *testing.T) {
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tests := []struct {
+		name              string
+		mbox, txt         string
+		wantMbox, wantTxt string
+	}{
+		{"absolute names", "user.example.com.", "bar.com.", "user.example.com", "bar.com"},
+		{"relative names get qualified", "user", "server", "user.example.com", "server.example.com"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			rc, err := dc.NewRecordConfig("foo", 300, dnsv2.TypeRP, tc.mbox, tc.txt)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			req := toReq(rc)
+			if req.MailBox != tc.wantMbox {
+				t.Errorf("MailBox = %q, want %q", req.MailBox, tc.wantMbox)
+			}
+			if req.TxtDomainName != tc.wantTxt {
+				t.Errorf("TxtDomainName = %q, want %q", req.TxtDomainName, tc.wantTxt)
+			}
+		})
+	}
+}
