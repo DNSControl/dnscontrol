@@ -136,7 +136,7 @@ func checkLabel(label string, rType string, domain string, meta map[string]strin
 }
 
 // checkSoa checks the elements of an SOA.
-// FIXME(tlim): Move this to MakeSOA(). (Note to self: API-downloaded items aren't run through validate)
+// FIXME(tlim): Move this to MakeSOA(). (Note to self: API-downloaded items aren't run through validate).
 func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox string) error {
 	if expire <= 0 {
 		return errors.New("SOA Expire must be > 0")
@@ -159,7 +159,8 @@ func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox s
 	return nil
 }
 
-// checkTargets returns zero or more errors when
+// checkTargets returns zero or more errors when problems are found.
+// FYI: Many of these checks are obsolete since Make*() does the same thing. We'll be removing the duplicate checks over time.
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	switch rec.Type {
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
