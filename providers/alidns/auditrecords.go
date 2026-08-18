@@ -26,8 +26,15 @@ func isValidAliDNSString(s string) bool {
 }
 
 // labelConstraint detects labels that contain non-ASCII characters except Chinese characters.
+// Punycode-encoded labels (xn--...) are decoded to Unicode before checking so that
+// non-Chinese IDN labels such as xn--ndaaa (ööö) are correctly rejected.
 func labelConstraint(rc *models.RecordConfig) error {
-	if !isValidAliDNSString(rc.GetLabel()) {
+	label := rc.GetLabel()
+	decoded, err := idna.ToUnicode(label)
+	if err == nil {
+		label = decoded
+	}
+	if !isValidAliDNSString(label) {
 		return errors.New("label contains non-ASCII characters (only Chinese is allowed)")
 	}
 	return nil
