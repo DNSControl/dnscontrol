@@ -228,7 +228,7 @@ func makeChanges(t *testing.T, prv providers.DNSServiceProvider, dc *models.Doma
 
 		_, corrections, actualChangeCount, err := zonerecs.CorrectZoneRecords(prv, dom)
 		if err != nil {
-			t.Fatal(fmt.Errorf("runTests: %w", err))
+			t.Fatal(fmt.Errorf("runTests: CZR %w", err))
 		}
 		if tst.Changeless {
 			if actualChangeCount != 0 {

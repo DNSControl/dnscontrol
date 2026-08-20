@@ -28,6 +28,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rfc4183"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v5/providers/ovh"
 	"github.com/dustin/go-humanize"
 	"github.com/nozzle/throttler"
 	"github.com/urfave/cli/v3"
@@ -139,6 +140,18 @@ func (args *PPreviewArgs) flags() []cli.Flag {
 		Usage:  `Limit the IGNORE/NO_PURGE report to this many lines (Expermental. Will change in the future.)`,
 		Action: func(ctx context.Context, c *cli.Command, maxreport int) error {
 			printer.MaxReport = maxreport
+			return nil
+		},
+	})
+	flags = append(flags, &cli.BoolFlag{
+		Name:   "disable-list-zones",
+		Hidden: true,
+		Usage:  `Pretend ListZones() is unimplemented (OVH only)`,
+		Action: func(ctx context.Context, c *cli.Command, noListZones bool) error {
+			// This was added because the integration test API key donated to
+			// the project doesn't have ListZones privs. If other providers
+			// this, we should make it a general thing.
+			ovh.NoListZone = noListZones
 			return nil
 		},
 	})

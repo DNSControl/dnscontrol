@@ -15,6 +15,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/providers/cloudflare"
+	"github.com/DNSControl/dnscontrol/v5/providers/ovh"
 )
 
 func TestReplaceIntegrationTargetTokensAzureAlias(t *testing.T) {
@@ -45,6 +46,7 @@ var (
 	enableCFRedirectMode = flag.Bool("cfredirect", true, "enable CF SingleRedirect tests (default true)")
 	enableCFFlatten      = flag.Bool("cfflatten", false, "enable CF CNAME flattening tests (requires paid plan, default false)")
 	enableCFTags         = flag.Bool("cftags", false, "enable CF tag tests (requires paid plan, default false)")
+	disableListZones     = flag.Bool("disablelistzones", false, "disable ListZones() (OVH only)")
 )
 
 // recorder accumulates the conversion inputs of every provider call made by
@@ -142,6 +144,13 @@ func getProvider(t *testing.T) (providers.DNSServiceProvider, string, map[string
 			items = append(items, `"manage_single_redirects": true`)
 		}
 		metadata = []byte(`{ ` + strings.Join(items, `, `) + ` }`)
+	}
+
+	// The -disablelistzones flag is only for OVH at this time.  The API key we
+	// use for integration tests does not have the ability to issue the
+	// ListZones API call. Therefore, we added this hack.
+	if *disableListZones {
+		ovh.NoListZone = true
 	}
 
 	var createOptions []providers.CreateOption

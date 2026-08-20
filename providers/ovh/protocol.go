@@ -14,6 +14,13 @@ type Void struct{}
 
 // fetchDomainList gets list of zones for account.
 func (c *ovhProvider) fetchZones() error {
+	// If we're in "pretend ListZones() isn't implemented mode" we return an
+	// empty list.  Elsewhere, we disable functionality that would require
+	// having the entire list of zones.
+	if !listzonesEnabled() {
+		return nil
+	}
+
 	if c.zones != nil {
 		return nil
 	}

@@ -10,7 +10,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -87,11 +86,22 @@ func init() {
 	providers.RegisterMaintainer(providerName, providerMaintainer)
 }
 
+var NoListZone bool
+
+func listzonesEnabled() bool {
+	return !NoListZone
+}
+
 func (c *ovhProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	_, ok := c.zones[domain]
-	if !ok {
-		return nil, fmt.Errorf("'%s' not a zone in ovh account", domain)
+
+	// FIXME(tlim): This safety check is unneeded as the fetchNS() call will suffice.
+	if listzonesEnabled() {
+		_, ok := c.zones[domain]
+		if !ok {
+			return nil, fmt.Errorf("'%s' not a zone in ovh account", domain)
+		}
 	}
+	// If ListZones() is enabled, assume any zone exists. The safety check is rather silly anyway.
 
 	ns, err := c.fetchNS(domain)
 	if err != nil {
@@ -121,7 +131,8 @@ func (c *ovhProvider) ListZones() (zones []string, err error) {
 func (c *ovhProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	if !c.zones[domain] {
+	// FIXME(tlim): This safety check is unneeded as the fetchRecords() call will suffice.
+	if listzonesEnabled() && !c.zones[domain] {
 		return nil, errNoExist{domain}
 	}
 
@@ -229,7 +240,7 @@ func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, e
 
 	switch rtype {
 	case "TXT":
-		var tx string
+		//fmt.Printf("DEBUG: OVH %s=%s\n", r.FieldType, r.Target)
 		switch r.FieldType {
 		case "DKIM", "DMARC":
 			// Unlike regular TXT and SPF records, OVH stores and returns DKIM
@@ -237,14 +248,10 @@ func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, e
 			// through the RFC1035 zone-file TXT parser is wrong: an unescaped
 			// ';' is interpreted as the start of a comment, silently
 			// truncating values like "v=DMARC1; p=none; rua=...".
-			tx = r.Target
+			rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
 		default:
-			tx, err = txtutil.ParseQuoted(r.Target)
-			if err != nil {
-				return nil, err
-			}
+			rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeTXT, r.Target)
 		}
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, tx)
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
 	}
