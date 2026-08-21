@@ -2260,6 +2260,8 @@ function DMARC_BUILDER(value) {
     // Percentage
     if (value.percent) {
         record.push('pct=' + value.percent);
+        console.log("WARNING: DMARC pct tag depracated.");
+        
     }
 
     // Aggregate reports
@@ -2294,18 +2296,23 @@ function DMARC_BUILDER(value) {
         }
     }
 
+    
+
     // Failure report format
     if (value.ruf && value.failureFormat) {
         record.push('rf=' + value.failureFormat);
+        console.log("WARNING: DMARC rf tag depracated.");
     }
 
     // Report interval
+    
     if (value.reportInterval) {
         if (_.isString(value.reportInterval)) {
             value.reportInterval = stringToDuration(value.reportInterval);
         }
 
         record.push('ri=' + value.reportInterval);
+        console.log("WARNING: DMARC ri tag depracated.");
     }
 
     if (value.ttl) {
