@@ -2167,14 +2167,14 @@ function DKIM_BUILDER(value) {
 // version: The DMARC version, by default DMARC1 (optional)
 // policy: The DMARC policy (p=), must be one of 'none', 'quarantine', 'reject'
 // subdomainPolicy: The DMARC policy for subdomains (sp=), must be one of 'none', 'quarantine', 'reject' (optional)
+// nonexistentSubdomainPolicy: The DMARC policy for nonexistent subdomains (np=), must be one of 'none', 'quarantine', 'reject' (optional)
 // alignmentSPF: 'strict'/'s' or 'relaxed'/'r' alignment for SPF (aspf=, default: 'r')
 // alignmentDKIM: 'strict'/'s' or 'relaxed'/'r' alignment for DKIM (adkim=, default: 'r')
-// percent: Number between 0 and 100, percentage for which policies are applied (pct=, default: 100)
 // rua: Array of aggregate report targets (optional)
 // ruf: Array of failure report targets (optional)
+// publicSuffixDomain: 'y', 'n', or 'u' indicates whether the domain is a Public Suffix Domain (`psd=`, default='u') 
+// testMode: 'y' or 'n' DMARC policy test mode dictates whether p, sp, or np policy tags are applied (`t=`, default: 'n')
 // failureOptions: Object or string; Object containing booleans SPF and DKIM, string is passed raw (fo=, default: '0')
-// failureFormat: Format in which failure reports are requested (rf=, default: 'afrf')
-// reportInterval: Interval in which reports are requested (ri=)
 // ttl: Input for TTL method
 function DMARC_BUILDER(value) {
     if (!value) {
@@ -2317,7 +2317,6 @@ function DMARC_BUILDER(value) {
     }
 
     // Report interval
-    
     if (value.reportInterval) {
         if (_.isString(value.reportInterval)) {
             value.reportInterval = stringToDuration(value.reportInterval);
@@ -2328,14 +2327,13 @@ function DMARC_BUILDER(value) {
     }
 
     // Public Suffix Domain
-
     if (value.publicSuffixDomain) {
         if (
-            !value.subdomainPolicy === 'u' ||
-            !value.subdomainPolicy === 'y' ||
-            !value.subdomainPolicy === 'n'
+            !value.publicSuffixDomain === 'u' ||
+            !value.publicSuffixDomain === 'y' ||
+            !value.publicSuffixDomain === 'n'
         ) {
-            throw "Invalid public-suffix-domain tag");
+            throw 'Invalid public-suffix-domain tag';
         }
 
         record.push('psd=' + value.publicSuffixDomain)
@@ -2348,7 +2346,7 @@ function DMARC_BUILDER(value) {
             !value.testMode === 'y' ||
             !value.testMode === 'n'
         ) {
-            throw "Invalid test-mode tag"
+            throw 'Invalid test-mode tag'
         }
 
         record.push('t=' + value.testMode)
