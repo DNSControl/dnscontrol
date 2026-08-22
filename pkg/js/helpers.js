@@ -2172,7 +2172,7 @@ function DKIM_BUILDER(value) {
 // alignmentDKIM: 'strict'/'s' or 'relaxed'/'r' alignment for DKIM (adkim=, default: 'r')
 // rua: Array of aggregate report targets (optional)
 // ruf: Array of failure report targets (optional)
-// publicSuffixDomain: 'y', 'n', or 'u' indicates whether the domain is a Public Suffix Domain (`psd=`, default='u') 
+// publicSuffixDomain: 'y', 'n', or 'u' indicates whether the domain is a Public Suffix Domain (`psd=`, default='u')
 // testMode: 'y' or 'n' DMARC policy test mode dictates whether p, sp, or np policy tags are applied (`t=`, default: 'n')
 // failureOptions: Object or string; Object containing booleans SPF and DKIM, string is passed raw (fo=, default: '0')
 // ttl: Input for TTL method
@@ -2272,8 +2272,7 @@ function DMARC_BUILDER(value) {
     // Percentage
     if (value.percent) {
         record.push('pct=' + value.percent);
-        console.log("WARNING: DMARC pct tag depracated.");
-        
+        console.log('WARNING: DMARC pct tag depracated.');
     }
 
     // Aggregate reports
@@ -2285,7 +2284,7 @@ function DMARC_BUILDER(value) {
     if (value.ruf && value.ruf.length > 0) {
         record.push('ruf=' + value.ruf.join(','));
     }
-    
+
     // Failure reporting options
     if (value.ruf && value.failureOptions) {
         var fo = '0';
@@ -2308,12 +2307,10 @@ function DMARC_BUILDER(value) {
         }
     }
 
-    
-
     // Failure report format
     if (value.ruf && value.failureFormat) {
         record.push('rf=' + value.failureFormat);
-        console.log("WARNING: DMARC rf tag depracated.");
+        console.log('WARNING: DMARC rf tag depracated.');
     }
 
     // Report interval
@@ -2323,7 +2320,7 @@ function DMARC_BUILDER(value) {
         }
 
         record.push('ri=' + value.reportInterval);
-        console.log("WARNING: DMARC ri tag depracated.");
+        console.log('WARNING: DMARC ri tag depracated.');
     }
 
     // Public Suffix Domain
@@ -2336,20 +2333,17 @@ function DMARC_BUILDER(value) {
             throw 'Invalid public-suffix-domain tag';
         }
 
-        record.push('psd=' + value.publicSuffixDomain)
+        record.push('psd=' + value.publicSuffixDomain);
     }
 
     // Test mode
 
     if (value.testMode) {
-        if (
-            !value.testMode === 'y' ||
-            !value.testMode === 'n'
-        ) {
-            throw 'Invalid test-mode tag'
+        if (!value.testMode === 'y' || !value.testMode === 'n') {
+            throw 'Invalid test-mode tag';
         }
 
-        record.push('t=' + value.testMode)
+        record.push('t=' + value.testMode);
     }
 
     if (value.ttl) {
