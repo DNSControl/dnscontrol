@@ -1032,14 +1032,14 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  * * `version:` The DMARC version to be used (default: `DMARC1`)
  * * `policy:` The DMARC policy (`p=`), must be one of `"none"`, `"quarantine"`, `"reject"`
  * * `subdomainPolicy:` The DMARC policy for subdomains (`sp=`), must be one of `"none"`, `"quarantine"`, `"reject"` (optional)
+ * * `nonexistentSubdomainPolicy:` The DMARC policy for nonexistent subdomains (`np=`), must be one of `"none"`, `"quarantine"`, `"reject"` (optional)
  * * `alignmentSPF:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for SPF (`aspf=`, default: `"r"`)
  * * `alignmentDKIM:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for DKIM (`adkim=`, default: `"r"`)
- * * `percent:` Number between `0` and `100`, percentage for which policies are applied (`pct=`, default: `100`)
  * * `rua:` Array of aggregate report targets (optional)
  * * `ruf:` Array of failure report targets (optional)
  * * `failureOptions:` Object or string; Object containing booleans `SPF` and `DKIM`, string is passed raw (`fo=`, default: `"0"`)
- * * `failureFormat:` Format in which failure reports are requested (`rf=`, default: `"afrf"`)
- * * `reportInterval:` Interval in which reports are requested (`ri=`)
+ * * `publicSuffixDomain:` `"y"`, or `"n"` or `"u"` indicates whether the domain is a Public Suffix Domain (`psd=`, default: `"u"`)
+ * * `testMode:` `"y"` or `"n"` DMARC policy test mode dictates whether p, sp, or np policy tags are applied (`t=`, default: `"n"`)
  * * `ttl:` Input for `TTL` method (optional)
  *
  * ### Caveats
@@ -1049,7 +1049,7 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/dmarc_builder
  */
-declare function DMARC_BUILDER(opts: { label?: string; version?: string; policy: 'none' | 'quarantine' | 'reject'; subdomainPolicy?: 'none' | 'quarantine' | 'reject'; alignmentSPF?: 'strict' | 's' | 'relaxed' | 'r'; alignmentDKIM?: 'strict' | 's' | 'relaxed' | 'r'; percent?: number; rua?: string[]; ruf?: string[]; failureOptions?: { SPF: boolean, DKIM: boolean } | string; failureFormat?: string; reportInterval?: Duration; ttl?: Duration }): DomainModifier;
+declare function DMARC_BUILDER(opts: { label?: string; version?: string; policy: 'none' | 'quarantine' | 'reject'; subdomainPolicy?: 'none' | 'quarantine' | 'reject'; nonexistentSubdomainPolicy?: 'none' | 'quarantine' | 'reject'; alignmentSPF?: 'strict' | 's' | 'relaxed' | 'r'; alignmentDKIM?: 'strict' | 's' | 'relaxed' | 'r'; rua?: string[]; ruf?: string[]; failureOptions?: { SPF: boolean, DKIM: boolean } | string; publicSuffixDomain?: 'y' | 'n' | 'u'; testMode?: 'y' | 'n'; failureFormat?: string; ttl?: Duration }): DomainModifier;
 
 /**
  * `DNAME` adds a [Delegation name record](https://www.rfc-editor.org/rfc/rfc6672) to the domain.
