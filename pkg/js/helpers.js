@@ -2221,6 +2221,18 @@ function DMARC_BUILDER(value) {
         record.push('sp=' + value.subdomainPolicy);
     }
 
+    // Nonexistent-Subdomain policy
+    if (
+        !value.nonexistentSubdomainPolicy === 'none' ||
+        !value.nonexistentSubdomainPolicy === 'quarantine' ||
+        !value.nonexistentSubdomainPolicy === 'reject'
+    ) {
+        throw 'Invalid DMARC nonexistent-subdomain policy';
+    }
+    if (value.subdomainPolicy) {
+        record.push('np=' + value.subdomainPolicy);
+    }
+
     // Alignment DKIM
     if (value.alignmentDKIM) {
         switch (value.alignmentDKIM) {
@@ -2273,7 +2285,7 @@ function DMARC_BUILDER(value) {
     if (value.ruf && value.ruf.length > 0) {
         record.push('ruf=' + value.ruf.join(','));
     }
-
+    
     // Failure reporting options
     if (value.ruf && value.failureOptions) {
         var fo = '0';
@@ -2313,6 +2325,33 @@ function DMARC_BUILDER(value) {
 
         record.push('ri=' + value.reportInterval);
         console.log("WARNING: DMARC ri tag depracated.");
+    }
+
+    // Public Suffix Domain
+
+    if (value.publicSuffixDomain) {
+        if (
+            !value.subdomainPolicy === 'u' ||
+            !value.subdomainPolicy === 'y' ||
+            !value.subdomainPolicy === 'n'
+        ) {
+            throw "Invalid public-suffix-domain tag");
+        }
+
+        record.push('psd=' + value.publicSuffixDomain)
+    }
+
+    // Test mode
+
+    if (value.testMode) {
+        if (
+            !value.testMode === 'y' ||
+            !value.testMode === 'n'
+        ) {
+            throw "Invalid test-mode tag"
+        }
+
+        record.push('t=' + value.testMode)
     }
 
     if (value.ttl) {
