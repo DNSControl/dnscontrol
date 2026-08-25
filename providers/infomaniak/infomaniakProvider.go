@@ -185,9 +185,7 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 		target = fmt.Sprintf("%d %s", f.Preference, strings.TrimSuffix(f.Mx, "."))
 
 	case dnsv2.TypeTXT:
-		target = rc.GetTargetTXTJoined()
-		// NOTE(tlim): If TXT records continue to fail, try this instead:
-		//target = rc.AsTXT().String()
+		target = rc.AsTXT().String()
 
 	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
@@ -263,7 +261,8 @@ func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	case dnsv2.TypeDS:
 		// Format: "keytag algorithm digesttype digest"
 		f := rc.AsDS()
-		target = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
+		//target = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
+		target = f.String()
 
 	case dnsv2.TypeSSHFP:
 		// Format: "algorithm fingerprint_type fingerprint"

@@ -17,5 +17,7 @@ func AuditRecords(records models.Records) []error {
 
 	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-07-26
 
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-08-26
+
 	return a.Audit(records)
 }
