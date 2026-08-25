@@ -37,6 +37,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v4/providers/hetznerv2"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/hostingde"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/huaweicloud"
+	_ "github.com/DNSControl/dnscontrol/v4/providers/infoblox"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/infomaniak"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/internetbs"
 	_ "github.com/DNSControl/dnscontrol/v4/providers/inwx"
