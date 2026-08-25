@@ -225,8 +225,8 @@ func (h *hetznerv2Provider) GetZoneRecords(dc *models.DomainConfig) (models.Reco
 	if err != nil {
 		return nil, err
 	}
-	opts := hcloud.ZoneRRSetListOpts{}
-	opts.PerPage = 100
+	opts := hcloud.ZoneRRSetListOpts{
+		PerPage: 100}
 	records, err := h.client.Zone.AllRRSetsWithOpts(context.Background(), z, opts)
 	if err != nil {
 		return nil, err

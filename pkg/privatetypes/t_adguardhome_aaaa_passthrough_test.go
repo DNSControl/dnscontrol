@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestAdguardhomeAaaaPassthrough(t *testing.T) {
 	y := &ADGUARDHOMEAAAAPASSTHROUGH{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		ADGUARDHOMEAAAAPASSTHROUGH: privatetypesrdata.ADGUARDHOMEAAAAPASSTHROUGH{
-			Target: "",
-		},
+		Hdr:    dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		Target: "",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

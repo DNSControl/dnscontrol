@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestUrl301(t *testing.T) {
 	y := &URL301{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		URL301: privatetypesrdata.URL301{
-			Location: "https://example.com/",
-		},
+		Hdr:      dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		Location: "https://example.com/",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

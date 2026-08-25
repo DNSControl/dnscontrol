@@ -42,10 +42,8 @@ func (rr *BUNNYDNSPZ) Data() dnsv2.RDATA {
 }
 func (rr *BUNNYDNSPZ) Clone() dnsv2.RR {
 	return &BUNNYDNSPZ{
-		Hdr: rr.Hdr,
-		BUNNYDNSPZ: privatetypesrdata.BUNNYDNSPZ{
-			PullZoneID: rr.PullZoneID,
-		}}
+		Hdr:        rr.Hdr,
+		PullZoneID: rr.PullZoneID}
 }
 func (rr *BUNNYDNSPZ) String() string {
 	return (rr.Header().Name + "\t" +
