@@ -96,11 +96,12 @@ func toRecordConfig(dc *models.DomainConfig, r dnsRecord) (*models.RecordConfig,
 		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, addTrailingDot(target))
 
 	case "TXT":
-		// Infomaniak API returns TXT values wrapped in quotes, strip them
-		if len(target) >= 2 && strings.HasPrefix(target, "\"") && strings.HasSuffix(target, "\"") {
-			target = target[1 : len(target)-1]
-		}
-		rc, err = dc.NewRecordConfig(label, ttl, rtype, target)
+		// Infomaniak returns TXT in RFC 1035 presentation format: one or more
+		// quoted character-strings. Values longer than 255 octets come back
+		// split into multiple `"..." "..."` strings, so parse them (naively
+		// stripping the outer quotes leaves the interior `" "` and breaks the
+		// round-trip). See issue #4748.
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, target)
 
 	case "SRV":
 		// Infomaniak returns SRV as "priority weight port target"
@@ -185,6 +186,8 @@ func fromRecordConfig(rc *models.RecordConfig) *dnsRecordCreate {
 
 	case dnsv2.TypeTXT:
 		target = rc.GetTargetTXTJoined()
+		// NOTE(tlim): If TXT records continue to fail, try this instead:
+		//target = rc.AsTXT().String()
 
 	case dnsv2.TypeSRV:
 		// Format: "priority weight port target" (without trailing dot)
