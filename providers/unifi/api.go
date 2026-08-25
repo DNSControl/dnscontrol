@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -440,7 +441,7 @@ func (c *unifiClient) getRecords() ([]any, bool, error) {
 			}
 		}
 
-		return nil, false, fmt.Errorf("no API available")
+		return nil, false, errors.New("no API available")
 	}
 
 	if c.useNewAPI() {

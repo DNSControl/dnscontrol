@@ -1,6 +1,7 @@
 package scaleway
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -74,7 +75,7 @@ func (s *scalewayProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		case diff2.CHANGE:
 			oldRec, ok := inst.Old[0].Original.(*domain.Record)
 			if !ok {
-				return nil, 0, fmt.Errorf("SCALEWAY: missing original record for change")
+				return nil, 0, errors.New("SCALEWAY: missing original record for change")
 			}
 			rec := fromRecordConfig(inst.New[0])
 			id := oldRec.ID
@@ -92,7 +93,7 @@ func (s *scalewayProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		case diff2.DELETE:
 			oldRec, ok := inst.Old[0].Original.(*domain.Record)
 			if !ok {
-				return nil, 0, fmt.Errorf("SCALEWAY: missing original record for delete")
+				return nil, 0, errors.New("SCALEWAY: missing original record for delete")
 			}
 			id := oldRec.ID
 			msg := inst.Msgs[0]

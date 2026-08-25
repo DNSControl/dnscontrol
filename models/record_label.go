@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -180,7 +181,7 @@ func (dc *DomainConfig) labelFromDnsconfigjsHelper(nameRaw string) (string, erro
 	name := nameRaw
 
 	if name == "" {
-		return "", fmt.Errorf(`label "" is invalid. Use "@" when a label is at the root (apex) of the zone`)
+		return "", errors.New(`label "" is invalid. Use "@" when a label is at the root (apex) of the zone`)
 	}
 	if name == "@" {
 		return name, nil

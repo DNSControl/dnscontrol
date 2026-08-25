@@ -1,6 +1,7 @@
 package bunnydns
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -50,7 +51,7 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 		// while the Value field should be empty.
 		rdata, ok := rc.GetRDATA().(privatetypesrdata.BUNNYDNSPZ)
 		if !ok {
-			return nil, fmt.Errorf("invalid RDATA for BUNNY_DNS_PZ")
+			return nil, errors.New("invalid RDATA for BUNNY_DNS_PZ")
 		}
 		r.PullZoneID = rdata.PullZoneID
 		r.Value = ""
@@ -110,7 +111,7 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 	case "BUNNY_DNS_PZ":
 		// When reading Pull Zone records, the API provides the PullZoneId in the LinkName field as string.
 		if r.LinkName == "" {
-			return nil, fmt.Errorf("missing Pull Zone ID (LinkName) for BUNNY_DNS_PZ")
+			return nil, errors.New("missing Pull Zone ID (LinkName) for BUNNY_DNS_PZ")
 		}
 		rc, err = dc.NewRecordConfig(label, r.TTL, privatetypes.TypeBUNNYDNSPZ, r.LinkName)
 	case "BUNNY_DNS_RDR":
