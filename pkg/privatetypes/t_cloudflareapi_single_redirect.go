@@ -47,15 +47,13 @@ func (rr *CLOUDFLAREAPISINGLEREDIRECT) Data() dnsv2.RDATA {
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) Clone() dnsv2.RR {
 	return &CLOUDFLAREAPISINGLEREDIRECT{
-		Hdr: rr.Hdr,
-		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
-			SRName:              rr.SRName,
-			Code:                rr.Code,
-			SRWhen:              rr.SRWhen,
-			SRThen:              rr.SRThen,
-			RT_SRRRulesetID:     rr.RT_SRRRulesetID,
-			RT_SRRRulesetRuleID: rr.RT_SRRRulesetRuleID,
-		}}
+		Hdr:                 rr.Hdr,
+		SRName:              rr.SRName,
+		Code:                rr.Code,
+		SRWhen:              rr.SRWhen,
+		SRThen:              rr.SRThen,
+		RT_SRRRulesetID:     rr.RT_SRRRulesetID,
+		RT_SRRRulesetRuleID: rr.RT_SRRRulesetRuleID}
 }
 func (rr *CLOUDFLAREAPISINGLEREDIRECT) String() string {
 	return (rr.Header().Name + "\t" +

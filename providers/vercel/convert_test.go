@@ -5,7 +5,6 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
-	vercelClient "github.com/vercel/terraform-provider-vercel/client"
 )
 
 func TestVercelRecordToRCUsesV3RecordConfig(t *testing.T) {
@@ -15,10 +14,10 @@ func TestVercelRecordToRCUsesV3RecordConfig(t *testing.T) {
 		in   DNSRecord
 		want *models.RecordConfig
 	}{
-		{"A", DNSRecord{DNSRecord: vercelClient.DNSRecord{Name: "www", RecordType: "A", Value: "192.0.2.1", TTL: 300}, Type: "A"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeA, "192.0.2.1")},
-		{"TXT", DNSRecord{DNSRecord: vercelClient.DNSRecord{Name: "www", RecordType: "TXT", Value: "hello world", TTL: 300}, Type: "TXT"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeTXT, "hello world")},
-		{"MX", DNSRecord{DNSRecord: vercelClient.DNSRecord{Name: "www", RecordType: "MX", Value: "mail.example.net", TTL: 300}, Type: "MX", MXPriority: 10}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeMX, uint16(10), "mail.example.net.")},
-		{"SRV", DNSRecord{DNSRecord: vercelClient.DNSRecord{Name: "www", RecordType: "SRV", Value: "2 443 service.example.net.", TTL: 300, Priority: 1}, Type: "SRV"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeSRV, uint16(1), uint16(2), uint16(443), "service.example.net.")},
+		{"A", DNSRecord{Name: "www", RecordType: "A", Value: "192.0.2.1", TTL: 300, Type: "A"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeA, "192.0.2.1")},
+		{"TXT", DNSRecord{Name: "www", RecordType: "TXT", Value: "hello world", TTL: 300, Type: "TXT"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeTXT, "hello world")},
+		{"MX", DNSRecord{Name: "www", RecordType: "MX", Value: "mail.example.net", TTL: 300, Type: "MX", MXPriority: 10}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeMX, uint16(10), "mail.example.net.")},
+		{"SRV", DNSRecord{Name: "www", RecordType: "SRV", Value: "2 443 service.example.net.", TTL: 300, Priority: 1, Type: "SRV"}, dc.MustNewRecordConfig("www", 300, dnsv2.TypeSRV, uint16(1), uint16(2), uint16(443), "service.example.net.")},
 	}
 
 	for _, tt := range tests {

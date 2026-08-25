@@ -6,16 +6,13 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestLua(t *testing.T) {
 	y := &LUA{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		LUA: privatetypesrdata.LUA{
-			LuaType:    "A",
-			LuaPayload: "return_127_0_0_1",
-		},
+		Hdr:        dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		LuaType:    "A",
+		LuaPayload: "return_127_0_0_1",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

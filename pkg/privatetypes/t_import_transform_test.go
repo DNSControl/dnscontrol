@@ -6,18 +6,15 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestImportTransform(t *testing.T) {
 	y := &IMPORTTRANSFORM{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		IMPORTTRANSFORM: privatetypesrdata.IMPORTTRANSFORM{
-			TransformTable: "1.1.1.0 ~ 1.1.1.100 ~ 4.4.4.100 ~",
-			TTL:            123,
-			SuffixStrip:    "com",
-			TargetDomain:   "example.com",
-		},
+		Hdr:            dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		TransformTable: "1.1.1.0 ~ 1.1.1.100 ~ 4.4.4.100 ~",
+		TTL:            123,
+		SuffixStrip:    "com",
+		TargetDomain:   "example.com",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

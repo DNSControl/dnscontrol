@@ -42,10 +42,8 @@ func (rr *URL) Data() dnsv2.RDATA {
 }
 func (rr *URL) Clone() dnsv2.RR {
 	return &URL{
-		Hdr: rr.Hdr,
-		URL: privatetypesrdata.URL{
-			Location: rr.Location,
-		}}
+		Hdr:      rr.Hdr,
+		Location: rr.Location}
 }
 func (rr *URL) String() string {
 	return (rr.Header().Name + "\t" +

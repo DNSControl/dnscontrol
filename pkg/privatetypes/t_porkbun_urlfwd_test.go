@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestPorkbunUrlfwd_Plain(t *testing.T) {
 	y := &PORKBUNURLFWD{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		PORKBUNURLFWD: privatetypesrdata.PORKBUNURLFWD{
-			Location: "http://example.com",
-		},
+		Hdr:      dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		Location: "http://example.com",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

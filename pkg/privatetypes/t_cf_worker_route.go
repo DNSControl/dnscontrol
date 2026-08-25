@@ -43,11 +43,9 @@ func (rr *CFWORKERROUTE) Data() dnsv2.RDATA {
 }
 func (rr *CFWORKERROUTE) Clone() dnsv2.RR {
 	return &CFWORKERROUTE{
-		Hdr: rr.Hdr,
-		CFWORKERROUTE: privatetypesrdata.CFWORKERROUTE{
-			When: rr.When,
-			Then: rr.Then,
-		}}
+		Hdr:  rr.Hdr,
+		When: rr.When,
+		Then: rr.Then}
 }
 func (rr *CFWORKERROUTE) String() string {
 	return (rr.Header().Name + "\t" +

@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestAlias(t *testing.T) {
 	y := &ALIAS{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		ALIAS: privatetypesrdata.ALIAS{
-			Target: "example.com.",
-		},
+		Hdr:    dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		Target: "example.com.",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

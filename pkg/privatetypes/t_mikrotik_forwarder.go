@@ -42,10 +42,8 @@ func (rr *MIKROTIKFORWARDER) Data() dnsv2.RDATA {
 }
 func (rr *MIKROTIKFORWARDER) Clone() dnsv2.RR {
 	return &MIKROTIKFORWARDER{
-		Hdr: rr.Hdr,
-		MIKROTIKFORWARDER: privatetypesrdata.MIKROTIKFORWARDER{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *MIKROTIKFORWARDER) String() string {
 	return (rr.Header().Name + "\t" +

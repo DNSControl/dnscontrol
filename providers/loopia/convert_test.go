@@ -25,12 +25,12 @@ func TestNativeToRecord_1(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	zrec := zRec{}
-	zrec.Type = "A"
-	zrec.TTL = 300
-	zrec.Rdata = "1.2.3.4"
-	zrec.Priority = 0
-	zrec.RecordID = 0
+	zrec := zRec{
+		Type:     "A",
+		TTL:      300,
+		Rdata:    "1.2.3.4",
+		Priority: 0,
+		RecordID: 0}
 
 	rc, err := nativeToRecord(zrec.SetZR(), dc, "www")
 

@@ -256,9 +256,8 @@ func (provider *exoscaleProvider) createRecordFunc(
 			Type:     egoscale.CreateDNSDomainRecordRequestType(recordConfig.Type),
 			Content:  target,
 			Priority: prio,
-		}
 
-		record.Ttl = int64(recordConfig.TTL)
+			Ttl: int64(recordConfig.TTL)}
 
 		ctx := context.Background()
 		op, err := provider.client.CreateDNSDomainRecord(ctx, domainID, record)

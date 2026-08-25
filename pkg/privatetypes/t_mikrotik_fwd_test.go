@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestMikrotikFwd(t *testing.T) {
 	y := &MIKROTIKFWD{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		MIKROTIKFWD: privatetypesrdata.MIKROTIKFWD{
-			ForwardTo: "example.com.",
-		},
+		Hdr:       dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		ForwardTo: "example.com.",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

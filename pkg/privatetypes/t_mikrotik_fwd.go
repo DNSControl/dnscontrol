@@ -42,10 +42,8 @@ func (rr *MIKROTIKFWD) Data() dnsv2.RDATA {
 }
 func (rr *MIKROTIKFWD) Clone() dnsv2.RR {
 	return &MIKROTIKFWD{
-		Hdr: rr.Hdr,
-		MIKROTIKFWD: privatetypesrdata.MIKROTIKFWD{
-			ForwardTo: rr.ForwardTo,
-		}}
+		Hdr:       rr.Hdr,
+		ForwardTo: rr.ForwardTo}
 }
 func (rr *MIKROTIKFWD) String() string {
 	return (rr.Header().Name + "\t" +

@@ -335,8 +335,8 @@ func parseRecordFilter(filterString string) ([]dnssdk.RecordFilter, error) {
 			return nil, fmt.Errorf("filter %s has invalid format, correct format is \"type,strict[,limit]\"", s)
 		}
 
-		record := dnssdk.RecordFilter{}
-		record.Type = fields[0]
+		record := dnssdk.RecordFilter{
+			Type: fields[0]}
 
 		record.Strict, err = strconv.ParseBool(fields[1])
 		if err != nil {

@@ -6,18 +6,15 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestCloudflareapiSingleRedirect(t *testing.T) {
 	y := &CLOUDFLAREAPISINGLEREDIRECT{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		CLOUDFLAREAPISINGLEREDIRECT: privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT{
-			SRName: "first_rule",
-			Code:   301,
-			SRWhen: "when_string",
-			SRThen: "then_string",
-		},
+		Hdr:    dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		SRName: "first_rule",
+		Code:   301,
+		SRWhen: "when_string",
+		SRThen: "then_string",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {
