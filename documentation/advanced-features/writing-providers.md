@@ -21,7 +21,7 @@
   - [Step 17: Submit a PR](#step-17-submit-a-pr)
   - [Step 18: After the PR is merged](#step-18-after-the-pr-is-merged)
 
-Writing a new DNS provider is a relatively straightforward process. You essentially need to implement the [providers.DNSServiceProvider interface.](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/providers#DNSServiceProvider) and the system takes care of the rest.
+Writing a new DNS provider is a relatively straightforward process. You essentially need to implement the [providers.DNSServiceProvider interface.](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider) and the system takes care of the rest.
 
 Please do note that if you submit a new provider you will be assigned bugs related to the provider in the future (unless you designate someone else as the maintainer). [More details here](../provider/index.md).
 
@@ -84,10 +84,10 @@ DNSControl provides 4 helper functions that do all the hard work for you.  As in
 
 The functions are:
 
-* [diff2.ByRecord()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/diff2#ByRecord) -- Updates are done one DNS record at a time. New records are added. Changes and deletes refer to an ID assigned to the record by the provider.
-* [diff2.ByLabel()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/diff2#ByLabel) -- Updates are done for an entire label. Adds and changes are done by sending one or more records that will appear at that label (i.e. `www.example.com`). Deletes delete all records at that label.
-* [diff2.ByRecordSet()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/diff2#ByRecordSet) -- Similar to ByLabel() but updates are done on the label+type level. If `www.example.com` has 2 A records and 2 MX records, updates must replace all the A records, or all the MX records, or add records of a different type.
-* [diff2.ByZone()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/diff2#ByZone) -- Updates are done by uploading the entire zone every time.
+* [diff2.ByRecord()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecord) -- Updates are done one DNS record at a time. New records are added. Changes and deletes refer to an ID assigned to the record by the provider.
+* [diff2.ByLabel()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByLabel) -- Updates are done for an entire label. Adds and changes are done by sending one or more records that will appear at that label (i.e. `www.example.com`). Deletes delete all records at that label.
+* [diff2.ByRecordSet()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecordSet) -- Similar to ByLabel() but updates are done on the label+type level. If `www.example.com` has 2 A records and 2 MX records, updates must replace all the A records, or all the MX records, or add records of a different type.
+* [diff2.ByZone()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByZone) -- Updates are done by uploading the entire zone every time.
 
 To determine your provider's category, review your API documentation.
 
@@ -160,13 +160,13 @@ Providers without registered metadata still work; users just create the
 
 **If you are implementing a DNS Registrar:**
 
-Implement all the calls in the [providers.Registrar interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/providers#Registrar).
+Implement all the calls in the [providers.Registrar interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#Registrar).
 
 The function `GetRegistrarCorrections()` returns a list of corrections to be made. These are in the form of functions that DNSControl can call to actually make the corrections.
 
 **If you are implementing a DNS Service Provider:**
 
-Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4/pkg/providers#DNSServiceProvider).
+Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider).
 
 * The function that converts the API's native records to `models.RecordConfig` structs should be called toRC().
 * There are helper functions (factories) for creating `models.RecordConfig`'s. See [The Cookbook](developer-info/cookbook.md) "Create a `models.RecordConfig`" for details.
