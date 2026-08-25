@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -60,7 +61,7 @@ func init() {
 func New(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
 	apiKey := m["api_key"]
 	if apiKey == "" {
-		return nil, fmt.Errorf("missing Dynu API key")
+		return nil, errors.New("missing Dynu API key")
 	}
 	return &dynuProvider{
 		apiKey:    apiKey,

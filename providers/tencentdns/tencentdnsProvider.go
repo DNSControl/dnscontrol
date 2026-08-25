@@ -2,6 +2,7 @@ package tencentdns
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -96,7 +97,7 @@ func newTencentDNS(config map[string]string) (*tencentdnsProvider, error) {
 	secretID := config["secret_id"]
 	secretKey := config["secret_key"]
 	if secretID == "" || secretKey == "" {
-		return nil, fmt.Errorf("missing tencent cloud credentials (secret_id, secret_key)")
+		return nil, errors.New("missing tencent cloud credentials (secret_id, secret_key)")
 	}
 
 	region := config["region"]

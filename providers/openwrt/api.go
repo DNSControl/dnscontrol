@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -82,10 +81,9 @@ retry:
 	}
 
 	if response.Result == "" {
-		return "", fmt.Errorf("authentication token is empty")
-	} else {
-		return response.Result, response.Error
+		return "", errors.New("authentication token is empty")
 	}
+	return response.Result, response.Error
 }
 
 func (c *openwrtProvider) uciApply() ([]any, error) {

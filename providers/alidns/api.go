@@ -1,6 +1,7 @@
 package alidns
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -80,7 +81,7 @@ func (a *aliDNSDsp) deleteRecordset(records models.Records) error {
 		req := alidns.CreateDeleteDomainRecordRequest()
 		original, ok := r.Original.(*alidns.Record)
 		if !ok {
-			return fmt.Errorf("deleteRecordset: record original is not of type *alidns.Record")
+			return errors.New("deleteRecordset: record original is not of type *alidns.Record")
 		}
 		req.RecordId = original.RecordId
 

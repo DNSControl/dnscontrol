@@ -653,10 +653,12 @@ func skipProvider(name string, providers []*models.DNSProviderInstance) bool {
 	})
 }
 
+// ansiEscapeRe matches terminal ANSI styling escape sequences.
+var ansiEscapeRe = regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
+
 func parseCorrectionMsg(s string) []string {
-	// Regex to remove the terminal styled formatting
-	ansiRe := regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
-	s = ansiRe.ReplaceAllString(s, "")
+	// Remove the terminal styled formatting.
+	s = ansiEscapeRe.ReplaceAllString(s, "")
 	// Create a slice(array) of correction/actions/changes from Msg
 	corrections := strings.Split(s, "\n")
 	// Clean up the slice, precaution remove any empty entries.

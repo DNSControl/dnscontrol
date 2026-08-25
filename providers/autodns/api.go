@@ -120,7 +120,7 @@ func (api *autoDNSProvider) request(method string, requestPath string, data any)
 		time.Sleep(sleepDuration)
 	}
 
-	return nil, errors.New("Failed to fetch" + requestURL.Path + " after 4 retries")
+	return nil, fmt.Errorf("failed to fetch %s after 4 retries", requestURL.Path)
 }
 
 func (api *autoDNSProvider) findZoneSystemNameServer(domain string) (*models.Nameserver, error) {
