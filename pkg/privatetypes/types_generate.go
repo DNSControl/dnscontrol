@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -39,8 +40,8 @@ type FieldDef struct {
 
 // TestDataDef represents test data for a type
 type TestDataDef struct {
-	Name   string                 `yaml:"name"`
-	Values map[string]interface{} `yaml:"values"`
+	Name   string         `yaml:"name"`
+	Values map[string]any `yaml:"values"`
 }
 
 // Config represents the YAML file structure
@@ -166,7 +167,7 @@ func fieldStringExpr(receiver string, f FieldDef) string {
 }
 
 // formatLiteral renders a test-data value as a Go literal appropriate for the field type.
-func formatLiteral(typeName string, v interface{}) string {
+func formatLiteral(typeName string, v any) string {
 	ti := info(typeName)
 	s := fmt.Sprintf("%v", v)
 	switch {
@@ -330,7 +331,7 @@ func generateTypeFile(t *TypeDef) error {
 		fmt.Fprintf(&buf, "\treturn nil\n")
 	} else {
 		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{", typeName)
-		fields := append(append(append([]FieldDef{}, t.Fields...), t.OptionalFields...), t.RuntimeFields...)
+		fields := slices.Concat(t.Fields, t.OptionalFields, t.RuntimeFields)
 		for i, f := range fields {
 			if i > 0 {
 				buf.WriteString(", ")
@@ -349,12 +350,14 @@ func generateTypeFile(t *TypeDef) error {
 	} else {
 		fmt.Fprintf(&buf, "\treturn &%s{\n", typeName)
 		buf.WriteString("\t\tHdr: rr.Hdr,\n")
-		fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
-		fields := append(append(append([]FieldDef{}, t.Fields...), t.OptionalFields...), t.RuntimeFields...)
-		for _, f := range fields {
-			fmt.Fprintf(&buf, "\t\t\t%s: rr.%s,\n", f.Name, f.Name)
+		fields := slices.Concat(t.Fields, t.OptionalFields, t.RuntimeFields)
+		for i, f := range fields {
+			if i == len(fields)-1 {
+				fmt.Fprintf(&buf, "\t\t%s: rr.%s}\n", f.Name, f.Name)
+			} else {
+				fmt.Fprintf(&buf, "\t\t%s: rr.%s,\n", f.Name, f.Name)
+			}
 		}
-		buf.WriteString("\t\t}}\n")
 	}
 	buf.WriteString("}\n")
 
@@ -430,9 +433,6 @@ func generateTestFile(t *TypeDef) error {
 		std = append(std, `"net/netip"`)
 	}
 	third := []string{`dnsv2 "codeberg.org/miekg/dns"`}
-	if len(t.Fields) > 0 {
-		third = append(third, `privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"`)
-	}
 	writeImports(&buf, std, third)
 
 	if len(t.Fields) == 0 {
@@ -451,11 +451,9 @@ func generateTestFile(t *TypeDef) error {
 			fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testFuncName)
 			fmt.Fprintf(&buf, "\ty := &%s{\n", typeName)
 			buf.WriteString("\t\tHdr: dnsv2.Header{Name: \"example.org.\", Class: dnsv2.ClassINET},\n")
-			fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
-			for _, f := range append(t.Fields, t.OptionalFields...) {
-				fmt.Fprintf(&buf, "\t\t\t%s: %s,\n", f.Name, zeroLiteral(f.Type))
+			for _, f := range slices.Concat(t.Fields, t.OptionalFields) {
+				fmt.Fprintf(&buf, "\t\t%s: %s,\n", f.Name, zeroLiteral(f.Type))
 			}
-			buf.WriteString("\t\t},\n")
 			buf.WriteString("\t}\n")
 			buf.WriteString("\trry, err := dnsv2.New(y.String())\n")
 			buf.WriteString("\tif err != nil {\n")
@@ -475,19 +473,17 @@ func generateTestFile(t *TypeDef) error {
 				fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testName)
 				fmt.Fprintf(&buf, "\ty := &%s{\n", typeName)
 				buf.WriteString("\t\tHdr: dnsv2.Header{Name: \"example.org.\", Class: dnsv2.ClassINET},\n")
-				fmt.Fprintf(&buf, "\t\t%s: privatetypesrdata.%s{\n", typeName, typeName)
 
-				for _, f := range append(t.Fields, t.OptionalFields...) {
+				for _, f := range slices.Concat(t.Fields, t.OptionalFields) {
 					var lit string
 					if v, ok := td.Values[f.Name]; ok {
 						lit = formatLiteral(f.Type, v)
 					} else {
 						lit = zeroLiteral(f.Type)
 					}
-					fmt.Fprintf(&buf, "\t\t\t%s: %s,\n", f.Name, lit)
+					fmt.Fprintf(&buf, "\t\t%s: %s,\n", f.Name, lit)
 				}
 
-				buf.WriteString("\t\t},\n")
 				buf.WriteString("\t}\n")
 				buf.WriteString("\trry, err := dnsv2.New(y.String())\n")
 				buf.WriteString("\tif err != nil {\n")
@@ -651,7 +647,7 @@ func generateRdataFile(t *TypeDef) error {
 	// "origin" is unused when there are no TargetHost fields.
 	if len(t.Fields) > 0 || len(t.OptionalFields) > 0 {
 		needsOrigin := false
-		for _, f := range append(t.Fields, t.OptionalFields...) {
+		for _, f := range slices.Concat(t.Fields, t.OptionalFields) {
 			if info(f.Type).NeedsOrigin {
 				needsOrigin = true
 				break
@@ -660,8 +656,8 @@ func generateRdataFile(t *TypeDef) error {
 		if !needsOrigin {
 			// Rewrite the receiver to use _ instead of origin to avoid unused-var warnings.
 			out := bytes.Replace(buf.Bytes(),
-				[]byte(fmt.Sprintf("func Make%s(origin string, isEnabled, args ...any)", typeName)),
-				[]byte(fmt.Sprintf("func Make%s(_ string, isEnabled, args ...any)", typeName)),
+				fmt.Appendf(nil, "func Make%s(origin string, isEnabled, args ...any)", typeName),
+				fmt.Appendf(nil, "func Make%s(_ string, isEnabled, args ...any)", typeName),
 				1)
 			buf.Reset()
 			buf.Write(out)
