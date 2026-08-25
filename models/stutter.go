@@ -16,6 +16,7 @@ func doesStutter(name, origin string) bool {
 	if name == "@" {
 		return false
 	}
+	// Return true if name is the origin (should be "@") or ends in the origin.
 	return name == origin || strings.HasSuffix(name, "."+origin)
 }
 
