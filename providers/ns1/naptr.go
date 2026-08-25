@@ -1,6 +1,7 @@
 package ns1
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -51,7 +52,7 @@ func naptrAssureQuotedFields(contents string) (string, error) {
 func naptrAddQuotes(flag string) (string, error) {
 	switch len(flag) {
 	case 0:
-		return "", fmt.Errorf("empty flag")
+		return "", errors.New("empty flag")
 	case 1:
 		if flag[0] == '"' {
 			return "", fmt.Errorf("invalid flag: %q", flag)
@@ -59,13 +60,13 @@ func naptrAddQuotes(flag string) (string, error) {
 		return `"` + flag + `"`, nil
 	case 2:
 		if flag == `""` {
-			return "", fmt.Errorf("empty flag")
+			return "", errors.New("empty flag")
 		}
 		if flag[0] == '"' {
-			return "", fmt.Errorf("unclosed quote")
+			return "", errors.New("unclosed quote")
 		}
 		if flag[1] == '"' {
-			return "", fmt.Errorf("unopened quote")
+			return "", errors.New("unopened quote")
 		}
 		return `"` + flag + `"`, nil
 	}
@@ -75,10 +76,10 @@ func naptrAddQuotes(flag string) (string, error) {
 		return flag, nil
 	}
 	if flag[0] == '"' {
-		return "", fmt.Errorf("unclosed quote")
+		return "", errors.New("unclosed quote")
 	}
 	if flag[last] == '"' {
-		return "", fmt.Errorf("unopened quote")
+		return "", errors.New("unopened quote")
 	}
 	return `"` + flag + `"`, nil
 }

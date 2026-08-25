@@ -398,13 +398,8 @@ func wouldOverfill(batch *gdns.Change, adds, dels *gdns.ResourceRecordSet) bool 
 		delCount = len(dels.Rrdatas)
 	}
 
-	if (len(batch.Additions) + addCount) > batchMax { // Would additions push us over the limit?
-		return true
-	}
-	if (len(batch.Deletions) + delCount) > batchMax { // Would deletions push us over the limit?
-		return true
-	}
-	return false
+	// Would additions or deletions push us over the limit?
+	return len(batch.Additions)+addCount > batchMax || len(batch.Deletions)+delCount > batchMax
 }
 
 func (g *gcloudProvider) mkCorrection(corrections []*models.Correction, accumulatedMsgs []string, batch *gdns.Change, origin string) []*models.Correction {

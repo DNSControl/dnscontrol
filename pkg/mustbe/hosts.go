@@ -127,12 +127,8 @@ func violatesSingleDotPolicy(s string) bool {
 	if strings.HasSuffix(s, ".") {
 		return false
 	}
-	// contains even a single dot, fails.
-	if strings.Contains(s, ".") {
-		return true
-	}
-	// Otherwise, passes.
-	return false
+	// Any interior dot (with no trailing dot to make it an FQDN) fails.
+	return strings.Contains(s, ".")
 }
 
 func MakeErrorSingleDotViolation(s string) error {

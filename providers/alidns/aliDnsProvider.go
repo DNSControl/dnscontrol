@@ -2,6 +2,7 @@ package alidns
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -81,12 +82,12 @@ type domainVersionInfo struct {
 func newAliDNSDsp(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
 	accessKeyID := config["access_key_id"]
 	if accessKeyID == "" {
-		return nil, fmt.Errorf("creds.json: access_key_id must not be empty")
+		return nil, errors.New("creds.json: access_key_id must not be empty")
 	}
 
 	accessKeySecret := config["access_key_secret"]
 	if accessKeySecret == "" {
-		return nil, fmt.Errorf("creds.json: access_key_secret must not be empty")
+		return nil, errors.New("creds.json: access_key_secret must not be empty")
 	}
 
 	// Region ID defaults to "cn-hangzhou". The region value does not affect
