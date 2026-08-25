@@ -42,10 +42,8 @@ func (rr *ADGUARDHOMEAAAAPASSTHROUGH) Data() dnsv2.RDATA {
 }
 func (rr *ADGUARDHOMEAAAAPASSTHROUGH) Clone() dnsv2.RR {
 	return &ADGUARDHOMEAAAAPASSTHROUGH{
-		Hdr: rr.Hdr,
-		ADGUARDHOMEAAAAPASSTHROUGH: privatetypesrdata.ADGUARDHOMEAAAAPASSTHROUGH{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *ADGUARDHOMEAAAAPASSTHROUGH) String() string {
 	return (rr.Header().Name + "\t" +

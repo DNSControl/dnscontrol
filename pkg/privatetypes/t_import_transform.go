@@ -45,13 +45,11 @@ func (rr *IMPORTTRANSFORM) Data() dnsv2.RDATA {
 }
 func (rr *IMPORTTRANSFORM) Clone() dnsv2.RR {
 	return &IMPORTTRANSFORM{
-		Hdr: rr.Hdr,
-		IMPORTTRANSFORM: privatetypesrdata.IMPORTTRANSFORM{
-			TransformTable: rr.TransformTable,
-			TTL:            rr.TTL,
-			SuffixStrip:    rr.SuffixStrip,
-			TargetDomain:   rr.TargetDomain,
-		}}
+		Hdr:            rr.Hdr,
+		TransformTable: rr.TransformTable,
+		TTL:            rr.TTL,
+		SuffixStrip:    rr.SuffixStrip,
+		TargetDomain:   rr.TargetDomain}
 }
 func (rr *IMPORTTRANSFORM) String() string {
 	return (rr.Header().Name + "\t" +

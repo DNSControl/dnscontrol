@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestBunnyDnsPz(t *testing.T) {
 	y := &BUNNYDNSPZ{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		BUNNYDNSPZ: privatetypesrdata.BUNNYDNSPZ{
-			PullZoneID: 123,
-		},
+		Hdr:        dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		PullZoneID: 123,
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

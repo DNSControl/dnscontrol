@@ -43,10 +43,8 @@ func (rr *AKAMAICDN) Data() dnsv2.RDATA {
 }
 func (rr *AKAMAICDN) Clone() dnsv2.RR {
 	return &AKAMAICDN{
-		Hdr: rr.Hdr,
-		AKAMAICDN: privatetypesrdata.AKAMAICDN{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *AKAMAICDN) String() string {
 	return (rr.Header().Name + "\t" +

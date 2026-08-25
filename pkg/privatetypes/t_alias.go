@@ -43,10 +43,8 @@ func (rr *ALIAS) Data() dnsv2.RDATA {
 }
 func (rr *ALIAS) Clone() dnsv2.RR {
 	return &ALIAS{
-		Hdr: rr.Hdr,
-		ALIAS: privatetypesrdata.ALIAS{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *ALIAS) String() string {
 	return (rr.Header().Name + "\t" +

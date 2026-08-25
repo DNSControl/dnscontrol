@@ -211,10 +211,8 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 			return nil, fmt.Errorf("registrar named %s expected for %s, but never registered", d.RegistrarName, d.Name)
 		}
 		d.RegistrarInstance = &models.RegistrarInstance{
-			ProviderBase: models.ProviderBase{
-				Name:         reg.Name,
-				ProviderType: reg.Type,
-			},
+			Name:         reg.Name,
+			ProviderType: reg.Type,
 		}
 		for pName, n := range d.DNSProviderNames {
 			prov, ok := cfg.DNSProvidersByName[pName]
@@ -222,10 +220,8 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 				return nil, fmt.Errorf("DNS Provider named %s expected for %s, but never registered", pName, d.Name)
 			}
 			d.DNSProviderInstances = append(d.DNSProviderInstances, &models.DNSProviderInstance{
-				ProviderBase: models.ProviderBase{
-					Name:         pName,
-					ProviderType: prov.Type,
-				},
+				Name:                pName,
+				ProviderType:        prov.Type,
 				NumberOfNameservers: n,
 			})
 		}

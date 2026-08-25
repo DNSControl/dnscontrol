@@ -43,11 +43,9 @@ func (rr *AZUREALIAS) Data() dnsv2.RDATA {
 }
 func (rr *AZUREALIAS) Clone() dnsv2.RR {
 	return &AZUREALIAS{
-		Hdr: rr.Hdr,
-		AZUREALIAS: privatetypesrdata.AZUREALIAS{
-			AliasType: rr.AliasType,
-			Target:    rr.Target,
-		}}
+		Hdr:       rr.Hdr,
+		AliasType: rr.AliasType,
+		Target:    rr.Target}
 }
 func (rr *AZUREALIAS) String() string {
 	return (rr.Header().Name + "\t" +

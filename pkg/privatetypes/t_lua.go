@@ -43,11 +43,9 @@ func (rr *LUA) Data() dnsv2.RDATA {
 }
 func (rr *LUA) Clone() dnsv2.RR {
 	return &LUA{
-		Hdr: rr.Hdr,
-		LUA: privatetypesrdata.LUA{
-			LuaType:    rr.LuaType,
-			LuaPayload: rr.LuaPayload,
-		}}
+		Hdr:        rr.Hdr,
+		LuaType:    rr.LuaType,
+		LuaPayload: rr.LuaPayload}
 }
 func (rr *LUA) String() string {
 	return (rr.Header().Name + "\t" +

@@ -188,10 +188,10 @@ func (c *desecProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exist
 
 		case diff2.DELETE:
 			// An empty array of records deletes this rrset.
-			rc := resourceRecord{}
-			rc.Type = change.Key.Type
-			rc.Records = make([]string, 0)
-			rc.TTL = 3600
+			rc := resourceRecord{
+				Type:    change.Key.Type,
+				Records: make([]string, 0),
+				TTL:     3600}
 			shortname := dc.ToShort(change.Key.NameFQDN)
 			if shortname == "@" {
 				shortname = ""

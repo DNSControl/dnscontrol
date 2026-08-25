@@ -8,6 +8,7 @@ parameters:
   - service
   - regexp
   - target
+  - modifiers...
 parameter_types:
   subdomain: string
   order: number
@@ -16,6 +17,7 @@ parameter_types:
   service: string
   regexp: string
   target: string
+  "modifiers...": RecordModifier[]
 ---
 
 ## Introduction

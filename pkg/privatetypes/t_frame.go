@@ -42,10 +42,8 @@ func (rr *FRAME) Data() dnsv2.RDATA {
 }
 func (rr *FRAME) Clone() dnsv2.RR {
 	return &FRAME{
-		Hdr: rr.Hdr,
-		FRAME: privatetypesrdata.FRAME{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *FRAME) String() string {
 	return (rr.Header().Name + "\t" +

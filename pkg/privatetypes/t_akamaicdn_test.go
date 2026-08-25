@@ -6,15 +6,12 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 func TestAkamaicdn(t *testing.T) {
 	y := &AKAMAICDN{
-		Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
-		AKAMAICDN: privatetypesrdata.AKAMAICDN{
-			Target: "example.com.",
-		},
+		Hdr:    dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET},
+		Target: "example.com.",
 	}
 	rry, err := dnsv2.New(y.String())
 	if err != nil {

@@ -42,10 +42,8 @@ func (rr *BUNNYDNSRDR) Data() dnsv2.RDATA {
 }
 func (rr *BUNNYDNSRDR) Clone() dnsv2.RR {
 	return &BUNNYDNSRDR{
-		Hdr: rr.Hdr,
-		BUNNYDNSRDR: privatetypesrdata.BUNNYDNSRDR{
-			Target: rr.Target,
-		}}
+		Hdr:    rr.Hdr,
+		Target: rr.Target}
 }
 func (rr *BUNNYDNSRDR) String() string {
 	return (rr.Header().Name + "\t" +

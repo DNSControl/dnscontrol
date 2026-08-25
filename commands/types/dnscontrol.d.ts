@@ -250,7 +250,7 @@ declare function AAAA(name: string, address: string, ...modifiers: RecordModifie
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific//adguardhome_aaaa_passthrough
  */
-declare function ADGUARDHOME_AAAA_PASSTHROUGH(source: string, destination: string): DomainModifier;
+declare function ADGUARDHOME_AAAA_PASSTHROUGH(source: string, destination: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * `ADGUARDHOME_A_PASSTHROUGH` represents the literal 'A'. AdGuardHome uses this to passthrough
@@ -269,7 +269,7 @@ declare function ADGUARDHOME_AAAA_PASSTHROUGH(source: string, destination: strin
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific//adguardhome_a_passthrough
  */
-declare function ADGUARDHOME_A_PASSTHROUGH(source: string, destination: string): DomainModifier;
+declare function ADGUARDHOME_A_PASSTHROUGH(source: string, destination: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * AKAMAICDN is a proprietary record type that is used to configure [Zone Apex Mapping](https://www.akamai.com/blog/security/edge-dns--zone-apex-mapping---dnssec).
@@ -671,7 +671,7 @@ declare function CF_TEMP_REDIRECT(source: string, destination: string, ...modifi
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/cloudflare-dns/cf_worker_route
  */
-declare function CF_WORKER_ROUTE(pattern: string, script: string): DomainModifier;
+declare function CF_WORKER_ROUTE(pattern: string, script: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * Documentation needed.
@@ -1033,11 +1033,14 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  * * `nonexistentSubdomainPolicy:` The DMARC policy for nonexistent subdomains (`np=`), must be one of `"none"`, `"quarantine"`, `"reject"` (optional)
  * * `alignmentSPF:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for SPF (`aspf=`, default: `"r"`)
  * * `alignmentDKIM:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for DKIM (`adkim=`, default: `"r"`)
+ * * `percent:` Integer percentage (0-100) of messages to which the DMARC policy is applied (`pct=`, optional)
  * * `rua:` Array of aggregate report targets (optional)
  * * `ruf:` Array of failure report targets (optional)
  * * `publicSuffixDomain:` `"y"`, or `"n"` or `"u"` indicates whether the domain is a Public Suffix Domain (`psd=`, default: `"u"`)
  * * `testMode:` `"y"` or `"n"` DMARC policy test mode dictates whether p, sp, or np policy tags are applied (`t=`, default: `"n"`)
  * * `failureOptions:` Object or string; Object containing booleans `SPF` and `DKIM`, string is passed raw (`fo=`, default: `"0"`)
+ * * `failureFormat:` Format of the message's failure reports (`rf=`); only emitted when `ruf` is also set (optional)
+ * * `reportInterval:` Requested interval between aggregate reports, as a `Duration` or number of seconds (`ri=`, optional)
  * * `ttl:` Input for `TTL` method (optional)
  *
  * ### Caveats
@@ -1047,7 +1050,7 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/dmarc_builder
  */
-declare function DMARC_BUILDER(opts: { label?: string; version?: string; policy: 'none' | 'quarantine' | 'reject'; subdomainPolicy?: 'none' | 'quarantine' | 'reject'; nonexistentSubdomainPolicy?: 'none' | 'quarantine' | 'reject'; alignmentSPF?: 'strict' | 's' | 'relaxed' | 'r'; alignmentDKIM?: 'strict' | 's' | 'relaxed' | 'r'; rua?: string[]; ruf?: string[]; publicSuffixDomain: 'y' | 'n' | 'u'; testMode: 'y' | 'n'; failureOptions?: { SPF: boolean, DKIM: boolean } | string; ttl?: Duration }): DomainModifier;
+declare function DMARC_BUILDER(opts: { label?: string; version?: string; policy: 'none' | 'quarantine' | 'reject'; subdomainPolicy?: 'none' | 'quarantine' | 'reject'; nonexistentSubdomainPolicy?: 'none' | 'quarantine' | 'reject'; alignmentSPF?: 'strict' | 's' | 'relaxed' | 'r'; alignmentDKIM?: 'strict' | 's' | 'relaxed' | 'r'; percent?: number; rua?: string[]; ruf?: string[]; publicSuffixDomain: 'y' | 'n' | 'u'; testMode: 'y' | 'n'; failureOptions?: { SPF: boolean, DKIM: boolean } | string; failureFormat?: string; reportInterval?: Duration | number; ttl?: Duration }): DomainModifier;
 
 /**
  * `DNAME` adds a [Delegation name record](https://www.rfc-editor.org/rfc/rfc6672) to the domain.
@@ -1908,9 +1911,11 @@ declare function IP(ip: string): number;
  * deg1: uint32
  * min1: uint32
  * sec1: float32
+ * ns: string
  * deg2: uint32
  * min2: uint32
  * sec2: float32
+ * ew: string
  * altitude: float32
  * size: float32
  * horizontal_precision: float32
@@ -1983,7 +1988,7 @@ declare function IP(ip: string): number;
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/loc
  */
-declare function LOC(deg1: number, min1: number, sec1: number, deg2: number, min2: number, sec2: number, altitude: number, size: number, horizontal_precision: number, vertical_precision: number): DomainModifier;
+declare function LOC(name: string, deg1: number, min1: number, sec1: number, ns: "N" | "S" | "n" | "s", deg2: number, min2: number, sec2: number, ew: "E" | "W" | "e" | "w", altitude: number, size: number, horizontal_precision: number, vertical_precision: number, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * `LOC_BUILDER_DD({})` actually takes an object with the following properties:
@@ -2494,7 +2499,7 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/nameserver
  */
-declare function NAMESERVER(name: string, ...modifiers: RecordModifier[]): DomainModifier;
+declare function NAMESERVER(name: string): DomainModifier;
 
 /**
  * NAMESERVER_TTL sets the TTL on the domain apex NS RRs defined by [`NAMESERVER`](NAMESERVER.md).
@@ -2717,7 +2722,7 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/naptr
  */
-declare function NAPTR(subdomain: string, order: number, preference: number, terminalflag: string, service: string, regexp: string, target: string): DomainModifier;
+declare function NAPTR(subdomain: string, order: number, preference: number, terminalflag: string, service: string, regexp: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
  * `NO_PURGE` indicates that existing records should not be deleted from a domain. Records will be added and updated, but not removed.
