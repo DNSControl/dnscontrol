@@ -1,6 +1,6 @@
 module github.com/DNSControl/dnscontrol/v5
 
-go 1.26
+go 1.27
 
 require golang.org/x/net v0.57.0
 
