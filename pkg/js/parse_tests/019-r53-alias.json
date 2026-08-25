@@ -7,7 +7,7 @@
       "records": [
         {
           "comparablev3": "AAAA foo.com. \"\" \"\"",
-          "filepos": "[line:6:5]",
+          "filepos": "[line:7:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -25,7 +25,7 @@
         },
         {
           "comparablev3": "AAAA foo.com. false ERERTFGFGF",
-          "filepos": "[line:7:5]",
+          "filepos": "[line:8:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -49,6 +49,24 @@
           },
           "name": "aevaltargethealthtest",
           "name_unicode": "aevaltargethealthtest",
+          "rdata": {
+            "AliasType": "A",
+            "EvalTargetHealth": "true",
+            "Target": "foo.com.",
+            "ZoneID": ""
+          },
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
+        },
+        {
+          "comparablev3": "A foo.com. false \"\"",
+          "filepos": "[line:6:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "aevaltargethealthtest2",
+          "name_unicode": "aevaltargethealthtest2",
           "rdata": {
             "AliasType": "A",
             "EvalTargetHealth": "false",
@@ -97,7 +115,7 @@
         },
         {
           "comparablev3": "CAA foo.com. \"\" \"\"",
-          "filepos": "[line:13:5]",
+          "filepos": "[line:14:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -114,8 +132,44 @@
           "typenum": 65298
         },
         {
+          "comparablev3": "A d111111abcdef8.cloudfront.net. \"\" \"\"",
+          "filepos": "[line:23:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "cftest",
+          "name_unicode": "cftest",
+          "rdata": {
+            "AliasType": "A",
+            "EvalTargetHealth": "",
+            "Target": "d111111abcdef8.cloudfront.net.",
+            "ZoneID": ""
+          },
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
+        },
+        {
+          "comparablev3": "A d222222abcdef8.cloudfront.net. false Z2FDTNDATAQYW2",
+          "filepos": "[line:24:5]",
+          "meta": {
+            "orig_custom_type": "R53_ALIAS"
+          },
+          "name": "cfzonetest",
+          "name_unicode": "cfzonetest",
+          "rdata": {
+            "AliasType": "A",
+            "EvalTargetHealth": "false",
+            "Target": "d222222abcdef8.cloudfront.net.",
+            "ZoneID": "Z2FDTNDATAQYW2"
+          },
+          "ttl": 300,
+          "type": "R53_ALIAS",
+          "typenum": 65298
+        },
+        {
           "comparablev3": "CNAME foo.com. \"\" \"\"",
-          "filepos": "[line:8:5]",
+          "filepos": "[line:9:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -133,7 +187,7 @@
         },
         {
           "comparablev3": "DS foo.com. \"\" \"\"",
-          "filepos": "[line:16:5]",
+          "filepos": "[line:17:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -151,7 +205,7 @@
         },
         {
           "comparablev3": "HTTPS foo.com. \"\" \"\"",
-          "filepos": "[line:20:5]",
+          "filepos": "[line:21:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -187,7 +241,7 @@
         },
         {
           "comparablev3": "NAPTR foo.com. \"\" \"\"",
-          "filepos": "[line:14:5]",
+          "filepos": "[line:15:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -205,7 +259,7 @@
         },
         {
           "comparablev3": "PTR foo.com. \"\" \"\"",
-          "filepos": "[line:9:5]",
+          "filepos": "[line:10:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -223,7 +277,7 @@
         },
         {
           "comparablev3": "SOA foo.com. \"\" \"\"",
-          "filepos": "[line:15:5]",
+          "filepos": "[line:16:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -241,7 +295,7 @@
         },
         {
           "comparablev3": "SPF foo.com. \"\" \"\"",
-          "filepos": "[line:12:5]",
+          "filepos": "[line:13:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -259,7 +313,7 @@
         },
         {
           "comparablev3": "SRV foo.com. \"\" \"\"",
-          "filepos": "[line:11:5]",
+          "filepos": "[line:12:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -277,7 +331,7 @@
         },
         {
           "comparablev3": "SSHFP foo.com. \"\" \"\"",
-          "filepos": "[line:18:5]",
+          "filepos": "[line:19:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -295,7 +349,7 @@
         },
         {
           "comparablev3": "SVCB foo.com. \"\" \"\"",
-          "filepos": "[line:19:5]",
+          "filepos": "[line:20:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -313,7 +367,7 @@
         },
         {
           "comparablev3": "TLSA foo.com. \"\" \"\"",
-          "filepos": "[line:17:5]",
+          "filepos": "[line:18:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
@@ -331,7 +385,7 @@
         },
         {
           "comparablev3": "TXT foo.com. \"\" \"\"",
-          "filepos": "[line:10:5]",
+          "filepos": "[line:11:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },

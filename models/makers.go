@@ -310,25 +310,6 @@ func MakeRP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	return dnsrdatav2.RP{Mbox: mbox, Txt: txt}, nil
 }
 
-func MakeR53ALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
-	mustbe.ValidArgs(args)
-	if len(args) != 5 {
-		return nil, fmt.Errorf("MakeR53ALIAS expects exactly 5 arguments, got %d: %+v", len(args), args)
-	}
-	target, err := mustbe.TargetHost(origin, isEnabled, args[1])
-	if err != nil {
-		return nil, err
-	}
-	return privatetypesrdata.R53ALIAS{
-		AliasType: mustbe.RawString(args[0]),
-		Target:    target,
-		// NB(tlim): These are commented out because the integration tests fail with them. Needs investigation.
-		// ZoneID:           mustbe.RawString(args[2]),
-		// EvalTargetHealth: mustbe.RawString(args[3]),
-		// FIXME(tlim): EvalTargetHealth is a boolean in our internal model but the R53ALIAS type expects a string. Maybe unify them in the future?
-	}, nil
-}
-
 func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {

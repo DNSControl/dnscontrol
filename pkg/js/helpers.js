@@ -406,7 +406,8 @@ function R53_EVALUATE_TARGET_HEALTH(enabled) {
 }
 
 function r53AliasOptions(record, processedArgs, processedMetas) {
-    var replacement = [processedArgs[0], processedArgs[1], '', ''];
+    // The args are [label, aliasType, target, evaluate_target_health, zone_id].
+    var replacement = [ processedArgs[0], processedArgs[1], processedArgs[2], '', '', ];
 
     if (_.isObject(record.r53_alias)) {
         replacement[3] = record.r53_alias['evaluate_target_health'] = 'false';
