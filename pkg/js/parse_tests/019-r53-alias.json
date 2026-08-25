@@ -42,7 +42,7 @@
           "typenum": 65298
         },
         {
-          "comparablev3": "A foo.com. false \"\"",
+          "comparablev3": "A foo.com. true \"\"",
           "filepos": "[line:5:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"

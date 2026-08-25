@@ -410,7 +410,7 @@ function r53AliasOptions(record, processedArgs, processedMetas) {
     var replacement = [ processedArgs[0], processedArgs[1], processedArgs[2], '', '', ];
 
     if (_.isObject(record.r53_alias)) {
-        replacement[3] = record.r53_alias['evaluate_target_health'] = 'false';
+        replacement[3] = record.r53_alias['evaluate_target_health'] || 'false';
         replacement[4] = record.r53_alias['zone_id'] || '';
     }
 
