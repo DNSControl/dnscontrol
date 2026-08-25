@@ -1,6 +1,7 @@
 package websupport
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -90,7 +91,7 @@ func (c *websupportProvider) mkChangeCorrection(svcID int64, oldRec, newRec *mod
 		F: func() error {
 			id := oldRec.Original.(nativeRecord).ID
 			if id == 0 {
-				return fmt.Errorf("WEBSUPPORT: cannot update record without an id")
+				return errors.New("WEBSUPPORT: cannot update record without an id")
 			}
 			input := models.Records{newRec}
 			before := providers.BeginToNative(c.observer, "toNative", input)
@@ -110,7 +111,7 @@ func (c *websupportProvider) mkDeleteCorrection(svcID int64, oldRec *models.Reco
 		F: func() error {
 			id := oldRec.Original.(nativeRecord).ID
 			if id == 0 {
-				return fmt.Errorf("WEBSUPPORT: cannot delete record without an id")
+				return errors.New("WEBSUPPORT: cannot delete record without an id")
 			}
 			return c.deleteRecord(svcID, id)
 		},

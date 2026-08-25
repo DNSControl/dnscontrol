@@ -2,6 +2,7 @@ package gcloud
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -13,7 +14,7 @@ import (
 func (g *gcloudProvider) getDnssecCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
 	// Don't allow combining AUTODNSSEC_{ON,OFF} with metadata DnssecConfig
 	if dc.AutoDNSSEC != "" && dc.Metadata["DnssecConfig"] != "" {
-		return nil, fmt.Errorf("cannot use AUTODNSSEC and DnssecConfig-metadata at the same time")
+		return nil, errors.New("cannot use AUTODNSSEC and DnssecConfig-metadata at the same time")
 	}
 	if dc.Metadata["DnssecConfig"] != "" {
 		return g.getDnssecCorrectionsFromMetadata(dc)
