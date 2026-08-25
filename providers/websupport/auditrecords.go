@@ -1,7 +1,7 @@
 package websupport
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
@@ -30,5 +30,5 @@ func AuditRecords(records models.Records) []error {
 }
 
 func rejectNS(rc *models.RecordConfig) error {
-	return fmt.Errorf("WEBSUPPORT does not support managing NS records via its API")
+	return errors.New("WEBSUPPORT does not support managing NS records via its API")
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -17,7 +18,7 @@ func BuilderLOC(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Rec
 	// args includes the label at args[0], so the parameter counts are +1:
 	// 8 = label + 7 preprocessed LOC fields; 13 = label + 12 DMS parameters.
 	if len(args) != 8 && len(args) != 13 {
-		return nil, fmt.Errorf("LOC should have 7 or 12 parameters")
+		return nil, errors.New("LOC should have 7 or 12 parameters")
 	}
 
 	label, err := dc.LabelFromDnsconfigjs(

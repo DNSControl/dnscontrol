@@ -2,6 +2,7 @@ package mikrotik
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -101,13 +102,13 @@ func newMikrotikProvider(cfg map[string]string, _ json.RawMessage) (providers.DN
 	password := cfg["password"]
 
 	if host == "" {
-		return nil, fmt.Errorf("mikrotik: 'host' is required")
+		return nil, errors.New("mikrotik: 'host' is required")
 	}
 	if username == "" {
-		return nil, fmt.Errorf("mikrotik: 'username' is required")
+		return nil, errors.New("mikrotik: 'username' is required")
 	}
 	if password == "" {
-		return nil, fmt.Errorf("mikrotik: 'password' is required")
+		return nil, errors.New("mikrotik: 'password' is required")
 	}
 
 	host = strings.TrimRight(host, "/")
@@ -294,7 +295,7 @@ func (p *mikrotikProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 				F: func() error {
 					oldOriginal, ok := oldRec.Original.(*dnsStaticRecord)
 					if !ok {
-						return fmt.Errorf("mikrotik: missing original record data for update")
+						return errors.New("mikrotik: missing original record data for update")
 					}
 					native, err := recordToNative(newRec)
 					if err != nil {
@@ -312,7 +313,7 @@ func (p *mikrotikProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 				F: func() error {
 					oldOriginal, ok := oldRec.Original.(*dnsStaticRecord)
 					if !ok {
-						return fmt.Errorf("mikrotik: missing original record data for delete")
+						return errors.New("mikrotik: missing original record data for delete")
 					}
 					return p.deleteRecord(oldOriginal.ID)
 				},
@@ -405,7 +406,7 @@ func (p *mikrotikProvider) getForwarderCorrections(dc *models.DomainConfig, exis
 				F: func() error {
 					oldFwd, ok := oldRec.Original.(*dnsForwarder)
 					if !ok {
-						return fmt.Errorf("mikrotik: missing original forwarder data for update")
+						return errors.New("mikrotik: missing original forwarder data for update")
 					}
 					f := recordToForwarder(newRec)
 					return p.updateForwarder(oldFwd.ID, f)
@@ -420,7 +421,7 @@ func (p *mikrotikProvider) getForwarderCorrections(dc *models.DomainConfig, exis
 				F: func() error {
 					oldFwd, ok := oldRec.Original.(*dnsForwarder)
 					if !ok {
-						return fmt.Errorf("mikrotik: missing original forwarder data for delete")
+						return errors.New("mikrotik: missing original forwarder data for delete")
 					}
 					return p.deleteForwarder(oldFwd.ID)
 				},
