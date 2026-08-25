@@ -16,10 +16,7 @@ func doesStutter(name, origin string) bool {
 	if name == "@" {
 		return false
 	}
-	if name == origin || strings.HasSuffix(name, "."+origin) {
-		return true
-	}
-	return false
+	return name == origin || strings.HasSuffix(name, "."+origin)
 }
 
 func stutterError(rc *RecordConfig, domain string) error {

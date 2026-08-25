@@ -48,10 +48,9 @@ func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
 	// AWS European Sovereign Cloud (aws.eu) does not support registering domains, at least not yet.
 	// Let us assume only the global AWS is capable of registering domains currently.
 	if conf["Region"] != "" && conf["Region"] != "us-east-1" {
-		return nil, errors.New("Error! Domain register endpoint is only supported on the global AWS region us-east-1")
-	} else {
-		return newRoute53(conf, nil)
+		return nil, errors.New("domain register endpoint is only supported on the global AWS region us-east-1")
 	}
+	return newRoute53(conf, nil)
 }
 
 func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -79,7 +78,7 @@ func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error
 
 	profile := m["Profile"]
 	if profile != "" && (keyID != "" || secretKey != "") {
-		return nil, fmt.Errorf("route53: cannot set both Profile and KeyId/SecretKey")
+		return nil, errors.New("route53: cannot set both Profile and KeyId/SecretKey")
 	}
 	if profile != "" {
 		optFns = append(optFns, config.WithSharedConfigProfile(profile))
@@ -920,11 +919,11 @@ func (b *changeBatcher) Next() bool {
 			// "When the value of the Action element is UPSERT, each ResourceRecord element is counted twice."
 			rrsetSize *= 2
 		}
-		if newReqSize := reqSize + rrsetSize; newReqSize > b.maxSize {
+		newReqSize := reqSize + rrsetSize
+		if newReqSize > b.maxSize {
 			break
-		} else {
-			reqSize = newReqSize
 		}
+		reqSize = newReqSize
 
 		// Check that we won't exceed 32000 Value characters in the request.
 		var rrsetChars int
@@ -935,11 +934,11 @@ func (b *changeBatcher) Next() bool {
 			// "When the value of the Action element is UPSERT, each character in a Value element is counted twice."
 			rrsetChars *= 2
 		}
-		if newReqChars := reqChars + rrsetChars; newReqChars > b.maxChars {
+		newReqChars := reqChars + rrsetChars
+		if newReqChars > b.maxChars {
 			break
-		} else {
-			reqChars = newReqChars
 		}
+		reqChars = newReqChars
 
 		end++
 	}

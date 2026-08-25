@@ -208,6 +208,9 @@ func (s *softlayerProvider) getExistingRecords(dc *models.DomainConfig, resource
 	return actual, nil
 }
 
+// srvLabelRe parses an SRV label of the form _service._protocol.
+var srvLabelRe = regexp.MustCompile(`^_(?P<Service>\w+)\.\_(?P<Protocol>\w+)$`)
+
 func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domain *datatypes.Dns_Domain) func() error {
 
 	ttl := verifyMinTTL(int(desired.TTL))
@@ -217,8 +220,6 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 	newType := desired.Type
 
 	var err error
-
-	srvRegexp := regexp.MustCompile(`^_(?P<Service>\w+)\.\_(?P<Protocol>\w+)$`)
 
 	return func() error {
 		newRecord := datatypes.Dns_Domain_ResourceRecord{
@@ -244,7 +245,7 @@ func (s *softlayerProvider) createRecordFunc(desired *models.RecordConfig, domai
 		case "SRV":
 			service := services.GetDnsDomainResourceRecordSrvTypeService(s.Session)
 
-			result := srvRegexp.FindStringSubmatch(host)
+			result := srvLabelRe.FindStringSubmatch(host)
 			if len(result) != 3 {
 				return fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", host)
 			}

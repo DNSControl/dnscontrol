@@ -160,6 +160,9 @@ func appendDomainIndexFromResponse(domainIndex map[string]uint32, bodyString []b
 }
 
 // Parses the Link Header into a map (https://github.com/desec-io/desec-tools/blob/main/fetch_zone.py#L13)
+// linkRelRe extracts the rel="..." parameter from an HTTP Link header.
+var linkRelRe = regexp.MustCompile(`rel="(.*)"`)
+
 func convertLinks(links string) map[string]string {
 	mapping := make(map[string]string)
 	printer.Debugf("Header: %s\n", links)
@@ -169,8 +172,7 @@ func convertLinks(links string) map[string]string {
 			printer.Printf("unexpected link header %s", link)
 			continue
 		}
-		r := regexp.MustCompile(`rel="(.*)"`)
-		matches := r.FindStringSubmatch(tmpurl[1])
+		matches := linkRelRe.FindStringSubmatch(tmpurl[1])
 		if len(matches) != 2 {
 			printer.Printf("unexpected label %s", tmpurl[1])
 			continue
