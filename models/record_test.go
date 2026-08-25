@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 // TestR53AliasTargetSurvivesRDATAUpdate verifies the provider-side mutation
@@ -77,20 +77,21 @@ func TestHasRecordTypeName(t *testing.T) {
 }
 
 func TestKey(t *testing.T) {
+	dc := MustNewDomainConfig("example.com")
 	tests := []struct {
-		rc       RecordConfig
+		rc       *RecordConfig
 		expected RecordKey
 	}{
 		{
-			RecordConfig{Type: "A", NameFQDN: "example.com"},
+			dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4"),
 			RecordKey{Type: "A", NameFQDN: "example.com"},
 		},
 		{
-			RecordConfig{Type: "R53_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.R53ALIAS{AliasType: "AAAA"}},
+			dc.MustNewRecordConfig("@", 0, privatetypes.TypeR53ALIAS, "AAAA", ".", true, ""),
 			RecordKey{Type: "R53_ALIAS_AAAA", NameFQDN: "example.com"},
 		},
 		{
-			RecordConfig{Type: "AZURE_ALIAS", NameFQDN: "example.com", rdata: privatetypesrdata.AZUREALIAS{AliasType: "CNAME"}},
+			dc.MustNewRecordConfig("@", 0, privatetypes.TypeAZUREALIAS, "CNAME", "foo.com"),
 			RecordKey{Type: "AZURE_ALIAS_CNAME", NameFQDN: "example.com"},
 		},
 	}
@@ -104,40 +105,13 @@ func TestKey(t *testing.T) {
 
 func TestRecordConfig_Copy(t *testing.T) {
 	type fields struct {
-		Type             string
-		Name             string
-		SubDomain        string
-		NameFQDN         string
-		target           string
-		TTL              uint32
-		Metadata         map[string]string
-		MxPreference     uint16
-		SrvPriority      uint16
-		SrvWeight        uint16
-		SrvPort          uint16
-		CaaTag           string
-		CaaFlag          uint8
-		DsKeyTag         uint16
-		DsAlgorithm      uint8
-		DsDigestType     uint8
-		DsDigest         string
-		NaptrOrder       uint16
-		NaptrPreference  uint16
-		NaptrFlags       string
-		NaptrService     string
-		NaptrRegexp      string
-		SshfpAlgorithm   uint8
-		SshfpFingerprint uint8
-		SoaMbox          string
-		SoaSerial        uint32
-		SoaRefresh       uint32
-		SoaRetry         uint32
-		SoaExpire        uint32
-		SoaMinttl        uint32
-		TlsaUsage        uint8
-		TlsaSelector     uint8
-		TlsaMatchingType uint8
-		Original         any
+		Type      string
+		Name      string
+		SubDomain string
+		NameFQDN  string
+		TTL       uint32
+		Metadata  map[string]string
+		Original  any
 	}
 	tests := []struct {
 		name    string
@@ -148,39 +122,12 @@ func TestRecordConfig_Copy(t *testing.T) {
 		{
 			name: "only",
 			fields: fields{
-				Type:             "type",
-				Name:             "name",
-				SubDomain:        "sub",
-				NameFQDN:         "namef",
-				target:           "targette",
-				TTL:              12345,
-				Metadata:         map[string]string{"me": "ah", "da": "ta"},
-				MxPreference:     123,
-				SrvPriority:      223,
-				SrvWeight:        345,
-				SrvPort:          456,
-				CaaTag:           "caata",
-				CaaFlag:          100,
-				DsKeyTag:         12341,
-				DsAlgorithm:      99,
-				DsDigestType:     98,
-				DsDigest:         "dsdig",
-				NaptrOrder:       10000,
-				NaptrPreference:  12220,
-				NaptrFlags:       "naptrfl",
-				NaptrService:     "naptrser",
-				NaptrRegexp:      "naptrreg",
-				SshfpAlgorithm:   4,
-				SshfpFingerprint: 5,
-				SoaMbox:          "soambox",
-				SoaSerial:        456789,
-				SoaRefresh:       192000,
-				SoaRetry:         293293,
-				SoaExpire:        3434343,
-				SoaMinttl:        34234324,
-				TlsaUsage:        1,
-				TlsaSelector:     2,
-				TlsaMatchingType: 3,
+				Type:      "type",
+				Name:      "name",
+				SubDomain: "sub",
+				NameFQDN:  "namef",
+				TTL:       12345,
+				Metadata:  map[string]string{"me": "ah", "da": "ta"},
 			},
 			want: &RecordConfig{
 				Type:      "type",

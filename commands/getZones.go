@@ -470,7 +470,7 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 	case "CAA":
 		return makeCaa(rec, ttlop)
 	case "SOA":
-		rec.Type = "//SOA"
+		rec.Type = "//SOA" // Most providers don't need an SOA. Users can remove comments if they want it.
 		noserial := append(fj[:2], fj[3:]...)
 		target = strings.Join(noserial, ", ")
 		// f.Serial is not included in the SOA() function because DNSControl controls that field.

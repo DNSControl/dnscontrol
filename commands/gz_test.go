@@ -46,8 +46,8 @@ func testFormat(t *testing.T, domain, format string) {
 		OutputFile:   outfile.Name(),
 		CredName:     "bind",
 		ProviderName: "BIND",
-
-		CredsFile: "test_data/bind-creds.json"}
+		CredsFile:    "test_data/bind-creds.json",
+	}
 
 	// Read the zonefile and convert
 	err = GetZone(gzargs)

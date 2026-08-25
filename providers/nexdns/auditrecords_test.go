@@ -54,8 +54,8 @@ func TestAuditRecords(t *testing.T) {
 func auditTXT(t *testing.T, target string) *models.RecordConfig {
 	t.Helper()
 
-	rc := &models.RecordConfig{Type: "TXT"}
-	rc.SetLabel("@", testOrigin)
+	dc := models.MustNewDomainConfig(testOrigin)
+	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeTXT, "my text")
 	if err := rc.SetTargetTXT(target); err != nil {
 		t.Fatalf("SetTargetTXT() error = %v", err)
 	}
