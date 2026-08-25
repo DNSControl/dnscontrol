@@ -261,7 +261,6 @@ func toRecordUpdate(rc *models.RecordConfig) *dnsRecordUpdate {
 	case dnsv2.TypeDS:
 		// Format: "keytag algorithm digesttype digest"
 		f := rc.AsDS()
-		//target = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
 		target = f.String()
 
 	case dnsv2.TypeSSHFP:
