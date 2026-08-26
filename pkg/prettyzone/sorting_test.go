@@ -67,7 +67,6 @@ func TestZoneGenData_Less(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			z := prettyzone.PrettySort(tt.records, tt.origin, tt.defaultTTL, tt.comments)
 			got := z.Less(tt.i, tt.j)
-			// TODO: update the condition below to compare got with tt.want.
 			if got != tt.want {
 				t.Errorf("Less(%d, %d) = %v, want %v", tt.i, tt.j, got, tt.want)
 			}

@@ -24,7 +24,6 @@ func TestDomainConfig_LabelFromFQDNNoDot(t *testing.T) {
 				t.Fatalf("could not construct receiver type: %v", err)
 			}
 			got := dc.LabelFromFQDNNoDot(tt.name)
-			// TODO: update the condition below to compare got with tt.want.
 			if got != tt.want {
 				t.Errorf("LabelFromFQDNNoDot(%q) = %v, want %v", tt.name, got, tt.want)
 			}

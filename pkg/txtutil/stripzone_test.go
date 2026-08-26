@@ -52,7 +52,6 @@ func TestStripZone(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := txtutil.StripZone(tt.label, tt.zone)
-			// TODO: update the condition below to compare got with tt.want.
 			if got != tt.want {
 				t.Errorf("StripZone(%q, %q) = %v, want %v", tt.label, tt.zone, got, tt.want)
 			}

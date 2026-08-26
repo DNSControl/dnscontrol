@@ -49,7 +49,6 @@ func TestTxts(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := mustbe.Txts(tt.args...)
-			// TODO: update the condition below to compare got with tt.want.
 			if !slices.Equal(got, tt.want) {
 				t.Errorf("Txts() = %v, want %v", got, tt.want)
 			}

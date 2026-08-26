@@ -37,7 +37,9 @@ func (rc *RecordConfig) GetRDATA() (rd dnsv2.RDATA) {
 	return rc.rdata
 }
 
-// ClearRDATA sets rc.rdata to nil. This is a workaround and will eventually be eliminated.
+// ClearRDATA sets rc.rdata to nil. This is a workaround for
+// integrationTest/helpers_integration_test.go and will eventually be
+// eliminated. No new uses, please!
 func (rc *RecordConfig) ClearRDATA() {
 	rc.rdata = nil
 	rc.ComparableV3 = ""

@@ -13,6 +13,7 @@ import (
 
 // RecordConfig stores a DNS record whether it was created from data downloaded from
 // a provider's API ("actual") or from user input in dndsconfig.js ("desired").
+// FYI: If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
 type RecordConfig struct {
 
 	// TypeNum is the assigned number of the record's type. 1 for A, 5 for CNAME, etc. See dnsv2.TypeToString and dnsv2.StringToType.
@@ -33,7 +34,6 @@ type RecordConfig struct {
 	NameUnicode string `json:"name_unicode,omitempty"` // .Name as Unicode (downcased, then convertedot Unicode).
 
 	// This is the FQDN version of .Name. It should never have a trailing ".".
-	//NameFQDNRaw     string `json:"-"` // .NameFQDN as the user entered it in dnsconfig.js (downcased).
 	NameFQDN        string `json:"-"` // Must end with ".$origin".
 	NameFQDNUnicode string `json:"-"` // .NameFQDN as Unicode (downcased, then convertedot Unicode).
 
@@ -48,10 +48,8 @@ type RecordConfig struct {
 
 	// Metadata (desired) added to the record via dnsconfig.js. For example: A("foo", "1.2.3.4", {metakey: "value"})
 	Metadata map[string]string `json:"meta,omitempty"`
-
 	// FilePos (desired) is "filename:line:char" of the record in dnsconfig.js (desired).
 	FilePos string `json:"filepos"`
-
 	// Subdomain (if non-empty) contains the subdomain path for this record.
 	// When .Name* fields are updated to include the subdomain, this field is
 	// cleared.
@@ -63,18 +61,16 @@ type RecordConfig struct {
 	// getting the records via the API, we store the original object here.
 	// Later if we need to pull out an ID or other provider-specific field, we
 	// can.  Typically deleting or updating a record requires knowing its ID.
+	// ProTip: Rather than storing the entire struct, store the specific field needed.
 	Original any `json:"-"`
 
 	//// Legacy fields we hope to remove someday
 
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
-
-	// FYI: If you add a field to this struct, also add it to the list in the UnmarshalJSON function.
 }
 
 // MarshalJSON marshals RecordConfig.
 func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
-	//fmt.Printf("DEBUG: MARSHALING %v\n", rc.Name)
 	recj := &struct {
 		RecordConfig
 		RDATA dnsv2.RDATA `json:"rdata,omitempty"`
@@ -121,6 +117,7 @@ func (rc *RecordConfig) Copy() (*RecordConfig, error) {
 //
 // short must not have a training dot: That would mean you have a FQDN, and
 // shouldn't be using SetLabel().  Maybe SetLabelFromFQDN()?
+// Deprecated: NewRecordConfig and NewRecordConfigParse remove the need for this.
 func (rc *RecordConfig) SetLabel(short, origin string) {
 	// Assertions that make sure the function is being used correctly:
 	if strings.HasSuffix(origin, ".") {

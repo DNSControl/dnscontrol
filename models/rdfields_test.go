@@ -31,7 +31,6 @@ func TestRDtoFieldsJS(t *testing.T) {
 			if tt.wantErr {
 				t.Fatal("RDtoFieldsJS() succeeded unexpectedly")
 			}
-			// TODO: update the condition below to compare got with tt.want.
 			if !slices.Equal(got, tt.want) {
 				t.Errorf("RDtoFieldsJS() = %v, want %v", got, tt.want)
 			}

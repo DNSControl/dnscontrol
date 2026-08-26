@@ -9,7 +9,6 @@ Useful refactoring projects. Please feel free to pick up any of these.
 
 * I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
 
-
 ## Rewrites needed
 
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
@@ -24,6 +23,7 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * pkg/normalize/validate.go has half of the Transform code, the other half is in pkg/transform.  An easy thing would be to move the part of pkg/normalize/validate.go and validate_test.go into pkg/normalize/transform{,_test}.go.  The more difficult thing would be to move all or most of the code to pkg/transform.
 
+* models/record.go FixPostion has an easy TODO.
 
 ## Bad decisions to reverse
 

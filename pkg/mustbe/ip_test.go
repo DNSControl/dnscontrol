@@ -49,7 +49,6 @@ func TestIPv4_Parse(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, _ := mustbe.IPv4(tt.a)
-			// TODO: update the condition below to compare got with tt.want.
 			if tt.want != got {
 				t.Errorf("IPv4() = %v, want %v", got, tt.want)
 			}
