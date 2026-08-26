@@ -25,6 +25,8 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * models/record.go FixPostion has an easy TODO.
 
+* models/t_txt.go has an some easy FIXMEs.
+
 ## Bad decisions to reverse
 
 * Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
