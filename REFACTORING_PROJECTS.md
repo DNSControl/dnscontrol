@@ -36,8 +36,11 @@ something that is both a Reg and a DSP.
 
 * models.SetLabel() should be removed (it's only used in a few places) or enhanced to also create the .NameUnicode/.NameFQDNUnicode fields. Then de-duplicate the code that does this for NewRecordConfig().
 
+* deSEC: BUG: It mutates RecordConfigs, which will create problems if the same zone is sent to multiple providers.
+
 
 ## Actual new features:
 
 * Handle "unknown types". dnsv2 has a way to managing unknown types. Investigate it and replace the half-written version (see rc.UnknownTypeName)
 
+* pkg/diff2/analyze.go: Smarter diffs. Diffs could just show which fields changed. For example, if just the preference of an MX record changes, show "old -> new" just for the priority.
