@@ -100,7 +100,7 @@ func parse(text string, dnsres Resolver, chain []string) (*SPFRecord, error) {
 					return nil, fmt.Errorf("in included SPF: %w", err)
 				}
 			}
-		} else if strings.HasPrefix(part, "exists:") || strings.HasPrefix(part, "ptr:") {
+		} else if strings.HasPrefix(part, "exists:") || part == "ptr" || strings.HasPrefix(part, "ptr:") {
 			p.IsLookup = true
 		} else {
 			return nil, fmt.Errorf("unsupported SPF part %s", part)

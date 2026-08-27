@@ -151,6 +151,35 @@ func TestParseQualifiedMechanisms(t *testing.T) {
 	}
 }
 
+func TestParsePtrMechanism(t *testing.T) {
+	tests := []struct {
+		input   string
+		wantErr bool
+		lookups int
+	}{
+		{"v=spf1 ptr -all", false, 1},
+		{"v=spf1 a mx ptr -all", false, 3},
+		{"v=spf1 mx ptr ip4:107.161.151.0/24 ~all", false, 2},
+		{"v=spf1 +ptr -all", false, 1},
+		{"v=spf1 ~ptr -all", false, 1},
+		{"v=spf1 ?ptr -all", false, 1},
+		{"v=spf1 ptr:example.com -all", false, 1},
+		{"v=spf1 ptrfoo -all", true, 0},
+		{"v=spf1 ptrfoo:example.com -all", true, 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			rec, err := Parse(tt.input, nil)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("Parse(%q) error = %v, wantErr %v", tt.input, err, tt.wantErr)
+			}
+			if err == nil && rec.Lookups() != tt.lookups {
+				t.Errorf("Parse(%q) lookups = %d, want %d", tt.input, rec.Lookups(), tt.lookups)
+			}
+		})
+	}
+}
+
 func TestParseIncludeLoop(t *testing.T) {
 	tests := []struct {
 		description string
