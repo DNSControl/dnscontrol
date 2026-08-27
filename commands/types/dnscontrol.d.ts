@@ -744,7 +744,7 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * In this situation, you will see an error message such as:
  *
- * ```
+ * ```text
  * Skipping registrar REGISTRAR: No nameservers declared for domain "example.com". Add {no_ns: "true"} to force
  * ```
  *
@@ -788,10 +788,10 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * DNSControl command line flag `--domains` matches the full name (with the "!").  If you define domains `example.com!john`, `example.com!paul`, and `example.com!george` then:
  *
- * * `--domains=example.com` will not match any of the three.
- * * `--domains='example.com!george'` will only match george.
- * * `--domains='example.com!george,example.com!john'` will match george and john.
- * * `--domains='example.com!*'` will match all three.
+ * - `--domains=example.com` will not match any of the three.
+ * - `--domains='example.com!george'` will only match george.
+ * - `--domains='example.com!george,example.com!john'` will match george and john.
+ * - `--domains='example.com!*'` will match all three.
  *
  * NOTE: The quotes are required if your shell treats `!` as a special
  * character, which is probably does.  If you see an error that mentions
