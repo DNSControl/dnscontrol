@@ -10,26 +10,31 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "d.c.b.a.1.1.0.2.ip6.arpa",
-        "dnscontrol_nameunicode": "d.c.b.a.1.1.0.2.ip6.arpa",
-        "dnscontrol_uniquename": "d.c.b.a.1.1.0.2.ip6.arpa"
-      },
       "name": "d.c.b.a.1.1.0.2.ip6.arpa",
       "records": [
         {
+          "comparablev3": "host11.example.com.",
           "filepos": "[line:5:5]",
           "name": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "target": "host11.example.com.",
+          "name_unicode": "2011:abcd::11",
+          "rdata": {
+            "Ptr": "host11.example.com."
+          },
           "ttl": 300,
-          "type": "PTR"
+          "type": "PTR",
+          "typenum": 12
         },
         {
+          "comparablev3": "host22.example.com.",
           "filepos": "[line:6:5]",
           "name": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "target": "host22.example.com.",
+          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.d.c.b.a.1.1.0.2.ip6.arpa",
+          "rdata": {
+            "Ptr": "host22.example.com."
+          },
           "ttl": 300,
-          "type": "PTR"
+          "type": "PTR",
+          "typenum": 12
         }
       ],
       "registrar": "none",
@@ -39,34 +44,44 @@
       "dnsProviders": {
         "bind": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "8.b.d.0.1.0.0.2.ip6.arpa",
-        "dnscontrol_nameunicode": "8.b.d.0.1.0.0.2.ip6.arpa",
-        "dnscontrol_uniquename": "8.b.d.0.1.0.0.2.ip6.arpa"
-      },
       "name": "8.b.d.0.1.0.0.2.ip6.arpa",
       "records": [
         {
+          "comparablev3": "server11.example.com.",
           "filepos": "[line:10:5]",
           "name": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "target": "server11.example.com.",
+          "name_unicode": "2001:db8::11",
+          "rdata": {
+            "Ptr": "server11.example.com."
+          },
           "ttl": 300,
-          "type": "PTR"
+          "type": "PTR",
+          "typenum": 12
         },
         {
+          "comparablev3": "server22.example.com.",
           "filepos": "[line:11:5]",
           "name": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "target": "server22.example.com.",
+          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa",
+          "rdata": {
+            "Ptr": "server22.example.com."
+          },
           "ttl": 300,
-          "type": "PTR"
+          "type": "PTR",
+          "typenum": 12
         },
         {
+          "comparablev3": "abcd.example.com.",
           "filepos": "[line:15:5]",
           "name": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "name_unicode": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": {
+            "Ptr": "abcd.example.com."
+          },
           "subdomain": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "target": "abcd.example.com.",
           "ttl": 300,
-          "type": "PTR"
+          "type": "PTR",
+          "typenum": 12
         }
       ],
       "registrar": "none",

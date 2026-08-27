@@ -131,7 +131,7 @@
   },
   "DNSIMPLE": {
     "TYPE": "DNSIMPLE",
-    "baseurl": "https://api.sandbox.dnsimple.com",
+    "baseurl": "$DNSIMPLE_BASEURL",
     "domain": "$DNSIMPLE_DOMAIN",
     "token": "$DNSIMPLE_TOKEN"
   },
@@ -312,6 +312,11 @@
     "apiUrl": "$NETNOD_APIURL",
     "domain": "$NETNOD_DOMAIN"
   },
+  "NEXDNS": {
+    "TYPE": "NEXDNS",
+    "api_token": "$NEXDNS_API_TOKEN",
+    "domain": "$NEXDNS_DOMAIN"
+  },
   "NS1": {
     "TYPE": "NS1",
     "api_token": "$NS1_TOKEN",
@@ -412,6 +417,7 @@
   "UNIFI": {
     "TYPE": "UNIFI",
     "api_key": "$UNIFI_API_KEY",
+    "console_id": "$UNIFI_CONSOLE_ID",
     "domain": "$UNIFI_DOMAIN",
     "host": "$UNIFI_HOST",
     "knownFailures": "26,43",

@@ -1,3 +1,3 @@
 $TTL 300
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq "test1.foo.com" and http.request.uri.path eq "/") then=(concat("https://goo.com", http.request.uri.path))
-;@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq "test2.foo.com" and http.request.uri.path eq "/") then=(concat("https://goo.com", http.request.uri.path))
+@          1     IN CLOUDFLAREAPI_SINGLE_REDIRECT "301,test1.foo.com,https://goo.com/$1" 301 "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\"" "concat(\"https://goo.com\", http.request.uri.path)"
+           1     IN CLOUDFLAREAPI_SINGLE_REDIRECT "302,test2.foo.com,https://goo.com/$1" 302 "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\"" "concat(\"https://goo.com\", http.request.uri.path)"

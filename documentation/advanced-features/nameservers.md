@@ -1,8 +1,29 @@
 # Nameservers and Delegations
 
+- [Nameservers and Delegations](#nameservers-and-delegations)
+  - [Constants](#constants)
+  - [Typical Delegations](#typical-delegations)
+    - [Same provider for REG and DNS](#same-provider-for-reg-and-dns)
+    - [Different provider for REG and DNS](#different-provider-for-reg-and-dns)
+    - [Registrar is elsewhere](#registrar-is-elsewhere)
+    - [Domain is "nowhere"](#domain-is-nowhere)
+    - [Zone is elsewhere](#zone-is-elsewhere)
+    - [Override nameservers](#override-nameservers)
+    - [Add nameservers](#add-nameservers)
+    - [Shadow nameservers](#shadow-nameservers)
+    - [Dual DNS Providers](#dual-dns-providers)
+  - [Other uses](#other-uses)
+    - [Make zonefile backups](#make-zonefile-backups)
+    - [Monitor delegation](#monitor-delegation)
+  - [Helper macros](#helper-macros)
+    - [`DOMAIN_ELSEWHERE`](#domain_elsewhere)
+    - [`DOMAIN_ELSEWHERE_AUTO`](#domain_elsewhere_auto)
+  - [Limits](#limits)
+
+
 DNSControl can handle a variety of provider scenarios. The registrar and DNS provider can be the same company, different company, they can even be unknown! The document shows examples of many common and uncommon configurations.
 
-# Constants
+## Constants
 
 All the examples use the variables.  Substitute your own.
 
@@ -28,9 +49,9 @@ var DNS_BIND = NewDnsProvider("bind");
 ```
 {% endcode %}
 
-# Typical Delegations
+## Typical Delegations
 
-## Same provider for REG and DNS
+### Same provider for REG and DNS
 
 Purpose: Use the same provider as a registrar and DNS service.
 
@@ -45,7 +66,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Different provider for REG and DNS
+### Different provider for REG and DNS
 
 Purpose: Use one provider as registrar, a different for DNS service.
 
@@ -60,7 +81,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Registrar is elsewhere
+### Registrar is elsewhere
 
 Purpose: This is a "DNS only" configuration.  Use it when you don't control the registrar but you do control the DNS records.
 
@@ -76,7 +97,7 @@ D("example.com", REG_NONE,
 ```
 {% endcode %}
 
-## Domain is "nowhere"
+### Domain is "nowhere"
 
 Suppose you don't want to manage a domain, but you want to list the zone in your `dnsconfig.js` file for inventory purposes. For example, suppose there are domains that some other part of your company maintains, but you want to list it in your `dnsconfig.js` because it is authoritative for the company.
 
@@ -98,7 +119,7 @@ Now you can produce a list of your zones like this:
 dnscontrol print-ir | jq -r '.domains[].name'
 ```
 
-## Zone is elsewhere
+### Zone is elsewhere
 
 Purpose: This is a "Registrar only" configuration.  Use it when you control the registrar but want to delegate the zone to someone else.
 
@@ -115,7 +136,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Override nameservers
+### Override nameservers
 
 Purpose: Ignore the provider's default nameservers and substitute our own.
 
@@ -132,7 +153,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Add nameservers
+### Add nameservers
 
 Purpose: Use the default nameservers from the registrar but add additional ones.
 
@@ -148,15 +169,15 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Shadow nameservers
+### Shadow nameservers
 
 Purpose: Secretly publish your DNS zone records to another server.
 
 Why? There are many reasons to do this:
 
-* You are preparing to move to a different DNS provider and want to test it before you cut over.
-* You want your DNS records stored somewhere else in case you have to switch over in an emergency.
-* You are sending the zone to a local caching DNS server.
+- You are preparing to move to a different DNS provider and want to test it before you cut over.
+- You want your DNS records stored somewhere else in case you have to switch over in an emergency.
+- You are sending the zone to a local caching DNS server.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -169,7 +190,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Dual DNS Providers
+### Dual DNS Providers
 
 Purpose: Use two different DNS services:
 
@@ -191,9 +212,9 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-# Other uses
+## Other uses
 
-## Make zonefile backups
+### Make zonefile backups
 
 Purpose: Make backups of DNS records in a zone.  This generates a zonefile listing all the records in the zone.
 
@@ -213,7 +234,7 @@ D("example.com", REG_NAMECOM,
 ```
 {% endcode %}
 
-## Monitor delegation
+### Monitor delegation
 
 Purpose: You don't control the registrar but want to detect if the delegation changes. You can specify the existing nameservers in `dnsconfig.js` and you will get a notification if the delegation diverges.
 
@@ -238,15 +259,16 @@ registrar's delegation (i.e. the `Name Server:` field in whois). In theory
 these are the same thing but there may be situations where they are not.
 {% endhint %}
 
-# Helper macros
+## Helper macros
 
 DNSControl has some built-in macros that you might find useful.
 
-## `DOMAIN_ELSEWHERE`
+### `DOMAIN_ELSEWHERE`
 
 Easily delegate a domain to a specific list of nameservers.
 
 {% code title="dnsconfig.js" %}
+
 ```javascript
 DOMAIN_ELSEWHERE("example.com", REG_NAMECOM, [
     "dns1.example.net.",
@@ -254,9 +276,10 @@ DOMAIN_ELSEWHERE("example.com", REG_NAMECOM, [
     "dns3.example.net.",
 ]);
 ```
+
 {% endcode %}
 
-## `DOMAIN_ELSEWHERE_AUTO`
+### `DOMAIN_ELSEWHERE_AUTO`
 
 Easily delegate a domain to a nameserver via an API query.
 
@@ -269,7 +292,7 @@ DOMAIN_ELSEWHERE_AUTO("example2.com", REG_NAMECOM, DNS_GOOGLE);
 ```
 {% endcode %}
 
-# Limits
+## Limits
 
 {% hint style="info" %}
 **NOTE**: Not all providers allow full control over the NS records of your zone. It is not recommended to use these providers in complicated scenarios such as hosting across multiple providers. See individual provider docs for more info.

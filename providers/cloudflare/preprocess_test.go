@@ -5,32 +5,22 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
-func newDomainConfig() *models.DomainConfig {
-	return &models.DomainConfig{
-		Name:     "test.com",
-		Records:  []*models.RecordConfig{},
-		Metadata: map[string]string{},
-	}
-}
-
 func makeRCmeta(meta map[string]string) *models.RecordConfig {
-	rc := models.RecordConfig{
-		Type:     "A",
-		Metadata: meta,
-	}
-	rc.SetLabel("foo", "example.tld")
-	rc.MustSetTarget("1.2.3.4")
-	return &rc
+	dc := models.MustNewDomainConfig("example.tld")
+	rc := dc.MustNewRecordConfig(dc.LabelFromShort("foo"), 0, dnsv2.TypeA, "1.2.3.4")
+	rc.Metadata = meta
+	return rc
 }
 
 func TestPreprocess_BoolValidation(t *testing.T) {
 	cf := &cloudflareProvider{}
 
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "on"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "fUll"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{}))
@@ -51,9 +41,11 @@ func TestPreprocess_BoolValidation(t *testing.T) {
 
 func TestPreprocess_BoolValidation_Fails(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
-	domain.Records = append(domain.Records, &models.RecordConfig{Metadata: map[string]string{metaProxy: "true"}})
-	err := cf.preprocessConfig(domain)
+	dc := models.MustNewDomainConfig("test.com")
+	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, "1.2.3.4")
+	rc.Metadata = map[string]string{metaProxy: "true"}
+	dc.AddRecordConfig(rc)
+	err := cf.preprocessConfig(dc)
 	if err == nil {
 		t.Fatal("Expected validation error, but got none")
 	}
@@ -61,7 +53,7 @@ func TestPreprocess_BoolValidation_Fails(t *testing.T) {
 
 func TestPreprocess_DefaultProxy(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaProxyDefault] = "full"
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "on"}))
 	domain.Records = append(domain.Records, makeRCmeta(map[string]string{metaProxy: "off"}))
@@ -80,7 +72,7 @@ func TestPreprocess_DefaultProxy(t *testing.T) {
 
 func TestPreprocess_DefaultProxy_Validation(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaProxyDefault] = "true"
 	err := cf.preprocessConfig(domain)
 	if err == nil {
@@ -90,15 +82,11 @@ func TestPreprocess_DefaultProxy_Validation(t *testing.T) {
 
 func TestPreprocess_CNAMEFlattenProxyMutualExclusion(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
-	rec := &models.RecordConfig{
-		Type:     "CNAME",
-		Metadata: map[string]string{metaCNAMEFlatten: "on", metaProxy: "on"},
-	}
-	rec.SetLabel("foo", "test.com")
-	rec.MustSetTarget("example.com.")
-	domain.Records = append(domain.Records, rec)
-	err := cf.preprocessConfig(domain)
+	dc := models.MustNewDomainConfig("test.com")
+	rc := dc.MustNewRecordConfig(dc.LabelFromShort("foo"), 0, dnsv2.TypeCNAME, "example.com.")
+	rc.Metadata = map[string]string{metaCNAMEFlatten: "on", metaProxy: "on"}
+	dc.AddRecordConfig(rc)
+	err := cf.preprocessConfig(dc)
 	if err == nil {
 		t.Fatal("Expected validation error for CNAME with both flatten and proxy, but got none")
 	}
@@ -110,7 +98,7 @@ func TestPreprocess_CNAMEFlattenProxyMutualExclusion(t *testing.T) {
 // determines whether to send the comment field to the API.
 func TestPreprocess_ManageComments_SetsEmptyKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaManageComments] = "true"
 
 	// Record without any comment
@@ -140,7 +128,7 @@ func TestPreprocess_ManageComments_SetsEmptyKey(t *testing.T) {
 // the metaComment key to records.
 func TestPreprocess_NoManageComments_NoKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	// No CF_MANAGE_COMMENTS
 
 	rec := makeRCmeta(map[string]string{})
@@ -159,7 +147,7 @@ func TestPreprocess_NoManageComments_NoKey(t *testing.T) {
 // record has the metaTags key in its metadata (empty string if not set).
 func TestPreprocess_ManageTags_SetsEmptyKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	domain.Metadata[metaManageTags] = "true"
 
 	// Record without any tags
@@ -189,7 +177,7 @@ func TestPreprocess_ManageTags_SetsEmptyKey(t *testing.T) {
 // the metaTags key to records.
 func TestPreprocess_NoManageTags_NoKey(t *testing.T) {
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	domain := models.MustNewDomainConfig("test.com")
 	// No CF_MANAGE_TAGS
 
 	rec := makeRCmeta(map[string]string{})
@@ -290,7 +278,7 @@ func TestIpRewriting(t *testing.T) {
 		{"1.2.3.4", "255.255.255.4", "full"},
 	}
 	cf := &cloudflareProvider{}
-	domain := newDomainConfig()
+	dc := models.MustNewDomainConfig("test.com")
 	cf.ipConversions = []transform.IPConversion{{
 		Low:      netip.MustParseAddr("1.2.3.0"),
 		High:     netip.MustParseAddr("1.2.3.40"),
@@ -298,18 +286,18 @@ func TestIpRewriting(t *testing.T) {
 		NewIPs:   nil,
 	}}
 	for _, tst := range tests {
-		rec := &models.RecordConfig{Type: "A", Metadata: map[string]string{metaProxy: tst.Proxy}}
-		rec.MustSetTarget(tst.Given)
-		domain.Records = append(domain.Records, rec)
+		rec := dc.MustNewRecordConfig("@", 0, dnsv2.TypeA, tst.Given)
+		rec.Metadata = map[string]string{metaProxy: tst.Proxy}
+		dc.AddRecordConfig(rec)
 	}
-	err := cf.preprocessConfig(domain)
+	err := cf.preprocessConfig(dc)
 	if err != nil {
 		t.Fatal(err)
 	}
 	for i, tst := range tests {
-		rec := domain.Records[i]
-		if rec.GetTargetField() != tst.Expected {
-			t.Fatalf("At index %d, expected target of %s, but found %s.", i, tst.Expected, rec.GetTargetField())
+		rec := dc.Records[i]
+		if rec.AsA().String() != tst.Expected {
+			t.Fatalf("At index %d, expected target of %s, but found %s.", i, tst.Expected, rec.AsA().String())
 		}
 		if tst.Proxy == "full" && tst.Given != tst.Expected && rec.Metadata[metaOriginalIP] != tst.Given {
 			t.Fatalf("At index %d, expected original_ip to be set", i)

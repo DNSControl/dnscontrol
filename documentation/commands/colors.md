@@ -1,5 +1,10 @@
 # Colors support
 
+- [Colors support](#colors-support)
+  - [Disable colors](#disable-colors)
+  - [(Force) Enable colors](#force-enable-colors)
+  - [Force colors in CI environments](#force-colors-in-ci-environments)
+
 DNSControl is using colors on both its console and notification outputs, to denote changes, such as during preview or push events.
 
 This is on by default in all interactive prompts supporting colors. See below on how to bypass it.

@@ -1,13 +1,12 @@
 package bunnydns
 
 import (
-	"errors"
 	"fmt"
 	"slices"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
@@ -23,13 +22,7 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		return nil, err
 	}
 
-	implicitRecs, err := b.getImplicitRecordConfigs(zone)
-	if err != nil {
-		return nil, err
-	}
-
-	recs := make(models.Records, 0, len(nativeRecs)+len(implicitRecs))
-	recs = append(recs, implicitRecs...)
+	recs := make(models.Records, 0, len(nativeRecs))
 
 	// Define a list of record types that are currently not supported by this provider.
 	unsupportedTypes := []recordType{
@@ -45,7 +38,7 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 			continue
 		}
 
-		rc, err := toRecordConfig(zone.Domain, nativeRec)
+		rc, err := toRecordConfig(dc, nativeRec)
 		if err != nil {
 			return nil, err
 		}
@@ -56,7 +49,6 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 }
 
 func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	// Bunny DNS never returns NS records for the apex domain, so these are artificially added when retrieving records.
 	// As no TTL can be configured or retrieved for these NS records, we set it to 0 to avoid unnecessary updates.
 	for _, rc := range dc.Records {
 		if rc.Name == "@" && rc.Type == "NS" {
@@ -68,7 +60,7 @@ func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		}
 
 		if rc.Type == "ALIAS" {
-			rc.ChangeType("CNAME", dc.Name)
+			rc.ChangeTypeToCNAME(dc, rc.AsALIAS().Target)
 		}
 	}
 
@@ -133,11 +125,7 @@ func (b *bunnydnsProvider) mkChangeCorrection(zoneID int64, oldRec, newRec *mode
 	return &models.Correction{
 		Msg: msg,
 		F: func() error {
-			existingID := oldRec.Original.(*record).ID
-			if existingID == 0 {
-				return errors.New("BUNNY_DNS: cannot change implicit records")
-			}
-
+			existingID := oldRec.Original.(int64)
 			desired, err := fromRecordConfig(newRec)
 			if err != nil {
 				return err
@@ -152,11 +140,7 @@ func (b *bunnydnsProvider) mkDeleteCorrection(zoneID int64, oldRec *models.Recor
 	return &models.Correction{
 		Msg: msg,
 		F: func() error {
-			existingID := oldRec.Original.(*record).ID
-			if existingID == 0 {
-				return errors.New("BUNNY_DNS: cannot delete implicit records")
-			}
-
+			existingID := oldRec.Original.(int64)
 			return b.deleteRecord(zoneID, existingID)
 		},
 	}

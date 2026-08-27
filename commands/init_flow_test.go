@@ -8,7 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // stubAsker drives the init flow from a pre recorded script for
@@ -89,7 +90,37 @@ func stubFetchNoRecords(t *testing.T) {
 	t.Cleanup(func() { fetchZoneRecordsFunc = origFetch })
 }
 
+// captureInitOutput keeps successful init-flow output from leaking into an
+// unrelated test failure. If an init test fails, its captured output is logged.
+func captureInitOutput(t *testing.T) {
+	t.Helper()
+
+	output, err := os.CreateTemp(t.TempDir(), "init-output-*.txt")
+	if err != nil {
+		t.Fatalf("create init output capture: %v", err)
+	}
+	origStdout, origStderr := os.Stdout, os.Stderr
+	os.Stdout, os.Stderr = output, output
+	t.Cleanup(func() {
+		os.Stdout, os.Stderr = origStdout, origStderr
+		if err := output.Close(); err != nil {
+			t.Errorf("close init output capture: %v", err)
+			return
+		}
+		if !t.Failed() {
+			return
+		}
+		captured, err := os.ReadFile(output.Name())
+		if err != nil {
+			t.Errorf("read init output capture: %v", err)
+			return
+		}
+		t.Logf("init output:\n%s", captured)
+	})
+}
+
 func TestRunInit_VerifyDNSProviderCredsWithZones(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -152,6 +183,7 @@ func TestRunInit_VerifyDNSProviderCredsWithZones(t *testing.T) {
 }
 
 func TestRunInit_VerifyDNSProviderCredsRetry(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	attempt := 0
@@ -209,6 +241,7 @@ func TestRunInit_VerifyDNSProviderCredsRetry(t *testing.T) {
 }
 
 func TestRunInit_VerifyDNSProviderCredsAbort(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -249,6 +282,7 @@ func TestRunInit_VerifyDNSProviderCredsAbort(t *testing.T) {
 // in providers (NONE registrar + BIND DNS). It asserts the generated
 // creds.json and dnsconfig.js parse cleanly.
 func TestRunInit_NoneBindFlow(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -318,6 +352,7 @@ func TestRunInit_NoneBindFlow(t *testing.T) {
 }
 
 func TestRunInit_ImportRecords(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{
@@ -356,13 +391,11 @@ func TestRunInit_ImportRecords(t *testing.T) {
 
 	origFetch := fetchZoneRecordsFunc
 	fetchZoneRecordsFunc = func(_ InitCredsEntry, zone string) (models.Records, error) {
-		aRecord := &models.RecordConfig{Type: "A", Name: "www", TTL: 300}
-		aRecord.SetTarget("192.0.2.1")
-		mxRecord := &models.RecordConfig{Type: "MX", Name: "@", TTL: 300, MxPreference: 10}
-		mxRecord.SetTarget("mx.example.com.")
-		soaRecord := &models.RecordConfig{Type: "SOA", Name: "@"}
-		nsRecord := &models.RecordConfig{Type: "NS", Name: "@"}
-		nsRecord.SetTarget("ns1.example.com.")
+		dc := models.MustNewDomainConfig("example.com")
+		aRecord := dc.MustNewRecordConfig(dc.LabelFromShort("www"), 300, dnsv2.TypeA, "192.0.2.1")
+		mxRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeMX, 10, "mx.example.com.")
+		soaRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeSOA, "foo.example.com", "tal@example.com", 1, 2, 3, 4, 5)
+		nsRecord := dc.MustNewRecordConfig(dc.LabelFromShort("@"), 300, dnsv2.TypeNS, "ns.example.com.")
 		return models.Records{aRecord, mxRecord, soaRecord, nsRecord}, nil
 	}
 	t.Cleanup(func() { fetchZoneRecordsFunc = origFetch })
@@ -398,6 +431,7 @@ func TestRunInit_ImportRecords(t *testing.T) {
 }
 
 func TestRunInit_ImportFallback(t *testing.T) {
+	captureInitOutput(t)
 	dir := t.TempDir()
 
 	stub := &stubAsker{

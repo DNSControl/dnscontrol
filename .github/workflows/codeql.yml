@@ -1,0 +1,59 @@
+name: "CodeQL"
+
+# Advanced CodeQL setup.
+#
+# This replaces GitHub's "default setup" for CodeQL. The default setup runs the
+# Go extractor's autobuild with whatever Go is pre-installed on the runner and
+# with GOTOOLCHAIN=local, which forbids downloading a newer toolchain. When
+# go.mod requires a Go version newer than the runner's (e.g. `go 1.27` while the
+# runner only has 1.26.x), extraction fails with:
+#
+#   go: go.mod requires go >= 1.27 (running go 1.26.x; GOTOOLCHAIN=local)
+#
+# Installing Go from go.mod before the extractor runs makes the required
+# toolchain the "local" one, so autobuild succeeds.
+#
+# NOTE: An advanced workflow and the repository's "default setup" cannot both be
+# active. Disable default setup under
+# Settings -> Code security -> CodeQL analysis (switch Default -> Advanced).
+
+on:
+  push:
+    branches: [main, master, release_candidate_v5]
+  pull_request:
+    branches: [main, master, release_candidate_v5]
+  schedule:
+    - cron: "0 0 * * 1"
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (go)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: go
+          build-mode: autobuild
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:go"

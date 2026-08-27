@@ -3,9 +3,9 @@ package tencentdns
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/stretchr/testify/assert"
 	intldomain "github.com/tencentcloud/tencentcloud-sdk-go-intl-en/tencentcloud/domain/v20180808"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
@@ -319,13 +319,9 @@ func TestRecordWeightComparisonNormalizesValues(t *testing.T) {
 }
 
 func makeLineRecord(domain, target string, metadata map[string]string) *models.RecordConfig {
-	rc := &models.RecordConfig{
-		Type:     "A",
-		TTL:      600,
-		Metadata: metadata,
-	}
-	rc.SetLabel("www", domain)
-	rc.SetTarget(target)
+	dc := models.MustNewDomainConfig(domain)
+	rc := dc.MustNewRecordConfig("www", 600, "A", target)
+	rc.Metadata = metadata
 	return rc
 }
 

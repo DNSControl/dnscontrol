@@ -2,11 +2,10 @@ package diff2
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/fatih/color"
 )
 
@@ -75,7 +74,7 @@ func analyzeByLabel(cc *CompareConfig) (ChangeList, int) {
 		if len(accMsgs) == 0 { // Nothing changed.
 		} else if len(accDesired) == 0 { // No new records at the label? This must be a delete.
 			instructions = append(instructions, mkDelete(label, "", accMsgs, accExisting))
-		} else if len(accExisting) == 0 { // No old records at the label? This must be a change.
+		} else if len(accExisting) == 0 { // No old records at the label? This must be a create.
 			c := mkAdd(label, "", accMsgs, accDesired)
 			c.MsgsByKey = msgsByKey
 			instructions = append(instructions, c)
@@ -232,18 +231,19 @@ func humanDiff(a, b targetConfig) string {
 	// FUTURE(tlim): Records like MX and SRV should have more clever output.
 	// For example if only the MX priority changes, show just that.
 
+	// FUTURE(tlim): If the data but NOT the TTLs are different, omit the TTLs.
+
 	if a.comparableNoTTL != b.comparableNoTTL {
 		// The recorddata is different:
-		return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
+		//return fmt.Sprintf("(%s) -> (%s)", a.comparableFull, b.comparableFull)
+		return fmt.Sprintf("(%s ttl=%d) -> (%s ttl=%d)", a.rec.GetRDATA().String(), a.rec.TTL, b.rec.GetRDATA().String(), b.rec.TTL)
 	}
 
 	// Just the TTLs are different:
 	return fmt.Sprintf("ttl=(%d->%d) %s",
 		a.rec.TTL, b.rec.TTL,
-		a.comparableNoTTL)
+		a.rec.GetRDATA().String())
 }
-
-var echRe = regexp.MustCompile(`ech="?([\w+/=]+)"?`)
 
 // diffTargets is the real workhorse of the diff2 system.  All the setup has been complete,
 // now we can find the differences between two zones.
@@ -255,37 +255,13 @@ func diffTargets(existing, desired []targetConfig) ChangeList {
 		return nil
 	}
 
-	echs := make(map[string]string)
-	for _, v := range existing {
-		matches := echRe.FindStringSubmatch(v.rec.SvcParams)
-		if len(matches) == 2 {
-			echs[v.rec.NameFQDN] = matches[1]
-		}
-	}
-	for i, v := range desired {
-		if strings.Contains(v.rec.SvcParams, "ech=IGNORE") {
-			var unquoted, quoted string
-			if _, ok := echs[v.rec.NameFQDN]; ok {
-				unquoted = fmt.Sprintf("ech=%s", echs[v.rec.NameFQDN])
-				quoted = fmt.Sprintf("ech=%s", echs[v.rec.NameFQDN])
-			} else {
-				unquoted = ""
-				quoted = ""
-			}
-			v.rec.SvcParams = echRe.ReplaceAllString(v.rec.SvcParams, unquoted)
-			v.comparableFull = echRe.ReplaceAllString(v.comparableFull, quoted)
-			v.comparableNoTTL = echRe.ReplaceAllString(v.comparableNoTTL, quoted)
-		}
-		desired[i] = v
-	}
-
 	var instructions ChangeList
 
 	// remove the exact matches.
 	existing, desired = removeCommon(existing, desired)
 
 	// At this point the exact matches are removed. However there may be
-	// records that have the same GetTargetCombined() but different
+	// records that have the same .String() but different
 	// TTLs.
 
 	existing, desired, newChanges := findTTLChanges(existing, desired)
@@ -300,7 +276,6 @@ func diffTargets(existing, desired []targetConfig) ChangeList {
 	for i := range mi {
 		er := existing[i].rec
 		dr := desired[i].rec
-
 		m := color.YellowString("± MODIFY %s %s %s", dr.NameFQDN, dr.Type, humanDiff(existing[i], desired[i]))
 
 		mkc := mkChange(dr.NameFQDN, dr.Type, []string{m}, models.Records{er}, models.Records{dr})

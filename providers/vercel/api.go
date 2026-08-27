@@ -16,7 +16,6 @@ type DNSRecord struct {
 	vercelClient.DNSRecord
 	Type string `json:"type"`
 	// Normally MXPriority would be uint16 type, but since vercelClient.DNSRecord uses int64, we'd better be consistent here
-	// Later in GetZoneRecords we do a `uint16OrZero` to ensure the type is correct
 	MXPriority int64 `json:"mxPriority"`
 }
 

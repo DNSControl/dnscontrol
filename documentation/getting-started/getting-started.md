@@ -1,5 +1,22 @@
 # Getting Started
 
+- [Getting Started](#getting-started)
+  - [1. Install the software](#1-install-the-software)
+    - [Homebrew](#homebrew)
+    - [Docker](#docker)
+    - [Binaries](#binaries)
+    - [Source](#source)
+  - [1.1. Shell Completion](#11-shell-completion)
+    - [zsh](#zsh)
+    - [bash](#bash)
+  - [2. Create a place for the config files](#2-create-a-place-for-the-config-files)
+  - [3. Create the initial `dnsconfig.js`](#3-create-the-initial-dnsconfigjs)
+  - [4. Create the initial `creds.json`](#4-create-the-initial-credsjson)
+  - [5. Test the sample files](#5-test-the-sample-files)
+  - [6. Make a change](#6-make-a-change)
+  - [7. Use your own domains](#7-use-your-own-domains)
+  - [8. Production Advice](#8-production-advice)
+
 ## 1. Install the software
 
 Choose one of the following installation methods:
@@ -287,7 +304,7 @@ on how it can be improved.
 
 If you are going to use this in production, we highly recommend the following:
 
-* Store the configuration files in Git.
-* Encrypt the `creds.json` file before storing it in Git. Do NOT store API keys or other credentials without encrypting them.
-* Use a CI/CD tool like [GitLab](../advanced-features/ci-cd-gitlab.md), Jenkins, CircleCI, [GitHub Actions](https://github.com/DNSControl/dnscontrol#via-github-actions-gha), etc. to automatically push DNS changes.
-* Join the DNSControl community. File [issues](https://github.com/DNSControl/dnscontrol/issues) and [PRs](https://github.com/DNSControl/dnscontrol/pulls).
+- Store the configuration files in Git.
+- Encrypt the `creds.json` file before storing it in Git. Do NOT store API keys or other credentials without encrypting them.
+- Use a CI/CD tool like [GitLab](../advanced-features/ci-cd-gitlab.md), Jenkins, CircleCI, [GitHub Actions](https://github.com/DNSControl/dnscontrol#via-github-actions-gha), etc. to automatically push DNS changes.
+- Join the DNSControl community. File [issues](https://github.com/DNSControl/dnscontrol/issues) and [PRs](https://github.com/DNSControl/dnscontrol/pulls).

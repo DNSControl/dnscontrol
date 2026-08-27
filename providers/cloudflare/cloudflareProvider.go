@@ -5,23 +5,24 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/netip"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	privatetypes "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/fatih/color"
 	"golang.org/x/net/idna"
-
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
-	"github.com/DNSControl/dnscontrol/v4/providers/cloudflare/rtypes/cfsingleredirect"
 )
 
 /*
@@ -125,6 +126,7 @@ func init() {
 
 // cloudflareProvider is the handle for API calls.
 type cloudflareProvider struct {
+	observer      providers.ConversionObserver
 	ipConversions []transform.IPConversion
 	ignoredLabels []string
 	manageWorkers bool
@@ -139,6 +141,10 @@ type cloudflareProvider struct {
 	tcZone        string   // Transcode Current zone
 
 	zoneCache zonecache.ZoneCache[cloudflare.Zone]
+}
+
+func (c *cloudflareProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 // GetNameservers returns the nameservers for a domain.
@@ -157,9 +163,7 @@ func (c *cloudflareProvider) ListZones() ([]string, error) {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	domainID, err := c.getDomainID(domain)
+	domainID, err := c.getDomainID(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -176,14 +180,14 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 
 	// Fetch DNS records concurrently
 	go func() {
-		recs, err := c.getRecordsForDomain(domainID, domain)
+		recs, err := c.getRecordsForDomain(domainID, dc)
 		mainCh <- result{records: recs, err: err}
 	}()
 
 	// Fetch Single Redirects concurrently if enabled
 	if c.manageSingleRedirects {
 		go func() {
-			prs, err := c.getSingleRedirects(domainID, domain)
+			prs, err := c.getSingleRedirects(dc, domainID)
 			redirectCh <- result{records: prs, err: err}
 		}()
 	} else {
@@ -193,7 +197,7 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	// Fetch Worker Routes concurrently if enabled
 	if c.manageWorkers {
 		go func() {
-			wrs, err := c.getWorkerRoutes(domainID, domain)
+			wrs, err := c.getWorkerRoutes(domainID, dc)
 			workerCh <- result{records: wrs, err: err}
 		}()
 	} else {
@@ -234,9 +238,6 @@ func (c *cloudflareProvider) GetZoneRecords(dc *models.DomainConfig) (models.Rec
 	records = append(records, redirectRes.records...)
 	records = append(records, workerRes.records...)
 
-	// Normalize
-	models.PostProcessRecords(records)
-
 	return records, nil
 }
 
@@ -250,11 +251,6 @@ func (c *cloudflareProvider) getDomainID(name string) (string, error) {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (c *cloudflareProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
-	for _, rec := range dc.Records {
-		if rec.Type == "ALIAS" {
-			rec.ChangeType("CNAME", dc.Name)
-		}
-	}
 
 	if err := c.preprocessConfig(dc); err != nil {
 		return nil, 0, err
@@ -382,17 +378,20 @@ func genComparableWithMgmt(rec *models.RecordConfig, manageComments, manageTags 
 }
 
 func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, domainID, msg string) []*models.Correction {
-	switch newrec.Type {
-	case "WORKER_ROUTE":
-		return []*models.Correction{{
-			Msg: msg,
-			F:   func() error { return c.createWorkerRoute(domainID, newrec.GetTargetField()) },
-		}}
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+	switch newrec.TypeNum {
+	case privatetypes.TypeCFWORKERROUTE:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
-				return c.createSingleRedirect(domainID, *newrec.F.(*cfsingleredirect.SingleRedirectConfig))
+				return c.createWorkerRoute(domainID, newrec.GetRDATA())
+			},
+		}}
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
+		return []*models.Correction{{
+			Msg: msg,
+			F: func() error {
+				//return c.createSingleRedirect(domainID, *newrec.F.(*cfsingleredirect.SingleRedirectConfig))
+				return c.createSingleRedirect(domainID, newrec.AsCLOUDFLAREAPISINGLEREDIRECT())
 			},
 		}}
 	default:
@@ -402,29 +401,29 @@ func (c *cloudflareProvider) mkCreateCorrection(newrec *models.RecordConfig, dom
 
 func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordConfig, domainID string, msg string) []*models.Correction {
 	var idTxt string
-	switch oldrec.Type {
-	case "WORKER_ROUTE":
+	switch oldrec.TypeNum {
+	case privatetypes.TypeCFWORKERROUTE:
 		idTxt = oldrec.Original.(cloudflare.WorkerRoute).ID
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
-		idTxt = oldrec.F.(*cfsingleredirect.SingleRedirectConfig).SRRRulesetID
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
+		idTxt = oldrec.AsCLOUDFLAREAPISINGLEREDIRECT().RT_SRRRulesetID
 	default:
 		idTxt = oldrec.Original.(cloudflare.DNSRecord).ID
 	}
 	msg = msg + color.YellowString(" id=%v", idTxt)
 
-	switch newrec.Type {
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+	switch newrec.TypeNum {
+	case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
 				return c.updateSingleRedirect(domainID, oldrec, newrec)
 			},
 		}}
-	case "WORKER_ROUTE":
+	case privatetypes.TypeCFWORKERROUTE:
 		return []*models.Correction{{
 			Msg: msg,
 			F: func() error {
-				return c.updateWorkerRoute(idTxt, domainID, newrec.GetTargetField())
+				return c.updateWorkerRoute(idTxt, domainID, newrec.GetRDATA())
 			},
 		}}
 	default:
@@ -443,7 +442,7 @@ func (c *cloudflareProvider) mkDeleteCorrection(recType string, origRec *models.
 	switch recType {
 	case "PAGE_RULE":
 		idTxt = origRec.Original.(cloudflare.PageRule).ID
-	case "WORKER_ROUTE":
+	case "CF_WORKER_ROUTE":
 		idTxt = origRec.Original.(cloudflare.WorkerRoute).ID
 	case "CLOUDFLAREAPI_SINGLE_REDIRECT":
 		idTxt = origRec.Original.(cloudflare.RulesetRule).ID
@@ -458,10 +457,10 @@ func (c *cloudflareProvider) mkDeleteCorrection(recType string, origRec *models.
 			switch recType {
 			// case "PAGE_RULE":
 			// 	return c.deletePageRule(origRec.Original.(cloudflare.PageRule).ID, domainID)
-			case "WORKER_ROUTE":
+			case "CF_WORKER_ROUTE":
 				return c.deleteWorkerRoute(origRec.Original.(cloudflare.WorkerRoute).ID, domainID)
 			case "CLOUDFLAREAPI_SINGLE_REDIRECT":
-				return c.deleteSingleRedirects(domainID, *origRec.F.(*cfsingleredirect.SingleRedirectConfig))
+				return c.deleteSingleRedirects(domainID, origRec.AsCLOUDFLAREAPISINGLEREDIRECT())
 			default:
 				return c.deleteDNSRecord(origRec.Original.(cloudflare.DNSRecord), domainID)
 			}
@@ -471,7 +470,7 @@ func (c *cloudflareProvider) mkDeleteCorrection(recType string, origRec *models.
 }
 
 func checkNSModifications(dc *models.DomainConfig) {
-	newList := make([]*models.RecordConfig, 0, len(dc.Records))
+	newList := make(models.Records, 0, len(dc.Records))
 
 	punyRoot, err := idna.ToASCII(dc.Name)
 	if err != nil {
@@ -480,7 +479,7 @@ func checkNSModifications(dc *models.DomainConfig) {
 
 	for _, rec := range dc.Records {
 		if rec.Type == "NS" && rec.GetLabelFQDN() == punyRoot {
-			if strings.HasSuffix(rec.GetTargetField(), ".ns.cloudflare.com.") {
+			if strings.HasSuffix(rec.AsNS().Ns, ".ns.cloudflare.com.") {
 				continue
 			}
 		}
@@ -542,9 +541,10 @@ func checkCNAMEFlattenVal(v string) (string, error) {
 
 func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 
+	// Cloudflare's CNAMEs works like our virtual ALIAS type:
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" {
-			rec.ChangeType("CNAME", dc.Name)
+			rec.ChangeTypeToCNAME(dc, rec.AsALIAS().Target)
 		}
 	}
 
@@ -572,8 +572,8 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 	// A and CNAMEs: Validate. If null, set to default.
 	// else: Make sure it wasn't set.  Set to default.
 	// iterate backwards so first defined page rules have highest priority
-	for i := len(dc.Records) - 1; i >= 0; i-- {
-		rec := dc.Records[i]
+	for _, rec := range slices.Backward(dc.Records) {
+
 		if rec.Metadata == nil {
 			rec.Metadata = map[string]string{}
 		}
@@ -657,24 +657,16 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 			return fmt.Errorf("CNAME record %#v has both CF_PROXY_ON and CF_CNAME_FLATTEN_ON set, but these are mutually exclusive; Cloudflare ignores CNAME flattening when proxy is enabled", rec.GetLabel())
 		}
 
-		switch rec.Type {
-		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+		switch rec.TypeNum {
+		case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 			// SINGLEREDIRECT record types. Verify they are enabled.
 			if !c.manageSingleRedirects {
 				return errors.New("you must add 'manage_single_redirects: true' metadata to cloudflare provider to use CLOUDFLAREAPI_SINGLE_REDIRECT records")
 			}
-		case "CF_WORKER_ROUTE":
-			// CF_WORKER_ROUTE record types. Encode target as $PATTERN,$SCRIPT
-			parts := strings.Split(rec.GetTargetField(), ",")
-			if len(parts) != 2 {
-				return errors.New("invalid data specified for cloudflare worker record")
-			}
-			rec.TTL = 1
-			rec.Type = "WORKER_ROUTE"
 		}
 	}
 
-	// look for ip conversions and transform records
+	// lookfor ip conversions and transform records
 	for _, rec := range dc.Records {
 		// Only transform A records
 		if rec.Type != "A" {
@@ -684,24 +676,25 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		if rec.Metadata[metaProxy] != "full" {
 			continue
 		}
-		ip, err := netip.ParseAddr(rec.GetTargetField())
-		if err != nil {
-			return fmt.Errorf("%s is not a valid ip address", rec.GetTargetField())
-		}
+		ip := rec.AsA().Addr
 		newIP, err := transform.IP(ip, c.ipConversions)
 		if err != nil {
 			return err
 		}
-		rec.Metadata[metaOriginalIP] = rec.GetTargetField()
-		if err := rec.SetTarget(newIP.String()); err != nil {
+
+		rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
+		rd, err := models.MakeA(dc.Name, rec.Metadata, nrc.Flags{}, newIP)
+		if err != nil {
 			return err
 		}
+		rec.SetRDATA(rd)
+
 	}
 
 	return nil
 }
 
-func (c *cloudflareProvider) LogTranscode(zone string, redirect *cfsingleredirect.SingleRedirectConfig) error {
+func (c *cloudflareProvider) LogTranscode(zone string, redirect privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
 	// No filename? Don't log anything.
 	filename := c.tcLogFilename
 	if filename == "" {
@@ -877,7 +870,7 @@ func (c cfTarget) MarshalJSON() ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-// DNSControlString returns cfTarget normalized to be a FQDN. Null targets are
+// FQDN returns cfTarget normalized to be a FQDN. Null targets are
 // represented by a single period.
 func (c cfTarget) FQDN() string {
 	return strings.TrimRight(string(c), ".") + "."
@@ -914,7 +907,7 @@ func stringDefault(value any, def string) string {
 	return def
 }
 
-func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSRecord) (*models.RecordConfig, error) {
+func (c *cloudflareProvider) nativeToRecord(dc *models.DomainConfig, cr cloudflare.DNSRecord) (*models.RecordConfig, error) {
 	// Check for read_only metadata
 	// https://github.com/DNSControl/dnscontrol/issues/3850
 	if cr.Meta != nil {
@@ -935,21 +928,35 @@ func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSReco
 		cr.Type = "TXT"
 	}
 
-	// normalize cname,mx,ns records with dots to be consistent with our config format.
-	if cr.Type == "ALIAS" || cr.Type == "CNAME" || cr.Type == "MX" || cr.Type == "NS" || cr.Type == "PTR" {
-		if cr.Content != "." {
-			cr.Content = cr.Content + "."
-		}
+	label := dc.LabelFromFQDNNoDot(cr.Name)
+	ttl := uint32(cr.TTL)
+
+	var rc *models.RecordConfig
+	var err error
+
+	switch rType := cr.Type; rType { // #rtype_variations
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, *cr.Priority, cr.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SRV":
+		data := cr.Data.(map[string]any)
+		target := stringDefault(data["target"], "MISSING.TARGET")
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]), target,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "TXT":
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rType, cr.Content,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	}
+	if err != nil {
+		return nil, fmt.Errorf("unparsable %q record received from cloudflare: %w", cr.Type, err)
 	}
 
-	rc := &models.RecordConfig{
-		TTL:      uint32(cr.TTL),
-		Original: cr,
-		Metadata: map[string]string{},
-	}
-	rc.SetLabelFromFQDN(cr.Name, domain)
+	// Save a pointer to the original cr so that "push" can refer to it for IDs, etc.
+	rc.Original = cr
 
-	if cr.Type == "A" || cr.Type == "AAAA" || cr.Type == "CNAME" {
+	if rc.TypeNum == dnsv2.TypeA || rc.TypeNum == dnsv2.TypeAAAA || rc.TypeNum == dnsv2.TypeCNAME {
 		if cr.Proxied != nil {
 			if *(cr.Proxied) {
 				rc.Metadata[metaProxy] = "on"
@@ -976,85 +983,7 @@ func (c *cloudflareProvider) nativeToRecord(domain string, cr cloudflare.DNSReco
 		rc.Metadata[metaTags] = strings.Join(cr.Tags, ",")
 	}
 
-	switch rType := cr.Type; rType { // #rtype_variations
-	case "MX":
-		if err := rc.SetTargetMX(*cr.Priority, cr.Content); err != nil {
-			return nil, fmt.Errorf("unparsable MX record received from cloudflare: %w", err)
-		}
-	case "SRV":
-		data := cr.Data.(map[string]any)
-
-		target := stringDefault(data["target"], "MISSING.TARGET")
-		if target != "." {
-			target += "."
-		}
-		if err := rc.SetTargetSRV(uint16Zero(data["priority"]), uint16Zero(data["weight"]), uint16Zero(data["port"]),
-			target); err != nil {
-			return nil, fmt.Errorf("unparsable SRV record received from cloudflare: %w", err)
-		}
-	case "TXT":
-		s, err := parseCfTxtContent(cr.Content)
-		if err != nil {
-			return rc, err
-		}
-		err = rc.SetTargetTXT(s)
-		return rc, err
-	default:
-		if err := rc.PopulateFromString(rType, cr.Content, domain); err != nil {
-			return nil, fmt.Errorf("unparsable record received from cloudflare: %w", err)
-		}
-	}
-
 	return rc, nil
-}
-
-func parseCfTxtContent(s string) (string, error) {
-	// Cloudflare encodes TXT records in a mystery format. They tell you when
-	// you've done something wrong, but won't document what they do want.
-	// If you use their web dashboard and enter the string as any normal human
-	// would, they display a warning that you're a bad person and should feel
-	// bad for doing that.  However, they accept it just fine, and present it in
-	// their API as a string like any person on this planet would expect.  If
-	// you enter the string with quotes, they accept that like a BIND zonefile.
-
-	// There is a difference between what you enter in their web dashboard, how
-	// it is rewritten by the UI, and what you get in the JSON. Examples:
-
-	// dashboard: i love dns it is great
-	// rewritten: "i love dns it is great"
-	// seen json: "i love dns it is great"
-
-	// dashboard: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	// rewritten: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// dashboard: "i love dns" "it is great"
-	// rewritten: "i love dns" "it is great"
-	// seen json: "i love dns" "it is great"
-
-	// dashboard: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// rewritten: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// dashboard: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// rewritten: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	// seen json: "xxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	// From this we conclude:
-	// If it begins and ends with a quote, use ParseQuoted() to decode it.
-	// Otherwise, it is a raw string. They could just fucking tell us that in
-	// the documenation, but where's the fun in that?
-
-	if s == "" {
-		return "", nil
-	}
-	if s == `"` {
-		return "", errors.New("invalid TXT record content: one double quote")
-	}
-	if s[0] == '"' && s[len(s)-1] == '"' {
-		return txtutil.ParseQuoted(s)
-	}
-	return s, nil
 }
 
 func getProxyMetadata(r *models.RecordConfig) map[string]string {
@@ -1075,6 +1004,7 @@ func getProxyMetadata(r *models.RecordConfig) map[string]string {
 // EnsureZoneExists creates a zone if it does not exist.
 func (c *cloudflareProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 	domain := dc.Name
+
 	if ok, err := c.zoneCache.HasZone(domain); err != nil || ok {
 		return err
 	}

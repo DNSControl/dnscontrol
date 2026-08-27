@@ -4,9 +4,6 @@
     {
       "dnsProviders": {},
       "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com",
         "zone_id": "Z2FTEDLFRTZ"
       },
       "name": "foo.com",
@@ -17,28 +14,27 @@
     {
       "dnsProviders": {},
       "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_tag": "internal",
-        "dnscontrol_uniquename": "foo.com!internal",
         "zone_id": "Z2FTEDLFRTF"
       },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "A foo.com. false Z2FTEDLFRTZ",
           "filepos": "[line:6:5]",
           "meta": {
             "orig_custom_type": "R53_ALIAS"
           },
           "name": "atest",
-          "r53_alias": {
-            "evaluate_target_health": "false",
-            "type": "A",
-            "zone_id": "Z2FTEDLFRTZ"
+          "name_unicode": "atest",
+          "rdata": {
+            "AliasType": "A",
+            "EvalTargetHealth": "false",
+            "Target": "foo.com.",
+            "ZoneID": "Z2FTEDLFRTZ"
           },
-          "target": "foo.com.",
           "ttl": 300,
-          "type": "R53_ALIAS"
+          "type": "R53_ALIAS",
+          "typenum": 65298
         }
       ],
       "registrar": "none",

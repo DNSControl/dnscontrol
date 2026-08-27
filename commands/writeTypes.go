@@ -5,7 +5,7 @@ import (
 	_ "embed" // Required by go:embed
 	"os"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v5/pkg/version"
 	"github.com/urfave/cli/v3"
 )
 

@@ -1,5 +1,9 @@
 # Security Policy
 
+- [Security Policy](#security-policy)
+  - [Supported Versions](#supported-versions)
+  - [Reporting a Vulnerability](#reporting-a-vulnerability)
+
 DNSControl is a command-line tool and therefore has a different (limited) attack surface as compared to a web app or other system.
 
 ## Supported Versions

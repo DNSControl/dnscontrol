@@ -23,14 +23,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/go-gandi/go-gandi"
 	"github.com/go-gandi/go-gandi/config"
 	"github.com/go-gandi/go-gandi/livedns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 // Section 1: Register this provider in the system.
@@ -112,11 +112,16 @@ var features = providers.DocumentationNotes{
 
 // gandiv5Provider is the gandiv5Provider handle used to store any client-related state.
 type gandiv5Provider struct {
+	observer  providers.ConversionObserver
 	apikey    string
 	token     string
 	sharingid string
 	debug     bool
 	apiurl    string
+}
+
+func (client *gandiv5Provider) SetConversionObserver(observer providers.ConversionObserver) {
+	client.observer = observer
 }
 
 // newDsp generates a DNS Service Provider client handle.
@@ -193,9 +198,11 @@ func (client *gandiv5Provider) GetZoneRecords(dc *models.DomainConfig) (models.R
 	}
 
 	// Convert them to DNScontrol's native format:
-	existingRecords := []*models.RecordConfig{}
+	var existingRecords models.Records
 	for _, rr := range records {
-		rrs, err := nativeToRecords(rr, domain)
+		before := providers.BeginToRC(client.observer, "nativeToRecords", rr)
+		rrs, err := nativeToRecords(dc, rr)
+		providers.EndToRC(client.observer, "nativeToRecords", before, rr, rrs, err)
 		if err != nil {
 			return nil, err
 		}
@@ -212,12 +219,17 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 	// provider.  We try to do minimal changes otherwise it gets
 	// confusing.
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
+	var err error
 	for _, rec := range dc.Records {
 		if rec.Type == "ALIAS" && rec.Name != "@" {
 			// GANDI only permits aliases on a naked domain.
 			// Therefore, we change this to a CNAME.
-			rec.ChangeType("CNAME", dc.Name)
+
+			rec, err = dc.NewRecordConfig(dc.LabelFromShort(rec.Name), rec.TTL, dnsv2.TypeCNAME, rec.AsALIAS().Target)
+			if err != nil {
+				panic("should not happen PrepDesiredRecords")
+			}
 		}
 		if rec.TTL < 300 {
 			printer.Warnf("Gandi does not support ttls < 300. Setting %s from %d to 300\n", rec.GetLabelFQDN(), rec.TTL)
@@ -228,8 +240,8 @@ func PrepDesiredRecords(dc *models.DomainConfig) {
 			rec.TTL = 2592000
 		}
 		if rec.Type == "NS" && rec.GetLabel() == "@" {
-			if !strings.HasSuffix(rec.GetTargetField(), ".gandi.net.") {
-				printer.Warnf("Gandi does not support changing apex NS records. Ignoring %s\n", rec.GetTargetField())
+			if !strings.HasSuffix(rec.AsNS().Ns, ".gandi.net.") {
+				printer.Warnf("Gandi does not support changing apex NS records. Ignoring %s\n", rec.AsNS().Ns)
 			}
 			continue
 		}
@@ -269,7 +281,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 				label := inst.Key.NameFQDN
 				rtype := n.RrsetType
 				domain := dc.Name
-				shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+				shortname := dc.ToShort(label)
 				ttl := n.RrsetTTL
 				values := n.RrsetValues
 				key := models.RecordKey{NameFQDN: label, Type: rtype}
@@ -320,7 +332,7 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 			msgs := strings.Join(inst.Msgs, "\n")
 			domain := dc.Name
 			label := inst.Key.NameFQDN
-			shortname := dnsutilv1.TrimDomainName(label, dc.Name)
+			shortname := dc.ToShort(label)
 			corrections = append(corrections,
 				&models.Correction{
 					Msg: msgs,
@@ -342,10 +354,10 @@ func (client *gandiv5Provider) GetZoneRecordsCorrections(dc *models.DomainConfig
 }
 
 // debugRecords prints a list of RecordConfig.
-func debugRecords(note string, recs []*models.RecordConfig) {
+func debugRecords(note string, recs models.Records) {
 	printer.Debugf("%s", note)
 	for k, v := range recs {
-		printer.Printf("   %v: %v %v %v %v\n", k, v.GetLabel(), v.Type, v.TTL, v.GetTargetDebug())
+		printer.Printf("   %v: %s %s %d %s\n", k, v.GetLabel(), v.Type, v.TTL, v.GetRDATA().String())
 	}
 }
 

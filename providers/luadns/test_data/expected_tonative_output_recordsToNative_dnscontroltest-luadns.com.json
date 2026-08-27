@@ -1,0 +1,3272 @@
+[
+  {
+    "index": 1,
+    "value": [
+      {
+        "name": "*.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.3.3.3",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "value": [
+      {
+        "name": "4.dnscontroltest-luadns.com.",
+        "type": "PTR",
+        "content": "bar.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "value": [
+      {
+        "name": "4.dnscontroltest-luadns.com.",
+        "type": "PTR",
+        "content": "foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "value": [
+      {
+        "name": "6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com.",
+        "type": "OPENPGPKEY",
+        "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAQWiJ4gXP6wC2wQ7h7odcLpZU+mQD2rHiqtTgj+1e6ou0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEE/tuN1tP/jpKko/EvTN4yJT7efAsFAgAAAAECGwECHgUCF4AACgkQTN4yJT7efAuxPQD/aEhrJaCX9FD1IkjA/8UmK0nokjtJNy46It3IWTGT4EQBAJI6goeRQBJqu/UnHmjv0OfqBQQCt87f9zXqZxLjiIQN",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "value": [
+      {
+        "name": "6c9b19cb967b563d9d96b341ad4a89a74444c6f18e9530f4623817fe._openpgpkey.dnscontroltest-luadns.com.",
+        "type": "OPENPGPKEY",
+        "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAxCQnAKBDmA75+73+3lYVXDwrMUbaR61fNZgGeOHwmDq0JEV4YW1wbGUgMiA8ZXhhbXBsZS0yQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEYZ3PIZnaOWQrPxj6VX+9VdC3r4wFAgAAAAECGwECHgUCF4AACgkQVX+9VdC3r4xq6wEAl2ujFSqWwc2wQuHedpFrSTN9Gh7cIziKCZ3f8BGSRTgBAIvjKlWLLLBu0FPpCVlcfkpsZMV5YRrg90k+D+O4zZ4M",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "8.8.8.8",
+        "ttl": 1000
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "4.4.4.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 12,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "ALIAS",
+        "content": "foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 13,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "ALIAS",
+        "content": "foo.dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 14,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "ALIAS",
+        "content": "foo2.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 15,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "0 issue \"letsencrypt.org\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 16,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 17,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "0 issuewild \";\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 18,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "0 issuewild \"example.com\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 19,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "0 issuewild \"letsencrypt.org\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 20,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "CAA",
+        "content": "128 issue \"letsencrypt.org\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 21,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "0 test.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 22,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "1 test.com. alpn=h2 port=99",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 23,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "1 test.com. port=80",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 24,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "1 test.com. port=99",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 25,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "3 example.com. alpn=h2 port=80 ech=another+base64+encoded+value",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 26,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "3 example.com. alpn=h2 port=80 ech=some+base64+encoded+value///",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 27,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "3 example.com. alpn=h2,h3 port=999",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 28,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "3 example.com. alpn=h2,h3 port=999 ech=some+base64+encoded+value///",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 29,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "HTTPS",
+        "content": "3 yetanother.com. alpn=h2 port=80 ech=another+base64+encoded+value",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 30,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "0 .",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 31,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "2 dnscontroltest-luadns.com.",
+        "ttl": 300
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "8 www.dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 32,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 bar.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 33,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 34,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "SSHFP",
+        "content": "1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 35,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "SSHFP",
+        "content": "2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 36,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "SSHFP",
+        "content": "2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 37,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "asimple",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 38,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "simple",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 39,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "8.8.8.8",
+        "ttl": 500
+      }
+    ]
+  },
+  {
+    "index": 40,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "8.8.8.8",
+        "ttl": 666
+      }
+    ]
+  },
+  {
+    "index": 41,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "01.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "02.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "03.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "04.rikudns.net.",
+        "ttl": 86400
+      }
+    ]
+  },
+  {
+    "index": 42,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "01.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "02.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "03.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "04.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns1.example.com.",
+        "ttl": 300
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns2.example.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 43,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "01.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "02.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "03.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "04.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns1.foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 44,
+    "value": [
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "01.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "02.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "03.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "04.rikudns.net.",
+        "ttl": 86400
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns1.foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns2.foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 45,
+    "value": [
+      {
+        "name": "_443._tcp.dnscontroltest-luadns.com.",
+        "type": "TLSA",
+        "content": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 46,
+    "value": [
+      {
+        "name": "_443._tcp.dnscontroltest-luadns.com.",
+        "type": "TLSA",
+        "content": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 47,
+    "value": [
+      {
+        "name": "_443._tcp.dnscontroltest-luadns.com.",
+        "type": "TLSA",
+        "content": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 48,
+    "value": [
+      {
+        "name": "_443._tcp.dnscontroltest-luadns.com.",
+        "type": "TLSA",
+        "content": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 49,
+    "value": [
+      {
+        "name": "_443._tcp.dnscontroltest-luadns.com.",
+        "type": "TLSA",
+        "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 50,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 .",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 51,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo4.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "52 6 7 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 52,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo4.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "52 62 7 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 53,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo4.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "52 62 72 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 54,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 55,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo3.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 56,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo4.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 57,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 60 70 foo2.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 58,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 60 70 foo2.com.",
+        "ttl": 300
+      },
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "15 65 75 foo3.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 59,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 333
+      }
+    ]
+  },
+  {
+    "index": 60,
+    "value": [
+      {
+        "name": "_sip._tcp.dnscontroltest-luadns.com.",
+        "type": "SRV",
+        "content": "5 6 7 foo.com.",
+        "ttl": 4400
+      }
+    ]
+  },
+  {
+    "index": 61,
+    "value": [
+      {
+        "name": "a.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "xn--ndaaa.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 62,
+    "value": [
+      {
+        "name": "bar.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 63,
+    "value": [
+      {
+        "name": "bar.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.5.5.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 64,
+    "value": [
+      {
+        "name": "bar.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "redact2.acm-validations.aws.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 65,
+    "value": [
+      {
+        "name": "bar.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 bar.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 66,
+    "value": [
+      {
+        "name": "bar.bat.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.5.5.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 67,
+    "value": [
+      {
+        "name": "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com.",
+        "type": "OPENPGPKEY",
+        "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 68,
+    "value": [
+      {
+        "name": "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey.dnscontroltest-luadns.com.",
+        "type": "OPENPGPKEY",
+        "content": "mDMEAAAAARYJKwYBBAHaRw8BAQdAO2uf8a0MUkNWUHzey8FhYJP2SS+061pF+GFK23egV9K0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEwP53wg/jSbhjzamYC/4c89luNM4FAgAAAAECGwECHgUCF4AACgkQC/4c89luNM4/LgEA8ARj4iJ0fVrpRRnhrTtlGwos170TDhTuZfPoGMqweS0A/1GWtg6/ywR4EPtRu+p9WogsQmO1HOk3ag3I5d7iP18C",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 69,
+    "value": [
+      {
+        "name": "decoy.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 70,
+    "value": [
+      {
+        "name": "decoy.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 71,
+    "value": [
+      {
+        "name": "decoy.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.3.3.3",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 72,
+    "value": [
+      {
+        "name": "dyndns-city1.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "91.42.1.1",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 73,
+    "value": [
+      {
+        "name": "dyndns-city1.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2003:dd:d7ff::fe71:ce77",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 74,
+    "value": [
+      {
+        "name": "dyndns-city2.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "91.42.1.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 75,
+    "value": [
+      {
+        "name": "dyndns-city2.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2003:dd:d7ff::fe71:ce78",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 76,
+    "value": [
+      {
+        "name": "final.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "TestDNSProviders was successful!",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 77,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "10.10.10.10",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 78,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "11.11.11.11",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 79,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "12.12.12.12",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 80,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "13.13.13.13",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 81,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "14.14.14.14",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 82,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 83,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 84,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.4.5.6",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 85,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 86,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.4.5.6",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 87,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "8.8.8.8",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 88,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "4.5.6.7",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 89,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2003:dd:d7ff::fe71:aaaa",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 90,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 91,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "google.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 92,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "google2.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 93,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "redact1.acm-validations.aws.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 94,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "10 aspmx.l.google.com.",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "20 alt1.aspmx.l.google.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 95,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "10 foo.dnscontroltest-luadns.com.",
+        "ttl": 300
+      },
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "20 bar.dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 96,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 mx.google.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 97,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "8 dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 98,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 99,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "simple",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 100,
+    "value": [
+      {
+        "name": "foo.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "v=spf1 ip4:99.99.99.99 -all",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 101,
+    "value": [
+      {
+        "name": "foo.bat.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      },
+      {
+        "name": "foo.bat.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.3.4.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 102,
+    "value": [
+      {
+        "name": "foo.bat.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "simple",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 103,
+    "value": [
+      {
+        "name": "foo254.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 104,
+    "value": [
+      {
+        "name": "foo255.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 105,
+    "value": [
+      {
+        "name": "foo256.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 106,
+    "value": [
+      {
+        "name": "foo509.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 107,
+    "value": [
+      {
+        "name": "foo510.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 108,
+    "value": [
+      {
+        "name": "foo511.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 109,
+    "value": [
+      {
+        "name": "foo764.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 110,
+    "value": [
+      {
+        "name": "foo765.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 111,
+    "value": [
+      {
+        "name": "foo766.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 112,
+    "value": [
+      {
+        "name": "foobt.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "blah`blah",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 113,
+    "value": [
+      {
+        "name": "foodq.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "in\"side",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 114,
+    "value": [
+      {
+        "name": "foodqs.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "\"left",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 115,
+    "value": [
+      {
+        "name": "foodqs.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "in\"ter\"ior",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 116,
+    "value": [
+      {
+        "name": "foodqs.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "right\"",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 117,
+    "value": [
+      {
+        "name": "fooosbs1.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "1back\\slash",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 118,
+    "value": [
+      {
+        "name": "fooosbs2.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "2back\\\\slash",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 119,
+    "value": [
+      {
+        "name": "fooosbs3.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "3back\\\\\\slash",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 120,
+    "value": [
+      {
+        "name": "fooosbs4.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "4back\\\\\\\\slash",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 121,
+    "value": [
+      {
+        "name": "foosc1.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "semi;colon",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 122,
+    "value": [
+      {
+        "name": "foosc2.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "wssemi ; colon",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 123,
+    "value": [
+      {
+        "name": "foosp.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "with spaces",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 124,
+    "value": [
+      {
+        "name": "foosq.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "quo'te",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 125,
+    "value": [
+      {
+        "name": "foows1.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "trailingws ",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 126,
+    "value": [
+      {
+        "name": "mail.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "ghs.googlehosted.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 127,
+    "value": [
+      {
+        "name": "mail.bat.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "ghs.googlehosted.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 128,
+    "value": [
+      {
+        "name": "nmx.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.3",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 129,
+    "value": [
+      {
+        "name": "nmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "0 .",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 130,
+    "value": [
+      {
+        "name": "nmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "3 nmx.dnscontroltest-luadns.com.",
+        "ttl": 300
+      },
+      {
+        "name": "nmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "9 www.dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 131,
+    "value": [
+      {
+        "name": "pager101-rec0000.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 132,
+    "value": [
+      {
+        "name": "pager101-rec0001.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 133,
+    "value": [
+      {
+        "name": "pager101-rec0002.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 134,
+    "value": [
+      {
+        "name": "pager101-rec0003.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 135,
+    "value": [
+      {
+        "name": "pager101-rec0004.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 136,
+    "value": [
+      {
+        "name": "pager101-rec0005.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 137,
+    "value": [
+      {
+        "name": "pager101-rec0006.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 138,
+    "value": [
+      {
+        "name": "pager101-rec0007.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 139,
+    "value": [
+      {
+        "name": "pager101-rec0008.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 140,
+    "value": [
+      {
+        "name": "pager101-rec0009.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 141,
+    "value": [
+      {
+        "name": "pager101-rec0010.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 142,
+    "value": [
+      {
+        "name": "pager101-rec0011.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 143,
+    "value": [
+      {
+        "name": "pager101-rec0012.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 144,
+    "value": [
+      {
+        "name": "pager101-rec0013.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 145,
+    "value": [
+      {
+        "name": "pager101-rec0014.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 146,
+    "value": [
+      {
+        "name": "pager101-rec0015.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 147,
+    "value": [
+      {
+        "name": "pager101-rec0016.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 148,
+    "value": [
+      {
+        "name": "pager101-rec0017.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 149,
+    "value": [
+      {
+        "name": "pager101-rec0018.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 150,
+    "value": [
+      {
+        "name": "pager101-rec0019.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 151,
+    "value": [
+      {
+        "name": "pager101-rec0020.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 152,
+    "value": [
+      {
+        "name": "pager101-rec0021.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 153,
+    "value": [
+      {
+        "name": "pager101-rec0022.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 154,
+    "value": [
+      {
+        "name": "pager101-rec0023.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 155,
+    "value": [
+      {
+        "name": "pager101-rec0024.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 156,
+    "value": [
+      {
+        "name": "pager101-rec0025.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 157,
+    "value": [
+      {
+        "name": "pager101-rec0026.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 158,
+    "value": [
+      {
+        "name": "pager101-rec0027.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 159,
+    "value": [
+      {
+        "name": "pager101-rec0028.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 160,
+    "value": [
+      {
+        "name": "pager101-rec0029.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 161,
+    "value": [
+      {
+        "name": "pager101-rec0030.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 162,
+    "value": [
+      {
+        "name": "pager101-rec0031.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 163,
+    "value": [
+      {
+        "name": "pager101-rec0032.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 164,
+    "value": [
+      {
+        "name": "pager101-rec0033.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 165,
+    "value": [
+      {
+        "name": "pager101-rec0034.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 166,
+    "value": [
+      {
+        "name": "pager101-rec0035.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 167,
+    "value": [
+      {
+        "name": "pager101-rec0036.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 168,
+    "value": [
+      {
+        "name": "pager101-rec0037.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 169,
+    "value": [
+      {
+        "name": "pager101-rec0038.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 170,
+    "value": [
+      {
+        "name": "pager101-rec0039.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 171,
+    "value": [
+      {
+        "name": "pager101-rec0040.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 172,
+    "value": [
+      {
+        "name": "pager101-rec0041.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 173,
+    "value": [
+      {
+        "name": "pager101-rec0042.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 174,
+    "value": [
+      {
+        "name": "pager101-rec0043.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 175,
+    "value": [
+      {
+        "name": "pager101-rec0044.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 176,
+    "value": [
+      {
+        "name": "pager101-rec0045.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 177,
+    "value": [
+      {
+        "name": "pager101-rec0046.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 178,
+    "value": [
+      {
+        "name": "pager101-rec0047.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 179,
+    "value": [
+      {
+        "name": "pager101-rec0048.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 180,
+    "value": [
+      {
+        "name": "pager101-rec0049.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 181,
+    "value": [
+      {
+        "name": "pager101-rec0050.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 182,
+    "value": [
+      {
+        "name": "pager101-rec0051.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 183,
+    "value": [
+      {
+        "name": "pager101-rec0052.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 184,
+    "value": [
+      {
+        "name": "pager101-rec0053.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 185,
+    "value": [
+      {
+        "name": "pager101-rec0054.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 186,
+    "value": [
+      {
+        "name": "pager101-rec0055.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 187,
+    "value": [
+      {
+        "name": "pager101-rec0056.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 188,
+    "value": [
+      {
+        "name": "pager101-rec0057.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 189,
+    "value": [
+      {
+        "name": "pager101-rec0058.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 190,
+    "value": [
+      {
+        "name": "pager101-rec0059.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 191,
+    "value": [
+      {
+        "name": "pager101-rec0060.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 192,
+    "value": [
+      {
+        "name": "pager101-rec0061.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 193,
+    "value": [
+      {
+        "name": "pager101-rec0062.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 194,
+    "value": [
+      {
+        "name": "pager101-rec0063.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 195,
+    "value": [
+      {
+        "name": "pager101-rec0064.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 196,
+    "value": [
+      {
+        "name": "pager101-rec0065.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 197,
+    "value": [
+      {
+        "name": "pager101-rec0066.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 198,
+    "value": [
+      {
+        "name": "pager101-rec0067.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 199,
+    "value": [
+      {
+        "name": "pager101-rec0068.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 200,
+    "value": [
+      {
+        "name": "pager101-rec0069.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 201,
+    "value": [
+      {
+        "name": "pager101-rec0070.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 202,
+    "value": [
+      {
+        "name": "pager101-rec0071.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 203,
+    "value": [
+      {
+        "name": "pager101-rec0072.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 204,
+    "value": [
+      {
+        "name": "pager101-rec0073.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 205,
+    "value": [
+      {
+        "name": "pager101-rec0074.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 206,
+    "value": [
+      {
+        "name": "pager101-rec0075.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 207,
+    "value": [
+      {
+        "name": "pager101-rec0076.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 208,
+    "value": [
+      {
+        "name": "pager101-rec0077.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 209,
+    "value": [
+      {
+        "name": "pager101-rec0078.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 210,
+    "value": [
+      {
+        "name": "pager101-rec0079.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 211,
+    "value": [
+      {
+        "name": "pager101-rec0080.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 212,
+    "value": [
+      {
+        "name": "pager101-rec0081.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 213,
+    "value": [
+      {
+        "name": "pager101-rec0082.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 214,
+    "value": [
+      {
+        "name": "pager101-rec0083.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 215,
+    "value": [
+      {
+        "name": "pager101-rec0084.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 216,
+    "value": [
+      {
+        "name": "pager101-rec0085.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 217,
+    "value": [
+      {
+        "name": "pager101-rec0086.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 218,
+    "value": [
+      {
+        "name": "pager101-rec0087.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 219,
+    "value": [
+      {
+        "name": "pager101-rec0088.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 220,
+    "value": [
+      {
+        "name": "pager101-rec0089.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 221,
+    "value": [
+      {
+        "name": "pager101-rec0090.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 222,
+    "value": [
+      {
+        "name": "pager101-rec0091.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 223,
+    "value": [
+      {
+        "name": "pager101-rec0092.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 224,
+    "value": [
+      {
+        "name": "pager101-rec0093.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 225,
+    "value": [
+      {
+        "name": "pager101-rec0094.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 226,
+    "value": [
+      {
+        "name": "pager101-rec0095.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 227,
+    "value": [
+      {
+        "name": "pager101-rec0096.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 228,
+    "value": [
+      {
+        "name": "pager101-rec0097.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 229,
+    "value": [
+      {
+        "name": "pager101-rec0098.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 230,
+    "value": [
+      {
+        "name": "pager101-rec0099.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 231,
+    "value": [
+      {
+        "name": "pager101-rec0100.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 232,
+    "value": [
+      {
+        "name": "test.dnscontroltest-luadns.com.",
+        "type": "ALIAS",
+        "content": "foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 233,
+    "value": [
+      {
+        "name": "test.dnscontroltest-luadns.com.",
+        "type": "ALIAS",
+        "content": "foo2.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 234,
+    "value": [
+      {
+        "name": "testa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 235,
+    "value": [
+      {
+        "name": "testa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.3.3.3",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 236,
+    "value": [
+      {
+        "name": "testa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 333
+      }
+    ]
+  },
+  {
+    "index": 237,
+    "value": [
+      {
+        "name": "testa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 999
+      }
+    ]
+  },
+  {
+    "index": 238,
+    "value": [
+      {
+        "name": "testaaaa.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2607:f8b0:4006:820::2006",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 239,
+    "value": [
+      {
+        "name": "testaaaa.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2607:f8b0:4006:820::2013",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 240,
+    "value": [
+      {
+        "name": "testcname.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "foo.dnscontroltest-luadns.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 241,
+    "value": [
+      {
+        "name": "testcname.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "www.google.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 242,
+    "value": [
+      {
+        "name": "testcname.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "www.yahoo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 243,
+    "value": [
+      {
+        "name": "testdefined.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 244,
+    "value": [
+      {
+        "name": "testdefined.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "9.9.9.9",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 245,
+    "value": [
+      {
+        "name": "testignore.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "8.8.8.8",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 246,
+    "value": [
+      {
+        "name": "testmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "100 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 247,
+    "value": [
+      {
+        "name": "testmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 bar.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 248,
+    "value": [
+      {
+        "name": "testmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 249,
+    "value": [
+      {
+        "name": "testmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "5 foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "testmx.dnscontroltest-luadns.com.",
+        "type": "MX",
+        "content": "100 bar.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 250,
+    "value": [
+      {
+        "name": "testtxt.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "changed",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 251,
+    "value": [
+      {
+        "name": "testtxt.dnscontroltest-luadns.com.",
+        "type": "TXT",
+        "content": "simple",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 252,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 253,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 254,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.1.1.1",
+        "ttl": 300
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.3.3.3",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 255,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.6.7.8",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 256,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.8",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 257,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.9",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 258,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.6.7.8",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 259,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.5.5.5",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 260,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 400
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.6.7.8",
+        "ttl": 400
+      }
+    ]
+  },
+  {
+    "index": 261,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.6.7.8",
+        "ttl": 400
+      }
+    ]
+  },
+  {
+    "index": 262,
+    "value": [
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 700
+      },
+      {
+        "name": "www.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "5.6.7.8",
+        "ttl": 700
+      }
+    ]
+  },
+  {
+    "index": 263,
+    "value": [
+      {
+        "name": "xn--fiq228c.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 264,
+    "value": [
+      {
+        "name": "xn--ndaaa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "1.2.3.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 265,
+    "value": [
+      {
+        "name": "xn--ndaaa.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "2.2.2.2",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 266,
+    "value": [
+      {
+        "name": "xn--o-0gab.dnscontroltest-luadns.com.",
+        "type": "CNAME",
+        "content": "xn--ndaaa.xn--vhquv.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 267,
+    "value": [
+      {
+        "name": "xyz.dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns1.foo.com.",
+        "ttl": 300
+      },
+      {
+        "name": "xyz.dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns2.foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 268,
+    "value": [
+      {
+        "name": "xyz.dnscontroltest-luadns.com.",
+        "type": "NS",
+        "content": "ns2.foo.com.",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 269,
+    "value": [
+      {
+        "name": "zzz.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "3.3.3.3",
+        "ttl": 300
+      },
+      {
+        "name": "zzz.dnscontroltest-luadns.com.",
+        "type": "A",
+        "content": "4.4.4.4",
+        "ttl": 300
+      }
+    ]
+  },
+  {
+    "index": 270,
+    "value": [
+      {
+        "name": "zzz.dnscontroltest-luadns.com.",
+        "type": "AAAA",
+        "content": "2003:dd:d7ff::fe71:cccc",
+        "ttl": 300
+      }
+    ]
+  }
+]

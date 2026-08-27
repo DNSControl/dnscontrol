@@ -1,4 +1,12 @@
-# Short version
+# Why the dot?
+
+- [Why the dot?](#why-the-dot)
+  - [Short version](#short-version)
+  - [Why CNAME/MX/NS targets require a trailing "dot"](#why-cnamemxns-targets-require-a-trailing-dot)
+  - [Simple mental models are better](#simple-mental-models-are-better)
+  - [Future](#future)
+
+## Short version
 
 You received this error message:
 
@@ -13,7 +21,7 @@ This means you should add a "." to the end of the target.
 +   CNAME("foo", "ghs.googlehosted.com."),
 ```
 
-# Why CNAME/MX/NS targets require a trailing "dot"
+## Why CNAME/MX/NS targets require a trailing "dot"
 
 People are often confused about this error message:
 
@@ -38,9 +46,9 @@ The first 2 examples are permitted. The last 2 examples are ambiguous and are th
 
 How are they ambiguous?
 
- * Should $DOMAIN be added to "bar.com"? Well, obviously not, because it already ends with ".com" and we all know that "bar.com.bar.com" is probably not what they want. No, it isn't that obvious! Why? (see the next bullet point)
- * Should $DOMAIN be added to "meta.xyz"? Everyone knows that ".xyz" isn't a TLD. Obviously, yes, $DOMAIN should be appended. However, wait... ".xyz" became a TLD in June 2014. We don't want to be surprised by changes like that. Also, users should not be required to memorize all the TLDs. (In the old days it was reasonable to expect people to memorize the 7 TLDs (gov/edu/com/mil/org/net) but since 2000 that's all changed. By the way, we forgot to include "int" in the original and you didn't notice.)
- * What if the CNAME target is "www.bar.com" and the domain is "bar.com"? Then It is reasonable to infer the user's intent, right? `www.bar.com.bar.com.` would be silly, right? Maybe. What if we are copying 100 lines of `dnsconfig.js` from one `D()` to another. Buried in the middle is this one CNAME that means something entirely different when in a new $DOMAIN. That would be bad. We've seen this in production and want to prevent this kind of error.
+- Should $DOMAIN be added to "bar.com"? Well, obviously not, because it already ends with ".com" and we all know that "bar.com.bar.com" is probably not what they want. No, it isn't that obvious! Why? (see the next bullet point)
+- Should $DOMAIN be added to "meta.xyz"? Everyone knows that ".xyz" isn't a TLD. Obviously, yes, $DOMAIN should be appended. However, wait... ".xyz" became a TLD in June 2014. We don't want to be surprised by changes like that. Also, users should not be required to memorize all the TLDs. (In the old days it was reasonable to expect people to memorize the 7 TLDs (gov/edu/com/mil/org/net) but since 2000 that's all changed. By the way, we forgot to include "int" in the original and you didn't notice.)
+- What if the CNAME target is "www.bar.com" and the domain is "bar.com"? Then It is reasonable to infer the user's intent, right? `www.bar.com.bar.com.` would be silly, right? Maybe. What if we are copying 100 lines of `dnsconfig.js` from one `D()` to another. Buried in the middle is this one CNAME that means something entirely different when in a new $DOMAIN. That would be bad. We've seen this in production and want to prevent this kind of error.
 
 Yes, we could layer rule upon rule upon rule. Eventually we'd get all the rules right. However, now a user would have to know all the rules to be able to use DNSControl. The point of the DNSControl DSL is to enable the casual user to be able to make DNS updates. By "casual user" we do not mean someone someone that lives and breathes DNS like you and I do. In fact, we mean someone that hasn't memorized the list of rules.
 

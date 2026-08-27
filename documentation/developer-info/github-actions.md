@@ -1,11 +1,24 @@
 # GitHub Actions
 
+- [GitHub Actions](#github-actions)
+  - [PR Checks Overview](#pr-checks-overview)
+  - [Check: git status](#check-git-status)
+    - [Check: go fmt](#check-go-fmt)
+    - [Check: prettier](#check-prettier)
+    - [Check: fmtjson](#check-fmtjson)
+    - [Check: go mod tidy](#check-go-mod-tidy)
+    - [Check: go generate](#check-go-generate)
+    - [Check: go fix](#check-go-fix)
+  - [Lint](#lint)
+  - [Build \& Test](#build--test)
+  - [Running all checks at once](#running-all-checks-at-once)
+
 ## PR Checks Overview
 
 Every pull request runs the following GitHub Actions workflows. All checks must pass before a PR can be merged.
 
 | Workflow | File | Description |
-|---|---|---|
+| --- | --- | --- |
 | **Check git status** | `pr_check_git_status.yml` | Ensures all generated/formatted files are committed |
 | **Lint** | `pr_lint.yml` | Runs `golangci-lint` |
 | **Build & Test** | `pr_build.yml` | Runs unit tests and builds binaries via GoReleaser |

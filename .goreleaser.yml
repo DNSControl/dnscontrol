@@ -37,7 +37,7 @@ changelog:
       regexp: "(?i)^.*(major|new provider|feature)[(\\w)]*:+.*$"
       order: 1
     - title: 'Provider-specific changes:'
-      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|ns1|opensrs|openwrt|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|scaleway|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
+      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|nexdns|ns1|opensrs|openwrt|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|scaleway|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
       order: 2
     - title: 'Documentation:'
       regexp: "(?i)^.*(docs)[(\\w)]*:+.*$"
@@ -166,7 +166,7 @@ release:
     ## Deprecation warnings
 
     > [!WARNING]
-    > - **REV() will switch from RFC2317 to RFC4183 in v5.0.**  This is a breaking change. Warnings are output if your configuration is affected. No date has been announced for v5.0. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
+    > - **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
     > - **NAMEDOTCOM, OPENSRS and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes.
 
     ## Install

@@ -1,8 +1,8 @@
 package rwth
 
 import (
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // RWTHDefaultNs is the default DNS NS for this provider.
@@ -10,17 +10,11 @@ var RWTHDefaultNs = []string{"dns-1.dfn.de", "dns-2.dfn.de", "zs1.rz.rwth-aachen
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (api *rwthProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	records, err := api.getAllRecords(domain)
+	records, err := api.getAllRecords(dc)
 	if err != nil {
 		return nil, err
 	}
-	foundRecords := models.Records{}
-	for i := range records {
-		foundRecords = append(foundRecords, &records[i])
-	}
-	return foundRecords, nil
+	return records, nil
 }
 
 // GetNameservers returns the default nameservers for RWTH.

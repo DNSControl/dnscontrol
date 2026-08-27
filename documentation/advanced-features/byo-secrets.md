@@ -1,17 +1,23 @@
 # Bring-Your-Own-Secrets for automated testing
 
+- [Bring-Your-Own-Secrets for automated testing](#bring-your-own-secrets-for-automated-testing)
+  - [Background: How GitHub Actions protects secrets](#background-how-github-actions-protects-secrets)
+  - [Which providers are selected for testing?](#which-providers-are-selected-for-testing)
+  - [Bring your own secrets](#bring-your-own-secrets)
+  - [Donate secrets to the project](#donate-secrets-to-the-project)
+
 Goal: Enable automated integration testing without accidentally leaking credentials (API keys and other secrets); at the same time permit everyone to automate their own tests without having to share their credentials.
 
 The instructions in this document will enable automated tests to run in these situations:
 
-* PR from a project member:
-  * All officially supported providers plus many others too.
-* PR from an external people:
-  * Automated tests run for providers that don't require secrets, which is currently only `BIND`.
-* PR on a fork of DNSControl:
-  * The forker can set up secrets in their fork and only those providers with secrets will be tested. They can "set it and forget it" and all their future PRs will receive all the benefits of automated testing.
+- PR from a project member:
+  - All officially supported providers plus many others too.
+- PR from an external people:
+  - Automated tests run for providers that don't require secrets, which is currently only `BIND`.
+- PR on a fork of DNSControl:
+  - The forker can set up secrets in their fork and only those providers with secrets will be tested. They can "set it and forget it" and all their future PRs will receive all the benefits of automated testing.
 
-# Background: How GitHub Actions protects secrets
+## Background: How GitHub Actions protects secrets
 
 GitHub Actions has a secure [secrets storage system](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets). Those secrets are available to GitHub Actions and are required for the integration tests to communicate with the various DNS providers that DNSControl supports.
 
@@ -23,11 +29,11 @@ Actually what happens is the secrets come from the forked repo.  Or, more precis
 
 Our automated integration tests leverages this info to have tests only run if they have access to the secrets they will need.
 
-# Which providers are selected for testing?
+## Which providers are selected for testing?
 
 Tests are executed if the env variable`*_DOMAIN` exists where `*` is the name of the provider.  If the value is empty or unset, the test is skipped. For example, if a provider is called `FANCYDNS`, there must be a variable called `FANCYDNS_DOMAIN`.
 
-# Bring your own secrets
+## Bring your own secrets
 
 This section describes how to add a provider to the "Actions" part of GitHub.
 
@@ -45,20 +51,20 @@ Edit `.github/workflows/pr_integration_tests.yml`
 
 1. Add your providers `_DOMAIN` env variable:
 
-* Add it to the `env` section of `integration-tests`.
-* Please keep this list sorted alphabetically.
+- Add it to the `env` section of `integration-tests`.
+- Please keep this list sorted alphabetically.
 
 To find this section, search for `PROVIDER SECRET LIST`.
 
 For example, the entry for BIND looks like:
 
 {% code title=".github/workflows/pr_integration_tests.yml" %}
-```
+```yaml
         BIND_DOMAIN: ${{ vars.BIND_DOMAIN }}
 ```
 {% endcode %}
 
-3. Add your providers other ENV variables:
+2. Add your providers other ENV variables:
 
 Every provider requires different variables set to perform the integration tests.  The list of such variables is in `integrationTest/profiles.json`.
 
@@ -69,7 +75,7 @@ To find this section, search for `PROVIDER SECRET LIST`.
 For example, the entry for CLOUDFLAREAPI looks like this:
 
 {% code title=".github/workflows/pr_integration_tests.yml" %}
-```
+```yaml
         CLOUDFLAREAPI_ACCOUNTID: ${{ secrets.CLOUDFLAREAPI_ACCOUNTID }}
         CLOUDFLAREAPI_TOKEN: ${{ secrets.CLOUDFLAREAPI_TOKEN }}
 ```
@@ -101,7 +107,7 @@ GitHub Actions should kick and and run the tests.
 
 The tests will fail if a secret is wrong or missing.  It may take a few iterations to get everything working because... computers.
 
-# Donate secrets to the project
+## Donate secrets to the project
 
 The DNSControl project would like to have all providers automatically tested. However, we can't fund purchasing domains or maintaining credentials at every provider. Instead we depend on volunteers to maintain (and pay for) such accounts.
 
@@ -114,9 +120,9 @@ For actual DNS domains, please select the "private registration" option if it is
 {% hint style="danger" %}
 Some rules:
 
-* The account/credentials should only access the test domain. Don't send your company's actual credentials and trust us to only touch the test domain. (this hasn't happened yet, thankfully!)
-* Renew the domain in a timely manner. This may be monitoring an email inbox you don't normally monitor.
-* Don't do anything that will get you in trouble with your employer, like charging it to your employer without permission. (this hasn't happened yet either, thankfully!)
+- The account/credentials should only access the test domain. Don't send your company's actual credentials and trust us to only touch the test domain. (this hasn't happened yet, thankfully!)
+- Renew the domain in a timely manner. This may be monitoring an email inbox you don't normally monitor.
+- Don't do anything that will get you in trouble with your employer, like charging it to your employer without permission. (this hasn't happened yet either, thankfully!)
 {% endhint %}
 
 Now that we've covered all that...

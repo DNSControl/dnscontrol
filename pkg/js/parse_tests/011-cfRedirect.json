@@ -3,48 +3,41 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
-          "comparable": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
-          "fields": {
-            "code": 301,
-            "sr_display": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
-            "sr_name": "301,test1.foo.com,https://goo.com/$1",
-            "sr_then": "concat(\"https://goo.com\", http.request.uri.path)",
-            "sr_when": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
-          },
+          "comparablev3": "\"301,test1.foo.com,https://goo.com/$1\" 301 \"http.host eq \\\"test1.foo.com\\\" and http.request.uri.path eq \\\"/\\\"\" \"concat(\\\"https://goo.com\\\", http.request.uri.path)\"",
           "filepos": "[line:2:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+          "rdata": {
+            "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "301,test1.foo.com,https://goo.com/$1",
+            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
+            "SRWhen": "http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\""
+          },
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(301,test1.foo.com,https://goo.com/$1) code=(301) when=(http.host eq \"test1.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))"
+          "typenum": 65289
         },
         {
-          "comparable": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
-          "fields": {
-            "code": 302,
-            "sr_display": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
-            "sr_name": "302,test2.foo.com,https://goo.com/$1",
-            "sr_then": "concat(\"https://goo.com\", http.request.uri.path)",
-            "sr_when": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
-          },
+          "comparablev3": "\"302,test2.foo.com,https://goo.com/$1\" 302 \"http.host eq \\\"test2.foo.com\\\" and http.request.uri.path eq \\\"/\\\"\" \"concat(\\\"https://goo.com\\\", http.request.uri.path)\"",
           "filepos": "[line:3:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))",
+          "rdata": {
+            "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "302,test2.foo.com,https://goo.com/$1",
+            "SRThen": "concat(\"https://goo.com\", http.request.uri.path)",
+            "SRWhen": "http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\""
+          },
           "ttl": 1,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(302,test2.foo.com,https://goo.com/$1) code=(302) when=(http.host eq \"test2.foo.com\" and http.request.uri.path eq \"/\") then=(concat(\"https://goo.com\", http.request.uri.path))"
+          "typenum": 65289
         }
       ],
       "registrar": "none",

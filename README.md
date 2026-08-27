@@ -17,10 +17,10 @@ extensible, so more providers can be added.
 
 ```js
 // define our registrar and providers
-var REG_NAMECOM = NewRegistrar("name.com");
-var r53 = NewDnsProvider("r53")
+var REG_NAMECOM = NewRegistrar("ndc_main");
+var DSP_ROUTE53 = NewDnsProvider("r53_main")
 
-D("example.com", REG_NAMECOM, DnsProvider(r53),
+D("example.com", REG_NAMECOM, DnsProvider(DSP_ROUTE53),
   A("@", "1.2.3.4"),
   CNAME("www","@"),
   MX("@",5,"mail.myserver.com."),
@@ -38,11 +38,13 @@ The easiest way to run DNSControl is to use the Docker container:
 docker run --rm -it -v "$(pwd):/dns"  ghcr.io/dnscontrol/dnscontrol preview
 ```
 
+Want full "GitOps" control of your DNS data?  Clone this repo to get started!  [github.com/DNSControl/dns-config](https://github.com/DNSControl/dns-config)
+
 See [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on documentation site to get started!
 
 ## Supported Providers
 
-DNSControl supports 64 DNS providers and registrars:
+DNSControl supports 65 DNS providers and registrars:
 
 | | | | | |
 | ----- | ----- | ----- | ----- | ----- |
@@ -55,23 +57,14 @@ DNSControl supports 64 DNS providers and registrars:
 | [hosting.de](https://docs.dnscontrol.org/provider/hostingde)¹ | [Huawei Cloud DNS](https://docs.dnscontrol.org/provider/huaweicloud) | [Hurricane Electric DNS](https://docs.dnscontrol.org/provider/hedns) | [Infomaniak](https://docs.dnscontrol.org/provider/infomaniak) | [Internet.bs](https://docs.dnscontrol.org/provider/internetbs)² |
 | [INWX](https://docs.dnscontrol.org/provider/inwx)¹ | [Joker](https://docs.dnscontrol.org/provider/joker) | [Linode](https://docs.dnscontrol.org/provider/linode) | [Loopia](https://docs.dnscontrol.org/provider/loopia)¹ | [LuaDNS](https://docs.dnscontrol.org/provider/luadns) |
 | Windows Server DNS | [MikroTik RouterOS](https://docs.dnscontrol.org/provider/mikrotik) | [Mythic Beasts](https://docs.dnscontrol.org/provider/mythicbeasts) | [Name.com](https://docs.dnscontrol.org/provider/namedotcom)¹ | [Namecheap](https://docs.dnscontrol.org/provider/namecheap)¹ |
-| [Netcup](https://docs.dnscontrol.org/provider/netcup) | [Netlify](https://docs.dnscontrol.org/provider/netlify) | [Netnod](https://docs.dnscontrol.org/provider/netnod) | [NS1](https://docs.dnscontrol.org/provider/ns1) | [OpenSRS](https://docs.dnscontrol.org/provider/opensrs)² |
-| [Oracle Cloud](https://docs.dnscontrol.org/provider/oracle) | [OVH](https://docs.dnscontrol.org/provider/ovh)¹ | [Packetframe](https://docs.dnscontrol.org/provider/packetframe) | [Porkbun](https://docs.dnscontrol.org/provider/porkbun)¹ | [PowerDNS](https://docs.dnscontrol.org/provider/powerdns) |
-| [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH DNS-Admin](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) | [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) | [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ |
-| [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi Network](https://docs.dnscontrol.org/provider/unifi) | [Vercel](https://docs.dnscontrol.org/provider/vercel) | [Vultr](https://docs.dnscontrol.org/provider/vultr) | [Netbird](https://docs.dnscontrol.org/provider/netbird) |
-| [WebSupport](https://docs.dnscontrol.org/provider/websupport) | | | | |
+| [Netcup](https://docs.dnscontrol.org/provider/netcup) | [Netlify](https://docs.dnscontrol.org/provider/netlify) | [Netnod](https://docs.dnscontrol.org/provider/netnod) | [NexDNS](https://docs.dnscontrol.org/provider/nexdns) | [NS1](https://docs.dnscontrol.org/provider/ns1) |
+| [OpenSRS](https://docs.dnscontrol.org/provider/opensrs)² | [Oracle Cloud](https://docs.dnscontrol.org/provider/oracle) | [OVH](https://docs.dnscontrol.org/provider/ovh)¹ | [Packetframe](https://docs.dnscontrol.org/provider/packetframe) | [Porkbun](https://docs.dnscontrol.org/provider/porkbun)¹ |
+| [PowerDNS](https://docs.dnscontrol.org/provider/powerdns) | [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH DNS-Admin](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) | [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) |
+| [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ | [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi Network](https://docs.dnscontrol.org/provider/unifi) | [Vercel](https://docs.dnscontrol.org/provider/vercel) | [Vultr](https://docs.dnscontrol.org/provider/vultr) |
+| [Netbird](https://docs.dnscontrol.org/provider/netbird) | [WebSupport](https://docs.dnscontrol.org/provider/websupport) |  |  |  |
 
 ¹also supports registrar functions
 ²registrar only
-
-Stack Overflow uses this system to manage hundreds of domains
-and subdomains across multiple registrars and DNS providers.
-
-You can think of it as a DNS compiler.  The configuration files are
-written in a DSL that looks a lot like JavaScript.  It is compiled
-to an intermediate representation (IR).  Compiler back-ends use the
-IR to update your DNS zones on services such as Route53, Cloudflare,
-and Gandi, or systems such as BIND.
 
 ## Benefits
 
@@ -112,11 +105,16 @@ DNSControl can be installed via packages for macOS, Linux and Windows, or from s
 
 ## Via GitHub Actions (GHA)
 
-See [dnscontrol-action](https://github.com/koenrh/dnscontrol-action) or [gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol).
+The official Github Action is: [github.com/dnscontrol/dnscontrol-action](https://github.com/dnscontrol/dnscontrol-action)
+
+Others have been created such as:
+
+* [github.com/metabrainz/dnscontrol-action](https://github.com/metabrainz/dnscontrol-action)
+* [github.com/gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol)
 
 ## Deprecation warnings (updated 2025-11-21)
 
-- **REV() will switch from RFC2317 to RFC4183 in v5.0.**  This is a breaking change. Warnings are output if your configuration is affected. No date has been announced for v5.0. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
+- **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
 - **NAMEDOTCOM, OPENSRS, and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes. Interested in being a hero and adopting them?  Contact tal at what exit dot org.
 
 ## Contributing

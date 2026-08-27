@@ -3,8 +3,8 @@ package dnsgraph_test
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph/testutils"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph/testutils"
 	"github.com/stretchr/testify/assert"
 )
 

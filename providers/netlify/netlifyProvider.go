@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 
-	"codeberg.org/miekg/dns/dnsutil"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -48,8 +49,13 @@ func init() {
 }
 
 type netlifyProvider struct {
+	observer    providers.ConversionObserver
 	apiToken    string // the account access token
 	accountSlug string // the account identifier slug. optional.
+}
+
+func (n *netlifyProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	n.observer = observer
 }
 
 func newNetlify(m map[string]string, message json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -104,48 +110,60 @@ func (n *netlifyProvider) GetZoneRecords(dc *models.DomainConfig) (models.Record
 	cleanRecords := make(models.Records, 0)
 
 	for _, r := range records {
-		if r.Type == "SOA" {
-			continue
-		}
-
-		rec := &models.RecordConfig{
-			TTL:      uint32(r.TTL),
-			Original: r,
-		}
-
-		rec.SetLabelFromFQDN(r.Hostname, domain) // netlify returns the FQDN
-
-		if r.Type == "CNAME" || r.Type == "MX" || r.Type == "NS" {
-			r.Value = dnsutil.Canonical(r.Value)
-		}
-
-		switch rtype := r.Type; rtype {
-		case "NETLIFY", "NETLIFYv6": // transparently ignore
-			continue
-		case "MX":
-			err = rec.SetTargetMX(uint16(r.Priority), r.Value)
-		case "SRV":
-			parts := strings.Fields(r.Value)
-			if len(parts) == 3 {
-				r.Value += "."
-			}
-			err = rec.SetTargetSRV(uint16(r.Priority), r.Weight, r.Port, r.Value)
-		case "TXT":
-			err = rec.SetTargetTXT(r.Value)
-		case "CAA":
-			err = rec.SetTargetCAA(uint8(r.Flag), r.Tag, r.Value)
-		default:
-			err = rec.PopulateFromString(r.Type, r.Value, domain)
-		}
-
+		before := providers.BeginToRC(n.observer, "toRecordConfig", r)
+		rec, err := toRecordConfig(dc, r)
+		providers.EndToRC(n.observer, "toRecordConfig", before, r, models.Records{rec}, err)
 		if err != nil {
-			return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+			return nil, err
+		}
+		if rec == nil {
+			continue
 		}
 
 		cleanRecords = append(cleanRecords, rec)
 	}
 
 	return cleanRecords, nil
+}
+
+// toRecordConfig converts a Netlify record to a RecordConfig. It returns nil for
+// SOA records and for the NETLIFY and NETLIFYv6 pseudo-types, which are ignored.
+func toRecordConfig(dc *models.DomainConfig, r *dnsRecord) (*models.RecordConfig, error) {
+	if r.Type == "SOA" {
+		return nil, nil
+	}
+
+	label := dc.LabelFromFQDNNoDot(r.Hostname) // Netlify returns the FQDN.
+	ttl := uint32(r.TTL)
+
+	var rec *models.RecordConfig
+	var err error
+	switch rtype := r.Type; rtype {
+	case "NETLIFY", "NETLIFYv6": // transparently ignore
+		return nil, nil
+	case "MX":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SRV":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "TXT":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Value)
+	case "CAA":
+		rec, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.Flag, r.Tag, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	default:
+		rec, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Value,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("unparsable record received from Netlify: %w", err)
+	}
+
+	rec.Original = r
+
+	return rec, nil
 }
 
 // ListZones returns all DNS zones managed by this provider.
@@ -165,57 +183,66 @@ func (n *netlifyProvider) ListZones() ([]string, error) {
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(records)
+	changes, actualChangeCount, err := diff2.ByRecord(records, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
 	zone, err := n.getZone(dc.Name)
 	if err != nil {
 		return nil, 0, err
 	}
 
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		id := m.Existing.Original.(*dnsRecord).ID
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				return n.deleteDNSRecord(zone.ID, id)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	var corrections []*models.Correction
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 
-	for _, m := range create {
-		req := toReq(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				_, err := n.createDNSRecord(zone.ID, req)
-				return err
-			},
-		}
-		corrections = append(corrections, corr)
-	}
-
-	for _, m := range modify {
-		id := m.Existing.Original.(*dnsRecord).ID
-		req := toReq(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				if err := n.deleteDNSRecord(zone.ID, id); err != nil {
+		case diff2.CREATE:
+			input := models.Records{change.New[0]}
+			before := providers.BeginToNative(n.observer, "toReq", input)
+			req := toReq(change.New[0])
+			providers.EndToNative(n.observer, "toReq", before, input, req, nil)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					_, err := n.createDNSRecord(zone.ID, req)
 					return err
-				}
+				},
+			})
 
-				_, err := n.createDNSRecord(zone.ID, req)
-				return err
-			},
+		case diff2.DELETE:
+			id := change.Old[0].Original.(*dnsRecord).ID
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					return n.deleteDNSRecord(zone.ID, id)
+				},
+			})
+
+		case diff2.CHANGE:
+			// Netlify has no update API, so a change is a delete followed by a create.
+			id := change.Old[0].Original.(*dnsRecord).ID
+			input := models.Records{change.New[0]}
+			before := providers.BeginToNative(n.observer, "toReq", input)
+			req := toReq(change.New[0])
+			providers.EndToNative(n.observer, "toReq", before, input, req, nil)
+			corrections = append(corrections, &models.Correction{
+				Msg: change.Msgs[0],
+				F: func() error {
+					if err := n.deleteDNSRecord(zone.ID, id); err != nil {
+						return err
+					}
+
+					_, err := n.createDNSRecord(zone.ID, req)
+					return err
+				},
+			})
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
-		corrections = append(corrections, corr)
 	}
 
 	return corrections, actualChangeCount, nil
@@ -223,29 +250,31 @@ func (n *netlifyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, rec
 
 func toReq(rc *models.RecordConfig) *dnsRecordCreate {
 	name := rc.GetLabelFQDN() // Netlify wants the FQDN
-	target := rc.GetTargetField()
-	priority := int64(0)
 
-	switch rc.Type {
-	case "MX":
-		priority = int64(rc.MxPreference)
-	case "SRV":
-		priority = int64(rc.SrvPriority)
-	case "TXT":
-		target = rc.GetTargetTXTJoined()
-	default:
-		// no action required
-	}
-
-	return &dnsRecordCreate{
+	r := &dnsRecordCreate{
 		Type:     rc.Type,
 		Hostname: name,
-		Value:    target,
 		TTL:      int64(rc.TTL),
-		Priority: priority,
-		Port:     int64(rc.SrvPort),
-		Weight:   int64(rc.SrvWeight),
-		Tag:      rc.CaaTag,
-		Flag:     int64(rc.CaaFlag),
 	}
+
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CAA:
+		r.Tag = f.Tag
+		r.Flag = int64(f.Flag)
+		r.Value = f.Value
+	case dnsrdatav2.MX:
+		r.Priority = int64(f.Preference)
+		r.Value = f.Mx
+	case dnsrdatav2.SRV:
+		r.Priority = int64(f.Priority)
+		r.Port = int64(f.Port)
+		r.Weight = int64(f.Weight)
+		r.Value = f.Target
+	case dnsrdatav2.TXT:
+		r.Value = rc.GetTargetTXTJoined()
+	default:
+		r.Value = rc.GetRDATA().String()
+	}
+
+	return r
 }

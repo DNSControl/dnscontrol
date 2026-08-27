@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // isZoneSigned reports whether the DNS zone is DNSSEC-signed, based on the
 // SIGNED property returned by StatusDNSZone.
-func (n *Client) isZoneSigned(domain string) (bool, error) {
-	r := n.client.Request(map[string]any{
+func (client *Client) isZoneSigned(domain string) (bool, error) {
+	r := client.client.Request(map[string]any{
 		"COMMAND": "StatusDNSZone",
 		"DNSZONE": domain,
 	})
 	if !r.IsSuccess() {
-		return false, n.GetAPIError("Could not get status for DNS zone", domain, r)
+		return false, client.GetAPIError("Could not get status for DNS zone", domain, r)
 	}
 	signed, err := r.GetColumnIndex("SIGNED", 0)
 	if err != nil {
@@ -26,11 +26,11 @@ func (n *Client) isZoneSigned(domain string) (bool, error) {
 
 // getDNSSECCorrections returns the corrections needed to reconcile the zone's
 // DNSSEC signing state with dc.AutoDNSSEC ("on", "off", or "" for no change).
-func (n *Client) getDNSSECCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
+func (client *Client) getDNSSECCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
 	if dc.AutoDNSSEC == "" {
 		return nil, nil
 	}
-	signed, err := n.isZoneSigned(dc.Name)
+	signed, err := client.isZoneSigned(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -38,12 +38,12 @@ func (n *Client) getDNSSECCorrections(dc *models.DomainConfig) ([]*models.Correc
 	case signed && dc.AutoDNSSEC == "off":
 		return []*models.Correction{{
 			Msg: fmt.Sprintf("Disable DNSSEC signing for zone %s", dc.Name),
-			F:   n.setZoneSigned(dc.Name, false),
+			F:   client.setZoneSigned(dc.Name, false),
 		}}, nil
 	case !signed && dc.AutoDNSSEC == "on":
 		return []*models.Correction{{
 			Msg: fmt.Sprintf("Enable DNSSEC signing for zone %s", dc.Name),
-			F:   n.setZoneSigned(dc.Name, true),
+			F:   client.setZoneSigned(dc.Name, true),
 		}}, nil
 	}
 	return nil, nil
@@ -51,12 +51,12 @@ func (n *Client) getDNSSECCorrections(dc *models.DomainConfig) ([]*models.Correc
 
 // setZoneSigned returns a function that enables or disables DNSSEC signing for
 // the zone via ModifyDNSZone.
-func (n *Client) setZoneSigned(domain string, signed bool) func() error {
+func (client *Client) setZoneSigned(domain string, signed bool) func() error {
 	return func() error {
 		value := "0"
 		if signed {
 			value = "1"
 		}
-		return n.updateZoneBy(map[string]any{"SIGNED": value}, domain)
+		return client.updateZoneBy(map[string]any{"SIGNED": value}, domain)
 	}
 }

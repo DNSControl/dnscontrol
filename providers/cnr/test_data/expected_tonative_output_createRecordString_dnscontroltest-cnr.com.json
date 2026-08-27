@@ -1,0 +1,726 @@
+[
+  {
+    "index": 1,
+    "value": "* 300 IN A 3.3.3.3"
+  },
+  {
+    "index": 2,
+    "value": "4 300 IN PTR bar.com."
+  },
+  {
+    "index": 3,
+    "value": "4 300 IN PTR foo.com."
+  },
+  {
+    "index": 4,
+    "value": "@ 1000 IN A 8.8.8.8"
+  },
+  {
+    "index": 5,
+    "value": "@ 300 IN A 1.2.3.2"
+  },
+  {
+    "index": 6,
+    "value": "@ 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 7,
+    "value": "@ 300 IN A 2.2.2.2"
+  },
+  {
+    "index": 8,
+    "value": "@ 300 IN A 2.3.4.5"
+  },
+  {
+    "index": 9,
+    "value": "@ 300 IN A 4.4.4.4"
+  },
+  {
+    "index": 10,
+    "value": "@ 300 IN CAA 0 issue \"letsencrypt.org\""
+  },
+  {
+    "index": 11,
+    "value": "@ 300 IN CAA 0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\""
+  },
+  {
+    "index": 12,
+    "value": "@ 300 IN CAA 0 issuewild \";\""
+  },
+  {
+    "index": 13,
+    "value": "@ 300 IN CAA 0 issuewild \"example.com\""
+  },
+  {
+    "index": 14,
+    "value": "@ 300 IN CAA 0 issuewild \"letsencrypt.org\""
+  },
+  {
+    "index": 15,
+    "value": "@ 300 IN CAA 128 issue \"letsencrypt.org\""
+  },
+  {
+    "index": 16,
+    "value": "@ 300 IN LOC 42 21 54.000 N 71 06 18.000 W -24.05m 30m 0.00m 0.00m"
+  },
+  {
+    "index": 17,
+    "value": "@ 300 IN LOC 42 21 54.000 N 71 06 18.000 W -24.06m 30m 10m 0.00m"
+  },
+  {
+    "index": 18,
+    "value": "@ 300 IN LOC 42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m"
+  },
+  {
+    "index": 19,
+    "value": "@ 300 IN MX 0 ."
+  },
+  {
+    "index": 20,
+    "value": "@ 300 IN MX 2 dnscontroltest-cnr.com."
+  },
+  {
+    "index": 21,
+    "value": "@ 300 IN MX 5 bar.com."
+  },
+  {
+    "index": 22,
+    "value": "@ 300 IN MX 5 foo.com."
+  },
+  {
+    "index": 23,
+    "value": "@ 300 IN MX 8 www.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 24,
+    "value": "@ 300 NS ns1.example.com."
+  },
+  {
+    "index": 25,
+    "value": "@ 300 NS ns1.foo.com."
+  },
+  {
+    "index": 26,
+    "value": "@ 300 NS ns2.example.com."
+  },
+  {
+    "index": 27,
+    "value": "@ 300 NS ns2.foo.com."
+  },
+  {
+    "index": 28,
+    "value": "@ 300 IN SSHFP 1 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+  },
+  {
+    "index": 29,
+    "value": "@ 300 IN SSHFP 2 1 66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C"
+  },
+  {
+    "index": 30,
+    "value": "@ 300 IN SSHFP 2 2 745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC"
+  },
+  {
+    "index": 31,
+    "value": "@ 300 IN SVCB 0 test.com."
+  },
+  {
+    "index": 32,
+    "value": "@ 300 IN SVCB 1 test.com. port=80"
+  },
+  {
+    "index": 33,
+    "value": "@ 300 IN SVCB 1 test.com. port=99"
+  },
+  {
+    "index": 34,
+    "value": "@ 300 IN TXT \"asimple\""
+  },
+  {
+    "index": 35,
+    "value": "@ 300 IN TXT \"simple\""
+  },
+  {
+    "index": 36,
+    "value": "@ 500 IN A 8.8.8.8"
+  },
+  {
+    "index": 37,
+    "value": "@ 666 IN A 8.8.8.8"
+  },
+  {
+    "index": 38,
+    "value": "_443._tcp 300 IN SMIMEA 2 0 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  },
+  {
+    "index": 39,
+    "value": "_443._tcp 300 IN SMIMEA 2 0 2 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  },
+  {
+    "index": 40,
+    "value": "_443._tcp 300 IN SMIMEA 2 0 2 fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210"
+  },
+  {
+    "index": 41,
+    "value": "_443._tcp 300 IN SMIMEA 2 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  },
+  {
+    "index": 42,
+    "value": "_443._tcp 300 IN SMIMEA 3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  },
+  {
+    "index": 43,
+    "value": "_443._tcp 300 IN TLSA 2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "index": 44,
+    "value": "_443._tcp 300 IN TLSA 2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "index": 45,
+    "value": "_443._tcp 300 IN TLSA 2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210"
+  },
+  {
+    "index": 46,
+    "value": "_443._tcp 300 IN TLSA 2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "index": 47,
+    "value": "_443._tcp 300 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"
+  },
+  {
+    "index": 48,
+    "value": "_sip._tcp 300 IN SRV 15 65 75 ."
+  },
+  {
+    "index": 49,
+    "value": "_sip._tcp 300 IN SRV 15 65 75 foo3.com."
+  },
+  {
+    "index": 50,
+    "value": "_sip._tcp 300 IN SRV 15 65 75 foo4.com."
+  },
+  {
+    "index": 51,
+    "value": "_sip._tcp 300 IN SRV 5 6 7 foo.com."
+  },
+  {
+    "index": 52,
+    "value": "_sip._tcp 300 IN SRV 5 60 70 foo2.com."
+  },
+  {
+    "index": 53,
+    "value": "_sip._tcp 300 IN SRV 52 6 7 foo.com."
+  },
+  {
+    "index": 54,
+    "value": "_sip._tcp 300 IN SRV 52 62 7 foo.com."
+  },
+  {
+    "index": 55,
+    "value": "_sip._tcp 300 IN SRV 52 62 72 foo.com."
+  },
+  {
+    "index": 56,
+    "value": "_sip._tcp 333 IN SRV 5 6 7 foo.com."
+  },
+  {
+    "index": 57,
+    "value": "_sip._tcp 4400 IN SRV 5 6 7 foo.com."
+  },
+  {
+    "index": 58,
+    "value": "a 300 IN CNAME xn--ndaaa.com."
+  },
+  {
+    "index": 59,
+    "value": "a 300 IN DNAME b.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 60,
+    "value": "a 300 IN LOC 42 21 43.950 N 71 05 6.340 W -24.33m 1m 200m 10m"
+  },
+  {
+    "index": 61,
+    "value": "b 300 IN LOC 52 14 5.000 N 00 08 50.000 E 10.22m 0.00m 0.00m 0.00m"
+  },
+  {
+    "index": 62,
+    "value": "bar 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 63,
+    "value": "bar 300 IN A 5.5.5.5"
+  },
+  {
+    "index": 64,
+    "value": "bar 300 IN CNAME redact2.acm-validations.aws."
+  },
+  {
+    "index": 65,
+    "value": "bar 300 IN MX 5 bar.com."
+  },
+  {
+    "index": 66,
+    "value": "bar.bat 300 IN A 5.5.5.5"
+  },
+  {
+    "index": 67,
+    "value": "c 300 IN LOC 32 07 19.000 S 116 02 25.000 E 10m 0.00m 0.00m 0.00m"
+  },
+  {
+    "index": 68,
+    "value": "d 300 IN LOC 42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m"
+  },
+  {
+    "index": 69,
+    "value": "decoy 300 IN A 1.1.1.1"
+  },
+  {
+    "index": 70,
+    "value": "decoy 300 IN A 2.2.2.2"
+  },
+  {
+    "index": 71,
+    "value": "decoy 300 IN A 3.3.3.3"
+  },
+  {
+    "index": 72,
+    "value": "dyndns-city1 300 IN A 91.42.1.1"
+  },
+  {
+    "index": 73,
+    "value": "dyndns-city1 300 IN AAAA 2003:dd:d7ff::fe71:ce77"
+  },
+  {
+    "index": 74,
+    "value": "dyndns-city2 300 IN A 91.42.1.2"
+  },
+  {
+    "index": 75,
+    "value": "dyndns-city2 300 IN AAAA 2003:dd:d7ff::fe71:ce78"
+  },
+  {
+    "index": 76,
+    "value": "final 300 IN TXT \"TestDNSProviders was successful!\""
+  },
+  {
+    "index": 77,
+    "value": "foo 300 IN A 1.1.1.1"
+  },
+  {
+    "index": 78,
+    "value": "foo 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 79,
+    "value": "foo 300 IN A 10.10.10.10"
+  },
+  {
+    "index": 80,
+    "value": "foo 300 IN A 11.11.11.11"
+  },
+  {
+    "index": 81,
+    "value": "foo 300 IN A 12.12.12.12"
+  },
+  {
+    "index": 82,
+    "value": "foo 300 IN A 13.13.13.13"
+  },
+  {
+    "index": 83,
+    "value": "foo 300 IN A 14.14.14.14"
+  },
+  {
+    "index": 84,
+    "value": "foo 300 IN A 2.3.4.5"
+  },
+  {
+    "index": 85,
+    "value": "foo 300 IN A 3.4.5.6"
+  },
+  {
+    "index": 86,
+    "value": "foo 300 IN A 4.5.6.7"
+  },
+  {
+    "index": 87,
+    "value": "foo 300 IN A 8.8.8.8"
+  },
+  {
+    "index": 88,
+    "value": "foo 300 IN AAAA 2003:dd:d7ff::fe71:aaaa"
+  },
+  {
+    "index": 89,
+    "value": "foo 300 IN CNAME dnscontroltest-cnr.com."
+  },
+  {
+    "index": 90,
+    "value": "foo 300 IN CNAME google.com."
+  },
+  {
+    "index": 91,
+    "value": "foo 300 IN CNAME google2.com."
+  },
+  {
+    "index": 92,
+    "value": "foo 300 IN CNAME redact1.acm-validations.aws."
+  },
+  {
+    "index": 93,
+    "value": "foo 300 IN MX 10 aspmx.l.google.com."
+  },
+  {
+    "index": 94,
+    "value": "foo 300 IN MX 10 foo.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 95,
+    "value": "foo 300 IN MX 20 alt1.aspmx.l.google.com."
+  },
+  {
+    "index": 96,
+    "value": "foo 300 IN MX 20 bar.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 97,
+    "value": "foo 300 IN MX 5 mx.google.com."
+  },
+  {
+    "index": 98,
+    "value": "foo 300 IN MX 8 dnscontroltest-cnr.com."
+  },
+  {
+    "index": 99,
+    "value": "foo 300 NS dnscontroltest-cnr.com."
+  },
+  {
+    "index": 100,
+    "value": "foo 300 IN TXT \"simple\""
+  },
+  {
+    "index": 101,
+    "value": "foo 300 IN TXT \"v=spf1 ip4:99.99.99.99 -all\""
+  },
+  {
+    "index": 102,
+    "value": "foo.bat 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 103,
+    "value": "foo.bat 300 IN A 2.3.4.5"
+  },
+  {
+    "index": 104,
+    "value": "foo.bat 300 IN TXT \"simple\""
+  },
+  {
+    "index": 105,
+    "value": "foo254 300 IN TXT \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\""
+  },
+  {
+    "index": 106,
+    "value": "foo255 300 IN TXT \"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\""
+  },
+  {
+    "index": 107,
+    "value": "foo256 300 IN TXT \"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\""
+  },
+  {
+    "index": 108,
+    "value": "foo509 300 IN TXT \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\""
+  },
+  {
+    "index": 109,
+    "value": "foo510 300 IN TXT \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\""
+  },
+  {
+    "index": 110,
+    "value": "foo511 300 IN TXT \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\""
+  },
+  {
+    "index": 111,
+    "value": "foo764 300 IN TXT \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\""
+  },
+  {
+    "index": 112,
+    "value": "foo765 300 IN TXT \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\""
+  },
+  {
+    "index": 113,
+    "value": "foo766 300 IN TXT \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\""
+  },
+  {
+    "index": 114,
+    "value": "foobt 300 IN TXT \"blah`blah\""
+  },
+  {
+    "index": 115,
+    "value": "fooosbs1 300 IN TXT \"1back\\\\slash\""
+  },
+  {
+    "index": 116,
+    "value": "fooosbs2 300 IN TXT \"2back\\\\\\\\slash\""
+  },
+  {
+    "index": 117,
+    "value": "fooosbs3 300 IN TXT \"3back\\\\\\\\\\\\slash\""
+  },
+  {
+    "index": 118,
+    "value": "fooosbs4 300 IN TXT \"4back\\\\\\\\\\\\\\\\slash\""
+  },
+  {
+    "index": 119,
+    "value": "foosc1 300 IN TXT \"semi;colon\""
+  },
+  {
+    "index": 120,
+    "value": "foosc2 300 IN TXT \"wssemi ; colon\""
+  },
+  {
+    "index": 121,
+    "value": "foosp 300 IN TXT \"with spaces\""
+  },
+  {
+    "index": 122,
+    "value": "foosq 300 IN TXT \"quo'te\""
+  },
+  {
+    "index": 123,
+    "value": "foows1 300 IN TXT \"trailingws \""
+  },
+  {
+    "index": 124,
+    "value": "mail 300 IN CNAME ghs.googlehosted.com."
+  },
+  {
+    "index": 125,
+    "value": "mail.bat 300 IN CNAME ghs.googlehosted.com."
+  },
+  {
+    "index": 126,
+    "value": "nmx 300 IN A 1.2.3.3"
+  },
+  {
+    "index": 127,
+    "value": "nmx 300 IN MX 0 ."
+  },
+  {
+    "index": 128,
+    "value": "nmx 300 IN MX 3 nmx.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 129,
+    "value": "nmx 300 IN MX 9 www.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 130,
+    "value": "test 300 IN DHCID AAAAAAAAuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA="
+  },
+  {
+    "index": 131,
+    "value": "test 300 IN DHCID AAIBY2/AuCccgoJbsaxcQc9TUapptP69lOjxfNuVAA2kjEA="
+  },
+  {
+    "index": 132,
+    "value": "test 300 IN DNAME example.com."
+  },
+  {
+    "index": 133,
+    "value": "test 300 IN DNAME example.net."
+  },
+  {
+    "index": 134,
+    "value": "test 300 IN NAPTR 100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+  },
+  {
+    "index": 135,
+    "value": "test 300 IN NAPTR 102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "index": 136,
+    "value": "test 300 IN NAPTR 103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "index": 137,
+    "value": "test 300 IN NAPTR 103 20 \"A\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "index": 138,
+    "value": "test 300 IN NAPTR 103 20 \"A\" \"E2U+sip\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "index": 139,
+    "value": "test 300 IN NAPTR 103 20 \"A\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" ."
+  },
+  {
+    "index": 140,
+    "value": "test 300 IN NAPTR 103 20 \"A\" \"E2U+sip\" \"\" example.foo.com."
+  },
+  {
+    "index": 141,
+    "value": "test 300 IN NAPTR 103 20 \"A\" \"E2U+sip\" \"\" example2.foo.com."
+  },
+  {
+    "index": 142,
+    "value": "test 300 IN NAPTR 103 20 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" ."
+  },
+  {
+    "index": 143,
+    "value": "testa 300 IN A 1.1.1.1"
+  },
+  {
+    "index": 144,
+    "value": "testa 300 IN A 3.3.3.3"
+  },
+  {
+    "index": 145,
+    "value": "testa 333 IN A 1.1.1.1"
+  },
+  {
+    "index": 146,
+    "value": "testa 999 IN A 1.1.1.1"
+  },
+  {
+    "index": 147,
+    "value": "testaaaa 300 IN AAAA 2607:f8b0:4006:820::2006"
+  },
+  {
+    "index": 148,
+    "value": "testaaaa 300 IN AAAA 2607:f8b0:4006:820::2013"
+  },
+  {
+    "index": 149,
+    "value": "testcname 300 IN CNAME foo.dnscontroltest-cnr.com."
+  },
+  {
+    "index": 150,
+    "value": "testcname 300 IN CNAME www.google.com."
+  },
+  {
+    "index": 151,
+    "value": "testcname 300 IN CNAME www.yahoo.com."
+  },
+  {
+    "index": 152,
+    "value": "testdefined 300 IN A 2.2.2.2"
+  },
+  {
+    "index": 153,
+    "value": "testdefined 300 IN A 9.9.9.9"
+  },
+  {
+    "index": 154,
+    "value": "testignore 300 IN A 8.8.8.8"
+  },
+  {
+    "index": 155,
+    "value": "testmx 300 IN MX 100 bar.com."
+  },
+  {
+    "index": 156,
+    "value": "testmx 300 IN MX 100 foo.com."
+  },
+  {
+    "index": 157,
+    "value": "testmx 300 IN MX 5 bar.com."
+  },
+  {
+    "index": 158,
+    "value": "testmx 300 IN MX 5 foo.com."
+  },
+  {
+    "index": 159,
+    "value": "testtxt 300 IN TXT \"changed\""
+  },
+  {
+    "index": 160,
+    "value": "testtxt 300 IN TXT \"simple\""
+  },
+  {
+    "index": 161,
+    "value": "www 300 IN A 1.1.1.1"
+  },
+  {
+    "index": 162,
+    "value": "www 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 163,
+    "value": "www 300 IN A 1.2.3.8"
+  },
+  {
+    "index": 164,
+    "value": "www 300 IN A 1.2.3.9"
+  },
+  {
+    "index": 165,
+    "value": "www 300 IN A 2.2.2.2"
+  },
+  {
+    "index": 166,
+    "value": "www 300 IN A 3.3.3.3"
+  },
+  {
+    "index": 167,
+    "value": "www 300 IN A 5.5.5.5"
+  },
+  {
+    "index": 168,
+    "value": "www 300 IN A 5.6.7.8"
+  },
+  {
+    "index": 169,
+    "value": "www 400 IN A 2.2.2.2"
+  },
+  {
+    "index": 170,
+    "value": "www 400 IN A 5.6.7.8"
+  },
+  {
+    "index": 171,
+    "value": "www 700 IN A 1.2.3.4"
+  },
+  {
+    "index": 172,
+    "value": "www 700 IN A 5.6.7.8"
+  },
+  {
+    "index": 173,
+    "value": "xn--fiq228c 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 174,
+    "value": "xn--ndaaa 300 IN A 1.2.3.4"
+  },
+  {
+    "index": 175,
+    "value": "xn--ndaaa 300 IN A 2.2.2.2"
+  },
+  {
+    "index": 176,
+    "value": "xn--o-0gab 300 IN CNAME xn--ndaaa.xn--vhquv."
+  },
+  {
+    "index": 177,
+    "value": "xyz 300 NS ns1.foo.com."
+  },
+  {
+    "index": 178,
+    "value": "xyz 300 NS ns2.foo.com."
+  },
+  {
+    "index": 179,
+    "value": "zzz 300 IN A 3.3.3.3"
+  },
+  {
+    "index": 180,
+    "value": "zzz 300 IN A 4.4.4.4"
+  },
+  {
+    "index": 181,
+    "value": "zzz 300 IN AAAA 2003:dd:d7ff::fe71:cccc"
+  }
+]

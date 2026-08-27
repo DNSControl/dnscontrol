@@ -3,18 +3,16 @@ package tencentdns
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/stretchr/testify/assert"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
 func TestNativeToRecord(t *testing.T) {
-	domain := "example.com"
-
 	tests := []struct {
 		name     string
 		input    *dnspod.RecordListItem
-		expected *models.RecordConfig
+		expected string
 	}{
 		{
 			name: "Basic A record",
@@ -24,10 +22,7 @@ func TestNativeToRecord(t *testing.T) {
 				Value: new("1.2.3.4"),
 				TTL:   new(uint64(600)),
 			},
-			expected: &models.RecordConfig{
-				Type: "A",
-				TTL:  600,
-			},
+			expected: "@ 600 IN A 1.2.3.4",
 		},
 		{
 			name: "CNAME record",
@@ -37,10 +32,7 @@ func TestNativeToRecord(t *testing.T) {
 				Value: new("target.example.com."),
 				TTL:   new(uint64(300)),
 			},
-			expected: &models.RecordConfig{
-				Type: "CNAME",
-				TTL:  300,
-			},
+			expected: "www 300 IN CNAME target.example.com.",
 		},
 		{
 			name: "MX record",
@@ -51,36 +43,25 @@ func TestNativeToRecord(t *testing.T) {
 				TTL:   new(uint64(600)),
 				MX:    new(uint64(10)),
 			},
-			expected: &models.RecordConfig{
-				Type:         "MX",
-				TTL:          600,
-				MxPreference: 10,
-			},
+			expected: "@ 600 IN MX 10 mail.example.com.",
 		},
 	}
 
+	testDomain := models.MustNewDomainConfig("example.com")
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := nativeToRecord(tt.input, domain)
+			rc, err := nativeToRecord(tt.input, testDomain)
 			if err != nil {
 				t.Fatalf("nativeToRecord failed: %v", err)
 			}
-			assert.Equal(t, tt.expected.Type, rc.Type)
-			assert.Equal(t, tt.expected.TTL, rc.TTL)
-			if tt.expected.Type == "MX" {
-				assert.Equal(t, tt.expected.MxPreference, rc.MxPreference)
-			}
-			expectedLabel := tt.expected.GetLabel()
-			if expectedLabel == "" {
-				expectedLabel = *tt.input.Name
-			}
-			assert.Equal(t, expectedLabel, rc.GetLabel())
+			got := rc.LineString()
+			assert.Equal(t, tt.expected, got)
 		})
 	}
 }
 
 func TestNativeToRecordPreservesProviderMetadata(t *testing.T) {
-	domain := "example.com"
+	testDomain := models.MustNewDomainConfig("example.com")
 	input := &dnspod.RecordListItem{
 		Name:   new("www"),
 		Type:   new("A"),
@@ -91,7 +72,7 @@ func TestNativeToRecordPreservesProviderMetadata(t *testing.T) {
 		Weight: new(uint64(80)),
 	}
 
-	rc, err := nativeToRecord(input, domain)
+	rc, err := nativeToRecord(input, testDomain)
 	if err != nil {
 		t.Fatalf("nativeToRecord failed: %v", err)
 	}
@@ -102,6 +83,7 @@ func TestNativeToRecordPreservesProviderMetadata(t *testing.T) {
 }
 
 func TestNativeToRecordPreservesDisabledWeight(t *testing.T) {
+	testDomain := models.MustNewDomainConfig("example.com")
 	input := &dnspod.RecordListItem{
 		Name:   new("www"),
 		Type:   new("A"),
@@ -110,20 +92,15 @@ func TestNativeToRecordPreservesDisabledWeight(t *testing.T) {
 		Weight: new(uint64(0)),
 	}
 
-	rc, err := nativeToRecord(input, "example.com")
+	rc, err := nativeToRecord(input, testDomain)
 	if assert.NoError(t, err) {
 		assert.Equal(t, "0", rc.Metadata[metaRecordWeight])
 	}
 }
 
 func TestRecordToCreateRequest(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-	}
-	rc.SetLabel("test", domain)
-	rc.SetTarget("1.1.1.1")
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
 
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, "test", *req.SubDomain)
@@ -136,32 +113,22 @@ func TestRecordToCreateRequest(t *testing.T) {
 }
 
 func TestRecordToCreateRequestWithWeight(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-		Metadata: map[string]string{
-			metaRecordWeight: "80",
-		},
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
+	rc.Metadata = map[string]string{
+		metaRecordWeight: "80",
 	}
-	rc.SetLabel("test", domain)
-	rc.SetTarget("1.1.1.1")
 
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, uint64(80), *req.Weight)
 }
 
 func TestRecordToCreateRequestWithLine(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-		Metadata: map[string]string{
-			metaRecordLine: "电信",
-		},
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
+	rc.Metadata = map[string]string{
+		metaRecordLine: "电信",
 	}
-	rc.SetLabel("test", domain)
-	rc.SetTarget("1.1.1.1")
 
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, "电信", *req.RecordLine)
@@ -169,16 +136,11 @@ func TestRecordToCreateRequestWithLine(t *testing.T) {
 }
 
 func TestRecordToCreateRequestWithLineID(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-		Metadata: map[string]string{
-			metaRecordLineID: "10=1",
-		},
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
+	rc.Metadata = map[string]string{
+		metaRecordLineID: "10=1",
 	}
-	rc.SetLabel("test", domain)
-	rc.SetTarget("1.1.1.1")
 
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, defaultRecordLine, *req.RecordLine)
@@ -186,18 +148,13 @@ func TestRecordToCreateRequestWithLineID(t *testing.T) {
 }
 
 func TestRecordToModifyRequestWithLineLineIDAndWeight(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-		Metadata: map[string]string{
-			metaRecordLine:   "电信",
-			metaRecordLineID: "10=1",
-			metaRecordWeight: "25",
-		},
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
+	rc.Metadata = map[string]string{
+		metaRecordLine:   "电信",
+		metaRecordLineID: "10=1",
+		metaRecordWeight: "25",
 	}
-	rc.SetLabel("test", domain)
-	rc.SetTarget("1.1.1.1")
 
 	req := recordToModifyRequest(rc, 42, nil)
 	assert.Equal(t, uint64(42), *req.RecordId)
@@ -207,34 +164,21 @@ func TestRecordToModifyRequestWithLineLineIDAndWeight(t *testing.T) {
 }
 
 func TestRecordToModifyRequestClearsRemovedWeight(t *testing.T) {
-	domain := "example.com"
-	previous := &models.RecordConfig{
-		Type: "A",
-		TTL:  600,
-		Metadata: map[string]string{
-			metaRecordWeight: "80",
-		},
+	testDomain := models.MustNewDomainConfig("example.com")
+	previous := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
+	previous.Metadata = map[string]string{
+		metaRecordWeight: "80",
 	}
-	previous.SetLabel("test", domain)
-	previous.SetTarget("1.1.1.1")
 
-	desired := &models.RecordConfig{Type: "A", TTL: 600}
-	desired.SetLabel("test", domain)
-	desired.SetTarget("1.1.1.1")
+	desired := testDomain.MustNewRecordConfig("test", 600, "A", "1.1.1.1")
 
 	req := recordToModifyRequest(desired, 42, previous)
 	assert.Equal(t, uint64(0), *req.Weight)
 }
 
 func TestRecordToCreateRequest_MX(t *testing.T) {
-	domain := "example.com"
-	rc := &models.RecordConfig{
-		Type:         "MX",
-		TTL:          600,
-		MxPreference: 10,
-	}
-	rc.SetLabel("@", domain)
-	rc.SetTarget("mail.example.com.")
+	testDomain := models.MustNewDomainConfig("example.com")
+	rc := testDomain.MustNewRecordConfig("@", 600, "MX", 10, "mail.example.com.")
 
 	req := recordToCreateRequest(rc)
 	assert.Equal(t, "@", *req.SubDomain)
@@ -242,3 +186,16 @@ func TestRecordToCreateRequest_MX(t *testing.T) {
 	assert.Equal(t, "mail.example.com.", *req.Value)
 	assert.Equal(t, uint64(10), *req.MX)
 }
+
+// func expectedRecord(rtype string, ttl uint32, mxPreference uint16) *models.RecordConfig {
+// 	dc := models.MustNewDomainConfig("example.com")
+// 	rc := dc.MustNewRecordConfig("@", ttl, rtype,
+// )
+// 	rc := new(models.RecordConfig)
+// 	rc.Type = rtype
+// 	rc.TTL = ttl
+// 	f := rc.AsMX()
+// 	f.Preference = mxPreference
+// 	rc.SetRDATA(f)
+// 	return rc
+// }

@@ -9,18 +9,20 @@ import (
 	"strings"
 	"time"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	aauth "github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns"
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 const azurePendingOperationConflictMessage = "Another operation is pending for requested object"
 
 type azurednsProvider struct {
+	observer       providers.ConversionObserver
 	zonesClient    *adns.PrivateZonesClient
 	recordsClient  *adns.RecordSetsClient
 	zones          map[string]*adns.PrivateZone
@@ -28,6 +30,10 @@ type azurednsProvider struct {
 	subscriptionID *string
 	rawRecords     map[string][]*adns.RecordSet
 	zoneName       map[string]string
+}
+
+func (a *azurednsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	a.observer = observer
 }
 
 func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
@@ -197,9 +203,7 @@ func (a *azurednsProvider) ListZones() ([]string, error) {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (a *azurednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	existingRecords, _, _, err := a.getExistingRecords(domain)
+	existingRecords, _, _, err := a.getExistingRecords(dc)
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +211,8 @@ func (a *azurednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return existingRecords, nil
 }
 
-func (a *azurednsProvider) getExistingRecords(domain string) (models.Records, []*adns.RecordSet, string, error) {
+func (a *azurednsProvider) getExistingRecords(dc *models.DomainConfig) (models.Records, []*adns.RecordSet, string, error) {
+	domain := dc.Name
 	zone, ok := a.zones[domain]
 	if !ok {
 		return nil, nil, "", errNoExist{domain}
@@ -220,7 +225,10 @@ func (a *azurednsProvider) getExistingRecords(domain string) (models.Records, []
 
 	var existingRecords models.Records
 	for _, set := range rawRecords {
-		existingRecords = append(existingRecords, nativeToRecords(set, zoneName)...)
+		before := providers.BeginToRC(a.observer, "nativeToRecords", set)
+		records := nativeToRecords(set, dc)
+		providers.EndToRC(a.observer, "nativeToRecords", before, set, records, nil)
+		existingRecords = append(existingRecords, records...)
 	}
 
 	a.rawRecords[domain] = rawRecords
@@ -359,16 +367,16 @@ func nativeToRecordTypeDiff(recordType *string) (adns.RecordType, error) {
 		return adns.RecordTypeA, nil
 	case "AAAA", "AZURE_ALIAS_AAAA":
 		return adns.RecordTypeAAAA, nil
-	case "CAA":
-		// CAA doesn't make any senese in a private dns zone in azure
-		return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
+	// case "CAA":
+	// 	// CAA doesn't make any senese in a private dns zone in azure
+	// 	return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
 	case "CNAME", "AZURE_ALIAS_CNAME":
 		return adns.RecordTypeCNAME, nil
 	case "MX":
 		return adns.RecordTypeMX, nil
-	case "NS":
-		// NS record types don't make any sense in a private azure dns zone
-		return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
+	// case "NS":
+	// 	// NS record types don't make any sense in a private azure dns zone
+	// 	return adns.RecordTypeA, fmt.Errorf("nativeToRecordTypeDiff RTYPE %v UNIMPLEMENTED", *recordType)
 	case "PTR":
 		return adns.RecordTypePTR, nil
 	case "SRV":
@@ -383,17 +391,17 @@ func nativeToRecordTypeDiff(recordType *string) (adns.RecordType, error) {
 	}
 }
 
-func nativeToRecords(set *adns.RecordSet, origin string) []*models.RecordConfig {
-	var results []*models.RecordConfig
+func nativeToRecords(set *adns.RecordSet, dc *models.DomainConfig) models.Records {
+	var results models.Records
+	label := dc.LabelFromFQDNWithDot(*set.Properties.Fqdn)
+	ttl := uint32(*set.Properties.TTL)
 	switch rtype := *set.Type; rtype {
 	case "Microsoft.Network/privateDnsZones/A":
 		if set.Properties.ARecords != nil {
 			// This is an A recordset. Process all the targets there.
 			for _, rec := range set.Properties.ARecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "A"
-				_ = rc.SetTarget(*rec.IPv4Address)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeA, *rec.IPv4Address)
+				rc.Original = set
 				results = append(results, rc)
 			}
 		} else {
@@ -403,10 +411,8 @@ func nativeToRecords(set *adns.RecordSet, origin string) []*models.RecordConfig 
 		if set.Properties.AaaaRecords != nil {
 			// This is an AAAA recordset. Process all the targets there.
 			for _, rec := range set.Properties.AaaaRecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "AAAA"
-				_ = rc.SetTarget(*rec.IPv6Address)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, *rec.IPv6Address)
+				rc.Original = set
 				results = append(results, rc)
 			}
 		} else {
@@ -415,58 +421,46 @@ func nativeToRecords(set *adns.RecordSet, origin string) []*models.RecordConfig 
 	case "Microsoft.Network/privateDnsZones/CNAME":
 		if set.Properties.CnameRecord != nil {
 			// This is a CNAME recordset. Process the targets. (there can only be one)
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "CNAME"
-			_ = rc.SetTarget(*set.Properties.CnameRecord.Cname)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, *set.Properties.CnameRecord.Cname)
+			rc.Original = set
 			results = append(results, rc)
 		} else {
 			panic(fmt.Errorf("nativeToRecords rtype %v unimplemented", *set.Type))
 		}
 	case "Microsoft.Network/privateDnsZones/PTR":
 		for _, rec := range set.Properties.PtrRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "PTR"
-			_ = rc.SetTarget(*rec.Ptrdname)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypePTR, *rec.Ptrdname)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/privateDnsZones/TXT":
 		if len(set.Properties.TxtRecords) == 0 { // Empty String Record Parsing
 			// This is a null TXT record.
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "TXT"
-			_ = rc.SetTargetTXT("")
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, "")
+			rc.Original = set
 			results = append(results, rc)
 		} else {
 			// This is a normal TXT record. Collect all its segments.
 			for _, rec := range set.Properties.TxtRecords {
-				rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-				rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-				rc.Type = "TXT"
 				var txts []string
 				for _, txt := range rec.Value {
 					txts = append(txts, *txt)
 				}
-				_ = rc.SetTargetTXTs(txts)
+				rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, strings.Join(txts, ""))
+				rc.Original = set
 				results = append(results, rc)
 			}
 		}
 	case "Microsoft.Network/privateDnsZones/MX":
 		for _, rec := range set.Properties.MxRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "MX"
-			_ = rc.SetTargetMX(uint16(*rec.Preference), *rec.Exchange)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(*rec.Preference), *rec.Exchange)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/privateDnsZones/SRV":
 		for _, rec := range set.Properties.SrvRecords {
-			rc := &models.RecordConfig{TTL: uint32(*set.Properties.TTL), Original: set}
-			rc.SetLabelFromFQDN(*set.Properties.Fqdn, origin)
-			rc.Type = "SRV"
-			_ = rc.SetTargetSRV(uint16(*rec.Priority), uint16(*rec.Weight), uint16(*rec.Port), *rec.Target)
+			rc, _ := dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, uint16(*rec.Priority), uint16(*rec.Weight), uint16(*rec.Port), *rec.Target)
+			rc.Original = set
 			results = append(results, rc)
 		}
 	case "Microsoft.Network/privateDnsZones/SOA":
@@ -478,7 +472,7 @@ func nativeToRecords(set *adns.RecordSet, origin string) []*models.RecordConfig 
 
 // NOTE recordToNativeDiff2 is really "convert []RecordConfig to rrset".
 
-func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recordConfig []*models.RecordConfig) (*adns.RecordSet, adns.RecordType, error) {
+func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recordConfig models.Records) (*adns.RecordSet, adns.RecordType, error) {
 	recordKeyType := recordKey.Type
 	//	if recordKeyType == "AZURE_ALIAS" {
 	//		fmt.Fprintf(os.Stderr, "DEBUG: XXXXXXXXXXXXXXXXXXXXXXX %v\n", recordKeyType)
@@ -488,13 +482,13 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
-			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.GetTargetField())})
+			recordSet.Properties.ARecords = append(recordSet.Properties.ARecords, &adns.ARecord{IPv4Address: new(rec.AsA().Addr.String())})
 		case "AAAA":
-			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.GetTargetField())})
+			recordSet.Properties.AaaaRecords = append(recordSet.Properties.AaaaRecords, &adns.AaaaRecord{IPv6Address: new(rec.AsAAAA().Addr.String())})
 		case "CNAME":
-			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.GetTargetField())}
+			recordSet.Properties.CnameRecord = &adns.CnameRecord{Cname: new(rec.AsCNAME().Target)}
 		case "PTR":
-			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.GetTargetField())})
+			recordSet.Properties.PtrRecords = append(recordSet.Properties.PtrRecords, &adns.PtrRecord{Ptrdname: new(rec.AsPTR().Ptr)})
 		case "TXT":
 			// When a TXT record is empty, Azure requires that the .Properties.TxtRecords have no value, not "".
 			if rec.GetTargetTXTJoined() != "" {
@@ -505,12 +499,14 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 				recordSet.Properties.TxtRecords = append(recordSet.Properties.TxtRecords, &adns.TxtRecord{Value: txts})
 			}
 		case "MX":
-			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(rec.GetTargetField()), Preference: new(int32(rec.MxPreference))})
+			f := rec.AsMX()
+			recordSet.Properties.MxRecords = append(recordSet.Properties.MxRecords, &adns.MxRecord{Exchange: new(f.Mx), Preference: new(int32(f.Preference))})
 		case "SRV":
-			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(rec.GetTargetField()), Port: new(int32(rec.SrvPort)), Weight: new(int32(rec.SrvWeight)), Priority: new(int32(rec.SrvPriority))})
+			f := rec.AsSRV()
+			recordSet.Properties.SrvRecords = append(recordSet.Properties.SrvRecords, &adns.SrvRecord{Target: new(f.Target), Port: new(int32(f.Port)), Weight: new(int32(f.Weight)), Priority: new(int32(f.Priority))})
 			/* CAA records don't work in a private zone */
-		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
-			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
+		// case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
+		// 	return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
 		default:
 			return nil, adns.RecordTypeA, fmt.Errorf("recordToNativeDiff2 RTYPE %v UNIMPLEMENTED", recordKeyType) // ands.A is a placeholder
 		}

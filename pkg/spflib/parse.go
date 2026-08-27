@@ -43,6 +43,10 @@ var qualifiers = map[byte]bool{
 
 // Parse parses a raw SPF record.
 func Parse(text string, dnsres Resolver) (*SPFRecord, error) {
+	return parse(text, dnsres, nil)
+}
+
+func parse(text string, dnsres Resolver, chain []string) (*SPFRecord, error) {
 	if !strings.HasPrefix(text, "v=spf1 ") {
 		return nil, errors.New("not an SPF record")
 	}
@@ -84,11 +88,14 @@ func Parse(text string, dnsres Resolver) (*SPFRecord, error) {
 			}
 			p.IsLookup = true
 			if dnsres != nil {
+				if inChain(chain, p.IncludeDomain) {
+					return nil, fmt.Errorf("SPF include loop: %s", strings.Join(append(chain, p.IncludeDomain), " -> "))
+				}
 				subRecord, err := dnsres.GetSPF(p.IncludeDomain)
 				if err != nil {
 					return nil, err
 				}
-				p.IncludeRecord, err = Parse(subRecord, dnsres)
+				p.IncludeRecord, err = parse(subRecord, dnsres, append(chain, p.IncludeDomain))
 				if err != nil {
 					return nil, fmt.Errorf("in included SPF: %w", err)
 				}
@@ -100,4 +107,13 @@ func Parse(text string, dnsres Resolver) (*SPFRecord, error) {
 		}
 	}
 	return rec, nil
+}
+
+func inChain(chain []string, domain string) bool {
+	for _, d := range chain {
+		if strings.EqualFold(d, domain) {
+			return true
+		}
+	}
+	return false
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 const (
@@ -20,60 +21,6 @@ type netcupProvider struct {
 		customernumber string
 		sessionID      string
 	}
-}
-
-func (api *netcupProvider) createRecord(domain string, rec *record) error {
-	rec.Delete = false
-	data := paramUpdateRecords{
-		Key:            api.credentials.apikey,
-		SessionID:      api.credentials.sessionID,
-		CustomerNumber: api.credentials.customernumber,
-		DomainName:     domain,
-		RecordSet: records{Records: []record{
-			*rec,
-		}},
-	}
-	_, err := api.get("updateDnsRecords", data)
-	if err != nil {
-		return fmt.Errorf("error while trying to create a record: %w", err)
-	}
-	return nil
-}
-
-func (api *netcupProvider) deleteRecord(domain string, rec *record) error {
-	rec.Delete = true
-	data := paramUpdateRecords{
-		Key:            api.credentials.apikey,
-		SessionID:      api.credentials.sessionID,
-		CustomerNumber: api.credentials.customernumber,
-		DomainName:     domain,
-		RecordSet: records{Records: []record{
-			*rec,
-		}},
-	}
-	_, err := api.get("updateDnsRecords", data)
-	if err != nil {
-		return fmt.Errorf("error while trying to delete a record: %w", err)
-	}
-	return nil
-}
-
-func (api *netcupProvider) modifyRecord(domain string, rec *record) error {
-	rec.Delete = false
-	data := paramUpdateRecords{
-		Key:            api.credentials.apikey,
-		SessionID:      api.credentials.sessionID,
-		CustomerNumber: api.credentials.customernumber,
-		DomainName:     domain,
-		RecordSet: records{Records: []record{
-			*rec,
-		}},
-	}
-	_, err := api.get("updateDnsRecords", data)
-	if err != nil {
-		return fmt.Errorf("error while trying to modify a record: %w", err)
-	}
-	return nil
 }
 
 func (api *netcupProvider) getRecords(domain string) ([]record, error) {
@@ -137,7 +84,6 @@ func (api *netcupProvider) get(action string, params any) (json.RawMessage, erro
 	if err != nil {
 		return nil, err
 	}
-
 	// Yeah, netcup implemented an empty recordset as an error - don't ask.
 	if action == "infoDnsRecords" && respData.StatusCode == 5029 {
 		emptyRecords, _ := json.Marshal(records{})
@@ -145,9 +91,10 @@ func (api *netcupProvider) get(action string, params any) (json.RawMessage, erro
 	}
 
 	// Check for any errors and log them
-	if respData.StatusCode != 2000 && (action == "") {
-		return nil, fmt.Errorf("netcup API error: %v\n%v", reqParam, respData)
+	if respData.StatusCode != 2000 {
+		return nil, fmt.Errorf("netcup API error on action '%s', status code %d. Full response: %s", action, respData.StatusCode, string(bodyString))
 	}
-
+	// Add delay to respect rate limit (180 requests/minute = 3 requests/second = ~333ms per request)
+	time.Sleep(334 * time.Millisecond)
 	return respData.Data, nil
 }

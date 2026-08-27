@@ -3,47 +3,67 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "sortfoo.com",
-        "dnscontrol_nameunicode": "sortfoo.com",
-        "dnscontrol_uniquename": "sortfoo.com"
-      },
       "name": "sortfoo.com",
       "records": [
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:1:1]",
           "name": "@",
-          "target": "1.2.3.4",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "a",
-          "target": "foo.com.",
+          "name_unicode": "a",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "b",
-          "target": "foo.com.",
+          "name_unicode": "b",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "c",
-          "target": "foo.com.",
+          "name_unicode": "c",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "foo.com.",
           "filepos": "[line:1:1]",
           "name": "d",
-          "target": "foo.com.",
+          "name_unicode": "d",
+          "rdata": {
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         }
       ],
       "registrar": "none",

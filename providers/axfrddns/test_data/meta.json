@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "with-dnssec.dnscontrol.internal"
+    },
+    {
+      "domain": "without-dnssec.dnscontrol.internal"
+    }
+  ]
+}

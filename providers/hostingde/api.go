@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"golang.org/x/net/idna"
 )
 
@@ -127,24 +127,24 @@ func (hp *hostingdeProvider) updateNameservers(nss []string, domain string) func
 	}
 }
 
-func (hp *hostingdeProvider) updateZone(zc *zoneConfig, options *dnsSecOptions, create, del, mod diff.Changeset) error {
+func (hp *hostingdeProvider) updateZone(zc *zoneConfig, options *dnsSecOptions, create, del, mod diff2.ChangeList) error {
 	toAdd := []*record{}
 	for _, c := range create {
-		r := recordToNative(c.Desired)
+		r := recordToNative(c.New[0])
 		toAdd = append(toAdd, r)
 	}
 
 	toDelete := []*record{}
 	for _, d := range del {
-		r := recordToNative(d.Existing)
-		r.ID = d.Existing.Original.(record).ID
+		r := recordToNative(d.Old[0])
+		r.ID = d.Old[0].Original.(record).ID
 		toDelete = append(toDelete, r)
 	}
 
 	toModify := []*record{}
 	for _, m := range mod {
-		r := recordToNative(m.Desired)
-		r.ID = m.Existing.Original.(record).ID
+		r := recordToNative(m.New[0])
+		r.ID = m.Old[0].Original.(record).ID
 		toModify = append(toModify, r)
 	}
 

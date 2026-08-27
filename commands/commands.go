@@ -8,11 +8,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/js"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/version"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/js"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/version"
 	"github.com/fatih/color"
 	"github.com/urfave/cli/v3"
 )
@@ -25,6 +25,11 @@ const (
 )
 
 var commands = []*cli.Command{}
+
+func commandNotFound(ctx context.Context, c *cli.Command, command string) {
+	fmt.Fprintf(c.Root().ErrWriter, "Unknown command: %s\n", command)
+	cli.OsExiter(1)
+}
 
 func cmd(cat string, c *cli.Command) bool {
 	c.Category = cat
@@ -54,6 +59,7 @@ func Run(v string) int {
 		Usage:   "DNSControl is a compiler and DSL for managing dns zones",
 		Version: v,
 	}
+	app.CommandNotFound = commandNotFound
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
 			Name:        "debug",
@@ -205,10 +211,8 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 			return nil, fmt.Errorf("registrar named %s expected for %s, but never registered", d.RegistrarName, d.Name)
 		}
 		d.RegistrarInstance = &models.RegistrarInstance{
-			ProviderBase: models.ProviderBase{
-				Name:         reg.Name,
-				ProviderType: reg.Type,
-			},
+			Name:         reg.Name,
+			ProviderType: reg.Type,
 		}
 		for pName, n := range d.DNSProviderNames {
 			prov, ok := cfg.DNSProvidersByName[pName]
@@ -216,10 +220,8 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 				return nil, fmt.Errorf("DNS Provider named %s expected for %s, but never registered", pName, d.Name)
 			}
 			d.DNSProviderInstances = append(d.DNSProviderInstances, &models.DNSProviderInstance{
-				ProviderBase: models.ProviderBase{
-					Name:         pName,
-					ProviderType: prov.Type,
-				},
+				Name:                pName,
+				ProviderType:        prov.Type,
 				NumberOfNameservers: n,
 			})
 		}

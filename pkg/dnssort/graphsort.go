@@ -1,6 +1,6 @@
 package dnssort
 
-import "github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+import "github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
 
 // SortUsingGraph sorts changes based on their dependencies using a directed graph.
 // Most changes have dependencies on other changes.
@@ -22,8 +22,8 @@ func SortUsingGraph[T dnsgraph.Graphable](records []T) SortResult[T] {
 	sortState := createDirectedSortState(records)
 
 	for sortState.hasWork() {
+		sortState.hasResolvedLastRound = false
 		for _, node := range sortState.graph.All {
-			sortState.hasResolvedLastRound = false
 
 			if hasUnmetDependencies(node) {
 				continue
