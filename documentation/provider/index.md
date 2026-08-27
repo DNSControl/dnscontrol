@@ -498,7 +498,7 @@ Providers in this category and their maintainers are:
 |[`NAMECHEAP`](namecheap.md)|@willpower232|
 |[`NETCUP`](netcup.md)|@kordianbruck|
 |[`NETLIFY`](netlify.md)|@SphericalKat|
-|[`NETNOD`](netnod.md)|@Netnod|
+|[`NETNOD`](netnod.md)|@Netnod @vilhelmprytz|
 |[`NS1`](ns1.md)|@costasd|
 |[`OPENSRS`](opensrs.md)|@philhug|
 |[`OPENWRT`](openwrt.md)|@huskyistaken|

@@ -39,7 +39,7 @@ var features = providers.DocumentationNotes{
 
 func init() {
 	const providerName = "NETNOD"
-	const providerMaintainer = "@Netnod"
+	const providerMaintainer = "@Netnod @vilhelmprytz"
 	fns := providers.DspFuncs{
 		Initializer:   newDSP,
 		RecordAuditor: AuditRecords,
