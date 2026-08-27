@@ -37,9 +37,9 @@ I'll ignore all the small stuff and get to the point.
 
 A typical provider implements 3 methods and DNSControl takes care of the rest:
 
-* GetZoneRecords() -- Download the list of DNS records.
-* GetZoneRecordsCorrections() -- Generate a list of corrections.
-* GetNameservers() -- Query the API and return the list of parent nameservers.
+- GetZoneRecords() -- Download the list of DNS records.
+- GetZoneRecordsCorrections() -- Generate a list of corrections.
+- GetNameservers() -- Query the API and return the list of parent nameservers.
 
 These three functions are all that's needed for `dnscontrol preview` and `dnscontrol push`.
 
@@ -75,19 +75,19 @@ Each DNS provider's API falls into one of 4 category. Some update one DNS record
 
 In summary, provider APIs basically fall into four general categories:
 
-* Updates are done one record at a time (ByRecord)
-* Updates are done one label at a time (ByLabel)
-* Updates are done one label+type at a time (ByRecordSet)
-* Updates require the entire zone to be uploaded (ByZone).
+- Updates are done one record at a time (ByRecord)
+- Updates are done one label at a time (ByLabel)
+- Updates are done one label+type at a time (ByRecordSet)
+- Updates require the entire zone to be uploaded (ByZone).
 
 DNSControl provides 4 helper functions that do all the hard work for you.  As input, they take the existing zone (what was downloaded via the API) and the desired zone (what is in `dnsconfig.js`).  They return a list of instructions. Implement handlers for the instructions and DNSControl is able to perform `dnscontrol push`.
 
 The functions are:
 
-* [diff2.ByRecord()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecord) -- Updates are done one DNS record at a time. New records are added. Changes and deletes refer to an ID assigned to the record by the provider.
-* [diff2.ByLabel()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByLabel) -- Updates are done for an entire label. Adds and changes are done by sending one or more records that will appear at that label (i.e. `www.example.com`). Deletes delete all records at that label.
-* [diff2.ByRecordSet()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecordSet) -- Similar to ByLabel() but updates are done on the label+type level. If `www.example.com` has 2 A records and 2 MX records, updates must replace all the A records, or all the MX records, or add records of a different type.
-* [diff2.ByZone()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByZone) -- Updates are done by uploading the entire zone every time.
+- [diff2.ByRecord()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecord) -- Updates are done one DNS record at a time. New records are added. Changes and deletes refer to an ID assigned to the record by the provider.
+- [diff2.ByLabel()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByLabel) -- Updates are done for an entire label. Adds and changes are done by sending one or more records that will appear at that label (i.e. `www.example.com`). Deletes delete all records at that label.
+- [diff2.ByRecordSet()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByRecordSet) -- Similar to ByLabel() but updates are done on the label+type level. If `www.example.com` has 2 A records and 2 MX records, updates must replace all the A records, or all the MX records, or add records of a different type.
+- [diff2.ByZone()](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/diff2#ByZone) -- Updates are done by uploading the entire zone every time.
 
 To determine your provider's category, review your API documentation.
 
@@ -147,8 +147,8 @@ this to create the zone files directory).
 
 The BIND and TransIP registrations in this repository are worked examples maintainers can copy from:
 
-* [`providers/bind/bindProvider.go`][bind-source]: the simple shape, plus a `PostWrite` hook that creates the zone files directory.
-* [`providers/transip/transipProvider.go`][transip-source]: an auth method selector (`Internal` plus `ShowIf`) that branches between a short lived access token and an account name paired with a PEM private key.
+- [`providers/bind/bindProvider.go`][bind-source]: the simple shape, plus a `PostWrite` hook that creates the zone files directory.
+- [`providers/transip/transipProvider.go`][transip-source]: an auth method selector (`Internal` plus `ShowIf`) that branches between a short lived access token and an account name paired with a PEM private key.
 
 [bind-source]: https://github.com/StackExchange/dnscontrol/blob/main/providers/bind/bindProvider.go
 [transip-source]: https://github.com/StackExchange/dnscontrol/blob/main/providers/transip/transipProvider.go
@@ -168,14 +168,14 @@ The function `GetRegistrarCorrections()` returns a list of corrections to be mad
 
 Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider).
 
-* The function that converts the API's native records to `models.RecordConfig` structs should be called toRC().
-* There are helper functions (factories) for creating `models.RecordConfig`'s. See [The Cookbook](developer-info/cookbook.md) "Create a `models.RecordConfig`" for details.
+- The function that converts the API's native records to `models.RecordConfig` structs should be called toRC().
+- There are helper functions (factories) for creating `models.RecordConfig`'s. See [The Cookbook](developer-info/cookbook.md) "Create a `models.RecordConfig`" for details.
 
 The function `GetDomainCorrections()` is a bit interesting. It returns a list of corrections to be made. These are in the form of functions that DNSControl can call to actually make the corrections.
 
-* The "create" function will probably need to convert an `models.RecordConfig` to the native API struct. Please name this function toNative()
-* To access or change the RDATA in a field, use `rd := rc.GetRDATA()` and `rc.SetRDATA(rd)`. Full details are in [The Cookbook](developer-info/cookbook.md) "Getters/Setters for RDATA in `models.RecordConfig`".
-* Of course, if you need to create a `models.RecordConfig` please use the factories listed above.
+- The "create" function will probably need to convert an `models.RecordConfig` to the native API struct. Please name this function toNative()
+- To access or change the RDATA in a field, use `rd := rc.GetRDATA()` and `rc.SetRDATA(rd)`. Full details are in [The Cookbook](developer-info/cookbook.md) "Getters/Setters for RDATA in `models.RecordConfig`".
+- Of course, if you need to create a `models.RecordConfig` please use the factories listed above.
 
 The remaining steps assume you're creating a DNS Service Provider.
 
@@ -209,8 +209,8 @@ Integration testing is the most important kind of testing when adding a new prov
 All records will be deleted from the test domain!  Use a OTE domain or a real domain that isn't otherwise in use and can be destroyed.
 {% endhint %}
 
-* Edit [integrationTest/profiles.json](https://github.com/DNSControl/dnscontrol/blob/main/integrationTest/profiles.json):
-  * Add the `creds.json` info required for this provider in the form of environment variables.
+- Edit [integrationTest/profiles.json](https://github.com/DNSControl/dnscontrol/blob/main/integrationTest/profiles.json):
+  - Add the `creds.json` info required for this provider in the form of environment variables.
 
 Now you can run the integration tests.
 
@@ -236,18 +236,18 @@ go test -v -args -verbose -profile ROUTE53
 
 Some useful `go test` tips:
 
-* Flags before `-args` go to the `go test` program. Flags after `-args` go to DNSControl.
-* Run only certain tests using the `-start` and `-end` flags.
-  * Rather than running all the tests, run just the tests you want.
-  * These flags must be *after* the `-args` flag.
-  * Example: `go test -v -args -verbose -profile ROUTE53 -start 10 -end 20` run tests 10-20 inclusive.
-  * Example: `go test -v -args -verbose -profile ROUTE53 -start 5 -end 5` runs only test 5.
-  * Example: `go test -v -args -verbose -profile ROUTE53 -start 20` skip the first 19 tests.
-  * Example: `go test -v -args -verbose -profile ROUTE53 -end 20` only run the first 20 tests.
-* Slow tests? Add `-timeout n` to increase the timeout for tests
-  * `go test` kills the tests after 10 minutes by default.  Some providers need more time.
-  * This flag must be *before* the `-args` flag.
-  * Example:  `go test -timeout 20m -v -args -verbose -profile CLOUDFLAREAPI`
+- Flags before `-args` go to the `go test` program. Flags after `-args` go to DNSControl.
+- Run only certain tests using the `-start` and `-end` flags.
+  - Rather than running all the tests, run just the tests you want.
+  - These flags must be *after* the `-args` flag.
+  - Example: `go test -v -args -verbose -profile ROUTE53 -start 10 -end 20` run tests 10-20 inclusive.
+  - Example: `go test -v -args -verbose -profile ROUTE53 -start 5 -end 5` runs only test 5.
+  - Example: `go test -v -args -verbose -profile ROUTE53 -start 20` skip the first 19 tests.
+  - Example: `go test -v -args -verbose -profile ROUTE53 -end 20` only run the first 20 tests.
+- Slow tests? Add `-timeout n` to increase the timeout for tests
+  - `go test` kills the tests after 10 minutes by default.  Some providers need more time.
+  - This flag must be *before* the `-args` flag.
+  - Example:  `go test -timeout 20m -v -args -verbose -profile CLOUDFLAREAPI`
 
 You can opt out of tests if they will always fail for that provider. For example, if it doesn't support a particular feature. Look at `func makeTests()` in [integrationTest/integration_test.go](https://github.com/DNSControl/dnscontrol/blob/2f65533e1b92c2967229a92a304fff7c14f7f4b6/integrationTest/integration_test.go#L675) for more details.
 
@@ -261,15 +261,15 @@ There is a potential bug in how TXT records are handled. Sadly we haven't found 
 
 ## Step 11: Update docs, CICD and other files
 
-* Edit `documentation/providers.md`:
-  * Remove the provider from the `Requested providers` list (near the end of the doc) (if needed).
-  * Add the new provider to the [Providers with "contributor support"](../provider/index.md#providers-with-contributor-support) section.
-* Edit `README.md`:
-  * Add the provider to the list.
-* Edit `documentation/SUMMARY.md`:
-  * Add the provider to the "Providers" list.
-* Create `documentation/provider/PROVIDERNAME.md`:
-  * Use one of the other files in that directory as a base.
+- Edit `documentation/providers.md`:
+  - Remove the provider from the `Requested providers` list (near the end of the doc) (if needed).
+  - Add the new provider to the [Providers with "contributor support"](../provider/index.md#providers-with-contributor-support) section.
+- Edit `README.md`:
+  - Add the provider to the list.
+- Edit `documentation/SUMMARY.md`:
+  - Add the provider to the "Providers" list.
+- Create `documentation/provider/PROVIDERNAME.md`:
+  - Use one of the other files in that directory as a base.
 
 {% hint style="success" %}
 **Need feedback?** Submit a draft PR!  It's a great way to get early feedback, ask about fixing
@@ -332,10 +332,10 @@ See [documentation/release-engineering.md](../release/release-engineering.md) fo
 
 Edit `.github/workflows/pr_integration_tests.yml`
 
-* Add your providers `_DOMAIN` env variable:
-  * Add it to the `env` section of `integration-tests`.
-  * Please keep this list sorted alphabetically.
-  * To find this section, search for `PROVIDER SECRET LIST`.
+- Add your providers `_DOMAIN` env variable:
+  - Add it to the `env` section of `integration-tests`.
+  - Please keep this list sorted alphabetically.
+  - To find this section, search for `PROVIDER SECRET LIST`.
 
 For example, the entry for BIND looks like:
 
@@ -347,9 +347,9 @@ For example, the entry for BIND looks like:
 
 {% endcode %}
 
-* Add your providers other ENV variables:
-  * Every provider requires different variables set to perform the integration tests.  The list of such variables is in `integrationTest/profiles.json`.
-  * You've already added `*_DOMAIN` to `pr_integration_tests.yml`. Now we're going to add the remaining ones.
+- Add your providers other ENV variables:
+  - Every provider requires different variables set to perform the integration tests.  The list of such variables is in `integrationTest/profiles.json`.
+  - You've already added `*_DOMAIN` to `pr_integration_tests.yml`. Now we're going to add the remaining ones.
 
 To find this section, search for `PROVIDER SECRET LIST`.
 
@@ -373,21 +373,18 @@ These are the things we'll be checking when you submit the PR.  Please try to co
 1. Run `go generate ./...` to make sure all generated files are fresh.
 2. Make sure the following files were created and/or updated:
 
-* `.github/CODEOWNERS`
-* `README.md`
-* `.github/workflows/pr_integration_tests.yml` (env variables for your provider)
-* `documentation/SUMMARY.md`
-* `documentation/provider/index.md` (the autogenerated table + the second one; make sure it is removed from the `requested` list)
-* `documentation/provider/`PROVIDERNAME`.md`
-* `integrationTest/profiles.json`
-* `pkg/providers/_all/all.go`
+- `.github/CODEOWNERS`
+- `README.md`
+- `.github/workflows/pr_integration_tests.yml` (env variables for your provider)
+- `documentation/SUMMARY.md`
+- `documentation/provider/index.md` (the autogenerated table + the second one; make sure it is removed from the `requested` list)
+- `documentation/provider/`PROVIDERNAME`.md`
+- `integrationTest/profiles.json`
+- `pkg/providers/_all/all.go`
 
 3. Review the code for style issues, remove debug statements, make sure all exported functions have a comment, and generally tighten up the code.
 4. Verify you're using the most recent version of anything you import.  (See [Step 14](#step-14-dependencies))
-5. Re-run the [integration test](#step-9-integration-test) one last time.
-
-* Post the results as a comment to your PR.
-
+5. Re-run the [integration test](#step-9-integration-test) one last time. Post the results as a comment to your PR.
 6. Re-read the [maintainer's responsibilities](../provider/index.md#providers-with-contributor-support) bullet list.  By submitting a provider you agree to maintain it, respond to bugs, periodically re-run the integration test to verify nothing has broken, and if we don't hear from you for 2 months we may disable the provider.
 
 ## Step 17: Submit a PR

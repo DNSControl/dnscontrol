@@ -1,5 +1,24 @@
 # Notifications
 
+- [Notifications](#notifications)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+    - [Automatic notifications](#automatic-notifications)
+    - [Example DNS change](#example-dns-change)
+    - [Preview example](#preview-example)
+    - [Push example](#push-example)
+  - [Notification services](#notification-services)
+    - [Shoutrrr](#shoutrrr)
+      - [Chat and Messaging Platforms](#chat-and-messaging-platforms)
+      - [Push Notification Services](#push-notification-services)
+      - [Incident and Alert Management](#incident-and-alert-management)
+      - [Email Services](#email-services)
+      - [Specialized Services](#specialized-services)
+    - [Slack/Mattermost](#slackmattermost)
+    - [Microsoft Teams](#microsoft-teams)
+    - [Telegram](#telegram)
+    - [Bonfire](#bonfire)
+
 DNSControl's "notifications" feature will log `push` changes to other services in real time. Typically this is used to automatically announce DNS changes in a team chatroom.  The functionality is implemented using the open source [Shoutrrr](https://github.com/nicholas-fedor/shoutrrr) library, which knows how to communicate to many different systems.  Some additional services are provided natively, see the [notifications package](https://github.com/DNSControl/dnscontrol/tree/main/pkg/notifications).
 
 ## Configuration
@@ -36,7 +55,7 @@ To automatically send notifications without using the `--notify` flag, configure
 - `notify_on_push`: Set to `true` to send notifications during `dnscontrol push` (when changes are applied)
 - `notify_on_preview`: Set to `true` to send notifications during `dnscontrol preview` (dry-run mode)
 
-**Example: Notifications only for actual changes (push)**
+**Example: Notifications only for actual changes (push):**
 
 {% code title="creds.json" %}
 ```json
@@ -50,7 +69,7 @@ To automatically send notifications without using the `--notify` flag, configure
 ```
 {% endcode %}
 
-**Example: Notifications for both preview and push**
+**Example: Notifications for both preview and push:**
 
 {% code title="creds.json" %}
 ```json
@@ -99,7 +118,7 @@ dnscontrol preview
 
 {% endtabs %}
 
-**The notification output**
+**The notification output:**
 
 ```shell
 **Preview: example.com[my_provider] -** CREATE foo.example.com A (1.2.3.4 ttl=86400)
@@ -126,7 +145,7 @@ dnscontrol push
 
 {% endtabs %}
 
-**The notification output**
+**The notification output:**
 
 ```shell
 Successfully ran correction for **example.com[my_provider]** - CREATE foo.example.com A 1.2.3.4 ttl=86400
@@ -139,34 +158,43 @@ Successfully ran correction for **example.com[my_provider]** - CREATE foo.exampl
 DNSControl supports various notification methods via Shoutrrr, including email (SMTP), Discord, Pushover, and many others. For detailed setup instructions, click on the desired service:
 
 #### Chat and Messaging Platforms
- * [Discord](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/discord/)
- * [Google Chat](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/googlechat/) (formerly Hangouts)
- * [Lark](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/lark/)
- * [Matrix](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/matrix/)
- * [Mattermost](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/mattermost/)
- * [Rocket.Chat](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/rocketchat/)
- * [Signal](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/signal/)
- * [Slack](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/slack/)
- * [Teams](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/teams/)
- * [Telegram](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/telegram/)
- * [WeCom](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/wecom/)
- * [Zulip](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/zulip/)
+
+- [Discord](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/discord/)
+- [Google Chat](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/googlechat/) (formerly Hangouts)
+- [Lark](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/lark/)
+- [Matrix](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/matrix/)
+- [Mattermost](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/mattermost/)
+- [Rocket.Chat](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/rocketchat/)
+- [Signal](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/signal/)
+- [Slack](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/slack/)
+- [Teams](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/teams/)
+- [Telegram](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/telegram/)
+- [WeCom](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/wecom/)
+- [Zulip](https://shoutrrr.nickfedor.com/v0.12.0/services/chat/zulip/)
+
 #### Push Notification Services
- * [Bark](https://shoutrrr.nickfedor.com/v0.12.0/services/push/bark/)
- * [Gotify](https://shoutrrr.nickfedor.com/v0.12.0/services/push/gotify/)
- * [IFTTT](https://shoutrrr.nickfedor.com/v0.12.0/services/push/ifttt/)
- * [Join](https://shoutrrr.nickfedor.com/v0.12.0/services/push/join/)
- * [Ntfy](https://shoutrrr.nickfedor.com/v0.12.0/services/push/ntfy/)
- * [Pushbullet](https://shoutrrr.nickfedor.com/v0.12.0/services/push/pushbullet/)
- * [Pushover](https://shoutrrr.nickfedor.com/v0.12.0/services/push/pushover/)
+
+- [Bark](https://shoutrrr.nickfedor.com/v0.12.0/services/push/bark/)
+- [Gotify](https://shoutrrr.nickfedor.com/v0.12.0/services/push/gotify/)
+- [IFTTT](https://shoutrrr.nickfedor.com/v0.12.0/services/push/ifttt/)
+- [Join](https://shoutrrr.nickfedor.com/v0.12.0/services/push/join/)
+- [Ntfy](https://shoutrrr.nickfedor.com/v0.12.0/services/push/ntfy/)
+- [Pushbullet](https://shoutrrr.nickfedor.com/v0.12.0/services/push/pushbullet/)
+- [Pushover](https://shoutrrr.nickfedor.com/v0.12.0/services/push/pushover/)
+
 #### Incident and Alert Management
- * [OpsGenie](https://shoutrrr.nickfedor.com/v0.12.0/services/incident/opsgenie/)
- * [PagerDuty](https://shoutrrr.nickfedor.com/v0.12.0/services/incident/pagerduty/)
+
+- [OpsGenie](https://shoutrrr.nickfedor.com/v0.12.0/services/incident/opsgenie/)
+- [PagerDuty](https://shoutrrr.nickfedor.com/v0.12.0/services/incident/pagerduty/)
+
 #### Email Services
- * [SMTP](https://shoutrrr.nickfedor.com/v0.12.0/services/email/smtp/)
+
+- [SMTP](https://shoutrrr.nickfedor.com/v0.12.0/services/email/smtp/)
+
 #### Specialized Services
- * [Generic](https://shoutrrr.nickfedor.com/v0.12.0/services/specialized/generic/)
- * [Notifiarr](https://shoutrrr.nickfedor.com/v0.12.0/services/specialized/notifiarr/)
+
+- [Generic](https://shoutrrr.nickfedor.com/v0.12.0/services/specialized/generic/)
+- [Notifiarr](https://shoutrrr.nickfedor.com/v0.12.0/services/specialized/notifiarr/)
 
 Configure `shoutrrr_url` with the Shoutrrr URL to be notified.
 

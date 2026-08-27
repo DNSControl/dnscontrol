@@ -1,5 +1,11 @@
 # Ordering of DNS records
 
+- [Ordering of DNS records](#ordering-of-dns-records)
+  - [Practical example](#practical-example)
+  - [Unresolved records](#unresolved-records)
+  - [Disabling ordering](#disabling-ordering)
+  - [Internals](#internals)
+
 DNSControl tries to automatically reorder the pending changes based on the dependencies of the records using [Topological sorting](https://en.wikipedia.org/wiki/Topological_sorting).
 For example, if an A record and a CNAME that points to the A record are created at the same time, some providers require the A record to be created before the CNAME.
 

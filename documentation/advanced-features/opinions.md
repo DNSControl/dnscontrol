@@ -1,10 +1,21 @@
 # DNSControl is an opinionated system
 
+- [DNSControl is an opinionated system](#dnscontrol-is-an-opinionated-system)
+  - [Opinion #1: DNS should be treated like code](#opinion-1-dns-should-be-treated-like-code)
+  - [Opinion #2: Non-experts should be able to safely make DNS changes](#opinion-2-non-experts-should-be-able-to-safely-make-dns-changes)
+  - [Opinion #3: dnsconfig.js are not zonefiles](#opinion-3-dnsconfigjs-are-not-zonefiles)
+  - [Opinion #4: All DNS is lowercase for languages that have such a concept](#opinion-4-all-dns-is-lowercase-for-languages-that-have-such-a-concept)
+  - [Opinion #5: Users should state what they want, and DNSControl should do the rest](#opinion-5-users-should-state-what-they-want-and-dnscontrol-should-do-the-rest)
+  - [Opinion #6: If it is ambiguous in DNS, it is forbidden in DNSControl](#opinion-6-if-it-is-ambiguous-in-dns-it-is-forbidden-in-dnscontrol)
+  - [Opinion #7: Hostnames don't have underscores](#opinion-7-hostnames-dont-have-underscores)
+  - [Opinion #8: TXT Records are one long string](#opinion-8-txt-records-are-one-long-string)
+  - [Opinion #9: RFC 4183 is better than RFC 2317](#opinion-9-rfc-4183-is-better-than-rfc-2317)
+
 DNSControl is an opinionated system. That means that we have certain opinions about how things should work.
 
 This page documents those opinions.
 
-# Opinion #1: DNS should be treated like code
+## Opinion #1: DNS should be treated like code
 
 Code is written in a high-level language, version controlled, commented, tested, and reviewed by a third party... and all of that happens before it goes into production.
 
@@ -14,7 +25,7 @@ DNS information should be tested for syntax, pass unit tests and policy tests, a
 
 Pushing the changes into production should be effortless, not requiring people to know which domains are on which providers, or that certain providers do things differently that others. The credentials for updates should be controlled such that anyone can write a PR, but not everyone has access to the credentials.
 
-# Opinion #2: Non-experts should be able to safely make DNS changes
+## Opinion #2: Non-experts should be able to safely make DNS changes
 
 The goal of DNSControl is to create a system that is set up by DNS experts like you, but updates and changes can be made by your coworkers who aren't DNS experts.
 
@@ -28,13 +39,13 @@ Things your coworkers should not have to know:
 
 - Your coworkers should be able to figure out the language without much training. The system should block them from doing dangerous things (even if they are technically legal).
 
-# Opinion #3: dnsconfig.js are not zonefiles
+## Opinion #3: dnsconfig.js are not zonefiles
 
 A zonefile can list any kind of DNS record. It has no judgement and no morals. It will let you do bad practices as long as the bits are RFC-compliant.
 
 `dnsconfig.js` is a high-level description of your DNS zone data. Being high-level permits the code to understand intent, and stop bad behavior.
 
-# Opinion #4: All DNS is lowercase for languages that have such a concept
+## Opinion #4: All DNS is lowercase for languages that have such a concept
 
 DNSControl downcases all DNS names (domains, labels, and targets). #sorrynotsorry
 
@@ -42,21 +53,21 @@ When the system reads `dnsconfig.js` or receives data from DNS providers, the DN
 
 This reduces code complexity, reduces the number of edge-cases that must be tested, and makes the system safer to operate.
 
-Yes, we know that DNS is case insensitive. See [Opinion #3](#opinion-3-dnsconfig.js-are-not-zonefiles).
+Yes, we know that DNS is case insensitive. See [Opinion #3](#opinion-3-dnsconfigjs-are-not-zonefiles).
 
-# Opinion #5: Users should state what they want, and DNSControl should do the rest
+## Opinion #5: Users should state what they want, and DNSControl should do the rest
 
 When possible, `dnsconfig.js` lists a high-level description of what is desired and the compiler does the hard work for you.
 
 Some examples:
 
-* Macros and iterators permit you to state something once, correctly, and repeat it many places.
-* TXT strings are expressed as JavaScript strings, with no weird DNS-required special escape characters. DNSControl does the escaping for you.
-* Domain names with Unicode are listed as real Unicode. Punycode translation is done for you.
-* IP addresses are expressed as IP addresses; and reversing them to in-addr.arpa addresses is done for you.
-* SPF records are stated in the most verbose way; DNSControl optimizes it for you in a safe, opt-in way.
+- Macros and iterators permit you to state something once, correctly, and repeat it many places.
+- TXT strings are expressed as JavaScript strings, with no weird DNS-required special escape characters. DNSControl does the escaping for you.
+- Domain names with Unicode are listed as real Unicode. Punycode translation is done for you.
+- IP addresses are expressed as IP addresses; and reversing them to in-addr.arpa addresses is done for you.
+- SPF records are stated in the most verbose way; DNSControl optimizes it for you in a safe, opt-in way.
 
-# Opinion #6: If it is ambiguous in DNS, it is forbidden in DNSControl
+## Opinion #6: If it is ambiguous in DNS, it is forbidden in DNSControl
 
 When there is ambiguity an expert knows what the system will do. Your coworkers should not be expected to be experts. (See [Opinion #2](#opinion-2-non-experts-should-be-able-to-safely-make-dns-changes)).
 
@@ -78,7 +89,7 @@ That's ambiguous. If the user knows that "xyz" is a top level domain (TLD) then 
 
 Therefore, we require all CNAME, MX, and NS targets to be FQDNs (they must end with a "."), or to be a shortname (no dots at all). Everything else is ambiguous and therefore an error.
 
-# Opinion #7: Hostnames don't have underscores
+## Opinion #7: Hostnames don't have underscores
 
 DNSControl prints warnings if a hostname includes an underscore (`_`) because underscores are not permitted in hostnames.
 
@@ -86,16 +97,15 @@ We want to prevent a naive user from including an underscore when they meant to 
 
 Hostnames are more restrictive than general DNS labels.
 
-> "While a hostname may not contain other characters, such as the
-underscore character (`_`), other DNS names may contain the underscore. Systems such as DomainKeys and service records use the underscore as a means to assure that their special character is not confused with hostnames. For example, `_http._sctp.www.example.com` specifies a service pointer for an SCTP capable webserver host (www) in the domain example.com." — _[the Wikipedia entry on hostnames](https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames)_
+> "While a hostname may not contain other characters, such as the underscore character (`_`), other DNS names may contain the underscore. Systems such as DomainKeys and service records use the underscore as a means to assure that their special character is not confused with hostnames. For example, `_http._sctp.www.example.com` specifies a service pointer for an SCTP capable webserver host (www) in the domain example.com." — *[the Wikipedia entry on hostnames](https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames)*
 
 However that leads to an interesting problem. When is a DNS label a hostname and when it it just a DNS label? There is no way to know for sure because code can't guess intention.
 
 Therefore we print a warning if a label has an underscore in it, unless the rtype is SRV, TLSA, TXT, or if the name starts with certain prefixes such as `_dmarc`. We're always willing to [add more exceptions](https://github.com/DNSControl/dnscontrol/pull/453/files).
 
-# Opinion #8: TXT Records are one long string
+## Opinion #8: TXT Records are one long string
 
-* TXT records are a single string with a length of 0 to 65,280 bytes (the maximum possible TXT record size).
+- TXT records are a single string with a length of 0 to 65,280 bytes (the maximum possible TXT record size).
 
 It is the provider's responsibility to split, join, quote, parse, encode, or decoded the string as needed by the provider's API. This should be invisible to the user.
 
@@ -105,7 +115,7 @@ You may be wondering: Isn't a TXT record really a series of 255-octet segments? 
 
 You may be wondering: Are there any higher-level applications which ascribe semantic value to the TXT string boundaries? I believe that the answer is "no". My proof is not based on reading RFCs, but instead based on (a) observing that I've never seen a DNS provider's control panel let you specify the boundaries, (b) I've never seen a FAQ or reddit post asking how to specify those boundaries. Therefore, there is no need for this. I also assert that there will be no such need in the future.
 
-# Opinion #9: RFC 4183 is better than RFC 2317
+## Opinion #9: RFC 4183 is better than RFC 2317
 
 There is no standard for how to do reverse lookup zones (in-addr.arpa) for CIDR blocks that are not /8, /16, or /24. There are only recommendations.
 

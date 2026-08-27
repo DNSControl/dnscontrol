@@ -1,5 +1,25 @@
 # How to build and ship a release
 
+- [How to build and ship a release](#how-to-build-and-ship-a-release)
+  - [Step 1. Verify everything is up to date](#step-1-verify-everything-is-up-to-date)
+    - [Automated](#automated)
+    - [Manual](#manual)
+  - [Step 2. Cut the release](#step-2-cut-the-release)
+    - [Create an empty PR for the release](#create-an-empty-pr-for-the-release)
+    - [Start the release automation](#start-the-release-automation)
+  - [Manual (escape hatch)](#manual-escape-hatch)
+  - [Release it to the public](#release-it-to-the-public)
+  - [Step 3. Create the release notes](#step-3-create-the-release-notes)
+  - [Step 4. Announce it via email](#step-4-announce-it-via-email)
+  - [Tip: How to bump the major version](#tip-how-to-bump-the-major-version)
+  - [Tip: Configuring GHA integration tests](#tip-configuring-gha-integration-tests)
+    - [Overview](#overview)
+    - [How do I add a single new integration test?](#how-do-i-add-a-single-new-integration-test)
+    - [How do I add a "bring your own keys" integration test?](#how-do-i-add-a-bring-your-own-keys-integration-test)
+  - [Tip: How to rebuild flattener](#tip-how-to-rebuild-flattener)
+  - [Tip: How to update modules](#tip-how-to-update-modules)
+  - [Tip: How to test GoReleaser](#tip-how-to-test-goreleaser)
+
 These are the instructions for producing a release.
 
 GitHub Actions (GHA) will do most of the work for you. You will need to edit the draft release notes and click a button to make the release public.
@@ -8,7 +28,7 @@ Please change the version number as appropriate.  Substitute (for example) `v4.2
 
 ## Step 1. Verify everything is up to date
 
-### Automated (recommended)
+### Automated
 
 This script will run `bin/generate-all.sh` and prompt to upgrade depenencies.
 It must be run from branch `main` or `prep_release`.
@@ -52,13 +72,12 @@ Pick the next release number:
 git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | tail
 ```
 
-### Automated (recommended)
-
 The manual dance below (empty PR → wait for tests → merge → tag) is now done by
 creating an empty "release" PR, then a single GitHub Actions run.
 
-#### Create an empty PR for the release
+### Create an empty PR for the release
 
+```shell
 git fetch origin main
 git checkout main
 git config remote.origin.prune true ; git config fetch.prune true
@@ -70,40 +89,30 @@ git push
 gh pr create --base main --title "Release $VERSION" --body ""
 ```
 
-#### Start the release automation
+### Start the release automation
 
 1. Go to **Actions → "RELEASE: Make release candidate" → Run workflow**.
-2. In the **"Use workflow from"** dropdown, choose the branch to release from
-   (usually `main`; any branch is supported).
+2. In the **"Use workflow from"** dropdown, choose the branch to release from (usually `main`; any branch is supported).
 3. Fill in the inputs:
-   * **version** (required): e.g. `v4.44.0` or `v4.44.0-rc1`. The run **fails
-     fast if that tag already exists**.
-   * **previous_tag** (optional): the tag the changelog compares against. Leave
-     blank to auto-detect the most recent non-RC release (almost always what you
-     want; set it only when releasing from an unusual branch).
-   * **skip_longtest** (optional, default off): **danger** — skips the full
-     `longtest` integration gate. Use only for an emergency release or when the
-     suite is known-broken. When set, the run is loudly annotated and the job
-     summary records that tests were skipped. (`preflight` still runs, so an
-     invalid version or an existing tag still blocks the release.)
+   - **version** (required): e.g. `v4.44.0` or `v4.44.0-rc1`. The run **fails fast if that tag already exists**.
+   - **previous_tag** (optional): the tag the changelog compares against. Leave blank to auto-detect the most recent non-RC release (almost always what you want; set it only when releasing from an unusual branch).
+   - **skip_longtest** (optional, default off): **danger** — skips the full `longtest` integration gate. Use only for an emergency release or when the suite is known-broken. When set, the run is loudly annotated and the job summary records that tests were skipped. (`preflight` still runs, so an invalid version or an existing tag still blocks the release.)
 4. Click **Run workflow**.
 
 The workflow then, in order:
 
 1. **preflight** — validates the version; refuses if the tag already exists.
-2. **verify** — runs the **entire** `longtest` integration suite as a gate. If
-   anything fails, nothing is tagged or published.
-3. **release** — tags the tip of the selected branch and runs GoReleaser to
-   produce the **draft** release.
+2. **verify** — runs the **entire** `longtest` integration suite as a gate. If anything fails, nothing is tagged or published.
+3. **release** — tags the tip of the selected branch and runs GoReleaser to produce the **draft** release.
 
 The release is tagged directly (not via an empty `Release <version>` commit):
 this org forbids GitHub Actions from opening pull requests and `main` is
 protected, so a PAT-free automated PR is not possible. The changelog range is
 still correct because it is computed by version, not by commit ancestry.
 
-### Manual (escape hatch)
+## Manual (escape hatch)
 
-You can still do it by hand. Pushing a tag runs GoReleaser directly, but it
+You can still do the release by hand. Pushing a tag runs GoReleaser directly, but it
 **skips** the integration-test gate — so run/verify tests yourself first.
 
 ```shell
@@ -126,7 +135,7 @@ gh pr create --base main --title "Release $VERSION" --body ""
 
 Wait to tests to complete and merge.
 
-```
+```shell
 gh run list -b "release_$VERSION"
 gh run watch
 ```
@@ -135,13 +144,13 @@ WAIT for the GHA to complete. If there are errors, stop and fix them.
 
 Merge it either manually or with this command:
 
-```
+```shell
 gh pr merge --squash --delete-branch  $PR
 ```
 
 Create the release
 
-```
+```shell
 git fetch origin main
 git checkout main
 git config remote.origin.prune true ; git config fetch.prune true
@@ -154,24 +163,25 @@ Soon after GitHub will start an [Action](https://github.com/DNSControl/dnscontro
 
 Wait to tests to complete and merge.
 
-```
+```shell
 gh run list -b "$VERSION"
 gh run watch
 ```
 
 WAIT for the GHA to complete. If there are errors, stop and fix them.
 
-# Release it to the public
+## Release it to the public
 
-Find the release
-        https://github.com/DNSControl/dnscontrol/releases
-and edit the notes.
+Find the release and edit the notes.
 
-When you submit it: 
-
-* "Pre-Release" for rc releases, "Latest" for real releases.
-* Create a discussion for this release
+```text
+https://github.com/DNSControl/dnscontrol/releases
 ```
+
+When you submit it:
+
+- "Pre-Release" for rc releases, "Latest" for real releases.
+- Create a discussion for this release
 
 ## Step 3. Create the release notes
 
@@ -181,11 +191,11 @@ The GHA workflow uses [GoReleaser](https://goreleaser.com/) which produces the [
 
 Release notes style guide:
 
-* Entries in the bullet list should be phrased in the positive: "Feature FOO now does BAR".  This is often the opposite of the related issue, which was probably phrased, "Feature FOO is broken because of BAR".
-* Every item should include the ID of the issue related to the change. If there was no issue, create one and close it.
-* Sort the list most important/exciting changes earlier in the list.
-* Items related to a specific provider should begin with the all-caps name of the provider, such as "ROUTE53: Added support for sandwiches (#100)"
-* The `Deprecation warnings` section should just copy from `README.md`.  If you change one, change it in the README too (you can make that change in this PR).
+- Entries in the bullet list should be phrased in the positive: "Feature FOO now does BAR".  This is often the opposite of the related issue, which was probably phrased, "Feature FOO is broken because of BAR".
+- Every item should include the ID of the issue related to the change. If there was no issue, create one and close it.
+- Sort the list most important/exciting changes earlier in the list.
+- Items related to a specific provider should begin with the all-caps name of the provider, such as "ROUTE53: Added support for sandwiches (#100)"
+- The `Deprecation warnings` section should just copy from `README.md`.  If you change one, change it in the README too (you can make that change in this PR).
 
 See [https://github.com/DNSControl/dnscontrol/releases](https://github.com/DNSControl/dnscontrol/releases) for examples for recent release notes and copy that style.
 
@@ -224,14 +234,14 @@ find * -name \*.bak -delete
 
 GHA is configured to run an integration test for any provider listed in the "provider" list. However the test is skipped if the `*_DOMAIN` variable is not set. For example, the Google Cloud provider integration test is only run if `GCLOUD_DOMAIN` is set.
 
-* Q: What labels control the integration tests?
-* A: A PR only runs a "smoke test" (the first few tests).  Add the label "fulltest" to run all tests. (The daily run of integration tests on the main branch always does all test.)
+- Q: What labels control the integration tests?
+- A: A PR only runs a "smoke test" (the first few tests).  Add the label "fulltest" to run all tests. (The daily run of integration tests on the main branch always does all test.)
 
-* Q: Where are non-secret environment variables stored?
-* A: GHA calls them "Variables". Update them here: https://github.com/DNSControl/dnscontrol/settings/variables/actions
+- Q: Where are non-secret environment variables stored?
+- A: GHA calls them "Variables". Update them here: https://github.com/DNSControl/dnscontrol/settings/variables/actions
 
-* Q: Where are SECRET environment variables stored?
-* A: GHA calls them "Secrets". Update them here: https://github.com/DNSControl/dnscontrol/settings/secrets/actions
+- Q: Where are SECRET environment variables stored?
+- A: GHA calls them "Secrets". Update them here: https://github.com/DNSControl/dnscontrol/settings/secrets/actions
 
 ### How do I add a single new integration test?
 
@@ -251,7 +261,7 @@ Overview: You will fork the repo and add any secrets to your fork.  For security
 
 3. In your fork, set any secrets in GHA via Settings :: Secrets and variables :: Actions :: Secrets.
 
-5. Start a build
+4. Start a build
 
 ## Tip: How to rebuild flattener
 
@@ -312,9 +322,9 @@ go mod tidy
 
 (These are random notes)
 
-```
+```shell
 git tag -a v4.42.3-rc1 -m "Release candidate 4.42.3-rc1"
-or
+# or
 git tag -a v4.42.3 -m "Release candidate 4.42.3"
 ```
 
@@ -322,26 +332,26 @@ DO NOT PUSH THIS TAG. It should stay local. If you push it, GHA will build a rel
 
 When done, delete the tag with:
 
-```
+```shell
 git tag -d v4.42.3-rc1
 or
 git tag -d v4.42.3
 ```
 
-```
+```shell
 touch /tmp/empty-notes.md
 unset GITHUB_TOKEN
 goreleaser release --clean --skip=publish,validate,announce --release-notes=/tmp/empty-notes.md --verbose
 ls dist*
 ```
 
-```
+```shell
 GITHUB_TOKEN=dummy goreleaser release --clean --skip=publish,announce --verbose 2>&1 | tee /tmp/goreleaser.log
 ```
 
 Review output for homebrew/docker logs:
 
-```
+```shell
 grep -i -A2 "homebrew\|cask" /tmp/goreleaser.log
 grep -i -A2 "docker" /tmp/goreleaser.log
 ```

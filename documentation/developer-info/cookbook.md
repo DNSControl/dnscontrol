@@ -11,6 +11,7 @@ This document provides "cookbook" recipes for doing common tasks.
   - [How to manipulate domain/zone names](#how-to-manipulate-domainzone-names)
   - [What you should know about TXT records](#what-you-should-know-about-txt-records)
     - [TXT functions](#txt-functions)
+  - [How to change the rtype of a RecordConfig](#how-to-change-the-rtype-of-a-recordconfig)
   - [How to label imports](#how-to-label-imports)
 
 ## Create a `models.DomainConfig`
@@ -133,7 +134,7 @@ fmt.Printf("Like in a zonefile: %s\n", rd.String())
 
 Generally you then need to cast it to the correct type.
 
-```
+```go
 rd := rc.GetRDATA()             // The generic RDATA
 mx1 := rc.GetRDATA().(dnsv2.MX)  // Cast as a MX so we can work with it.
 mx2 := rc.AsMX()                 // Same as mx1, but less typing.
@@ -141,7 +142,7 @@ mx2 := rc.AsMX()                 // Same as mx1, but less typing.
 
 Typical useage:
 
-```
+```go
 switch rtype {
 case "MX":
     mx = rc.AsMX()
@@ -252,6 +253,7 @@ f2 := dc.ToFqdnNoDot("foo")           // Assume dc.Name = "example.com"
 ```
 
 Turn a name (FQDN end with a ".") into a shortname:
+
 ```go
 short1 := nameutil.ToShort("foo.example.com.", "example.com")
 short2 := dc.ToShort("foo.example.com.")    // Assume dc.Name = "example.com"
@@ -262,15 +264,17 @@ short2 := dc.ToShort("foo.example.com.")    // Assume dc.Name = "example.com"
 ## What you should know about TXT records
 
 The DNS protocol stores a TXT record as a series of segements:
-* Each segment can be a maximum of 255-octets (octets == bytes).
-* It's possible to have no segments.
-* It's possible to zero-length segments.
-* In a DNS Zone File, TXT records are presented as quoted strings (each segment quoted individually), with \DDD (3-digit) escapes for non-printing chars and \x (1-char escapes) for literals (typically `\\` to represent a backslach and `\"` to represent a double-quote inside a quoted string).
+
+- Each segment can be a maximum of 255-octets (octets == bytes).
+- It's possible to have no segments.
+- It's possible to zero-length segments.
+- In a DNS Zone File, TXT records are presented as quoted strings (each segment quoted individually), with \DDD (3-digit) escapes for non-printing chars and \x (1-char escapes) for literals (typically `\\` to represent a backslach and `\"` to represent a double-quote inside a quoted string).
 
 DNSControl stores TXT records as segments. However...
-* We "re-segment" strings so that all but the last one is 255-octets.
-* Zero-length segments are removed.
-* Records with no segments are "improved" to have a single 0-length segment. This eliminates an edge case to deal with.
+
+- We "re-segment" strings so that all but the last one is 255-octets.
+- Zero-length segments are removed.
+- Records with no segments are "improved" to have a single 0-length segment. This eliminates an edge case to deal with.
 
 To manage this, we have getters and setters that assure the above rules happen transparently.
 
@@ -292,8 +296,8 @@ rc2, err := dc.NewRecordConfigParse(LABEL, TTL, dnsv2.TypeTXT, `"quoted" "like" 
 
 Updating existing records:
 
-* `SetTargetTXT(string)`:  Takes one (possibly long) string.
-* `SetTargetTXTs([]string)`: Takes a []string.  Will re-segment if needed.
+- `SetTargetTXT(string)`:  Takes one (possibly long) string.
+- `SetTargetTXTs([]string)`: Takes a []string.  Will re-segment if needed.
 
 FYI: The above functions will re-segment the text such that each segment is 255
 octets long, except the last one which contains the remainder. If a record is
@@ -315,20 +319,18 @@ For any other transformation:
 
 1. Set .Type and .TypeNum
 
-2.  Create the RDATA using a MakeFOO() function and use the SetRDATA() to store
-    it.  Be sure to use SetDATA() last since it rebuilds any pre-computed
-    strings.
+2. Create the RDATA using a MakeFOO() function and use the SetRDATA() to store it.  Be sure to use SetDATA() last since it rebuilds any pre-computed strings.
 
 Example:
 
 ```go
-    rec.Type = "AKAMAITLC"
-	rec.TypeNum = privatetypes.TypeAKAMAITLC
-	rd, err := privatetypesrdata.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target)
-	if err != nil {
-		return err
-	}
-	rec.SetRDATA(rd)
+rec.Type = "AKAMAITLC"
+rec.TypeNum = privatetypes.TypeAKAMAITLC
+rd, err := privatetypesrdata.MakeAKAMAITLC(dc.Name, nil, nrc.Flags{}, "DUAL", target)
+if err != nil {
+    return err
+}
+rec.SetRDATA(rd)
 ```
 
 Doing it this way preserves all other fields such as `.Metadata`.

@@ -1,4 +1,8 @@
-### Integration Tests
+# Integration Tests
+
+- [Integration Tests](#integration-tests)
+  - [Configuration](#configuration)
+  - [Running a test](#running-a-test)
 
 This is a simple framework for testing dns providers by making real requests.
 
