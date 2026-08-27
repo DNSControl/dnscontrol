@@ -1,5 +1,12 @@
 # init
 
+- [init](#init)
+  - [What happens](#what-happens)
+  - [Provider coverage](#provider-coverage)
+  - [Example: Cloudflare (single account for DNS and registrar)](#example-cloudflare-single-account-for-dns-and-registrar)
+  - [Example: retrying after a credential error](#example-retrying-after-a-credential-error)
+  - [Example: TransIP for DNS with a PEM private key](#example-transip-for-dns-with-a-pem-private-key)
+
 `dnscontrol init` walks a new user through creating a working `creds.json` plus a minimal `dnsconfig.js` starter. It prompts for a DNS provider and a registrar, shows where to create the matching API credentials, and writes both files so that `dnscontrol preview` runs on a fresh checkout.
 
 ```shell

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/prettyzone"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/prettyzone"
 )
 
 /*
@@ -77,8 +77,8 @@ type labelConfig struct {
 type rTypeConfig struct {
 	rType string // The rType for all records in this group (A, CNAME, etc)
 	// The records stored as lists:
-	existingRecs []*models.RecordConfig
-	desiredRecs  []*models.RecordConfig
+	existingRecs models.Records
+	desiredRecs  models.Records
 	// The records stored as compareable/rec tuples:
 	existingTargets []targetConfig
 	desiredTargets  []targetConfig
@@ -104,6 +104,9 @@ func NewCompareConfig(origin string, existing, desired models.Records, compFn Co
 		keyMap:   map[models.RecordKey]bool{},
 	}
 	cc.addRecords(existing, true) // Must be called first so that CNAME manipulations happen in the correct order.
+	models.SVCBHydrateDesiredEchIgnore(existing, desired)
+	// It is a layering violation to post-process SVCB records here but I can't
+	// find a better place to do it.
 	cc.addRecords(desired, false)
 	cc.verifyCNAMEAssertions()
 	sort.Slice(cc.ldata, func(i, j int) bool {
@@ -170,8 +173,10 @@ func (cc *CompareConfig) verifyCNAMEAssertions() {
 // Generate a string that can be used to compare this record to others
 // for equality.
 func mkCompareBlobs(rc *models.RecordConfig, f func(*models.RecordConfig) string) (string, string) {
-	// Start with the comparable string
-	comp := rc.ToComparableNoTTL()
+	comp := rc.ComparableV3
+	if comp == "" {
+		panic(fmt.Sprintf("mkCompareBlobs: record %s IN %s %s has empty ComparableV3", rc.NameFQDN, rc.Type, rc.GetRDATA().String()))
+	}
 
 	// If the custom function exists, add its output
 	if f != nil {
@@ -200,6 +205,12 @@ func (cc *CompareConfig) addRecords(recs models.Records, storeInExisting bool) {
 	z := prettyzone.PrettySort(recs, cc.origin, 0, nil)
 
 	for _, rec := range z.Records {
+		if rec.ComparableV3 == "" {
+			panic(fmt.Sprintf("addRecord: should not happen: Cv3 is blank: %v", rec))
+			// We panic because we have eliminated all places where the .ComparableV3
+			// doesn't get fixed. If we're wrong, we want to know about it.
+		}
+
 		key := rec.Key()
 		label := key.NameFQDN
 		rtype := key.Type

@@ -1,6 +1,6 @@
 package dnsgraph
 
-import "github.com/DNSControl/dnscontrol/v4/pkg/dnstree"
+import "github.com/DNSControl/dnscontrol/v5/pkg/dnstree"
 
 type edgeDirection uint8
 
@@ -99,6 +99,13 @@ func (graph *Graph[T]) AddEdge(sourceNode *Node[T], dependency Dependency) {
 			continue
 		}
 
+		// A type-restricted dependency only links to destination nodes of the
+		// requested record type (e.g. a DS depends on the NS at its label, not
+		// on sibling DS records).
+		if dependency.OnlyType != "" && destinationNode.Data.GetRecordType() != dependency.OnlyType {
+			continue
+		}
+
 		if sourceNode.Edges.Contains(destinationNode, OutgoingEdge) {
 			continue
 		}
@@ -130,7 +137,7 @@ func (nodes dnsGraphNodes[T]) RemoveNode(toRemove *Node[T]) dnsGraphNodes[T] {
 	return newNodes
 }
 
-// RemoveNode removes a node from a graph.
+// RemoveNode removes a node edges.
 func (edges Edges[T]) RemoveNode(toRemove *Node[T]) Edges[T] {
 	var newEdges Edges[T]
 

@@ -3,19 +3,19 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "bar.com.",
           "filepos": "[line:2:5]",
           "name": "@",
-          "target": "bar.com.",
+          "name_unicode": "@",
+          "rdata": {
+            "Target": "bar.com."
+          },
           "ttl": 300,
-          "type": "DNAME"
+          "type": "DNAME",
+          "typenum": 39
         }
       ],
       "registrar": "none",

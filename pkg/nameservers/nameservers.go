@@ -6,18 +6,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
-// DetermineNameservers will find all nameservers we should use for a domain. It follows the following rules:
+// DetermineNameserversForProviders determines all nameservers to be used for a domain. It follows the following rules:
 // 1. All explicitly defined NAMESERVER records will be used.
 // 2. Each DSP declares how many nameservers to use. Default is all. 0 indicates to use none.
-func DetermineNameservers(dc *models.DomainConfig) ([]*models.Nameserver, error) {
-	return DetermineNameserversForProviders(dc, dc.DNSProviderInstances, false)
-}
-
-// DetermineNameserversForProviders is like DetermineNameservers, for a subset of providers.
 func DetermineNameserversForProviders(dc *models.DomainConfig, providers []*models.DNSProviderInstance, silent bool) ([]*models.Nameserver, error) {
 	// start with the nameservers that have been explicitly added:
 	ns := dc.Nameservers
@@ -68,18 +65,10 @@ func AddNSRecords(dc *models.DomainConfig) {
 		}
 	}
 	for _, ns := range dc.Nameservers {
-		rc := &models.RecordConfig{
-			Type:     "NS",
-			Metadata: map[string]string{},
-			TTL:      ttl,
-		}
-		rc.SetLabel("@", dc.Name)
-		t := ns.Name
-		if !strings.HasSuffix(t, ".") {
-			t += "."
-		}
-		if err := rc.SetTarget(t); err != nil {
-			fmt.Printf("failed AddNSRecords rc.SetTarget(%q): %s\n", t, err)
+		rc, err := dc.NewRecordConfig("@", ttl, dnsv2.TypeNS, ns.Name,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+		if err != nil {
+			panic("Should not happen: " + err.Error())
 		}
 
 		dc.Records = append(dc.Records, rc)

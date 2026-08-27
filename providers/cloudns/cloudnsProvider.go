@@ -8,14 +8,13 @@ import (
 	"strconv"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/fatih/color"
-
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
 )
 
 /*
@@ -165,115 +164,82 @@ func (c *cloudnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, exi
 		return nil, 0, err
 	}
 
-	var (
-		reportMsgs []string
-		create     diff.Changeset
-		del        diff.Changeset
-		modify     diff.Changeset
-	)
+	// diff2.ByRecord returns the instructions in a safe order (e.g. a delete is
+	// emitted before the create that replaces it, and dependency-ordered so an
+	// A/AAAA precedes the NS that needs it and an NS precedes its DS), so emit
+	// the corrections in that order rather than re-sorting them by type.
+	var reportCorrections, recordCorrections []*models.Correction
 	for _, inst := range instructions {
-		cor := diff.Correlation{}
 		switch inst.Type {
 		case diff2.REPORT:
-			reportMsgs = append(reportMsgs, inst.Msgs...)
+			for _, msg := range inst.Msgs {
+				reportCorrections = append(reportCorrections, &models.Correction{Msg: msg})
+			}
+
 		case diff2.CREATE:
-			cor.Desired = inst.New[0]
-			create = append(create, cor)
+			desired := inst.New[0]
+			input := models.Records{desired}
+			before := providers.BeginToNative(c.observer, "toReq", input)
+			req, err := toReq(desired)
+			providers.EndToNative(c.observer, "toReq", before, input, req, err)
+			if err != nil {
+				return nil, 0, err
+			}
+			// ClouDNS does not require the trailing period to be specified when creating an NS record where the A or AAAA record exists in the zone.
+			// So, modify it to remove the trailing period.
+			if req["record-type"] == "NS" && strings.HasSuffix(req["record"], domainID+".") {
+				req["record"] = strings.TrimSuffix(req["record"], ".")
+			}
+			recordCorrections = append(recordCorrections, &models.Correction{
+				Msg: fmt.Sprintf("%s%s", inst.Msgs[0], addMetadataCorrection(nil, desired)),
+				F: func() error {
+					return c.createRecord(domainID, req)
+				},
+			})
+
 		case diff2.CHANGE:
-			cor.Existing = inst.Old[0]
-			cor.Desired = inst.New[0]
-			modify = append(modify, cor)
+			existing := inst.Old[0]
+			desired := inst.New[0]
+			id := existing.Original.(*domainRecord).ID
+			input := models.Records{desired}
+			before := providers.BeginToNative(c.observer, "toReq", input)
+			req, err := toReq(desired)
+			providers.EndToNative(c.observer, "toReq", before, input, req, err)
+			if err != nil {
+				return nil, 0, err
+			}
+			// ClouDNS does not require the trailing period to be specified when updating an NS record where the A or AAAA record exists in the zone.
+			// So, modify it to remove the trailing period.
+			if req["record-type"] == "NS" && strings.HasSuffix(req["record"], domainID+".") {
+				req["record"] = strings.TrimSuffix(req["record"], ".")
+			}
+			recordCorrections = append(recordCorrections, &models.Correction{
+				Msg: fmt.Sprintf("%s%s, ClouDNS ID: %s: ", inst.Msgs[0], addMetadataCorrection(existing, desired), id),
+				F: func() error {
+					return c.modifyRecord(domainID, id, req)
+				},
+			})
+
 		case diff2.DELETE:
-			cor.Existing = inst.Old[0]
-			del = append(del, cor)
+			existing := inst.Old[0]
+			id := existing.Original.(*domainRecord).ID
+			recordCorrections = append(recordCorrections, &models.Correction{
+				Msg: fmt.Sprintf("%s%s, ClouDNS ID: %s", inst.Msgs[0], addMetadataCorrection(existing, nil), id),
+				F: func() error {
+					return c.deleteRecord(domainID, id)
+				},
+			})
+
 		default:
 			panic(fmt.Sprintf("unhandled inst.Type %s", inst.Type))
 		}
 	}
 
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(reportMsgs)
+	// Order: reports, DNSSEC changes, then the record changes in diff2's order.
+	var corrections []*models.Correction
+	corrections = append(corrections, reportCorrections...)
 	corrections = append(corrections, dnssecFixes...)
-
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		id := m.Existing.Original.(*domainRecord).ID
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s%s, ClouDNS ID: %s", m.String(), addMetadataCorrection(m.Existing, m.Desired), id),
-			F: func() error {
-				return c.deleteRecord(domainID, id)
-			},
-		}
-		// at ClouDNS, we MUST have a NS for a DS
-		// So, when deleting, we must delete the DS first, otherwise deleting the NS throws an error
-		if m.Existing.Type == "DS" {
-			// type DS is prepended - so executed first
-			corrections = append([]*models.Correction{corr}, corrections...)
-		} else {
-			corrections = append(corrections, corr)
-		}
-	}
-
-	var (
-		createCorrections         []*models.Correction
-		createARecordCorrections  []*models.Correction
-		createNSRecordCorrections []*models.Correction
-	)
-	for _, m := range create {
-		req, err := toReq(m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-
-		// ClouDNS does not require the trailing period to be specified when creating an NS record where the A or AAAA record exists in the zone.
-		// So, modify it to remove the trailing period.
-		if req["record-type"] == "NS" && strings.HasSuffix(req["record"], domainID+".") {
-			req["record"] = strings.TrimSuffix(req["record"], ".")
-		}
-
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s%s", m.String(), addMetadataCorrection(m.Existing, m.Desired)),
-			F: func() error {
-				return c.createRecord(domainID, req)
-			},
-		}
-		// A & AAAA need to be created before NS #2244
-		// NS need to be created before DS #1018
-		// or else errors will be thrown
-		switch m.Desired.Type {
-		case "A", "AAAA":
-			createARecordCorrections = append(createARecordCorrections, corr)
-		case "NS":
-			createNSRecordCorrections = append(createNSRecordCorrections, corr)
-		default:
-			createCorrections = append(createCorrections, corr)
-		}
-	}
-	corrections = append(corrections, createARecordCorrections...)
-	corrections = append(corrections, createNSRecordCorrections...)
-	corrections = append(corrections, createCorrections...)
-
-	for _, m := range modify {
-		id := m.Existing.Original.(*domainRecord).ID
-		req, err := toReq(m.Desired)
-		if err != nil {
-			return nil, 0, err
-		}
-
-		// ClouDNS does not require the trailing period to be specified when updating an NS record where the A or AAAA record exists in the zone.
-		// So, modify it to remove the trailing period.
-		if req["record-type"] == "NS" && strings.HasSuffix(req["record"], domainID+".") {
-			req["record"] = strings.TrimSuffix(req["record"], ".")
-		}
-
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s%s, ClouDNS ID: %s: ", m.String(), addMetadataCorrection(m.Existing, m.Desired), id),
-			F: func() error {
-				return c.modifyRecord(domainID, id, req)
-			},
-		}
-		corrections = append(corrections, corr)
-	}
+	corrections = append(corrections, recordCorrections...)
 
 	return corrections, actualChangeCount, nil
 }
@@ -338,15 +304,15 @@ func (c *cloudnsProvider) getDNSSECCorrections(dc *models.DomainConfig) ([]*mode
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *cloudnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	records, err := c.getRecords(domain)
+	records, err := c.getRecords(dc.Name)
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
-		existingRecords[i], err = toRc(domain, &records[i])
+		before := providers.BeginToRC(c.observer, "toRc", &records[i])
+		existingRecords[i], err = toRc(dc, &records[i])
+		providers.EndToRC(c.observer, "toRc", before, &records[i], models.Records{existingRecords[i]}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -380,89 +346,112 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 }
 
 // parses the ClouDNS format into our standard RecordConfig.
-func toRc(domain string, r *domainRecord) (*models.RecordConfig, error) {
-	ttl, _ := strconv.ParseUint(r.TTL, 10, 32)
-	priority, _ := strconv.ParseUint(r.Priority, 10, 16)
-	weight, _ := strconv.ParseUint(r.Weight, 10, 16)
-	port, _ := strconv.ParseUint(r.Port, 10, 16)
+func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
+	var err error
 
-	rc := &models.RecordConfig{
-		Type:         r.Type,
-		TTL:          uint32(ttl),
-		MxPreference: uint16(priority),
-		SrvPriority:  uint16(priority),
-		SrvWeight:    uint16(weight),
-		SrvPort:      uint16(port),
-		Original:     r,
+	ttl_, err := strconv.ParseUint(r.TTL, 10, 32)
+	if err != nil {
+		return nil, err
 	}
-	rc.SetLabel(r.Host, domain)
+	ttl := uint32(ttl_)
+	label := dc.LabelFromShort(r.Host)
+
+	var rc *models.RecordConfig
+	switch rtype := r.Type; rtype { // #rtype_variations
+	case "TXT":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, r.Priority, dc.ToFqdnWithDot(r.Target+".")) // ignore:legacyfield
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, dc.ToFqdnWithDot(r.Target+".")) // ignore:legacyfield
+	case "ALIAS":
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeALIAS, dc.ToFqdnWithDot(r.Target+"."))
+	case "CNAME", "DNAME", "NS", "PTR":
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, dc.ToFqdnWithDot(r.Target+"."))
+	case "CAA":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, r.CaaFlag, r.CaaTag, r.CaaValue) // ignore:legacyfield
+	case "TLSA":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTLSA, r.TlsaUsage, r.TlsaSelector, r.TlsaMatchingType, r.Target) // ignore:legacyfield
+	case "SSHFP":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSSHFP, r.SshfpAlgorithm, r.SshfpFingerprint, r.Target) // ignore:legacyfield
+	case "DS":
+		// SshfpAlgorithm and DS algorithm both use the API's "algorithm" field.
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeDS, r.DsKeyTag, r.SshfpAlgorithm, r.DsDigestType, r.Target) // ignore:legacyfield
+	case "CLOUD_WR":
+		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeCLOUDNSWR, r.Target)
+	case "LOC":
+		latSec, err := parseFloat32(r.LocLatSec)
+		if err != nil {
+			return nil, err
+		}
+
+		longSec, err := parseFloat32(r.LocLongSec)
+		if err != nil {
+			return nil, err
+		}
+
+		altitude, err := parseFloat32(r.LocAltitude) // ignore:legacyfield
+		if err != nil {
+			return nil, err
+		}
+
+		size, err := parseFloat32(r.LocSize) // ignore:legacyfield
+		if err != nil {
+			return nil, err
+		}
+
+		hPrec, err := parseFloat32(r.LocHPrecision)
+		if err != nil {
+			return nil, err
+		}
+
+		vPrec, err := parseFloat32(r.LocVPrecision)
+		if err != nil {
+			return nil, err
+		}
+
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeLOC,
+			r.LocLatDeg, r.LocLatMin, latSec, r.LocLatDir,
+			r.LocLongDeg, r.LocLongMin, longSec, r.LocLongDir,
+			altitude, size, hPrec, vPrec)
+		if err != nil {
+			return nil, err
+		}
+
+	case "NAPTR":
+		target := dc.ToFqdnWithDot(r.NaptrReplacement + ".")
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNAPTR, r.NaptrOrder, r.NaptrPreference, r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target) // ignore:legacyfield
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
+	}
+	if err != nil {
+		return nil, err
+	}
 
 	// Add metadata for GeoDNS
 	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
 	// but you can ask the support for others type of record and they enable it
 	// for your ClouDNS account.
 	if r.GeodnsCode != "" {
-		if rc.Metadata == nil {
-			rc.Metadata = map[string]string{}
-		}
 		rc.Metadata[metaGeodnsCode] = r.GeodnsCode
 	}
 
-	var err error
-	switch rtype := r.Type; rtype { // #rtype_variations
-	case "TXT":
-		err = rc.SetTargetTXT(r.Target)
-	case "CNAME", "DNAME", "MX", "NS", "SRV", "ALIAS", "PTR":
-		if err := rc.SetTarget(dnsutilv1.AddOrigin(r.Target+".", domain)); err != nil {
-			return nil, err
-		}
-	case "CAA":
-		caaFlag, _ := strconv.ParseUint(r.CaaFlag, 10, 8)
-		rc.CaaFlag = uint8(caaFlag)
-		rc.CaaTag = r.CaaTag
-		err = rc.SetTarget(r.CaaValue)
-	case "TLSA":
-		tlsaUsage, _ := strconv.ParseUint(r.TlsaUsage, 10, 8)
-		rc.TlsaUsage = uint8(tlsaUsage)
-		tlsaSelector, _ := strconv.ParseUint(r.TlsaSelector, 10, 8)
-		rc.TlsaSelector = uint8(tlsaSelector)
-		tlsaMatchingType, _ := strconv.ParseUint(r.TlsaMatchingType, 10, 8)
-		rc.TlsaMatchingType = uint8(tlsaMatchingType)
-		err = rc.SetTarget(r.Target)
-	case "SSHFP":
-		sshfpAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8)
-		rc.SshfpAlgorithm = uint8(sshfpAlgorithm)
-		sshfpFingerprint, _ := strconv.ParseUint(r.SshfpFingerprint, 10, 8)
-		rc.SshfpFingerprint = uint8(sshfpFingerprint)
-		err = rc.SetTarget(r.Target)
-	case "DS":
-		dsKeyTag, _ := strconv.ParseUint(r.DsKeyTag, 10, 16)
-		rc.DsKeyTag = uint16(dsKeyTag)
-		dsAlgorithm, _ := strconv.ParseUint(r.SshfpAlgorithm, 10, 8) // SshFpAlgorithm and DsAlgorithm both use json field "algorithm"
-		rc.DsAlgorithm = uint8(dsAlgorithm)
-		dsDigestType, _ := strconv.ParseUint(r.DsDigestType, 10, 8)
-		rc.DsDigestType = uint8(dsDigestType)
-		rc.DsDigest = r.Target
-		err = rc.SetTarget(r.Target)
-	case "CLOUD_WR":
-		rc.Type = "CLOUDNS_WR"
-		err = rc.SetTarget(r.Target)
-	case "LOC":
-		loc := fmt.Sprintf("%s %s %s %s %s %s %s %s %s %s %s %s",
-			r.LocLatDeg, r.LocLatMin, r.LocLatSec, r.LocLatDir,
-			r.LocLongDeg, r.LocLongMin, r.LocLongSec, r.LocLongDir,
-			r.LocAltitude, r.LocSize, r.LocHPrecision, r.LocVPrecision)
-		err = rc.SetTargetLOCString(r.Target, loc)
-	case "NAPTR":
-		naptrOrder, _ := strconv.ParseUint(r.NaptrOrder, 10, 16)
-		naptrPreference, _ := strconv.ParseUint(r.NaptrPreference, 10, 16)
-		target := dnsutilv1.AddOrigin(r.NaptrReplacement+".", domain)
-		err = rc.SetTargetNAPTR(uint16(naptrOrder), uint16(naptrPreference), r.NaptrFlags, r.NaptrService, r.NaptrRegexp, target)
-	default:
-		err = rc.SetTarget(r.Target)
+	rc.Original = r
+
+	// Add metadata for GeoDNS. By default, it works only with A, AAAA, CNAME,
+	// NAPTR, or SRV records, but support can enable other types per account.
+	if r.GeodnsCode != "" {
+		rc.Metadata[metaGeodnsCode] = r.GeodnsCode
 	}
 
-	return rc, err
+	return rc, nil
+}
+
+// parseFloat32 parses s into a float32. This has an advantage over
+// NewRecordConfig because errors are detected earlier.
+func parseFloat32(s string) (float32, error) {
+	f, err := strconv.ParseFloat(s, 32)
+	return float32(f), err
 }
 
 func formatLocParam(param string) string {
@@ -476,56 +465,67 @@ func formatLocParam(param string) string {
 
 // toReq takes a RecordConfig and turns it into the native format used by the API.
 func toReq(rc *models.RecordConfig) (requestParams, error) {
-	req := requestParams{
-		"record-type": rc.Type,
-		"host":        rc.GetLabel(),
-		"record":      rc.GetTargetField(),
-		"ttl":         strconv.Itoa(int(rc.TTL)),
+
+	host := rc.GetLabel()
+	// ClouDNS doesn't use "@", it uses an empty name
+	if host == "@" {
+		host = ""
 	}
 
-	// ClouDNS doesn't use "@", it uses an empty name
-	if req["host"] == "@" {
-		req["host"] = ""
+	req := requestParams{
+		"record-type": rc.Type,
+		"host":        host,
+		"ttl":         strconv.Itoa(int(rc.TTL)),
 	}
 
 	// Add metadata for GeoDNS
 	// Note: By default, it works only with A, AAAA, CNAME, NAPTR or SRV record
 	// but you can ask the support for others type of record and they enable it
 	// for your ClouDNS account.
-	geodnsCodeFromMetadataValue, geodnsCodeFromMetadataExist := rc.Metadata[metaGeodnsCode]
-	if geodnsCodeFromMetadataExist {
+	if geodnsCodeFromMetadataValue, ok := rc.Metadata[metaGeodnsCode]; ok {
 		req["geodns-code"] = geodnsCodeFromMetadataValue
 	}
 
-	switch rc.Type { // #rtype_variations
-	case "A", "AAAA", "NS", "PTR", "TXT", "SOA", "ALIAS", "CNAME", "DNAME":
-		// Nothing special.
-	case "CLOUDNS_WR":
+	switch rc.TypeNum {
+	case privatetypes.TypeCLOUDNSWR:
+		f := rc.AsCLOUDNSWR()
 		req["record-type"] = "WR"
-	case "MX":
-		req["priority"] = strconv.Itoa(int(rc.MxPreference))
-	case "SRV":
-		req["priority"] = strconv.Itoa(int(rc.SrvPriority))
-		req["weight"] = strconv.Itoa(int(rc.SrvWeight))
-		req["port"] = strconv.Itoa(int(rc.SrvPort))
-	case "CAA":
-		req["caa_flag"] = strconv.Itoa(int(rc.CaaFlag))
-		req["caa_type"] = rc.CaaTag
-		req["caa_value"] = rc.GetTargetField()
-	case "TLSA":
-		req["tlsa_usage"] = strconv.Itoa(int(rc.TlsaUsage))
-		req["tlsa_selector"] = strconv.Itoa(int(rc.TlsaSelector))
-		req["tlsa_matching_type"] = strconv.Itoa(int(rc.TlsaMatchingType))
-	case "SSHFP":
-		req["algorithm"] = strconv.Itoa(int(rc.SshfpAlgorithm))
-		req["fptype"] = strconv.Itoa(int(rc.SshfpFingerprint))
-	case "DS":
-		req["key-tag"] = strconv.Itoa(int(rc.DsKeyTag))
-		req["algorithm"] = strconv.Itoa(int(rc.DsAlgorithm))
-		req["digest-type"] = strconv.Itoa(int(rc.DsDigestType))
-		req["record"] = rc.DsDigest
-	case "LOC":
-		parts := strings.Fields(rc.GetTargetCombined())
+		req["record"] = f.Target
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
+		req["priority"] = strconv.Itoa(int(f.Preference))
+		req["record"] = f.Mx
+	case dnsv2.TypeSRV:
+		f := rc.AsSRV()
+		req["priority"] = strconv.Itoa(int(f.Priority))
+		req["weight"] = strconv.Itoa(int(f.Weight))
+		req["port"] = strconv.Itoa(int(f.Port))
+		req["record"] = f.Target
+	case dnsv2.TypeCAA:
+		f := rc.AsCAA()
+		req["caa_flag"] = strconv.Itoa(int(f.Flag))
+		req["caa_type"] = f.Tag
+		req["caa_value"] = f.Value
+		req["record"] = rc.GetRDATA().String()
+	case dnsv2.TypeTLSA:
+		f := rc.AsTLSA()
+		req["tlsa_usage"] = strconv.Itoa(int(f.Usage))
+		req["tlsa_selector"] = strconv.Itoa(int(f.Selector))
+		req["tlsa_matching_type"] = strconv.Itoa(int(f.MatchingType))
+		req["record"] = f.Certificate
+	case dnsv2.TypeSSHFP:
+		f := rc.AsSSHFP()
+		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
+		req["fptype"] = strconv.Itoa(int(f.Type))
+		req["record"] = f.FingerPrint
+	case dnsv2.TypeDS:
+		f := rc.AsDS()
+		req["key-tag"] = strconv.Itoa(int(f.KeyTag))
+		req["algorithm"] = strconv.Itoa(int(f.Algorithm))
+		req["digest-type"] = strconv.Itoa(int(f.DigestType))
+		req["record"] = f.Digest
+	case dnsv2.TypeLOC:
+		parts := strings.Fields(rc.GetRDATA().String())
 		req["lat-deg"] = parts[0]
 		req["lat-min"] = parts[1]
 		req["lat-sec"] = parts[2]
@@ -538,15 +538,20 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 		req["size"] = formatLocParam(parts[9])
 		req["h-precision"] = formatLocParam(parts[10])
 		req["v-precision"] = formatLocParam(parts[11])
-	case "NAPTR":
-		req["order"] = strconv.Itoa(int(rc.NaptrOrder))
-		req["pref"] = strconv.Itoa(int(rc.NaptrPreference))
-		req["flag"] = rc.NaptrFlags
-		req["params"] = rc.NaptrService
-		req["regexp"] = rc.NaptrRegexp
-		req["replace"] = rc.GetTargetField()
+		req["record"] = rc.GetRDATA().String()
+	case dnsv2.TypeNAPTR:
+		f := rc.AsNAPTR()
+		req["order"] = strconv.Itoa(int(f.Order))
+		req["pref"] = strconv.Itoa(int(f.Preference))
+		req["flag"] = f.Flags
+		req["params"] = f.Service
+		req["regexp"] = f.Regexp
+		req["replace"] = f.Replacement
+		req["record"] = rc.GetRDATA().String()
+	case dnsv2.TypeTXT:
+		req["record"] = rc.GetTargetTXTJoined()
 	default:
-		return nil, fmt.Errorf("ClouDNS.toReq rtype %q unimplemented", rc.Type)
+		req["record"] = rc.GetRDATA().String()
 	}
 
 	return req, nil

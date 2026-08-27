@@ -10,6 +10,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for Go
   - package-ecosystem: "gomod"
@@ -22,9 +24,13 @@ updates:
       - dependency-name: "github.com/exoscale/egoscale"
       - dependency-name: "github.com/ovh/go-ovh"
       - dependency-name: "github.com/vultr/govultr"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for Docker
   - package-ecosystem: "docker"
     directory: /
     schedule:
       interval: "monthly"
+    cooldown:
+      default-days: 7

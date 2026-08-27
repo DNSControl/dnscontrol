@@ -71,6 +71,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❌ | ✅ | ❌ |
 | [`NETLIFY`](netlify.md) | ❌ | ✅ | ❌ |
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ❌ |
+| [`NEXDNS`](nexdns.md) | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ❌ | ✅ | ❌ |
 | [`OPENSRS`](opensrs.md) | ❌ | ❌ | ✅ |
 | [`OPENWRT`](openwrt.md) | ❌ | ✅ | ❌ |
@@ -145,6 +146,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❌ | ❌ | ❌ |
 | [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ✅ |
 | [`NETNOD`](netnod.md) | ❔ | ✅ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ❔ | ❌ | ✅ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
 | [`OPENSRS`](opensrs.md) | ❔ | ❔ | ❌ | ❔ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ❌ | ✅ |
@@ -163,7 +165,7 @@ Jump to a table:
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ✅ |
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❔ | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ❔ | ❔ | ✅ | ✅ |
+| [`VULTR`](vultr.md) | ✅ | ❔ | ✅ | ✅ |
 | [`WEBSUPPORT`](websupport.md) | ❔ | ❌ | ❌ | ❌ |
 
 
@@ -190,7 +192,7 @@ Jump to a table:
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❔ | ❌ | ❌ | ❌ |
 | [`DYNU`](dynu.md) | ❌ | ✅ | ✅ | ✅ | ❔ |
-| [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
+| [`EXOSCALE`](exoscale.md) | ✅ | ❔ | ❌ | ❌ | ❔ |
 | [`FORTIGATE`](fortigate.md) | ❔ | ❔ | ❌ | ❌ | ❔ |
 | [`GANDI_V5`](gandiv5.md) | ✅ | ❔ | ✅ | ✅ | ❔ |
 | [`GCLOUD`](gcloud.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
@@ -215,6 +217,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❔ | ❌ | ❌ | ❔ |
 | [`NETLIFY`](netlify.md) | ✅ | ❔ | ❌ | ❌ | ❔ |
 | [`NETNOD`](netnod.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`NEXDNS`](nexdns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❌ | ✅ | ❔ |
 | [`OPENWRT`](openwrt.md) | ❌ | ❔ | ❔ | ❔ | ❔ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ❔ |
@@ -228,7 +231,7 @@ Jump to a table:
 | [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
 | [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ❌ | ❔ | ❔ |
-| [`TENCENTDNS`](tencentdns.md) | ✅ | ❔ | ❔ | ✅ | ❔ |
+| [`TENCENTDNS`](tencentdns.md) | ❌ | ❔ | ❔ | ❌ | ❔ |
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
 | [`UNIFI`](unifi.md) | ❌ | ❔ | ❌ | ❌ | ❔ |
 | [`VERCEL`](vercel.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
@@ -283,6 +286,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NETLIFY`](netlify.md) | ❔ | ❌ | ✅ | ❔ |
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ❌ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ✅ | ❔ |
 | [`ORACLE`](oracle.md) | ❔ | ✅ | ✅ | ❔ |
@@ -350,6 +354,7 @@ Jump to a table:
 | [`NETCUP`](netcup.md) | ✅ | ❔ | ❔ | ❔ | ✅ |
 | [`NETLIFY`](netlify.md) | ✅ | ❔ | ❔ | ❌ | ❌ |
 | [`NETNOD`](netnod.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
+| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ❌ | ❌ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❔ | ❔ | ✅ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`OVH`](ovh.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
@@ -381,7 +386,7 @@ Jump to a table:
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ❔ | ❌ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
-| [`DESEC`](desec.md) | ✅ | ✅ | ✅ |
+| [`DESEC`](desec.md) | ✅ | ✅ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ❔ | ❌ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ❔ | ❌ |
@@ -403,6 +408,7 @@ Jump to a table:
 | [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ |
 | [`NETLIFY`](netlify.md) | ❌ | ❔ | ❌ |
 | [`NETNOD`](netnod.md) | ❌ | ❌ | ❌ |
+| [`NEXDNS`](nexdns.md) | ❔ | ❌ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ❔ | ✅ |
 | [`ORACLE`](oracle.md) | ❔ | ❔ | ❌ |
 | [`PORKBUN`](porkbun.md) | ❌ | ❔ | ❌ |
@@ -412,6 +418,7 @@ Jump to a table:
 | [`SCALEWAY`](scaleway.md) | ❌ | ❔ | ❌ |
 | [`TRANSIP`](transip.md) | ❌ | ❌ | ❌ |
 | [`VERCEL`](vercel.md) | ❌ | ❌ | ❌ |
+| [`VULTR`](vultr.md) | ✅ | ❔ | ❔ |
 | [`WEBSUPPORT`](websupport.md) | ❔ | ❔ | ❌ |
 
 <!-- provider-matrix-end -->
@@ -491,7 +498,7 @@ Providers in this category and their maintainers are:
 |[`NAMECHEAP`](namecheap.md)|@willpower232|
 |[`NETCUP`](netcup.md)|@kordianbruck|
 |[`NETLIFY`](netlify.md)|@SphericalKat|
-|[`NETNOD`](netnod.md)|@Netnod|
+|[`NETNOD`](netnod.md)|@Netnod @vilhelmprytz|
 |[`NS1`](ns1.md)|@costasd|
 |[`OPENSRS`](opensrs.md)|@philhug|
 |[`OPENWRT`](openwrt.md)|@huskyistaken|

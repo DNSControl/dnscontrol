@@ -1,0 +1,2994 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "flag": 0,
+      "hostname": "*.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.3.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 1000,
+      "type": "A",
+      "value": "8.8.8.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.3.4.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "4.4.4.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "ALIAS",
+      "value": "foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "ALIAS",
+      "value": "foo.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "ALIAS",
+      "value": "foo2.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issue",
+      "ttl": 300,
+      "type": "CAA",
+      "value": "letsencrypt.org",
+      "weight": 0
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issue",
+      "ttl": 300,
+      "type": "CAA",
+      "value": "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234",
+      "weight": 0
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issuewild",
+      "ttl": 300,
+      "type": "CAA",
+      "value": ";",
+      "weight": 0
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issuewild",
+      "ttl": 300,
+      "type": "CAA",
+      "value": "example.com",
+      "weight": 0
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issuewild",
+      "ttl": 300,
+      "type": "CAA",
+      "value": "letsencrypt.org",
+      "weight": 0
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "flag": 128,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "tag": "issue",
+      "ttl": 300,
+      "type": "CAA",
+      "value": "letsencrypt.org",
+      "weight": 0
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 2,
+      "ttl": 300,
+      "type": "MX",
+      "value": "netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "bar.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 8,
+      "ttl": 300,
+      "type": "MX",
+      "value": "www.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "NS",
+      "value": "ns1.foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "NS",
+      "value": "ns2.foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "asimple",
+      "weight": 0
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "simple",
+      "weight": 0
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 500,
+      "type": "A",
+      "value": "8.8.8.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "flag": 0,
+      "hostname": "netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 666,
+      "type": "A",
+      "value": "8.8.8.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 75,
+      "priority": 15,
+      "ttl": 300,
+      "type": "SRV",
+      "value": ".",
+      "weight": 65
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 75,
+      "priority": 15,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo3.com.",
+      "weight": 65
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 75,
+      "priority": 15,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo4.com.",
+      "weight": 65
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 7,
+      "priority": 5,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 6
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 70,
+      "priority": 5,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo2.com.",
+      "weight": 60
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 7,
+      "priority": 52,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 6
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 7,
+      "priority": 52,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 62
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 72,
+      "priority": 52,
+      "ttl": 300,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 62
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 7,
+      "priority": 5,
+      "ttl": 333,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 6
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "flag": 0,
+      "hostname": "_sip._tcp.netlifytest.yesthattom.com",
+      "port": 7,
+      "priority": 5,
+      "ttl": 4400,
+      "type": "SRV",
+      "value": "foo.com.",
+      "weight": 6
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "flag": 0,
+      "hostname": "a.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "xn--ndaaa.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "flag": 0,
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "flag": 0,
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "5.5.5.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "flag": 0,
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "redact2.acm-validations.aws.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "flag": 0,
+      "hostname": "bar.netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "bar.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "flag": 0,
+      "hostname": "bar.bat.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "5.5.5.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "flag": 0,
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "flag": 0,
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "flag": 0,
+      "hostname": "decoy.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.3.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "flag": 0,
+      "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "91.42.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "flag": 0,
+      "hostname": "dyndns-city1.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2003:dd:d7ff::fe71:ce77",
+      "weight": 0
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "flag": 0,
+      "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "91.42.1.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "flag": 0,
+      "hostname": "dyndns-city2.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2003:dd:d7ff::fe71:ce78",
+      "weight": 0
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "flag": 0,
+      "hostname": "final.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "TestDNSProviders was successful!",
+      "weight": 0
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "10.10.10.10",
+      "weight": 0
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "11.11.11.11",
+      "weight": 0
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "12.12.12.12",
+      "weight": 0
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "13.13.13.13",
+      "weight": 0
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "14.14.14.14",
+      "weight": 0
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.3.4.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.4.5.6",
+      "weight": 0
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "4.5.6.7",
+      "weight": 0
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "8.8.8.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2003:dd:d7ff::fe71:aaaa",
+      "weight": 0
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "google.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "google2.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "redact1.acm-validations.aws.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 10,
+      "ttl": 300,
+      "type": "MX",
+      "value": "aspmx.l.google.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 10,
+      "ttl": 300,
+      "type": "MX",
+      "value": "foo.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 20,
+      "ttl": 300,
+      "type": "MX",
+      "value": "alt1.aspmx.l.google.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 20,
+      "ttl": 300,
+      "type": "MX",
+      "value": "bar.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "mx.google.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 8,
+      "ttl": 300,
+      "type": "MX",
+      "value": "netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "NS",
+      "value": "netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "simple",
+      "weight": 0
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "v=spf1 ip4:99.99.99.99 -all",
+      "weight": 0
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.3.4.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "flag": 0,
+      "hostname": "foo.bat.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "simple",
+      "weight": 0
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "flag": 0,
+      "hostname": "foo254.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "weight": 0
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "flag": 0,
+      "hostname": "foo255.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "weight": 0
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "flag": 0,
+      "hostname": "foo256.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "weight": 0
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "flag": 0,
+      "hostname": "foo509.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "weight": 0
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "flag": 0,
+      "hostname": "foo510.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+      "weight": 0
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "flag": 0,
+      "hostname": "foo511.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      "weight": 0
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "flag": 0,
+      "hostname": "foo764.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "weight": 0
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "flag": 0,
+      "hostname": "foo765.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH",
+      "weight": 0
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "flag": 0,
+      "hostname": "foo766.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ",
+      "weight": 0
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "flag": 0,
+      "hostname": "foobt.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "blah`blah",
+      "weight": 0
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "flag": 0,
+      "hostname": "foodq.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "in\"side",
+      "weight": 0
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "flag": 0,
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "\"left",
+      "weight": 0
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "flag": 0,
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "in\"ter\"ior",
+      "weight": 0
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "flag": 0,
+      "hostname": "foodqs.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "right\"",
+      "weight": 0
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "flag": 0,
+      "hostname": "fooosbs1.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "1back\\slash",
+      "weight": 0
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "flag": 0,
+      "hostname": "fooosbs2.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "2back\\\\slash",
+      "weight": 0
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "flag": 0,
+      "hostname": "fooosbs3.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "3back\\\\\\slash",
+      "weight": 0
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "flag": 0,
+      "hostname": "fooosbs4.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "4back\\\\\\\\slash",
+      "weight": 0
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "flag": 0,
+      "hostname": "foosc1.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "semi;colon",
+      "weight": 0
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "flag": 0,
+      "hostname": "foosc2.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "wssemi ; colon",
+      "weight": 0
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "flag": 0,
+      "hostname": "foosp.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "with spaces",
+      "weight": 0
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "flag": 0,
+      "hostname": "foosq.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "quo'te",
+      "weight": 0
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "flag": 0,
+      "hostname": "foows1.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "trailingws ",
+      "weight": 0
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "flag": 0,
+      "hostname": "mail.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "ghs.googlehosted.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "flag": 0,
+      "hostname": "mail.bat.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "ghs.googlehosted.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "flag": 0,
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "flag": 0,
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "priority": 3,
+      "ttl": 300,
+      "type": "MX",
+      "value": "nmx.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "flag": 0,
+      "hostname": "nmx.netlifytest.yesthattom.com",
+      "priority": 9,
+      "ttl": 300,
+      "type": "MX",
+      "value": "www.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0000.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0001.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0002.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0003.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0004.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0005.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0006.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0007.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0008.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0009.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0010.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0011.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0012.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0013.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0014.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0015.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0016.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0017.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0018.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0019.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0020.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0021.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0022.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0023.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0024.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0025.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0026.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0027.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0028.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0029.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0030.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0031.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0032.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0033.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0034.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0035.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0036.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0037.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0038.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0039.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0040.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0041.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0042.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0043.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0044.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0045.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0046.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0047.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0048.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0049.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0050.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0051.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0052.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0053.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0054.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0055.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0056.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0057.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0058.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0059.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0060.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0061.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0062.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0063.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0064.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0065.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0066.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0067.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0068.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0069.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0070.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0071.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0072.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0073.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0074.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0075.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0076.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0077.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0078.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0079.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0080.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0081.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0082.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0083.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0084.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0085.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0086.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0087.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0088.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0089.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0090.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0091.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0092.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0093.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0094.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0095.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0096.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0097.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0098.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0099.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "flag": 0,
+      "hostname": "pager101-rec0100.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "flag": 0,
+      "hostname": "test.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "ALIAS",
+      "value": "foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "flag": 0,
+      "hostname": "test.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "ALIAS",
+      "value": "foo2.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "flag": 0,
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "flag": 0,
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.3.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "flag": 0,
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 333,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "flag": 0,
+      "hostname": "testa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 999,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "flag": 0,
+      "hostname": "testaaaa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2607:f8b0:4006:820::2006",
+      "weight": 0
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "flag": 0,
+      "hostname": "testaaaa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2607:f8b0:4006:820::2013",
+      "weight": 0
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "flag": 0,
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "foo.netlifytest.yesthattom.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "flag": 0,
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "www.google.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "flag": 0,
+      "hostname": "testcname.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "www.yahoo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "flag": 0,
+      "hostname": "testdefined.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "flag": 0,
+      "hostname": "testdefined.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "9.9.9.9",
+      "weight": 0
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "flag": 0,
+      "hostname": "testignore.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "8.8.8.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "flag": 0,
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "priority": 100,
+      "ttl": 300,
+      "type": "MX",
+      "value": "bar.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "flag": 0,
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "priority": 100,
+      "ttl": 300,
+      "type": "MX",
+      "value": "foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "flag": 0,
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "bar.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "flag": 0,
+      "hostname": "testmx.netlifytest.yesthattom.com",
+      "priority": 5,
+      "ttl": 300,
+      "type": "MX",
+      "value": "foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "flag": 0,
+      "hostname": "testtxt.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "changed",
+      "weight": 0
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "flag": 0,
+      "hostname": "testtxt.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "TXT",
+      "value": "simple",
+      "weight": 0
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.1.1.1",
+      "weight": 0
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.9",
+      "weight": 0
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.3.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "5.5.5.5",
+      "weight": 0
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "5.6.7.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 400,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 400,
+      "type": "A",
+      "value": "5.6.7.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 700,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "flag": 0,
+      "hostname": "www.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 700,
+      "type": "A",
+      "value": "5.6.7.8",
+      "weight": 0
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "flag": 0,
+      "hostname": "xn--fiq228c.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "flag": 0,
+      "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "1.2.3.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "flag": 0,
+      "hostname": "xn--ndaaa.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "2.2.2.2",
+      "weight": 0
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "flag": 0,
+      "hostname": "xn--o-0gab.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "CNAME",
+      "value": "xn--ndaaa.xn--vhquv.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "flag": 0,
+      "hostname": "xyz.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "NS",
+      "value": "ns1.foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "flag": 0,
+      "hostname": "xyz.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "NS",
+      "value": "ns2.foo.com.",
+      "weight": 0
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "flag": 0,
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "3.3.3.3",
+      "weight": 0
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "flag": 0,
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "A",
+      "value": "4.4.4.4",
+      "weight": 0
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "flag": 0,
+      "hostname": "zzz.netlifytest.yesthattom.com",
+      "priority": 0,
+      "ttl": 300,
+      "type": "AAAA",
+      "value": "2003:dd:d7ff::fe71:cccc",
+      "weight": 0
+    }
+  }
+]

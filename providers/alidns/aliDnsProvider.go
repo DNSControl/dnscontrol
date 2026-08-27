@@ -2,14 +2,15 @@ package alidns
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
@@ -81,12 +82,12 @@ type domainVersionInfo struct {
 func newAliDNSDsp(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
 	accessKeyID := config["access_key_id"]
 	if accessKeyID == "" {
-		return nil, fmt.Errorf("creds.json: access_key_id must not be empty")
+		return nil, errors.New("creds.json: access_key_id must not be empty")
 	}
 
 	accessKeySecret := config["access_key_secret"]
 	if accessKeySecret == "" {
-		return nil, fmt.Errorf("creds.json: access_key_secret must not be empty")
+		return nil, errors.New("creds.json: access_key_secret must not be empty")
 	}
 
 	// Region ID defaults to "cn-hangzhou". The region value does not affect
@@ -136,7 +137,7 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 			continue
 		}
 
-		rc, err := nativeToRecord(r, domain)
+		rc, err := nativeToRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}
@@ -152,7 +153,10 @@ func (a *aliDNSDsp) GetZoneRecords(dc *models.DomainConfig) (models.Records, err
 	}
 
 	for _, ns := range nameservers {
-		rc := nativeToRecordNS(ns, domain)
+		rc, err := nativeToRecordNS(ns, dc)
+		if err != nil {
+			return nil, err
+		}
 		out = append(out, rc)
 	}
 
@@ -171,8 +175,8 @@ func deduplicateNameServerTargets(newRecs models.Records) models.Records {
 	dedupedMap := make(map[string]bool)
 	var deduped models.Records
 	for _, rec := range newRecs {
-		if !dedupedMap[rec.GetTargetField()] {
-			dedupedMap[rec.GetTargetField()] = true
+		if !dedupedMap[rec.AsNS().Ns] {
+			dedupedMap[rec.AsNS().Ns] = true
 			deduped = append(deduped, rec)
 		}
 	}
@@ -186,7 +190,7 @@ func (a *aliDNSDsp) PrepDesiredRecords(dc *models.DomainConfig) {
 		return
 	}
 
-	recordsToKeep := make([]*models.RecordConfig, 0, len(dc.Records))
+	recordsToKeep := make(models.Records, 0, len(dc.Records))
 
 	for _, rec := range dc.Records {
 		// If TTL is 0 (not set), use the minimum TTL as default
@@ -260,7 +264,7 @@ func (a *aliDNSDsp) GetZoneRecordsCorrections(dc *models.DomainConfig, existingR
 			corrections = append(corrections, &models.Correction{
 				Msg: msgs,
 				F: func() error {
-					return a.deleteRecordset(change.Old, dcn)
+					return a.deleteRecordset(change.Old)
 				},
 			})
 		default:

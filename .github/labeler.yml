@@ -142,6 +142,9 @@ provider-NETLIFY:
 provider-NETNOD:
   - changed-files:
       - any-glob-to-any-file: providers/netnod/**
+provider-NEXDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/nexdns/**
 provider-NS1:
   - changed-files:
       - any-glob-to-any-file: providers/ns1/**

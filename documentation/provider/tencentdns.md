@@ -166,10 +166,10 @@ Reference: https://docs.dnspod.com/dns/faq-dns-resolution/?lang=en
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
-  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❔
-  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
+  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
   - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
 - Service discovery
   - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔

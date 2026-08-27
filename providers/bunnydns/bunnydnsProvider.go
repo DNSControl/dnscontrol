@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -79,11 +79,8 @@ func newBunnydns(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 	}, nil
 }
 
+// GetNameservers returns empty array, since BunnyDNS does not permit apex NS records.
+// This prevents DNSControl from trying to create default NS records for the domain.
 func (b *bunnydnsProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	zone, err := b.findZoneByDomain(domain)
-	if err != nil {
-		return nil, err
-	}
-
-	return models.ToNameservers(zone.Nameservers())
+	return []*models.Nameserver{}, nil
 }

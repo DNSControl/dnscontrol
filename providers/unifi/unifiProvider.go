@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // Provider metadata.
@@ -122,7 +123,7 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 				continue
 			}
 
-			rc, err = newToRecord(domain, newRec)
+			rc, err = newToRecord(dc, newRec)
 			if err != nil {
 				return nil, fmt.Errorf("failed to convert record %s: %w", fqdn, err)
 			}
@@ -135,7 +136,7 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 				continue
 			}
 
-			rc, err = legacyToRecord(domain, legacyRec)
+			rc, err = legacyToRecord(dc, legacyRec)
 			if err != nil {
 				return nil, fmt.Errorf("failed to convert record %s: %w", fqdn, err)
 			}
@@ -151,10 +152,17 @@ func (p *unifiProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 func (p *unifiProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	var corrections []*models.Correction
 
-	// UniFi doesn't care about TTL much, but we normalize it
+	// Normalize TTL. UniFi has no per-record TTL for MX/TXT/SRV (the API omits
+	// it and always reads them back as 300), so force those to 300 to avoid a
+	// perpetual TTL diff. Other types keep their TTL, defaulting 0 to 300.
 	for _, record := range dc.Records {
-		if record.TTL == 0 {
+		switch record.TypeNum {
+		case dnsv2.TypeMX, dnsv2.TypeTXT, dnsv2.TypeSRV:
 			record.TTL = 300
+		default:
+			if record.TTL == 0 {
+				record.TTL = 300
+			}
 		}
 	}
 

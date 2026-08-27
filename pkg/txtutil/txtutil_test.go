@@ -33,3 +33,35 @@ func Test_splitChunks(t *testing.T) {
 		})
 	}
 }
+
+func Test_isPlain(t *testing.T) {
+	tests := []struct {
+		name string
+		s    string
+		want bool
+	}{
+		// Plains:
+		{"alpha", "simple", true},
+		{"alnum", "abc123", true},
+		{"host", "example.com", true},
+		{"dot", "a.b.c", true},
+		{"at", "@", true},
+		{"star", "*", true},
+		{"mixed allowed", "a*@Z.9", true},
+		// Non-plains:
+		{"empty", "", false},
+		{"space", "with space", false},
+		{"quote", `"quoted"`, false},
+		{"exclamation", "bang!", false},
+		//{"unicode", "héllo", false}, // Non-ASCII characters not permitted.
+		{"newline", "line\nbreak", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isPlain(tt.s); got != tt.want {
+				t.Errorf("isPlain(%q) = %v, want %v", tt.s, got, tt.want)
+			}
+		})
+	}
+}

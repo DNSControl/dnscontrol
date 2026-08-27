@@ -1,10 +1,11 @@
 package openwrt
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
 var supportedRTypes = map[string]struct{}{
@@ -18,7 +19,7 @@ var supportedRTypes = map[string]struct{}{
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
 	// MX records cannot have null/empty target
@@ -28,23 +29,23 @@ func AuditRecords(records []*models.RecordConfig) []error {
 	a.Add("SRV", rejectif.SrvHasNullTarget)
 
 	// Start with auditor errors
-	var errors []error
-	errors = append(errors, a.Audit(records)...)
+	var errs []error
+	errs = append(errs, a.Audit(records)...)
 
 	// Check for unsupported record types
 	for _, rc := range records {
 		if _, ok := supportedRTypes[rc.Type]; !ok {
-			errors = append(errors, fmt.Errorf("record type %q is not supported by OpenWrt", rc.Type))
+			errs = append(errs, fmt.Errorf("record type %q is not supported by OpenWrt", rc.Type))
 		}
 
 		// OpenWrt doesn't support wildcard CNAMEs
 		if rc.Type == "CNAME" && rc.GetLabel() == "*" {
-			errors = append(errors, fmt.Errorf("OpenWrt does not support wildcard CNAME records"))
+			errs = append(errs, errors.New("OpenWrt does not support wildcard CNAME records"))
 		}
 	}
 
-	if len(errors) == 0 {
+	if len(errs) == 0 {
 		return nil
 	}
-	return errors
+	return errs
 }

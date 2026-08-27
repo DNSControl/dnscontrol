@@ -1,30 +1,36 @@
 # "Builders"
 
+- ["Builders"](#builders)
+  - [Trailing commas](#trailing-commas)
+  - [Repeat records in many domains (macros)](#repeat-records-in-many-domains-macros)
+  - [Many domains with the exact same records](#many-domains-with-the-exact-same-records)
+  - [Caveats about getting too fancy](#caveats-about-getting-too-fancy)
+
 Problem: It is difficult to get CAA and other records exactly right.
 
 Solution: Use a "builder" to construct it for you.
 
-* [CAA_BUILDER](../language-reference/domain-modifiers/CAA_BUILDER.md)
-* [DKIM_BUILDER](../language-reference/domain-modifiers/DKIM_BUILDER.md)
-* [DMARC_BUILDER](../language-reference/domain-modifiers/DMARC_BUILDER.md)
-* [M365_BUILDER](../language-reference/domain-modifiers/M365_BUILDER.md)
-* [SPF_BUILDER](../language-reference/domain-modifiers/SPF_BUILDER.md)
+- [CAA_BUILDER](../language-reference/domain-modifiers/CAA_BUILDER.md)
+- [DKIM_BUILDER](../language-reference/domain-modifiers/DKIM_BUILDER.md)
+- [DMARC_BUILDER](../language-reference/domain-modifiers/DMARC_BUILDER.md)
+- [M365_BUILDER](../language-reference/domain-modifiers/M365_BUILDER.md)
+- [SPF_BUILDER](../language-reference/domain-modifiers/SPF_BUILDER.md)
 
-# Trailing commas
+## Trailing commas
 
 You might encounter `D()` statements in code examples that include `END` at the end, such as:
 
 {% code title="dnsconfig.js" %}
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-  A("test", "1.2.3.4"),
+  A("test", "1.2.3.4")
 END);
 ```
 {% endcode %}
 
 As of [DNSControl v4.15.0](https://github.com/DNSControl/dnscontrol/releases/tag/v4.15.0), the `END` statements are no longer necessary. These were originally included for historical reasons that are now irrelevant. You can safely remove them from your configurations.
 
-# Repeat records in many domains (macros)
+## Repeat records in many domains (macros)
 
 Problem: I have a set of records I'd like to include in many domains.
 
@@ -68,7 +74,7 @@ D("aliasdomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
 ```
 {% endcode %}
 
-# Many domains with the exact same records
+## Many domains with the exact same records
 
 Problem: We have many domains, each should have the exact same records.
 
@@ -109,19 +115,19 @@ _.each(
 ```
 {% endcode %}
 
-# Caveats about getting too fancy
+## Caveats about getting too fancy
 
 The `dnsconfig.js` language is JavaScript. On the plus side, this means you can use loops and variables and anything else you want.
 
 However, we don't recommend you get too fancy.
 
-*A new JS interpreter may break your code*
+*A new JS interpreter may break your code:*
 
 Some day we may change from the [Otto JS interpreter](https://github.com/robertkrimen/otto) to something else. This may break your configuration if you depend on unusual or obscure behavior of Otto.
 
 Loops and macros are fine. Just don't get too fancy.
 
-*Complexity is a killer*
+*Complexity is a killer:*
 
 As Brian Kernighan wrote, "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
 

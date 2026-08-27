@@ -5,25 +5,24 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2021-10-01
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-07-20
 
-	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2023-11-30
+	a.Add("TXT", rejectif.TxtHasDoubleQuotes) // Last verified 2026-07-20
 
-	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2020-12-28
+	a.Add("DNAME", dnameHasWildcardLabel) // Last verified 2026-02-10
 
-	a.Add("DNAME", dnameHasWildcardLabel)               // Last verified 2026-02-10
 	a.Add("SVCB", func(rc *models.RecordConfig) error { // Last verified 2026-06-29
-		for param := range strings.FieldsSeq(rc.SvcParams) {
+		for param := range strings.FieldsSeq(models.Svcbv2ValueToString(rc.AsSVCB().Value)) {
 			key, value, _ := strings.Cut(param, "=")
 			key = strings.ToLower(strings.TrimSpace(key))
 			value = strings.Trim(value, `"`)

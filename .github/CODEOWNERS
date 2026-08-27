@@ -45,13 +45,14 @@ providers/namecheap @willpower232
 providers/netbird @yzqzss
 providers/netcup @kordianbruck
 providers/netlify @SphericalKat
-providers/netnod @Netnod
+providers/netnod @Netnod @vilhelmprytz
+providers/nexdns @nexdns
 providers/ns1 @costasd
 # providers/opensrs NEEDS VOLUNTEER
 providers/openwrt @huskyistaken
 providers/oracle @kallsyms
 providers/ovh @masterzen
-providers/packetframe @hamptonmoore
+# providers/packetframe NEEDS VOLUNTEER
 providers/porkbun @imlonghao
 providers/powerdns @jpbede
 providers/realtimeregister @PJEilers

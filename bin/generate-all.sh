@@ -8,8 +8,8 @@ if [ -x node_modules/.bin/prettier ]; then
   node_modules/.bin/prettier --write pkg/js/helpers.js
 fi
 
-echo ========== bin/fmtjson
-bin/fmtjson $(find . -path ./.vscode -prune -o -type f -name "*.json" ! -name "package-lock.json" -print)
+echo ========== bin/fmtjson-all.sh
+bin/fmtjson-all.sh
 
 # dnsconfig.js-compatible files:
 echo ========== fmt parse_tests

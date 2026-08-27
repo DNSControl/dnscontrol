@@ -7,12 +7,13 @@ import (
 	"fmt"
 	"slices"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	api "github.com/luadns/luadns-go"
 	"golang.org/x/time/rate"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 /*
@@ -76,11 +77,16 @@ func init() {
 }
 
 type luadnsProvider struct {
+	observer    providers.ConversionObserver
 	provider    *api.Client
 	ctx         context.Context
 	rateLimiter *rate.Limiter
 	nameServers []string
 	zones       []*api.Zone
+}
+
+func (l *luadnsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	l.observer = observer
 }
 
 // NewLuaDNS creates the provider.
@@ -133,9 +139,11 @@ func (l *luadnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
-		newr, err := nativeToRecord(domain, records[i])
+		before := providers.BeginToRC(l.observer, "nativeToRecord", records[i])
+		newr, err := nativeToRecord(dc, records[i])
+		providers.EndToRC(l.observer, "nativeToRecord", before, records[i], models.Records{newr}, err)
 		if err != nil {
 			return nil, err
 		}
@@ -165,7 +173,9 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 		case diff2.REPORT:
 			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 		case diff2.CREATE:
+			before := providers.BeginToNative(l.observer, "recordsToNative", change.New)
 			req := recordsToNative(change.New)
+			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
 					if err := l.rateLimiter.Wait(l.ctx); err != nil {
@@ -177,7 +187,9 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 				Msg: change.MsgsJoined,
 			})
 		case diff2.CHANGE:
+			before := providers.BeginToNative(l.observer, "recordsToNative", change.New)
 			req := recordsToNative(change.New)
+			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
 					if err := l.rateLimiter.Wait(l.ctx); err != nil {
@@ -189,7 +201,9 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 				Msg: change.MsgsJoined,
 			})
 		case diff2.DELETE:
+			before := providers.BeginToNative(l.observer, "recordsToNative", change.Old)
 			req := recordsToNative(change.Old)
+			providers.EndToNative(l.observer, "recordsToNative", before, change.Old, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
 					if err := l.rateLimiter.Wait(l.ctx); err != nil {
@@ -273,30 +287,30 @@ func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
 func (l *luadnsProvider) checkNS(dc *models.DomainConfig) {
 	for _, rec := range dc.Records {
 		// LuaDNS does not support changing the TTL of the default nameservers, so forcefully change the TTL to 86400.
-		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetTargetCombined()) && rec.TTL != 86400 {
+		if rec.Type == "NS" && rec.Name == "@" && slices.Contains(l.nameServers, rec.GetRDATA().String()) && rec.TTL != 86400 {
 			rec.TTL = 86400
 		}
 	}
 }
 
-func nativeToRecord(domain string, r *api.Record) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     r.Type,
-		TTL:      r.TTL,
-		Original: r,
-	}
-	rc.SetLabelFromFQDN(r.Name, domain)
+func nativeToRecord(dc *models.DomainConfig, r *api.Record) (*models.RecordConfig, error) {
+	label := dc.ToShort(r.Name)
+	ttl := r.TTL
+	var rc *models.RecordConfig
 	var err error
-	switch rtype := rc.Type; rtype {
+	switch rtype := r.Type; rtype {
 	case "TXT":
-		err = rc.SetTargetTXT(r.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Content)
 	default:
-		err = rc.PopulateFromString(rtype, r.Content, domain)
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Content)
+	}
+	if err == nil {
+		rc.Original = r
 	}
 	return rc, err
 }
 
-func recordsToNative(rc []*models.RecordConfig) []*api.RR {
+func recordsToNative(rc models.Records) []*api.RR {
 	var rrs []*api.RR
 	for _, rec := range rc {
 		r := &api.RR{
@@ -304,17 +318,22 @@ func recordsToNative(rc []*models.RecordConfig) []*api.RR {
 			Type: rec.Type,
 			TTL:  rec.TTL,
 		}
-		switch rtype := rec.Type; rtype {
-		case "TXT":
+		switch rtype := rec.TypeNum; rtype {
+		case dnsv2.TypeTXT:
 			r.Content = rec.GetTargetTXTJoined()
-		case "HTTPS":
-			content := fmt.Sprintf("%d %s %s", rec.SvcPriority, rec.GetTargetField(), rec.SvcParams)
-			if rec.SvcParams == "" {
-				content = content[:len(content)-1]
+		case dnsv2.TypeHTTPS:
+			// The RDATA's String() quotes every SvcParam value (e.g. port="80",
+			// alpn="h2,h3"), which LuaDNS's strict SVCB parser rejects. Build the
+			// content with unquoted params (port=80, alpn=h2,h3) instead.
+			f := rec.AsHTTPS()
+			params := models.Svcbv2ValueToString(f.Value)
+			if params == "" {
+				r.Content = fmt.Sprintf("%d %s", f.Priority, f.Target)
+			} else {
+				r.Content = fmt.Sprintf("%d %s %s", f.Priority, f.Target, params)
 			}
-			r.Content = content
 		default:
-			r.Content = rec.GetTargetCombined()
+			r.Content = rec.GetRDATA().String()
 		}
 		rrs = append(rrs, r)
 	}

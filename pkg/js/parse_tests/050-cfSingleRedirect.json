@@ -3,116 +3,111 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
-          "comparable": "name=(name1) code=(301) when=(when1) then=(then1)",
-          "fields": {
-            "code": 301,
-            "sr_display": "name=(name1) code=(301) when=(when1) then=(then1)",
-            "sr_name": "name1",
-            "sr_then": "then1",
-            "sr_when": "when1"
-          },
+          "comparablev3": "name1 301 when1 then1",
           "filepos": "[line:5:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(name1) code=(301) when=(when1) then=(then1)",
-          "ttl": 1,
+          "rdata": {
+            "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "name1",
+            "SRThen": "then1",
+            "SRWhen": "when1"
+          },
+          "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(name1) code=(301) when=(when1) then=(then1)"
+          "typenum": 65289
         },
         {
-          "comparable": "name=(name2) code=(302) when=(when2) then=(then2)",
-          "fields": {
-            "code": 302,
-            "sr_display": "name=(name2) code=(302) when=(when2) then=(then2)",
-            "sr_name": "name2",
-            "sr_then": "then2",
-            "sr_when": "when2"
-          },
+          "comparablev3": "name2 302 when2 then2",
           "filepos": "[line:6:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(name2) code=(302) when=(when2) then=(then2)",
-          "ttl": 1,
+          "rdata": {
+            "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "name2",
+            "SRThen": "then2",
+            "SRWhen": "when2"
+          },
+          "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(name2) code=(302) when=(when2) then=(then2)"
+          "typenum": 65289
         },
         {
-          "comparable": "name=(name3) code=(301) when=(when3) then=(then3)",
-          "fields": {
-            "code": 301,
-            "sr_display": "name=(name3) code=(301) when=(when3) then=(then3)",
-            "sr_name": "name3",
-            "sr_then": "then3",
-            "sr_when": "when3"
-          },
+          "comparablev3": "name3 301 when3 then3",
           "filepos": "[line:7:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(name3) code=(301) when=(when3) then=(then3)",
-          "ttl": 1,
+          "rdata": {
+            "Code": 301,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "name3",
+            "SRThen": "then3",
+            "SRWhen": "when3"
+          },
+          "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(name3) code=(301) when=(when3) then=(then3)"
+          "typenum": 65289
         },
         {
-          "comparable": "name=(namemeta) code=(302) when=(whenmeta) then=(thenmeta)",
-          "fields": {
-            "code": 302,
-            "sr_display": "name=(namemeta) code=(302) when=(whenmeta) then=(thenmeta)",
-            "sr_name": "namemeta",
-            "sr_then": "thenmeta",
-            "sr_when": "whenmeta"
-          },
+          "comparablev3": "namemeta 302 whenmeta thenmeta",
           "filepos": "[line:9:5]",
           "meta": {
-            "metanum": "22",
+            "metanum": "%!s(float64=22)",
             "metastr": "stringy"
           },
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(namemeta) code=(302) when=(whenmeta) then=(thenmeta)",
-          "ttl": 1,
+          "rdata": {
+            "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "namemeta",
+            "SRThen": "thenmeta",
+            "SRWhen": "whenmeta"
+          },
+          "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(namemeta) code=(302) when=(whenmeta) then=(thenmeta)"
+          "typenum": 65289
         },
         {
-          "comparable": "name=(namettl) code=(302) when=(whenttl) then=(thenttl)",
-          "fields": {
-            "code": 302,
-            "sr_display": "name=(namettl) code=(302) when=(whenttl) then=(thenttl)",
-            "sr_name": "namettl",
-            "sr_then": "thenttl",
-            "sr_when": "whenttl"
-          },
+          "comparablev3": "namettl 302 whenttl thenttl",
           "filepos": "[line:8:5]",
           "name": "@",
-          "name_raw": "@",
           "name_unicode": "@",
-          "target": "name=(namettl) code=(302) when=(whenttl) then=(thenttl)",
-          "ttl": 1,
+          "rdata": {
+            "Code": 302,
+            "RT_SRRRulesetID": "",
+            "RT_SRRRulesetRuleID": "",
+            "SRName": "namettl",
+            "SRThen": "thenttl",
+            "SRWhen": "whenttl"
+          },
+          "ttl": 999,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
-          "zonfefilepartial": "name=(namettl) code=(302) when=(whenttl) then=(thenttl)"
+          "typenum": 65289
         },
         {
+          "comparablev3": "1.2.3.4",
           "filepos": "[line:2:5]",
           "meta": {
             "meta": "value"
           },
           "name": "name1",
-          "target": "1.2.3.4",
+          "name_unicode": "name1",
+          "rdata": {
+            "Addr": "1.2.3.4"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "none",

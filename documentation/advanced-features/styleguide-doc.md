@@ -1,30 +1,53 @@
 # Documentation Coding Style
 
+- [Documentation Coding Style](#documentation-coding-style)
+  - [Where are the docs?](#where-are-the-docs)
+  - [How to add a new page?](#how-to-add-a-new-page)
+  - [Top-of-Document parameters](#top-of-document-parameters)
+  - [GitHub pull request preview](#github-pull-request-preview)
+    - [How to access preview links](#how-to-access-preview-links)
+  - [Formatting tips](#formatting-tips)
+    - [General](#general)
+    - [Headings](#headings)
+    - [Code Snippets](#code-snippets)
+    - [Hint](#hint)
+    - [Example of a hint](#example-of-a-hint)
+    - [This is a heading](#this-is-a-heading)
+    - [Technical references](#technical-references)
+      - [Mentioning language features](#mentioning-language-features)
+      - [Mentioning functions from the Source code](#mentioning-functions-from-the-source-code)
+    - [Links](#links)
+      - [Internal links](#internal-links)
+      - [Link to another website](#link-to-another-website)
+      - [Link with anchor text](#link-with-anchor-text)
+  - [Capitalization matters](#capitalization-matters)
+  - [Proofreading](#proofreading)
+
 ## Where are the docs?
 
 TL;DR version: [`docs`](https://github.com/DNSControl/dnscontrol/tree/main/docs) is the [marketing website](https://dnscontrol.org). [`documentation`](https://github.com/DNSControl/dnscontrol/tree/main/documentation) is the [docs.dnscontrol.org](https://docs.dnscontrol.org/) website. (Yes, the names are backwards!)
 
-**The two websites**
+**The two websites:**
 
 1. <https://dnscontrol.org/>
-   * The main website
-   * Source code: [`docs`](https://github.com/DNSControl/dnscontrol/tree/main/docs)
-   * Mostly "marketing" for the project.
-   * Rarely changes.  Updated via GitHub "pages" feature.
+   - The main website
+   - Source code: [`docs`](https://github.com/DNSControl/dnscontrol/tree/main/docs)
+   - Mostly "marketing" for the project.
+   - Rarely changes.  Updated via GitHub "pages" feature.
 2. <https://docs.dnscontrol.org/>
-   * Project documentation
-   * Source code: [`documentation`](https://github.com/DNSControl/dnscontrol/tree/main/documentation)
-   * Users and developer documentation
-   * Changes frequently.  Updated via [GitBook](https://www.gitbook.com/)
+   - Project documentation
+   - Source code: [`documentation`](https://github.com/DNSControl/dnscontrol/tree/main/documentation)
+   - Users and developer documentation
+   - Changes frequently.  Updated via [GitBook](https://www.gitbook.com/)
 
-**The directory structure**
+**The directory structure:**
 
 Within the git repo, docs are grouped:
 
-* [`documentation/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation): general docs
-* [`documentation/provider/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/provider/): One file per provider
-* [`documentation/language-reference/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/language-reference/): One file per `dnsconfig.js` language feature
-* [`documentation/assets/FOO/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/assets/): Images for page FOO(PNGs only, please!)
+- [`documentation/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation): general docs
+- [`documentation/provider/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/provider/): One file per provider
+- [`documentation/language-reference/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/language-reference/): One file per `dnsconfig.js` language feature
+- [`documentation/assets/FOO/`](https://github.com/DNSControl/dnscontrol/tree/main/documentation/assets/): Images for page FOO(PNGs only, please!)
 
 ## How to add a new page?
 
@@ -37,7 +60,7 @@ Files in the `documentation/language-reference/{record,domain,global}` subdirect
 
 Here's an example from [`A`](../language-reference/domain-modifiers/A.md)
 
-```
+```yaml
 ---
 name: A
 provider: NAMEDOTCOM
@@ -52,10 +75,10 @@ parameter_types:
 ---
 ```
 
-* `name`: The name of the function/constant in the document. This should match the filename (aside from the `.md` suffix).
-* `parameters`: These are the names of the parameters that the function accepts. `modifiers...` indicates that a variable number of modifiers can be added.
-* `parameter_types`: The typescript type for each parameter. This is used when generating `types-dnscontrol.d.ts`
-* `provider`: If a feature is only available for one provider
+- `name`: The name of the function/constant in the document. This should match the filename (aside from the `.md` suffix).
+- `parameters`: These are the names of the parameters that the function accepts. `modifiers...` indicates that a variable number of modifiers can be added.
+- `parameter_types`: The typescript type for each parameter. This is used when generating `types-dnscontrol.d.ts`
+- `provider`: If a feature is only available for one provider
 
 ## GitHub pull request preview
 
@@ -227,8 +250,8 @@ Blah blah blah [a search engine](https://www.google.com) blah blah.
 
 Please capitalize these terms as you see them here:
 
-  * DNSControl
-  * GitHub
+- DNSControl
+- GitHub
 
 ## Proofreading
 

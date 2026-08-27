@@ -1,10 +1,21 @@
 # Coding Style
 
-# Use the Google Go Style Guide
+- [Coding Style](#coding-style)
+  - [Use the Google Go Style Guide](#use-the-google-go-style-guide)
+  - [Always favor simplicity](#always-favor-simplicity)
+  - [Filenames](#filenames)
+  - [JavaScript annotations](#javascript-annotations)
+  - [Don't conditionally add/remove trailing dots](#dont-conditionally-addremove-trailing-dots)
+    - [Why?](#why)
+    - [But isn't future-proofing good? What if the API changes?](#but-isnt-future-proofing-good-what-if-the-api-changes)
+    - [But what if it changes anyway?](#but-what-if-it-changes-anyway)
+    - [What should we do instead?](#what-should-we-do-instead)
+
+## Use the Google Go Style Guide
 
 <https://google.github.io/styleguide/go/>
 
-# Always favor simplicity
+## Always favor simplicity
 
 This is a community project. The code you write today will be maintained by someone in the future that may not be a professional developer or one that is as experienced as you.
 
@@ -20,10 +31,10 @@ psychopath who knows where you live." — _[John Woods](http://wiki.c2.com/?Code
 
 Don't code for today-you.  Write code for six-months-from-now-you.  Have you met six-months-from-now-you? Oh, you should. Fine individual. They are quite smart. They have 6 months more experience than today-you, but sadly has had 6 months to forget what today-you knows.  The job of today-you is to write code that six-months-from-now-you can understand.
 
-* Avoid building a complex framework to be perfectly DRY when a little bit of repetition will result in easier to understand code.
-* Break things into well-defined functions that can be individually read, understood, and tested.
+- Avoid building a complex framework to be perfectly DRY when a little bit of repetition will result in easier to understand code.
+- Break things into well-defined functions that can be individually read, understood, and tested.
 
-# Filenames
+## Filenames
 
 These are the filenames to use:
 
@@ -31,23 +42,23 @@ These are the filenames to use:
 **NOTE**: This is a new standard. Old providers are not yet compliant.
 {% endhint %}
 
-* `providers/foo/fooProvider.go` -- The main file.
-* `providers/foo/records.go` -- Get/Correct the records of a DNS zone: `GetZoneRecords()` and `GetZoneRecordsCorrections()`, plus any helper functions.
-* `providers/foo/convert.go` -- Convert between RecordConfig and the native API's format: `toRc()` and `toNative()`
-* `providers/foo/auditrecords.go` -- The AuditRecords function and helpers
-* `providers/foo/api.go` -- Code that talks to the API, preferably through a public library.
-* `providers/foo/listzones.go` -- Code for listing and creating DNS zones and domains
-* `providers/foo/dnssec.go` -- Code for DNSSEC support
+- `providers/foo/fooProvider.go` -- The main file.
+- `providers/foo/records.go` -- Get/Correct the records of a DNS zone: `GetZoneRecords()` and `GetZoneRecordsCorrections()`, plus any helper functions.
+- `providers/foo/convert.go` -- Convert between RecordConfig and the native API's format: `toRc()` and `toNative()`
+- `providers/foo/auditrecords.go` -- The AuditRecords function and helpers
+- `providers/foo/api.go` -- Code that talks to the API, preferably through a public library.
+- `providers/foo/listzones.go` -- Code for listing and creating DNS zones and domains
+- `providers/foo/dnssec.go` -- Code for DNSSEC support
 
-# JavaScript annotations
+## JavaScript annotations
 
 Functions in `pkg/js/helpers.js` should be annotated using the [JSDoc](https://jsdoc.app/tags-param.html) `@` notation. These are used to generate autocomplete instructions for your IDE.
 
-* Add `@param {type} foo` for a parameter named `foo` that is of type `type`.
-  * Example: `@param {string} foo Description of the parameter`
-* Add `@deprecated` if the function is deprecated.
+- Add `@param {type} foo` for a parameter named `foo` that is of type `type`.
+  - Example: `@param {string} foo Description of the parameter`
+- Add `@deprecated` if the function is deprecated.
 
-# Don't conditionally add/remove trailing dots
+## Don't conditionally add/remove trailing dots
 
 {% hint style="info" %}
 The "trailing dot" is the "." at the end of "example.com." which indicates the string is a FQDN.
@@ -57,7 +68,7 @@ DO NOT conditionally add or remove the trailing dot from a string to future-proo
 
 DO call Go's `panic()` function if a protocol changes unexpectedly.
 
-## Why?
+### Why?
 
 It seems like future-proofing to only add a "." if the dot doesn't already exist.  It is the opposite.
 

@@ -15,7 +15,7 @@ func PtrNameMagic(name, domain string) (string, error) {
 	// IPv4 or IPv6 address, we replace it with the right string (i.e
 	// reverse it and truncate it).
 
-	// If the name is already in-addr.arpa or ipv6.arpa,
+	// If the name is already in-addr.arpa or ip6.arpa,
 	// make sure the domain matches.
 	if strings.HasSuffix(name, ".in-addr.arpa.") || strings.HasSuffix(name, ".ip6.arpa.") {
 		if before, ok := strings.CutSuffix(name, "."+domain+"."); ok {
