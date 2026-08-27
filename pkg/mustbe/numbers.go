@@ -114,12 +114,12 @@ func Uint32(arg any) uint32 {
 	case uint32:
 		return v
 	case uint:
-		if v > math.MaxUint32 {
+		if uint64(v) > uint64(math.MaxUint32) { // casts to assure 32-bit compatibility.
 			panic(fmt.Sprintf("value %v overflows uint32", arg))
 		}
 		return uint32(v)
 	case int:
-		if v < 0 || v > math.MaxUint32 {
+		if v < 0 || int64(v) > int64(math.MaxUint32) { // casts to assure 32-bit compatibility.
 			panic(fmt.Sprintf("value %v overflows uint32", arg))
 		}
 		return uint32(v)
