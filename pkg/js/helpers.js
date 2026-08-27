@@ -306,18 +306,24 @@ function DefaultTTL(v) {
 function makeCAAFlag(value) {
     return function (record) {
         record.caaflag |= value;
-        if (!_.isObject(record.meta)) {
-            record.meta = {};
-        }
-        // Store as a string: meta values cross to Go as strings (see
-        // mergeMetas), otherwise a numeric value would be mangled (e.g. into
-        // "%!s(float64=128)").
-        record.meta['caaflag'] = record.caaflag.toString();
     };
 }
 
 // CAA_CRITICAL: Critical CAA flag
 var CAA_CRITICAL = makeCAAFlag(1 << 7);
+
+// caaOptions injects the CAA flag as the first rdata argument so that MakeCAA
+// (Go) always receives (flag, tag, value). processedArgs is [label, tag, value];
+// the flag is accumulated on record.caaflag by the CAA_CRITICAL modifier and
+// defaults to 0.
+function caaOptions(record, processedArgs) {
+    return [
+        processedArgs[0],
+        record.caaflag || 0,
+        processedArgs[1],
+        processedArgs[2],
+    ];
+}
 
 // DnsProvider("providerName", 0)
 // nsCount of 0 means don't use or register any nameservers.
@@ -2089,9 +2095,9 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                 );
             }
 
-            // Modifier functions (e.g. CAA_CRITICAL) may have written to
-            // record.meta. Capture that so it propagates to Go as a meta;
-            // otherwise it would be silently dropped.
+            // Modifier functions may have written to record.meta. Capture that
+            // so it propagates to Go as a meta; otherwise it would be silently
+            // dropped.
             if (_.isObject(record.meta) && !_.isEmpty(record.meta)) {
                 processedMetas.push(record.meta);
             }
@@ -2128,7 +2134,7 @@ var ALIAS = rawrecordBuilder('ALIAS');
 var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
 var BUNNY_DNS_PZ = rawrecordBuilder('BUNNY_DNS_PZ');
 var BUNNY_DNS_RDR = rawrecordBuilder('BUNNY_DNS_RDR');
-var CAA = rawrecordBuilder('CAA');
+var CAA = rawrecordBuilder('CAA', false, caaOptions);
 var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
 var CF_SINGLE_REDIRECT = rawrecordBuilder(
     'CLOUDFLAREAPI_SINGLE_REDIRECT',

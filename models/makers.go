@@ -82,17 +82,10 @@ func MakeAAAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	return dnsrdatav2.AAAA{Addr: ip}, nil
 }
 
-func MakeCAA(origin string, metadata map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
+func MakeCAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
-	if len(args) != 2 && len(args) != 3 {
-		return nil, fmt.Errorf("MakeCAA expects 2 or 3 arguments, got %d: %+v", len(args), args)
-	}
-	if len(args) == 2 {
-		var flag any = uint8(0)
-		if cf, ok := metadata["caaflag"]; ok {
-			flag = cf
-		}
-		return dnsrdatav2.CAA{Flag: mustbe.Uint8(flag), Tag: mustbe.RawString(args[0]), Value: mustbe.RawString(args[1])}, nil
+	if len(args) != 3 {
+		return nil, fmt.Errorf("MakeCAA expects 3 arguments, got %d: %+v", len(args), args)
 	}
 
 	tag := mustbe.RawString(args[1])
@@ -102,7 +95,6 @@ func MakeCAA(origin string, metadata map[string]string, isEnabled nrc.Flags, arg
 	}
 
 	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: tag, Value: mustbe.RawString(args[2])}, nil
-
 }
 func MakeCNAME(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
