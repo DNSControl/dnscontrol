@@ -1,4 +1,9 @@
-### Integration Tests
+# Integration Tests
+
+- [Integration Tests](#integration-tests)
+  - [Configuration](#configuration)
+  - [Running a test](#running-a-test)
+  - [Bonus: How to test for 32-bit compatibility](#bonus-how-to-test-for-32-bit-compatibility)
 
 This is a simple framework for testing dns providers by making real requests.
 
@@ -74,3 +79,18 @@ should create a script that you can `source` to set these
 variables. Be careful not to check this script into Git since it
 contains credentials.
 {% endhint %}
+
+## Bonus: How to test for 32-bit compatibility
+
+Make sure it compiles:
+
+```bash
+GOOS=linux GOARCH=arm GOARM=7 go build
+```
+
+Use Docker to make sure all tests pass:
+
+```bash
+docker run --platform linux/arm -v "$(pwd):/src" -w /src golang:latest go test -v ./...
+docker run --platform linux/386 -v "$(pwd):/src" -w /src golang:latest go test -v ./...
+```

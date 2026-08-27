@@ -10,102 +10,157 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "domain.tld",
-        "dnscontrol_nameunicode": "domain.tld",
-        "dnscontrol_uniquename": "domain.tld"
-      },
       "name": "domain.tld",
       "records": [
         {
+          "comparablev3": "127.0.0.1",
           "filepos": "[line:7:5]",
           "name": "@",
-          "target": "127.0.0.1",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "127.0.0.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.0.3",
           "filepos": "[line:21:5]",
           "name": "@",
-          "target": "127.0.0.3",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "127.0.0.3"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.0.2",
           "filepos": "[line:8:5]",
           "name": "a",
-          "target": "127.0.0.2",
+          "name_unicode": "a",
+          "rdata": {
+            "Addr": "127.0.0.2"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "c.domain.tld.",
           "filepos": "[line:9:5]",
           "name": "b",
-          "target": "c.domain.tld.",
+          "name_unicode": "b",
+          "rdata": {
+            "Target": "c.domain.tld."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "127.0.0.4",
           "filepos": "[line:22:5]",
           "name": "d",
-          "target": "127.0.0.4",
+          "name_unicode": "d",
+          "rdata": {
+            "Addr": "127.0.0.4"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "f.domain.tld.",
           "filepos": "[line:23:5]",
           "name": "e",
-          "target": "f.domain.tld.",
+          "name_unicode": "e",
+          "rdata": {
+            "Target": "f.domain.tld."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "127.0.0.7",
           "filepos": "[line:42:5]",
           "name": "ssub",
+          "name_unicode": "ssub",
+          "rdata": {
+            "Addr": "127.0.0.7"
+          },
           "subdomain": "ssub",
-          "target": "127.0.0.7",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.0.8",
           "filepos": "[line:43:5]",
           "name": "j.ssub",
+          "name_unicode": "j.ssub",
+          "rdata": {
+            "Addr": "127.0.0.8"
+          },
           "subdomain": "ssub",
-          "target": "127.0.0.8",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "l.ssub.domain.tld.",
           "filepos": "[line:44:5]",
           "name": "k.ssub",
+          "name_unicode": "k.ssub",
+          "rdata": {
+            "Target": "l.ssub.domain.tld."
+          },
           "subdomain": "ssub",
-          "target": "l.ssub.domain.tld.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "127.0.0.5",
           "filepos": "[line:28:5]",
           "name": "ub",
+          "name_unicode": "ub",
+          "rdata": {
+            "Addr": "127.0.0.5"
+          },
           "subdomain": "ub",
-          "target": "127.0.0.5",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.0.6",
           "filepos": "[line:29:5]",
           "name": "g.ub",
+          "name_unicode": "g.ub",
+          "rdata": {
+            "Addr": "127.0.0.6"
+          },
           "subdomain": "ub",
-          "target": "127.0.0.6",
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "i.ub.domain.tld.",
           "filepos": "[line:30:5]",
           "name": "h.ub",
+          "name_unicode": "h.ub",
+          "rdata": {
+            "Target": "i.ub.domain.tld."
+          },
           "subdomain": "ub",
-          "target": "i.ub.domain.tld.",
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         }
       ],
       "registrar": "Third-Party",
@@ -115,54 +170,79 @@
       "dnsProviders": {
         "Cloudflare": -1
       },
-      "meta": {
-        "dnscontrol_nameraw": "sub.domain.tld",
-        "dnscontrol_nameunicode": "sub.domain.tld",
-        "dnscontrol_uniquename": "sub.domain.tld"
-      },
       "name": "sub.domain.tld",
       "records": [
         {
+          "comparablev3": "127.0.1.1",
           "filepos": "[line:13:5]",
           "name": "@",
-          "target": "127.0.1.1",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "127.0.1.1"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.1.3",
           "filepos": "[line:35:5]",
           "name": "@",
-          "target": "127.0.1.3",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "127.0.1.3"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "127.0.1.2",
           "filepos": "[line:14:5]",
           "name": "aa",
-          "target": "127.0.1.2",
+          "name_unicode": "aa",
+          "rdata": {
+            "Addr": "127.0.1.2"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "cc.sub.domain.tld.",
           "filepos": "[line:15:5]",
           "name": "bb",
-          "target": "cc.sub.domain.tld.",
+          "name_unicode": "bb",
+          "rdata": {
+            "Target": "cc.sub.domain.tld."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         },
         {
+          "comparablev3": "127.0.1.4",
           "filepos": "[line:36:5]",
           "name": "dd",
-          "target": "127.0.1.4",
+          "name_unicode": "dd",
+          "rdata": {
+            "Addr": "127.0.1.4"
+          },
           "ttl": 300,
-          "type": "A"
+          "type": "A",
+          "typenum": 1
         },
         {
+          "comparablev3": "ff.sub.domain.tld.",
           "filepos": "[line:37:5]",
           "name": "ee",
-          "target": "ff.sub.domain.tld.",
+          "name_unicode": "ee",
+          "rdata": {
+            "Target": "ff.sub.domain.tld."
+          },
           "ttl": 300,
-          "type": "CNAME"
+          "type": "CNAME",
+          "typenum": 5
         }
       ],
       "registrar": "Third-Party",

@@ -3,118 +3,46 @@ package cfsingleredirect
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 func init() {
-	rtypecontrol.Register(&CfRedirect{})
-	rtypecontrol.Register(&CfTempRedirect{})
+	models.RegisterBuilder("CF_REDIRECT", BuilderCFREDIRECT)
+	models.RegisterBuilder("CF_TEMP_REDIRECT", BuilderCFTEMPREDIRECT)
 }
 
-// CfRedirect represents the CF_REDIRECT rtype, which is a builder that produces CLOUDFLAREAPI_SINGLE_REDIRECT.
-type CfRedirect struct{}
-
-// Name returns the text (all caps) name of the rtype.
-func (handle *CfRedirect) Name() string {
-	return "CF_REDIRECT"
+func BuilderCFREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 301, args, subdomain)
+}
+func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
+	return builderCFREDIRECThelper(dc, 302, args, subdomain)
 }
 
-// FromArgs populates a RecordConfig from the raw ([]any) args.
-func (handle *CfRedirect) FromArgs(dcn *domaintags.DomainNameVarieties, rec *models.RecordConfig, args []any) error {
-	return fromArgsHelper(dcn, rec, args, 301)
-}
-
-// FromStruct populates a RecordConfig from a struct, which will be stored in rec.F.
-func (handle *CfRedirect) FromStruct(dcn *domaintags.DomainNameVarieties, rec *models.RecordConfig, name string, fields any) error {
-	panic("CF_REDIRECT: FromStruct not implemented")
-}
-
-// CopyToLegacyFields copies data from rec.F to the legacy fields in rec.
-func (handle *CfRedirect) CopyToLegacyFields(rec *models.RecordConfig) {
-	// Nothing needs to be copied.  The CLOUDFLAREAPI_SINGLE_REDIRECT FromArgs copies everything needed.
-}
-
-// CopyFromLegacyFields populates rec.F from the legacy RecordType fields.
-func (handle *CfRedirect) CopyFromLegacyFields(rec *models.RecordConfig) {
-	// Nothing needs to be copied.  The CLOUDFLAREAPI_SINGLE_REDIRECT is built in FromArgs.
-
-	// However, we add some assertions here to catch mistakes.
-	if rec.F == nil {
-		panic("assertion failed: CfRedirect CopyFromLegacyFields called with rec.F == nil")
-	}
-	if rec.ZonefilePartial == "" {
-		panic("assertion failed: CfRedirect CopyFromLegacyFields called with rec.ZonefilePartial == \"\"")
-	}
-	if rec.Comparable == "" {
-		panic("assertion failed: CfRedirect CopyFromLegacyFields called with rec.Comparable == \"\"")
-	}
-}
-
-// CfTempRedirect represents the CF_TEMP_REDIRECT rtype, which is a builder that produces CLOUDFLAREAPI_SINGLE_REDIRECT.
-type CfTempRedirect struct{}
-
-// Name returns the text (all caps) name of the rtype.
-func (handle *CfTempRedirect) Name() string {
-	return "CF_TEMP_REDIRECT"
-}
-
-// FromArgs populates a RecordConfig from the raw ([]any) args.
-func (handle *CfTempRedirect) FromArgs(dcn *domaintags.DomainNameVarieties, rec *models.RecordConfig, args []any) error {
-	return fromArgsHelper(dcn, rec, args, 302)
-}
-
-// FromStruct populates a RecordConfig from a struct, which will be stored in rec.F.
-func (handle *CfTempRedirect) FromStruct(dcn *domaintags.DomainNameVarieties, rec *models.RecordConfig, name string, fields any) error {
-	panic("CF_TEMP_REDIRECT: FromStruct not implemented")
-}
-
-// CopyToLegacyFields copies data from rec.F to the legacy fields in rec.
-func (handle *CfTempRedirect) CopyToLegacyFields(rec *models.RecordConfig) {
-	// Nothing needs to be copied.  The CLOUDFLAREAPI_SINGLE_REDIRECT FromArgs copies everything needed.
-}
-
-// CopyFromLegacyFields copies data from rec.F to the legacy fields in rec.
-func (handle *CfTempRedirect) CopyFromLegacyFields(rec *models.RecordConfig) {
-	// Nothing needs to be copied.  The CLOUDFLAREAPI_SINGLE_REDIRECT is built in FromArgs.
-
-	// However, we add some assertions here to catch mistakes.
-	if rec.F == nil {
-		panic("assertion failed: CfTempRedirect CopyFromLegacyFields called with rec.F == nil")
-	}
-	if rec.ZonefilePartial == "" {
-		panic("assertion failed: CfTempRedirect CopyFromLegacyFields called with rec.ZonefilePartial == \"\"")
-	}
-	if rec.Comparable == "" {
-		panic("assertion failed: CfTempRedirect CopyFromLegacyFields called with rec.Comparable == \"\"")
-	}
-}
-
-func fromArgsHelper(dcn *domaintags.DomainNameVarieties, rec *models.RecordConfig, args []any, code int) error {
-
-	// Pave the args to be the expected types.
-	if err := rtypecontrol.PaveArgs(args, "ss"); err != nil {
-		return err
-	}
-
+func builderCFREDIRECThelper(dc *models.DomainConfig, code uint16, args []any, _ string) (models.Records, error) {
 	// Convert old-style patterns to new-style rules:
-	prWhen := args[0].(string)
-	prThen := args[1].(string)
+	prWhen := mustbe.RawString(args[1])
+	prThen := mustbe.RawString(args[2])
 	srWhen, srThen, err := makeRuleFromPattern(prWhen, prThen)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Create a rule name:
 	name := fmt.Sprintf("%03d,%s,%s", code, prWhen, prThen)
 
-	sr := SingleRedirectConfig{}
-	rec.Type = sr.Name() // This record is now a CLOUDFLAREAPI_SINGLE_REDIRECT
-	err = sr.FromArgs(dcn, rec, []any{name, code, srWhen, srThen})
+	rec, err := dc.NewRecordConfig(
+		"@",
+		1, // CF ignores the TTL. We always force it to 1.
+		"CLOUDFLAREAPI_SINGLE_REDIRECT",
+		name, code, srWhen, srThen,
+	)
 	if err != nil {
-		return err
+		return nil,
+			fmt.Errorf(
+				"record error in GeneratorCFREDIRECT at [CLOUDFLAREAPI_SINGLE_REDIRECT(%s)]: %w",
+				txtutil.ZoneifyManyAny(args), err)
 	}
-
-	return nil
+	return models.Records{rec}, nil
 }

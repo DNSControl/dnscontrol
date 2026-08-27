@@ -1,5 +1,10 @@
 # Migrating zones to DNSControl
 
+- [Migrating zones to DNSControl](#migrating-zones-to-dnscontrol)
+  - [General advice](#general-advice)
+  - [Create the first draft](#create-the-first-draft)
+  - [Example workflow](#example-workflow)
+
 This document explains how to migrate (convert) DNS zones from other systems to DNSControl's `dnsconfig.js` file.
 
 This document assumes you have DNSControl set up and working on at least one zone. You should have a working `dnsconfig.js` file and `creds.json` file as explained in the [Getting Started](getting-started.md) doc, or by running [`dnscontrol init`](../commands/init.md) which generates both files interactively in under a minute.
@@ -29,7 +34,7 @@ dnscontrol get-zones --format=js bind BIND example.com
 dnscontrol get-zones --format=js --out=draft.js bind BIND example.com
 ```
 
-This will read the file `zones/example.com.zone`. By default the system uses directory `zones` and file suffix `.zone`. You can modify this default behaviour by configuring `creds.json` for BIND as described [here](../provider/bind.md).
+This will read the file `zones/example.com.zone`. By default the system uses directory `zones` and file suffix `.zone`. You can modify this default behaviour by configuring `creds.json` for BIND as described in [it's documentation](../provider/bind.md).
 
 Add the contents of `draft.js` to `dnsconfig.js` and edit it as needed.
 

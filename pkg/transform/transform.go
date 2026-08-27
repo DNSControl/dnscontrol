@@ -208,7 +208,7 @@ func decodeHexOrBase64(s string) ([]byte, error) {
 		// we will assume that the input is hex.
 		return hexData, nil
 	} else {
-		return nil, fmt.Errorf("unreachable")
+		return nil, errors.New("unreachable")
 	}
 }
 

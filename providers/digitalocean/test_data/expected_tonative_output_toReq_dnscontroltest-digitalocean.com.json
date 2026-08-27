@@ -1,0 +1,1736 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "type": "A",
+      "name": "*",
+      "data": "3.3.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "8.8.8.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 1000,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "1.2.3.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "2.3.4.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "4.4.4.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "data": "letsencrypt.org.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0,
+      "tag": "issue"
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "data": ";.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0,
+      "tag": "issuewild"
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "data": "example.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0,
+      "tag": "issuewild"
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "data": "letsencrypt.org.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0,
+      "tag": "issuewild"
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "data": "letsencrypt.org.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 128,
+      "tag": "issue"
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "type": "MX",
+      "name": "@",
+      "data": "dnscontroltest-digitalocean.com.",
+      "priority": 2,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "type": "MX",
+      "name": "@",
+      "data": "bar.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "type": "MX",
+      "name": "@",
+      "data": "foo.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "type": "MX",
+      "name": "@",
+      "data": "www.dnscontroltest-digitalocean.com.",
+      "priority": 8,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "type": "NS",
+      "name": "@",
+      "data": "ns1.example.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "type": "NS",
+      "name": "@",
+      "data": "ns1.foo.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "type": "NS",
+      "name": "@",
+      "data": "ns2.example.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "type": "NS",
+      "name": "@",
+      "data": "ns2.foo.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "type": "TXT",
+      "name": "@",
+      "data": "asimple",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "type": "TXT",
+      "name": "@",
+      "data": "simple",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "8.8.8.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 500,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "data": "8.8.8.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 666,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": ".",
+      "priority": 15,
+      "port": 75,
+      "ttl": 300,
+      "weight": 65,
+      "flags": 0
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo3.com.",
+      "priority": 15,
+      "port": 75,
+      "ttl": 300,
+      "weight": 65,
+      "flags": 0
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo4.com.",
+      "priority": 15,
+      "port": 75,
+      "ttl": 300,
+      "weight": 65,
+      "flags": 0
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 5,
+      "port": 7,
+      "ttl": 300,
+      "weight": 6,
+      "flags": 0
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo2.com.",
+      "priority": 5,
+      "port": 70,
+      "ttl": 300,
+      "weight": 60,
+      "flags": 0
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 52,
+      "port": 7,
+      "ttl": 300,
+      "weight": 6,
+      "flags": 0
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 52,
+      "port": 7,
+      "ttl": 300,
+      "weight": 62,
+      "flags": 0
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 52,
+      "port": 72,
+      "ttl": 300,
+      "weight": 62,
+      "flags": 0
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 5,
+      "port": 7,
+      "ttl": 333,
+      "weight": 6,
+      "flags": 0
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "type": "SRV",
+      "name": "_sip._tcp",
+      "data": "foo.com.",
+      "priority": 5,
+      "port": 7,
+      "ttl": 4400,
+      "weight": 6,
+      "flags": 0
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "type": "CNAME",
+      "name": "a",
+      "data": "xn--ndaaa.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "type": "A",
+      "name": "bar",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "type": "A",
+      "name": "bar",
+      "data": "5.5.5.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "type": "CNAME",
+      "name": "bar",
+      "data": "redact2.acm-validations.aws.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "type": "MX",
+      "name": "bar",
+      "data": "bar.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "type": "A",
+      "name": "bar.bat",
+      "data": "5.5.5.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "type": "A",
+      "name": "decoy",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "type": "A",
+      "name": "decoy",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "type": "A",
+      "name": "decoy",
+      "data": "3.3.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "type": "A",
+      "name": "dyndns-city1",
+      "data": "91.42.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "type": "AAAA",
+      "name": "dyndns-city1",
+      "data": "2003:dd:d7ff::fe71:ce77",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "type": "A",
+      "name": "dyndns-city2",
+      "data": "91.42.1.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "type": "AAAA",
+      "name": "dyndns-city2",
+      "data": "2003:dd:d7ff::fe71:ce78",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "type": "TXT",
+      "name": "final",
+      "data": "TestDNSProviders was successful!",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "10.10.10.10",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "11.11.11.11",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "12.12.12.12",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "13.13.13.13",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "14.14.14.14",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "2.3.4.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "3.4.5.6",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "4.5.6.7",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "type": "A",
+      "name": "foo",
+      "data": "8.8.8.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "type": "AAAA",
+      "name": "foo",
+      "data": "2003:dd:d7ff::fe71:aaaa",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "type": "CNAME",
+      "name": "foo",
+      "data": "dnscontroltest-digitalocean.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "type": "CNAME",
+      "name": "foo",
+      "data": "google.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "type": "CNAME",
+      "name": "foo",
+      "data": "google2.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "type": "CNAME",
+      "name": "foo",
+      "data": "redact1.acm-validations.aws.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "aspmx.l.google.com.",
+      "priority": 10,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "foo.dnscontroltest-digitalocean.com.",
+      "priority": 10,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "alt1.aspmx.l.google.com.",
+      "priority": 20,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "bar.dnscontroltest-digitalocean.com.",
+      "priority": 20,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "mx.google.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "type": "MX",
+      "name": "foo",
+      "data": "dnscontroltest-digitalocean.com.",
+      "priority": 8,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "type": "NS",
+      "name": "foo",
+      "data": "dnscontroltest-digitalocean.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "type": "TXT",
+      "name": "foo",
+      "data": "simple",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "type": "TXT",
+      "name": "foo",
+      "data": "v=spf1 ip4:99.99.99.99 -all",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "type": "A",
+      "name": "foo.bat",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "type": "A",
+      "name": "foo.bat",
+      "data": "2.3.4.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "type": "TXT",
+      "name": "foo.bat",
+      "data": "simple",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "type": "TXT",
+      "name": "foo254",
+      "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "type": "TXT",
+      "name": "foo255",
+      "data": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "type": "TXT",
+      "name": "foo256",
+      "data": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "type": "TXT",
+      "name": "foobt",
+      "data": "blah`blah",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "type": "TXT",
+      "name": "foodq",
+      "data": "in\"side",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "type": "TXT",
+      "name": "foodqs",
+      "data": "\"left",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "type": "TXT",
+      "name": "foodqs",
+      "data": "in\"ter\"ior",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "type": "TXT",
+      "name": "foodqs",
+      "data": "right\"",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "type": "TXT",
+      "name": "foosc1",
+      "data": "semi;colon",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "type": "TXT",
+      "name": "foosc2",
+      "data": "wssemi ; colon",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "type": "TXT",
+      "name": "foosp",
+      "data": "with spaces",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "type": "TXT",
+      "name": "foosq",
+      "data": "quo'te",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "type": "TXT",
+      "name": "foows1",
+      "data": "trailingws ",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "type": "CNAME",
+      "name": "mail",
+      "data": "ghs.googlehosted.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "type": "CNAME",
+      "name": "mail.bat",
+      "data": "ghs.googlehosted.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "type": "A",
+      "name": "nmx",
+      "data": "1.2.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "type": "MX",
+      "name": "nmx",
+      "data": "nmx.dnscontroltest-digitalocean.com.",
+      "priority": 3,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "type": "MX",
+      "name": "nmx",
+      "data": "www.dnscontroltest-digitalocean.com.",
+      "priority": 9,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "type": "A",
+      "name": "testa",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "type": "A",
+      "name": "testa",
+      "data": "3.3.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "type": "A",
+      "name": "testa",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 333,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "type": "A",
+      "name": "testa",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 999,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "type": "AAAA",
+      "name": "testaaaa",
+      "data": "2607:f8b0:4006:820::2006",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "type": "AAAA",
+      "name": "testaaaa",
+      "data": "2607:f8b0:4006:820::2013",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "type": "CNAME",
+      "name": "testcname",
+      "data": "foo.dnscontroltest-digitalocean.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "type": "CNAME",
+      "name": "testcname",
+      "data": "www.google.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "type": "CNAME",
+      "name": "testcname",
+      "data": "www.yahoo.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "type": "A",
+      "name": "testdefined",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "type": "A",
+      "name": "testdefined",
+      "data": "9.9.9.9",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "type": "A",
+      "name": "testignore",
+      "data": "8.8.8.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "type": "MX",
+      "name": "testmx",
+      "data": "bar.com.",
+      "priority": 100,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "type": "MX",
+      "name": "testmx",
+      "data": "foo.com.",
+      "priority": 100,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "type": "MX",
+      "name": "testmx",
+      "data": "bar.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "type": "MX",
+      "name": "testmx",
+      "data": "foo.com.",
+      "priority": 5,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "type": "TXT",
+      "name": "testtxt",
+      "data": "changed",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "type": "TXT",
+      "name": "testtxt",
+      "data": "simple",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "1.1.1.1",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "1.2.3.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "1.2.3.9",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "3.3.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "5.5.5.5",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "5.6.7.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 400,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "5.6.7.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 400,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 700,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "data": "5.6.7.8",
+      "priority": 0,
+      "port": 0,
+      "ttl": 700,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "type": "A",
+      "name": "xn--fiq228c",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "type": "A",
+      "name": "xn--ndaaa",
+      "data": "1.2.3.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "type": "A",
+      "name": "xn--ndaaa",
+      "data": "2.2.2.2",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "type": "CNAME",
+      "name": "xn--o-0gab",
+      "data": "xn--ndaaa.xn--vhquv.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "type": "NS",
+      "name": "xyz",
+      "data": "ns1.foo.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "type": "NS",
+      "name": "xyz",
+      "data": "ns2.foo.com.",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "type": "A",
+      "name": "zzz",
+      "data": "3.3.3.3",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "type": "A",
+      "name": "zzz",
+      "data": "4.4.4.4",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "type": "AAAA",
+      "name": "zzz",
+      "data": "2003:dd:d7ff::fe71:cccc",
+      "priority": 0,
+      "port": 0,
+      "ttl": 300,
+      "weight": 0,
+      "flags": 0
+    }
+  }
+]

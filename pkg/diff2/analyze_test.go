@@ -7,7 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/fatih/color"
 	"github.com/kylelemons/godebug/diff"
 )
@@ -32,10 +33,10 @@ func (c Change) String() string {
 		fmt.Fprint(b, "    Hints=OnlyTTL\n", c.Key)
 	}
 	if len(c.Old) != 0 {
-		fmt.Fprintf(b, "    old=%v\n", c.Old)
+		fmt.Fprintf(b, "    old=%v\n", c.Old.StringEach())
 	}
 	if len(c.New) != 0 {
-		fmt.Fprintf(b, "    new=%v\n", c.New)
+		fmt.Fprintf(b, "    new=%v\n", c.New.StringEach())
 	}
 	fmt.Fprintf(b, "    msg=%q\n", c.Msgs)
 
@@ -57,13 +58,13 @@ func (cl ChangeList) String() string {
 // Make sample data
 
 func makeRec(label, rtype, content string) *models.RecordConfig {
-	origin := "f.com"
-	r := models.RecordConfig{TTL: 300}
-	r.SetLabel(label, origin)
-	if err := r.PopulateFromString(rtype, content, origin); err != nil {
-		panic(err)
+	dc := models.MustNewDomainConfig("f.com")
+	typeNum, err := dnsutilv2.StringToType(rtype)
+	if err != nil {
+		panic(fmt.Sprintf("BUG: makeRec does not support %q", rtype))
 	}
-	return &r
+	rec := dc.AddTestRCParse(dc.LabelFromShort(label), 300, typeNum, content)
+	return rec
 }
 
 func makeRecTTL(label, rtype, content string, ttl uint32) *models.RecordConfig {
@@ -536,8 +537,6 @@ ChangeList: len=11
 		},
 	}
 	for _, tt := range tests {
-		models.CanonicalizeTargets(tt.args.existing, tt.args.origin)
-		models.CanonicalizeTargets(tt.args.desired, tt.args.origin)
 
 		// Each "analyze*()" should return the same msgs, but a different ChangeList.
 		// Sadly the analyze*() functions are destructive to the CompareConfig struct.
@@ -578,7 +577,6 @@ func coalesce(a string, b string) string {
 func mkTargetConfig(x ...*models.RecordConfig) []targetConfig {
 	var tc []targetConfig
 
-	models.CanonicalizeTargets(x, "f.com")
 	for _, r := range x {
 		ct, cf := mkCompareBlobs(r, nil)
 		tc = append(tc, targetConfig{

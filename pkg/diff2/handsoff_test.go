@@ -5,25 +5,26 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/js"
-	dnsv1 "github.com/miekg/dns"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsrr"
+	"github.com/DNSControl/dnscontrol/v5/pkg/js"
 	testifyrequire "github.com/stretchr/testify/require"
 )
 
 // parseZoneContents is copied verbatim from providers/bind/bindProvider.go
 // because import cycles and... tests shouldn't depend on huge modules.
-func parseZoneContents(content string, zoneName string, zonefileName string) (models.Records, error) {
-	zp := dnsv1.NewZoneParser(strings.NewReader(content), zoneName, zonefileName)
+func parseZoneContents(content string, dc *models.DomainConfig, zonefileName string) (models.Records, error) {
+	zoneName := dc.Name
+	zp := dnsv2.NewZoneParser(strings.NewReader(content), zoneName, zonefileName)
 
 	foundRecords := models.Records{}
 	for rr, ok := zp.Next(); ok; rr, ok = zp.Next() {
-		rec, err := dnsrr.RRtoRCTxtBug(rr, zoneName)
+		rec, err := dnsrr.RRv2toRC(dc, rr)
 		if err != nil {
 			return nil, err
 		}
-		foundRecords = append(foundRecords, &rec)
+		foundRecords = append(foundRecords, rec)
 	}
 
 	if err := zp.Err(); err != nil {
@@ -39,7 +40,7 @@ func showRecs(recs models.Records) string {
 		result.WriteString(" ")
 		result.WriteString(rec.Type)
 		result.WriteString(" ")
-		result.WriteString(rec.GetTargetCombined())
+		result.WriteString(rec.GetRDATA().String())
 		result.WriteString("\n")
 	}
 	return result.String()
@@ -47,8 +48,9 @@ func showRecs(recs models.Records) string {
 
 func handsoffHelper(t *testing.T, existingZone, desiredJs string, noPurge bool, resultWanted string) {
 	t.Helper()
+	dc1 := models.MustNewDomainConfig("f.com")
 
-	existing, err := parseZoneContents(existingZone, "f.com", "no_file_name")
+	existing, err := parseZoneContents(existingZone, dc1, "no_file_name")
 	if err != nil {
 		t.Fatal(err)
 	}

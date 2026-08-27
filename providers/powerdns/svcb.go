@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
+
+const powerdnsOriginalSVCBParams = "powerdns_svcb_orig_params"
 
 // contentHasPowerDNSSVCBAutoHints reports whether SVCB/HTTPS rdata contains
 // PowerDNS's provider-specific automatic address hinting parameters.
@@ -25,7 +27,8 @@ func recordHasPowerDNSSVCBAutoHints(rc *models.RecordConfig) bool {
 	if rc.Type != "SVCB" && rc.Type != "HTTPS" {
 		return false
 	}
-	return contentHasPowerDNSSVCBAutoHints(rc.SvcParams)
+	f := rc.AsSVCB()
+	return contentHasPowerDNSSVCBAutoHints(models.Svcbv2ValueToString(f.Value))
 }
 
 // powerDNSTargetCombined returns PowerDNS API content for a RecordConfig,
@@ -33,12 +36,13 @@ func recordHasPowerDNSSVCBAutoHints(rc *models.RecordConfig) bool {
 // cannot parse.
 func powerDNSTargetCombined(rc *models.RecordConfig) string {
 	if recordHasPowerDNSSVCBAutoHints(rc) {
-		if rc.SvcParams == "" {
-			return fmt.Sprintf("%d %s", rc.SvcPriority, rc.GetTargetField())
+		f := rc.AsSVCB()
+		if models.Svcbv2ValueToString(f.Value) == "" {
+			return fmt.Sprintf("%d %s", f.Priority, rc.Metadata[powerdnsOriginalSVCBParams])
 		}
-		return fmt.Sprintf("%d %s %s", rc.SvcPriority, rc.GetTargetField(), rc.SvcParams)
+		return fmt.Sprintf("%d %s %s", f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
 	}
-	return rc.GetTargetCombined()
+	return rc.GetRDATA().String()
 }
 
 // rejectPowerDNSSVCBAutoHintsUnsorted rejects PowerDNS auto hint records with
@@ -49,7 +53,8 @@ func rejectPowerDNSSVCBAutoHintsUnsorted(rc *models.RecordConfig) error {
 	}
 
 	lastOrder := -1
-	for field := range strings.FieldsSeq(rc.SvcParams) {
+	f := rc.AsSVCB()
+	for field := range strings.FieldsSeq(models.Svcbv2ValueToString(f.Value)) {
 		order := powerDNSSVCBParamOrder(field)
 		if order == -1 {
 			continue

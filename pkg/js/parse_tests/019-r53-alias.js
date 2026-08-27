@@ -3,6 +3,7 @@ D("foo.com", "none",
     R53_ALIAS("atest", "A", "foo.com."),
     R53_ALIAS("atest", "A", "foo.com.", R53_ZONE("Z2FTEDLFRTF")),
     R53_ALIAS("aevaltargethealthtest", "A", "foo.com.", R53_EVALUATE_TARGET_HEALTH(true)),
+    R53_ALIAS("aevaltargethealthtest2", "A", "foo.com.", R53_EVALUATE_TARGET_HEALTH(false)),
     R53_ALIAS("aaaatest", "AAAA", "foo.com."),
     R53_ALIAS("aaaatest", "AAAA", "foo.com.", R53_ZONE("ERERTFGFGF")),
     R53_ALIAS("cnametest", "CNAME", "foo.com."),
@@ -17,5 +18,8 @@ D("foo.com", "none",
     R53_ALIAS("tlsatest", "TLSA", "foo.com."),
     R53_ALIAS("sshfptest", "SSHFP", "foo.com."),
     R53_ALIAS("svcbtest", "SVCB", "foo.com."),
-    R53_ALIAS("httpstest", "HTTPS", "foo.com.")
+    R53_ALIAS("httpstest", "HTTPS", "foo.com."),
+    // Non-apex (out-of-zone) targets. GitHub issue https://github.com/DNSControl/dnscontrol/issues/4796
+    R53_ALIAS("cftest", "A", "d111111abcdef8.cloudfront.net."),
+    R53_ALIAS("cfzonetest", "A", "d222222abcdef8.cloudfront.net.", R53_ZONE("Z2FDTNDATAQYW2"))
 );

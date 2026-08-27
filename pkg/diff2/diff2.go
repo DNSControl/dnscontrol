@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsgraph"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/dnsgraph"
 )
 
 // Verb indicates the Change's type (create, delete, etc.)
@@ -64,24 +64,53 @@ func (c Change) GetDependencies() []dnsgraph.Dependency {
 	var dependencies []dnsgraph.Dependency
 
 	if c.Type == CHANGE || c.Type == DELETE {
-		dependencies = append(dependencies, dnsgraph.CreateDependencies(c.Old.GetAllDependencies(), dnsgraph.BackwardDependency)...)
+		dependencies = append(dependencies, toGraphDependencies(c.Old.GetAllDependencies(), dnsgraph.BackwardDependency)...)
 	}
 	if c.Type == CHANGE || c.Type == CREATE {
-		dependencies = append(dependencies, dnsgraph.CreateDependencies(c.New.GetAllDependencies(), dnsgraph.ForwardDependency)...)
+		dependencies = append(dependencies, toGraphDependencies(c.New.GetAllDependencies(), dnsgraph.ForwardDependency)...)
 	}
 
 	return dependencies
 }
 
+// toGraphDependencies converts model.Dependency dependencies into
+// graph.Dependency dependencies, tagging each with the given direction and
+// preserving any OnlyType filter.
+func toGraphDependencies(deps []models.Dependency, direction dnsgraph.DependencyType) []dnsgraph.Dependency {
+	result := make([]dnsgraph.Dependency, 0, len(deps))
+	for _, dep := range deps {
+		result = append(result, dnsgraph.Dependency{
+			NameFQDN: dep.NameFQDN,
+			Type:     direction,
+			OnlyType: dep.OnlyType,
+		})
+	}
+	return result
+}
+
+// GetRecordType returns the DNS record type of the change, used to satisfy
+// dnsgraph Dependency.OnlyType filters. Change.Key.Type is only populated for
+// ByRecordSet, so fall back to the records themselves.
+func (c Change) GetRecordType() string {
+	if len(c.New) > 0 {
+		return c.New[0].Type
+	}
+	if len(c.Old) > 0 {
+		return c.Old[0].Type
+	}
+	return c.Key.Type
+}
+
 /*
 General instructions:
 
-Every provider updates their zones in one of three granularities: record, recordset, label, or zone.
+Every provider updates their zones in one of four granularities: record, recordset, label, or zone.
 Identify which your provider is, and use the appropriate "By*" call. (ByZone is different, see its documentation.)
 
   changes, err := diff2.ByRecord(existing, dc, nil)
   //changes, err := diff2.ByRecordSet(existing, dc, nil)
   //changes, err := diff2.ByLabel(existing, dc, nil)
+  // diff2.ByZone's boilerplate is different. See ByZone.
   if err != nil {
     return nil, err
   }
@@ -146,7 +175,7 @@ func (c *Change) CreateCorrectionWithMessage(msg string, correctionFunction func
 // record, if A records are added, changed, or removed, the API takes
 // www.example.com, A, and a list of all the desired IP addresses.
 //
-// Examples include: AZURE_DNS, GCORE, NS1, ROUTE53.
+// Examples include: AZURE_DNS, GCORE, NS1, ROUTE53, VULTR.
 func ByRecordSet(existing models.Records, dc *models.DomainConfig, compFunc ComparableFunc) (ChangeList, int, error) {
 	return byHelper(analyzeByRecordSet, existing, dc, compFunc)
 }
@@ -174,7 +203,7 @@ func ByLabel(existing models.Records, dc *models.DomainConfig, compFunc Comparab
 // A change always has exactly 1 old and 1 new: .Old[0] and .New[0]
 // A delete always has exactly 1 old: .Old[0]
 //
-// Examples include: CLOUDFLAREAPI, HEDNS, INWX, MSDNS, OVH, PORKBUN, VULTR.
+// Examples include: CLOUDFLAREAPI, HEDNS, INWX, MSDNS, OVH, PORKBUN.
 func ByRecord(existing models.Records, dc *models.DomainConfig, compFunc ComparableFunc) (ChangeList, int, error) {
 	return byHelper(analyzeByRecord, existing, dc, compFunc)
 }

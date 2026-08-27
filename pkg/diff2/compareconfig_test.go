@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -31,8 +31,8 @@ func (cc *CompareConfig) String() string {
 	}
 	fmt.Fprintf(b, "labelMap: len=%d %v\n", len(cc.labelMap), cc.labelMap)
 	fmt.Fprintf(b, "keyMap:   len=%d %v\n", len(cc.keyMap), cc.keyMap)
-	fmt.Fprintf(b, "existing: %q\n", cc.existing)
-	fmt.Fprintf(b, "desired: %q\n", cc.desired)
+	fmt.Fprintf(b, "existing: %q\n", cc.existing.StringEach())
+	fmt.Fprintf(b, "desired: %q\n", cc.desired.StringEach())
 	fmt.Fprintf(b, "origin: %v\n", cc.origin)
 	fmt.Fprintf(b, "compFn: %v\n", cc.compareableFunc)
 
@@ -226,9 +226,6 @@ compFn: <nil>
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			models.CanonicalizeTargets(tt.args.desired, "f.com")
-			models.CanonicalizeTargets(tt.args.existing, "f.com")
-
 			cc := NewCompareConfig(tt.args.origin, tt.args.existing, tt.args.desired, tt.args.compFn)
 			got := strings.TrimSpace(cc.String())
 			tt.want = strings.TrimSpace(tt.want)

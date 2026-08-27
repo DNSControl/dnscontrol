@@ -3,18 +3,15 @@ package main
 // Data-driven tests that exercize the DNS Provider APIs.
 
 import (
-	"runtime/debug"
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/providers/_all"
-	_ "github.com/DNSControl/dnscontrol/v4/pkg/rtype"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 )
 
 func TestDNSProviders(t *testing.T) {
-	debug.SetTraceback("all")
 	provider, domain, cfg := getProvider(t)
 	if provider == nil {
 		return
@@ -35,8 +32,7 @@ func TestMakeTests(t *testing.T) {
 	}
 	globalDC = dc
 	globalDCN = dc.DomainNameVarieties()
-
-	debug.SetTraceback("all")
+	globalCfg = map[string]string{}
 
 	_ = makeTests()
 }
@@ -76,7 +72,7 @@ func makeTests() []*TestGroup {
 	// whether or not a certain kind of record can be created and
 	// deleted.
 
-	// emptyzone() is the same as tc("Empty").  It removes all records.
+	// tcEmptyZone() is the same as tc("Empty").  It removes all records.
 	// Each testgroup() begins with tcEmptyZone() automagically. You do not
 	// have to include the tcEmptyZone() in each testgroup().
 
@@ -141,8 +137,8 @@ func makeTests() []*TestGroup {
 		// Same test, but do it with a wildcard.
 		testgroup("Protocol-Wildcard",
 			not("HEDNS"), // Not supported by dns.he.net due to abuse
-			tc("Create wildcard", a("*", "3.3.3.3"), a("www", "5.5.5.5")),
-			tc("Delete wildcard", a("www", "5.5.5.5")),
+			tc("Create wildcard", a("*", "3.3.3.3"), a("www", "5.4.5.4")),
+			tc("Delete wildcard", a("www", "5.4.5.4")),
 		),
 
 		///// Test the basic DNS types
@@ -186,7 +182,15 @@ func makeTests() []*TestGroup {
 			tc("Change MX apex", mx("@", 5, "bar.com.")),
 			tc("Create MX", mx("testmx", 5, "foo.com.")),
 			tc("Change MX target", mx("testmx", 5, "bar.com.")),
-			tc("Change MX p", mx("testmx", 100, "bar.com.")),
+		),
+
+		testgroup("MX",
+			not(
+				"NAMECHEAP",
+			),
+			tc("Create MX", mx("testmx", 5, "foo.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("Change MX p", mx("testmx", 50, "foo.com.")),
 		),
 
 		testgroup("RP",
@@ -231,11 +235,12 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("manyTypesAtOnce",
-			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 100, "bar.com.")),
+			// TENCENT restricts MX preference to 1-50
+			tc("CreateManyTypesAtLabel", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 50, "bar.com.")),
 			tcEmptyZone(),
 			tc("Create an A record", a("www", "1.1.1.1")),
 			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com.")),
-			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 100, "bar.com.")),
+			tc("Add Type At Label", a("www", "1.1.1.1"), mx("testmx", 5, "foo.com."), mx("testmx", 50, "bar.com.")),
 		),
 
 		// Exercise TTL operations.
@@ -245,13 +250,16 @@ func makeTests() []*TestGroup {
 		// weirdest edge-case we've ever seen.
 
 		testgroup("Attl",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: both are rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not("NETCUP"),  // NETCUP does not support custom TTLs.
 			tc("Create Arc", ttl(a("testa", "1.1.1.1"), 333)),
 			tc("Change TTL", ttl(a("testa", "1.1.1.1"), 999)),
 		),
 
 		testgroup("TTL",
+			not("DESEC"),   // deSEC does not support TTL lower than 3600.
 			not("NETCUP"),  // NETCUP does not support TTLs.
 			not("LINODE"),  // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
 			not("OPENWRT"), // OpenWRT does not support per record TTL
@@ -426,6 +434,7 @@ func makeTests() []*TestGroup {
 		testgroup("NullMX",
 			not(
 				"TRANSIP", // TRANSIP is slow and doesn't support NullMX. Skip to save time.
+				"LINODE",  // Linode doesn't support setting a null MX record on a subdomain
 			),
 			tc("create", // Install a Null MX.
 				a("nmx", "1.2.3.3"), // Install this so it is ready for the next tc()
@@ -484,15 +493,21 @@ func makeTests() []*TestGroup {
 		testgroup("NS only APEX",
 			not(
 				"AZURE_PRIVATE_DNS", // Apex NS records are managed by Azure.
+				"BUNNY_DNS",         // Apex NS records are managed by BunnyDNS.
 				"DNSCALE",           // Apex NS records are managed by DNScale.
 				"DNSIMPLE",          // Does not support NS records nor subdomains.
 				"DYNU",              // Apex NS records are managed by Dynu.
 				"EXOSCALE",          // Not supported.
 				"GANDI_V5",          // "Gandi does not support changing apex NS records. Ignoring ns1.foo.com."
+				"GIDINET",           // "GIDINET does not support modifying NS records at apex."
 				"JOKER",             // Not supported via the Zone API.
+				"NAMECHEAP",         // cannot handle single NS at apex but does handle dual
 				"NAMEDOTCOM",        // "Ignores @ for NS records"
 				"NETCUP",            // NS records not currently supported.
+				"NEXDNS",            // The apex NS records follow the zone's nameserver group and are not editable.
+				"NS1",               // Test leaves NS1 in a confused state.
 				"PORKBUN",           // Record ignored.
+				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
 				"VERCEL",            // "invalid_name - Cannot set NS records at the root level. Only subdomain NS records are supported"
@@ -568,7 +583,7 @@ func makeTests() []*TestGroup {
 			tc("TXT with semicolon ws", txt("foosc2", `wssemi ; colon`)),
 
 			tc("TXT interior ws", txt("foosp", "with spaces")),
-			// tc("TXT leading ws", txt("foowsb", " leadingspace")),
+			//c("TXT leading ws", txt("foowsb", " leadingspace")),
 			tc("TXT trailing ws", txt("foows1", "trailingws ")),
 
 			// Vultr syntax-checks TXT records with SPF contents.
@@ -711,10 +726,12 @@ func makeTests() []*TestGroup {
 			not(
 				"AZURE_DNS",         // Removed because it is too slow
 				"AZURE_PRIVATE_DNS", // Removed because it is too slow
+				"CLOUDNS",           // Removed because it is too slow
 				"CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
-				"CNR",               // Test beaks limits.
+				"CNR",               // Test breaks limits.
 				// "CSCGLOBAL",     // Doesn't page. Works fine.  Due to the slow API we skip.
 				"DESEC",        // Skip due to daily update limits.
+				"DNSIMPLE",     // Daily update quota.
 				"DIGITALOCEAN", // No paging. Why bother?
 				"FORTIGATE",    // No paging
 				"GANDI_V5",     // Their API is so damn slow. We'll add it back as needed.
@@ -735,9 +752,11 @@ func makeTests() []*TestGroup {
 			only(
 				// "AZURE_DNS",         // Removed because it is too slow
 				// "AZURE_PRIVATE_DNS", // Removed because it is too slow
+				// "CLOUDNS",           // Removed because it is too slow
 				// "CLOUDFLAREAPI",     // Infinite pagesize but due to slow speed, skipping.
 				// "CSCGLOBAL",         // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",             // Skip due to daily update limits.
+				// "DNSIMPLE",         // Daily update quota.
 				// "GANDI_V5",          // Their API is so damn slow. We'll add it back as needed.
 				// "GCLOUD",
 				"ORACLE",
@@ -752,9 +771,11 @@ func makeTests() []*TestGroup {
 				// "AKAMAIEDGEDNS",     // No paging done. No need to test.
 				// "AZURE_DNS",         // Too slow
 				// "AZURE_PRIVATE_DNS", // Too slow
+				// "CLOUDNS",           // Removed because it is too slow
 				// "CLOUDFLAREAPI",     // Fails with >1000 corrections. See https://github.com/DNSControl/dnscontrol/issues/1440
 				// "CSCGLOBAL", // Doesn't page. Works fine.  Due to the slow API we skip.
 				// "DESEC",     // Skip due to daily update limits.
+				// "DNSIMPLE", // Daily update quota.
 				// "GANDI_V5",  // Their API is so damn slow. We'll add it back as needed.
 				"GCLOUD",
 				// "HEDNS",     // No paging done. No need to test.
@@ -799,11 +820,19 @@ func makeTests() []*TestGroup {
 			tc("CAA record", caa("@", 0, "issue", "letsencrypt.org")),
 			tc("CAA change tag", caa("@", 0, "issuewild", "letsencrypt.org")),
 			tc("CAA change target", caa("@", 0, "issuewild", "example.com")),
-			tc("CAA change flag", caa("@", 128, "issuewild", "example.com")),
-			tc("CAA many records", caa("@", 128, "issuewild", ";")),
+			tc("CAA many records", caa("@", 0, "issuewild", ";")),
 			// Test support of spaces in the 3rd field. Some providers don't
 			// support this.  See providers/exoscale/auditrecords.go as an example.
 			tc("CAA whitespace", caa("@", 0, "issue", "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234")),
+		),
+
+		testgroup("CAA",
+			requires(providers.CanUseCAA),
+			not(
+				"NAMECHEAP",
+			),
+			tc("CAA record", caa("@", 0, "issue", "letsencrypt.org")),
+			tc("CAA change flag", caa("@", 128, "issue", "letsencrypt.org")),
 		),
 
 		// LOCation records. // No.47
@@ -841,7 +870,10 @@ func makeTests() []*TestGroup {
 				naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", "."),
 				naptr("test", 102, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", "."),
 			),
-			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")),
+			// AllowNoChanges: providers that audit-reject multiple NAPTRs at
+			// one label (e.g. GIGAHOST) skip "NAPTR second record" above, so
+			// this state may already be converged.
+			tc("NAPTR delete second record", naptr("test", 100, 10, "U", "E2U+sip", "!^.*$!sip:customer-service@example.com!", ".")).AllowNoChanges(),
 			tc("NAPTR change order", naptr("test", 103, 10, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change preference", naptr("test", 103, 20, "U", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
 			tc("NAPTR change flags", naptr("test", 103, 20, "A", "E2U+email", "!^.*$!mailto:information@example.com!", ".")),
@@ -900,11 +932,14 @@ func makeTests() []*TestGroup {
 		testgroup("SRV",
 			requires(providers.CanUseSRV),
 			not(
+				"NETCUP",    // NETCUP does not support per record TTL
 				"OPENWRT",   // OpenWRT does not support per record TTL
 				"NAMECHEAP", // Namecheap does not support per record TTL
+				"UNIFI",     // Per record TTLs not supported.
 			),
 			tc("Create SRV333", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 333)),
-			tc("Change TTL999", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 999)),
+			// The next TTL needs to fall in a different bucket than the previous one for LINODE
+			tc("Change TTL4400", ttl(srv("_sip._tcp", 5, 6, 7, "foo.com."), 4400)),
 		),
 
 		testgroup("SSHFP",
@@ -928,7 +963,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("DS",
 			requires(providers.CanUseDS),
-			not("CLOUDFLAREAPI"),
+			not("CLOUDFLAREAPI", "POWERDNS"), // PowerDNS: DS records are not supported for the apex domain.
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
@@ -1053,6 +1088,7 @@ func makeTests() []*TestGroup {
 
 		testgroup("ALIAS to nonfqdn",
 			requires(providers.CanUseAlias),
+			not("DNSMADEEASY"), // DME validates ANAME target resolvability at create time; an unpublished in-zone target can't resolve
 			tc("ALIAS at root",
 				a("foo", "1.2.3.4"),
 				alias("@", "foo"),
@@ -1288,8 +1324,10 @@ func makeTests() []*TestGroup {
 		),
 
 		// Tencent Cloud DNSPod resolution lines and weighted routing.
+		// China site line list: https://cloud.tencent.com/document/product/1427/56167
 		testgroup("TENCENTDNS_LINE_WEIGHT",
 			only("TENCENTDNS"),
+			alltrue(!strings.EqualFold(globalCfg["site"], "intl")),
 			tc("create records on the default and telecom lines",
 				a("tencent-line", "1.2.3.4"),
 				withMeta(a("tencent-line", "1.2.3.4"), map[string]string{
@@ -1577,14 +1615,14 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE main",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			),
 
@@ -1595,7 +1633,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				// txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "", ""),
 			).ExpectNoChanges(),
@@ -1603,7 +1641,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1611,7 +1649,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "A", ""),
 			).ExpectNoChanges(),
@@ -1619,7 +1657,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1627,7 +1665,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("foo", "A", "1.2.3.4"),
 			).ExpectNoChanges(),
@@ -1635,7 +1673,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1643,7 +1681,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", ""),
 			).ExpectNoChanges(),
@@ -1651,7 +1689,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1659,7 +1697,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1667,7 +1705,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1675,7 +1713,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1683,7 +1721,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1692,7 +1730,7 @@ func makeTests() []*TestGroup {
 				// a("foo", "1.2.3.4"),
 				// a("foo", "2.3.4.5"),
 				// txt("foo", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A,TXT", ""),
 			).ExpectNoChanges(),
@@ -1700,7 +1738,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1709,7 +1747,7 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				// cname("mail", "ghs.googlehosted.com."),
 				ignore("", "CNAME", "*.googlehosted.com."),
 			).ExpectNoChanges(),
@@ -1717,23 +1755,23 @@ func makeTests() []*TestGroup {
 				a("foo", "1.2.3.4"),
 				a("foo", "2.3.4.5"),
 				txt("foo", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),
 
 		// Same as "main" but with an apex ("@") record.
 		testgroup("IGNORE apex",
+			not("FORTIGATE"), // TXT records not supported
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
 			not("NETBIRD"), // MX/TXT records not supported
 			not("OPENWRT"), // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			),
 
@@ -1744,7 +1782,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				// txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "", ""),
 				// ignore("", "NS", ""),
@@ -1756,7 +1794,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1764,7 +1802,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "A", ""),
 			).ExpectNoChanges(),
@@ -1772,7 +1810,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1780,7 +1818,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("@", "A", "1.2.3.4"),
 				// NB(tlim): .UnsafeIgnore is needed because the NS records
@@ -1791,7 +1829,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1799,7 +1837,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", ""),
 			).ExpectNoChanges(),
@@ -1807,7 +1845,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1815,7 +1853,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1823,7 +1861,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1831,7 +1869,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "", "2.3.4.5"),
 			).ExpectNoChanges(),
@@ -1839,7 +1877,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1848,7 +1886,7 @@ func makeTests() []*TestGroup {
 				// a("@", "1.2.3.4"),
 				// a("@", "2.3.4.5"),
 				// txt("@", "simple"),
-				// a("bar", "5.5.5.5"),
+				// a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 				ignore("", "A,TXT", ""),
 			).ExpectNoChanges(),
@@ -1856,7 +1894,7 @@ func makeTests() []*TestGroup {
 				a("@", "1.2.3.4"),
 				a("@", "2.3.4.5"),
 				txt("@", "simple"),
-				a("bar", "5.5.5.5"),
+				a("bar", "5.4.5.4"),
 				cname("mail", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),
@@ -1908,14 +1946,14 @@ func makeTests() []*TestGroup {
 		testgroup("IGNORE wilds",
 			// Vercel has a very strict rate limit, let's just skip IGNORE* tests for Vercel
 			not("VERCEL"),
-
-			not("NETBIRD"), // MX/TXT records not supported
-			not("OPENWRT"), // OpenWRT does not support TXT records
+			not("FORTIGATE"), // TXT records not supported
+			not("NETBIRD"),   // MX/TXT records not supported
+			not("OPENWRT"),   // OpenWRT does not support TXT records
 			tc("Create some records",
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			),
 
@@ -1923,7 +1961,7 @@ func makeTests() []*TestGroup {
 				// a("foo.bat", "1.2.3.4"),
 				// a("foo.bat", "2.3.4.5"),
 				// txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("foo.*", "", ""),
 			).ExpectNoChanges(),
@@ -1931,7 +1969,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1939,7 +1977,7 @@ func makeTests() []*TestGroup {
 				// a("foo.bat", "1.2.3.4"),
 				// a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				// a("bar.bat", "5.5.5.5"),
+				// a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("*.bat", "A", ""),
 			).ExpectNoChanges(),
@@ -1947,7 +1985,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 
@@ -1955,7 +1993,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				// cname("mail.bat", "ghs.googlehosted.com."),
 				ignore("", "", "*.googlehosted.com."),
 			).ExpectNoChanges(),
@@ -1963,7 +2001,7 @@ func makeTests() []*TestGroup {
 				a("foo.bat", "1.2.3.4"),
 				a("foo.bat", "2.3.4.5"),
 				txt("foo.bat", "simple"),
-				a("bar.bat", "5.5.5.5"),
+				a("bar.bat", "5.4.5.4"),
 				cname("mail.bat", "ghs.googlehosted.com."),
 			).ExpectNoChanges(),
 		),
@@ -1976,7 +2014,7 @@ func makeTests() []*TestGroup {
 			),
 			tc("Create some records",
 				a("foo", "1.1.1.1"),
-				a("foo", "10.10.10.10"),
+				a("foo", "9.9.9.9"),
 				aaaa("foo", "2003:dd:d7ff::fe71:aaaa"),
 				mx("foo", 10, "aspmx.l.google.com."),
 				mx("foo", 20, "alt1.aspmx.l.google.com."),
@@ -2173,11 +2211,11 @@ func makeTests() []*TestGroup {
 			only("OVH"),
 			tc("Create TXT",
 				txt("spf", "v=spf1 ip4:99.99.99.99 -all"),
-				txt("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
+				txt("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
 				txt("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com")),
 			tc("Update TXT",
 				txt("spf", "v=spf1 a mx -all"),
-				txt("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
+				txt("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
 				txt("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@example.com")),
 		),
 
@@ -2185,40 +2223,61 @@ func makeTests() []*TestGroup {
 			only("OVH"),
 			tc("Create native OVH records",
 				ovhspf("spf", "v=spf1 ip4:99.99.99.99 -all"),
-				ovhdkim("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
+				ovhdkim("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwOUgwGWVIwQG8PBl89O37BdaoqEd/rT6r/Iot4PidtPJkPbVxWRi0mUgduAnsO8zHCz2QKAd5wPe9+l+Stwy6e0h27nAOkI/Edx3qwwWqWSUfwfIBWZG+lrFrhWgSIWCj2/TMkMMzBZJdhVszCzdGQiNPkGvKgjfqW5T0TZt0QIDAQAB"),
 				ovhdmarc("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com")),
 			tc("Update native OVH records",
 				ovhspf("spf", "v=spf1 a mx -all"),
-				ovhdkim("dkim", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
+				ovhdkim("dkim._domainkey", "v=DKIM1;t=s;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk72yk6UML8LGIXFobhvx6UDUntqGzmyie2FLMyrOYk1C7CVYR139VMbO9X1rFvZ8TaPnMCkMbuEGWGgWNc27MLYKfI+wP/SYGjRS98TNl9wXxP8tPfr6id5gks95sEMMaYTu8sctnN6sBOvr4hQ2oipVcBn/oxkrfhqvlcat5gQIDAQAB"),
 				ovhdmarc("_dmarc", "v=DMARC1; p=none; rua=mailto:dmarc@example.com")),
+			tc("Create native OVH DKIM record longer than 255 bytes",
+				ovhdkim("dkimbig._domainkey", "v=DKIM1; t=s; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtNHHaHjrlPU5hvNyp5LKkhINqUNo3rwvHP3RMYvBMdxs0W34SLMc52QSn+O8QN5P2rU9Hs3qiD5kaIjGfU77EwMnrUh0MhRgWPKED5R66/BXYh9tIv9aLBeGgrO8Tj1zvW2CO9HI9V5TcuEe8OKgY4EvtuBtlgG7DbM2fwm2VL9nbvM15hxQjAkDxfDNBLMXozsk86Fp9EzOwtUykRH1VoCusC0qYqmOMpPknDoJ2vJKZMm1Cpx0ICnsdWbmLVKPpgdBdj28jCXU/bm4jvXcSL9oGb3rBxVmpsgA+JHEZH2XMbDDzHjLnH7DsavP/Xth19KA/opQ4h6vFxAQOX+yzQIDAQAB")),
 		),
 
 		// CLOUDNS features
 
-		testgroup("CLOUDNS geodns tests",
-			only("CLOUDNS"),
-			tc("Add record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "US",
-			})),
-			tc("Update record with default geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "DEFAULT",
-			})),
-			tc("Update record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "BR",
-			})),
-			tc("Delete metadata from record", a("@", "1.2.3.4")),
-			tc("Update a record with the value DEFAULT after removing the metadata should do nothing", withMeta(a("@", "1.2.3.4"), map[string]string{
-				"cloudns_geodns_code": "DEFAULT",
-			})).ExpectNoChanges(),
-		),
+		// NB(tlim): This is disabled because we don't have access to an account
+		// with this feature. Neither Free nor Premium include it.
+		//
+		// You know your account has geodns enabled if this outputs: "1"
+		// curl -X POST https://api.cloudns.net/dns/is-geodns-available.json -d "auth-id=YOUR_ID" -d "auth-password=YOUR_PASSWORD" | jq .
+		//
+		// testgroup("CLOUDNS geodns tests",
+		// 	only("CLOUDNS"),
+		// 	tc("Add record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "US",
+		// 	})),
+		// 	tc("Update record with default geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "DEFAULT",
+		// 	})),
+		// 	tc("Update record with geodns code", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "BR",
+		// 	})),
+		// 	tc("Delete metadata from record", a("@", "1.2.3.4")),
+		// 	tc("Update a record with the value DEFAULT after removing the metadata should do nothing", withMeta(a("@", "1.2.3.4"), map[string]string{
+		// 		"cloudns_geodns_code": "DEFAULT",
+		// 	})).ExpectNoChanges(),
+		// ),
 
 		// PORKBUN features
 
-		testgroup("PORKBUN_URLFWD tests",
+		testgroup("PORKBUN url forwarding tests",
 			only("PORKBUN"),
-			tc("Add a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.com", "", "", "")),
-			tc("Update a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.org", "", "", "")),
-			tc("Update a urlfwd with metadata", porkbunUrlfwd("urlfwd1", "http://example.org", "permanent", "no", "no")),
+			tc("Add a urlfwd", porkbunUrlfwd("urlfwd1", "http://example.com")),
+			tc("Update a urlfwd with metadata", withMeta(porkbunUrlfwd("urlfwd1", "http://example.com"), map[string]string{
+				"type":        "permanent",
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
+			tc("Add a url", url("urlfwd2", "http://example.com")),
+			tc("Update a url with metadata", withMeta(url("urlfwd2", "http://example.com"), map[string]string{
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
+			tc("Add a url301", url301("urlfwd3", "http://example.com")),
+			tc("Update a url with metadata", withMeta(url301("urlfwd3", "http://example.com"), map[string]string{
+				"includePath": "yes",
+				"wildcard":    "no",
+			})),
 		),
 
 		// GCORE features
@@ -2302,8 +2361,8 @@ func makeTests() []*TestGroup {
 
 		testgroup("Bunny DNS Pull Zone",
 			only("BUNNY_DNS"),
-			tc("Create PZ", bunnyPullZone("@", "5269987")),
-			tc("Change PZ", bunnyPullZone("@", "5269992")),
+			tc("Create PZ", bunnyPullZone("@", "6214614")),
+			tc("Change PZ", bunnyPullZone("@", "6214615")),
 		),
 
 		// HEDNS: Dynamic DNS
@@ -2352,6 +2411,9 @@ func makeTests() []*TestGroup {
 				a("hdmix-static", "3.3.3.3"),
 			),
 		),
+
+		// Clear everything out.
+		testgroup("CLEAR"), //tc("Create A", a("testa", "1.1.1.1")),
 
 		// This MUST be the last test.
 		testgroup("final",

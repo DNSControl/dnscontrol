@@ -16,7 +16,7 @@ package diff2
 import (
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 const (
@@ -33,7 +33,7 @@ type externalDNSManagedRecord struct {
 // isExternalDNSTxtRecord checks if a TXT record is an external-dns ownership record.
 // It returns true and the managed record info if it is, false otherwise.
 // customPrefix is an optional prefix that external-dns was configured with (e.g., "extdns-").
-func isExternalDNSTxtRecord(rec *models.RecordConfig, domain string, customPrefix string) (bool, *externalDNSManagedRecord) {
+func isExternalDNSTxtRecord(rec *models.RecordConfig, _ string, customPrefix string) (bool, *externalDNSManagedRecord) {
 	if rec.Type != "TXT" {
 		return false, nil
 	}

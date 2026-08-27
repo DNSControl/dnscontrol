@@ -3,51 +3,55 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
-          "azure_alias": {
-            "type": "AAAA"
-          },
+          "comparablev3": "AAAA foo.com.",
           "filepos": "[line:3:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "aaaatest",
-          "target": "foo.com.",
+          "name_unicode": "aaaatest",
+          "rdata": {
+            "AliasType": "AAAA",
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
-          "azure_alias": {
-            "type": "A"
-          },
+          "comparablev3": "A foo.com.",
           "filepos": "[line:2:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "atest",
-          "target": "foo.com.",
+          "name_unicode": "atest",
+          "rdata": {
+            "AliasType": "A",
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         },
         {
-          "azure_alias": {
-            "type": "CNAME"
-          },
+          "comparablev3": "CNAME foo.com.",
           "filepos": "[line:4:5]",
           "meta": {
             "orig_custom_type": "AZURE_ALIAS"
           },
           "name": "cnametest",
-          "target": "foo.com.",
+          "name_unicode": "cnametest",
+          "rdata": {
+            "AliasType": "CNAME",
+            "Target": "foo.com."
+          },
           "ttl": 300,
-          "type": "AZURE_ALIAS"
+          "type": "AZURE_ALIAS",
+          "typenum": 65286
         }
       ],
       "registrar": "none",

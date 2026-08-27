@@ -3,20 +3,20 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "15 foo.com.",
           "filepos": "[line:2:5]",
-          "mxpreference": 15,
           "name": "@",
-          "target": "foo.com.",
+          "name_unicode": "@",
+          "rdata": {
+            "Mx": "foo.com.",
+            "Preference": 15
+          },
           "ttl": 300,
-          "type": "MX"
+          "type": "MX",
+          "typenum": 15
         }
       ],
       "registrar": "none",

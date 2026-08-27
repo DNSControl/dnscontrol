@@ -3,47 +3,77 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "\"simple\"",
           "filepos": "[line:2:5]",
           "name": "a",
-          "target": "simple",
+          "name_unicode": "a",
+          "rdata": {
+            "Txt": [
+              "simple"
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"ws at end \"",
           "filepos": "[line:3:5]",
           "name": "b",
-          "target": "ws at end ",
+          "name_unicode": "b",
+          "rdata": {
+            "Txt": [
+              "ws at end "
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"one\"",
           "filepos": "[line:4:5]",
           "name": "c",
-          "target": "one",
+          "name_unicode": "c",
+          "rdata": {
+            "Txt": [
+              "one"
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"bonieclyde\"",
           "filepos": "[line:5:5]",
           "name": "d",
-          "target": "bonieclyde",
+          "name_unicode": "d",
+          "rdata": {
+            "Txt": [
+              "bonieclyde"
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         },
         {
+          "comparablev3": "\"strawwoodbrick\"",
           "filepos": "[line:6:5]",
           "name": "e",
-          "target": "strawwoodbrick",
+          "name_unicode": "e",
+          "rdata": {
+            "Txt": [
+              "strawwoodbrick"
+            ]
+          },
           "ttl": 300,
-          "type": "TXT"
+          "type": "TXT",
+          "typenum": 16
         }
       ],
       "registrar": "none",

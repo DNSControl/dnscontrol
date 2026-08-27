@@ -3,9 +3,11 @@ name: CF_WORKER_ROUTE
 parameters:
   - pattern
   - script
+  - modifiers...
 parameter_types:
   pattern: string
   script: string
+  "modifiers...": RecordModifier[]
 provider: CLOUDFLAREAPI
 ---
 

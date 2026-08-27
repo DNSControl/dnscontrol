@@ -3,60 +3,82 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "foo.com",
-        "dnscontrol_nameunicode": "foo.com",
-        "dnscontrol_uniquename": "foo.com"
-      },
       "name": "foo.com",
       "records": [
         {
+          "comparablev3": "0 0 1 zeros.foo.com.",
           "filepos": "[line:6:5]",
           "name": "_ntp._udp",
-          "srvport": 1,
-          "target": "zeros.foo.com.",
+          "name_unicode": "_ntp._udp",
+          "rdata": {
+            "Port": 1,
+            "Priority": 0,
+            "Target": "zeros.foo.com.",
+            "Weight": 0
+          },
           "ttl": 300,
-          "type": "SRV"
+          "type": "SRV",
+          "typenum": 33
         },
         {
+          "comparablev3": "1 100 123 one.foo.com.",
           "filepos": "[line:2:5]",
           "name": "_ntp._udp",
-          "srvport": 123,
-          "srvpriority": 1,
-          "srvweight": 100,
-          "target": "one.foo.com.",
+          "name_unicode": "_ntp._udp",
+          "rdata": {
+            "Port": 123,
+            "Priority": 1,
+            "Target": "one.foo.com.",
+            "Weight": 100
+          },
           "ttl": 300,
-          "type": "SRV"
+          "type": "SRV",
+          "typenum": 33
         },
         {
+          "comparablev3": "2 100 123 two.foo.com.",
           "filepos": "[line:3:5]",
           "name": "_ntp._udp",
-          "srvport": 123,
-          "srvpriority": 2,
-          "srvweight": 100,
-          "target": "two.foo.com.",
+          "name_unicode": "_ntp._udp",
+          "rdata": {
+            "Port": 123,
+            "Priority": 2,
+            "Target": "two.foo.com.",
+            "Weight": 100
+          },
           "ttl": 300,
-          "type": "SRV"
+          "type": "SRV",
+          "typenum": 33
         },
         {
+          "comparablev3": "3 100 123 localhost.foo.com.",
           "filepos": "[line:4:5]",
           "name": "_ntp._udp",
-          "srvport": 123,
-          "srvpriority": 3,
-          "srvweight": 100,
-          "target": "localhost.foo.com.",
+          "name_unicode": "_ntp._udp",
+          "rdata": {
+            "Port": 123,
+            "Priority": 3,
+            "Target": "localhost.foo.com.",
+            "Weight": 100
+          },
           "ttl": 300,
-          "type": "SRV"
+          "type": "SRV",
+          "typenum": 33
         },
         {
+          "comparablev3": "4 100 123 three.example.com.",
           "filepos": "[line:5:5]",
           "name": "_ntp._udp",
-          "srvport": 123,
-          "srvpriority": 4,
-          "srvweight": 100,
-          "target": "three.example.com.",
+          "name_unicode": "_ntp._udp",
+          "rdata": {
+            "Port": 123,
+            "Priority": 4,
+            "Target": "three.example.com.",
+            "Weight": 100
+          },
           "ttl": 300,
-          "type": "SRV"
+          "type": "SRV",
+          "typenum": 33
         }
       ],
       "registrar": "none",

@@ -1,8 +1,7 @@
 package zonerecs
 
 import (
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // CorrectZoneRecords calls both GetZoneRecords, does any
@@ -13,13 +12,6 @@ func CorrectZoneRecords(driver models.DNSProvider, dc *models.DomainConfig) ([]*
 	if err != nil {
 		return nil, nil, 0, err
 	}
-	rtypecontrol.FixLegacyRecords(&existingRecords) // Call this after GetZoneRecords() to fix providers that haven't been updated for RecordConfigV2.
-
-	// downcase
-	models.Downcase(existingRecords)
-	models.Downcase(dc.Records)
-	models.CanonicalizeTargets(existingRecords, dc.Name)
-	models.CanonicalizeTargets(dc.Records, dc.Name)
 
 	// Copy dc so that any correction code that wants to
 	// modify the records may. For example, if the provider only
@@ -29,13 +21,6 @@ func CorrectZoneRecords(driver models.DNSProvider, dc *models.DomainConfig) ([]*
 	if err != nil {
 		return nil, nil, 0, err
 	}
-
-	// punycode
-	if err := dc.Punycode(); err != nil {
-		return nil, nil, 0, err
-	}
-	// FIXME(tlim) It is a waste to PunyCode every iteration.
-	// This should be moved to where the JavaScript is processed.
 
 	everything, actualChangeCount, err := driver.GetZoneRecordsCorrections(dc, existingRecords)
 	reports, corrections := splitReportsAndCorrections(everything)

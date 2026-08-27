@@ -1,5 +1,12 @@
 # Documentation MCP Server
 
+- [Documentation MCP Server](#documentation-mcp-server)
+  - [Endpoint](#endpoint)
+  - [Features](#features)
+  - [Adding to Claude Code](#adding-to-claude-code)
+  - [Adding to other MCP clients](#adding-to-other-mcp-clients)
+  - [Further reading](#further-reading)
+
 The DNSControl documentation site exposes an [MCP (Model Context Protocol)](https://modelcontextprotocol.io/introduction) server. This allows AI assistants such as Claude Code, Claude Desktop, and other MCP-compatible tools to search and query the DNSControl documentation directly.
 
 ## Endpoint

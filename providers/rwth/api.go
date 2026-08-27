@@ -14,9 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/dnsrr"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 const (
@@ -127,32 +126,26 @@ func (api *rwthProvider) updateRecord(id int, record models.RecordConfig) error 
 	return api.request("/update_record", "POST", req, nil)
 }
 
-func (api *rwthProvider) getAllRecords(domain string) ([]models.RecordConfig, error) {
-	zone, err := api.getZone(domain)
+func (api *rwthProvider) getAllRecords(dc *models.DomainConfig) (models.Records, error) {
+	zone, err := api.getZone(dc.Name)
 	if err != nil {
 		return nil, err
 	}
-	records := make([]models.RecordConfig, 0)
+	records := make(models.Records, 0)
 	response := []RecordReply{}
 	request := url.Values{}
 	request.Set("zone_id", strconv.Itoa(zone.ID))
 	if err := api.request("/list_records", "GET", request, &response); err != nil {
-		return nil, fmt.Errorf("failed fetching zone records for %q: %w", domain, err)
+		return nil, fmt.Errorf("failed fetching zone records for %q: %w", dc.Name, err)
 	}
 	for _, apiRecord := range response {
-		if checkIsLockedSystemAPIRecord(apiRecord) != nil {
+		recConfig, err := toRecordConfig(dc, apiRecord)
+		if err != nil {
+			return nil, err
+		}
+		if recConfig == nil {
 			continue
 		}
-		dnsRec, err := NewRR(apiRecord.Content) // Parse content as DNS record
-		if err != nil {
-			return nil, err
-		}
-
-		recConfig, err := dnsrr.RRtoRC(dnsRec, domain) // and make it a RC
-		if err != nil {
-			return nil, err
-		}
-		recConfig.Original = apiRecord // but keep our ApiRecord as the original
 
 		records = append(records, recConfig)
 	}

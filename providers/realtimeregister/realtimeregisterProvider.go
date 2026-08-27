@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 /*
@@ -101,9 +101,12 @@ func (api *realtimeregisterAPI) GetZoneRecords(dc *models.DomainConfig) (models.
 		return nil, err
 	}
 	records := response.Records
-	recordConfigs := make([]*models.RecordConfig, len(records))
+	recordConfigs := make(models.Records, len(records))
 	for i := range records {
-		recordConfigs[i] = toRecordConfig(domain, &records[i])
+		recordConfigs[i], err = toRecordConfig(dc, &records[i])
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return recordConfigs, nil
@@ -206,91 +209,83 @@ func (api *realtimeregisterAPI) GetRegistrarCorrections(dc *models.DomainConfig)
 	return nil, nil
 }
 
-func toRecordConfig(domain string, record *Record) *models.RecordConfig {
-	recordConfig := &models.RecordConfig{
-		Type:         record.Type,
-		TTL:          uint32(record.TTL),
-		MxPreference: uint16(record.Priority),
-		SrvWeight:    uint16(0),
-		SrvPort:      uint16(0),
-		Original:     record,
-	}
-
-	recordConfig.SetLabelFromFQDN(record.Name, domain)
+func toRecordConfig(dc *models.DomainConfig, record *Record) (*models.RecordConfig, error) {
+	label := dc.LabelFromFQDNNoDot(record.Name)
+	ttl := uint32(record.TTL)
+	var recordConfig *models.RecordConfig
+	var err error
 
 	switch rtype := record.Type; rtype { // #rtype_variations
 	case "TXT":
-		_ = recordConfig.SetTargetTXT(removeEscapeChars(record.Content))
+		recordConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, removeEscapeChars(record.Content))
 	case "NS", "ALIAS", "CNAME":
-		_ = recordConfig.SetTarget(dnsutilv1.AddOrigin(addTrailingDot(record.Content), domain))
+		recordConfig, err = dc.NewRecordConfig(label, ttl, rtype, addTrailingDot(record.Content))
 	case "MX":
 		content := record.Content
 		if content != "." {
 			content = addTrailingDot(content)
 		}
-		_ = recordConfig.SetTarget(dnsutilv1.AddOrigin(content, domain))
-	case "NAPTR":
-		_ = recordConfig.SetTargetNAPTRString(record.Content)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, record.Priority, content)
 	case "SRV":
 		parts := strings.Fields(record.Content)
-		weight, _ := strconv.ParseUint(parts[0], 10, 16)
-		port, _ := strconv.ParseUint(parts[1], 10, 16)
 		content := parts[2]
 		if content != "." {
 			content = addTrailingDot(content)
 		}
-		_ = recordConfig.SetTargetSRV(uint16(record.Priority), uint16(weight), uint16(port), content)
-	case "CAA":
-		_ = recordConfig.SetTargetCAAString(record.Content)
-	case "SSHFP":
-		_ = recordConfig.SetTargetSSHFPString(record.Content)
-	case "TLSA":
-		_ = recordConfig.SetTargetTLSAString(record.Content)
-	case "DS":
-		_ = recordConfig.SetTargetDSString(record.Content)
-	case "LOC":
-		_ = recordConfig.SetTargetLOCString(domain, record.Content)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, record.Priority, parts[0], parts[1], content)
+	case "NAPTR", "CAA", "SSHFP", "TLSA", "DS", "LOC":
+		recordConfig, err = dc.NewRecordConfigParse(label, ttl, rtype, record.Content)
 	default:
-		_ = recordConfig.SetTarget(record.Content)
+		recordConfig, err = dc.NewRecordConfig(label, ttl, rtype, record.Content)
 	}
-	return recordConfig
+	if err != nil {
+		return nil, err
+	}
+	recordConfig.Original = record
+	return recordConfig, nil
 }
 
-func toRecord(recordConfig *models.RecordConfig) Record {
+func toRecord(rc *models.RecordConfig) Record {
 	record := &Record{
-		Type:    recordConfig.Type,
-		Name:    recordConfig.NameFQDN,
-		Content: removeTrailingDot(recordConfig.GetTargetField()),
-		TTL:     int(recordConfig.TTL),
+		Type: rc.Type,
+		Name: rc.NameFQDN,
+		TTL:  int(rc.TTL),
 	}
 
-	switch rtype := recordConfig.Type; rtype {
-	case "SRV":
-		if record.Content == "" {
-			record.Content = "."
+	switch rtype := rc.TypeNum; rtype {
+	case dnsv2.TypeSRV:
+		f := rc.AsSRV()
+		record.Priority = parsePriority(int(f.Priority))
+		t := removeTrailingDot(f.Target)
+		if t == "" {
+			t = "."
 		}
-		record.Priority = parsePriority(int(recordConfig.SrvPriority))
-		record.Content = fmt.Sprintf("%d %d %s", recordConfig.SrvWeight, recordConfig.SrvPort, record.Content)
-	case "NAPTR", "SSHFP", "TLSA", "CAA":
-		record.Content = recordConfig.GetTargetCombined()
-	case "TXT":
-		record.Content = addEscapeChars(record.Content)
-	case "DS":
-		record.Content = fmt.Sprintf("%d %d %d %s", recordConfig.DsKeyTag, recordConfig.DsAlgorithm,
-			recordConfig.DsDigestType, strings.ToUpper(recordConfig.DsDigest))
-	case "MX":
-		if record.Content == "" {
-			record.Content = "."
-			record.Priority = 0
-		} else {
-			record.Priority = parsePriority(int(recordConfig.MxPreference))
-		}
+		record.Content = fmt.Sprintf("%d %d %s", f.Weight, f.Port, t)
+	case dnsv2.TypeNAPTR, dnsv2.TypeSSHFP, dnsv2.TypeTLSA, dnsv2.TypeCAA:
+		record.Content = rc.GetRDATA().String()
+	case dnsv2.TypeTXT:
+		//record.Content = addEscapeChars(record.Content)
+		record.Content = rc.AsTXT().String()
+	case dnsv2.TypeDS:
+		f := rc.AsDS()
+		record.Content = fmt.Sprintf("%d %d %d %s", f.KeyTag, f.Algorithm, f.DigestType, strings.ToUpper(f.Digest))
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
 		// Workaround for 0 prio and 'omitempty' restrictions on json marshalling
-		if record.Priority == 0 {
+		if f.Preference == 0 {
 			record.Priority = -1
+		} else {
+			record.Priority = int(f.Preference)
 		}
-	case "LOC":
-		parts := strings.Fields(recordConfig.GetTargetCombined())
+		target := removeTrailingDot(f.Mx)
+		if target == "" {
+			target = "."
+			record.Priority = 0
+		}
+		record.Content = target
+
+	case dnsv2.TypeLOC:
+		parts := strings.Fields(rc.GetRDATA().String())
 		degrees1, _ := strconv.ParseUint(parts[0], 10, 32)
 		minutes1, _ := strconv.ParseUint(parts[1], 10, 32)
 		degrees2, _ := strconv.ParseUint(parts[4], 10, 32)
@@ -303,6 +298,14 @@ func toRecord(recordConfig *models.RecordConfig) Record {
 			degrees1, minutes1, parts[2], parts[3], degrees2, minutes2,
 			parts[6], parts[7], altitude, size, hp, vp,
 		)
+	case dnsv2.TypeCNAME:
+		record.Content = removeTrailingDot(rc.AsCNAME().Target)
+
+	case dnsv2.TypeA, dnsv2.TypeAAAA:
+		record.Content = rc.GetRDATA().String()
+
+	default:
+		record.Content = removeTrailingDot(rc.GetRDATA().String())
 	}
 
 	return *record

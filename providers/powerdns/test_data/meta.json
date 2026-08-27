@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "dnscontrol-test.com"
+    }
+  ]
+}

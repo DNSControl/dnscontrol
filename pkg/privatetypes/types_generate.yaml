@@ -1,0 +1,273 @@
+---
+# 65280 to 65534
+types:
+  - name: Adguardhome_A_Passthrough
+    codepoint: 65280
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: ""
+
+  - name: Adguardhome_AAAA_Passthrough
+    codepoint: 65281
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: ""
+
+  - name: Akamaicdn
+    codepoint: 65282
+    fields:
+      - name: Target
+        type: TargetHost
+    test_data:
+      - name: ""
+        values:
+          Target: example.com.
+
+  - name: Akamaitlc
+    codepoint: 65284
+    fields:
+      - name: AnswerType
+        type: RawString
+      - name: Target
+        type: TargetHost
+    test_data:
+      - name: ""
+        values:
+          AnswerType: cname
+          Target: example.com.
+
+  - name: Alias
+    codepoint: 65285
+    fields:
+      - name: Target
+        type: TargetHost
+    test_data:
+      - name: ""
+        values:
+          Target: example.com.
+
+  - name: Azure_Alias
+    codepoint: 65286
+    fields:
+      - name: AliasType
+        type: RawString
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          AliasType: A
+          Target: example.com.
+
+  - name: Bunny_Dns_Pz
+    codepoint: 65287
+    fields:
+      - name: PullZoneID
+        type: Int64
+    test_data:
+      - name: ""
+        values:
+          PullZoneID: 123
+
+# NOTE TO SELF: PullZoneID is an int64.  Should it be a uint16?
+
+  - name: Bunny_Dns_Rdr
+    codepoint: 65320
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: https://example.com
+
+  - name: Cf_Worker_Route
+    codepoint: 65288
+    fields:
+      - name: When
+        type: RawString
+      - name: Then
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          When: whenWhen
+          Then: ThenThen
+
+  - name: Cloudflareapi_Single_Redirect
+    codepoint: 65289
+    fields:
+      - name: SRName
+        type: RawString
+      - name: Code
+        type: Uint16
+      - name: SRWhen
+        type: RawString
+      - name: SRThen
+        type: RawString
+    runtimeFields:
+      - name: RT_SRRRulesetID
+        type: RawString
+        structtag: "json:\"sr_rulesetid,omitempty\""
+        comment: "ID of the ruleset containing this rule (populated by API)"
+      - name: RT_SRRRulesetRuleID
+        type: RawString
+        structtag: "json:\"sr_rulesetruleid,omitempty\""
+        comment: "ID of this rule within the ruleset (populated by API)"
+#      - name: RT_SRDisplay
+#        type: RawString
+#        structtag: "json:\"sr_display,omitempty\""
+#        comment: "How is this displayed to the user (SetTarget) for CF_SINGLE_REDIRECT"
+
+    test_data:
+      - name: ""
+        values:
+          SRName: first_rule
+          Code: 301
+          SRWhen: when_string
+          SRThen: then_string
+
+  - name: Cloudns_Wr
+    codepoint: 65290
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: example.com.
+
+  - name: Frame
+    codepoint: 65291
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: example.com.
+
+  - name: Import_Transform
+    codepoint: 65322
+    fields:
+      - name: TransformTable
+        type: RawString
+      - name: TTL
+        type: Uint16
+      - name: SuffixStrip
+        type: RawString
+      - name: TargetDomain
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          TransformTable: 1.1.1.0 ~ 1.1.1.100 ~ 4.4.4.100 ~
+          SuffixStrip: com
+          TargetDomain: example.com
+          TTL: 123
+
+  - name: Lua
+    codepoint: 65292
+    fields:
+      - name: LuaType
+        type: ToUpperRawString
+      - name: LuaPayload
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          LuaType: A
+          LuaPayload: return_127_0_0_1
+
+  - name: Mikrotik_Fwd
+    codepoint: 65293
+    fields:
+      - name: ForwardTo
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          ForwardTo: example.com.
+
+  - name: Mikrotik_Nxdomain
+    codepoint: 65294
+    fields: []
+    test_data: []
+
+  - name: Mikrotik_Forwarder
+    codepoint: 65321
+    fields:
+      - name: Target
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Target: 1.1.1.1,8.8.8.8
+
+  - name: Netlify
+    codepoint: 65295
+    fields: []
+    test_data: []
+
+  - name: Netlifyv6
+    codepoint: 65296
+    fields: []
+    test_data: []
+
+  - name: Porkbun_Urlfwd
+    codepoint: 65297
+    fields:
+      - name: Location
+        type: RawString
+    test_data:
+      - name: "plain"
+        values:
+          Location: http://example.com
+
+  - name: R53_Alias
+    codepoint: 65298
+    fields:
+      - name: AliasType
+        type: RawString
+      - name: Target
+        type: TargetHost
+    optionalFields:
+      - name: EvalTargetHealth
+        type: RawString
+      - name: ZoneID
+        type: RawString
+    test_data:
+      - name: normal_user
+        values:
+          AliasType: 1
+          Target: alice.
+          EvalTargetHealth: true
+          ZoneID: 1234
+
+  - name: Url
+    codepoint: 65299
+    fields:
+      - name: Location
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Location: https://example.com/
+
+  - name: Url301
+    codepoint: 65300
+    fields:
+      - name: Location
+        type: RawString
+    test_data:
+      - name: ""
+        values:
+          Location: https://example.com/
