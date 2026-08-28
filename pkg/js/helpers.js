@@ -1680,8 +1680,8 @@ function DMARC_BUILDER(value) {
     ) {
         throw 'Invalid DMARC nonexistent-subdomain policy';
     }
-    if (value.subdomainPolicy) {
-        record.push('np=' + value.subdomainPolicy);
+    if (value.nonexistentSubdomainPolicy) {
+        record.push('np=' + value.nonexistentSubdomainPolicy);
     }
 
     // Alignment DKIM
