@@ -9,16 +9,14 @@ import (
 func IPv4(a any) (netip.Addr, error) {
 	switch v := a.(type) {
 	case float64:
-		i := int32(v)
-		a := (i >> 24) % 256
-		b := (i >> 16) % 256
-		c := (i >> 8) % 256
-		d := i % 256
+		// IP addresses expressed as a number (e.g. via the IP() helper in
+		// dnsconfig.js) range from 0 to 4294967295 (2^32-1)
+		i := uint32(v)
 		x := netip.AddrFrom4([4]byte{
-			byte(a),
-			byte(b),
-			byte(c),
-			byte(d),
+			byte(i >> 24), // NB(tlim): byte() silently truncates the upper bits.
+			byte(i >> 16),
+			byte(i >> 8),
+			byte(i),
 		})
 		return x, nil
 	case string:

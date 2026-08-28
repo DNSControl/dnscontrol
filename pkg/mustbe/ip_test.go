@@ -45,6 +45,11 @@ func TestIPv4_Parse(t *testing.T) {
 		{"a", "1.2.3.4", netip.MustParseAddr("1.2.3.4")},
 		{"b", float64((2 << 24) + (3 << 16) + (4 << 8) + 5), netip.MustParseAddr("2.3.4.5")},
 		{"c", netip.MustParseAddr("3.4.5.6"), netip.MustParseAddr("3.4.5.6")},
+		// Regression test for https://github.com/DNSControl/dnscontrol/issues/4825:
+		// addresses with a first octet >= 128 produce a number greater than
+		// math.MaxInt32, which used to overflow when converted via int32.
+		{"d", float64((135 << 24) + (181 << 16) + (247 << 8) + 240), netip.MustParseAddr("135.181.247.240")},
+		{"e", float64((255 << 24) + (255 << 16) + (255 << 8) + 255), netip.MustParseAddr("255.255.255.255")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

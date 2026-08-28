@@ -1,4 +1,4 @@
-# Debugger
+# Debugging Tips
 
 - [Debugger](#debugger)
   - [Debug a particular function](#debug-a-particular-function)
@@ -79,4 +79,32 @@ VSCode equivalent configuration is:
         }
 
     ]
+```
+
+## Debug `helpers.js`
+
+Develop a function:
+
+```
+node -e "
+function IP(dot) {
+    var d = dot.split('.');
+    return ((((((+d[0]) * 256) + (+d[1])) * 256) + (+d[2])) * 256) + (+d[3]);
+}
+console.log(IP('135.181.247.240'));
+"
+```
+
+Debug a function within helpers.js:
+
+```
+$ node -e "
+const fs = require('fs');
+const vm = require('vm');
+const code = fs.readFileSync('/Users/tlimoncelli/gitthings/dnscontrol/pkg/js/helpers.js', 'utf8');
+const sandbox = {};
+vm.createContext(sandbox);
+vm.runInContext(code, sandbox);
+console.log(vm.runInContext(\" IP('135.181.247.240') \", sandbox));
+"
 ```
