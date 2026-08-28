@@ -47,6 +47,18 @@
           "ttl": 300,
           "type": "A",
           "typenum": 1
+        },
+        {
+          "comparablev3": "190.2.3.4",
+          "filepos": "[line:12:5]",
+          "name": "yyy",
+          "name_unicode": "yyy",
+          "rdata": {
+            "Addr": "190.2.3.4"
+          },
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
         }
       ],
       "registrar": "Third-Party",
