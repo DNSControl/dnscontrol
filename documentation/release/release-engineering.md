@@ -37,7 +37,7 @@ It must be run from branch `main` or `prep_release`.
 git checkout main
 git config remote.origin.prune true ; git config fetch.prune true
 git pull --rebase --ff-only --prune
-bin/prep_release.sh
+bin/prepare_release.sh
 ```
 
 ### Manual
