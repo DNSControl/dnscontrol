@@ -8,9 +8,6 @@
         {
           "comparablev3": "128 iodef \"https://example.com\"",
           "filepos": "[line:12:5]",
-          "meta": {
-            "caaflag": "128"
-          },
           "name": "@",
           "name_unicode": "@",
           "rdata": {
@@ -25,9 +22,6 @@
         {
           "comparablev3": "128 iodef \"mailto:test@example.com\"",
           "filepos": "[line:8:5]",
-          "meta": {
-            "caaflag": "128"
-          },
           "name": "@",
           "name_unicode": "@",
           "rdata": {

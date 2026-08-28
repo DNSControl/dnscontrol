@@ -8,8 +8,10 @@ import (
 	"sort"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/transip/gotransip/v6"
 	"github.com/transip/gotransip/v6/domain"
@@ -276,17 +278,27 @@ func (n *transipProvider) recordsToNativeObserved(records models.Records) ([]dom
 	return entries, nil
 }
 
-func recordToNative(config *models.RecordConfig) (domain.DNSEntry, error) {
+func recordToNative(rc *models.RecordConfig) (domain.DNSEntry, error) {
+	var content string
+	switch rc.TypeNum {
+	case dnsv2.TypeTXT:
+		// TransIP stores the TXT "content" field verbatim.
+		content = rc.GetTargetTXTJoined()
+	default:
+		content = rc.GetRDATA().String()
+	}
 	return domain.DNSEntry{
-		Name:    config.Name,
-		Expire:  int(config.TTL),
-		Type:    config.Type,
-		Content: config.GetRDATA().String(),
+		Name:    rc.Name,
+		Expire:  int(rc.TTL),
+		Type:    rc.Type,
+		Content: content,
 	}, nil
 }
 
 func nativeToRecord(entry domain.DNSEntry, dc *models.DomainConfig) (*models.RecordConfig, error) {
-	return dc.NewRecordConfigParse(dc.LabelFromShort(entry.Name), uint32(entry.Expire), entry.Type, entry.Content)
+	// TransIP returns TXT content unquoted (see recordToNative), so parse it as raw data.
+	return dc.NewRecordConfigParse(dc.LabelFromShort(entry.Name), uint32(entry.Expire), entry.Type, entry.Content,
+		nrc.Flags{TxtDontParse: true})
 }
 
 // removeDomainNameserversFromDomainRecords removes the nameserver records from the dc.Records which are already defined as the Domain nameservers.
