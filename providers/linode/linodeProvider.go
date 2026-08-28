@@ -30,7 +30,9 @@ Info required in `creds.json`:
 // Allowed values from the Linode API
 // https://www.linode.com/docs/api/domains/#domains-list__responses
 var allowedTTLValues = []uint32{
-	0,       // Default, currently 1209600 seconds
+	0,       // Default - control by default TTL for the zone
+	30,      // 30 seconds
+	120,     // 2 minutes
 	300,     // 5 minutes
 	3600,    // 1 hour
 	7200,    // 2 hours
