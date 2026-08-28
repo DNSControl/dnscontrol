@@ -40,19 +40,26 @@ D("example.com", REG_NONE, DnsProvider(DSP_LINODE),
 Linode does not allow all TTLs, but only a specific subset of TTLs. The following TTLs are supported
 ([source](https://www.linode.com/docs/api/domains/#domains-list__responses)):
 
-- 0 (Default, currently equivalent to 1209600, or 14 days)
-- 300
-- 3600
-- 7200
-- 14400
-- 28800
-- 57600
-- 86400
-- 172800
-- 345600
-- 604800
-- 1209600
-- 2419200
+- 0 (Default: the _Default TTL_ configured for the zone[^1])
+- 30 ("30s")
+- 120 ("2m")
+- 300 ("5m")
+- 3600 ("1h")
+- 7200 ("2h")
+- 14400 ("4h")
+- 28800 ("8h")
+- 57600 ("16h")
+- 86400 ("1d")
+- 172800 ("2d")
+- 345600 ("4d")
+- 604800 ("1w")
+- 1209600 ("2w")
+- 2419200 ("4w")
+
+[^1]: The _default TTL_ for a zone may be set using Linode's web UI or API.
+This sets the TTL for the SOA, NS records, and any other records that have their TTL set to zero. It also sets the value in the _minimum TTL_ field of the SOA.
+There currently seems to be no way to set the minimum TTL a different value than
+the _default TTL_.
 
 The provider will automatically round up your TTL to one of these values. For example, 600 seconds would become 3600
 seconds, but 300 seconds would stay 300 seconds.
