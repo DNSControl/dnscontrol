@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"regexp"
 	"sort"
 	"strings"
 
@@ -44,8 +43,6 @@ var allowedTTLValues = []uint32{
 	1209600, // 2 weeks
 	2419200, // 4 weeks
 }
-
-var srvRegexp = regexp.MustCompile(`^_(?P<Service>\w+)\.\_(?P<Protocol>\w+)$`)
 
 // linodeProvider is the handle for this provider.
 type linodeProvider struct {
@@ -356,10 +353,11 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		req.Weight = int(f.Weight)
 		req.Port = int(f.Port)
 
-		// From softlayer provider
-		// This is to support SRV, it doesn't work yet for Linode
-		result := srvRegexp.FindStringSubmatch(req.Name)
-		if len(result) != 3 {
+		// This is to support SRV, it doesn't work yet for Linode.
+		// AuditRecords validates the label with srvLabelRegexp; here the same
+		// regexp extracts the service and protocol from its named groups.
+		result := srvLabelRegexp.FindStringSubmatch(req.Name)
+		if result == nil {
 			return nil, fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", req.Name)
 		}
 		serviceName, protocol := result[1], strings.ToLower(result[2])
