@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -323,6 +324,12 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 	return rc, err
 }
 
+// srvLabelRegexp matches a valid SRV record label: "_service._protocol",
+// optionally followed by a subdomain (e.g. "_smtp._tcp.sub.domain").
+// This regex is both used to validate labels (auditrecords.go) and
+// extract the service and protocol (linodeProvider.go).
+var srvLabelRegexp = regexp.MustCompile(`^_(?P<Service>[A-Za-z0-9][A-Za-z0-9-]*)\._(?P<Protocol>[A-Za-z0-9][A-Za-z0-9-]*)(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*$`)
+
 func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest, error) {
 	req := &recordEditRequest{
 		Type: rc.Type,
@@ -353,9 +360,7 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		req.Weight = int(f.Weight)
 		req.Port = int(f.Port)
 
-		// This is to support SRV, it doesn't work yet for Linode.
-		// AuditRecords validates the label with srvLabelRegexp; here the same
-		// regexp extracts the service and protocol from its named groups.
+		// extract the service and protocol from its named groups.
 		result := srvLabelRegexp.FindStringSubmatch(req.Name)
 		if result == nil {
 			return nil, fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", req.Name)

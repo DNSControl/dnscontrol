@@ -2,21 +2,10 @@ package linode
 
 import (
 	"errors"
-	"regexp"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
-
-// srvLabelRegexp matches a valid SRV record label: "_service._protocol",
-// optionally followed by a subdomain (e.g. "_smtp._tcp.sub.domain").
-//
-// Each of the service and protocol tokens is a single leading underscore
-// followed by an alphanumeric and then any number of alphanumerics or hyphens
-// (no additional underscores). The named Service and Protocol capture groups
-// let linodeProvider.go extract those two values, so this single regexp is used
-// both to validate the label (AuditRecords) and to parse it (toReq).
-var srvLabelRegexp = regexp.MustCompile(`^_(?P<Service>[A-Za-z0-9][A-Za-z0-9-]*)\._(?P<Protocol>[A-Za-z0-9][A-Za-z0-9-]*)(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*$`)
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
