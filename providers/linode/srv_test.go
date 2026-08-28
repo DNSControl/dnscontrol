@@ -11,13 +11,16 @@ func TestSRVLabel(t *testing.T) {
 		"_muble._udp-lite",
 		"_tcp._smtp.sub.domain",
 		"_tcp._smtp.sub-domain",
-	}
-	invalid := []string{
+		// service/protocol tokens may contain underscores and hyphens.
 		"__smtp._tcp",
 		"_sm_tp._tcp",
 		"_smtp_._tcp",
 		"_smtp.__tcp",
-		"_foo&._tcp",
+	}
+	invalid := []string{
+		"_foo&._tcp", // '&' is not a word character or hyphen
+		"_smtp",      // missing the protocol token
+		"notasrv",    // missing the leading underscore
 	}
 
 	for _, label := range valid {
@@ -38,9 +41,8 @@ func TestSRVLabel(t *testing.T) {
 }
 
 // TestExtractSrvParts verifies that srvLabelRegexp — the same regexp that
-// validates the label — extracts the service and protocol from its named
-// capture groups. A trailing subdomain is allowed but ignored by the
-// extraction; interior underscores, a single label, or junk do not match.
+// validates the label and extracts the service and protocol from its named
+// capture groups. A trailing subdomain is allowed.
 func TestExtractSrvParts(t *testing.T) {
 	tests := []struct {
 		label    string
@@ -54,8 +56,9 @@ func TestExtractSrvParts(t *testing.T) {
 		{label: "_muble._udp-lite", service: "muble", protocol: "udp-lite", match: true},
 		// A subdomain is permitted; extraction still yields service/protocol.
 		{label: "_smtp._tcp.subdomain", service: "smtp", protocol: "tcp", match: true},
-		// No match: an interior underscore, a single label, or junk.
-		{label: "_foo_bar._tcp", match: false},
+		// Underscores are permitted within the service/protocol tokens.
+		{label: "_foo_bar._tcp", service: "foo_bar", protocol: "tcp", match: true},
+		// No match: a single label or junk.
 		{label: "_smtp", match: false},
 		{label: "notasrv", match: false},
 	}

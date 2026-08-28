@@ -2,10 +2,17 @@ package linode
 
 import (
 	"errors"
+	"regexp"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
+
+// srvLabelRegexp matches a valid SRV record label: "_service._protocol",
+// optionally followed by a subdomain (e.g. "_smtp._tcp.sub.domain").  This is
+// used both by AuditRecords to validate labels and by toReq to extract Service
+// and Protocol from the labels.
+var srvLabelRegexp = regexp.MustCompile(`^_(?P<Service>[\w-]+)\._(?P<Protocol>[\w-]+)(?:\.[\w-]+)*$`)
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
