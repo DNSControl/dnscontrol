@@ -12,7 +12,7 @@ import (
 // optionally followed by a subdomain (e.g. "_smtp._tcp.sub.domain").  This is
 // used both by AuditRecords to validate labels and by toReq to extract Service
 // and Protocol from the labels.
-var srvLabelRegexp = regexp.MustCompile(`^_(?P<Service>[\w-]+)\._(?P<Protocol>[\w-]+)(?:\.[\w-]+)*$`)
+var srvLabelRegexp = regexp.MustCompile(`^_(?P<Service>[[:alnum:]-]+)\._(?P<Protocol>[[:alnum:]-][\w-]*(?:\.[\w-]+)*)$`)
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
