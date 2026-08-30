@@ -17,9 +17,11 @@ Example:
 {% endcode %}
 
 ## Metadata
+
 This provider does not recognize any special metadata fields unique to Linode.
 
 ## Usage
+
 An example configuration:
 
 {% code title="dnsconfig.js" %}
@@ -34,9 +36,11 @@ D("example.com", REG_NONE, DnsProvider(DSP_LINODE),
 {% endcode %}
 
 ## Activation
+
 [Create Personal Access Token](https://cloud.linode.com/profile/tokens)
 
 ## Caveats
+
 Linode does not allow all TTLs, but only a specific subset of TTLs. The following TTLs are supported
 ([source](https://www.linode.com/docs/api/domains/#domains-list__responses)):
 
@@ -64,7 +68,13 @@ the _default TTL_.
 The provider will automatically round up your TTL to one of these values. For example, 600 seconds would become 3600
 seconds, but 300 seconds would stay 300 seconds.
 
-Linode requires [`SRV`](../language-reference/domain-modifiers/SRV.md) records to have a non-zero priority.
+Linode requires [`SRV`](../language-reference/domain-modifiers/SRV.md) records
+to have a non-zero priority. Linode validates service name and protocol more
+strictly than DNSControl. This means certain pathalogical errors will not be
+caught until DNSControl `push`, though many issues will be caught at `check` and
+`preview`. Some invalid service names are silently "corrected" by Linode, in
+which case every `push` will try to undo the correction. This should only happen
+for invalid inputs.
 
 ## Feature Summary
 
