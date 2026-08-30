@@ -6,9 +6,12 @@ import (
 
 // invalidSrvLabels is a list of invalid labels, for use in tests.
 var invalidSrvLabels = []string{
+	// Each of these will be tried plain plus ".sub" and plus ".sub.domain".
+	"notasrv",    // just plain wrong
+	"_notasrv",   // just plain wrong
 	"_foo&._tcp", // '&' is not a word character or hyphen
-	"_smtp",      // missing the protocol token
-	"notasrv",    // missing the leading underscore
+	"smtp._tcp",  // missing the leading underscore
+	"_smtp.tcp",  // missing the leading underscore
 }
 
 // srvLabelTests is a list of valid labels, with expected service and protocol extraction.
@@ -17,11 +20,14 @@ var srvLabelTests = []struct {
 	service  string
 	protocol string
 }{
+	// Each of these will be tried plain plus ".sub" and plus ".sub.domain".
 	{label: "_muble._udp-lite", service: "muble", protocol: "udp-lite"},
 	{label: "_sip._udp", service: "sip", protocol: "udp"},
 	{label: "_smtp._tcp", service: "smtp", protocol: "tcp"},
-	{label: "_tcp._smtp", service: "tcp", protocol: "smtp"},
 	{label: "_xmpp-server._tcp", service: "xmpp-server", protocol: "tcp"},
+	// This weird case is accepted by Linode when subdomains in use.
+	// For example `_tcp._smtp.sub.domain` or `_tcp._smtp.sub-domain`.
+	{label: "_tcp._smtp", service: "tcp", protocol: "smtp"},
 	// Underscores are permitted within the service/protocol tokens.
 	{label: "_foo_bar._tcp", service: "foo_bar", protocol: "tcp"},
 	// Permitted, but Linode will correct, which causes an update loop. We're ok
@@ -37,23 +43,28 @@ var srvLabelTests = []struct {
 
 func TestSRVLabel(t *testing.T) {
 
-	for _, label := range invalidSrvLabels {
-		t.Run("invalid/"+label, func(t *testing.T) {
-			err := validateSrvLabel(label)
-			if err == nil {
-				t.Errorf("expected %q to be an invalid SRV label, but it was accepted", label)
-			}
-		})
+	for _, l := range invalidSrvLabels {
+		for _, suffix := range []string{"", ".sub", ".sub.dom"} {
+			label := l + suffix
+			t.Run("invalid/"+label, func(t *testing.T) {
+				err := validateSrvLabel(label)
+				if err == nil {
+					t.Errorf("expected %q to be an invalid SRV label, but it was accepted", label)
+				}
+			})
+		}
 	}
 
 	for _, tc := range srvLabelTests {
-		label := tc.label
-		t.Run("valid/"+label, func(t *testing.T) {
-			err := validateSrvLabel(label)
-			if err != nil {
-				t.Errorf("expected %q to be a valid SRV label, but it was rejected: %v", label, err)
-			}
-		})
+		for _, suffix := range []string{"", ".sub", ".sub.domain"} {
+			label := tc.label + suffix
+			t.Run("valid/"+label, func(t *testing.T) {
+				err := validateSrvLabel(label)
+				if err != nil {
+					t.Errorf("expected %q to be a valid SRV label, but it was rejected: %v", label, err)
+				}
+			})
+		}
 	}
 }
 
@@ -61,7 +72,7 @@ func TestSRVLabel(t *testing.T) {
 // validates the label) extracts the service and protocol properly.
 func TestExtractSrvParts(t *testing.T) {
 	for _, tc := range srvLabelTests {
-		for _, suffix := range []string{"", ".sub", ".sub.dom"} {
+		for _, suffix := range []string{"", ".sub", ".sub.domain"} {
 			label := tc.label + suffix
 			t.Run(label, func(t *testing.T) {
 				service, protocol, err := extractSrvLabelValues(label)
