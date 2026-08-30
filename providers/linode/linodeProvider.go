@@ -355,10 +355,10 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 		req.Weight = int(f.Weight)
 		req.Port = int(f.Port)
 
-		// The regexp extracts the service and protocol from its named groups.
-		// The label has already been validated by AuditRecords(), but the same regex is used here.
-		// NB(tlim): The fact that Linode expects the client to do this extraction is a good example
-		// of how not to design a protocol.
+		// The label has already been validated by AuditRecords().
+		// NB(tlim): The fact that Linode expects the client to do this
+		// extraction is a good example of how not to design a protocol. It's
+		// asking the same data to be sent twice, which multiplies the edge cases.
 		serviceName, protocol, err := extractSrvLabelValues(req.Name)
 		if err != nil {
 			return nil, err
