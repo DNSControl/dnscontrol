@@ -38,7 +38,6 @@ var srvLabelTests = []struct {
 func TestSRVLabel(t *testing.T) {
 
 	for _, label := range invalidSrvLabels {
-		label := label
 		t.Run("invalid/"+label, func(t *testing.T) {
 			err := validateSrvLabel(label)
 			if err == nil {

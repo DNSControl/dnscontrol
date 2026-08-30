@@ -357,11 +357,12 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) (*recordEditRequest
 
 		// The regexp extracts the service and protocol from its named groups.
 		// The label has already been validated by AuditRecords(), but the same regex is used here.
-		result := srvLabelRegexp.FindStringSubmatch(req.Name)
-		if result == nil {
-			return nil, fmt.Errorf("SRV Record must match format \"_service._protocol\" not %s", req.Name)
+		// NB(tlim): The fact that Linode expects the client to do this extraction is a good example
+		// of how not to design a protocol.
+		serviceName, protocol, err := extractSrvLabelValues(req.Name)
+		if err != nil {
+			return nil, err
 		}
-		serviceName, protocol := result[1], strings.ToLower(result[2])
 		req.Protocol = protocol
 		req.Service = serviceName
 
