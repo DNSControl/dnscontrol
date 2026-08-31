@@ -82,7 +82,7 @@ func TestExtractSrvParts(t *testing.T) {
 				if service != tc.service {
 					t.Errorf("service = %q, want %q", service, tc.service)
 				}
-				if protocol != tc.protocol {
+				if protocol != tc.protocol+suffix {
 					t.Errorf("protocol = %q, want %q", protocol, tc.protocol)
 				}
 			})

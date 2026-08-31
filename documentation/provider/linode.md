@@ -68,13 +68,13 @@ the _default TTL_.
 The provider will automatically round up your TTL to one of these values. For example, 600 seconds would become 3600
 seconds, but 300 seconds would stay 300 seconds.
 
-Linode requires [`SRV`](../language-reference/domain-modifiers/SRV.md) records
-to have a non-zero priority. Linode validates service name and protocol more
-strictly than DNSControl. This means certain pathalogical errors will not be
-caught until DNSControl `push`, though many issues will be caught at `check` and
-`preview`. Some invalid service names are silently "corrected" by Linode, in
-which case every `push` will try to undo the correction. This should only happen
-for invalid inputs.
+Linode validates labels of [`SRV`](../language-reference/domain-modifiers/SRV.md)
+records more strictly than DNSControl, only permitting certain service names
+and protocols.  Most issues will be caught at `check` and `preview` but certain
+errors will not be caught until DNSControl `push` as they rely on the API
+rejecting the update.  Also be aware that some invalid service names are
+silently corrected by Linode, in which case every `push` will try to undo the
+correction. All of these caveats only affect invalid inputs.
 
 ## Feature Summary
 

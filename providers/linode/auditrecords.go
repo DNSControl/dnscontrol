@@ -11,7 +11,8 @@ import (
 func AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("CAA", rejectif.CaaFlagIsNonZero)            // Last verified 2026-07-28
+	a.Add("CAA", rejectif.CaaFlagIsNonZero) // Last verified 2026-07-28
+
 	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2023-01-15
 
 	a.Add("SRV", srvHasInvalidLabel) // Last verified 2026-08-28

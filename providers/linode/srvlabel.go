@@ -39,7 +39,7 @@ func extractSrvLabelValues(label string) (string, string, error) {
 }
 
 func validateSrvLabelHelper(label string) (string, string, error) {
-	parts := strings.SplitN(label, ".", 3)
+	parts := strings.SplitN(label, ".", 2)
 	if len(parts) < 2 {
 		return "", "", fmt.Errorf("invalid label %q: fewer than 2 parts", label)
 	}
