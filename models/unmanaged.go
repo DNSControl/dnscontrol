@@ -13,16 +13,16 @@ import (
 // unexported: LabelGlob, RTypeMap, and TargetGlob
 type UnmanagedConfig struct {
 	// Glob pattern for matching labels.
-	LabelPattern string    `json:"label_pattern,omitempty"`
-	LabelGlob    glob.Glob `json:"-"` // Compiled version
+	LabelPattern string        `json:"label_pattern,omitempty"`
+	LabelGlob    *glob.Pattern `json:"-"` // Compiled version
 
 	// Comma-separated list of DNS Resource Types.
 	RTypePattern string              `json:"rType_pattern,omitempty"`
 	RTypeMap     map[string]struct{} `json:"-"` // map of RTypes or len()=0 for all
 
 	// Glob pattern for matching targets.
-	TargetPattern string    `json:"target_pattern,omitempty"`
-	TargetGlob    glob.Glob `json:"-"` // Compiled version
+	TargetPattern string        `json:"target_pattern,omitempty"`
+	TargetGlob    *glob.Pattern `json:"-"` // Compiled version
 }
 
 // Uncomment to use:
