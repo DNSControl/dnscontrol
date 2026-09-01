@@ -33,7 +33,7 @@ require (
 	github.com/fatih/color v1.19.0
 	github.com/fbiville/markdown-table-formatter v0.3.0
 	github.com/go-gandi/go-gandi v0.7.0
-	github.com/gobwas/glob v0.2.4-0.20181002190808-e7a84e9525fe
+	github.com/gobwas/glob v1.0.0
 	github.com/google/go-cmp v0.7.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
