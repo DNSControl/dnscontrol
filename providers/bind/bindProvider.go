@@ -243,9 +243,9 @@ func findSoaRecord(recs models.Records) *models.RecordConfig {
 	return nil
 }
 
-func updateSerialNumber(recs models.Records, forcedSerial uint32) {
+func updateSerialNumber(desired, existing models.Records, forcedSerial uint32) {
 
-	recToUpdate := findSoaRecord(recs)
+	recToUpdate := findSoaRecord(desired)
 	if recToUpdate == nil {
 		return
 	}
@@ -255,7 +255,18 @@ func updateSerialNumber(recs models.Records, forcedSerial uint32) {
 	if forcedSerial != 0 {
 		f.Serial = forcedSerial
 	} else {
-		f.Serial = generateSerial(f.Serial)
+		// Base the new serial on the larger of the desired serial and the
+		// serial currently published in the existing zone file. The desired
+		// SOA is usually a freshly-built default (serial 1), so without this
+		// the serial would be regenerated from that default on every push and
+		// never advance past YYYYMMDD00. See issue #4840.
+		oldSerial := f.Serial
+		if existingSOA := findSoaRecord(existing); existingSOA != nil {
+			if s := existingSOA.AsSOA().Serial; s > oldSerial {
+				oldSerial = s
+			}
+		}
+		f.Serial = generateSerial(oldSerial)
 	}
 
 	recToUpdate.SetRDATA(f)
@@ -333,8 +344,9 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 		),
 	)
 
-	// We know there are changes. Update the SOA record's serial number.
-	updateSerialNumber(result.DesiredPlus, uint32(bindserial.ForcedValue&0xFFFF))
+	// We know there are changes. Update the SOA record's serial number,
+	// basing it on the serial already published in the existing zone.
+	updateSerialNumber(result.DesiredPlus, foundRecords, uint32(bindserial.ForcedValue&0xFFFF))
 
 	corrections = append(corrections,
 		&models.Correction{
