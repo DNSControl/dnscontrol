@@ -4,7 +4,6 @@ on:
     branches:
       - "tlim_testpr"
   pull_request:
-  workflow_dispatch:
 
 concurrency:
   # Cancel superseded runs when new commits are pushed to the same PR/branch.

@@ -37,7 +37,7 @@ It must be run from branch `main` or `prep_release`.
 git checkout main
 git config remote.origin.prune true ; git config fetch.prune true
 git pull --rebase --ff-only --prune
-bin/prep_release.sh
+bin/prepare_release.sh
 ```
 
 ### Manual
@@ -69,7 +69,7 @@ git commit -am "CHORE: generate-all.sh"
 Pick the next release number:
 
 ```shell
-git tag -l |grep -F v4. | sort --version-sort --field-separator=. --key=2,2 | tail
+git tag -l |grep -F v5. | sort --version-sort --field-separator=. --key=2,2 | tail
 ```
 
 The manual dance below (empty PR → wait for tests → merge → tag) is now done by

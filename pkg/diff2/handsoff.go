@@ -291,7 +291,7 @@ func matchAny(uconfigs []*models.UnmanagedConfig, rec *models.RecordConfig) bool
 	return false
 }
 
-func matchLabel(labelGlob glob.Glob, labelName string) bool {
+func matchLabel(labelGlob *glob.Pattern, labelName string) bool {
 	if labelGlob == nil {
 		return true
 	}
@@ -306,7 +306,7 @@ func matchType(typeMap map[string]struct{}, typeName string) bool {
 	return ok
 }
 
-func matchTarget(targetGlob glob.Glob, targetName string) bool {
+func matchTarget(targetGlob *glob.Pattern, targetName string) bool {
 	if targetGlob == nil {
 		return true
 	}
