@@ -9,7 +9,9 @@ import (
 )
 
 // supportedTypes lists the Infoblox record types we fetch and manage.
-var supportedTypes = []string{"a", "aaaa", "cname", "mx", "txt", "srv", "ns", "ptr", "caa"}
+// NS is excluded because Infoblox requires an 'addresses' field (nameserver IPs)
+// when creating NS delegation records, which dnscontrol does not provide.
+var supportedTypes = []string{"a", "aaaa", "cname", "mx", "txt", "srv", "ptr", "caa"}
 
 // infobloxRecord is the common set of fields returned by all Infoblox record types.
 // Type-specific fields are extracted in the per-type converters.
@@ -60,7 +62,6 @@ type ibRecordSRV struct {
 type ibRecordNS struct {
 	Ref        string `json:"_ref"`
 	Name       string `json:"name"`
-	TTL        uint32 `json:"ttl"`
 	View       string `json:"view"`
 	Nameserver string `json:"nameserver"`
 }
@@ -240,11 +241,8 @@ func convertNS(raw json.RawMessage, domain string, defaultTTL uint32) (*models.R
 
 	rc := &models.RecordConfig{
 		Type:     "NS",
-		TTL:      r.TTL,
+		TTL:      defaultTTL,
 		Original: r.Ref,
-	}
-	if rc.TTL == 0 {
-		rc.TTL = defaultTTL
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
 	if err := rc.PopulateFromString("NS", ensureTrailingDot(r.Nameserver), domain); err != nil {
@@ -334,6 +332,9 @@ func buildRecordBody(rc *models.RecordConfig, domain, view string, includeView b
 	case "NS":
 		recType = "ns"
 		body["nameserver"] = strings.TrimSuffix(rc.GetTargetField(), ".")
+		// NS records in Infoblox don't support ttl/use_ttl fields.
+		delete(body, "use_ttl")
+		delete(body, "ttl")
 	case "PTR":
 		recType = "ptr"
 		body["ptrdname"] = strings.TrimSuffix(rc.GetTargetField(), ".")
