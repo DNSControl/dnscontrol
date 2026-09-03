@@ -61,7 +61,8 @@ func newInfobloxAPI(host, username, password, wapiVer, view string, tlsSkipVerif
 		httpClient: &http.Client{
 			Jar: jar,
 			Transport: &http.Transport{
-				TLSClientConfig: tlsConfig,
+				TLSClientConfig:    tlsConfig,
+				DisableCompression: true,
 			},
 		},
 	}, nil
@@ -155,7 +156,7 @@ func (api *infobloxAPI) getZoneDefaultTTL(fqdn string) (uint32, error) {
 // getRecords fetches all records of a given type for a zone.
 // recType should be the Infoblox record type string (e.g. "a", "aaaa", "cname").
 func (api *infobloxAPI) getRecords(recType, zone string) ([]json.RawMessage, error) {
-	returnFields := ttlReturnFields(recType)
+	returnFields := extraReturnFields(recType)
 	url := fmt.Sprintf("%s/record:%s?zone=%s&view=%s%s&_max_results=-10000&_return_as_object=1",
 		api.baseURL(), recType, zone, api.view, returnFields)
 
@@ -177,12 +178,21 @@ func (api *infobloxAPI) getRecords(recType, zone string) ([]json.RawMessage, err
 	return records, nil
 }
 
-// ttlReturnFields returns the additional _return_fields query parameter for TTL-supporting types.
-func ttlReturnFields(recType string) string {
+// extraReturnFields returns the additional _return_fields query parameter
+// needed for each record type. Most types need ttl and use_ttl appended.
+// Some types also need their data fields explicitly requested because
+// Infoblox marks them as non-standard.
+func extraReturnFields(recType string) string {
 	switch recType {
 	case "ns":
-		// NS records in Infoblox don't support use_ttl in the same way
-		return "&_return_fields%2B=ttl"
+		// NS records in Infoblox don't have ttl or use_ttl fields.
+		return ""
+	case "caa":
+		// ca_flag, ca_tag, ca_value are non-standard fields.
+		return "&_return_fields%2B=ttl,use_ttl,ca_flag,ca_tag,ca_value"
+	case "ptr":
+		// name is a non-standard field for PTR records.
+		return "&_return_fields%2B=ttl,use_ttl,name"
 	default:
 		return "&_return_fields%2B=ttl,use_ttl"
 	}

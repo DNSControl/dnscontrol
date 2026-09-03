@@ -17,7 +17,9 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 	a.Add("TXT", rejectif.TxtHasBackslash)
 
-	a.Add("TXT", rejectif.TxtLongerThan(512))
+	a.Add("TXT", rejectif.TxtLongerThan(255))
+
+	a.Add("TXT", rejectif.TxtIsEmpty)
 
 	return a.Audit(records)
 }
