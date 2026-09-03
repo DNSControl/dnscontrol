@@ -3465,6 +3465,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * * `txtMaxSize` The maximum size for each TXT record. Values over 255 will result in [multiple strings][multi-string]. General recommendation is to [not go higher than 450][record-size] so that DNS responses will still fit in a UDP packet. (Optional. Default: `"255"`)
  * * `parts:` The individual parts of the SPF settings.
  * * `flatten:` Which includes should be inlined. For safety purposes the flattening is done on an opt-in basis. If `"*"` is listed, all includes will be flattened... this might create more problems than is solves due to length limitations.
+ * * `keepIgnoredRedirects:` Inlining an include can move its `redirect=` modifier into a record that has an `all` mechanism, where [RFC 7208 Section 6.1](https://tools.ietf.org/html/rfc7208#section-6.1) requires it to be ignored. Such modifiers are removed. Set this to `true` to keep them. (Optional. Default: `false`)
  *
  * [multi-string]: https://tools.ietf.org/html/rfc4408#section-3.1.3 [record-size]: https://tools.ietf.org/html/rfc4408#section-3.1.4
  *
@@ -3590,7 +3591,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/spf_builder
  */
-declare function SPF_BUILDER(opts: { label?: string; overflow?: string; overhead1?: string; raw?: string; ttl?: Duration; txtMaxSize?: number; parts: string[]; flatten?: string[] }): DomainModifier;
+declare function SPF_BUILDER(opts: { label?: string; overflow?: string; overhead1?: string; raw?: string; ttl?: Duration; txtMaxSize?: number; parts: string[]; flatten?: string[]; keepIgnoredRedirects?: boolean }): DomainModifier;
 
 /**
  * `SRV` adds a [Service locator record](https://www.rfc-editor.org/rfc/rfc2782) to a domain. The name should be the relative label for the record.

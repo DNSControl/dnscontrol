@@ -47,7 +47,11 @@ func flattenSPFs(cfg *models.DNSConfig) []error {
 				}
 			}
 			if flatten, ok := txt.Metadata["flatten"]; ok && strings.HasPrefix(txtTarget, "v=spf1") {
-				rec = rec.Flatten(flatten)
+				var opts []spflib.FlattenOption
+				if txt.Metadata["keepIgnoredRedirects"] == "true" {
+					opts = append(opts, spflib.KeepIgnoredRedirects())
+				}
+				rec = rec.Flatten(flatten, opts...)
 				err = txt.SetTargetTXT(rec.TXT())
 				if err != nil {
 					errs = append(errs, err)

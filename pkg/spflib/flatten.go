@@ -107,8 +107,31 @@ func (s *SPFRecord) split(thisfqdn string, pattern string, nextIdx int, m map[st
 	newRec.split(nextFQDN, pattern, nextIdx+1, m, 0, txtMaxSize)
 }
 
+// FlattenOption alters the behavior of Flatten.
+type FlattenOption func(*flattenOptions)
+
+type flattenOptions struct {
+	keepIgnoredRedirects bool
+}
+
+// KeepIgnoredRedirects makes Flatten retain redirect= modifiers that are
+// ignored because the record contains an "all" mechanism.
+func KeepIgnoredRedirects() FlattenOption {
+	return func(o *flattenOptions) {
+		o.keepIgnoredRedirects = true
+	}
+}
+
 // Flatten optimizes s.
-func (s *SPFRecord) Flatten(spec string) *SPFRecord {
+func (s *SPFRecord) Flatten(spec string, opts ...FlattenOption) *SPFRecord {
+	var o flattenOptions
+	for _, opt := range opts {
+		opt(&o)
+	}
+	return s.flatten(spec, o)
+}
+
+func (s *SPFRecord) flatten(spec string, opts flattenOptions) *SPFRecord {
 	newRec := &SPFRecord{}
 	for _, p := range s.Parts {
 		if p.IncludeRecord == nil {
@@ -119,7 +142,7 @@ func (s *SPFRecord) Flatten(spec string) *SPFRecord {
 			newRec.Parts = append(newRec.Parts, p)
 		} else {
 			// flatten child recursively
-			flattenedChild := p.IncludeRecord.Flatten(spec)
+			flattenedChild := p.IncludeRecord.flatten(spec, opts)
 			// include their parts (skipping final all term)
 			parts := flattenedChild.Parts
 			if n := len(parts); n > 0 && isAllMechanism(parts[n-1].Text) {
@@ -128,17 +151,34 @@ func (s *SPFRecord) Flatten(spec string) *SPFRecord {
 			newRec.Parts = append(newRec.Parts, parts...)
 		}
 	}
+	if !opts.keepIgnoredRedirects {
+		newRec.dropIgnoredRedirects()
+	}
 	return newRec
 }
 
+// dropIgnoredRedirects removes the redirect= modifiers of s. RFC 7208 Section
+// 6.1 requires them to be ignored when the record has an "all" mechanism.
+func (s *SPFRecord) dropIgnoredRedirects() {
+	if !slices.ContainsFunc(s.Parts, func(p *SPFPart) bool { return isAllMechanism(p.Text) }) {
+		return
+	}
+	s.Parts = slices.DeleteFunc(s.Parts, func(p *SPFPart) bool {
+		return strings.HasPrefix(trimQualifier(p.Text), "redirect=")
+	})
+}
+
+// trimQualifier removes the leading qualifier of a term, as Parse does before
+// deciding what the term is.
+func trimQualifier(text string) string {
+	if text != "" && qualifiers[text[0]] {
+		return text[1:]
+	}
+	return text
+}
+
 func isAllMechanism(text string) bool {
-	if text == "" {
-		return false
-	}
-	if qualifiers[text[0]] {
-		text = text[1:]
-	}
-	return strings.EqualFold(text, "all")
+	return strings.EqualFold(trimQualifier(text), "all")
 }
 
 func matchesFlatSpec(spec, fqdn string) bool {
