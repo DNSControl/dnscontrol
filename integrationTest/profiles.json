@@ -230,10 +230,10 @@
     "TYPE": "INFOBLOX",
     "domain": "$INFOBLOX_DOMAIN",
     "host": "$INFOBLOX_HOST",
-    "username": "$INFOBLOX_USERNAME",
     "password": "$INFOBLOX_PASSWORD",
-    "view": "$INFOBLOX_VIEW",
-    "tls_skip_verify": "true"
+    "tls_skip_verify": "true",
+    "username": "$INFOBLOX_USERNAME",
+    "view": "$INFOBLOX_VIEW"
   },
   "INFOMANIAK": {
     "TYPE": "INFOMANIAK",
