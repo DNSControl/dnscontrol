@@ -92,6 +92,19 @@ func makeFileName(format string, ff domaintags.DomainNameVarieties) string {
 	return b.String()
 }
 
+func validateDirName(dir, format string) error {
+	full := filepath.Join(dir, format)
+	goodDir, goodFile := filepath.Split(full)
+	goodDir = strings.TrimSuffix(goodDir, "/")
+
+	// If format includes a "/", suggest that the user is trying to specify a subdirectory, which is not allowed.
+	if strings.Contains(format, "/") {
+		return fmt.Errorf("BIND filenameformat (%q) may not contain a slash. suggestion: use dir %q and fileformat %q", format, goodDir, goodFile)
+	}
+
+	return nil
+}
+
 // extractZonesFromFilenames extracts the zone names from a list of filenames
 // based on the format string used to create the files. It is mathematically
 // impossible to do this correctly for all format strings, but typical format

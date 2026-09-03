@@ -77,6 +77,9 @@ func initBind(config map[string]string, providermeta json.RawMessage) (providers
 	if api.filenameformat == "" {
 		api.filenameformat = "%c.zone"
 	}
+	if err := validateDirName(api.directory, api.filenameformat); err != nil {
+		return nil, err
+	}
 	if len(providermeta) != 0 {
 		err := json.Unmarshal(providermeta, api)
 		if err != nil {
@@ -198,7 +201,6 @@ func (c *bindProvider) ListZones() ([]string, error) {
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *bindProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
-	// meta := dc.Metadata
 
 	var zonefile string
 
@@ -243,11 +245,11 @@ func findSoaRecord(recs models.Records) *models.RecordConfig {
 	return nil
 }
 
-func updateSerialNumber(desired, existing models.Records, forcedSerial uint32) {
+func updateSerialNumber(desired, existing models.Records, forcedSerial uint32) uint32 {
 
 	recToUpdate := findSoaRecord(desired)
 	if recToUpdate == nil {
-		return
+		return 0
 	}
 
 	f := recToUpdate.AsSOA()
@@ -270,6 +272,7 @@ func updateSerialNumber(desired, existing models.Records, forcedSerial uint32) {
 	}
 
 	recToUpdate.SetRDATA(f)
+	return recToUpdate.AsSOA().Serial
 }
 
 // ParseZoneContents parses a string as a BIND zone and returns the records.
@@ -346,13 +349,13 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 
 	// We know there are changes. Update the SOA record's serial number,
 	// basing it on the serial already published in the existing zone.
-	updateSerialNumber(result.DesiredPlus, foundRecords, uint32(bindserial.ForcedValue&0xFFFF))
+	serial := updateSerialNumber(result.DesiredPlus, foundRecords, uint32(bindserial.ForcedValue&0xFFFF))
 
 	corrections = append(corrections,
 		&models.Correction{
 			Msg: msg,
 			F: func() error {
-				printer.Printf("WRITING ZONEFILE: %v\n", zonefile)
+				printer.Printf("WRITING ZONEFILE: %q (serial %d)\n", zonefile, serial)
 				fname, err := preprocessFilename(zonefile)
 				if err != nil {
 					return fmt.Errorf("could not create zonefile: %w", err)

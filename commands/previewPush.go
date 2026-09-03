@@ -64,7 +64,7 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
 				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to initialize %q: %w", dCfg.Name, err)
 				}
 				dnsProviders[pInst.Name] = prov
 			}

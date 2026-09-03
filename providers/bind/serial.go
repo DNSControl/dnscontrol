@@ -56,7 +56,12 @@ func generateSerial(oldSerial uint32) uint32 {
 	if oldSerial == newSerial {
 		log.Fatalf("%v: old_serial == new_serial (%v == %v) draft=%v method=%v", original, oldSerial, newSerial, draft, method)
 	}
-	if oldSerial > newSerial {
+	if oldSerial < 4294967000 && oldSerial > newSerial {
+		// If the old serial is very large, we allow it to wrap around to a
+		// smaller number. Otherwise, it should never be smaller than the new
+		// serial.  The constant 4294967000 is a bit arbitrary, but it is close
+		// to the maximum 32-bit unsigned integer (2^32 - 1 = 4294967295). This
+		// allows for some leeway in case of very large serial numbers.
 		log.Fatalf("%v: old_serial > new_serial (%v > %v) draft=%v method=%v", original, oldSerial, newSerial, draft, method)
 	}
 

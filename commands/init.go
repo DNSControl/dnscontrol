@@ -286,7 +286,7 @@ func verifyDNSProviderCredsReal(sample InitCredsEntry) ([]string, error) {
 	maps.Copy(creds, sample.Fields)
 	provider, err := providers.CreateDNSProvider(sample.TypeName, creds, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed verifyDNSProviderCredsReal(%s): %w", sample.Name, err)
 	}
 	lister, ok := provider.(providers.ZoneLister)
 	if !ok {

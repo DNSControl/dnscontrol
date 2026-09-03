@@ -895,7 +895,7 @@ func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[
 			rCfg := cfg.RegistrarsByName[d.RegistrarName]
 			r, err := providers.CreateRegistrar(rCfg.Type, providerConfigs[d.RegistrarName])
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed to initialize registrar %q: %w", rCfg.Name, err)
 			}
 			registrars[d.RegistrarName] = r
 		}
@@ -906,7 +906,7 @@ func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
 				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to initialize DNS provider %q: %w", dCfg.Name, err)
 				}
 				dnsProviders[pInst.Name] = prov
 			}
