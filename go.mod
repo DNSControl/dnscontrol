@@ -3,7 +3,7 @@ module github.com/DNSControl/dnscontrol/v5
 go 1.27
 
 require (
-	codeberg.org/miekg/dns v0.6.105
+	codeberg.org/miekg/dns v0.6.106
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
@@ -23,12 +23,12 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.48.0
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.19
-	github.com/cloudflare/cloudflare-go v0.117.0
+	github.com/cloudflare/cloudflare-go v0.118.0
 	github.com/digitalocean/godo v1.206.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.1
 	github.com/dustin/go-humanize v1.0.1
-	github.com/exoscale/egoscale/v3 v3.1.47
+	github.com/exoscale/egoscale/v3 v3.1.49
 	github.com/failsafe-go/failsafe-go v0.9.7
 	github.com/fatih/color v1.19.0
 	github.com/fbiville/markdown-table-formatter v0.3.0
@@ -38,17 +38,17 @@ require (
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
 	github.com/hetznercloud/hcloud-go/v2 v2.47.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.213
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.214
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
 	github.com/mittwald/go-powerdns v0.6.7
 	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04
 	github.com/netnod/netnod-primary-dns-client v1.1.1
-	github.com/nicholas-fedor/shoutrrr v0.18.0
+	github.com/nicholas-fedor/shoutrrr v0.19.0
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/nrdcg/goinwx v0.12.0
-	github.com/oracle/oci-go-sdk/v65 v65.124.0
+	github.com/oracle/oci-go-sdk/v65 v65.124.1
 	github.com/ovh/go-ovh v1.9.0
 	github.com/philhug/opensrs-go v0.0.0-20171126225031-9dfa7433020d
 	github.com/pkg/errors v0.9.1
@@ -58,14 +58,14 @@ require (
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.37
 	github.com/softlayer/softlayer-go v1.2.1
 	github.com/stretchr/testify v1.12.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1479+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.171
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1480+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.172
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.28.0
 	github.com/urfave/cli/v3 v3.11.0
 	github.com/vercel/terraform-provider-vercel v1.14.1
-	github.com/vultr/govultr/v3 v3.32.0
+	github.com/vultr/govultr/v3 v3.33.0
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419
 	golang.org/x/net v0.58.0
@@ -73,7 +73,7 @@ require (
 	golang.org/x/text v0.41.0
 	golang.org/x/time v0.15.0
 	golang.org/x/tools v0.49.0
-	google.golang.org/api v0.296.0
+	google.golang.org/api v0.297.0
 	gopkg.in/ns1/ns1-go.v2 v2.18.0
 	gopkg.in/yaml.v3 v3.0.1
 )
