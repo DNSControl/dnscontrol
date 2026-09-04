@@ -11,12 +11,12 @@ import (
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
 	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Cannot(),
+	providers.CanConcur:              providers.Can(),
 	providers.CanGetZones:            providers.Cannot(), // MVP: no ListZones
 	providers.CanUseCAA:              providers.Can(),
 	providers.CanUsePTR:              providers.Can(),
 	providers.CanUseSRV:              providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("Infoblox zones must be pre-created"),
+	providers.DocCreateDomains:       providers.Cannot("zones must be pre-created"),
 	providers.DocDualHost:            providers.Cannot(),
 	providers.DocOfficiallySupported: providers.Cannot(),
 }

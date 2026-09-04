@@ -195,7 +195,7 @@ func TestTTLInheritance(t *testing.T) {
 func TestBuildRecordBodyA(t *testing.T) {
 	rc := &models.RecordConfig{Type: "A", TTL: 300}
 	rc.SetLabel("host", "example.com")
-	if err := rc.PopulateFromString("A", "10.0.0.1", "example.com"); err != nil {
+	if err := rc.SetTarget("10.0.0.1"); err != nil {
 		t.Fatal(err)
 	}
 
@@ -220,7 +220,7 @@ func TestBuildRecordBodyA(t *testing.T) {
 func TestBuildRecordBodyNoView(t *testing.T) {
 	rc := &models.RecordConfig{Type: "A", TTL: 300}
 	rc.SetLabel("host", "example.com")
-	if err := rc.PopulateFromString("A", "10.0.0.1", "example.com"); err != nil {
+	if err := rc.SetTarget("10.0.0.1"); err != nil {
 		t.Fatal(err)
 	}
 
