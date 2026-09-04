@@ -1,0 +1,179 @@
+name: "RELEASE: auto-release on merge to main"
+
+# Fully-automated release (issue #4829).
+#
+# Development happens on `develop`; `main` only ever receives a `develop -> main`
+# merge. So any push to `main` means "release". This workflow:
+#
+#   1. Computes the next version from Conventional Commits with `svu`
+#      (feat -> minor, fix/perf -> patch, `!`/BREAKING CHANGE -> major;
+#      chore/ci/docs/etc. -> no bump).
+#   2. If nothing releasable landed since the last tag, it does nothing.
+#   3. Otherwise it tags `vX.Y.Z` and runs GoReleaser, which publishes the
+#      release (draft: false in .goreleaser.yml).
+#
+# The tag is pushed with GITHUB_TOKEN. GitHub deliberately does NOT re-trigger
+# workflows for GITHUB_TOKEN tag pushes, so this job runs GoReleaser itself
+# rather than relying on the tag-push path in release_draft.yml (which remains
+# the manual escape hatch). There is therefore no double release.
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  # Never cancel an in-flight release; serialize if two merges land quickly.
+  group: release-on-merge
+  cancel-in-progress: false
+
+jobs:
+  # version: compute the next semver and, if there is one, create the tag.
+  version:
+    name: compute version
+    # Safety switch for rollout: this workflow is inert until the repository
+    # variable AUTO_RELEASE_ENABLED is set to "true"
+    # (Settings -> Secrets and variables -> Actions -> Variables). That lets the
+    # automation land on main without cutting a release, and lets you turn it
+    # off instantly if something goes wrong.
+    if: github.repository == 'DNSControl/dnscontrol' && vars.AUTO_RELEASE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.svu.outputs.release }}
+      version: ${{ steps.svu.outputs.version }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "stable"
+
+      - name: Compute next version with svu
+        id: svu
+        run: |
+          set -eu
+          go install github.com/caarlos0/svu/v3@latest
+          SVU="$(go env GOPATH)/bin/svu"
+          CURRENT="$("$SVU" current)"
+          NEXT="$("$SVU" next)"
+          echo "current=$CURRENT next=$NEXT"
+          if [ "$NEXT" = "$CURRENT" ]; then
+            echo "No releasable commits since ${CURRENT} (only chore/ci/docs/etc.). Nothing to release."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## No release"
+              echo ""
+              echo "No \`feat\`/\`fix\`/breaking commits since \`${CURRENT}\`, so no version was cut."
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "release=true"   >> "$GITHUB_OUTPUT"
+            echo "version=$NEXT"  >> "$GITHUB_OUTPUT"
+            {
+              echo "## Releasing ${NEXT}"
+              echo ""
+              echo "Previous release: \`${CURRENT}\`"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Create and push tag
+        if: steps.svu.outputs.release == 'true'
+        env:
+          VERSION: ${{ steps.svu.outputs.version }}
+        run: |
+          set -eu
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "Release ${VERSION}"
+          git push origin "refs/tags/${VERSION}"
+
+  # release: build and publish with GoReleaser (only if a version was cut).
+  release:
+    name: goreleaser
+    needs: version
+    if: needs.version.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Checkout repo
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          # Build from the tag we just created.
+          ref: ${{ needs.version.outputs.version }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "stable"
+
+      # Stringer is needed because .goreleaser includes "go generate ./...".
+      - name: Install stringer
+        run: go install golang.org/x/tools/cmd/stringer@latest
+
+      # Compute the changelog range: current = the tag we just cut; previous =
+      # the most recent non-rc release older than it (so notes cover the full
+      # range since the last stable release). Mirrors release_draft.yml.
+      - name: Compute changelog previous/current tags
+        env:
+          CURRENT_TAG: ${{ needs.version.outputs.version }}
+        run: |
+          set -eu
+          cur="$CURRENT_TAG"
+          echo "GORELEASER_CURRENT_TAG=$cur" >> "$GITHUB_ENV"
+          base="${cur%%-*}"   # strip any -rc suffix
+          prev="$(
+            { git tag --list 'v[0-9]*.[0-9]*.[0-9]*'; echo "$base"; } \
+              | awk '!/-/' \
+              | sort -V -u \
+              | awk -v base="$base" '$0==base{print prev; exit} {prev=$0}'
+          )"
+          if [ -n "$prev" ]; then
+            echo "GORELEASER_PREVIOUS_TAG=$prev" >> "$GITHUB_ENV"
+            echo "current=$cur previous=$prev (most recent non-rc release)"
+          else
+            echo "No prior non-rc release found for $cur; letting GoReleaser auto-detect."
+          fi
+
+      - name: Goreleaser release
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
+          MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
+          MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
+          MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
+          MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}

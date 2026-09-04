@@ -29,30 +29,42 @@ before:
 changelog:
   sort: asc
   use: github
+  # Grouping is driven by Conventional Commits (see issue #4829). Two rules to
+  # know when editing this list:
+  #   1. A commit lands in the FIRST group (by list order) whose regexp
+  #      matches; `order:` only controls the DISPLAY position. So the
+  #      provider-specific group must be LISTED before the generic feat/fix
+  #      groups, and the catch-all "Other" group must be LISTED last.
+  #   2. Provider-specific changes are identified by the "p/<name>" scope,
+  #      e.g. "fix(p/route53): ...". This means there is NO per-provider list
+  #      to maintain here: adding a new provider needs no changes to this file.
   groups:
     - title: 'Breaking changes:'
-      regexp: "(?i)^.*breaking[(\\w)]*:+.*$"
+      regexp: '(?i)^[a-z]+(\([^)]*\))?!:|breaking change'
       order: 0
-    - title: 'Major features:'
-      regexp: "(?i)^.*(major|new provider|feature)[(\\w)]*:+.*$"
-      order: 1
     - title: 'Provider-specific changes:'
-      regexp: "(?i)((adguardhome|akamaiedgedns|alidns|autodns|axfrddns|azure_dns|azure_private_dns|azuredns|bind|bunny_dns|bunnydns|cloudflare|cloudflareapi|cloudns|cnr|cscglobal|desec|digitalocean|dnscale|dnsimple|dnsmadeeasy|dnsoverhttps|doh|domainnameshop|dynadot|dynu|easyname|exoscale|fortigate|gandi|gandi_v5|gcloud|gcore|gidinet|gigahost|hedns|hetzner_v2|hexonet|hostingde|huaweicloud|infomaniak|internetbs|inwx|joker|linode|loopia|luadns|mikrotik|mythicbeasts|namecheap|namedotcom|netbird|netcup|netlify|netnod|nexdns|ns1|opensrs|openwrt|oracle|ovh|packetframe|porkbun|powerdns|realtimeregister|route53|rwth|sakuracloud|scaleway|softlayer|tencentdns|transip|unifi|vercel|vultr|websupport).*:)+.*"
+      regexp: '(?i)^(feat|fix|refactor|perf)\(p/[^)]+\):'
       order: 2
-    - title: 'Documentation:'
-      regexp: "(?i)^.*(docs)[(\\w)]*:+.*$"
+    - title: 'New features:'
+      regexp: '(?i)^feat(\([^)]*\))?:'
+      order: 1
+    - title: 'Bug fixes:'
+      regexp: '(?i)^fix(\([^)]*\))?:'
       order: 3
-    - title: 'CI/CD:'
-      regexp: "(?i)^.*(build|ci|cicd)[(\\w)]*:+.*$"
+    - title: 'Documentation:'
+      regexp: '(?i)^docs(\([^)]*\))?:'
       order: 4
-    - title: 'Dependencies:'
-      regexp: "(?i)^.*\\b(deps|dependencies)\\b.*$"
+    - title: 'CI/CD:'
+      regexp: '(?i)^(build|ci)(\([^)]*\))?:'
       order: 5
+    - title: 'Dependencies:'
+      regexp: '(?i)^\w+\([^)]*deps[^)]*\):|\bdependencies\b'
+      order: 6
+    - title: 'Deprecation warnings:'
+      regexp: '(?i)deprecate'
+      order: 8
     - title: 'Other changes and improvements:'
       order: 9
-    - title: 'Deprecation warnings:'
-      regexp: "(?i)^.*Deprecate[(\\w)]*:+.*$"
-      order: 10
   filters:
     exclude:
     - '^test:'
@@ -146,7 +158,9 @@ homebrew_casks:
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
 
 release:
-  draft: true
+  # Fully automated releases (issue #4829): publish immediately, no draft to
+  # hand-edit. The human gate is the `develop -> main` merge, not note editing.
+  draft: false
   prerelease: auto
   mode: append
   header: |

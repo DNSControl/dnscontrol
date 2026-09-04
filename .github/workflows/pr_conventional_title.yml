@@ -1,0 +1,62 @@
+name: "PR: Conventional title"
+
+# Enforce Conventional Commits on the PR TITLE (issue #4829). PRs are
+# squash-merged into `develop`, and GitHub uses the PR title as the squash
+# commit subject, so the title is what later drives version bumping (svu) and
+# the release changelog (GoReleaser).
+#
+# Only PRs targeting `develop` are checked: `main` only receives the
+# `develop -> main` merge commit, which is not a conventional commit.
+#
+# Provider-specific changes use the "p/<name>" scope, e.g.
+#   fix(p/route53): ...      feat(p/azure_dns): ...
+# Scopes are otherwise free-form (we validate the type, not the scope), so
+# there is no per-provider list to maintain.
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  conventional-title:
+    name: Validate PR title
+    # Only gate PRs into develop. PRs into main (the release merge) are exempt.
+    if: github.base_ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that the PR title is a Conventional Commit
+        uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Allowed commit types. A trailing "!" (e.g. feat!:) marks a breaking
+          # change and is always allowed.
+          types: |
+            feat
+            fix
+            docs
+            chore
+            ci
+            build
+            refactor
+            perf
+            test
+            revert
+          # A scope is optional (global changes have none). When present it is
+          # free-form; provider changes should use "p/<name>".
+          requireScope: false
+          # Subject must be non-empty and not start with an uppercase letter is
+          # NOT enforced here to keep the barrier low; type correctness is what
+          # the release automation depends on.
+          validateSingleCommit: false

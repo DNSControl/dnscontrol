@@ -1,0 +1,86 @@
+name: "RELEASE gate: full integration"
+
+# The release gate for the `develop -> main` merge (issue #4829).
+#
+# Releases happen when a human merges `develop -> main`. That merge is
+# infrequent (~weekly), so we can afford to run the ENTIRE longtest
+# integration suite here as a required check before the merge is allowed.
+#
+# Emergency bypass: add the `skip-longtest` label to the PR. The gate then
+# reports success WITHOUT running the suite, but records a loud warning and a
+# job-summary note so the skip is auditable.
+#
+# Make the `release-gate` job a REQUIRED status check on `main` in branch
+# protection. It is a single job that always runs and reflects either the
+# longtest result or the emergency skip, so branch protection never gets stuck
+# on a skipped check.
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # Decide whether the emergency bypass label is present.
+  guard:
+    if: github.repository == 'DNSControl/dnscontrol'
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.decide.outputs.skip }}
+    steps:
+      - id: decide
+        env:
+          HAS_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'skip-longtest') }}
+        run: echo "skip=$HAS_LABEL" >> "$GITHUB_OUTPUT"
+
+  # Run the full integration suite unless the bypass label is set.
+  longtest:
+    needs: guard
+    if: needs.guard.outputs.skip == 'false'
+    uses: ./.github/workflows/pr_integration_tests.yml
+    with:
+      full: true
+    secrets: inherit
+
+  # The single required check. Always runs; green if tests passed OR the
+  # emergency skip was requested; red if the suite failed.
+  release-gate:
+    needs: [guard, longtest]
+    if: always() && github.repository == 'DNSControl/dnscontrol'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate gate
+        env:
+          SKIP: ${{ needs.guard.outputs.skip }}
+          LONGTEST_RESULT: ${{ needs.longtest.result }}
+        run: |
+          set -eu
+          if [ "$SKIP" = "true" ]; then
+            echo "::warning title=longtest SKIPPED::Release longtest gate was skipped via the 'skip-longtest' label on PR #${{ github.event.pull_request.number }}."
+            {
+              echo "## ⚠️ Release longtest gate SKIPPED"
+              echo ""
+              echo "The full integration suite was **not run** because the \`skip-longtest\` label is present on this PR."
+              echo "This should only be used for emergencies."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$LONGTEST_RESULT" = "success" ]; then
+            echo "Full longtest integration suite passed."
+            exit 0
+          fi
+          echo "::error title=longtest failed::Release gate failed (longtest result: ${LONGTEST_RESULT})."
+          exit 1
