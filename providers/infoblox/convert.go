@@ -132,8 +132,8 @@ func convertA(raw json.RawMessage, domain string, defaultTTL uint32) (*models.Re
 		Original: r.Ref,
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
-	if err := rc.PopulateFromString("A", r.IPv4Addr, domain); err != nil {
-		return nil, fmt.Errorf("failed to populate A record: %w", err)
+	if err := rc.SetTarget(r.IPv4Addr); err != nil {
+		return nil, fmt.Errorf("failed to set A record target: %w", err)
 	}
 	return rc, nil
 }
@@ -150,8 +150,8 @@ func convertAAAA(raw json.RawMessage, domain string, defaultTTL uint32) (*models
 		Original: r.Ref,
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
-	if err := rc.PopulateFromString("AAAA", r.IPv6Addr, domain); err != nil {
-		return nil, fmt.Errorf("failed to populate AAAA record: %w", err)
+	if err := rc.SetTarget(r.IPv6Addr); err != nil {
+		return nil, fmt.Errorf("failed to set AAAA record target: %w", err)
 	}
 	return rc, nil
 }
@@ -168,8 +168,8 @@ func convertCNAME(raw json.RawMessage, domain string, defaultTTL uint32) (*model
 		Original: r.Ref,
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
-	if err := rc.PopulateFromString("CNAME", ensureTrailingDot(r.Canonical), domain); err != nil {
-		return nil, fmt.Errorf("failed to populate CNAME record: %w", err)
+	if err := rc.SetTarget(ensureTrailingDot(r.Canonical)); err != nil {
+		return nil, fmt.Errorf("failed to set CNAME record target: %w", err)
 	}
 	return rc, nil
 }
@@ -245,8 +245,8 @@ func convertNS(raw json.RawMessage, domain string, defaultTTL uint32) (*models.R
 		Original: r.Ref,
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
-	if err := rc.PopulateFromString("NS", ensureTrailingDot(r.Nameserver), domain); err != nil {
-		return nil, fmt.Errorf("failed to populate NS record: %w", err)
+	if err := rc.SetTarget(ensureTrailingDot(r.Nameserver)); err != nil {
+		return nil, fmt.Errorf("failed to set NS record target: %w", err)
 	}
 	return rc, nil
 }
@@ -263,8 +263,8 @@ func convertPTR(raw json.RawMessage, domain string, defaultTTL uint32) (*models.
 		Original: r.Ref,
 	}
 	rc.SetLabelFromFQDN(r.Name, domain)
-	if err := rc.PopulateFromString("PTR", ensureTrailingDot(r.PtrDName), domain); err != nil {
-		return nil, fmt.Errorf("failed to populate PTR record: %w", err)
+	if err := rc.SetTarget(ensureTrailingDot(r.PtrDName)); err != nil {
+		return nil, fmt.Errorf("failed to set PTR record target: %w", err)
 	}
 	return rc, nil
 }

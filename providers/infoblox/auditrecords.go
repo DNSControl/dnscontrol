@@ -13,6 +13,8 @@ func AuditRecords(records []*models.RecordConfig) []error {
 
 	a.Add("MX", rejectif.MxNull)
 
+	a.Add("NS", rejectif.NsAtApex)
+
 	a.Add("SRV", rejectif.SrvHasNullTarget)
 
 	a.Add("TXT", rejectif.TxtHasBackslash)
