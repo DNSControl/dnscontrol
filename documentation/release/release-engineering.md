@@ -61,17 +61,16 @@ Run:
 bin/auto_release.sh
 ```
 
-That's the whole thing. The script opens (or reuses) the `develop → main` pull request and turns on **GitHub auto-merge**. From there it is hands-off:
+The script opens (or reuses) the `develop → main` pull request and turns on **GitHub auto-merge**. Then:
 
 1. The **`release-gate`** check runs the **entire** `longtest` integration suite (this is why it can be slow — and why releases are batched rather than one-per-merge).
-2. When the gate passes, GitHub **auto-merges** the PR **as a merge commit** (auto-merge is configured to merge, never squash — squashing would collapse every `feat`/`fix` into one commit and destroy both the version computation and the changelog).
-3. The merge lands on `main`, triggering the automation below.
+2. A maintainer **approves** the PR. Branch protection on `main` requires one approval — this is the deliberate human sign-off on the release. (GitHub does not let you approve your own PR, so if you ran the script, **someone else approves**.)
+3. Once the gate is green **and** the PR is approved, GitHub **auto-merges** it **as a merge commit** (never a squash — squashing would collapse every `feat`/`fix` into one commit and destroy both the version computation and the changelog).
+4. The merge lands on `main`, triggering the automation below.
 
-You never choose a version and there is no `Release vX.Y.Z` commit: `svu` computes the version from the merged Conventional Commits and it lives only in the tag.
+So a release takes two human actions — running the script and approving the PR. Everything else (version, tag, changelog, publishing) is automatic. You never choose a version and there is no `Release vX.Y.Z` commit: `svu` computes the version from the merged Conventional Commits and it lives only in the tag.
 
-Useful flags: `-y` (no confirmation prompt), `-w` (watch the checks), `--skip-longtest` (emergency; see below). If you prefer to do it by hand, open the `develop → main` PR yourself and enable auto-merge (or just merge once green) — but **use a merge commit, not a squash**.
-
-> If branch protection on `main` requires a review approval, auto-merge waits for it. Configure `main` to require the `release-gate` status check (and, if you want zero human clicks, no required approvals).
+Useful flags: `-y` (no confirmation prompt), `-w` (watch the checks), `--skip-longtest` (emergency; see below). If you prefer to do it by hand, open the `develop → main` PR yourself and enable auto-merge (or just merge once green and approved) — but **use a merge commit, not a squash**.
 
 ## Emergency: skip the integration gate
 
@@ -111,7 +110,7 @@ These are GitHub settings (not in the repo) that the model depends on:
 - **Squash merges use the PR title** as the commit subject (Settings → General → Pull Requests → "Default commit message" → *Pull request title*).
 - **`develop` and `main` both allow the right merge methods:** feature PRs into `develop` use *Squash*; the `develop -> main` PR uses *Create a merge commit*. Both methods must be enabled.
 - **"Allow auto-merge" is enabled** (Settings → General → Pull Requests), so `bin/auto_release.sh` can turn it on.
-- **Branch protection on `main`** requires the `release-gate` status check (and, for a fully hands-off merge, does not require a review approval).
+- **Branch protection on `main`** requires the `release-gate` status check **and one review approval** (the human sign-off on the release; the approver cannot be the PR author).
 - **Branch protection on `develop`** requires the `PR: Conventional title` check.
 - The `skip-longtest` label must exist in the repo.
 
