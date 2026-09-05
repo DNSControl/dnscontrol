@@ -1,5 +1,19 @@
 # GoReleaser
 
+- [GoReleaser](#goreleaser)
+  - [Homebrew Tap](#homebrew-tap)
+    - [Homebrew TAP GitHub PAT](#homebrew-tap-github-pat)
+      - [Rotation procedure](#rotation-procedure)
+    - [macOS Code Signing \& Notarization](#macos-code-signing--notarization)
+      - [Steps to activate](#steps-to-activate)
+        - [1. Apple Developer Program](#1-apple-developer-program)
+        - [2. Developer ID Application Certificate](#2-developer-id-application-certificate)
+        - [3. Export as .p12](#3-export-as-p12)
+        - [4. App Store Connect API Key](#4-app-store-connect-api-key)
+        - [5. GitHub Actions Secrets](#5-github-actions-secrets)
+        - [6. Testing](#6-testing)
+      - [Background](#background)
+
 ## Homebrew Tap
 
 GoReleaser automatically publishes a Homebrew Cask to [DNSControl/homebrew-tap](https://github.com/DNSControl/homebrew-tap) on every release. This requires two components: a GitHub PAT for tap updates and macOS code signing + notarization.
@@ -9,7 +23,7 @@ GoReleaser automatically publishes a Homebrew Cask to [DNSControl/homebrew-tap](
 GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formula to the `DNSControl/homebrew-tap` repository. This is a fine-grained PAT scoped to the `DNSControl` organization with minimal permissions.
 
 | Item | Value |
-|------|-------|
+| ------ | ------- |
 | **Secret name** | `HOMEBREW_TAP_TOKEN` (repository secret) |
 | **Token type** | Fine-grained PAT |
 | **Resource owner** | `DNSControl` (organization) |
@@ -19,6 +33,7 @@ GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formul
 | **Action needed before** | ~January 18, 2027 |
 
 **Links:**
+
 - [GitHub Issue (tracking): Rotate Homebrew TAP GitHub PAT before Feb 6, 2027](https://github.com/DNSControl/dnscontrol/issues/4071)
 - [Secret setting](https://github.com/DNSControl/dnscontrol/settings/secrets/actions/HOMEBREW_TAP_TOKEN)
 
@@ -35,6 +50,7 @@ GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formul
      --repo DNSControl/dnscontrol \
      --body "<the-new-token>"
    ```
+
 3. Verify that the next GoReleaser release successfully updates the Homebrew tap
 4. Create a new tracking issue for the next rotation cycle
 

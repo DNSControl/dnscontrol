@@ -229,7 +229,7 @@ type recordEditRequest struct {
 	Type     string `json:"type,omitempty"`
 	Name     string `json:"name"`
 	Target   string `json:"target"`
-	Priority int    `json:"priority,omitempty"`
+	Priority *int   `json:"priority"`
 	Weight   int    `json:"weight,omitempty"`
 	Port     int    `json:"port,omitempty"`
 	Service  string `json:"service,omitempty"`

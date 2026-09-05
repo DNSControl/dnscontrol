@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -59,9 +60,12 @@ func (api *netcupProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	if err != nil {
 		return nil, err
 	}
-	existingRecords := make([]*models.RecordConfig, len(records))
+	existingRecords := make(models.Records, len(records))
 	for i := range records {
-		existingRecords[i] = toRecordConfig(domain, &records[i])
+		existingRecords[i], err = toRecordConfig(dc, &records[i])
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return existingRecords, nil
@@ -71,6 +75,11 @@ func (api *netcupProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 // As netcup doesn't support setting nameservers over this API, these are static.
 // Domains not managed by netcup DNS will return an error.
 func (api *netcupProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
+	// We make an API call to verify that we have authority for this domain.
+	if _, err := api.getRecords(domain); err != nil {
+		return nil, err
+	}
+
 	return models.ToNameservers([]string{
 		"root-dns.netcup.net",
 		"second-dns.netcup.net",
@@ -82,61 +91,86 @@ func (api *netcupProvider) GetNameservers(domain string) ([]*models.Nameserver, 
 func (api *netcupProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {
 	domain := dc.Name
 
-	// Setting the TTL is not supported for netcup
-	for _, r := range dc.Records {
-		r.TTL = 0
-	}
-
-	// Filter out types we can't modify (like NS)
-	newRecords := models.Records{}
-	for _, r := range dc.Records {
-		if r.Type != "NS" {
-			newRecords = append(newRecords, r)
-		}
-	}
-	dc.Records = newRecords
-
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	// Create a copy of the desired state for diffing.
+	// This is to avoid side-effects on the original DomainConfig.
+	dcForDiff, err := dc.Copy()
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
-
-	// Deletes first so changing type works etc.
-	for _, m := range del {
-		req := m.Existing.Original.(*record)
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s", m.String(), req.ID),
-			F: func() error {
-				return api.deleteRecord(domain, req)
-			},
+	// We filter out unsupported record types (NS) and zero out the TTL
+	// as it is not supported by the provider.
+	desiredRecords := make(models.Records, 0, len(dc.Records))
+	for _, r := range dc.Records {
+		if r.Type == "NS" {
+			continue
 		}
-		corrections = append(corrections, corr)
+		rec := *r
+		rec.TTL = 0
+		desiredRecords = append(desiredRecords, &rec)
+	}
+	dcForDiff.Records = desiredRecords
+
+	instructions, actualChangeCount, err := diff2.ByRecord(existingRecords, dcForDiff, nil)
+	if err != nil {
+		return nil, 0, err
 	}
 
-	for _, m := range create {
-		req := fromRecordConfig(m.Desired)
-		corr := &models.Correction{
-			Msg: m.String(),
-			F: func() error {
-				return api.createRecord(domain, req)
-			},
+	recordsToUpdate := []record{}
+	msgs := []string{}
+	var corrections []*models.Correction
+
+	for _, inst := range instructions {
+		switch inst.Type {
+		case diff2.REPORT:
+			// Handle report-only corrections separately. They don't involve API calls.
+			corrections = append(corrections, &models.Correction{Msg: inst.MsgsJoined})
+			continue
+		case diff2.DELETE:
+			native := inst.Old[0].Original.(*record)
+			// For deletion, we must send the original record and set the delete flag.
+			// The API validates other fields even on deletion, so we make a copy and modify it.
+			recToDelete := *native
+			recToDelete.Delete = true
+			recordsToUpdate = append(recordsToUpdate, recToDelete)
+			msgs = append(msgs, inst.MsgsJoined)
+		case diff2.CREATE:
+			rec := fromRecordConfig(inst.New[0])
+			recordsToUpdate = append(recordsToUpdate, *rec)
+			msgs = append(msgs, inst.MsgsJoined)
+		case diff2.CHANGE:
+			native := inst.Old[0].Original.(*record)
+			rec := fromRecordConfig(inst.New[0])
+			rec.ID = native.ID
+			recordsToUpdate = append(recordsToUpdate, *rec)
+			msgs = append(msgs, inst.MsgsJoined)
 		}
-		corrections = append(corrections, corr)
 	}
-	for _, m := range modify {
-		id := m.Existing.Original.(*record).ID
-		req := fromRecordConfig(m.Desired)
-		req.ID = id
-		corr := &models.Correction{
-			Msg: fmt.Sprintf("%s, Netcup ID: %s: ", m.String(), id),
+
+	if len(recordsToUpdate) > 0 {
+		// Create one big correction for the batch update.
+		batchCorrection := &models.Correction{
+			Msg: strings.Join(msgs, "\n"),
 			F: func() error {
-				return api.modifyRecord(domain, req)
+				return api.updateRecords(domain, recordsToUpdate)
 			},
 		}
-		corrections = append(corrections, corr)
+		corrections = append(corrections, batchCorrection)
 	}
 
 	return corrections, actualChangeCount, nil
+}
+
+func (api *netcupProvider) updateRecords(domain string, recs []record) error {
+	payload := paramUpdateRecords{
+		Key:            api.credentials.apikey,
+		SessionID:      api.credentials.sessionID,
+		CustomerNumber: api.credentials.customernumber,
+		DomainName:     domain,
+		RecordSet:      records{Records: recs},
+	}
+	_, err := api.get("updateDnsRecords", payload)
+	if err != nil {
+		return fmt.Errorf("failed while trying to update records (netcup): %w", err)
+	}
+	return nil
 }

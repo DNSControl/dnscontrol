@@ -16,14 +16,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypecontrol"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rtypeinfo"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonecache"
+	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/pquerna/otp/totp"
 )
@@ -148,6 +147,7 @@ const (
 
 // hednsProvider stores login credentials and represents and API connection.
 type hednsProvider struct {
+	observer        providers.ConversionObserver
 	Username        string
 	Password        string
 	TfaSecret       string
@@ -156,6 +156,10 @@ type hednsProvider struct {
 
 	httpClient http.Client
 	zoneCache  zonecache.ZoneCache[uint64]
+}
+
+func (c *hednsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	c.observer = observer
 }
 
 // Record stores the HEDNS specific zone and record IDs.
@@ -220,6 +224,7 @@ func (c *hednsProvider) ListZones() ([]string, error) {
 // EnsureZoneExists creates a zone if it does not exist.
 func (c *hednsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 	domain := dc.Name
+
 	ok, err := c.zoneCache.HasZone(domain)
 	if err != nil {
 		return err
@@ -418,7 +423,7 @@ func (c *hednsProvider) setDDNSKeyForNewRecord(zoneID uint64, _ string, record *
 func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	var zoneRecords []*models.RecordConfig
+	var zoneRecords models.Records
 
 	// Get Domain ID
 	domainID, err := c.zoneCache.GetZone(domain)
@@ -487,37 +492,13 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 			return true
 		}
 
-		var rc *models.RecordConfig
-		if rtypeinfo.IsModernType(rec.Type) {
-			// FQDNs for NewRecordConfigFromString require trailing "."
-			rc, err = rtypecontrol.NewRecordConfigFromString(
-				rec.Name+".", rec.TTL, rec.Type, rec.Data,
-				domaintags.MakeDomainNameVarieties(domain),
-			)
-		} else {
-			rc = &models.RecordConfig{Type: rec.Type, TTL: rec.TTL}
-			rc.SetLabelFromFQDN(rec.Name, domain)
-			switch rec.Type {
-			case "ALIAS":
-				err = rc.SetTarget(rec.Data)
-			case "MX":
-				// HEDNS omits the trailing "." on the hostnames for MX records
-				err = rc.SetTargetMX(rec.Priority, rec.Data+".")
-			case "SRV":
-				err = rc.SetTargetSRVPriorityString(rec.Priority, rec.Data)
-			case "SPF":
-				// Convert to TXT record as SPF is deprecated
-				rc.ChangeType("TXT", domain)
-				fallthrough
-			default:
-				err = rc.PopulateFromStringFunc(rec.Type, rec.Data, domain, txtutil.ParseQuoted)
-			}
-		}
+		before := providers.BeginToRC(c.observer, "recordToRC", rec)
+		rc, conversionErr := recordToRC(dc, rec)
+		providers.EndToRC(c.observer, "recordToRC", before, rec, models.Records{rc}, conversionErr)
+		err = conversionErr
 		if err != nil {
 			return false
 		}
-
-		rc.Original = rec
 		rc.Metadata = map[string]string{
 			metaDynamic: "off",
 		}
@@ -531,6 +512,34 @@ func (c *hednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records,
 	})
 
 	return zoneRecords, err
+}
+
+func recordToRC(dc *models.DomainConfig, rec Record) (*models.RecordConfig, error) {
+	label := dc.LabelFromFQDNNoDot(rec.Name)
+	ttl := rec.TTL
+	rtype := rec.Type
+	if rtype == "SPF" {
+		rtype = "TXT"
+	}
+
+	var rc *models.RecordConfig
+	var err error
+	switch rtype {
+	case "MX":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, rec.Priority, rec.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	case "SRV":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, rec.Priority, rec.Data,
+			nrc.Flags{SrvWeirdSplit: true, TargetIsFqdnNoDot: true})
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, rec.Data,
+			nrc.Flags{TargetIsFqdnNoDot: true})
+	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = rec
+	return rc, nil
 }
 
 func (c *hednsProvider) authUsernameAndPassword() (document *goquery.Document, requiresTfa bool, err error) {
@@ -751,18 +760,18 @@ func (c *hednsProvider) editZoneRecord(zoneID uint64, recordID uint64, rc *model
 	}
 
 	// Work out the content
-	switch rc.Type {
-	case "MX":
-		values.Set("Priority", strconv.FormatUint(uint64(rc.MxPreference), 10))
-		values.Set("Content", rc.GetTargetField())
-	case "SRV":
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
+		values.Set("Priority", strconv.FormatUint(uint64(f.Preference), 10))
+		values.Set("Content", f.Mx)
+	case dnsrdatav2.SRV:
 		values.Del("Content")
-		values.Set("Target", rc.GetTargetField())
-		values.Set("Priority", strconv.FormatUint(uint64(rc.SrvPriority), 10))
-		values.Set("Weight", strconv.FormatUint(uint64(rc.SrvWeight), 10))
-		values.Set("Port", strconv.FormatUint(uint64(rc.SrvPort), 10))
+		values.Set("Target", f.Target)
+		values.Set("Priority", strconv.FormatUint(uint64(f.Priority), 10))
+		values.Set("Weight", strconv.FormatUint(uint64(f.Weight), 10))
+		values.Set("Port", strconv.FormatUint(uint64(f.Port), 10))
 	default:
-		values.Set("Content", rc.GetTargetCombinedFunc(txtutil.EncodeQuoted))
+		values.Set("Content", rc.GetRDATA().String())
 	}
 
 	response, err := c.httpClient.PostForm(apiEndpoint, values)

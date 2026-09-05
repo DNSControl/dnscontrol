@@ -6,9 +6,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/ovh/go-ovh/ovh"
 )
 
@@ -85,11 +86,22 @@ func init() {
 	providers.RegisterMaintainer(providerName, providerMaintainer)
 }
 
+var NoListZone bool
+
+func listzonesEnabled() bool {
+	return !NoListZone
+}
+
 func (c *ovhProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	_, ok := c.zones[domain]
-	if !ok {
-		return nil, fmt.Errorf("'%s' not a zone in ovh account", domain)
+
+	// FIXME(tlim): This safety check is unneeded as the fetchNS() call will suffice.
+	if listzonesEnabled() {
+		_, ok := c.zones[domain]
+		if !ok {
+			return nil, fmt.Errorf("'%s' not a zone in ovh account", domain)
+		}
 	}
+	// If ListZones() is enabled, assume any zone exists. The safety check is rather silly anyway.
 
 	ns, err := c.fetchNS(domain)
 	if err != nil {
@@ -119,7 +131,8 @@ func (c *ovhProvider) ListZones() (zones []string, err error) {
 func (c *ovhProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	domain := dc.Name
 
-	if !c.zones[domain] {
+	// FIXME(tlim): This safety check is unneeded as the fetchRecords() call will suffice.
+	if listzonesEnabled() && !c.zones[domain] {
 		return nil, errNoExist{domain}
 	}
 
@@ -130,13 +143,11 @@ func (c *ovhProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, e
 
 	var actual models.Records
 	for _, r := range records {
-		rec, err := nativeToRecord(r, domain)
+		rec, err := nativeToRecord(r, dc)
 		if err != nil {
 			return nil, err
 		}
-		if rec != nil {
-			actual = append(actual, rec)
-		}
+		actual = append(actual, rec)
 	}
 
 	return actual, nil
@@ -204,33 +215,52 @@ func (c *ovhProvider) getDiff2DomainCorrections(dc *models.DomainConfig, actual 
 	return corrections, actualChangeCount, nil
 }
 
-func nativeToRecord(r *Record, origin string) (*models.RecordConfig, error) {
+func nativeToRecord(r *Record, dc *models.DomainConfig) (*models.RecordConfig, error) {
+
 	if r.FieldType == "SOA" {
 		return nil, nil
 	}
-	rec := &models.RecordConfig{
-		TTL:      uint32(r.TTL),
-		Original: r,
-	}
 
+	// ovh uses a custom type for SPF, DKIM and DMARC.
 	rtype := r.FieldType
-
-	// ovh uses a custom type for SPF, DKIM and DMARC
 	if rtype == "SPF" || rtype == "DKIM" || rtype == "DMARC" {
 		rtype = "TXT"
 	}
 
-	rec.SetLabel(r.SubDomain, origin)
-	if err := rec.PopulateFromString(rtype, r.Target, origin); err != nil {
-		return nil, fmt.Errorf("unparsable record received from ovh: %w", err)
-	}
+	label := dc.LabelFromShort(r.SubDomain)
 
 	// ovh default is 3600
-	if rec.TTL == 0 {
-		rec.TTL = 3600
+	ttl := uint32(r.TTL)
+	if ttl == 0 {
+		ttl = 3600
 	}
 
-	return rec, nil
+	var rc *models.RecordConfig
+	var err error
+
+	switch rtype {
+	case "TXT":
+		//fmt.Printf("DEBUG: OVH %s=%s\n", r.FieldType, r.Target)
+		switch r.FieldType {
+		case "DKIM", "DMARC":
+			// Unlike regular TXT and SPF records, OVH stores and returns DKIM
+			// and DMARC targets as raw, unquoted text. Running raw text
+			// through the RFC1035 zone-file TXT parser is wrong: an unescaped
+			// ';' is interpreted as the start of a comment, silently
+			// truncating values like "v=DMARC1; p=none; rua=...".
+			rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, r.Target)
+		default:
+			rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeTXT, r.Target)
+		}
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, r.Target)
+	}
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
+
+	return rc, nil
 }
 
 func (c *ovhProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {

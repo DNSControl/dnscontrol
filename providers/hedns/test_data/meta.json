@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "dnscontrol.net",
+      "to_rc": [
+        "recordToRC"
+      ]
+    }
+  ]
+}

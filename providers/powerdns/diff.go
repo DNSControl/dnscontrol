@@ -3,13 +3,19 @@ package powerdns
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/fatih/color"
 	"github.com/mittwald/go-powerdns/apis/zones"
 )
+
+// powerDNSSvcParamQuoteRe matches quoted SVCB/HTTPS parameter values that do
+// not contain characters PowerDNS requires to remain quoted, such as ECH
+// base64 data containing + or /.
+var powerDNSSvcParamQuoteRe = regexp.MustCompile(`="([^"+/ ]*)"`)
 
 func (dsp *powerdnsProvider) getDiff2DomainCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
 	changes, actualChangeCount, err := diff2.ByRecordSet(existing, dc, nil)
@@ -87,10 +93,9 @@ func buildRecordList(change diff2.Change) (records []zones.Record) {
 			Content: powerDNSTargetCombined(recordContent),
 		}
 		if recordContent.Type == "HTTPS" || recordContent.Type == "SVCB" {
-			// PowerDNS API will return HTTP 422 error if record content contains double quotes.
-			// Remove double quotes to work around this limitation.
-			// e.g. `1 . alpn="h3,h2"`  ==> `1 . alpn=h3,h2`
-			record.Content = strings.ReplaceAll(record.Content, "\"", "")
+			// PowerDNS rejects quoted simple param values like alpn="h3,h2",
+			// but validates ECH base64 data against the quoted parsed form.
+			record.Content = powerDNSSvcParamQuoteRe.ReplaceAllString(record.Content, `=$1`)
 		}
 		records = append(records, record)
 	}

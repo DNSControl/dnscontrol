@@ -3,12 +3,13 @@ package dnsmadeeasy
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 var features = providers.DocumentationNotes{
@@ -97,29 +98,56 @@ func (api *dnsMadeEasyProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 	}
 
 	for _, rec := range dc.Records {
-		switch rec.Type {
-		case "ALIAS":
-			// ALIAS is called ANAME on DNS Made Easy
-			rec.ChangeType("ANAME", dc.Name)
-		case "NS":
-			// NS records have fixed TTL on DNS Made Easy and it cannot be changed
+		// NS records have a fixed TTL on DNS Made Easy that cannot be changed.
+		if rec.Type == "NS" {
 			rec.TTL = fixedNameServerRecordTTL
 		}
 	}
 
-	toReport, create, del, modify, actualChangeCount, err := diff.NewCompat(dc).IncrementalDiff(existingRecords)
+	changes, actualChangeCount, err := diff2.ByRecord(existingRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	// Start corrections with the reports
-	corrections := diff.GenerateMessageCorrections(toReport)
 
+	var corrections []*models.Correction
+
+	// DNS Made Easy applies creates, deletes and modifications in three
+	// separate batch API calls, so collect each category before emitting.
 	var deleteRecordIds []int
 	deleteDescription := []string{"Batch deletion of records:"}
-	for _, m := range del {
-		originalRecordID := m.Existing.Original.(*recordResponseDataEntry).ID
-		deleteRecordIds = append(deleteRecordIds, originalRecordID)
-		deleteDescription = append(deleteDescription, m.String())
+	var createRecords []recordRequestData
+	createDescription := []string{"Batch creation of records:"}
+	var modifyRecords []recordRequestData
+	modifyDescription := []string{"Batch modification of records:"}
+
+	for _, change := range changes {
+		switch change.Type {
+		case diff2.REPORT:
+			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
+
+		case diff2.DELETE:
+			originalRecordID := change.Old[0].Original.(*recordResponseDataEntry).ID
+			deleteRecordIds = append(deleteRecordIds, originalRecordID)
+			deleteDescription = append(deleteDescription, change.Msgs[0])
+
+		case diff2.CREATE:
+			record := fromRecordConfig(change.New[0])
+			createRecords = append(createRecords, *record)
+			createDescription = append(createDescription, change.Msgs[0])
+
+		case diff2.CHANGE:
+			originalRecord := change.Old[0].Original.(*recordResponseDataEntry)
+
+			record := fromRecordConfig(change.New[0])
+			record.ID = originalRecord.ID
+			record.GtdLocation = originalRecord.GtdLocation
+
+			modifyRecords = append(modifyRecords, *record)
+			modifyDescription = append(modifyDescription, change.Msgs[0])
+
+		default:
+			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
+		}
 	}
 
 	if len(deleteRecordIds) > 0 {
@@ -132,14 +160,6 @@ func (api *dnsMadeEasyProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 		corrections = append(corrections, corr)
 	}
 
-	var createRecords []recordRequestData
-	createDescription := []string{"Batch creation of records:"}
-	for _, m := range create {
-		record := fromRecordConfig(m.Desired)
-		createRecords = append(createRecords, *record)
-		createDescription = append(createDescription, m.String())
-	}
-
 	if len(createRecords) > 0 {
 		corr := &models.Correction{
 			Msg: strings.Join(createDescription, "\n\t"),
@@ -148,19 +168,6 @@ func (api *dnsMadeEasyProvider) GetZoneRecordsCorrections(dc *models.DomainConfi
 			},
 		}
 		corrections = append(corrections, corr)
-	}
-
-	var modifyRecords []recordRequestData
-	modifyDescription := []string{"Batch modification of records:"}
-	for _, m := range modify {
-		originalRecord := m.Existing.Original.(*recordResponseDataEntry)
-
-		record := fromRecordConfig(m.Desired)
-		record.ID = originalRecord.ID
-		record.GtdLocation = originalRecord.GtdLocation
-
-		modifyRecords = append(modifyRecords, *record)
-		modifyDescription = append(modifyDescription, m.String())
 	}
 
 	if len(modifyRecords) > 0 {
@@ -217,17 +224,17 @@ func (api *dnsMadeEasyProvider) GetZoneRecords(dc *models.DomainConfig) (models.
 		return nil, err
 	}
 
-	existingRecords := make([]*models.RecordConfig, 0, len(records))
+	existingRecords := make(models.Records, 0, len(records))
 	for i := range records {
 		// Ignore HTTPRED and SPF records
 		if records[i].Type == "HTTPRED" || records[i].Type == "SPF" {
 			continue
 		}
-		existingRecords = append(existingRecords, toRecordConfig(domain, &records[i]))
+		existingRecords = append(existingRecords, toRecordConfig(dc, &records[i]))
 	}
 
 	for i := range nameServers {
-		existingRecords = append(existingRecords, systemNameServerToRecordConfig(domain, nameServers[i]))
+		existingRecords = append(existingRecords, systemNameServerToRecordConfig(dc, nameServers[i]))
 	}
 
 	return existingRecords, nil

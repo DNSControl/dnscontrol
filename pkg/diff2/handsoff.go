@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/gobwas/glob"
 )
 
@@ -71,7 +71,7 @@ Here is how we intend to implement these features:
   * Take the list of existing records. If any match one of the IGNORE glob
       patterns, add it to the "ignored list".
   * If any item on the "ignored list" is also in "desired" (match on
-      label:rtype), output a warning (defeault) or declare an error (if
+      label:rtype), detail an error (default) or output a warning (if
       DISABLE_IGNORE_SAFETY_CHECK is true).
   * When we're done, add the "ignore list" records to desired.
 
@@ -151,7 +151,7 @@ func handsoff(
 	if len(conflicts) != 0 {
 		msgs = append(msgs, fmt.Sprintf("%d records that are both IGNORE*()'d and not ignored:", len(conflicts)))
 		for _, r := range conflicts {
-			msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetTargetCombined()))
+			msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetRDATA().String()))
 		}
 		if !unmanagedSafely {
 			return nil, nil, errors.New(strings.Join(msgs, "\n") +
@@ -166,7 +166,7 @@ func handsoff(
 		if len(externalDNSConflicts) != 0 {
 			msgs = append(msgs, fmt.Sprintf("WARNING: %d records are defined in your config but also managed by external-dns:", len(externalDNSConflicts)))
 			for _, r := range externalDNSConflicts {
-				msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetTargetCombined()))
+				msgs = append(msgs, fmt.Sprintf("    %s %s %s", r.GetLabelFQDN(), r.Type, r.GetRDATA().String()))
 			}
 			msgs = append(msgs, "Consider removing these from your config or from external-dns to avoid conflicts.")
 		}
@@ -194,7 +194,7 @@ func reportSkips(recs models.Records, full bool) []string {
 	}
 
 	for _, r := range recs[:last] {
-		msgs = append(msgs, fmt.Sprintf(`    %s("%s.", %s),`, r.Type, r.GetLabelFQDN(), r.GetTargetJS()))
+		msgs = append(msgs, fmt.Sprintf(`    %s("%s.", %s),`, r.Type, r.GetLabelFQDN(), r.GetRDATA().String()))
 	}
 	if shorten && printer.MaxReport != 0 {
 		msgs = append(msgs, fmt.Sprintf("    ...and %d more... (use --full to show all)", len(recs)-printer.MaxReport))
@@ -281,7 +281,6 @@ func compileUnmanagedConfigs(configs []*models.UnmanagedConfig) error {
 
 // matchAny returns true if rec matches any of the uconfigs.
 func matchAny(uconfigs []*models.UnmanagedConfig, rec *models.RecordConfig) bool {
-	// fmt.Printf("DEBUG: matchAny(%s, %q, %q, %q)\n", models.DebugUnmanagedConfig(uconfigs), rec.NameFQDN, rec.Type, rec.GetTargetField())
 	for _, uc := range uconfigs {
 		if matchLabel(uc.LabelGlob, rec.GetLabel()) &&
 			matchType(uc.RTypeMap, rec.Type) &&
@@ -292,7 +291,7 @@ func matchAny(uconfigs []*models.UnmanagedConfig, rec *models.RecordConfig) bool
 	return false
 }
 
-func matchLabel(labelGlob glob.Glob, labelName string) bool {
+func matchLabel(labelGlob *glob.Pattern, labelName string) bool {
 	if labelGlob == nil {
 		return true
 	}
@@ -307,7 +306,7 @@ func matchType(typeMap map[string]struct{}, typeName string) bool {
 	return ok
 }
 
-func matchTarget(targetGlob glob.Glob, targetName string) bool {
+func matchTarget(targetGlob *glob.Pattern, targetName string) bool {
 	if targetGlob == nil {
 		return true
 	}

@@ -3,10 +3,12 @@ name: ADGUARDHOME_A_PASSTHROUGH
 parameters:
   - source
   - destination
+  - modifiers...
 provider: ADGUARDHOME
 parameter_types:
   source: string
   destination: string
+  "modifiers...": RecordModifier[]
 ---
 
 `ADGUARDHOME_A_PASSTHROUGH` represents the literal 'A'. AdGuardHome uses this to passthrough

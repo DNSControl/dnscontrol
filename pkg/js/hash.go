@@ -17,8 +17,7 @@ func hashFunc(call otto.FunctionCall) otto.Value {
 	}
 	algorithm := call.Argument(0).String() // The algorithm to use for hashing
 	value := call.Argument(1).String()     // The value to hash
-	//lint:ignore SA4006 work around bug in staticcheck. This value is needed if the switch statement follows the default path.
-	result := otto.Value{} //nolint:staticcheck
+	result := otto.Value{}
 	// fmt.Printf("%s\n", value)
 
 	switch algorithm {

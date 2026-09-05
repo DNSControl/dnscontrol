@@ -1,15 +1,15 @@
 package exoscale
 
 import (
-	"fmt"
+	"errors"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
 // AuditRecords returns a list of errors corresponding to the records that aren't supported by this provider.
 // If all records are supported, an empty list is returned.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	auditor := rejectif.Auditor{}
 
 	auditor.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2022-07-11
@@ -17,7 +17,7 @@ func AuditRecords(records []*models.RecordConfig) []error {
 	auditor.Add("MX", rejectif.MxNull) // Last verified 2022-07-11
 
 	auditor.Add("PTR", func(rc *models.RecordConfig) error {
-		return fmt.Errorf("PTR records are not supported by the Exoscale provider")
+		return errors.New("PTR records are not supported by the Exoscale provider")
 	})
 
 	auditor.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2020-12-28

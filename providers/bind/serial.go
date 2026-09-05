@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/bindserial"
+	"github.com/DNSControl/dnscontrol/v5/pkg/bindserial"
 )
 
 var nowFunc = time.Now
@@ -13,7 +13,7 @@ var nowFunc = time.Now
 // generateSerial takes an old SOA serial number and increments it.
 func generateSerial(oldSerial uint32) uint32 {
 	// Serial numbers are in the format yyyymmddvv
-	// where vv is a version count that starts at 01 each day.
+	// where vv is a version count that starts at 00 each day.
 	// Multiple serial numbers generated on the same day increase vv.
 	// If the old serial number is not in this format, it gets replaced
 	// with the new format. However if that would mean a new serial number
@@ -56,7 +56,12 @@ func generateSerial(oldSerial uint32) uint32 {
 	if oldSerial == newSerial {
 		log.Fatalf("%v: old_serial == new_serial (%v == %v) draft=%v method=%v", original, oldSerial, newSerial, draft, method)
 	}
-	if oldSerial > newSerial {
+	if oldSerial < 4294967000 && oldSerial > newSerial {
+		// If the old serial is very large, we allow it to wrap around to a
+		// smaller number. Otherwise, it should never be smaller than the new
+		// serial.  The constant 4294967000 is a bit arbitrary, but it is close
+		// to the maximum 32-bit unsigned integer (2^32 - 1 = 4294967295). This
+		// allows for some leeway in case of very large serial numbers.
 		log.Fatalf("%v: old_serial > new_serial (%v > %v) draft=%v method=%v", original, oldSerial, newSerial, draft, method)
 	}
 

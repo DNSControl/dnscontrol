@@ -1,29 +1,35 @@
 ---
 name: LOC
 parameters:
+  - name
   - deg1
   - min1
   - sec1
+  - ns
   - deg2
   - min2
   - sec2
+  - ew
   - altitude
   - size
   - horizontal_precision
   - vertical_precision
+  - modifiers...
 parameter_types:
   name: string
-  target: string
   deg1: number
   min1: number
   sec1: number
+  ns: '"N" | "S" | "n" | "s"'
   deg2: number
   min2: number
   sec2: number
+  ew: '"E" | "W" | "e" | "w"'
   altitude: number
   size: number
   horizontal_precision: number
   vertical_precision: number
+  "modifiers...": RecordModifier[]
 ---
 
 `LOC` add a [Location record](https://www.rfc-editor.org/rfc/rfc1876) to the domain.
@@ -36,9 +42,11 @@ target: string
 deg1: uint32
 min1: uint32
 sec1: float32
+ns: string
 deg2: uint32
 min2: uint32
 sec2: float32
+ew: string
 altitude: float32
 size: float32
 horizontal_precision: float32

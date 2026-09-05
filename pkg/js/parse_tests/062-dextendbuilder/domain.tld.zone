@@ -1,0 +1,3 @@
+$TTL 300
+loctest1         IN LOC   42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m
+loctest2.ssub    IN LOC   42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m

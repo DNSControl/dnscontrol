@@ -1,5 +1,12 @@
 # How to add a requested provider
 
+- [How to add a requested provider](#how-to-add-a-requested-provider)
+  - [1. Start from an up-to-date `main` branch](#1-start-from-an-up-to-date-main-branch)
+  - [2. Define variables](#2-define-variables)
+  - [3. Edit the provider index file](#3-edit-the-provider-index-file)
+  - [4. Commit your changes](#4-commit-your-changes)
+  - [5. Push and open a pull request](#5-push-and-open-a-pull-request)
+
 Follow the steps below to document a newly requested provider in the `documentation/provider/index.md` file.
 
 ## 1. Start from an up-to-date `main` branch

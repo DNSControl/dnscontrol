@@ -127,6 +127,121 @@ func TestFlattenTrailingAll(t *testing.T) {
 	}
 }
 
+func TestFlattenIgnoredRedirect(t *testing.T) {
+	tests := []struct {
+		description string
+		dnsres      fakeResolver
+		input       string
+		spec        string
+		opts        []FlattenOption
+		want        string
+	}{
+		{
+			description: "redirect of a flattened include is dropped when an all mechanism ignores it",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net -all",
+			spec:  "child.example.net",
+			want:  "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "redirect is kept when no all mechanism ignores it",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net",
+			spec:  "child.example.net",
+			want:  "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+		},
+		{
+			description: "KeepIgnoredRedirects retains a redirect an all mechanism ignores",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net -all",
+			spec:  "child.example.net",
+			opts:  []FlattenOption{KeepIgnoredRedirects()},
+			want:  "v=spf1 ip4:1.2.3.4 redirect=other.example.org -all",
+		},
+		{
+			description: "qualified redirect is dropped when an all mechanism ignores it",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 ~redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net -all",
+			spec:  "child.example.net",
+			want:  "v=spf1 ip4:1.2.3.4 -all",
+		},
+		{
+			description: "qualified redirect is kept when no all mechanism ignores it",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 ~redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net",
+			spec:  "child.example.net",
+			want:  "v=spf1 ip4:1.2.3.4 ~redirect=other.example.org",
+		},
+		{
+			description: "redirect ignored inside a nested include does not become live in the parent",
+			dnsres: fakeResolver{
+				"a.example.net":     "v=spf1 include:b.example.net ~all",
+				"b.example.net":     "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:a.example.net",
+			spec:  "a.example.net,b.example.net",
+			want:  "v=spf1 ip4:1.2.3.4",
+		},
+		{
+			description: "redirect that matches the flatten spec is still inlined",
+			dnsres: fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			},
+			input: "v=spf1 include:child.example.net -all",
+			spec:  "*",
+			want:  "v=spf1 ip4:1.2.3.4 ip4:9.9.9.9 -all",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.description, func(t *testing.T) {
+			rec, err := Parse(test.input, test.dnsres)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := rec.Flatten(test.spec, test.opts...).TXT(); got != test.want {
+				t.Errorf("got %s want %s", got, test.want)
+			}
+		})
+	}
+}
+
+func TestFlattenOutputParses(t *testing.T) {
+	for _, qualifier := range []string{"", "+", "~", "-", "?"} {
+		t.Run(qualifier+"redirect", func(t *testing.T) {
+			dnsres := fakeResolver{
+				"child.example.net": "v=spf1 ip4:1.2.3.4 " + qualifier + "redirect=other.example.org",
+				"other.example.org": "v=spf1 ip4:9.9.9.9 -all",
+			}
+			rec, err := Parse("v=spf1 include:child.example.net -all", dnsres)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got := rec.Flatten("child.example.net").TXT()
+			if _, err := Parse(got, dnsres); err != nil {
+				t.Errorf("Parse(%q) returned %v", got, err)
+			}
+		})
+	}
+}
+
 // each test is array of strings.
 // first item is unsplit input
 // next is @ spf record

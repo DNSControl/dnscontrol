@@ -4,7 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 func TestAuditRecords(t *testing.T) {
@@ -42,7 +43,7 @@ func TestAuditRecords(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			errs := AuditRecords([]*models.RecordConfig{tt.record})
+			errs := AuditRecords(models.Records{tt.record})
 			if len(errs) != tt.wantCount {
 				t.Errorf("AuditRecords() returned %d errors, want %d: %v", len(errs), tt.wantCount, errs)
 			}
@@ -53,8 +54,8 @@ func TestAuditRecords(t *testing.T) {
 func auditTXT(t *testing.T, target string) *models.RecordConfig {
 	t.Helper()
 
-	rc := &models.RecordConfig{Type: "TXT"}
-	rc.SetLabel("@", testOrigin)
+	dc := models.MustNewDomainConfig(testOrigin)
+	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeTXT, "my text")
 	if err := rc.SetTargetTXT(target); err != nil {
 		t.Fatalf("SetTargetTXT() error = %v", err)
 	}
@@ -99,13 +100,13 @@ func TestRejectUnroutableIP(t *testing.T) {
 				rtype = "AAAA"
 			}
 
-			rc := &models.RecordConfig{Type: rtype}
-			rc.SetLabel("@", testOrigin)
-			if err := rc.SetTarget(tt.address); err != nil {
+			dc := models.MustNewDomainConfig(testOrigin)
+			rc, err := dc.NewRecordConfig("@", 0, rtype, tt.address)
+			if err != nil {
 				t.Fatalf("SetTarget() error = %v", err)
 			}
 
-			err := rejectUnroutableIP(rc)
+			err = rejectUnroutableIP(rc)
 			if tt.reject && err == nil {
 				t.Errorf("%s (%s) was accepted, want rejected", tt.address, tt.what)
 			}
@@ -119,10 +120,7 @@ func TestRejectUnroutableIP(t *testing.T) {
 func auditCAA(t *testing.T, flag uint8, tag, target string) *models.RecordConfig {
 	t.Helper()
 
-	rc := &models.RecordConfig{Type: "CAA"}
-	rc.SetLabel("@", testOrigin)
-	if err := rc.SetTargetCAA(flag, tag, target); err != nil {
-		t.Fatalf("SetTargetCAA() error = %v", err)
-	}
+	dc := models.MustNewDomainConfig(testOrigin)
+	rc := dc.MustNewRecordConfig("@", 0, dnsv2.TypeCAA, flag, tag, target)
 	return rc
 }

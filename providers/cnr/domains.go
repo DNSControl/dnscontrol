@@ -1,40 +1,40 @@
 package cnr
 
-import "github.com/DNSControl/dnscontrol/v4/models"
+import "github.com/DNSControl/dnscontrol/v5/models"
 
 // EnsureZoneExists returns an error
 // * if access to dnszone is not allowed (not authorized) or
 // * if it doesn't exist and creating it fails.
-func (n *Client) EnsureZoneExists(dc *models.DomainConfig) error {
+func (client *Client) EnsureZoneExists(dc *models.DomainConfig) error {
 	domain := dc.Name
 	command := map[string]any{
 		"COMMAND": "AddDNSZone",
 		"DNSZONE": domain,
 	}
-	if n.APIEntity == "OTE" {
+	if client.APIEntity == "OTE" {
 		command["SOATTL"] = "33200"
 		command["SOASERIAL"] = "0000000000"
 	}
 	// Create the zone
-	r := n.client.Request(command)
+	r := client.client.Request(command)
 	if r.GetCode() == 549 || r.IsSuccess() {
 		return nil
 	}
-	return n.GetAPIError("Failed to create not existing zone ", domain, r)
+	return client.GetAPIError("Failed to create not existing zone ", domain, r)
 }
 
 // ListZones lists all the.
-func (n *Client) ListZones() ([]string, error) {
+func (client *Client) ListZones() ([]string, error) {
 	var zones []string
 
 	// Basic
 
-	rs := n.client.RequestAllResponsePages(map[string]string{
+	rs := client.client.RequestAllResponsePages(map[string]string{
 		"COMMAND": "QueryDNSZoneList",
 	})
 	for _, r := range rs {
 		if r.IsError() {
-			return nil, n.GetAPIError("Error while QueryDNSZoneList", "Basic", &r)
+			return nil, client.GetAPIError("Error while QueryDNSZoneList", "Basic", &r)
 		}
 		zoneColumn := r.GetColumn("DNSZONE")
 		if zoneColumn != nil {

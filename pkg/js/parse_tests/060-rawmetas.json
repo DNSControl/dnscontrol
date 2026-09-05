@@ -3,62 +3,39 @@
   "domains": [
     {
       "dnsProviders": {},
-      "meta": {
-        "dnscontrol_nameraw": "bar.com",
-        "dnscontrol_nameunicode": "bar.com",
-        "dnscontrol_uniquename": "bar.com"
-      },
       "name": "bar.com",
       "records": [
         {
-          "comparable": "user2.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "bar.com.bar.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 300
-            },
-            "Mbox": "user2.example.com.",
-            "Txt": "mytxt.example.com."
-          },
+          "comparablev3": "user2.example.com. mytxt.example.com.",
           "filepos": "[line:5:5]",
           "meta": {
             "skip_fqdn_check": "true"
           },
-          "name": "bar.com",
-          "name_raw": "bar.com",
-          "name_unicode": "bar.com",
-          "target": "",
-          "ttl": 300,
-          "type": "RP",
-          "zonfefilepartial": "user2.example.com. mytxt.example.com."
-        },
-        {
-          "comparable": "user2.example.com. mytxt.example.com.",
-          "fields": {
-            "Hdr": {
-              "Class": 1,
-              "Name": "foo.bar.com.bar.com.",
-              "Rdlength": 0,
-              "Rrtype": 17,
-              "Ttl": 300
-            },
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
             "Mbox": "user2.example.com.",
             "Txt": "mytxt.example.com."
           },
+          "ttl": 300,
+          "type": "RP",
+          "typenum": 17
+        },
+        {
+          "comparablev3": "user2.example.com. mytxt.example.com.",
           "filepos": "[line:4:5]",
           "meta": {
             "skip_fqdn_check": "true"
           },
-          "name": "foo.bar.com",
-          "name_raw": "foo.bar.com",
-          "name_unicode": "foo.bar.com",
-          "target": "",
+          "name": "foo",
+          "name_unicode": "foo",
+          "rdata": {
+            "Mbox": "user2.example.com.",
+            "Txt": "mytxt.example.com."
+          },
           "ttl": 300,
           "type": "RP",
-          "zonfefilepartial": "user2.example.com. mytxt.example.com."
+          "typenum": 17
         }
       ],
       "registrar": "none",

@@ -1,54 +1,50 @@
 package tencentdns
 
 import (
-	"fmt"
 	"strconv"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/txtutil"
+	dnsv2 "codeberg.org/miekg/dns"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/models"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
+	"golang.org/x/net/idna"
 )
 
-func nativeToRecord(r *dnspod.RecordListItem, domainName string) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      uint32(*r.TTL),
-		Original: r,
-		Metadata: map[string]string{},
-	}
+func nativeToRecord(r *dnspod.RecordListItem, dc *models.DomainConfig) (*models.RecordConfig, error) {
+	label := dc.LabelFromShort(*r.Name)
+	ttl := uint32(*r.TTL)
+	metadata := map[string]string{}
 	if r.Line != nil && *r.Line != "" {
-		rc.Metadata[metaRecordLine] = *r.Line
+		metadata[metaRecordLine] = *r.Line
 	}
 	if r.LineId != nil && *r.LineId != "" {
-		rc.Metadata[metaRecordLineID] = *r.LineId
+		metadata[metaRecordLineID] = *r.LineId
 	}
 	if r.Weight != nil {
-		rc.Metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
-	}
-	rc.SetLabel(*r.Name, domainName)
-
-	val := *r.Value
-	switch *r.Type {
-	case "A", "AAAA", "CNAME", "NS", "PTR", "TXT", "CAA", "SRV":
-	case "MX":
-		if r.MX != nil {
-			val = fmt.Sprintf("%d %s", *r.MX, *r.Value)
-		}
-	default:
-		return nil, fmt.Errorf("unsupported record type: %s", *r.Type)
+		metadata[metaRecordWeight] = strconv.FormatUint(*r.Weight, 10)
 	}
 
-	// DNSPod does not have a native ALIAS record type. DNSControl uses
-	// ALIAS("@") to model apex CNAME flattening, which DNSPod represents
-	// as a CNAME record at "@".
-	// See https://docs.dnspod.com/dns/faq-dns-resolution/?lang=en.
 	rtype := *r.Type
-	if rtype == "CNAME" && *r.Name == "@" {
-		rtype = "ALIAS"
-	}
 
-	if err := rc.PopulateFromStringFunc(rtype, val, domainName, txtutil.ParseQuoted); err != nil {
+	var rc *models.RecordConfig
+	var err error
+	val := *r.Value
+	switch rtype {
+	case "MX":
+		p := uint64(0)
+		if r.MX != nil {
+			p = *r.MX
+		}
+		//fmt.Printf("DEBUG TENCENT: MX apip=%v p=%v v=%q\n", *r.MX, p, val)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, p, val)
+	default:
+		rc, err = dc.NewRecordConfigParse(label, ttl, rtype, val)
+	}
+	if err != nil {
 		return nil, err
 	}
+	rc.Original = r
+	rc.Metadata = metadata
 
 	return rc, nil
 }
@@ -89,9 +85,6 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 	req := dnspod.NewCreateRecordRequest()
 	req.SubDomain = new(rc.GetLabel())
 	req.RecordType = new(rc.Type)
-	if rc.Type == "ALIAS" {
-		req.RecordType = new("CNAME")
-	}
 	line, lineID := recordLineMetadata(rc)
 	req.RecordLine = new(line)
 	if lineID != "" {
@@ -101,11 +94,29 @@ func recordToCreateRequest(rc *models.RecordConfig) *dnspod.CreateRecordRequest 
 		req.Weight = new(weight)
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
+	var val string
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CNAME:
+		var err error
+		val, err = idna.ToUnicode(f.Target)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Target
+		}
+	case dnsrdatav2.MX:
+		req.MX = new(uint64(f.Preference))
+		var err error
+		val, err = idna.ToUnicode(f.Mx)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Mx
+		}
+	case dnsrdatav2.TXT:
+		val = rc.GetTargetTXTJoined()
+	default:
+		val = rc.GetRDATA().String()
 	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 
@@ -117,14 +128,11 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 	req.RecordId = new(recordID)
 	req.SubDomain = new(rc.GetLabel())
 	req.RecordType = new(rc.Type)
-	if rc.Type == "ALIAS" {
-		req.RecordType = new("CNAME")
-	}
 	line, lineID := recordLineMetadata(rc)
-	req.RecordLine = new(line)
 	if lineID != "" {
 		req.RecordLineId = new(lineID)
 	}
+	req.RecordLine = new(line)
 	if weight, ok := recordWeightMetadata(rc); ok {
 		req.Weight = new(weight)
 	} else if comparableRecordWeight(previous) != "" {
@@ -132,11 +140,28 @@ func recordToModifyRequest(rc *models.RecordConfig, recordID uint64, previous *m
 		req.Weight = new(uint64(0))
 	}
 
-	val := rc.GetTargetCombinedFunc(txtutil.EncodeQuoted)
-	if rc.Type == "MX" {
-		val = rc.GetTargetField()
-		req.MX = new(uint64(rc.MxPreference))
+	var val string
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.CNAME:
+		var err error
+		val, err = idna.ToUnicode(f.Target)
+		if err != nil {
+			// If there is a failure, use the original.
+			val = f.Target
+		}
+	case dnsrdatav2.MX:
+		req.MX = new(uint64(f.Preference))
+		var err error
+		val, err = idna.ToUnicode(f.Mx)
+		if err != nil {
+			val = f.Mx
+		}
+	case dnsrdatav2.TXT:
+		val = rc.GetTargetTXTJoined()
+	default:
+		val = rc.GetRDATA().String()
 	}
+
 	req.Value = new(val)
 	req.TTL = new(uint64(rc.TTL))
 

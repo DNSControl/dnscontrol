@@ -17,17 +17,18 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/bindserial"
-	"github.com/DNSControl/dnscontrol/v4/pkg/credsfile"
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
-	"github.com/DNSControl/dnscontrol/v4/pkg/nameservers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/normalize"
-	"github.com/DNSControl/dnscontrol/v4/pkg/notifications"
-	"github.com/DNSControl/dnscontrol/v4/pkg/printer"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rfc4183"
-	"github.com/DNSControl/dnscontrol/v4/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/bindserial"
+	"github.com/DNSControl/dnscontrol/v5/pkg/credsfile"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameservers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/normalize"
+	"github.com/DNSControl/dnscontrol/v5/pkg/notifications"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rfc4183"
+	"github.com/DNSControl/dnscontrol/v5/pkg/zonerecs"
+	"github.com/DNSControl/dnscontrol/v5/providers/ovh"
 	"github.com/dustin/go-humanize"
 	"github.com/nozzle/throttler"
 	"github.com/urfave/cli/v3"
@@ -139,6 +140,18 @@ func (args *PPreviewArgs) flags() []cli.Flag {
 		Usage:  `Limit the IGNORE/NO_PURGE report to this many lines (Expermental. Will change in the future.)`,
 		Action: func(ctx context.Context, c *cli.Command, maxreport int) error {
 			printer.MaxReport = maxreport
+			return nil
+		},
+	})
+	flags = append(flags, &cli.BoolFlag{
+		Name:   "disable-list-zones",
+		Hidden: true,
+		Usage:  `Pretend ListZones() is unimplemented (OVH only)`,
+		Action: func(ctx context.Context, c *cli.Command, noListZones bool) error {
+			// This was added because the integration test API key donated to
+			// the project doesn't have ListZones privs. If other providers
+			// this, we should make it a general thing.
+			ovh.NoListZone = noListZones
 			return nil
 		},
 	})
@@ -434,7 +447,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 
 // stats returns a JSON string with memory usage statistics.
 // These stats are unofficial and subject to change without notice.
-// "average_mem_per_record" is misleading because it includes all memory overhead.
+// "benchmark1" is misleading because it includes all memory overhead.
 func stats(cfg *models.DNSConfig) string {
 
 	// https://www.datadoghq.com/blog/go-memory-metrics/
@@ -640,10 +653,12 @@ func skipProvider(name string, providers []*models.DNSProviderInstance) bool {
 	})
 }
 
+// ansiEscapeRe matches terminal ANSI styling escape sequences.
+var ansiEscapeRe = regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
+
 func parseCorrectionMsg(s string) []string {
-	// Regex to remove the terminal styled formatting
-	ansiRe := regexp.MustCompile(`\x1b\[[0-9;]*[a-zA-Z]`)
-	s = ansiRe.ReplaceAllString(s, "")
+	// Remove the terminal styled formatting.
+	s = ansiEscapeRe.ReplaceAllString(s, "")
 	// Create a slice(array) of correction/actions/changes from Msg
 	corrections := strings.Split(s, "\n")
 	// Clean up the slice, precaution remove any empty entries.
@@ -880,7 +895,7 @@ func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[
 			rCfg := cfg.RegistrarsByName[d.RegistrarName]
 			r, err := providers.CreateRegistrar(rCfg.Type, providerConfigs[d.RegistrarName])
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed to initialize registrar %q: %w", rCfg.Name, err)
 			}
 			registrars[d.RegistrarName] = r
 		}
@@ -891,7 +906,7 @@ func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
 				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to initialize DNS provider %q: %w", dCfg.Name, err)
 				}
 				dnsProviders[pInst.Name] = prov
 			}

@@ -5,7 +5,8 @@ import (
 	"net/netip"
 	"strconv"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 type nativeRecord struct {
@@ -57,62 +58,53 @@ func (r *nativeRecord) getDomain() (string, error) {
 	return recDomain, nil
 }
 
-func toRc(domain string, r nativeRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		TTL:      300,
-		Original: r,
-	}
-
+func toRc(dc *models.DomainConfig, r nativeRecord) (*models.RecordConfig, error) {
 	recDomain, _ := r.getDomain()
-	rc.SetLabelFromFQDN(recDomain, domain)
+	label := dc.LabelFromFQDNNoDot(recDomain)
+	var rc *models.RecordConfig
+	var err error
 
 	switch r.Type {
 	case "domain":
-		addr, err := netip.ParseAddr(r.IP)
-		if err != nil {
-			return nil, err
+		addr, parseErr := netip.ParseAddr(r.IP)
+		if parseErr != nil {
+			return nil, parseErr
 		}
-
-		rc.SetTargetIP(addr)
 		switch {
 		case addr.Is4():
-			rc.Type = "A"
+			rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeA, addr)
 		case addr.Is6():
-			rc.Type = "AAAA"
+			rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeAAAA, addr)
 		}
 
 	case "cname":
-		rc.Type = "CNAME"
-		rc.SetTarget(r.Target)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeCNAME, r.Target)
 
 	case "mxhost":
-		rc.Type = "MX"
-		pref, err := strconv.ParseUint(r.Pref, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Pref, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		rc.SetTargetMX(uint16(pref), r.Relay)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeMX, r.Pref, r.Relay)
 
 	case "srvhost":
-		rc.Type = "SRV"
-		priority, err := strconv.ParseUint(r.Priority, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Priority, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		weight, err := strconv.ParseUint(r.Weight, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Weight, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		port, err := strconv.ParseUint(r.Port, 10, 16)
-		if err != nil {
-			return nil, err
+		if _, parseErr := strconv.ParseUint(r.Port, 10, 16); parseErr != nil {
+			return nil, parseErr
 		}
-		rc.SetTargetSRV(uint16(priority), uint16(weight), uint16(port), r.Target)
+		rc, err = dc.NewRecordConfig(label, 300, dnsv2.TypeSRV, r.Priority, r.Weight, r.Port, r.Target)
 
 	default:
 		return nil, fmt.Errorf("unhandled record type: %s", r.Type)
 	}
-
+	if err != nil {
+		return nil, err
+	}
+	rc.Original = r
 	return rc, nil
 }
 
@@ -122,30 +114,32 @@ func toNative(rc *models.RecordConfig) (nativeRecord, string, error) {
 	var err error
 
 	// omits .type and .name
-	switch rc.Type {
-	case "A", "AAAA":
+	switch rc.TypeNum {
+	case dnsv2.TypeA, dnsv2.TypeAAAA:
 		recType = "domain"
 		r.Name = rc.NameFQDN
 		r.IP = rc.GetTargetIP().String()
 
-	case "CNAME":
+	case dnsv2.TypeCNAME:
 		recType = "cname"
 		r.Cname = rc.NameFQDN
-		r.Target = rc.GetTargetField()
+		r.Target = rc.AsCNAME().Target
 
-	case "SRV":
+	case dnsv2.TypeSRV:
+		f := rc.AsSRV()
 		recType = "srvhost"
 		r.Srv = rc.NameFQDN
-		r.Priority = string(strconv.Itoa(int(rc.SrvPriority)))
-		r.Weight = strconv.Itoa(int(rc.SrvWeight))
-		r.Port = strconv.Itoa(int(rc.SrvPort))
-		r.Target = rc.GetTargetField()
+		r.Priority = string(strconv.Itoa(int(f.Priority)))
+		r.Weight = strconv.Itoa(int(f.Weight))
+		r.Port = strconv.Itoa(int(f.Port))
+		r.Target = f.Target
 
-	case "MX":
+	case dnsv2.TypeMX:
+		f := rc.AsMX()
 		recType = "mxhost"
 		r.Domain = rc.NameFQDN
-		r.Pref = strconv.Itoa(int(rc.MxPreference))
-		r.Relay = rc.GetTargetField()
+		r.Pref = strconv.Itoa(int(f.Preference))
+		r.Relay = f.Mx
 
 	default:
 		err = fmt.Errorf("unhandled record type: %s", rc.Type)

@@ -1,5 +1,12 @@
 # CLI variables
 
+- [CLI variables](#cli-variables)
+  - [Passing variables](#passing-variables)
+  - [Define defaults](#define-defaults)
+  - [Example 1: Different IPs for internal/external DNS](#example-1-different-ips-for-internalexternal-dns)
+  - [Example 2: Different DNS records](#example-2-different-dns-records)
+    - [ProTips](#protips)
+
 You can pass variables into your configuration from the command line using the `-v key=value` flag. There is also a mechanism called `CLI_DEFAULTS` which lets you easily set the defaults on variables that are otherwise controlled from the command line.
 
 This gives you the opportunity to run different code when a value is passed.
@@ -34,8 +41,8 @@ In this example we have a number of variables which need to be set differently w
 
 In this configuration:
 
-* `dnscontrol push` would generate the external (default) view.
-* `dnscontrol push -v view=internal` would generate the internal view.
+- `dnscontrol push` would generate the external (default) view.
+- `dnscontrol push -v view=internal` would generate the internal view.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -70,8 +77,8 @@ In this example different code is run when `emergency=true`.  Normally `server12
 
 In this configuration:
 
-* `dnscontrol push` would generate the normal configuration.
-* `dnscontrol push -v emergency=true` would generate the emergency configuration.
+- `dnscontrol push` would generate the normal configuration.
+- `dnscontrol push -v emergency=true` would generate the emergency configuration.
 
 {% code title="dnsconfig.js" %}
 ```javascript
@@ -119,4 +126,3 @@ In the first example, you'll see that one variable is used to set a mode which t
 In the second example, you'll see a boolean variable is set which selects which code will run different code. While the conditional code is not isolated to the top of the file, the conditional code is placed immediately after the domain.
 
 In both examples, not setting any variables on the command line does something reasonable. If someone accidentally runs `dnscontrol push` without any variables, the behavior is correct (assuming we're not in emergency mode, which is unlikely).
-

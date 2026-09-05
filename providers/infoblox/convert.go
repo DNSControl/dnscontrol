@@ -120,7 +120,9 @@ func ensureTrailingDot(s string) string {
 	return s + "."
 }
 
-func convertA(raw json.RawMessage, domain string, defaultTTL uint32) (*models.RecordConfig, error) {
+func convertA(raw json.RawMessage, dc *models.DomainConfig, defaultTTL uint32) (*models.RecordConfig, error) {
+	domain := dc.Name
+
 	var r ibRecordA
 	if err := json.Unmarshal(raw, &r); err != nil {
 		return nil, fmt.Errorf("failed to parse A record: %w", err)

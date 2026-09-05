@@ -4,8 +4,9 @@ import (
 	"errors"
 	"unicode"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/rejectif"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 	"golang.org/x/net/idna"
 )
 
@@ -26,8 +27,15 @@ func isValidAliDNSString(s string) bool {
 }
 
 // labelConstraint detects labels that contain non-ASCII characters except Chinese characters.
+// Punycode-encoded labels (xn--...) are decoded to Unicode before checking so that
+// non-Chinese IDN labels such as xn--ndaaa (ööö) are correctly rejected.
 func labelConstraint(rc *models.RecordConfig) error {
-	if !isValidAliDNSString(rc.GetLabel()) {
+	label := rc.GetLabel()
+	decoded, err := idna.ToUnicode(label)
+	if err == nil {
+		label = decoded
+	}
+	if !isValidAliDNSString(label) {
 		return errors.New("label contains non-ASCII characters (only Chinese is allowed)")
 	}
 	return nil
@@ -36,9 +44,21 @@ func labelConstraint(rc *models.RecordConfig) error {
 // targetConstraint detects target values that contain non-ASCII characters except Chinese characters.
 // This applies to CNAME, MX, NS, SRV targets.
 func targetConstraint(rc *models.RecordConfig) error {
-	target, err := idna.ToUnicode(rc.GetTargetField())
-	if err != nil {
-		target = rc.GetTargetField()
+	var target string
+	switch rc.TypeNum {
+	case dnsv2.TypeCNAME:
+		target = rc.AsCNAME().Target
+	case dnsv2.TypeMX:
+		target = rc.AsMX().Mx
+	case dnsv2.TypeNS:
+		target = rc.AsNS().Ns
+	case dnsv2.TypeSRV:
+		target = rc.AsSRV().Target
+	default:
+		target = rc.GetRDATA().String()
+	}
+	if t, err := idna.ToUnicode(target); err == nil {
+		target = t
 	}
 	if !isValidAliDNSString(target) {
 		return errors.New("target contains non-ASCII characters (only Chinese is allowed)")
@@ -49,7 +69,7 @@ func targetConstraint(rc *models.RecordConfig) error {
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
-func AuditRecords(records []*models.RecordConfig) []error {
+func AuditRecords(records models.Records) []error {
 	// Note: We can't get domain version info here because AuditRecords
 	// is called without provider context. TTL validation will be done
 	// at the provider level in GetZoneRecordsCorrections.

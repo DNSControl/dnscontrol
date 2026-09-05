@@ -1,5 +1,14 @@
 # get-zones
 
+- [get-zones](#get-zones)
+  - [Use case 1: Bootstrapping a new system](#use-case-1-bootstrapping-a-new-system)
+  - [Use case 2: Generating BIND ZONE files](#use-case-2-generating-bind-zone-files)
+  - [Use case 3: TAB separated values](#use-case-3-tab-separated-values)
+  - [Use case 4: List zones](#use-case-4-list-zones)
+  - [Syntax](#syntax)
+  - [Examples](#examples)
+  - [Developer Notes](#developer-notes)
+
 DNSControl has a stand-alone utility that will contact a provider, download the records of one or more zones, and output them to a file in a variety of formats.
 
 `get-zones` relies on command line parameters and `creds.json` exclusively. It does not use `dnsconfig.js`. This is to assist bootstrapping a new system.
@@ -84,13 +93,13 @@ dnscontrol get-zones --format=djs --out=foo.djs my_bind example.com
 dnscontrol preview --config foo.js
 ```
 
-# Developer Notes
+## Developer Notes
 
 This command is not implemented for all providers.
 
 To add this to a provider:
 
-**Step 1. Document the feature**
+**Step 1. Document the feature:**
 
 In the `*provider.go` file, change the setting to implemented.
 
@@ -101,7 +110,7 @@ In the `*provider.go` file, change the setting to implemented.
 ```
 {% endcode %}
 
-**Step 2. Update the docs**
+**Step 2. Update the docs:**
 
 ```shell
 go generate

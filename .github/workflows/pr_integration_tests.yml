@@ -95,7 +95,7 @@ jobs:
   warm-gomod-cache:
     runs-on: ubuntu-latest
     container:
-      image: golang:1.26
+      image: golang:1.27
     needs:
       - integration-test-providers
     outputs:
@@ -144,7 +144,7 @@ jobs:
     if: ${{ inputs.full || (github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main') }}
     runs-on: ubuntu-latest
     container:
-      image: golang:1.26
+      image: golang:1.27
     needs:
       - integration-test-providers
       - warm-gomod-cache

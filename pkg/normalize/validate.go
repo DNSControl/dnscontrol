@@ -3,40 +3,22 @@ package normalize
 import (
 	"errors"
 	"fmt"
-	"net/netip"
 	"slices"
 	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v4/pkg/transform"
-	dnsv1 "github.com/miekg/dns"
-	dnsutilv1 "github.com/miekg/dns/dnsutil"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
-
-// Returns false if target does not validate.
-func checkIPv4(label string) error {
-	if addr, err := netip.ParseAddr(label); err != nil || !addr.Is4() {
-		return fmt.Errorf("WARNING: target (%v) is not an IPv4 address", label)
-	}
-	return nil
-}
-
-// Returns false if target does not validate.
-func checkIPv6(label string) error {
-	if addr, err := netip.ParseAddr(label); err != nil || !addr.Is6() {
-		return fmt.Errorf("WARNING: target (%v) is not an IPv6 address", label)
-	}
-	return nil
-}
 
 // make sure target is valid reference for cnames, mx, etc.
 func checkTarget(target string) error {
-	if target == "@" {
-		return nil
-	}
+	// The target shouldn't be "@". It should be $origin+"."
 	if target == "" {
 		return errors.New("empty target (\"\"). Did you mean \"@\" instead?")
 	}
@@ -46,17 +28,15 @@ func checkTarget(target string) error {
 	if !strings.HasSuffix(target, ".in-addr.arpa.") && strings.Contains(target, "/") {
 		return fmt.Errorf("target (%v) includes invalid char", target)
 	}
-	// If it contains a ".", it must end in a ".".
-	if strings.ContainsRune(target, '.') && target[len(target)-1] != '.' {
-		return fmt.Errorf("target (%v) must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", target)
-	}
 	return nil
 }
 
-// validateRecordTypes list of valid rec.Type values. Returns true if this is a real DNS record type, false means it is a pseudo-type used internally.
+// validateRecordTypes returns an error if this type is incompatible with the provider.
+// FIXME(tlim): Is this needed any more?
 func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
-	if rec.IsModernType() {
-		// Modern types do their own validation.
+	switch rec.Type {
+	// RCv3 records do not need this validation step.
+	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
 		return nil
 	}
 
@@ -89,9 +69,10 @@ func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []strin
 	}
 	_, ok := validTypes[rec.Type]
 	if !ok {
+
 		cType := providers.GetCustomRecordType(rec.Type)
 		if cType == nil {
-			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v", rec.Type, domain, rec.GetLabel())
+			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v Type=%s TypeNum=%d", rec.Type, domain, rec.GetLabel(), rec.Type, rec.TypeNum)
 		}
 		for _, providerType := range pTypes {
 			if providerType != cType.Provider {
@@ -154,6 +135,8 @@ func checkLabel(label string, rType string, domain string, meta map[string]strin
 	return nil
 }
 
+// checkSoa checks the elements of an SOA.
+// FIXME(tlim): Move this to MakeSOA(). (Note to self: API-downloaded items aren't run through validate).
 func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox string) error {
 	if expire <= 0 {
 		return errors.New("SOA Expire must be > 0")
@@ -176,18 +159,18 @@ func checkSoa(expire uint32, minttl uint32, refresh uint32, retry uint32, mbox s
 	return nil
 }
 
-// checkTargets returns true if rec.Target is valid for the rec.Type.
+// checkTargets returns zero or more errors when problems are found.
+// FYI: Many of these checks are obsolete since Make*() does the same thing. We'll be removing the duplicate checks over time.
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
-	if rec.IsModernType() {
-		// Modern types do their own validation.
+	switch rec.Type {
+	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
 		return nil
 	}
 
 	label := rec.GetLabel()
-	target := rec.GetTargetField()
 	check := func(e error) {
 		if e != nil {
-			err := fmt.Errorf("%s: %s %s.%s: %s", rec.FilePos, rec.Type, rec.GetLabel(), domain, e.Error())
+			err := fmt.Errorf("%s: %s %s: %s", rec.FilePos, rec.Type, rec.GetLabelFQDN(), e.Error())
 			if _, ok := e.(Warning); ok {
 				err = Warning{err}
 			}
@@ -195,57 +178,60 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		}
 	}
 	switch rec.Type { // #rtype_variations
+
+	// No longer needed
 	case "A":
-		check(checkIPv4(target))
 	case "AAAA":
-		check(checkIPv6(target))
+	case "LOC":
+	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
+
 	case "ALIAS":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsALIAS().Target))
 	case "CNAME":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsCNAME().Target))
 		if label == "@" {
-			check(errors.New("cannot create CNAME record for bare domain"))
+			check(errors.New("cannot create CNAME record for bare domain. Use ALIAS"))
 		}
-		labelFQDN := dnsutilv1.AddOrigin(label, domain)
-		targetFQDN := dnsutilv1.AddOrigin(target, domain)
+		labelFQDN := nameutil.ToFqdnNoDot(label, domain)
+		targetFQDN := nameutil.ToFqdnNoDot(rec.AsCNAME().Target, domain)
 		if labelFQDN == targetFQDN {
 			check(errors.New("CNAME loop (target points at itself)"))
 		}
 	case "DNAME":
-		check(checkTarget(target))
-	case "LOC":
+		check(checkTarget(rec.AsDNAME().Target))
 	case "MX":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsMX().Mx))
 	case "NAPTR":
+		target := rec.AsNAPTR().Replacement
 		if target != "" {
 			check(checkTarget(target))
 		}
 	case "NS":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsNS().Ns))
 		if label == "@" {
 			check(errors.New("cannot create NS record for bare domain. Use NAMESERVER instead"))
 		}
 	case "PTR":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsPTR().Ptr))
 	case "SOA":
-		check(checkSoa(rec.SoaExpire, rec.SoaMinttl, rec.SoaRefresh, rec.SoaRetry, rec.SoaMbox))
-		check(checkTarget(target))
+		f := rec.AsSOA()
+		check(checkSoa(f.Expire, f.Minttl, f.Refresh, f.Retry, f.Mbox))
+		check(checkTarget(f.Ns))
 		if label != "@" {
 			check(errors.New("SOA record is only valid for bare domain"))
 		}
 	case "SRV":
-		check(checkTarget(target))
+		check(checkTarget(rec.AsSRV().Target))
 	case "LUA":
-		upper := strings.ToUpper(rec.LuaRType)
+		f := rec.AsLUA()
+		upper := strings.ToUpper(f.LuaType)
 		if upper == "" {
 			check(errors.New("LUA records must specify an emitted rtype"))
 			break
 		}
-		if _, ok := dnsv1.StringToType[upper]; !ok {
-			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", rec.LuaRType))
+		if _, ok := dnsv2.StringToType[upper]; !ok {
+			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", f.LuaType))
 		}
-		rec.LuaRType = upper
-	case "CAA", "DHCID", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "OPENPGPKEY", "SMIMEA", "SSHFP", "SVCB", "TLSA", "TXT":
 	default:
 		if rec.Metadata["orig_custom_type"] != "" {
 			// it is a valid custom type. We perform no validation on target
@@ -265,7 +251,7 @@ func transformCNAME(target, oldDomain, newDomain, suffixstrip string) string {
 	if strings.HasSuffix(target, ".") {
 		return target + nd + "."
 	}
-	return dnsutilv1.AddOrigin(target, oldDomain) + "." + nd + "."
+	return nameutil.ToFqdnWithDot(target, oldDomain) + nd + "."
 }
 
 func newRec(rec *models.RecordConfig, ttl uint32) *models.RecordConfig {
@@ -308,10 +294,10 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 		}
 		switch rec.Type {
 		case "A":
-			addr, _ := netip.ParseAddr(rec.GetTargetField())
+			addr := rec.AsA().Addr
 			trs, err := transform.IPToList(addr, transforms)
 			if err != nil {
-				return fmt.Errorf("import_transform: TransformIP(%v, %v) returned err=%w", rec.GetTargetField(), transforms, err)
+				return fmt.Errorf("import_transform: TransformIP(%v, %v) returned err=%w", addr, transforms, err)
 			}
 			for _, tr := range trs {
 				r := newRec(rec, ttl)
@@ -320,9 +306,13 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 					return err
 				}
 				r.SetLabel(l, dstDomain.Name)
-				if err := r.SetTarget(tr.String()); err != nil {
+
+				rd, err := models.MakeA(dstDomain.Name, rec.Metadata, nrc.Flags{}, tr.String())
+				if err != nil {
 					return err
 				}
+				r.SetRDATA(rd)
+
 				dstDomain.Records = append(dstDomain.Records, r)
 			}
 		case "CNAME":
@@ -332,9 +322,13 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 				return err
 			}
 			r.SetLabel(l, dstDomain.Name)
-			if err := r.SetTarget(transformCNAME(r.GetTargetField(), srcDomain.Name, dstDomain.Name, suffixstrip)); err != nil {
+
+			rd, err := models.MakeCNAME(dstDomain.Name, rec.Metadata, nrc.Flags{}, transformCNAME(r.AsCNAME().Target, srcDomain.Name, dstDomain.Name, suffixstrip))
+			if err != nil {
 				return err
 			}
+			r.SetRDATA(rd)
+
 			dstDomain.Records = append(dstDomain.Records, r)
 		default:
 			// Anything else is ignored.
@@ -346,8 +340,8 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 
 // deleteImportTransformRecords deletes any IMPORT_TRANSFORM records from a domain.
 func deleteImportTransformRecords(domain *models.DomainConfig) {
-	for i := len(domain.Records) - 1; i >= 0; i-- {
-		rec := domain.Records[i]
+	for i, rec := range slices.Backward(domain.Records) {
+
 		if rec.Type == "IMPORT_TRANSFORM" {
 			domain.Records = append(domain.Records[:i], domain.Records[i+1:]...)
 		}
@@ -394,31 +388,29 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				errs = append(errs, err)
 			}
 			// Unlike any other FQDN in this system, it is stored as a FQDN without the trailing dot.
-			n := dnsutilv1.AddOrigin(ns.Name, domain.Name+".")
+			n := nameutil.ToFqdnWithDot(ns.Name, domain.Name)
 			ns.Name = strings.TrimSuffix(n, ".")
 		}
 
 		// Normalize Records.
-		models.PostProcessRecords(domain.Records)
-		// No need to call FixLegacyDC here. These records were created from dnsconfig.js, not from a provider.
 		for _, rec := range domain.Records {
 			if rec.TTL == 0 {
 				rec.TTL = models.DefaultTTL
 			}
 
 			// Canonicalize Label:
-			if rec.GetLabel() == (domain.Name + ".") {
-				// If label == ${domain}DOT, change to "@"
-				rec.SetLabel("@", domain.Name)
-			} else if lab, suf := rec.GetLabel(), "."+domain.Name+"."; strings.HasSuffix(lab, suf) {
-				// If label ends with DOT${domain}DOT, strip it to a short name.
-				rec.SetLabel(lab[:len(lab)-len(suf)], domain.Name)
-			}
+			//if rec.GetLabel() == (domain.Name + ".") {
+			//	// If label == ${domain}DOT, change to "@"
+			//	rec.SetLabel("@", domain.Name)
+			//} else if lab, suf := rec.GetLabel(), "."+domain.Name+"."; strings.HasSuffix(lab, suf) {
+			//	// If label ends with DOT${domain}DOT, strip it to a short name.
+			//	rec.SetLabel(lab[:len(lab)-len(suf)], domain.Name)
+			//}
 			// If label ends with dot, add to the list of errors.
-			if strings.HasSuffix(rec.GetLabel(), ".") {
-				errs = append(errs, fmt.Errorf("label %q does not match D(%q)", rec.GetLabel(), domain.Name))
-				return errs // Exit early.
-			}
+			//if strings.HasSuffix(rec.GetLabel(), ".") {
+			//	errs = append(errs, fmt.Errorf("label %q does not match D(%q)", rec.GetLabel(), domain.Name))
+			//	return errs // Exit early.
+			//}
 
 			// in-addr.arpa magic
 			if strings.HasSuffix(domain.Name, ".in-addr.arpa") || strings.HasSuffix(domain.Name, ".ip6.arpa") {
@@ -442,22 +434,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 
 			// Canonicalize Targets.
 			switch rec.Type { // #rtype_variations
-			case "ALIAS", "CNAME", "MX", "NS", "SRV":
-				// #rtype_variations
-				// These record types have a target that is a hostname.
-				// We normalize them to a FQDN so there is less variation to handle.  If a
-				// provider API requires a shortname, the provider must do the shortening.
-				origin := domain.Name + "."
-				if rec.SubDomain != "" {
-					origin = rec.SubDomain + "." + origin
-				}
-				if err := rec.SetTarget(dnsutilv1.AddOrigin(rec.GetTargetField(), origin)); err != nil {
-					errs = append(errs, err)
-				}
-			case "A", "AAAA":
-				if err := rec.SetTargetIP(rec.GetTargetIP()); err != nil {
-					errs = append(errs, err)
-				}
 			case "PTR":
 				var err error
 				var name string
@@ -468,43 +444,57 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			case "CAA":
 				// Per: https://www.iana.org/assignments/pkix-parameters/pkix-parameters.xhtml#caa-properties excluding reserved tags
 				allowedTags := []string{"issue", "issuewild", "iodef", "contactemail", "contactphone", "issuemail", "issuevmc"}
-				if !slices.Contains(allowedTags, rec.CaaTag) {
-					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", rec.CaaTag))
+				f := rec.AsCAA()
+				if !slices.Contains(allowedTags, f.Tag) {
+					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", f.Tag))
 				}
 			case "OPENPGPKEY":
-				target := rec.GetTargetField()
-				if target, err = transform.OPENPGPKEY(target); err != nil {
+				var orig, transformed, final string
+				var err error
+				orig = rec.AsOPENPGPKEY().PublicKey
+				transformed, err = transform.OPENPGPKEY(orig)
+				if err != nil {
+					final = orig
 					errs = append(errs, err)
 				} else {
-					if err := rec.SetTarget(target); err != nil {
+					final = transformed
+				}
+				if orig != final {
+					rd, err := models.MakeOPENPGPKEY("", nil, nrc.Flags{}, final)
+					if err != nil {
 						errs = append(errs, err)
 					}
+					rec.SetRDATA(rd)
 				}
+
 			case "TLSA":
-				if rec.TlsaUsage > 3 {
+				f := rec.AsTLSA()
+				if f.Usage > 3 {
+					f := rec.AsTLSA()
 					errs = append(errs, fmt.Errorf("TLSA Usage %d is invalid in record %s (domain %s)",
-						rec.TlsaUsage, rec.GetLabel(), domain.Name))
+						f.Usage, rec.GetLabel(), domain.Name))
 				}
-				if rec.TlsaSelector > 1 {
+				if f.Selector > 1 {
 					errs = append(errs, fmt.Errorf("TLSA Selector %d is invalid in record %s (domain %s)",
-						rec.TlsaSelector, rec.GetLabel(), domain.Name))
+						f.Selector, rec.GetLabel(), domain.Name))
 				}
-				if rec.TlsaMatchingType > 2 {
+				if f.MatchingType > 2 {
 					errs = append(errs, fmt.Errorf("TLSA MatchingType %d is invalid in record %s (domain %s)",
-						rec.TlsaMatchingType, rec.GetLabel(), domain.Name))
+						f.MatchingType, rec.GetLabel(), domain.Name))
 				}
 			case "SMIMEA":
-				if rec.SmimeaUsage > 3 {
+				f := rec.AsSMIMEA()
+				if f.Usage > 3 {
 					errs = append(errs, fmt.Errorf("SMIMEA Usage %d is invalid in record %s (domain %s)",
-						rec.SmimeaUsage, rec.GetLabel(), domain.Name))
+						f.Usage, rec.GetLabel(), domain.Name))
 				}
-				if rec.SmimeaSelector > 1 {
+				if f.Selector > 1 {
 					errs = append(errs, fmt.Errorf("SMIMEA Selector %d is invalid in record %s (domain %s)",
-						rec.SmimeaSelector, rec.GetLabel(), domain.Name))
+						f.Selector, rec.GetLabel(), domain.Name))
 				}
-				if rec.SmimeaMatchingType > 2 {
+				if f.MatchingType > 2 {
 					errs = append(errs, fmt.Errorf("SMIMEA MatchingType %d is invalid in record %s (domain %s)",
-						rec.SmimeaMatchingType, rec.GetLabel(), domain.Name))
+						f.MatchingType, rec.GetLabel(), domain.Name))
 				}
 			}
 
@@ -526,18 +516,22 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	for _, domain := range config.Domains {
 		for _, rec := range domain.Records {
 			if rec.Type == "IMPORT_TRANSFORM" {
-				suffixstrip := rec.Metadata["transform_suffixstrip"]
-				table, err := transform.DecodeTransformTable(rec.Metadata["transform_table"])
+				rd := rec.AsIMPORTTRANSFORM()
+				transformTable := rd.TransformTable
+				ttl := uint32(rd.TTL)
+				suffixstrip := rd.SuffixStrip
+				targetDomain := rd.TargetDomain
+				table, err := transform.DecodeTransformTable(transformTable)
 				if err != nil {
 					errs = append(errs, err)
 					continue
 				}
-				c := config.FindDomain(rec.GetTargetField())
+				c := config.FindDomain(targetDomain)
 				if c == nil {
-					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", rec.GetTargetField())
+					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", targetDomain)
 					errs = append(errs, err)
 				}
-				err = importTransform(c, domain, table, rec.TTL, suffixstrip)
+				err = importTransform(c, domain, table, ttl, suffixstrip)
 				if err != nil {
 					errs = append(errs, err)
 				}
@@ -683,10 +677,11 @@ func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
 	return
 }
 
-func checkDuplicates(records []*models.RecordConfig) (errs []error) {
-	seen := map[string]*models.RecordConfig{}
+func checkDuplicates(records models.Records) (errs []error) {
+	seen := make(map[string]*models.RecordConfig)
 	for _, r := range records {
-		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ToComparableNoTTL())
+		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
+
 		if seen[diffable] != nil {
 			errs = append(errs, fmt.Errorf("exact duplicate record found: %s", diffable))
 		}
@@ -695,7 +690,7 @@ func checkDuplicates(records []*models.RecordConfig) (errs []error) {
 	return errs
 }
 
-func checkRecordSetHasMultipleTTLs(records []*models.RecordConfig) (errs []error) {
+func checkRecordSetHasMultipleTTLs(records models.Records) (errs []error) {
 	// The RFCs say that all records at a particular recordset should have
 	// the same TTL.  Most providers don't care, and if they do the
 	// dnscontrol provider code usually picks the lowest TTL for all of them.
@@ -708,6 +703,9 @@ func checkRecordSetHasMultipleTTLs(records []*models.RecordConfig) (errs []error
 	// Find the inconsistencies:
 	m := make(map[string]map[uint32]map[string]bool)
 	for _, r := range records {
+		if !r.IsTTLSignificant() {
+			continue
+		}
 		label := r.GetLabelFQDN()
 		ttl := r.TTL
 		rtype := r.Type
@@ -785,7 +783,7 @@ func commaSepInts(list []int) string {
 // checkR53WeightedGroupConsistency validates that all records sharing the same
 // label+type+set_identifier have identical weight and health_check_id, since
 // they map to a single Route 53 ResourceRecordSet.
-func checkR53WeightedGroupConsistency(records []*models.RecordConfig) (errs []error) {
+func checkR53WeightedGroupConsistency(records models.Records) (errs []error) {
 	type groupMeta struct {
 		weight      string
 		healthCheck string
@@ -972,7 +970,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 		for i, newIP := range newIPs {
 			if i == 0 && newIP.Compare(ip) != 0 {
 				// replace target of first record if different
-				if err := rec.SetTarget(newIP.String()); err != nil {
+				if err := rec.SetTargetIP(newIP); err != nil {
 					return err
 				}
 			} else if i > 0 {
@@ -981,7 +979,7 @@ func applyRecordTransforms(domain *models.DomainConfig) error {
 				if err != nil {
 					return err
 				}
-				if err := cpy.SetTarget(newIP.String()); err != nil {
+				if err := cpy.SetTargetIP(newIP); err != nil {
 					return err
 				}
 				domain.Records = append(domain.Records, cpy)

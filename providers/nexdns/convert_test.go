@@ -3,7 +3,7 @@ package nexdns
 import (
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 const testOrigin = "example.com"
@@ -79,7 +79,7 @@ func TestRecordRoundTrip(t *testing.T) {
 		{
 			name:    "DS sends the bare digest",
 			stored:  apiRecord{ID: "r7", Name: "child", Type: "DS", Content: "12345 13 2 2bb183af5f22588179a53b0a98631fad1a292118bd8e9ba3d3a1e01f2e1bd9c1", TTL: 300},
-			content: "2bb183af5f22588179a53b0a98631fad1a292118bd8e9ba3d3a1e01f2e1bd9c1",
+			content: "2BB183AF5F22588179A53B0A98631FAD1A292118BD8E9BA3D3A1E01F2E1BD9C1",
 			verify: func(t *testing.T, req recordRequest) {
 				if req.KeyTag == nil || *req.KeyTag != 12345 {
 					t.Errorf("keytag = %v, want 12345", req.KeyTag)
@@ -95,7 +95,7 @@ func TestRecordRoundTrip(t *testing.T) {
 		{
 			name:    "TLSA sends the bare certificate data",
 			stored:  apiRecord{ID: "r8", Name: "_443._tcp", Type: "TLSA", Content: "3 1 1 abcdef0123456789", TTL: 300},
-			content: "abcdef0123456789",
+			content: "ABCDEF0123456789",
 			verify: func(t *testing.T, req recordRequest) {
 				if req.Usage == nil || req.Selector == nil || req.MatchingType == nil {
 					t.Fatalf("tlsa fields = %v %v %v, want all three", req.Usage, req.Selector, req.MatchingType)
@@ -136,9 +136,11 @@ func TestRecordRoundTrip(t *testing.T) {
 		},
 	}
 
+	dc := models.MustNewDomainConfig(testOrigin)
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rc, err := toRecordConfig(tt.stored, testOrigin)
+			rc, err := toRecordConfig(dc, tt.stored)
 			if err != nil {
 				t.Fatalf("toRecordConfig() error = %v", err)
 			}
@@ -169,16 +171,12 @@ func TestFilterApexNS(t *testing.T) {
 		t.Fatalf("ToNameservers() error = %v", err)
 	}
 
-	dc := &models.DomainConfig{
-		Name:        testOrigin,
-		Nameservers: nameservers,
-		Records: models.Records{
-			makeRecord(t, "NS", "@", "ns1.example.net."),
-			makeRecord(t, "NS", "@", "ns9.example.org."),
-			makeRecord(t, "NS", "sub", "ns1.example.org."),
-			makeRecord(t, "A", "www", "203.0.113.10"),
-		},
-	}
+	dc := models.MustNewDomainConfig(testOrigin)
+	dc.Nameservers = nameservers
+	dc.AddRecordConfig(makeRecord(t, "NS", testOrigin, "ns1.example.net."))
+	dc.AddRecordConfig(makeRecord(t, "NS", testOrigin, "ns9.example.org."))
+	dc.AddRecordConfig(makeRecord(t, "NS", "sub."+testOrigin, "ns1.example.org."))
+	dc.AddRecordConfig(makeRecord(t, "A", "www."+testOrigin, "203.0.113.10"))
 
 	filterApexNS(dc)
 
@@ -195,10 +193,7 @@ func TestFilterApexNS(t *testing.T) {
 func makeRecord(t *testing.T, rtype, label, target string) *models.RecordConfig {
 	t.Helper()
 
-	rc := &models.RecordConfig{Type: rtype, TTL: 300}
-	rc.SetLabel(label, testOrigin)
-	if err := rc.PopulateFromString(rtype, target, testOrigin); err != nil {
-		t.Fatalf("PopulateFromString() error = %v", err)
-	}
+	dc := models.MustNewDomainConfig(testOrigin)
+	rc := dc.MustNewRecordConfigParse(dc.LabelFromFQDNNoDot(label), 300, rtype, target)
 	return rc
 }

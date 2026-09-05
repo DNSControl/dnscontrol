@@ -1,5 +1,18 @@
 # creds.json
 
+- [creds.json](#credsjson)
+  - [Format](#format)
+  - [The TYPE subkey](#the-type-subkey)
+  - [Error messages](#error-messages)
+    - [Missing](#missing)
+    - [cleanup](#cleanup)
+    - [mismatch](#mismatch)
+    - [fixcreds](#fixcreds)
+    - [hyphen](#hyphen)
+  - [Using a different file name](#using-a-different-file-name)
+    - [Example commands](#example-commands)
+  - [Don't store creds.json in a Git repo!](#dont-store-credsjson-in-a-git-repo)
+
 When DNSControl interacts with a provider, any API keys, credentials, or other configuration parameters required are stored in `creds.json`.   The file contains a set of key/value pairs for each configuration.  That is, since a provider can be used multiple times with different credentials, the file contains a section for each set of credentials.
 
 {% hint style="success" %}
@@ -37,17 +50,17 @@ Here's a sample file:
 
 ## Format
 
-* Primary keys: (e.g. `cloudflare_tal`, `inside`, `CNR`)
-  * ...refer to the first parameter in the `NewRegistrar()` or `NewDnsProvider()` functions in a `dnsconfig.js` file.
-  * ...may include any printable character except colon (`:`)
-  * Convention: all lower case, usually the name of the provider or the username at the provider or both.
-* Subkeys: (e.g. `apikey`, `apiuser` and etc.)
-  * ...are whatever the provider specifies.
-  * ...can be credentials, secrets, or configuration settings. In the above examples the `inside` setting is configuration parameters for the BIND provider, not credentials.
-  * A missing subkey is not an error. The value is the empty string.
-* Values:
-  * ...may include any JSON string value including the empty string.
-  * If a subkey starts with `$`, it is taken as an env variable.  In the above example, `$CNR_APILOGIN` would be replaced by the value of the environment variable `CNR_APILOGIN` or the empty string if no such environment variable exists.
+- Primary keys: (e.g. `cloudflare_tal`, `inside`, `CNR`)
+  - ...refer to the first parameter in the `NewRegistrar()` or `NewDnsProvider()` functions in a `dnsconfig.js` file.
+  - ...may include any printable character except colon (`:`)
+  - Convention: all lower case, usually the name of the provider or the username at the provider or both.
+- Subkeys: (e.g. `apikey`, `apiuser` and etc.)
+  - ...are whatever the provider specifies.
+  - ...can be credentials, secrets, or configuration settings. In the above examples the `inside` setting is configuration parameters for the BIND provider, not credentials.
+  - A missing subkey is not an error. The value is the empty string.
+- Values:
+  - ...may include any JSON string value including the empty string.
+  - If a subkey starts with `$`, it is taken as an env variable.  In the above example, `$CNR_APILOGIN` would be replaced by the value of the environment variable `CNR_APILOGIN` or the empty string if no such environment variable exists.
 
 ## The TYPE subkey
 
@@ -145,12 +158,12 @@ The fix is to change the `TYPE` subkey entry in `creds.json` from `-` to a valid
 
 The `--creds` flag allows you to specify a different file name.
 
-* Normally the file is read as a JSON file.
-* Do not end the filename with `.yaml` or `.yml` as some day we hope to support YAML.
-* Rather than specifying a file, you can specify a program or shell command to be run. The output of the program/command must be valid JSON and will be read the same way.
-  * If the name begins with `!`, the remainder of the name is taken to be a shell command or program to be run.
-  * If the name is a file that is executable (chmod `+x` bit), it is taken as the command to be run (Linux/MacOS only).
-  * Exceptions: The `x` bit is not checked if the filename ends with `.yaml`, `.yml` or `.json`.
+- Normally the file is read as a JSON file.
+- Do not end the filename with `.yaml` or `.yml` as some day we hope to support YAML.
+- Rather than specifying a file, you can specify a program or shell command to be run. The output of the program/command must be valid JSON and will be read the same way.
+  - If the name begins with `!`, the remainder of the name is taken to be a shell command or program to be run.
+  - If the name is a file that is executable (chmod `+x` bit), it is taken as the command to be run (Linux/MacOS only).
+  - Exceptions: The `x` bit is not checked if the filename ends with `.yaml`, `.yml` or `.json`.
 
 ### Example commands
 

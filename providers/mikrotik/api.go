@@ -3,6 +3,7 @@ package mikrotik
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -153,7 +154,7 @@ func (p *mikrotikProvider) doRequest(method, path string, payload any) ([]byte, 
 	}
 
 	if resp.StatusCode == http.StatusUnauthorized {
-		return nil, fmt.Errorf("mikrotik: authentication failed (401)")
+		return nil, errors.New("mikrotik: authentication failed (401)")
 	}
 
 	if resp.StatusCode >= 400 {

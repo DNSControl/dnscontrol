@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/pkg/domaintags"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 )
 
 func Test_makeFileName(t *testing.T) {
@@ -204,6 +204,35 @@ func Test_extractZonesFromFilenames(t *testing.T) {
 			if got := extractZonesFromFilenames(tt.args.format, tt.args.names); !reflect.DeepEqual(got, tt.want) {
 				ext, _ := makeExtractor(tt.args.format)
 				t.Errorf("extractZonesFromFilenames() = %v, want %v Fm=%s Ex=%s", got, tt.want, tt.args.format, ext)
+			}
+		})
+	}
+}
+
+func Test_validateDirName(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		dir     string
+		format  string
+		wantErr bool
+	}{
+		{"plan", "zone", "%U.zone", false},
+		{"bad", "zone", "z/y/%U.zone", true},
+		{"nilzonegood", "", "%U.zone", false},
+		{"nilzonebad", "", "z/y/%U.zone", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotErr := validateDirName(tt.dir, tt.format)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("validateDirName() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("validateDirName() succeeded unexpectedly")
 			}
 		})
 	}

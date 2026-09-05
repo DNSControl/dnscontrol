@@ -8,11 +8,14 @@ parameters:
   - nonexistentSubdomainPolicy
   - alignmentSPF
   - alignmentDKIM
+  - percent
   - rua
   - ruf
   - publicSuffixDomain
   - testMode
   - failureOptions
+  - failureFormat
+  - reportInterval
   - ttl
 parameters_object: true
 parameter_types:
@@ -23,11 +26,14 @@ parameter_types:
   nonexistentSubdomainPolicy: "'none' | 'quarantine' | 'reject'?"
   alignmentSPF: "'strict' | 's' | 'relaxed' | 'r'?"
   alignmentDKIM: "'strict' | 's' | 'relaxed' | 'r'?"
+  percent: number?
   rua: string[]?
   ruf: string[]?
   publicSuffixDomain: "'y' | 'n' | 'u'"
   testMode: "'y' | 'n'"
   failureOptions: "{ SPF: boolean, DKIM: boolean } | string?"
+  failureFormat: string?
+  reportInterval: "Duration | number?"
   ttl: Duration?
 ---
 
@@ -115,11 +121,14 @@ insecure    IN  TXT "v=DMARC1; p=none; ruf=mailto:mailauth-reports@example.com; 
 * `nonexistentSubdomainPolicy:` The DMARC policy for nonexistent subdomains (`np=`), must be one of `"none"`, `"quarantine"`, `"reject"` (optional)
 * `alignmentSPF:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for SPF (`aspf=`, default: `"r"`)
 * `alignmentDKIM:` `"strict"`/`"s"` or `"relaxed"`/`"r"` alignment for DKIM (`adkim=`, default: `"r"`)
+* `percent:` Integer percentage (0-100) of messages to which the DMARC policy is applied (`pct=`, optional)
 * `rua:` Array of aggregate report targets (optional)
 * `ruf:` Array of failure report targets (optional)
 * `publicSuffixDomain:` `"y"`, or `"n"` or `"u"` indicates whether the domain is a Public Suffix Domain (`psd=`, default: `"u"`) 
 * `testMode:` `"y"` or `"n"` DMARC policy test mode dictates whether p, sp, or np policy tags are applied (`t=`, default: `"n"`) 
 * `failureOptions:` Object or string; Object containing booleans `SPF` and `DKIM`, string is passed raw (`fo=`, default: `"0"`)
+* `failureFormat:` Format of the message's failure reports (`rf=`); only emitted when `ruf` is also set (optional)
+* `reportInterval:` Requested interval between aggregate reports, as a `Duration` or number of seconds (`ri=`, optional)
 * `ttl:` Input for `TTL` method (optional)
 
 ### Caveats

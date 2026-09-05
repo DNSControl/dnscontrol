@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // fqdnTypes are record types whose `content` holds a hostname that dnscontrol
@@ -41,54 +42,51 @@ func toNative(rc *models.RecordConfig) (nativeRecord, error) {
 		TTL:  rc.TTL,
 	}
 
-	switch rc.Type {
-	case "MX":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.MxPreference)
-	case "SRV":
-		r.Content = trimDot(rc.GetTargetField())
-		r.Priority = intPtr(rc.SrvPriority)
-		r.Weight = intPtr(rc.SrvWeight)
-		r.Port = intPtr(rc.SrvPort)
-	case "TXT":
+	switch f := rc.GetRDATA().(type) {
+	case dnsrdatav2.MX:
+		r.Priority = intPtr(f.Preference)
+		r.Content = trimDot(f.Mx)
+	case dnsrdatav2.SRV:
+		r.Priority = intPtr(f.Priority)
+		r.Weight = intPtr(f.Weight)
+		r.Port = intPtr(f.Port)
+		r.Content = trimDot(f.Target)
+	case dnsrdatav2.TXT:
 		r.Content = rc.GetTargetTXTJoined()
-	case "CNAME":
-		r.Content = trimDot(rc.GetTargetField())
+	case dnsrdatav2.CNAME:
+		r.Content = trimDot(f.Target)
 	default:
-		r.Content = rc.GetTargetField()
+		r.Content = rc.GetRDATA().String()
 	}
 
 	return r, nil
 }
 
 // toRecordConfig converts a WebSupport native record into a dnscontrol RecordConfig.
-func toRecordConfig(domain string, n nativeRecord) (*models.RecordConfig, error) {
-	rc := &models.RecordConfig{
-		Type:     n.Type,
-		TTL:      n.TTL,
-		Original: n,
-	}
-	rc.SetLabelFromFQDN(n.Name, domain)
-
+func toRecordConfig(dc *models.DomainConfig, n nativeRecord) (*models.RecordConfig, error) {
 	content := n.Content
 	if fqdnTypes[n.Type] {
 		content = ensureDot(content)
 	}
 
+	label := dc.LabelFromFQDNNoDot(n.Name)
+	ttl := n.TTL
+	var rc *models.RecordConfig
 	var err error
 	switch n.Type {
 	case "MX":
-		err = rc.SetTargetMX(derefInt(n.Priority), content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), content)
 	case "SRV":
-		err = rc.SetTargetSRV(derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, derefInt(n.Priority), derefInt(n.Weight), derefInt(n.Port), content)
 	case "TXT":
-		err = rc.SetTargetTXT(n.Content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, n.Content)
 	default:
-		err = rc.SetTarget(content)
+		rc, err = dc.NewRecordConfig(label, ttl, n.Type, content)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("WEBSUPPORT: %s record %q: %w", n.Type, n.Name, err)
 	}
+	rc.Original = n
 	return rc, nil
 }
 

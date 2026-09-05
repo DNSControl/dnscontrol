@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/notifications"
-	"github.com/DNSControl/dnscontrol/v4/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/notifications"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 // ReportItem is a record of corrections for a particular domain/provider/registrar.
@@ -64,7 +64,7 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
 				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to initialize %q: %w", dCfg.Name, err)
 				}
 				dnsProviders[pInst.Name] = prov
 			}
