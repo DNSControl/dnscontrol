@@ -180,19 +180,21 @@ func recordToNative(rc *models.RecordConfig) *record {
 
 	switch rc.TypeNum {
 	case dnsv2.TypeTXT:
-		// TODO(tlim): I think all of this can be replaced by:
-		// record.Content = rc.AsTXT().String()
+		// Try this first:
+		record.Content = rc.GetTargetTXTJoined()
+		// If that doesn't work, try this:
+		//record.Content = rc.AsTXT().String()
 
-		// TODO(tlim): Move this to a function with unit tests.
-		txtStrings := make([]string, rc.GetTargetTXTSegmentCount())
-		copy(txtStrings, rc.GetTargetTXTSegmented())
+		// // TODO(tlim): Move this to a function with unit tests.
+		// txtStrings := make([]string, rc.GetTargetTXTSegmentCount())
+		// copy(txtStrings, rc.GetTargetTXTSegmented())
 
-		// Escape quotes
-		for i := range txtStrings {
-			txtStrings[i] = fmt.Sprintf(`"%s"`, strings.ReplaceAll(txtStrings[i], `"`, `\"`))
-		}
+		// // Escape quotes
+		// for i := range txtStrings {
+		// 	txtStrings[i] = fmt.Sprintf(`"%s"`, strings.ReplaceAll(txtStrings[i], `"`, `\"`))
+		// }
 
-		record.Content = strings.Join(txtStrings, " ")
+		// record.Content = strings.Join(txtStrings, " ")
 	case dnsv2.TypeMX:
 		mx := rc.AsMX()
 		record.Priority = mx.Preference
