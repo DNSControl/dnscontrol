@@ -278,7 +278,7 @@ func TestCreateRecord(t *testing.T) {
 	var receivedBody string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
-			http.Error(w, "method not allowed", 405)
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed) // 405
 			return
 		}
 		body, _ := readBody(r)
@@ -311,7 +311,7 @@ func TestDeleteRecord(t *testing.T) {
 	var deletedRef string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "DELETE" {
-			http.Error(w, "method not allowed", 405)
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed) // 405
 			return
 		}
 		deletedRef = strings.TrimPrefix(r.URL.Path, "/wapi/v2.12/")
@@ -334,7 +334,7 @@ func TestUpdateRecord(t *testing.T) {
 	var updatedRef string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
-			http.Error(w, "method not allowed", 405)
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed) // 405
 			return
 		}
 		updatedRef = strings.TrimPrefix(r.URL.Path, "/wapi/v2.12/")
@@ -359,7 +359,7 @@ func TestUpdateRecord(t *testing.T) {
 
 func TestHTTPError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, `{"error":"unauthorized"}`, 401)
+		http.Error(w, `{"error":"unauthorized"}`, http.StatusUnauthorized)
 	}))
 	defer ts.Close()
 

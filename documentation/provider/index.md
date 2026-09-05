@@ -132,7 +132,7 @@ Jump to a table:
 | [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ✅ | ✅ |
 | [`HOSTINGDE`](hostingde.md) | ❔ | ✅ | ✅ | ✅ |
 | [`HUAWEICLOUD`](huaweicloud.md) | ❔ | ✅ | ✅ | ✅ |
-| [`INFOBLOX`](infoblox.md) | ❌ | ❌ | ❌ | ❌ |
+| [`INFOBLOX`](infoblox.md) | ✅ | ❌ | ❌ | ❌ |
 | [`INFOMANIAK`](infomaniak.md) | ❔ | ❔ | ❌ | ❔ |
 | [`INTERNETBS`](internetbs.md) | ❔ | ❔ | ❌ | ❔ |
 | [`INWX`](inwx.md) | ✅ | ✅ | ✅ | ✅ |
