@@ -31,6 +31,9 @@ provider-CLOUDFLAREAPI:
 provider-CLOUDNS:
   - changed-files:
       - any-glob-to-any-file: providers/cloudns/**
+provider-CLOUDPRESS:
+  - changed-files:
+      - any-glob-to-any-file: providers/cloudpress/**
 provider-CNR:
   - changed-files:
       - any-glob-to-any-file: providers/cnr/**

@@ -134,6 +134,7 @@
 * [CentralNic Reseller (CNR) - formerly RRPProxy](provider/cnr.md)
 * [Cloudflare](provider/cloudflareapi.md)
 * [ClouDNS](provider/cloudns.md)
+* [CloudPress](provider/cloudpress.md)
 * [CSC Global](provider/cscglobal.md)
 * [deSEC](provider/desec.md)
 * [DigitalOcean](provider/digitalocean.md)
