@@ -8,6 +8,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/pkg/errors"
 )
 
@@ -160,7 +161,14 @@ func (r record) nativeToRecord(dc *models.DomainConfig) (*models.RecordConfig, e
 	case "SRV":
 		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, fmt.Sprintf("%d %s", r.Priority, r.Content))
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
+		// hosting.de returns TXT content in presentation format. Anything
+		// else is used as-is, so that one unexpected record does not fail
+		// the read of the entire zone.
+		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content)
+		if err != nil {
+			printer.Warnf("hostingde: TXT record %q is not in presentation format, using it as-is: %v\n", r.Name, err)
+			rc, err = dc.NewRecordConfig(label, ttl, r.Type, r.Content)
+		}
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, r.Type, r.Content)
 	}
@@ -180,19 +188,8 @@ func recordToNative(rc *models.RecordConfig) *record {
 
 	switch rc.TypeNum {
 	case dnsv2.TypeTXT:
-		// TODO(tlim): I think all of this can be replaced by:
-		// record.Content = rc.AsTXT().String()
-
-		// TODO(tlim): Move this to a function with unit tests.
-		txtStrings := make([]string, rc.GetTargetTXTSegmentCount())
-		copy(txtStrings, rc.GetTargetTXTSegmented())
-
-		// Escape quotes
-		for i := range txtStrings {
-			txtStrings[i] = fmt.Sprintf(`"%s"`, strings.ReplaceAll(txtStrings[i], `"`, `\"`))
-		}
-
-		record.Content = strings.Join(txtStrings, " ")
+		// hosting.de expects presentation format, quotes and all.
+		record.Content = rc.AsTXT().String()
 	case dnsv2.TypeMX:
 		mx := rc.AsMX()
 		record.Priority = mx.Preference
