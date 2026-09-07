@@ -29,8 +29,8 @@ parameter_types:
   percent: number?
   rua: string[]?
   ruf: string[]?
-  publicSuffixDomain: "'y' | 'n' | 'u'"
-  testMode: "'y' | 'n'"
+  publicSuffixDomain: "'y' | 'n' | 'u'?"
+  testMode: "'y' | 'n'?"
   failureOptions: "{ SPF: boolean, DKIM: boolean } | string?"
   failureFormat: string?
   reportInterval: "Duration | number?"
