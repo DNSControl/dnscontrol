@@ -19,9 +19,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/dns"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/edgegrid"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v12/pkg/session"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/dns"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/edgegrid"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/session"
 )
 
 // initialize initializes the "Akamai OPEN EdgeGrid" library.
@@ -220,10 +220,11 @@ func (a *edgeDNSProvider) rcToRs(records models.Records) (*dns.RecordBody, error
 		return nil, err
 	}
 
+	ttlVal := int(records[0].TTL)
 	akaRecord := &dns.RecordBody{
 		Name:       records[0].NameFQDN,
 		RecordType: records[0].Type,
-		TTL:        int(records[0].TTL),
+		TTL:        &ttlVal,
 	}
 
 	for _, r := range records {
@@ -262,7 +263,8 @@ func (a *edgeDNSProvider) replaceRecordset(ctx context.Context, records models.R
 	if err != nil {
 		return err
 	}
-	akaRecord.TTL = int(ttl)
+	ttlInt := int(ttl)
+	akaRecord.TTL = &ttlInt
 
 	err = a.client.UpdateRecord(ctx, dns.UpdateRecordRequest{
 		Zone:   zonename,

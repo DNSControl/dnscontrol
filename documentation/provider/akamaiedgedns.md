@@ -75,6 +75,8 @@ Store your zone configuration details in a dnsconfig.js file in the same folder 
 
 Akamai assigns a unique set of authoritative nameservers for each contract.  These authorities should be used as the NS records on all zones belonging to this contract.
 
+**Note:** Every Edge DNS zone is tied to the specific contract used to create it, and its nameservers are assigned based on that contract. If the `contract_id` in your `creds.json` does not match the contract that was originally used to create the zone, DNSControl sees the mismatch as a discrepancy and attempts to switch the zone's NS records to the nameservers of the contract specified in `creds.json`. To prevent this, set the `contract_id` field in your `creds.json` to match the contract that was originally used to create the zone.
+
 The NS records for these authorities have a TTL of 86400.
 
 Add:

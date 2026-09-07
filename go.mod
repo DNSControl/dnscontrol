@@ -13,7 +13,7 @@ require (
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/TomOnTime/utfutil v1.0.0
-	github.com/akamai/AkamaiOPEN-edgegrid-golang/v12 v12.3.0
+	github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
 	github.com/aws/aws-sdk-go-v2 v1.45.1
 	github.com/aws/aws-sdk-go-v2/config v1.33.2
@@ -178,7 +178,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
 	google.golang.org/grpc v1.83.2 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
-	gopkg.in/ini.v1 v1.67.0 // indirect
+	gopkg.in/ini.v1 v1.67.3 // indirect
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	moul.io/http2curl v1.0.0 // indirect
