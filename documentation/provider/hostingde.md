@@ -75,6 +75,10 @@ The `HOSTINGDE` provider **ignores the default nameserver set** defined in your 
 Instead, it uses hosting.de's nameservers (`ns1.hosting.de.`, `ns2.hosting.de.`, and `ns3.hosting.de.`) by default, regardless of your account settings.
 Using the `default_ns` metadata, the default nameserver set can be overwritten.
 
+## Caveats
+
+The [`SOA()`](../language-reference/domain-modifiers/SOA.md) functions does not update the primary nameserver. Hosting.de always sets it to the first nameserver in your NameserverSet. Therefore the `SOA()` function's nameserver parameter is ignored.
+
 ## Feature Summary
 
 <!-- provider-features-start -->
