@@ -69,20 +69,71 @@ type RecordConfig struct {
 	UnknownTypeName string `json:"unknown_type_name,omitempty"`
 }
 
-// MarshalJSON marshals RecordConfig.
+// MarshalJSON marshals RecordConfig. .rdata is written as its zone-file-style
+// text presentation (RDATA.String()) rather than as a JSON object, so that it
+// can be read back with MyNewData/NewRecordConfigParse — the same parser
+// already used to build a RecordConfig from dnsconfig.js and zone imports.
 func (rc *RecordConfig) MarshalJSON() ([]byte, error) {
 	recj := &struct {
 		RecordConfig
-		RDATA dnsv2.RDATA `json:"rdata,omitempty"`
+		RDATA string `json:"rdata,omitempty"`
 	}{
 		RecordConfig: *rc,
 	}
-	recj.RDATA = rc.GetRDATA()
+	recj.RDATA = rc.GetRDATA().String()
 	j, err := json.Marshal(*recj)
 	if err != nil {
 		return nil, err
 	}
 	return j, nil
+}
+
+// UnmarshalJSON unmarshals RecordConfig. This is needed because .rdata is an
+// unexported field whose type is the dnsv2.RDATA interface: encoding/json
+// can't populate it on its own since it doesn't know which concrete type
+// (A, MX, TXT, etc.) to instantiate. Instead of decoding "rdata" as
+// structured JSON, we treat it as the text presentation format (the same
+// format used in zone files and dnsconfig.js) and parse it with MyNewData,
+// the same helper NewRecordConfigParse uses. This also handles types like
+// SVCB/HTTPS whose RDATA embeds further interfaces (svcb.Pair) that have no
+// generic JSON-object representation.
+func (rc *RecordConfig) UnmarshalJSON(data []byte) error {
+	type recordConfigAlias RecordConfig // avoid infinite recursion into UnmarshalJSON
+	recj := &struct {
+		*recordConfigAlias
+		RDATA string `json:"rdata,omitempty"`
+	}{
+		recordConfigAlias: (*recordConfigAlias)(rc),
+	}
+	if err := json.Unmarshal(data, recj); err != nil {
+		return err
+	}
+
+	typeNum := rc.TypeNum
+	if typeNum == 0 && rc.Type != "" {
+		typeNum = dnsv2.StringToType[rc.Type]
+	}
+	if typeNum == 0 {
+		return fmt.Errorf("UnmarshalJSON: record %q has no usable typenum/type", rc.Name)
+	}
+	rc.TypeNum = typeNum
+	if rc.Type == "" {
+		rc.Type = dnsv2.TypeToString[typeNum]
+	}
+
+	if recj.RDATA == "" {
+		return fmt.Errorf("UnmarshalJSON: record %q (type %s) is missing its rdata", rc.Name, rc.Type)
+	}
+
+	// The text presentation format written by MarshalJSON always has fully
+	// qualified (dot-terminated) target hostnames, so no origin is needed to
+	// resolve relative names here.
+	rd, err := MyNewData(typeNum, recj.RDATA, "")
+	if err != nil {
+		return fmt.Errorf("UnmarshalJSON: record %q (type %s): %w", rc.Name, rc.Type, err)
+	}
+	rc.SetRDATA(rd)
+	return nil
 }
 
 // FixPosition takes the string representation of a position in a file that

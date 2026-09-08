@@ -10,12 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "_443._tcp",
           "name_unicode": "_443._tcp",
-          "rdata": {
-            "Certificate": "MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
-            "MatchingType": 1,
-            "Selector": 1,
-            "Usage": 3
-          },
+          "rdata": "3 1 1 MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
           "ttl": 300,
           "type": "TLSA",
           "typenum": 52

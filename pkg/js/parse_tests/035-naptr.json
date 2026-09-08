@@ -10,14 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 100,
-            "Preference": 10,
-            "Regexp": "!^.*$!sip:customer-service@example.com!",
-            "Replacement": "example",
-            "Service": "E2U+sip"
-          },
+          "rdata": "100 10 \"U\" \"E2U+sip\" \"!^.*$!sip:customer-service@example.com!\" example",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -27,14 +20,7 @@
           "filepos": "[line:3:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 102,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": "example",
-            "Service": "E2U+email"
-          },
+          "rdata": "102 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" example",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -44,14 +30,7 @@
           "filepos": "[line:4:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 103,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": ".",
-            "Service": "E2U+email"
-          },
+          "rdata": "103 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35
@@ -61,14 +40,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flags": "U",
-            "Order": 104,
-            "Preference": 10,
-            "Regexp": "!^.*$!mailto:information@example.com!",
-            "Replacement": ".",
-            "Service": "E2U+email"
-          },
+          "rdata": "104 10 \"U\" \"E2U+email\" \"!^.*$!mailto:information@example.com!\" .",
           "ttl": 300,
           "type": "NAPTR",
           "typenum": 35

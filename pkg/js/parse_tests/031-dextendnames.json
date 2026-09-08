@@ -17,9 +17,7 @@
           "filepos": "[line:7:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "127.0.0.1"
-          },
+          "rdata": "127.0.0.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -29,9 +27,7 @@
           "filepos": "[line:21:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "127.0.0.3"
-          },
+          "rdata": "127.0.0.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -41,9 +37,7 @@
           "filepos": "[line:8:5]",
           "name": "a",
           "name_unicode": "a",
-          "rdata": {
-            "Addr": "127.0.0.2"
-          },
+          "rdata": "127.0.0.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -53,9 +47,7 @@
           "filepos": "[line:9:5]",
           "name": "b",
           "name_unicode": "b",
-          "rdata": {
-            "Target": "c.domain.tld."
-          },
+          "rdata": "c.domain.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -65,9 +57,7 @@
           "filepos": "[line:22:5]",
           "name": "d",
           "name_unicode": "d",
-          "rdata": {
-            "Addr": "127.0.0.4"
-          },
+          "rdata": "127.0.0.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -77,9 +67,7 @@
           "filepos": "[line:23:5]",
           "name": "e",
           "name_unicode": "e",
-          "rdata": {
-            "Target": "f.domain.tld."
-          },
+          "rdata": "f.domain.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -89,9 +77,7 @@
           "filepos": "[line:42:5]",
           "name": "ssub",
           "name_unicode": "ssub",
-          "rdata": {
-            "Addr": "127.0.0.7"
-          },
+          "rdata": "127.0.0.7",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "A",
@@ -102,9 +88,7 @@
           "filepos": "[line:43:5]",
           "name": "j.ssub",
           "name_unicode": "j.ssub",
-          "rdata": {
-            "Addr": "127.0.0.8"
-          },
+          "rdata": "127.0.0.8",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "A",
@@ -115,9 +99,7 @@
           "filepos": "[line:44:5]",
           "name": "k.ssub",
           "name_unicode": "k.ssub",
-          "rdata": {
-            "Target": "l.ssub.domain.tld."
-          },
+          "rdata": "l.ssub.domain.tld.",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "CNAME",
@@ -128,9 +110,7 @@
           "filepos": "[line:28:5]",
           "name": "ub",
           "name_unicode": "ub",
-          "rdata": {
-            "Addr": "127.0.0.5"
-          },
+          "rdata": "127.0.0.5",
           "subdomain": "ub",
           "ttl": 300,
           "type": "A",
@@ -141,9 +121,7 @@
           "filepos": "[line:29:5]",
           "name": "g.ub",
           "name_unicode": "g.ub",
-          "rdata": {
-            "Addr": "127.0.0.6"
-          },
+          "rdata": "127.0.0.6",
           "subdomain": "ub",
           "ttl": 300,
           "type": "A",
@@ -154,9 +132,7 @@
           "filepos": "[line:30:5]",
           "name": "h.ub",
           "name_unicode": "h.ub",
-          "rdata": {
-            "Target": "i.ub.domain.tld."
-          },
+          "rdata": "i.ub.domain.tld.",
           "subdomain": "ub",
           "ttl": 300,
           "type": "CNAME",
@@ -177,9 +153,7 @@
           "filepos": "[line:13:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "127.0.1.1"
-          },
+          "rdata": "127.0.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -189,9 +163,7 @@
           "filepos": "[line:35:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "127.0.1.3"
-          },
+          "rdata": "127.0.1.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -201,9 +173,7 @@
           "filepos": "[line:14:5]",
           "name": "aa",
           "name_unicode": "aa",
-          "rdata": {
-            "Addr": "127.0.1.2"
-          },
+          "rdata": "127.0.1.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -213,9 +183,7 @@
           "filepos": "[line:15:5]",
           "name": "bb",
           "name_unicode": "bb",
-          "rdata": {
-            "Target": "cc.sub.domain.tld."
-          },
+          "rdata": "cc.sub.domain.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -225,9 +193,7 @@
           "filepos": "[line:36:5]",
           "name": "dd",
           "name_unicode": "dd",
-          "rdata": {
-            "Addr": "127.0.1.4"
-          },
+          "rdata": "127.0.1.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -237,9 +203,7 @@
           "filepos": "[line:37:5]",
           "name": "ee",
           "name_unicode": "ee",
-          "rdata": {
-            "Target": "ff.sub.domain.tld."
-          },
+          "rdata": "ff.sub.domain.tld.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5

@@ -25,9 +25,7 @@
           "filepos": "[line:7:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "3.3.3.3"
-          },
+          "rdata": "3.3.3.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -37,9 +35,7 @@
           "filepos": "[line:19:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "33.33.33.33"
-          },
+          "rdata": "33.33.33.33",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -59,9 +55,7 @@
           "filepos": "[line:11:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "1.1.1.1"
-          },
+          "rdata": "1.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -71,9 +65,7 @@
           "filepos": "[line:23:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "11.11.11.11"
-          },
+          "rdata": "11.11.11.11",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -94,9 +86,7 @@
           "filepos": "[line:15:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "8.8.8.8"
-          },
+          "rdata": "8.8.8.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -117,9 +107,7 @@
           "filepos": "[line:31:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.12"
-          },
+          "rdata": "203.0.113.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -129,9 +117,7 @@
           "filepos": "[line:27:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "203.0.113.1"
-          },
+          "rdata": "203.0.113.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -151,9 +137,7 @@
           "filepos": "[line:36:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "192.0.2.1"
-          },
+          "rdata": "192.0.2.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -163,9 +147,7 @@
           "filepos": "[line:31:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.12"
-          },
+          "rdata": "203.0.113.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -175,9 +157,7 @@
           "filepos": "[line:27:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "203.0.113.1"
-          },
+          "rdata": "203.0.113.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -198,9 +178,7 @@
           "filepos": "[line:41:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.1"
-          },
+          "rdata": "203.0.113.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -210,9 +188,7 @@
           "filepos": "[line:31:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.12"
-          },
+          "rdata": "203.0.113.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -222,9 +198,7 @@
           "filepos": "[line:27:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "203.0.113.1"
-          },
+          "rdata": "203.0.113.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -245,9 +219,7 @@
           "filepos": "[line:49:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.22"
-          },
+          "rdata": "203.0.113.22",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -257,9 +229,7 @@
           "filepos": "[line:45:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "203.0.113.2"
-          },
+          "rdata": "203.0.113.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -279,9 +249,7 @@
           "filepos": "[line:57:5]",
           "name": "main",
           "name_unicode": "main",
-          "rdata": {
-            "Addr": "203.0.113.12"
-          },
+          "rdata": "203.0.113.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -291,9 +259,7 @@
           "filepos": "[line:53:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "203.0.113.1"
-          },
+          "rdata": "203.0.113.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
