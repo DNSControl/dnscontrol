@@ -3,7 +3,7 @@ module github.com/DNSControl/dnscontrol/v5
 go 1.27
 
 require (
-	codeberg.org/miekg/dns v0.6.106
+	codeberg.org/miekg/dns v0.6.109
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
@@ -15,12 +15,12 @@ require (
 	github.com/TomOnTime/utfutil v1.0.0
 	github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
-	github.com/aws/aws-sdk-go-v2 v1.45.1
-	github.com/aws/aws-sdk-go-v2/config v1.33.2
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.2
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.68.0
-	github.com/aws/aws-sdk-go-v2/service/route53domains v1.42.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.48.0
+	github.com/aws/aws-sdk-go-v2 v1.46.0
+	github.com/aws/aws-sdk-go-v2/config v1.33.3
+	github.com/aws/aws-sdk-go-v2/credentials v1.20.3
+	github.com/aws/aws-sdk-go-v2/service/route53 v1.69.0
+	github.com/aws/aws-sdk-go-v2/service/route53domains v1.43.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.49.0
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.19
 	github.com/cloudflare/cloudflare-go v0.118.0
@@ -28,7 +28,7 @@ require (
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.1
 	github.com/dustin/go-humanize v1.0.1
-	github.com/exoscale/egoscale/v3 v3.1.49
+	github.com/exoscale/egoscale/v3 v3.1.50
 	github.com/failsafe-go/failsafe-go v0.9.7
 	github.com/fatih/color v1.19.0
 	github.com/fbiville/markdown-table-formatter v0.3.0
@@ -45,10 +45,10 @@ require (
 	github.com/mittwald/go-powerdns v0.6.7
 	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04
 	github.com/netnod/netnod-primary-dns-client v1.1.1
-	github.com/nicholas-fedor/shoutrrr v0.19.0
+	github.com/nicholas-fedor/shoutrrr v0.20.0
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/nrdcg/goinwx v0.12.0
-	github.com/oracle/oci-go-sdk/v65 v65.124.1
+	github.com/oracle/oci-go-sdk/v65 v65.124.2
 	github.com/ovh/go-ovh v1.9.0
 	github.com/philhug/opensrs-go v0.0.0-20171126225031-9dfa7433020d
 	github.com/pkg/errors v0.9.1
@@ -58,8 +58,8 @@ require (
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.37
 	github.com/softlayer/softlayer-go v1.2.1
 	github.com/stretchr/testify v1.12.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1480+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.172
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1483+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.175
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.28.0
@@ -69,9 +69,9 @@ require (
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419
 	golang.org/x/net v0.58.0
-	golang.org/x/oauth2 v0.36.0
-	golang.org/x/text v0.41.0
-	golang.org/x/time v0.15.0
+	golang.org/x/oauth2 v0.37.0
+	golang.org/x/text v0.42.0
+	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.49.0
 	google.golang.org/api v0.297.0
 	gopkg.in/ns1/ns1-go.v2 v2.18.0
@@ -85,15 +85,15 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.12.0 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.8.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.19.1 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.1 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.1 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.1 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.19.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.19 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.8.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.36.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.41.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.9.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.37.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.42.0 // indirect
 	github.com/aws/smithy-go v1.28.1 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -170,8 +170,8 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.55.0 // indirect
-	golang.org/x/mod v0.40.0 // indirect
-	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/mod v0.41.0 // indirect
+	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
