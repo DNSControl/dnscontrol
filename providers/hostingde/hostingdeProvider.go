@@ -146,6 +146,14 @@ func soaToString(s soaValues) string {
 	return fmt.Sprintf("refresh=%d retry=%d expire=%d negativettl=%d ttl=%d", s.Refresh, s.Retry, s.Expire, s.NegativeTTL, s.TTL)
 }
 
+// placeholderSOA stands in for a zone that declares no SOA record. Only the
+// numeric fields are read, and they fall back to the provider's defaults
+// because they are zero. The mailbox must stay empty: a non-empty one makes
+// GetZoneRecordsCorrections rewrite the zone's contact address.
+func placeholderSOA(dc *models.DomainConfig) *models.RecordConfig {
+	return dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", "", 0, 0, 0, 0)
+}
+
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
 	var err error
@@ -219,7 +227,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		}
 	}
 	if desiredSoa == nil {
-		desiredSoa = dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", 1, 0, 0, 0, 0)
+		desiredSoa = placeholderSOA(dc)
 	}
 
 	defaultSoa := &hp.defaultSoa
