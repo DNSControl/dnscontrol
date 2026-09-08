@@ -77,7 +77,7 @@ Using the `default_ns` metadata, the default nameserver set can be overwritten.
 
 ## Caveats
 
-The [`SOA()`](../language-reference/domain-modifiers/SOA.md) functions does not update the primary nameserver. Hosting.de always sets it to the first nameserver in your NameserverSet. Therefore the `SOA()` function's nameserver parameter is ignored.
+The [`SOA()`](../language-reference/domain-modifiers/SOA.md) functions does not update the primary nameserver. Hosting.de always sets it to the first nameserver in your NameserverSet. Therefore the `SOA()` function's nameserver parameter is ignored. Updating the SOA's mbox might not work.
 
 ## Feature Summary
 

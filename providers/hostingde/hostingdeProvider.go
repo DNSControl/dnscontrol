@@ -151,7 +151,11 @@ func soaToString(s soaValues) string {
 // because they are zero. The mailbox must stay empty: a non-empty one makes
 // GetZoneRecordsCorrections rewrite the zone's contact address.
 func placeholderSOA(dc *models.DomainConfig) *models.RecordConfig {
-	return dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", "", 0, 0, 0, 0)
+	rc, err := dc.NewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", "", 0, 0, 0, 0)
+	if err != nil {
+		return nil
+	}
+	return rc
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -248,13 +252,11 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		zoneChanged = true
 	}
 
-	fmt.Printf("DEBUG: df.Mbox=%q\n", df.Mbox)
 	if df.Mbox != "" {
 		desiredMail := ""
 		if df.Mbox[len(df.Mbox)-1] != '.' {
-			desiredMail = df.Mbox + "@" + dc.Name
+			desiredMail = df.Mbox + "@" + dc.Name + "."
 		}
-		fmt.Printf(`DEBUG: %q != "" && %q != %q`+"\n", desiredMail, zone.ZoneConfig.EmailAddress, desiredMail)
 		if desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
 			msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))
 			zone.ZoneConfig.EmailAddress = desiredMail
