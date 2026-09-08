@@ -248,11 +248,13 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		zoneChanged = true
 	}
 
+	fmt.Printf("DEBUG: df.Mbox=%q\n", df.Mbox)
 	if df.Mbox != "" {
 		desiredMail := ""
 		if df.Mbox[len(df.Mbox)-1] != '.' {
 			desiredMail = df.Mbox + "@" + dc.Name
 		}
+		fmt.Printf(`DEBUG: %q != "" && %q != %q`+"\n", desiredMail, zone.ZoneConfig.EmailAddress, desiredMail)
 		if desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
 			msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))
 			zone.ZoneConfig.EmailAddress = desiredMail
@@ -316,7 +318,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 	}
 
 	corrections = append(corrections, &models.Correction{
-		Msg: "\n" + strings.Join(msg, "\n"),
+		Msg: strings.Join(msg, "\n"),
 		F: func() error {
 			for i := range 10 {
 				err := hp.updateZone(&zone.ZoneConfig, DNSSecOptions, create, del, mod)
