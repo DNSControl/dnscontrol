@@ -15,3 +15,24 @@ func TestPlaceholderSOAHasNoMailbox(t *testing.T) {
 		t.Errorf("placeholder mailbox = %q, want empty; a non-empty one is turned into %s@example.com", got, got)
 	}
 }
+
+func TestSoaMailToEmail(t *testing.T) {
+	tests := []struct {
+		name string
+		mbox string
+		want string
+	}{
+		{"0", "", ""},
+		{"1", "hostmaster", "hostmaster@example.com"},
+		{"2", "hostmaster.example.com.", "hostmaster@example.com"},
+		// The host may be outside the zone.
+		{"3", "eee.cloudflare.com.", "eee@cloudflare.com"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := soaMailToEmail(tt.mbox, "example.com"); got != tt.want {
+				t.Errorf("soaMailToEmail(%v) = %v, want %v", tt.mbox, got, tt.want)
+			}
+		})
+	}
+}

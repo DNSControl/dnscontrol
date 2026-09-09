@@ -13,6 +13,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	"github.com/DNSControl/dnscontrol/v5/pkg/soautil"
 )
 
 var defaultNameservers = []string{"ns1.hosting.de", "ns2.hosting.de", "ns3.hosting.de"}
@@ -146,6 +147,21 @@ func soaToString(s soaValues) string {
 	return fmt.Sprintf("refresh=%d retry=%d expire=%d negativettl=%d ttl=%d", s.Refresh, s.Retry, s.Expire, s.NegativeTTL, s.TTL)
 }
 
+// soaMailToEmail turns a SOA mailbox into the address hosting.de keeps in the
+// zone config. A mailbox without a host of its own is qualified with the zone.
+// The address must not end in a period, the API rejects that.
+func soaMailToEmail(mbox, zone string) string {
+	mbox = strings.TrimRight(mbox, ".")
+	if mbox == "" {
+		return ""
+	}
+	if mail := soautil.BindMailToRFC5322(mbox); mail != "" {
+		return mail
+	}
+	// RFC-1035 [Section-8]
+	return strings.ReplaceAll(mbox, "\\.", ".") + "@" + zone
+}
+
 // placeholderSOA stands in for a zone that declares no SOA record. Only the
 // numeric fields are read, and they fall back to the provider's defaults
 // because they are zero. The mailbox must stay empty: a non-empty one makes
@@ -248,16 +264,10 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		zoneChanged = true
 	}
 
-	if df.Mbox != "" {
-		desiredMail := ""
-		if df.Mbox[len(df.Mbox)-1] != '.' {
-			desiredMail = df.Mbox + "@" + dc.Name
-		}
-		if desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
-			msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))
-			zone.ZoneConfig.EmailAddress = desiredMail
-			zoneChanged = true
-		}
+	if desiredMail := soaMailToEmail(df.Mbox, dc.Name); desiredMail != "" && zone.ZoneConfig.EmailAddress != desiredMail {
+		msg = append(msg, fmt.Sprintf("Changing SOA Mail from %s to %s", zone.ZoneConfig.EmailAddress, desiredMail))
+		zone.ZoneConfig.EmailAddress = desiredMail
+		zoneChanged = true
 	}
 
 	existingAutoDNSSecEnabled := zone.ZoneConfig.DNSSECMode == "automatic"
