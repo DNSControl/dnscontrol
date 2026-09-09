@@ -11,7 +11,12 @@ import (
 func TestPlaceholderSOAHasNoMailbox(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 
-	if got := placeholderSOA(dc).AsSOA().Mbox; got != "" {
+	rc, err := placeholderSOA(dc)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if got := rc.AsSOA().Mbox; got != "" {
 		t.Errorf("placeholder mailbox = %q, want empty; a non-empty one is turned into %s@example.com", got, got)
 	}
 }

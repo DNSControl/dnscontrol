@@ -166,8 +166,8 @@ func soaMailToEmail(mbox, zone string) string {
 // numeric fields are read, and they fall back to the provider's defaults
 // because they are zero. The mailbox must stay empty: a non-empty one makes
 // GetZoneRecordsCorrections rewrite the zone's contact address.
-func placeholderSOA(dc *models.DomainConfig) *models.RecordConfig {
-	return dc.MustNewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", "", 0, 0, 0, 0)
+func placeholderSOA(dc *models.DomainConfig) (*models.RecordConfig, error) {
+	return dc.NewRecordConfig("@", 0, dnsv2.TypeSOA, "ns", "", 0, 0, 0, 0)
 }
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
@@ -243,7 +243,10 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 		}
 	}
 	if desiredSoa == nil {
-		desiredSoa = placeholderSOA(dc)
+		desiredSoa, err = placeholderSOA(dc)
+		if err != nil {
+			return nil, 0, err
+		}
 	}
 
 	defaultSoa := &hp.defaultSoa
@@ -326,7 +329,7 @@ func (hp *hostingdeProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, 
 	}
 
 	corrections = append(corrections, &models.Correction{
-		Msg: "\n" + strings.Join(msg, "\n"),
+		Msg: strings.Join(msg, "\n"),
 		F: func() error {
 			for i := range 10 {
 				err := hp.updateZone(&zone.ZoneConfig, DNSSecOptions, create, del, mod)

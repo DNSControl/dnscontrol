@@ -901,12 +901,29 @@ func makeTests() []*TestGroup {
 		// SOA
 		testgroup("SOA",
 			requires(providers.CanUseSOA),
-			tcEmptyZone(), // Required or only the first run passes.
+			not("HOSTINGDE"), // Has its own group below.
+			tcEmptyZone(),    // Required or only the first run passes.
 			// Providers such as Route53 cannot delete the mandatory SOA during
 			// the empty-zone setup. It may therefore already have this value
 			// when a previous run stopped after this test.
 			tc("Create SOA record", soa("@", "kim.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)).AllowNoChanges(),
 			tc("Modify SOA ns    ", soa("@", "mmm.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
+			tc("Modify SOA mbox  ", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
+			tc("Modify SOA refres", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2400, 604800, 3600)),
+			tc("Modify SOA retry ", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2401, 604800, 3600)),
+			tc("Modify SOA expire", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2401, 604801, 3600)),
+			tc("Modify SOA minttl", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2401, 604801, 3601)),
+		),
+
+		// hosting.de derives the primary nameserver of a zone from its
+		// nameserver set, so a change to the ns produces no correction here.
+		// The group above expects one, which is correct for the providers that
+		// store the SOA as a record.
+		testgroup("SOA",
+			only("HOSTINGDE"),
+			tcEmptyZone(), // Required or only the first run passes.
+			tc("Create SOA record", soa("@", "kim.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)).AllowNoChanges(),
+			tc("Modify SOA ns    ", soa("@", "mmm.ns.cloudflare.com.", "dns.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)).AllowNoChanges(),
 			tc("Modify SOA mbox  ", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10000, 2400, 604800, 3600)),
 			tc("Modify SOA refres", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2400, 604800, 3600)),
 			tc("Modify SOA retry ", soa("@", "mmm.ns.cloudflare.com.", "eee.cloudflare.com.", 2037190000, 10001, 2401, 604800, 3600)),
