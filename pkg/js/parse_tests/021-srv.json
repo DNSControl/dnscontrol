@@ -10,12 +10,7 @@
           "filepos": "[line:6:5]",
           "name": "_ntp._udp",
           "name_unicode": "_ntp._udp",
-          "rdata": {
-            "Port": 1,
-            "Priority": 0,
-            "Target": "zeros.foo.com.",
-            "Weight": 0
-          },
+          "rdata": "0 0 1 zeros.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -25,12 +20,7 @@
           "filepos": "[line:2:5]",
           "name": "_ntp._udp",
           "name_unicode": "_ntp._udp",
-          "rdata": {
-            "Port": 123,
-            "Priority": 1,
-            "Target": "one.foo.com.",
-            "Weight": 100
-          },
+          "rdata": "1 100 123 one.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -40,12 +30,7 @@
           "filepos": "[line:3:5]",
           "name": "_ntp._udp",
           "name_unicode": "_ntp._udp",
-          "rdata": {
-            "Port": 123,
-            "Priority": 2,
-            "Target": "two.foo.com.",
-            "Weight": 100
-          },
+          "rdata": "2 100 123 two.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -55,12 +40,7 @@
           "filepos": "[line:4:5]",
           "name": "_ntp._udp",
           "name_unicode": "_ntp._udp",
-          "rdata": {
-            "Port": 123,
-            "Priority": 3,
-            "Target": "localhost.foo.com.",
-            "Weight": 100
-          },
+          "rdata": "3 100 123 localhost.foo.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
@@ -70,12 +50,7 @@
           "filepos": "[line:5:5]",
           "name": "_ntp._udp",
           "name_unicode": "_ntp._udp",
-          "rdata": {
-            "Port": 123,
-            "Priority": 4,
-            "Target": "three.example.com.",
-            "Weight": 100
-          },
+          "rdata": "4 100 123 three.example.com.",
           "ttl": 300,
           "type": "SRV",
           "typenum": 33
