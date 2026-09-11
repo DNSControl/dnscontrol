@@ -370,3 +370,49 @@ func TestSingleRedirectDeleteResponses(t *testing.T) {
 		})
 	}
 }
+
+func TestSingleRedirectKeepUnknown(t *testing.T) {
+	c, a, dc := redirectFixture(t)
+	// NO_PURGE promises to preserve undeclared rules, including their relative
+	// order and disabled state, while allowing an explicitly managed edit.
+	dc.KeepUnknown = true
+	dc.Records = slices.Delete(dc.Records, 1, 2)
+	disabled := false
+	a.rules[1].Enabled = &disabled
+	before, _ := json.Marshal(a.rules[1:])
+	rd := dc.Records[0].AsCLOUDFLAREAPISINGLEREDIRECT()
+	rd.Code = 302
+	dc.Records[0].SetRDATA(rd)
+	applyRedirectPlan(t, redirectPlan(t, c, dc))
+	after, _ := json.Marshal(a.rules[1:])
+	if string(before) != string(after) || a.rules[0].ID != "meta-id" {
+		t.Error("NO_PURGE rules or their relative order changed")
+	}
+	assertRedirectNoop(t, c, dc)
+}
+
+func TestSingleRedirectGeneratedEditIsReplacement(t *testing.T) {
+	for _, builder := range []string{"CF_REDIRECT", "CF_TEMP_REDIRECT"} {
+		t.Run(builder, func(t *testing.T) {
+			c, a, _ := redirectFixture(t)
+			parse := func(destination string) *models.DomainConfig {
+				config, err := js.ExecuteJavascriptString([]byte(fmt.Sprintf(`D("example.com", "none", %s("meta.example.com/*", %q));`, builder, destination)), false, nil)
+				if err != nil {
+					t.Fatal(err)
+				}
+				return config.Domains[0]
+			}
+			old := parse("https://meta.example.net/$1").Records[0].AsCLOUDFLAREAPISINGLEREDIRECT()
+			a.rules = a.rules[:1]
+			a.rules[0].Description, a.rules[0].Expression = old.SRName, old.SRWhen
+			a.rules[0].ActionParameters.FromValue.StatusCode = old.Code
+			a.rules[0].ActionParameters.FromValue.TargetURL.Expression = old.SRThen
+			dc := parse("https://new-meta.example.net/$1")
+			applyRedirectPlan(t, redirectPlan(t, c, dc))
+			if len(a.rules) != 1 || a.rules[0].ID == "meta-id" {
+				t.Errorf("expected generated-name replacement: %+v", a.rules)
+			}
+			assertRedirectNoop(t, c, dc)
+		})
+	}
+}

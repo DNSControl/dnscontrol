@@ -255,6 +255,11 @@ func (rc *RecordConfig) Key() RecordKey {
 	t := rc.Type
 	if rc.GetRDATA() != nil {
 		switch rc.Type {
+		case "CLOUDFLAREAPI_SINGLE_REDIRECT":
+			// Redirects share the apex label but have individual identities.
+			// Pair edits by name so an add/delete cannot turn a content update
+			// into a modification of a different rule (and change precedence).
+			t = fmt.Sprintf("%s_%s", t, rc.AsCLOUDFLAREAPISINGLEREDIRECT().SRName)
 		case "R53_ALIAS":
 			// Route53 aliases append their alias type, so that records for the same
 			// label with different alias types are considered separate.

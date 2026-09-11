@@ -659,6 +659,9 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 
 		switch rec.TypeNum {
 		case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
+			// HTTP redirects have no DNS TTL. Match provider read-back and the
+			// CF_REDIRECT/CF_TEMP_REDIRECT builders, including explicit TTLs.
+			rec.TTL = 1
 			// SINGLEREDIRECT record types. Verify they are enabled.
 			if !c.manageSingleRedirects {
 				return errors.New("you must add 'manage_single_redirects: true' metadata to cloudflare provider to use CLOUDFLAREAPI_SINGLE_REDIRECT records")
