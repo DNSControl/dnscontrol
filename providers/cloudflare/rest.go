@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -409,43 +410,34 @@ func (c *cloudflareProvider) getSingleRedirects(dc *models.DomainConfig, id stri
 	return recs, nil
 }
 
-func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
-	newSingleRedirectRulesActionParameters := cloudflare.RulesetRuleActionParameters{}
-	newSingleRedirectRule := cloudflare.RulesetRule{}
-	newSingleRedirectRules := []cloudflare.RulesetRule{}
-	newSingleRedirectRules = append(newSingleRedirectRules, newSingleRedirectRule)
-	newSingleRedirect := cloudflare.UpdateEntrypointRulesetParams{}
-
+func singleRedirectRule(cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) cloudflare.RulesetRule {
 	// Preserve query string if there isn't one in the replacement.
 	preserveQueryString := !strings.Contains(cfr.SRThen, "?")
+	return cloudflare.RulesetRule{
+		Action:      "redirect",
+		Description: cfr.SRName,
+		Expression:  cfr.SRWhen,
+		ActionParameters: &cloudflare.RulesetRuleActionParameters{
+			FromValue: &cloudflare.RulesetRuleActionParametersFromValue{
+				StatusCode:          cfr.Code,
+				TargetURL:           cloudflare.RulesetRuleActionParametersTargetURL{Expression: cfr.SRThen},
+				PreserveQueryString: &preserveQueryString,
+			},
+		},
+	}
+}
 
-	newSingleRedirectRulesActionParameters.FromValue = &cloudflare.RulesetRuleActionParametersFromValue{}
-	// Redirect status code
-	newSingleRedirectRulesActionParameters.FromValue.StatusCode = uint16(cfr.Code)
-	// Incoming request expression
-	newSingleRedirectRules[0].Expression = cfr.SRWhen
-	// Redirect expression
-	newSingleRedirectRulesActionParameters.FromValue.TargetURL.Expression = cfr.SRThen
-	// Redirect name
-	newSingleRedirectRules[0].Description = cfr.SRName
-
-	// Rule action, should always be redirect in this case
-	newSingleRedirectRules[0].Action = "redirect"
-	// Phase should always be http_request_dynamic_redirect
-	newSingleRedirect.Phase = "http_request_dynamic_redirect"
-
-	// Assigns the values in the nested structs
-	newSingleRedirectRulesActionParameters.FromValue.PreserveQueryString = &preserveQueryString
-	newSingleRedirectRules[0].ActionParameters = &newSingleRedirectRulesActionParameters
-
+func (c *cloudflareProvider) createSingleRedirect(domainID string, cfr privatetypesrdata.CLOUDFLAREAPISINGLEREDIRECT) error {
 	// Get a list of current redirects so that the new redirect get appended to it
 	rules, err := c.cfClient.GetEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(domainID), "http_request_dynamic_redirect")
 	var e *cloudflare.NotFoundError
 	if err != nil && !errors.As(err, &e) {
 		return fmt.Errorf("failed fetching redirect rule list cloudflare: %w", err)
 	}
-	newSingleRedirect.Rules = newSingleRedirectRules
-	newSingleRedirect.Rules = append(rules.Rules, newSingleRedirect.Rules...)
+	newSingleRedirect := cloudflare.UpdateEntrypointRulesetParams{
+		Phase: "http_request_dynamic_redirect",
+		Rules: append(rules.Rules, singleRedirectRule(cfr)),
+	}
 
 	_, err = c.cfClient.UpdateEntrypointRuleset(context.Background(), cloudflare.ZoneIdentifier(domainID), newSingleRedirect)
 
@@ -459,7 +451,7 @@ func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatet
 	},
 	)
 	// NB(tlim): Yuck. This returns an error even when it is successful. Dig into the JSON for the real status.
-	if strings.Contains(err.Error(), `"success": true,`) {
+	if err != nil && strings.Contains(err.Error(), `"success": true,`) {
 		return nil
 	}
 
@@ -467,10 +459,30 @@ func (c *cloudflareProvider) deleteSingleRedirects(domainID string, cfr privatet
 }
 
 func (c *cloudflareProvider) updateSingleRedirect(domainID string, oldrec, newrec *models.RecordConfig) error {
-	if err := c.deleteSingleRedirects(domainID, oldrec.AsCLOUDFLAREAPISINGLEREDIRECT()); err != nil {
+	old := oldrec.AsCLOUDFLAREAPISINGLEREDIRECT()
+	desired := newrec.AsCLOUDFLAREAPISINGLEREDIRECT()
+	rule := singleRedirectRule(desired)
+	original := oldrec.Original.(cloudflare.RulesetRule)
+	rule.Enabled = original.Enabled
+	rule.Ref = original.Ref
+	// The DSL derives query-string handling from the destination. Leave the
+	// deployed setting alone when only the condition or status changes.
+	if old.SRThen == desired.SRThen {
+		rule.ActionParameters.FromValue.PreserveQueryString = original.ActionParameters.FromValue.PreserveQueryString
+	}
+
+	// The pinned SDK has no typed rule PATCH method. Raw still uses its
+	// authentication, retries, and error handling. Omitting position keeps the
+	// existing rule in place; do not send a stale copy of the entire ruleset.
+	endpoint := fmt.Sprintf("/zones/%s/rulesets/%s/rules/%s", domainID, old.RT_SRRRulesetID, old.RT_SRRRulesetRuleID)
+	result, err := c.cfClient.Raw(context.Background(), http.MethodPatch, endpoint, rule, nil)
+	if err != nil {
 		return err
 	}
-	return c.createSingleRedirect(domainID, newrec.AsCLOUDFLAREAPISINGLEREDIRECT())
+	if !result.Success {
+		return fmt.Errorf("failed updating Cloudflare Single Redirect %q: %v", desired.SRName, result.Errors)
+	}
+	return nil
 }
 
 func (c *cloudflareProvider) getWorkerRoutes(id string, dc *models.DomainConfig) (models.Records, error) {

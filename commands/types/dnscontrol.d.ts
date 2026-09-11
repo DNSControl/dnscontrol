@@ -607,16 +607,24 @@ declare function CF_REDIRECT(source: string, destination: string, ...modifiers: 
  *
  * The fields are:
  *
- * * name: The name (basically a comment)
+ * * name: The name used to match this rule between deployments. Use a unique, stable name for each rule in a zone.
  * * code: Any of 301, 302, 303, 307, 308. May be a number or string.
  * * when: What Cloudflare sometimes calls the "rule expression".
  * * then: The replacement expression.
  *
- * DNSControl does not currently choose the order of the rules.  New rules are added to the end of the list. Use Cloudflare's dashboard to re-order the rule, DNSControl should not change them.  (In the future we hope to add a feature where the order the rules appear in dnsconfig.js is maintained in the dashboard.)
+ * DNSControl does not currently choose the order of the rules. New rules are added to the end of the list. Use Cloudflare's dashboard to reorder them. Editing the status code, condition, or destination of a rule with the same unique name preserves its Cloudflare rule ID and current position. Its enabled state is also preserved. A condition or status edit preserves the existing query-string behavior; changing the destination derives that behavior from the new destination, as for a new rule.
+ *
+ * Changing a rule's name is a replacement: the old rule is deleted and the new rule is appended. Names are case-sensitive. Rules with duplicate names cannot be reliably matched during edits; use unique names when position matters.
+ *
+ * Preserving positions does not restore an already misordered ruleset, enforce declaration order, or detect order-only drift. When conditions overlap, put specific rules before broader fallbacks in Cloudflare's dashboard. In the future we hope to support declarative ordering as a separate feature.
+ *
+ * Single Redirects are HTTP rules and have no DNS TTL. DNSControl normalizes their internal TTL to 1 when planning Cloudflare changes, including when a default TTL or an explicit `TTL()` modifier is present. This does not control browser redirect caching.
  *
  * ## `CF_REDIRECT` and `CF_TEMP_REDIRECT`
  *
  * `CF_REDIRECT` and `CF_TEMP_REDIRECT` used to manage Cloudflare Page Rules. However that feature is going away.  To help with the migration, DNSControl now translates those commands into CF_SINGLE_REDIRECT equivalents.  The conversion process is a transpiler that only understands certain formats. Please submit a Github issue if you find something it can't handle.
+ *
+ * These generated rules share the same ordered list as explicit `CF_SINGLE_REDIRECT` rules. Their generated names include the status code, source pattern, and destination. Changing any of those produces a replacement that is appended. To edit a redirect while retaining its position, use an explicit `CF_SINGLE_REDIRECT` with a stable name.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/cloudflare-dns/cf_single_redirect
  */
