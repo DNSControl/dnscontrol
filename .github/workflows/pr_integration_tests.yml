@@ -186,6 +186,7 @@ jobs:
       HETZNER_V2_DOMAIN: ${{ vars.HETZNER_V2_DOMAIN }}
       HOSTINGDE_DOMAIN: ${{ vars.HOSTINGDE_DOMAIN }}
       HUAWEICLOUD_DOMAIN: ${{ vars.HUAWEICLOUD_DOMAIN }}
+      INFOBLOX_DOMAIN: ${{ vars.INFOBLOX_DOMAIN }}
       INFOMANIAK_DOMAIN: ${{ vars.INFOMANIAK_DOMAIN }}
       INWX_DOMAIN: ${{ vars.INWX_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
@@ -327,6 +328,11 @@ jobs:
       HUAWEICLOUD_KEY: ${{ secrets.HUAWEICLOUD_KEY }}
       HUAWEICLOUD_KEY_ID: ${{ secrets.HUAWEICLOUD_KEY_ID }}
       HUAWEICLOUD_REGION: ${{ secrets.HUAWEICLOUD_REGION }}
+      #
+      INFOBLOX_HOST: ${{ secrets.INFOBLOX_HOST }}
+      INFOBLOX_USERNAME: ${{ secrets.INFOBLOX_USERNAME }}
+      INFOBLOX_PASSWORD: ${{ secrets.INFOBLOX_PASSWORD }}
+      INFOBLOX_VIEW: ${{ secrets.INFOBLOX_VIEW }}
       #
       INFOMANIAK_TOKEN: ${{ secrets.INFOMANIAK_TOKEN }}
       #

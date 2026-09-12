@@ -97,6 +97,9 @@ provider-HOSTINGDE:
 provider-HUAWEICLOUD:
   - changed-files:
       - any-glob-to-any-file: providers/huaweicloud/**
+provider-INFOBLOX:
+  - changed-files:
+      - any-glob-to-any-file: providers/infoblox/**
 provider-INFOMANIAK:
   - changed-files:
       - any-glob-to-any-file: providers/infomaniak/**
