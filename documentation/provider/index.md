@@ -33,6 +33,7 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ❌ | ✅ | ❌ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ❌ |
 | [`CLOUDNS`](cloudns.md) | ❌ | ✅ | ✅ |
+| [`CLOUDPRESS`](cloudpress.md) | ❌ | ✅ | ❌ |
 | [`CNR`](cnr.md) | ❌ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ✅ | ✅ |
 | [`DESEC`](desec.md) | ❌ | ✅ | ❌ |
@@ -109,6 +110,7 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ❔ | ❌ | ✅ | ✅ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❌ | ✅ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ |
+| [`CLOUDPRESS`](cloudpress.md) | ❔ | ❌ | ✅ | ✅ |
 | [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ❔ | ❌ | ✅ |
 | [`DESEC`](desec.md) | ✅ | ❔ | ✅ | ✅ |
@@ -184,6 +186,7 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ❔ | ❌ | ✅ | ❌ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❔ | ✅ | ✅ | ❔ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ | ❔ |
+| [`CLOUDPRESS`](cloudpress.md) | ❔ | ❔ | ❔ | ✅ | ❔ |
 | [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
 | [`DESEC`](desec.md) | ❔ | ❔ | ✅ | ✅ | ❔ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -253,6 +256,7 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ❌ | ❌ | ✅ | ✅ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ❔ | ✅ | ✅ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ❌ | ✅ | ✅ | ❌ |
+| [`CLOUDPRESS`](cloudpress.md) | ❔ | ❔ | ✅ | ❔ |
 | [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ❔ | ❔ | ✅ | ❔ |
 | [`DESEC`](desec.md) | ❔ | ✅ | ✅ | ✅ |
@@ -322,7 +326,8 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ✅ | ❔ | ❌ | ✅ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
-| [`CNR`](cnr.md) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❔ | ❔ | ❔ | ❔ |
+| [`CNR`](cnr.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ❔ | ❔ | ❔ | ❔ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
@@ -385,6 +390,8 @@ Jump to a table:
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ❔ | ❌ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ❔ | ❌ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
+| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❔ | ❔ |
+| [`DESEC`](desec.md) | ✅ | ✅ | ✅ |
 | [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
