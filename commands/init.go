@@ -154,6 +154,7 @@ func pickProviders(asker Asker) (registrarType, dnsProviderType string, sameAcco
 			meta, _ := providers.GetCredsMetadata(dnsProviderType)
 			sameAccount, err = asker.Confirm(
 				fmt.Sprintf("Use the same %s account for the registrar role too?", displayName(meta.TypeName)),
+				"",
 				true,
 			)
 			if err != nil {
@@ -208,7 +209,7 @@ func confirmAndWrite(asker Asker, args InitArgs, existingCreds map[string]map[st
 		}
 	}
 
-	confirm, err := asker.Confirm("Write these files?", true)
+	confirm, err := asker.Confirm("Write these files?", "", true)
 	if err != nil {
 		return err
 	}
@@ -384,7 +385,7 @@ func askDomainsWithZones(asker Asker, availableZones []string, providerName stri
 
 	fmt.Println()
 	prompt := fmt.Sprintf("Select from the %d zone(s) found at %s?", len(availableZones), providerName)
-	useList, err := asker.Confirm(prompt, true)
+	useList, err := asker.Confirm(prompt, "", true)
 	if err != nil {
 		return nil, err
 	}
@@ -409,7 +410,7 @@ func askDomainsWithZones(asker Asker, availableZones []string, providerName stri
 	}
 
 	for {
-		more, err := asker.Confirm("Add another domain manually?", false)
+		more, err := asker.Confirm("Add another domain manually?", "", false)
 		if err != nil {
 			return nil, err
 		}
@@ -448,7 +449,7 @@ func offerFollowUps(asker Asker, args InitArgs, entries []InitCredsEntry, choice
 		_ = compareZones(binary, args, sample, choice.Domains)
 	}
 
-	run, err := asker.Confirm("Run `dnscontrol preview` now?", true)
+	run, err := asker.Confirm("Run `dnscontrol preview` now?", "", true)
 	if err != nil {
 		return err
 	}
@@ -770,7 +771,7 @@ func askDomains(asker Asker) ([]string, error) {
 	}
 	domains := []string{first}
 	for {
-		more, err := asker.Confirm("Add another domain?", false)
+		more, err := asker.Confirm("Add another domain?", "", false)
 		if err != nil {
 			return nil, err
 		}

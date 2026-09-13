@@ -45,6 +45,8 @@ type CredsField struct {
 	EnvVar string
 	// Choices restricts input to one of the listed values.
 	Choices []string
+	// ConfirmValue asks a yes/no question and stores this value on yes.
+	ConfirmValue string
 	// Validator can reject an entered value with an explanatory error.
 	Validator func(string) error
 	// Internal marks the field as a UI selector whose answer drives

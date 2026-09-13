@@ -72,7 +72,7 @@ func (stub *stubAsker) Multiline(_, _ string) (string, error) {
 	return value, nil
 }
 
-func (stub *stubAsker) Confirm(_ string, _ bool) (bool, error) {
+func (stub *stubAsker) Confirm(_, _ string, _ bool) (bool, error) {
 	if len(stub.confirm) == 0 {
 		stub.t.Fatalf("unexpected Confirm call")
 	}

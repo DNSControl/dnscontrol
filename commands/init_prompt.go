@@ -28,7 +28,7 @@ type Asker interface {
 	// that contains newlines (for example a PEM encoded private key).
 	Multiline(message, help string) (string, error)
 	// Confirm asks a yes/no question.
-	Confirm(message string, defaultValue bool) (bool, error)
+	Confirm(message, help string, defaultValue bool) (bool, error)
 }
 
 // surveyAsker is the default Asker backed by github.com/AlecAivazis/survey/v2.
@@ -109,9 +109,9 @@ func (surveyAsker) Multiline(message, help string) (string, error) {
 }
 
 // Confirm implements Asker.
-func (surveyAsker) Confirm(message string, defaultValue bool) (bool, error) {
+func (surveyAsker) Confirm(message, help string, defaultValue bool) (bool, error) {
 	var answer bool
-	prompt := &survey.Confirm{Message: message, Default: defaultValue}
+	prompt := &survey.Confirm{Message: message, Help: help, Default: defaultValue}
 	if err := survey.AskOne(prompt, &answer); err != nil {
 		return false, err
 	}
@@ -136,6 +136,12 @@ func askField(asker Asker, field providers.CredsField) (string, error) {
 			err   error
 		)
 		switch {
+		case field.ConfirmValue != "":
+			var confirmed bool
+			confirmed, err = asker.Confirm(label, field.Help, defaultValue == field.ConfirmValue)
+			if confirmed {
+				value = field.ConfirmValue
+			}
 		case len(field.Choices) > 0:
 			value, err = asker.Select(label, field.Help, field.Choices, defaultValue)
 		case field.Multiline:
@@ -170,6 +176,9 @@ func fieldLabel(field providers.CredsField) string {
 		label = field.Key
 	} else if !strings.EqualFold(label, field.Key) {
 		label += " [" + field.Key + "]"
+	}
+	if field.ConfirmValue != "" {
+		return label
 	}
 	if field.Required {
 		return label + " (required)"
