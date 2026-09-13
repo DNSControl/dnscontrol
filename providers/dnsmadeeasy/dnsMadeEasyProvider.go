@@ -63,9 +63,10 @@ func init() {
 				Required: true,
 			},
 			{
-				Key:   "sandbox",
-				Label: "Use sandbox",
-				Help:  "Set to any non-empty value to use the DNS Made Easy sandbox API instead of production.",
+				Key:          "sandbox",
+				Label:        "Use the DNS Made Easy sandbox API instead of production?",
+				Help:         "Answer no for normal use. The sandbox needs its own API credentials from https://sandbox.dnsmadeeasy.com/.",
+				ConfirmValue: "1",
 			},
 		},
 	})
