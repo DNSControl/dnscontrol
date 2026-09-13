@@ -1,0 +1,31 @@
+name: "PR: Commitlint"
+permissions:
+  contents: read
+
+# We adopted Conventional Commits at the PR level: DNSControl squash-merges
+# PRs, so the PR *title* becomes the commit message on main (and is what
+# .goreleaser.yml's changelog.groups matches against). So, unlike
+# commitlint's usual CI setup (which lints each commit message), this lints
+# only the PR title.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: latest
+      - run: npm install
+      - name: Lint PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | npx commitlint --verbose
