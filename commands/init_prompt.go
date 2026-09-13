@@ -128,17 +128,7 @@ func askField(asker Asker, field providers.CredsField) (string, error) {
 		}
 	}
 
-	label := field.Label
-	if label == "" {
-		label = field.Key
-	} else if !strings.EqualFold(label, field.Key) {
-		label += " [" + field.Key + "]"
-	}
-	if field.Required {
-		label += " (required)"
-	} else {
-		label += " (optional)"
-	}
+	label := fieldLabel(field)
 
 	for {
 		var (
@@ -171,6 +161,20 @@ func askField(asker Asker, field providers.CredsField) (string, error) {
 		}
 		return value, nil
 	}
+}
+
+func fieldLabel(field providers.CredsField) string {
+	label := strings.TrimSuffix(field.Label, "(optional)")
+	label = strings.TrimSpace(strings.TrimSuffix(label, "(required)"))
+	if label == "" {
+		label = field.Key
+	} else if !strings.EqualFold(label, field.Key) {
+		label += " [" + field.Key + "]"
+	}
+	if field.Required {
+		return label + " (required)"
+	}
+	return label + " (optional)"
 }
 
 // openPortalHint prints the portal URL plus any provider notes so the

@@ -94,7 +94,7 @@ func init() {
 			},
 			{
 				Key:    "totp-key",
-				Label:  "TOTP shared secret (optional)",
+				Label:  "TOTP shared secret",
 				Help:   "Shared TOTP secret used to generate the 2FA token. Only needed if two factor authentication is enabled for the account.",
 				Secret: true,
 			},

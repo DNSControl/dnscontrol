@@ -60,12 +60,12 @@ func init() {
 			},
 			{
 				Key:   "insecure_tls",
-				Label: "Skip TLS verification (optional)",
+				Label: "Skip TLS verification",
 				Help:  "Set to \"true\" to skip TLS certificate verification when connecting to the FortiGate.",
 			},
 			{
 				Key:   "debug_http",
-				Label: "Debug HTTP (optional)",
+				Label: "Debug HTTP",
 				Help:  "Set to \"true\" to log HTTP requests and responses for debugging.",
 			},
 		},

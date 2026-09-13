@@ -134,12 +134,12 @@ func init() {
 			},
 			{
 				Key:   "max_attempts",
-				Label: "Max attempts (optional)",
+				Label: "Max attempts",
 				Help:  "Override retry attempts. Leave blank to use the default of 5.",
 			},
 			{
 				Key:   "max_duration",
-				Label: "Max duration (optional)",
+				Label: "Max duration",
 				Help:  "Retry duration limit, such as 5m. Leave blank for no limit.",
 			},
 		},

@@ -117,7 +117,7 @@ func init() {
 			},
 			{
 				Key:   "accountid",
-				Label: "Account ID (optional)",
+				Label: "Account ID",
 				Help:  "Cloudflare account ID. Required to manage zones in a specific account when the credentials have access to more than one.",
 			},
 		},

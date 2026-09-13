@@ -128,7 +128,7 @@ func init() {
 			},
 			{
 				Key:   "debugmode",
-				Label: "Debug mode (optional)",
+				Label: "Debug mode",
 				Help:  "Set to \"2\" to enable verbose API debug logging. Leave blank to disable.",
 			},
 		},

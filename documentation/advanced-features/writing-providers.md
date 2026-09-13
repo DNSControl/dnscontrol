@@ -127,6 +127,8 @@ providers.RegisterCredsMetadata("MYPROVIDER", providers.CredsMetadata{
 })
 ```
 
+The wizard appends the `creds.json` key and `(required)` or `(optional)` to the `Label` itself, so leave those out of the label text.
+
 A field can carry any of the following flags:
 
 | Flag | Effect |

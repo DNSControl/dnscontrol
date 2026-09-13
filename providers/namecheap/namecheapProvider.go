@@ -108,7 +108,7 @@ func init() {
 			},
 			{
 				Key:   "BaseURL",
-				Label: "Base URL (optional)",
+				Label: "Base URL",
 				Help:  "Override the API base URL (for example to use the sandbox). Leave blank to use the production URL.",
 			},
 		},

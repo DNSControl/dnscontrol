@@ -69,7 +69,7 @@ func init() {
 			},
 			{
 				Key:   "baseurl",
-				Label: "Base URL (optional)",
+				Label: "Base URL",
 				Help:  "Override the API base URL (for example, the sandbox URL https://api.sandbox.dnsimple.com). Leave blank to use the production endpoint.",
 			},
 		},

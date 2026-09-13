@@ -109,7 +109,7 @@ func init() {
 			},
 			{
 				Key:   "sandbox",
-				Label: "Use sandbox (optional)",
+				Label: "Use sandbox",
 				Help:  "Set to 1 to use the INWX sandbox API (ote.inwx.com) instead of production. Leave blank for production.",
 			},
 		},

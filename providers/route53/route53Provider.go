@@ -163,7 +163,7 @@ func init() {
 		Fields: []providers.CredsField{
 			{
 				Key:    "Region",
-				Label:  "AWS Region to use for Route 53 control plane (optional)",
+				Label:  "AWS Region to use for Route 53 control plane",
 				Help:   "Leave blank to use default global Route 53 in us-east-1. Type \"eusc-de-east-1\" for AWS European Sovereign Cloud.",
 				EnvVar: "AWS_DEFAULT_REGION",
 			},
@@ -201,7 +201,7 @@ func init() {
 			},
 			{
 				Key:    "Token",
-				Label:  "AWS session token (optional)",
+				Label:  "AWS session token",
 				Help:   "STS session token. Leave blank unless you are using temporary credentials.",
 				EnvVar: "AWS_SESSION_TOKEN",
 				Secret: true,
@@ -209,17 +209,17 @@ func init() {
 			},
 			{
 				Key:   "RoleArn",
-				Label: "Role ARN to assume (optional)",
+				Label: "Role ARN to assume",
 				Help:  "If set, dnscontrol will call sts:AssumeRole on this ARN using the source credentials selected above. Leave blank to use the source credentials directly.",
 			},
 			{
 				Key:   "ExternalId",
-				Label: "External ID for AssumeRole (optional)",
+				Label: "External ID for AssumeRole",
 				Help:  "External ID required by some trust policies. Only relevant when RoleArn is set.",
 			},
 			{
 				Key:   "DelegationSet",
-				Label: "Reusable delegation set ID (optional)",
+				Label: "Reusable delegation set ID",
 				Help:  "Existing Route 53 reusable delegation set ID (the value after /delegationset/). Only applied when creating new domains.",
 			},
 		},

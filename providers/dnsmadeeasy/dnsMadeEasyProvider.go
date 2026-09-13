@@ -64,7 +64,7 @@ func init() {
 			},
 			{
 				Key:   "sandbox",
-				Label: "Use sandbox (optional)",
+				Label: "Use sandbox",
 				Help:  "Set to any non-empty value to use the DNS Made Easy sandbox API instead of production.",
 			},
 		},
