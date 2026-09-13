@@ -658,6 +658,11 @@ func (c *cloudflareProvider) preprocessConfig(dc *models.DomainConfig) error {
 		}
 
 		switch rec.TypeNum {
+		case privatetypes.TypeCFWORKERROUTE:
+			// Worker Routes have no DNS TTL. Match provider read-back, which
+			// constructs TTL 1, so an inherited DefaultTTL does not cause a
+			// TTL-only correction on every preview.
+			rec.TTL = 1
 		case privatetypes.TypeCLOUDFLAREAPISINGLEREDIRECT:
 			// SINGLEREDIRECT record types. Verify they are enabled.
 			if !c.manageSingleRedirects {
