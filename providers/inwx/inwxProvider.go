@@ -108,9 +108,10 @@ func init() {
 				Required: true,
 			},
 			{
-				Key:   "sandbox",
-				Label: "Use sandbox",
-				Help:  "Set to 1 to use the INWX sandbox API (ote.inwx.com) instead of production. Leave blank for production.",
+				Key:          "sandbox",
+				Label:        "Use the INWX sandbox API (ote.inwx.com) instead of production?",
+				Help:         "Answer no for normal use. The sandbox is the INWX OT&E test environment.",
+				ConfirmValue: "1",
 			},
 		},
 	})
