@@ -127,9 +127,11 @@ func init() {
 				Required: true,
 			},
 			{
-				Key:   "debugmode",
-				Label: "Debug mode",
-				Help:  "Set to \"2\" to enable verbose API debug logging. Leave blank to disable.",
+				Key:     "debugmode",
+				Label:   "Debug mode",
+				Help:    "0 turns debug logging off, 1 logs the API commands for each change, 2 also shows the full CNR API communication.",
+				Choices: []string{"0", "1", "2"},
+				Default: "0",
 			},
 		},
 	})
