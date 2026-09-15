@@ -346,6 +346,20 @@ func TestMinTTLForGrade(t *testing.T) {
 	assert.Equal(t, defaultTTL, minTTLForGrade("DP_Unknown", packages))
 }
 
+// DescribeDomain and DescribePackageDetail disagree on the case of the same
+// plan name, so the lookup must not compare the two strings exactly.
+func TestMinTTLForGradeIgnoresGradeCase(t *testing.T) {
+	packages := []*dnspod.PackageDetailItem{
+		{
+			DomainGrade: new("DP_Plus"),
+			MinTtl:      new(uint64(60)),
+		},
+	}
+
+	assert.Equal(t, uint32(60), minTTLForGrade("DP_PLUS", packages))
+	assert.Equal(t, uint32(60), minTTLForGrade("dp_plus", packages))
+}
+
 func TestCredsMetadata(t *testing.T) {
 	meta, ok := providers.GetCredsMetadata("TENCENTDNS")
 	assert.True(t, ok)

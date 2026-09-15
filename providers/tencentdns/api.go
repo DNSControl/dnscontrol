@@ -140,7 +140,12 @@ func (c *tencentCloudClient) getMinTTL(domainName string) (uint32, error) {
 
 func minTTLForGrade(grade string, packages []*dnspod.PackageDetailItem) uint32 {
 	for _, item := range packages {
-		if item.DomainGrade == nil || *item.DomainGrade != grade || item.MinTtl == nil {
+		if item.DomainGrade == nil || item.MinTtl == nil {
+			continue
+		}
+		// DescribeDomain reports grades such as "DP_PLUS" while
+		// DescribePackageDetail reports "DP_Plus" for the same plan.
+		if !strings.EqualFold(*item.DomainGrade, grade) {
 			continue
 		}
 		return uint32(*item.MinTtl)
