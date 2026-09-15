@@ -20,8 +20,8 @@ func TestToRecordConfig(t *testing.T) {
 		wantData string
 	}{
 		{"A", &ResourceRecord{Name: "www", Type: "A", Value: "192.0.2.1", TTL: 300}, "A", "192.0.2.1"},
-		{"MX", &ResourceRecord{Name: "www", Type: "MX", Value: "mail.example.net.", Pref: ptrTo(int32(10)), TTL: 300}, "MX", "10 mail.example.net."},
-		{"SRV", &ResourceRecord{Name: "_sip._tcp", Type: "SRV", Value: "2 443 service.example.net.", Pref: ptrTo(int32(1)), TTL: 300}, "SRV", "1 2 443 service.example.net."},
+		{"MX", &ResourceRecord{Name: "www", Type: "MX", Value: "mail.example.net.", Pref: new(int32(10)), TTL: 300}, "MX", "10 mail.example.net."},
+		{"SRV", &ResourceRecord{Name: "_sip._tcp", Type: "SRV", Value: "2 443 service.example.net.", Pref: new(int32(1)), TTL: 300}, "SRV", "1 2 443 service.example.net."},
 	}
 
 	for _, tc := range tests {
@@ -56,8 +56,8 @@ func TestRecordsToNative(t *testing.T) {
 		wantPref  *int32
 	}{
 		{"A", dnsv2.TypeA, []any{"192.0.2.1"}, "192.0.2.1", nil},
-		{"MX", dnsv2.TypeMX, []any{uint16(10), "mail.example.net."}, "mail.example.net.", ptrTo(int32(10))},
-		{"MXZeroPreference", dnsv2.TypeMX, []any{uint16(0), "mail.example.net."}, "mail.example.net.", ptrTo(int32(0))},
+		{"MX", dnsv2.TypeMX, []any{uint16(10), "mail.example.net."}, "mail.example.net.", new(int32(10))},
+		{"MXZeroPreference", dnsv2.TypeMX, []any{uint16(0), "mail.example.net."}, "mail.example.net.", new(int32(0))},
 		{"CNAME", dnsv2.TypeCNAME, []any{"target.example.net."}, "target.example.net.", nil},
 	}
 
@@ -129,5 +129,3 @@ func TestRecordsToNativeMarshalsZeroPreference(t *testing.T) {
 		t.Errorf("pref = %v, want 0", pref)
 	}
 }
-
-func ptrTo[T any](v T) *T { return &v }
