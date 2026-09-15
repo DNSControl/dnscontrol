@@ -224,12 +224,14 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 
 			switch rc.TypeNum {
 			case dnsv2.TypeMX:
+				// AutoDNS carries the preference in its own "pref" field,
+				// so "value" must be the bare target FQDN. Using the full
+				// RDATA here repeats the preference ("10 mail.example.net.")
+				// and the gateway rejects the entire zone update with
+				// EF020541 "The MX resource record value is invalid.".
 				f := rc.AsMX()
 				resourceRecord.Pref = int32(f.Preference)
-				resourceRecord.Value = rc.GetRDATA().String()
-				// If that doesn't work, try:
-				//resourceRecord.Pref = int32(f.Preference)
-				//resourceRecord.Value = f.Mx
+				resourceRecord.Value = f.Mx
 
 			// case dnsv2.TypeSRV:
 			// 	resourceRecord.Value = rc.GetRDATA().String()
