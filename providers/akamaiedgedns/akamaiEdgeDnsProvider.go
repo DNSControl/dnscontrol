@@ -61,7 +61,7 @@ func (a *edgeDNSProvider) SetConversionObserver(observer providers.ConversionObs
 
 func init() {
 	const providerName = "AKAMAIEDGEDNS"
-	const providerMaintainer = "@edglynes"
+	const providerMaintainer = "@meghanakudua02"
 	fns := providers.DspFuncs{
 		Initializer:   newEdgeDNSDSP,
 		RecordAuditor: AuditRecords,

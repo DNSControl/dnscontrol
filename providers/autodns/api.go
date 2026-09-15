@@ -284,6 +284,13 @@ func (api *autoDNSProvider) updateZone(domain string, resourceRecords []*Resourc
 
 	zone.IncludeWwwForMain = false
 
+	// "main" is a legacy AutoDNS field that we surface as a synthetic apex A
+	// record on read but never write. Carrying it back unchanged makes any
+	// apex A correction impossible: DNSControl deletes the record from
+	// resourceRecords, the PUT restores it from "main", and the zone drifts
+	// forever. Clear it so the apex lives solely in resourceRecords.
+	zone.MainRecord = nil
+
 	zone.Soa.TTL = zoneTTL
 
 	// empty out NameServers and ResourceRecords, add what it should be
