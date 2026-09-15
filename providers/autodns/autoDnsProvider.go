@@ -230,7 +230,8 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				// and the gateway rejects the entire zone update with
 				// EF020541 "The MX resource record value is invalid.".
 				f := rc.AsMX()
-				resourceRecord.Pref = int32(f.Preference)
+				pref := int32(f.Preference)
+				resourceRecord.Pref = &pref
 				resourceRecord.Value = f.Mx
 
 			// case dnsv2.TypeSRV:
@@ -396,9 +397,9 @@ func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.Re
 	ttl := uint32(record.TTL)
 	switch record.Type {
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.Pref), record.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.pref()), record.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", record.Pref, record.Value))
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", record.pref(), record.Value))
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, record.Type, record.Value)
 	}

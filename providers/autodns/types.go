@@ -11,9 +11,13 @@ type ResourceRecord struct {
 	// Required: true
 	Name string `json:"name"`
 
-	// Preference of the record, need for some record types e.g. MX
+	// Preference of the record, need for some record types e.g. MX.
+	// A pointer so that a preference of 0 -- which is valid for MX and is
+	// what "deliver here, no alternatives" looks like -- is still written
+	// out. With a plain int32, omitempty would drop it and AutoDNS would
+	// substitute its own default.
 	// Maximum: 65535
-	Pref int32 `json:"pref,omitempty"`
+	Pref *int32 `json:"pref,omitempty"`
 
 	// The bind notation of the record. Only used by the zone stream task!
 	Raw string `json:"raw,omitempty"`
@@ -36,6 +40,15 @@ type MainAddressRecord struct {
 
 	// The value of the record.
 	Value string `json:"address,omitempty"`
+}
+
+// pref returns the record's preference, treating an absent "pref" as 0.
+func (r *ResourceRecord) pref() int32 {
+	if r.Pref == nil {
+		return 0
+	}
+
+	return *r.Pref
 }
 
 // Zone represents the Zone in API calls.
