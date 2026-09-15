@@ -16,6 +16,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/providers/bind"
 )
@@ -230,8 +231,7 @@ func recordsToNative(recs models.Records) ([]*models.Nameserver, uint32, []*Reso
 				// and the gateway rejects the entire zone update with
 				// EF020541 "The MX resource record value is invalid.".
 				f := rc.AsMX()
-				pref := int32(f.Preference)
-				resourceRecord.Pref = &pref
+				resourceRecord.Pref = new(int32(f.Preference))
 				resourceRecord.Value = f.Mx
 
 			// case dnsv2.TypeSRV:
@@ -399,7 +399,8 @@ func toRecordConfig(dc *models.DomainConfig, record *ResourceRecord) (*models.Re
 	case "MX":
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, uint16(record.pref()), record.Value)
 	case "SRV":
-		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSRV, fmt.Sprintf("%d %s", record.pref(), record.Value))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, record.pref(), record.Value,
+			nrc.Flags{SrvWeirdSplit: true})
 	default:
 		rc, err = dc.NewRecordConfigParse(label, ttl, record.Type, record.Value)
 	}
