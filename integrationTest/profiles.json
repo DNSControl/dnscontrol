@@ -77,6 +77,13 @@
     "api_key": "$BUNNY_DNS_API_KEY",
     "domain": "$BUNNY_DNS_DOMAIN"
   },
+  "CLOUDPRESS": {
+    "TYPE": "CLOUDPRESS",
+    "base_url": "$CLOUDPRESS_BASE_URL",
+    "api_token": "$CLOUDPRESS_API_TOKEN",
+    "account_id": "$CLOUDPRESS_ACCOUNT_ID",
+    "domain": "$CLOUDPRESS_DOMAIN"
+  },
   "CLOUDFLAREAPI": {
     "TYPE": "CLOUDFLAREAPI",
     "accountid": "$CLOUDFLAREAPI_ACCOUNTID",
