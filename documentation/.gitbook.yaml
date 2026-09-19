@@ -1,13 +1,13 @@
 redirects:
-  getting-started/providers: providers/index.md
-  service-providers/providers: providers.md
+  getting-started/providers: provider/index.md
+  service-providers/providers: provider/index.md
   service-providers/providers/akamaiedgedns: provider/akamaiedgedns.md
   service-providers/providers/autodns: provider/autodns.md
   service-providers/providers/axfrddns: provider/axfrddns.md
-  service-providers/providers/azure_dns: provider/azure_dns.md
-  service-providers/providers/azure_private_dns: provider/azure_private_dns.md
+  service-providers/providers/azure_dns: provider/azuredns.md
+  service-providers/providers/azure_private_dns: provider/azureprivatedns.md
   service-providers/providers/bind: provider/bind.md
-  service-providers/providers/bunny_dns: provider/bunny_dns.md
+  service-providers/providers/bunny_dns: provider/bunnydns.md
   service-providers/providers/cloudflareapi: provider/cloudflareapi.md
   service-providers/providers/cloudns: provider/cloudns.md
   service-providers/providers/cscglobal: provider/cscglobal.md
@@ -20,7 +20,7 @@ redirects:
   service-providers/providers/dynadot: provider/dynadot.md
   service-providers/providers/easyname: provider/easyname.md
   service-providers/providers/exoscale: provider/exoscale.md
-  service-providers/providers/gandi_v5: provider/gandi_v5.md
+  service-providers/providers/gandi_v5: provider/gandiv5.md
   service-providers/providers/gcloud: provider/gcloud.md
   service-providers/providers/gcore: provider/gcore.md
   service-providers/providers/hedns: provider/hedns.md
