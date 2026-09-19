@@ -11,6 +11,10 @@ import (
 
 const pageSize = uint32(1000)
 
+// minNSTTL is the minimum TTL Scaleway enforces on NS records. A request for a
+// lower TTL is silently clamped up to this value.
+const minNSTTL = uint32(1800)
+
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (s *scalewayProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
 	zone := dc.Name
@@ -49,6 +53,14 @@ func (s *scalewayProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 
 // GetZoneRecordsCorrections returns a list of corrections that will turn existing records into dc.Records.
 func (s *scalewayProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
+	// Match the clamp Scaleway applies, so an NS record asking for a lower TTL
+	// does not show up as a pending change on every run.
+	for _, rec := range dc.Records {
+		if rec.Type == "NS" && rec.TTL < minNSTTL {
+			rec.TTL = minNSTTL
+		}
+	}
+
 	instructions, actualChangeCount, err := diff2.ByRecord(existing, dc, nil)
 	if err != nil {
 		return nil, 0, err
