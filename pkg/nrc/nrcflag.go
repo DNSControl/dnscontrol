@@ -5,7 +5,7 @@ type Flags struct {
 	// if it looks like the user forgot the trailing dot. This is enforced by
 	// the rule, "If a hostname contains any dots (even a single dot), there
 	// must be a trailing dot."
-	// Use with LabelFromDnsconfigjs() ONLY
+	// Use with LabelFromDnsconfigjs() ONLY.
 	EnforceOneDotPolicy bool
 
 	// SrvWeirdSplit the last field contains multiple fields.
@@ -13,7 +13,7 @@ type Flags struct {
 	// Some APIs deliver SRV fields as two strings: "priority" and "weight port hostname."
 	// This happens often enough to warrant a flag to handle this case.
 	// true: last 2 args are combined and sent to NewRecordConfigParse()
-	// ONLY use with NewRecordConfigParse().
+	// Use with NewRecordConfig() ONLY.
 	SrvWeirdSplit bool
 
 	// TargetIsFqdnNoDot modifies how RDATA host target fields are parsed.
@@ -21,9 +21,10 @@ type Flags struct {
 	// shortname (no dot) or FQDN (dot). When this flag is set, it is assumed to be a FQDN no matter what.
 	// false: ends with ".": FQDN; no dot: shortname.
 	// true: ends with ".": FQDN; no dot: FQDN.
-	// ONLY use with NewRecordConfigParse().
+	// Use with NewRecordConfig() or NewRecordConfigParse().
 	TargetIsFqdnNoDot bool
 
 	// TxtDontParse tells NewRecordConfigParse() that the TXT data is raw bytes, not to be parsed.
+	// Use with NewRecordConfig() ONLY.
 	TxtDontParse bool
 }
