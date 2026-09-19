@@ -4,7 +4,7 @@ Thank you for your interest in contributing to DNSControl! This guide will help 
 
 ## Prerequisites
 
-- **Go 1.26+** (see `go.mod` for the exact version)
+- **Go 1.27+** (see `go.mod` for the exact version)
 - **golangci-lint** (optional, used by CI and `bin/generate-all.sh`)
 - **staticcheck** (optional, used by `bin/generate-all.sh`)
 
