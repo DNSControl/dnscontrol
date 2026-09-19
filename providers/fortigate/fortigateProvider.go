@@ -15,11 +15,27 @@ import (
 // Feature Declaration
 
 var features = providers.DocumentationNotes{
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(), // FortiGate does not really support ARPA Zones and handles PTR records really weired
-	providers.CanUseLOC:              providers.Cannot(),
+	providers.CanAutoDNSSEC:          providers.Cannot(),
 	providers.CanConcur:              providers.Unimplemented(),
+	providers.CanGetZones:            providers.Can(),
+	providers.CanUseAlias:            providers.Cannot(),
+	providers.CanUseCAA:              providers.Cannot(),
+	providers.CanUseDHCID:            providers.Cannot(),
+	providers.CanUseDNAME:            providers.Cannot(),
+	providers.CanUseDNSKEY:           providers.Cannot(),
+	providers.CanUseDS:               providers.Cannot(),
+	providers.CanUseHTTPS:            providers.Cannot(),
+	providers.CanUseLOC:              providers.Cannot(),
+	providers.CanUseNAPTR:            providers.Cannot(),
+	providers.CanUsePTR:              providers.Cannot("does not really support ARPA Zones and handles PTR records weirdly"),
+	providers.CanUseSMIMEA:           providers.Cannot(),
+	providers.CanUseSOA:              providers.Cannot(),
+	providers.CanUseSRV:              providers.Cannot(),
+	providers.CanUseSSHFP:            providers.Cannot(),
+	providers.CanUseSVCB:             providers.Cannot(),
+	providers.CanUseTLSA:             providers.Cannot(),
 	providers.DocCreateDomains:       providers.Can(),
+	providers.DocDualHost:            providers.Cannot(),
 	providers.DocOfficiallySupported: providers.Cannot(), // unofficial integration
 }
 
