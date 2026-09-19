@@ -187,6 +187,9 @@ provider-SCALEWAY:
 provider-SOFTLAYER:
   - changed-files:
       - any-glob-to-any-file: providers/softlayer/**
+provider-SPACESHIP:
+  - changed-files:
+      - any-glob-to-any-file: providers/spaceship/**
 provider-TENCENTDNS:
   - changed-files:
       - any-glob-to-any-file: providers/tencentdns/**

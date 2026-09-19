@@ -61,6 +61,7 @@ providers/rwth @mistererwin
 providers/sakuracloud @ttkzw
 providers/scaleway @alessiopcc
 # providers/softlayer NEEDS VOLUNTEER
+providers/spaceship @rootful
 providers/tencentdns @cylonchau
 providers/transip @blackshadev
 providers/unifi @zupolgec

@@ -400,6 +400,12 @@
     "domain": "$SL_DOMAIN",
     "username": "$SL_USERNAME"
   },
+  "SPACESHIP": {
+    "TYPE": "SPACESHIP",
+    "api_key": "$SPACESHIP_API_KEY",
+    "api_secret": "$SPACESHIP_API_SECRET",
+    "domain": "$SPACESHIP_DOMAIN"
+  },
   "TENCENTDNS": {
     "TYPE": "TENCENTDNS",
     "domain": "$TENCENTDNS_DOMAIN",
