@@ -153,8 +153,8 @@ The BIND and TransIP registrations in this repository are worked examples mainta
 - [`providers/bind/bindProvider.go`][bind-source]: the simple shape, plus a `PostWrite` hook that creates the zone files directory.
 - [`providers/transip/transipProvider.go`][transip-source]: an auth method selector (`Internal` plus `ShowIf`) that branches between a short lived access token and an account name paired with a PEM private key.
 
-[bind-source]: https://github.com/StackExchange/dnscontrol/blob/main/providers/bind/bindProvider.go
-[transip-source]: https://github.com/StackExchange/dnscontrol/blob/main/providers/transip/transipProvider.go
+[bind-source]: https://github.com/DNSControl/dnscontrol/blob/main/providers/bind/bindProvider.go
+[transip-source]: https://github.com/DNSControl/dnscontrol/blob/main/providers/transip/transipProvider.go
 
 Providers without registered metadata still work; users just create the
 `creds.json` entry manually, using the help of the provider's documentation page.

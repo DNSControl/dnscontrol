@@ -85,7 +85,7 @@ VSCode equivalent configuration is:
 
 Develop a function:
 
-```
+```shell
 node -e "
 function IP(dot) {
     var d = dot.split('.');
@@ -95,13 +95,13 @@ console.log(IP('135.181.247.240'));
 "
 ```
 
-Debug a function within helpers.js:
+Debug a function within `helpers.js` (run from the root of the repository):
 
-```
-$ node -e "
+```shell
+node -e "
 const fs = require('fs');
 const vm = require('vm');
-const code = fs.readFileSync('/Users/tlimoncelli/gitthings/dnscontrol/pkg/js/helpers.js', 'utf8');
+const code = fs.readFileSync('pkg/js/helpers.js', 'utf8');
 const sandbox = {};
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);

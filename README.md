@@ -38,9 +38,13 @@ The easiest way to run DNSControl is to use the Docker container:
 docker run --rm -it -v "$(pwd):/dns"  ghcr.io/dnscontrol/dnscontrol preview
 ```
 
-Want full "GitOps" control of your DNS data?  Clone this repo to get started!  [github.com/DNSControl/dns-config](https://github.com/DNSControl/dns-config)
+## Getting Started
 
-See [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on documentation site to get started!
+The quickest way to start is [`dnscontrol init`](https://docs.dnscontrol.org/commands/init). The interactive wizard asks for your DNS provider and registrar, verifies your credentials and writes a working `creds.json` and `dnsconfig.js`, including the records that already exist in your zones.
+
+See the [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on the documentation site for the full walkthrough.
+
+Want full "GitOps" control of your DNS data? Clone the [dns-config](https://github.com/DNSControl/dns-config) starter repo to get started!
 
 ## Supported Providers
 

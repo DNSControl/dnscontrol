@@ -34,3 +34,12 @@ updates:
       interval: "monthly"
     cooldown:
       default-days: 7
+
+  # Maintain dependencies for npm
+  # (Needed for Prettier.  Remove this if we switch to Homebrew prettier or other install method.)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
