@@ -132,7 +132,8 @@ The parameters are:
 * `flatten:` Which includes should be inlined. For safety purposes the flattening is done on an opt-in basis. If `"*"` is listed, all includes will be flattened... this might create more problems than is solves due to length limitations.
 * `keepIgnoredRedirects:` Inlining an include can move its `redirect=` modifier into a record that has an `all` mechanism, where [RFC 7208 Section 6.1](https://tools.ietf.org/html/rfc7208#section-6.1) requires it to be ignored. Such modifiers are removed. Set this to `true` to keep them. (Optional. Default: `false`)
 
-[multi-string]: https://tools.ietf.org/html/rfc4408#section-3.1.3 [record-size]: https://tools.ietf.org/html/rfc4408#section-3.1.4
+[multi-string]: https://tools.ietf.org/html/rfc4408#section-3.1.3
+[record-size]: https://tools.ietf.org/html/rfc4408#section-3.1.4
 
 `SPF_BUILDER()` returns multiple `TXT()` records:
 
