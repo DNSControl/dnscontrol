@@ -17,6 +17,11 @@
   - [7. Use your own domains](#7-use-your-own-domains)
   - [8. Production Advice](#8-production-advice)
 
+There are two ways to get started:
+
+- **Quick path:** [install DNSControl](#id-1.-install-the-software), then run [`dnscontrol init`](../commands/init.md) in a new directory. The interactive wizard asks for your DNS provider and registrar, verifies your credentials, writes `creds.json` and `dnsconfig.js` with the records that already exist in your zones, and offers to run `dnscontrol preview`. Continue with [7. Use your own domains](#id-7.-use-your-own-domains) and [8. Production Advice](#id-8.-production-advice).
+- **Manual path:** follow all steps below. They use sample files and the BIND provider, so you can try DNSControl without API credentials.
+
 ## 1. Install the software
 
 Choose one of the following installation methods:
@@ -94,7 +99,7 @@ Create a subdirectory called `zones` in the same directory as the configuration 
 `dnsconfig.js` is the main configuration and defines providers, DNS domains, and so on.
 
 {% hint style="success" %}
-**Quick path:** run `dnscontrol init` instead. The interactive wizard asks for your DNS provider and registrar, prompts for the right `creds.json` fields and writes a working starter `dnsconfig.js` for you. The rest of this section is the manual equivalent. See the [init command reference](../commands/init.md) for details.
+**Quick path:** run `dnscontrol init` instead. The interactive wizard asks for your DNS provider and registrar, prompts for the right `creds.json` fields and writes a working starter `dnsconfig.js` for you. The rest of this section and step 4 are the manual equivalent. See the [init command reference](../commands/init.md) for details.
 {% endhint %}
 
 Start your `dnsconfig.js` file by downloading [dnsconfig.js](https://github.com/DNSControl/dnscontrol/blob/main/documentation/assets/getting-started/dnsconfig.js) and renaming it.

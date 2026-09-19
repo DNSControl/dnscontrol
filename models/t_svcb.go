@@ -17,17 +17,17 @@ func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error)
 	var result []svcbv2.Pair
 
 	for _, field := range fields {
-		keyValue := strings.SplitN(field, "=", 2)
-		if len(keyValue) != 2 {
+		key, v, found := strings.Cut(field, "=")
+		knum := svcbv2.StringToKey(key)
+		if !found && !svcbKeyWithoutValue(knum) {
 			return nil, fmt.Errorf("invalid svcb.Pair: %q", field)
 		}
 
 		// Make the pair.
-		pairFn := svcbv2.KeyToPair(svcbv2.StringToKey(keyValue[0]))
+		pairFn := svcbv2.KeyToPair(knum)
 		pair := pairFn()
 
 		// Strip the value of any quotes:
-		v := keyValue[1]
 		if len(v) >= 2 && v[0] == '"' && v[len(v)-1] == '"' { // Strip quotes if present
 			v = v[1 : len(v)-1]
 		}
@@ -43,6 +43,11 @@ func stringToSvcbv2Values(origin string, contents string) ([]svcbv2.Pair, error)
 	return result, nil
 }
 
+// svcbKeyWithoutValue reports whether the key is a flag without a value (RFC 9460, RFC 9540).
+func svcbKeyWithoutValue(key uint16) bool {
+	return key == svcbv2.KeyNoDefaultALPN || key == svcbv2.KeyOhttp
+}
+
 // Svcbv2ValueToString converts a SVCB value list to a string.
 // Typical usage: models.Svcbv2ValueToString(rc.AsHTTPS().Value)
 // Does NOT generate quotes around values in key=value pairs.
@@ -54,6 +59,10 @@ func Svcbv2ValueToString(pairs []svcbv2.Pair) string {
 		}
 		knum := svcbv2.PairToKey(p)
 		k := svcbv2.KeyToString(knum)
+		if svcbKeyWithoutValue(knum) {
+			sb.WriteString(k)
+			continue
+		}
 		fmt.Fprintf(&sb, "%s=%s", k, p.String())
 	}
 	return sb.String()
