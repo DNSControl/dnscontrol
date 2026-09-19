@@ -8,7 +8,7 @@
 ## Debug a particular function
 
 ```shell
-dlv test github.com/DNSControl/dnscontrol/v4/pkg/diff2 -- -test.run Test_analyzeByRecordSet
+dlv test github.com/DNSControl/dnscontrol/v5/pkg/diff2 -- -test.run Test_analyzeByRecordSet
                                                 ^^^^^^^^^
                                                 Assumes you are in the pkg/diff2 directory.
 ```
@@ -16,7 +16,7 @@ dlv test github.com/DNSControl/dnscontrol/v4/pkg/diff2 -- -test.run Test_analyze
 ## Debug an integration tests
 
 ```shell
-dlv test github.com/DNSControl/dnscontrol/v4/integrationTest -- -test.v -test.run ^TestDNSProviders -verbose -profile BIND -start 7 -end 7
+dlv test github.com/DNSControl/dnscontrol/v5/integrationTest -- -test.v -test.run ^TestDNSProviders -verbose -profile BIND -start 7 -end 7
 ```
 
 If you are using VSCode, the equivalent configuration is:
@@ -85,7 +85,7 @@ VSCode equivalent configuration is:
 
 Develop a function:
 
-```
+```shell
 node -e "
 function IP(dot) {
     var d = dot.split('.');
@@ -95,13 +95,13 @@ console.log(IP('135.181.247.240'));
 "
 ```
 
-Debug a function within helpers.js:
+Debug a function within `helpers.js` (run from the root of the repository):
 
-```
-$ node -e "
+```shell
+node -e "
 const fs = require('fs');
 const vm = require('vm');
-const code = fs.readFileSync('/Users/tlimoncelli/gitthings/dnscontrol/pkg/js/helpers.js', 'utf8');
+const code = fs.readFileSync('pkg/js/helpers.js', 'utf8');
 const sandbox = {};
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);

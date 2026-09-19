@@ -5,7 +5,7 @@
   - [Add replay tests](#add-replay-tests)
 
 `pkg/providergolden` records and replays the exact conversion calls exercised by
-integration tests. See [goldenfiles.md](goldenfiles.md) for the recording
+integration tests. See [Provider conversion golden files](goldenfiles.md) for the recording
 workflow and file formats.
 
 ## Instrument the provider
