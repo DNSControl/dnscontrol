@@ -43,6 +43,7 @@ require (
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
 	github.com/mittwald/go-powerdns v0.6.7
+	github.com/namecheap/go-spaceship-sdk v0.2.1
 	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04
 	github.com/netnod/netnod-primary-dns-client v1.1.1
 	github.com/nicholas-fedor/shoutrrr v0.21.0
@@ -100,6 +101,7 @@ require (
 	github.com/bits-and-blooms/bitset v1.24.4 // indirect
 	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/dlclark/regexp2 v1.12.0 // indirect
 	github.com/eclipse/paho.golang v0.23.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.1.0 // indirect
