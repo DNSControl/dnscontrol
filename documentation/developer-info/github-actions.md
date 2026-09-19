@@ -11,6 +11,7 @@
     - [Check: go fix](#check-go-fix)
   - [Lint](#lint)
   - [Build \& Test](#build--test)
+  - [Commitlint](#commitlint)
   - [Running all checks at once](#running-all-checks-at-once)
 
 ## PR Checks Overview
@@ -22,6 +23,7 @@ Every pull request runs the following GitHub Actions workflows. All checks must 
 | **Check git status** | `pr_check_git_status.yml` | Ensures all generated/formatted files are committed |
 | **Lint** | `pr_lint.yml` | Runs `golangci-lint` |
 | **Build & Test** | `pr_build.yml` | Runs unit tests and builds binaries via GoReleaser |
+| **Commitlint** | `pr_commitlint.yml` | Checks that the pull request title follows Conventional Commits |
 
 ## Check: git status
 
@@ -124,6 +126,17 @@ Runs all unit tests with `gotestsum` and builds binaries for all platforms using
 ```bash
 go test ./...
 go build .
+```
+
+## Commitlint
+
+Checks the pull request title against the Conventional Commits rules in `commitlint.config.js`. Only the title is checked, not the commits inside the pull request, because DNSControl squash-merges pull requests and the title becomes the commit message on `main`. Editing the title re-runs the check. See [Pull request titles](https://github.com/DNSControl/dnscontrol/blob/main/CONTRIBUTING.md#pull-request-titles) for the rules.
+
+**How to check locally:**
+
+```bash
+npm install
+echo "fix(p/ROUTE53): correct TTL rounding" | npx commitlint
 ```
 
 ## Running all checks at once
