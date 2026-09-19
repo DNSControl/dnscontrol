@@ -62,7 +62,7 @@ Global Traffic Director feature is not supported.
 
 ### DNS Made Easy sandbox environment
 
-Sandbox control panel is available at [https://sandbox.dnsmadeeasy.com/](sandbox.dnsmadeeasy.com). To generate sandbox API credentials, sign up for a free trial and go to [Account Information](https://sandbox.dnsmadeeasy.com/account/info) in Config menu.
+Sandbox control panel is available at [https://sandbox.dnsmadeeasy.com/](https://sandbox.dnsmadeeasy.com/). To generate sandbox API credentials, sign up for a free trial and go to [Account Information](https://sandbox.dnsmadeeasy.com/account/info) in Config menu.
 
 Set `sandbox` key to a non-empty value in credentials JSON alongside `TYPE`, `api_key` and `secret_key` to make all API calls against DNS Made Easy sandbox environment. Details in [DNS Made Easy API documentation](https://api-docs.dnsmadeeasy.com/).
 
