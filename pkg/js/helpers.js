@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // How to keep this file clean:
 // 1. Add new functions in alphabetical order when it makes sense.
@@ -13,7 +13,7 @@
 // -dev file to have helpers.js read from the file instead.
 
 // If this javascript interpreter doesn't have a .endsWith() function on strings, add one.
-if (typeof String.prototype.endsWith !== 'function') {
+if (typeof String.prototype.endsWith !== "function") {
     String.prototype.endsWith = function (suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
@@ -59,12 +59,12 @@ function NewRegistrar() {
     // version of this function.
     switch (arguments.length) {
         case 1:
-            return oldNewRegistrar(arguments[0], '-');
+            return oldNewRegistrar(arguments[0], "-");
         case 2:
             // x = NewRegistrar("myThing", "THING")
             // x = NewRegistrar("myThing", { metakey: metavalue } )
-            if (typeof arguments[1] === 'object') {
-                return oldNewRegistrar(arguments[0], '-', arguments[1]);
+            if (typeof arguments[1] === "object") {
+                return oldNewRegistrar(arguments[0], "-", arguments[1]);
             }
             break;
         default: // do nothing
@@ -73,7 +73,7 @@ function NewRegistrar() {
 }
 function oldNewRegistrar(name, type, meta) {
     if (type) {
-        type == 'MANUAL';
+        type == "MANUAL";
     }
     var reg = { name: name, type: type, meta: meta };
     conf.registrars.push(reg);
@@ -85,12 +85,12 @@ function NewDnsProvider(name, type, meta) {
     // version of this function.
     switch (arguments.length) {
         case 1:
-            return oldNewDnsProvider(arguments[0], '-');
+            return oldNewDnsProvider(arguments[0], "-");
         case 2:
             // x = NewDnsProvider("myThing", "THING")
             // x = NewDnsProvider("myThing", { metakey: metavalue } )
-            if (typeof arguments[1] === 'object') {
-                return oldNewDnsProvider(arguments[0], '-', arguments[1]);
+            if (typeof arguments[1] === "object") {
+                return oldNewDnsProvider(arguments[0], "-", arguments[1]);
             }
             break;
         default: // do nothing
@@ -98,7 +98,7 @@ function NewDnsProvider(name, type, meta) {
     return oldNewDnsProvider.apply(null, arguments);
 }
 function oldNewDnsProvider(name, type, meta) {
-    if (typeof meta === 'object' && 'ip_conversions' in meta) {
+    if (typeof meta === "object" && "ip_conversions" in meta) {
         meta.ip_conversions = format_tt(meta.ip_conversions);
     }
     var dsp = { name: name, type: type, meta: meta };
@@ -109,7 +109,7 @@ function oldNewDnsProvider(name, type, meta) {
 function newDomain(name, registrar) {
     return {
         name: name,
-        subdomain: '',
+        subdomain: "",
         registrar: registrar,
         meta: {},
         rawrecords: [],
@@ -136,9 +136,9 @@ function processDargs(m, domain) {
         _.extend(domain.meta, m);
     } else {
         throw (
-            'WARNING: domain modifier type unsupported: ' +
+            "WARNING: domain modifier type unsupported: " +
             typeof m +
-            ' Domain: ' +
+            " Domain: " +
             domain.name
         );
     }
@@ -163,9 +163,9 @@ function D(name, registrar) {
     var tagWasRemoved = withoutEmptyTag[1];
 
     if (conf.domain_names.indexOf(name) !== -1) {
-        var message = name + ' is declared more than once';
+        var message = name + " is declared more than once";
         if (tagWasRemoved) {
-            message += ' (check empty tags)';
+            message += " (check empty tags)";
         }
         throw message;
     }
@@ -178,7 +178,7 @@ function INCLUDE(name) {
     if (domain == null) {
         throw (
             name +
-            ' was not declared yet and therefore cannot be updated. Use D() before.'
+            " was not declared yet and therefore cannot be updated. Use D() before."
         );
     }
     return function (d) {
@@ -195,13 +195,13 @@ function D_EXTEND(name) {
     if (domain == null) {
         throw (
             name +
-            ' was not declared yet and therefore cannot be updated. Use D() before.'
+            " was not declared yet and therefore cannot be updated. Use D() before."
         );
     }
 
     // Handle weird REV() case.
-    if (name.indexOf('/') !== -1) {
-        name = name.substring(name.indexOf('.') + 1);
+    if (name.indexOf("/") !== -1) {
+        name = name.substring(name.indexOf(".") + 1);
     }
 
     domain.obj.subdomain = name.substr(
@@ -219,7 +219,7 @@ function D_EXTEND(name) {
 // _removeEmptyTag(domain): Remove empty tag.
 function _removeEmptyTag(name) {
     var tagWasRemoved = false;
-    if (name.slice(-1) === '!') {
+    if (name.slice(-1) === "!") {
         name = name.slice(0, name.length - 1);
         tagWasRemoved = true;
     }
@@ -236,12 +236,12 @@ function _getDomainObject(name) {
     var domain = null;
     var domainLen = 0;
     for (var i = 0; i < conf.domains.length; i++) {
-        var thisName = conf.domains[i]['name'];
+        var thisName = conf.domains[i]["name"];
         // check for empty tag
         var thisNameTrimmedTag = _removeEmptyTag(thisName);
         thisName = thisNameTrimmedTag[0];
 
-        var desiredSuffix = '.' + thisName;
+        var desiredSuffix = "." + thisName;
         var foundSuffix = name.substr(-desiredSuffix.length);
         // If this is an exact match or the suffix matches...
         if (name === thisName || foundSuffix === desiredSuffix) {
@@ -277,18 +277,18 @@ function TTL(v) {
 function stringToDuration(v) {
     var matches = v.match(/^(\d+)([smhdwny]?)$/);
     if (matches == null) {
-        throw v + ' is not a valid duration string';
+        throw v + " is not a valid duration string";
     }
-    unit = 's';
+    unit = "s";
     if (matches[2]) {
         unit = matches[2];
     }
     v = parseInt(matches[1]);
     var u = { s: 1, m: 60, h: 3600 };
-    u['d'] = u.h * 24;
-    u['w'] = u.d * 7;
-    u['n'] = u.d * 30;
-    u['y'] = u.d * 365;
+    u["d"] = u.h * 24;
+    u["w"] = u.d * 7;
+    u["n"] = u.d * 30;
+    u["y"] = u.d * 365;
     v *= u[unit];
     return v;
 }
@@ -329,7 +329,7 @@ function caaOptions(record, processedArgs) {
 // nsCount of 0 means don't use or register any nameservers.
 // nsCount not provider means use all.
 function DnsProvider(name, nsCount) {
-    if (typeof nsCount === 'undefined') {
+    if (typeof nsCount === "undefined") {
         nsCount = -1;
     }
     return function (d) {
@@ -381,7 +381,7 @@ function validateAzureAliasType(value) {
     if (!_.isString(value)) {
         return false;
     }
-    return ['A', 'AAAA', 'CNAME'].indexOf(value) !== -1;
+    return ["A", "AAAA", "CNAME"].indexOf(value) !== -1;
 }
 
 // R53_ZONE(zone_id)
@@ -391,7 +391,7 @@ function R53_ZONE(zone_id) {
             r.meta.zone_id = zone_id;
             //console.debug("R53_Opt store zoneid in domainmeta", zone_id);
         } else if (_.isObject(r.r53_alias)) {
-            r.r53_alias['zone_id'] = zone_id;
+            r.r53_alias["zone_id"] = zone_id;
             //console.debug("R53_Opt store zoneid in recordr53alias", zone_id);
         } else {
             //console.debug("R53_Opt MAKE  zoneid in recordr53alias", zone_id);
@@ -404,7 +404,7 @@ function R53_ZONE(zone_id) {
 function R53_EVALUATE_TARGET_HEALTH(enabled) {
     return function (r) {
         if (_.isObject(r.r53_alias)) {
-            r.r53_alias['evaluate_target_health'] = enabled.toString();
+            r.r53_alias["evaluate_target_health"] = enabled.toString();
         } else {
             r.r53_alias = { evaluate_target_health: enabled.toString() };
         }
@@ -417,13 +417,13 @@ function r53AliasOptions(record, processedArgs, processedMetas) {
         processedArgs[0],
         processedArgs[1],
         processedArgs[2],
-        '',
-        '',
+        "",
+        "",
     ];
 
     if (_.isObject(record.r53_alias)) {
-        replacement[3] = record.r53_alias['evaluate_target_health'] || 'false';
-        replacement[4] = record.r53_alias['zone_id'] || '';
+        replacement[3] = record.r53_alias["evaluate_target_health"] || "false";
+        replacement[4] = record.r53_alias["zone_id"] || "";
     }
 
     return replacement;
@@ -433,30 +433,30 @@ function r53AliasOptions(record, processedArgs, processedMetas) {
 // weight: integer 0-255, set_identifier: unique string within the weighted group.
 function R53_WEIGHT(weight, set_identifier) {
     if (!_.isNumber(weight) || weight < 0 || weight > 255) {
-        throw 'R53_WEIGHT: weight must be a number between 0 and 255';
+        throw "R53_WEIGHT: weight must be a number between 0 and 255";
     }
-    if (!_.isString(set_identifier) || set_identifier === '') {
-        throw 'R53_WEIGHT: set_identifier must be a non-empty string';
+    if (!_.isString(set_identifier) || set_identifier === "") {
+        throw "R53_WEIGHT: set_identifier must be a non-empty string";
     }
     return function (r) {
         if (!_.isObject(r.meta)) {
             r.meta = {};
         }
-        r.meta['r53_weight'] = weight.toString();
-        r.meta['r53_set_identifier'] = set_identifier;
+        r.meta["r53_weight"] = weight.toString();
+        r.meta["r53_set_identifier"] = set_identifier;
     };
 }
 
 // R53_HEALTH_CHECK_ID(health_check_id) associates a Route 53 health check with the record.
 function R53_HEALTH_CHECK_ID(health_check_id) {
-    if (!_.isString(health_check_id) || health_check_id === '') {
-        throw 'R53_HEALTH_CHECK_ID: health_check_id must be a non-empty string';
+    if (!_.isString(health_check_id) || health_check_id === "") {
+        throw "R53_HEALTH_CHECK_ID: health_check_id must be a non-empty string";
     }
     return function (r) {
         if (!_.isObject(r.meta)) {
             r.meta = {};
         }
-        r.meta['r53_health_check_id'] = health_check_id;
+        r.meta["r53_health_check_id"] = health_check_id;
     };
 }
 
@@ -466,22 +466,22 @@ function validateR53AliasType(value) {
     }
     return (
         [
-            'SOA',
-            'A',
-            'TXT',
-            'CNAME',
-            'MX',
-            'NAPTR',
-            'PTR',
-            'SRV',
-            'SPF',
-            'AAAA',
-            'CAA',
-            'DS',
-            'TLSA',
-            'SSHFP',
-            'SVCB',
-            'HTTPS',
+            "SOA",
+            "A",
+            "TXT",
+            "CNAME",
+            "MX",
+            "NAPTR",
+            "PTR",
+            "SRV",
+            "SPF",
+            "AAAA",
+            "CAA",
+            "DS",
+            "TLSA",
+            "SSHFP",
+            "SVCB",
+            "HTTPS",
         ].indexOf(value) !== -1
     );
 }
@@ -606,39 +606,39 @@ function locStringBuilder(record, args) {
     // it is a good sanity check to compare with later on down the chain
     // when you're in the weeds with maths.
     // Tests depend on it being present. Changes here must reflect in tests.
-    nsstring = '';
-    ewstring = '';
-    precisionbuffer = '';
+    nsstring = "";
+    ewstring = "";
+    precisionbuffer = "";
     ns = args.ns.toUpperCase();
     ew = args.ew.toUpperCase();
 
     // Handle N/S coords - can use also s1.toFixed(3)
     nsstring =
         args.d1.toString() +
-        ' ' +
+        " " +
         args.m1.toString() +
-        ' ' +
+        " " +
         args.s1.toString() +
-        ' ';
+        " ";
     var nsmatches = args.ns.match(/^([NnSs])$/);
     if (nsmatches == null) {
-        throw v + ' is not a valid latitude modifier';
+        throw v + " is not a valid latitude modifier";
     } else {
-        nsstring += ns + ' ';
+        nsstring += ns + " ";
     }
     // Handle E/W coords - can use also s2.toFixed(3)
     ewstring =
         args.d2.toString() +
-        ' ' +
+        " " +
         args.m2.toString() +
-        ' ' +
+        " " +
         args.s2.toString() +
-        ' ';
+        " ";
     var nsmatches = args.ew.match(/^([EeWw])$/);
     if (nsmatches == null) {
-        throw v + ' is not a valid longitude modifier';
+        throw v + " is not a valid longitude modifier";
     } else {
-        ewstring += ew + ' ';
+        ewstring += ew + " ";
     }
 
     // handle altitude, size, horizontal precision, vertical precision
@@ -649,23 +649,23 @@ function locStringBuilder(record, args) {
             ? -100000
             : args.alt > 42849672.95
               ? 42849672.95
-              : args.alt.toString()) + 'm';
+              : args.alt.toString()) + "m";
     precisionbuffer +=
-        ' ' +
+        " " +
         (args.siz > 90000000
             ? 90000000
             : args.siz < 0
               ? 0
               : args.siz.toString()) +
-        'm';
+        "m";
     precisionbuffer +=
-        ' ' +
+        " " +
         (args.hp > 90000000 ? 90000000 : args.hp < 0 ? 0 : args.hp.toString()) +
-        'm';
+        "m";
     precisionbuffer +=
-        ' ' +
+        " " +
         (args.vp > 90000000 ? 90000000 : args.vp < 0 ? 0 : args.vp.toString()) +
-        'm';
+        "m";
 
     record.target = nsstring + ewstring + precisionbuffer;
 
@@ -683,10 +683,10 @@ function locDMSBuilder(record, args) {
 
     lat = args.d1 * LOCDegrees + args.m1 * LOCHours + args.s1 * 1000;
     lon = args.d2 * LOCDegrees + args.m2 * LOCHours + args.s2 * 1000;
-    if (ns == 'N') record.loclatitude = LOCEquator + lat;
+    if (ns == "N") record.loclatitude = LOCEquator + lat;
     // S
     else record.loclatitude = LOCEquator - lat;
-    if (ew == 'E') record.loclongitude = LOCPrimeMeridian + lon;
+    if (ew == "E") record.loclongitude = LOCPrimeMeridian + lon;
     // W
     else record.loclongitude = LOCPrimeMeridian - lon;
     // Altitude
@@ -717,11 +717,11 @@ function validateIntegers(args) {
             args.name +
             "': *" +
             args.d1 +
-            '*, ' +
+            "*, " +
             args.m1 +
-            ', ' +
+            ", " +
             args.s1 +
-            ', ...'
+            ", ..."
         );
     }
     if (args.m1 % 1 !== 0) {
@@ -730,11 +730,11 @@ function validateIntegers(args) {
             args.name +
             "': " +
             args.d1 +
-            ', *' +
+            ", *" +
             args.m1 +
-            '*, ' +
+            "*, " +
             args.s1 +
-            ', ...'
+            ", ..."
         );
     }
     if (args.d2 % 1 !== 0) {
@@ -743,11 +743,11 @@ function validateIntegers(args) {
             args.name +
             "': *" +
             args.d2 +
-            '*, ' +
+            "*, " +
             args.m2 +
-            ', ' +
+            ", " +
             args.s2 +
-            ', ...'
+            ", ..."
         );
     }
     if (args.m2 % 1 !== 0) {
@@ -756,11 +756,11 @@ function validateIntegers(args) {
             args.name +
             "': " +
             args.d2 +
-            ', *' +
+            ", *" +
             args.m2 +
-            '*, ' +
+            "*, " +
             args.s2 +
-            ', ...'
+            ", ..."
         );
     }
 }
@@ -768,7 +768,7 @@ function validateIntegers(args) {
 function ConvertDDToDMS(D, longitude) {
     //stackoverflow, baby. do not re-order the rows.
     return {
-        hemi: D < 0 ? (longitude ? 'W' : 'S') : longitude ? 'E' : 'N',
+        hemi: D < 0 ? (longitude ? "W" : "S") : longitude ? "E" : "N",
         dg: 0 | (D < 0 ? (D = -D) : D),
         mn: 0 | (((D += 1e-9) % 1) * 60),
         sc: (0 | (((D * 60) % 1) * 60000)) / 1000,
@@ -778,7 +778,7 @@ function ConvertDDToDMS(D, longitude) {
 // NAMESERVER(name,target)
 function NAMESERVER(name) {
     if (arguments.length != 1) {
-        throw 'NAMESERVER only accepts one argument for name.';
+        throw "NAMESERVER only accepts one argument for name.";
     }
     return function (d) {
         d.nameservers.push({ name: name });
@@ -804,7 +804,7 @@ function format_tt(transform_table) {
             if (_.isArray(newIP)) {
                 newIP = _.map(newIP, function (i) {
                     return num2dot(i);
-                }).join(',');
+                }).join(",");
             } else {
                 newIP = num2dot(newIP);
             }
@@ -814,15 +814,15 @@ function format_tt(transform_table) {
             if (_.isArray(newBase)) {
                 newBase = _.map(newBase, function (i) {
                     return num2dot(i);
-                }).join(',');
+                }).join(",");
             } else {
                 newBase = num2dot(newBase);
             }
         }
         var row = [num2dot(ip.low), num2dot(ip.high), newBase, newIP];
-        lines.push(row.join(' ~ '));
+        lines.push(row.join(" ~ "));
     }
-    return lines.join(' ; ');
+    return lines.join(" ; ");
 }
 
 //function UNMANAGED(label_pattern, rType_pattern, target_pattern) {
@@ -847,13 +847,13 @@ function DISABLE_IGNORE_SAFETY_CHECK(d) {
 // IGNORE(labelPattern, rtypePattern, targetPattern)
 function IGNORE(labelPattern, rtypePattern, targetPattern) {
     if (labelPattern === undefined) {
-        labelPattern = '*';
+        labelPattern = "*";
     }
     if (rtypePattern === undefined) {
-        rtypePattern = '*';
+        rtypePattern = "*";
     }
     if (targetPattern === undefined) {
-        targetPattern = '*';
+        targetPattern = "*";
     }
     return function (d) {
         d.unmanaged.push({
@@ -870,7 +870,7 @@ function IGNORE_NAME(name, rTypes) {
 }
 
 function IGNORE_TARGET(target, rType) {
-    return IGNORE('*', rType, target);
+    return IGNORE("*", rType, target);
 }
 
 // IMPORT_TRANSFORM(translation_table, domain, ttl)
@@ -879,13 +879,13 @@ function importTransformOptions(record, processedArgs) {
         processedArgs[0],
         processedArgs[1],
         processedArgs[3],
-        processedArgs.length === 5 ? processedArgs[4] : '',
+        processedArgs.length === 5 ? processedArgs[4] : "",
         processedArgs[2],
     ];
 }
 
 var importTransformRawBuilder = rawrecordBuilder(
-    'IMPORT_TRANSFORM',
+    "IMPORT_TRANSFORM",
     true,
     importTransformOptions
 );
@@ -954,14 +954,14 @@ function ENSURE_ABSENT_REC() {
 // "on"   Enable AUTODNSSEC for this domain
 // "off"  Disable AUTODNSSEC for this domain
 function AUTODNSSEC_ON(d) {
-    d.auto_dnssec = 'on';
+    d.auto_dnssec = "on";
 }
 function AUTODNSSEC_OFF(d) {
-    d.auto_dnssec = 'off';
+    d.auto_dnssec = "off";
 }
 function AUTODNSSEC(d) {
     console.log(
-        'WARNING: AUTODNSSEC is deprecated. It is now a no-op.  Please use AUTODNSSEC_ON or AUTODNSSEC_OFF. The default is to make no modifications. This message will disappear in a future release.'
+        "WARNING: AUTODNSSEC is deprecated. It is now a no-op.  Please use AUTODNSSEC_ON or AUTODNSSEC_OFF. The default is to make no modifications. This message will disappear in a future release."
     );
 }
 
@@ -979,14 +979,14 @@ function getModifiers(args, start) {
 // ip conversion functions from http://stackoverflow.com/a/8105740/121660
 // via http://javascript.about.com/library/blipconvert.htm
 function IP(dot) {
-    var d = dot.split('.');
+    var d = dot.split(".");
     // prettier-ignore
     return ((((((+d[0]) * 256) + (+d[1])) * 256) + (+d[2])) * 256) + (+d[3]);
 }
 
 function num2dot(num) {
     if (num === undefined) {
-        return '';
+        return "";
     }
     if (_.isString(num)) {
         return num;
@@ -994,7 +994,7 @@ function num2dot(num) {
     var d = num % 256;
     for (var i = 3; i > 0; i--) {
         num = Math.floor(num / 256);
-        d = (num % 256) + '.' + d;
+        d = (num % 256) + "." + d;
     }
     return d;
 }
@@ -1002,42 +1002,42 @@ function num2dot(num) {
 // Cloudflare aliases:
 
 // Meta settings for individual records.
-var CF_PROXY_OFF = { cloudflare_proxy: 'off' }; // Proxy disabled.
-var CF_PROXY_ON = { cloudflare_proxy: 'on' }; // Proxy enabled.
-var CF_PROXY_FULL = { cloudflare_proxy: 'full' }; // Proxy+Railgun enabled.
-var CF_CNAME_FLATTEN_OFF = { cloudflare_cname_flatten: 'off' }; // CNAME flattening disabled (default).
-var CF_CNAME_FLATTEN_ON = { cloudflare_cname_flatten: 'on' }; // CNAME flattening enabled (paid plans only).
+var CF_PROXY_OFF = { cloudflare_proxy: "off" }; // Proxy disabled.
+var CF_PROXY_ON = { cloudflare_proxy: "on" }; // Proxy enabled.
+var CF_PROXY_FULL = { cloudflare_proxy: "full" }; // Proxy+Railgun enabled.
+var CF_CNAME_FLATTEN_OFF = { cloudflare_cname_flatten: "off" }; // CNAME flattening disabled (default).
+var CF_CNAME_FLATTEN_ON = { cloudflare_cname_flatten: "on" }; // CNAME flattening enabled (paid plans only).
 // Per-domain meta settings:
 // Proxy default off for entire domain (the default):
-var CF_PROXY_DEFAULT_OFF = { cloudflare_proxy_default: 'off' };
+var CF_PROXY_DEFAULT_OFF = { cloudflare_proxy_default: "off" };
 // Proxy default on for entire domain:
-var CF_PROXY_DEFAULT_ON = { cloudflare_proxy_default: 'on' };
+var CF_PROXY_DEFAULT_ON = { cloudflare_proxy_default: "on" };
 // UniversalSSL off for entire domain:
-var CF_UNIVERSALSSL_OFF = { cloudflare_universalssl: 'off' };
+var CF_UNIVERSALSSL_OFF = { cloudflare_universalssl: "off" };
 // UniversalSSL on for entire domain:
-var CF_UNIVERSALSSL_ON = { cloudflare_universalssl: 'on' };
+var CF_UNIVERSALSSL_ON = { cloudflare_universalssl: "on" };
 // Per-record comment (works on all plans):
 function CF_COMMENT(comment) {
     return { cloudflare_comment: comment };
 }
 // Per-record tags (requires paid plan):
 function CF_TAGS() {
-    return { cloudflare_tags: Array.prototype.slice.call(arguments).join(',') };
+    return { cloudflare_tags: Array.prototype.slice.call(arguments).join(",") };
 }
 // Enable comment management for domain (opt-in to sync comments):
-var CF_MANAGE_COMMENTS = { cloudflare_manage_comments: 'true' };
+var CF_MANAGE_COMMENTS = { cloudflare_manage_comments: "true" };
 // Enable tag management for domain (opt-in to sync tags, requires paid plan):
-var CF_MANAGE_TAGS = { cloudflare_manage_tags: 'true' };
+var CF_MANAGE_TAGS = { cloudflare_manage_tags: "true" };
 
 // Hurricane Electric DNS (HEDNS) aliases:
 
 // Enable Dynamic DNS on a record (preserves existing DDNS key):
-var HEDNS_DYNAMIC_ON = { hedns_dynamic: 'on' };
+var HEDNS_DYNAMIC_ON = { hedns_dynamic: "on" };
 // Disable Dynamic DNS on a record (WARNING: clears the associated DDNS key):
-var HEDNS_DYNAMIC_OFF = { hedns_dynamic: 'off' };
+var HEDNS_DYNAMIC_OFF = { hedns_dynamic: "off" };
 // Set a specific DDNS key on a dynamic record (implies HEDNS_DYNAMIC_ON):
 function HEDNS_DDNS_KEY(key) {
-    return { hedns_dynamic: 'on', hedns_ddns_key: key };
+    return { hedns_dynamic: "on", hedns_ddns_key: key };
 }
 
 // Gidinet aliases:
@@ -1054,11 +1054,11 @@ function HEDNS_DDNS_KEY(key) {
 //   );
 function GIDINET_PREMIUM_NS() {
     return [
-        NAMESERVER('dns1.gidinet.com.'),
-        NAMESERVER('dns2.gidinet.com.'),
-        NAMESERVER('dns3.gidinet.com.'),
-        NAMESERVER('dns4.gidinet.com.'),
-        NAMESERVER('dns5.gidinet.com.'),
+        NAMESERVER("dns1.gidinet.com."),
+        NAMESERVER("dns2.gidinet.com."),
+        NAMESERVER("dns3.gidinet.com."),
+        NAMESERVER("dns4.gidinet.com."),
+        NAMESERVER("dns5.gidinet.com."),
     ];
 }
 
@@ -1071,11 +1071,11 @@ function GIDINET_PREMIUM_NS() {
 
 function LOC_BUILDER_DD(value) {
     if (!value.x && !value.y) {
-        throw 'LOC_BUILDER_DD requires x and y elements';
+        throw "LOC_BUILDER_DD requires x and y elements";
     }
 
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     var lati = ConvertDDToDMS(value.x, false);
@@ -1094,11 +1094,11 @@ function LOC_BUILDER_DD(value) {
 
 function LOC_BUILDER_DMM_STR(value) {
     if (!value.str) {
-        throw 'LOC_BUILDER_DMM_STR requires a string of the form 25.24°S 153.15°E';
+        throw "LOC_BUILDER_DMM_STR requires a string of the form 25.24°S 153.15°E";
     }
 
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     var dms = parseDMMCoordinatesString(value.str);
@@ -1114,11 +1114,11 @@ function LOC_BUILDER_DMM_STR(value) {
 
 function LOC_BUILDER_DMS_STR(value) {
     if (!value.str) {
-        throw 'LOC_BUILDER_DMS_STR requires a string of the form 33°51′31″S 151°12′51″Es (or 33°51\'31"S 151°12\'51"Es)';
+        throw "LOC_BUILDER_DMS_STR requires a string of the form 33°51′31″S 151°12′51″Es (or 33°51'31\"S 151°12'51\"Es)";
     }
 
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     var dms = parseDMSCoordinatesString(value.str);
@@ -1134,11 +1134,11 @@ function LOC_BUILDER_DMS_STR(value) {
 
 function LOC_BUILDER_STR(value) {
     if (!value.str) {
-        throw 'LOC_BUILDER_STR requires a string';
+        throw "LOC_BUILDER_STR requires a string";
     }
 
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     var dms = parseDMMCoordinatesString(value.str);
@@ -1251,24 +1251,24 @@ function LOC_builder_push(value, dms) {
 
 function SPF_BUILDER(value) {
     if (!value.parts || value.parts.length < 2) {
-        throw 'SPF_BUILDER requires at least 2 elements';
+        throw "SPF_BUILDER requires at least 2 elements";
     }
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
-    if (!value.raw && value.raw !== '') {
-        value.raw = '_rawspf';
+    if (!value.raw && value.raw !== "") {
+        value.raw = "_rawspf";
     }
 
     r = []; // The list of records to return.
     p = {}; // The metaparameters to set on the main TXT record.
-    rawspf = value.parts.join(' '); // The unaltered SPF settings.
+    rawspf = value.parts.join(" "); // The unaltered SPF settings.
 
     // If flattening is requested, generate a TXT record with the raw SPF settings.
     if (value.flatten && value.flatten.length > 0) {
-        p.flatten = value.flatten.join(',');
+        p.flatten = value.flatten.join(",");
         // Only add the raw spf record if it isn't an empty string
-        if (value.raw !== '') {
+        if (value.raw !== "") {
             rp = {};
             if (value.ttl) {
                 r.push(TXT(value.raw, rawspf, rp, TTL(value.ttl)));
@@ -1292,7 +1292,7 @@ function SPF_BUILDER(value) {
     }
 
     if (value.keepIgnoredRedirects) {
-        p.keepIgnoredRedirects = 'true';
+        p.keepIgnoredRedirects = "true";
     }
 
     // Generate a TXT record with the metaparameters.
@@ -1321,13 +1321,13 @@ function SPF_BUILDER(value) {
 
 function CAA_BUILDER(value) {
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
-    if (value.issue && value.issue == 'none') value.issue = [';'];
-    if (value.issuewild && value.issuewild == 'none') value.issuewild = [';'];
-    if (value.issuevmc && value.issuevmc == 'none') value.issuevmc = [';'];
-    if (value.issuemail && value.issuemail == 'none') value.issuemail = [';'];
+    if (value.issue && value.issue == "none") value.issue = [";"];
+    if (value.issuewild && value.issuewild == "none") value.issuewild = [";"];
+    if (value.issuevmc && value.issuevmc == "none") value.issuevmc = [";"];
+    if (value.issuemail && value.issuemail == "none") value.issuemail = [";"];
 
     if (
         (!value.issue &&
@@ -1343,7 +1343,7 @@ function CAA_BUILDER(value) {
             value.issuemail &&
             value.issuemail.length == 0)
     ) {
-        throw 'CAA_BUILDER requires at least one entry at issue, issuewild, issuevmc or issuemail';
+        throw "CAA_BUILDER requires at least one entry at issue, issuewild, issuevmc or issuemail";
     }
 
     var CAA_TTL = function () {};
@@ -1355,10 +1355,10 @@ function CAA_BUILDER(value) {
     if (value.iodef) {
         if (value.iodef_critical) {
             r.push(
-                CAA(value.label, 'iodef', value.iodef, CAA_CRITICAL, CAA_TTL)
+                CAA(value.label, "iodef", value.iodef, CAA_CRITICAL, CAA_TTL)
             );
         } else {
-            r.push(CAA(value.label, 'iodef', value.iodef, CAA_TTL));
+            r.push(CAA(value.label, "iodef", value.iodef, CAA_TTL));
         }
     }
 
@@ -1368,7 +1368,7 @@ function CAA_BUILDER(value) {
             flag = CAA_CRITICAL;
         }
         for (var i = 0, len = value.issue.length; i < len; i++)
-            r.push(CAA(value.label, 'issue', value.issue[i], flag, CAA_TTL));
+            r.push(CAA(value.label, "issue", value.issue[i], flag, CAA_TTL));
     }
 
     if (value.issuewild) {
@@ -1378,7 +1378,7 @@ function CAA_BUILDER(value) {
         }
         for (var i = 0, len = value.issuewild.length; i < len; i++)
             r.push(
-                CAA(value.label, 'issuewild', value.issuewild[i], flag, CAA_TTL)
+                CAA(value.label, "issuewild", value.issuewild[i], flag, CAA_TTL)
             );
     }
 
@@ -1389,7 +1389,7 @@ function CAA_BUILDER(value) {
         }
         for (var i = 0, len = value.issuevmc.length; i < len; i++)
             r.push(
-                CAA(value.label, 'issuevmc', value.issuevmc[i], flag, CAA_TTL)
+                CAA(value.label, "issuevmc", value.issuevmc[i], flag, CAA_TTL)
             );
     }
 
@@ -1400,7 +1400,7 @@ function CAA_BUILDER(value) {
         }
         for (var i = 0, len = value.issuemail.length; i < len; i++)
             r.push(
-                CAA(value.label, 'issuemail', value.issuemail[i], flag, CAA_TTL)
+                CAA(value.label, "issuemail", value.issuemail[i], flag, CAA_TTL)
             );
     }
 
@@ -1419,8 +1419,8 @@ function CAA_BUILDER(value) {
  * @returns {string} The DKIM quoted-printable encoded string.
  */
 function _encodeDKIMQuotedPrintable(str) {
-    var hexChars = '0123456789ABCDEF'.split('');
-    var result = '';
+    var hexChars = "0123456789ABCDEF".split("");
+    var result = "";
 
     for (var i = 0; i < str.length; i++) {
         var charCode = str.charCodeAt(i);
@@ -1432,7 +1432,7 @@ function _encodeDKIMQuotedPrintable(str) {
             charCode > 0x7f
         ) {
             result +=
-                '=' + hexChars[(charCode >>> 4) & 15] + hexChars[charCode & 15];
+                "=" + hexChars[(charCode >>> 4) & 15] + hexChars[charCode & 15];
         } else {
             result += str.charAt(i);
         }
@@ -1474,9 +1474,9 @@ function DKIM_BUILDER(value) {
 
     // Apply defaults using _.defaults()
     value = _.defaults(value, {
-        version: 'DKIM1',
-        pubkey: '',
-        label: '@',
+        version: "DKIM1",
+        pubkey: "",
+        label: "@",
     });
 
     // Normalize string|array fields to always be arrays
@@ -1501,25 +1501,25 @@ function DKIM_BUILDER(value) {
     // ========================================
 
     // Static allowed values
-    var ALLOWED_VERSIONS = ['DKIM1'];
-    var ALLOWED_KEYTYPES = ['rsa', 'ed25519'];
+    var ALLOWED_VERSIONS = ["DKIM1"];
+    var ALLOWED_KEYTYPES = ["rsa", "ed25519"];
     var ALLOWED_HASHTYPES = {
-        rsa: ['sha1', 'sha256'],
-        ed25519: ['sha256'],
+        rsa: ["sha1", "sha256"],
+        ed25519: ["sha256"],
     };
-    var ALLOWED_SERVICETYPES = ['*', 'email'];
-    var ALLOWED_FLAGS = ['y', 's'];
+    var ALLOWED_SERVICETYPES = ["*", "email"];
+    var ALLOWED_FLAGS = ["y", "s"];
 
     // Required fields
     if (_.isEmpty(value.selector)) {
-        throw 'DKIM_BUILDER selector cannot be empty';
+        throw "DKIM_BUILDER selector cannot be empty";
     }
 
     // Version validation
     if (!_.contains(ALLOWED_VERSIONS, value.version)) {
         throw (
-            'DKIM_BUILDER version must be one of: ' +
-            ALLOWED_VERSIONS.join(', ')
+            "DKIM_BUILDER version must be one of: " +
+            ALLOWED_VERSIONS.join(", ")
         );
     }
 
@@ -1529,24 +1529,24 @@ function DKIM_BUILDER(value) {
         !_.contains(ALLOWED_KEYTYPES, value.keytype)
     ) {
         throw (
-            'DKIM_BUILDER keytype must be one of: ' +
-            ALLOWED_KEYTYPES.join(', ') +
-            ', ' +
+            "DKIM_BUILDER keytype must be one of: " +
+            ALLOWED_KEYTYPES.join(", ") +
+            ", " +
             value.keytype +
-            ' given'
+            " given"
         );
     }
 
     // Hashtypes validation (now always an array after normalization)
     if (!_.isEmpty(value.hashtypes)) {
-        var allowedHashtypes = ALLOWED_HASHTYPES[value.keytype || 'rsa'];
+        var allowedHashtypes = ALLOWED_HASHTYPES[value.keytype || "rsa"];
         var invalidHashtypes = _.difference(value.hashtypes, allowedHashtypes);
         if (invalidHashtypes.length > 0) {
             throw (
-                'DKIM_BUILDER hashtypes for ' +
+                "DKIM_BUILDER hashtypes for " +
                 value.keytype +
-                ' must be one of: ' +
-                allowedHashtypes.join(', ')
+                " must be one of: " +
+                allowedHashtypes.join(", ")
             );
         }
     }
@@ -1559,8 +1559,8 @@ function DKIM_BUILDER(value) {
         );
         if (invalidServicetypes.length > 0) {
             throw (
-                'DKIM_BUILDER servicetypes must be one of: ' +
-                ALLOWED_SERVICETYPES.join(', ')
+                "DKIM_BUILDER servicetypes must be one of: " +
+                ALLOWED_SERVICETYPES.join(", ")
             );
         }
     }
@@ -1570,7 +1570,7 @@ function DKIM_BUILDER(value) {
         var invalidFlags = _.difference(value.flags, ALLOWED_FLAGS);
         if (invalidFlags.length > 0) {
             throw (
-                'DKIM_BUILDER flags must be one of: ' + ALLOWED_FLAGS.join(', ')
+                "DKIM_BUILDER flags must be one of: " + ALLOWED_FLAGS.join(", ")
             );
         }
     }
@@ -1582,40 +1582,40 @@ function DKIM_BUILDER(value) {
     // Build record RFC 6376 order: v=, h=, k=, n=, p=, s=, t=
     var record = [];
 
-    record.push('v=' + value.version);
+    record.push("v=" + value.version);
 
     if (value.hashtypes) {
-        record.push('h=' + value.hashtypes.join(':'));
+        record.push("h=" + value.hashtypes.join(":"));
     }
 
     if (value.keytype) {
-        record.push('k=' + value.keytype);
+        record.push("k=" + value.keytype);
     }
 
     if (!_.isEmpty(value.note)) {
-        record.push('n=' + _encodeDKIMQuotedPrintable(value.note));
+        record.push("n=" + _encodeDKIMQuotedPrintable(value.note));
     }
 
-    record.push('p=' + value.pubkey);
+    record.push("p=" + value.pubkey);
 
     if (value.servicetypes) {
-        record.push('s=' + value.servicetypes.join(':'));
+        record.push("s=" + value.servicetypes.join(":"));
     }
 
     if (value.flags) {
-        record.push('t=' + value.flags.join(':'));
+        record.push("t=" + value.flags.join(":"));
     }
 
     // Build label
-    var fullLabel = value.selector + '._domainkey';
-    if (value.label !== '@') {
-        fullLabel += '.' + value.label;
+    var fullLabel = value.selector + "._domainkey";
+    if (value.label !== "@") {
+        fullLabel += "." + value.label;
     }
 
     // Handle TTL
     var DKIM_TTL = value.ttl ? TTL(value.ttl) : function () {};
 
-    return TXT(fullLabel, record.join('; '), DKIM_TTL);
+    return TXT(fullLabel, record.join("; "), DKIM_TTL);
 }
 
 // DMARC_BUILDER takes an object:
@@ -1637,136 +1637,136 @@ function DMARC_BUILDER(value) {
         value = {};
     }
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     if (!value.version) {
-        value.version = 'DMARC1';
+        value.version = "DMARC1";
     }
 
-    var label = '_dmarc';
-    if (value.label !== '@') {
-        label += '.' + value.label;
+    var label = "_dmarc";
+    if (value.label !== "@") {
+        label += "." + value.label;
     }
 
     if (!value.policy) {
-        value.policy = 'none';
+        value.policy = "none";
     }
 
     if (
-        !value.policy === 'none' ||
-        !value.policy === 'quarantine' ||
-        !value.policy === 'reject'
+        !value.policy === "none" ||
+        !value.policy === "quarantine" ||
+        !value.policy === "reject"
     ) {
-        throw 'Invalid DMARC policy';
+        throw "Invalid DMARC policy";
     }
 
     var record = [];
-    record.push('v=' + value.version);
-    record.push('p=' + value.policy);
+    record.push("v=" + value.version);
+    record.push("p=" + value.policy);
 
     // Subdomain policy
     if (
-        !value.subdomainPolicy === 'none' ||
-        !value.subdomainPolicy === 'quarantine' ||
-        !value.subdomainPolicy === 'reject'
+        !value.subdomainPolicy === "none" ||
+        !value.subdomainPolicy === "quarantine" ||
+        !value.subdomainPolicy === "reject"
     ) {
-        throw 'Invalid DMARC subdomain policy';
+        throw "Invalid DMARC subdomain policy";
     }
     if (value.subdomainPolicy) {
-        record.push('sp=' + value.subdomainPolicy);
+        record.push("sp=" + value.subdomainPolicy);
     }
 
     // Nonexistent-Subdomain policy
     if (
-        !value.nonexistentSubdomainPolicy === 'none' ||
-        !value.nonexistentSubdomainPolicy === 'quarantine' ||
-        !value.nonexistentSubdomainPolicy === 'reject'
+        !value.nonexistentSubdomainPolicy === "none" ||
+        !value.nonexistentSubdomainPolicy === "quarantine" ||
+        !value.nonexistentSubdomainPolicy === "reject"
     ) {
-        throw 'Invalid DMARC nonexistent-subdomain policy';
+        throw "Invalid DMARC nonexistent-subdomain policy";
     }
     if (value.nonexistentSubdomainPolicy) {
-        record.push('np=' + value.nonexistentSubdomainPolicy);
+        record.push("np=" + value.nonexistentSubdomainPolicy);
     }
 
     // Alignment DKIM
     if (value.alignmentDKIM) {
         switch (value.alignmentDKIM) {
-            case 'relaxed':
-                value.alignmentDKIM = 'r';
+            case "relaxed":
+                value.alignmentDKIM = "r";
                 break;
-            case 'strict':
-                value.alignmentDKIM = 's';
+            case "strict":
+                value.alignmentDKIM = "s";
                 break;
-            case 'r':
-            case 's':
+            case "r":
+            case "s":
                 break;
             default:
-                throw 'Invalid DMARC DKIM alignment policy';
+                throw "Invalid DMARC DKIM alignment policy";
         }
-        record.push('adkim=' + value.alignmentDKIM);
+        record.push("adkim=" + value.alignmentDKIM);
     }
 
     // Alignment SPF
     if (value.alignmentSPF) {
         switch (value.alignmentSPF) {
-            case 'relaxed':
-                value.alignmentSPF = 'r';
+            case "relaxed":
+                value.alignmentSPF = "r";
                 break;
-            case 'strict':
-                value.alignmentSPF = 's';
+            case "strict":
+                value.alignmentSPF = "s";
                 break;
-            case 'r':
-            case 's':
+            case "r":
+            case "s":
                 break;
             default:
-                throw 'Invalid DMARC DKIM alignment policy';
+                throw "Invalid DMARC DKIM alignment policy";
         }
-        record.push('aspf=' + value.alignmentSPF);
+        record.push("aspf=" + value.alignmentSPF);
     }
 
     // Percentage
     if (value.percent) {
-        record.push('pct=' + value.percent);
-        console.log('WARNING: DMARC pct tag depracated.');
+        record.push("pct=" + value.percent);
+        console.log("WARNING: DMARC pct tag depracated.");
     }
 
     // Aggregate reports
     if (value.rua && value.rua.length > 0) {
-        record.push('rua=' + value.rua.join(','));
+        record.push("rua=" + value.rua.join(","));
     }
 
     // Failure reports
     if (value.ruf && value.ruf.length > 0) {
-        record.push('ruf=' + value.ruf.join(','));
+        record.push("ruf=" + value.ruf.join(","));
     }
 
     // Failure reporting options
     if (value.ruf && value.failureOptions) {
-        var fo = '0';
+        var fo = "0";
         if (_.isObject(value.failureOptions)) {
             if (value.failureOptions.DKIM) {
-                fo = 'd';
+                fo = "d";
             }
             if (value.failureOptions.SPF) {
-                fo = 's';
+                fo = "s";
             }
             if (value.failureOptions.DKIM && value.failureOptions.SPF) {
-                fo = '1';
+                fo = "1";
             }
         } else {
             fo = value.failureOptions;
         }
 
-        if (fo !== '0') {
-            record.push('fo=' + fo);
+        if (fo !== "0") {
+            record.push("fo=" + fo);
         }
     }
 
     // Failure report format
     if (value.ruf && value.failureFormat) {
-        record.push('rf=' + value.failureFormat);
-        console.log('WARNING: DMARC rf tag depracated.');
+        record.push("rf=" + value.failureFormat);
+        console.log("WARNING: DMARC rf tag depracated.");
     }
 
     // Report interval
@@ -1775,37 +1775,37 @@ function DMARC_BUILDER(value) {
             value.reportInterval = stringToDuration(value.reportInterval);
         }
 
-        record.push('ri=' + value.reportInterval);
-        console.log('WARNING: DMARC ri tag depracated.');
+        record.push("ri=" + value.reportInterval);
+        console.log("WARNING: DMARC ri tag depracated.");
     }
 
     // Public Suffix Domain
     if (value.publicSuffixDomain) {
         if (
-            !value.publicSuffixDomain === 'u' ||
-            !value.publicSuffixDomain === 'y' ||
-            !value.publicSuffixDomain === 'n'
+            !value.publicSuffixDomain === "u" ||
+            !value.publicSuffixDomain === "y" ||
+            !value.publicSuffixDomain === "n"
         ) {
-            throw 'Invalid public-suffix-domain tag';
+            throw "Invalid public-suffix-domain tag";
         }
 
-        record.push('psd=' + value.publicSuffixDomain);
+        record.push("psd=" + value.publicSuffixDomain);
     }
 
     // Test mode
 
     if (value.testMode) {
-        if (!value.testMode === 'y' || !value.testMode === 'n') {
-            throw 'Invalid test-mode tag';
+        if (!value.testMode === "y" || !value.testMode === "n") {
+            throw "Invalid test-mode tag";
         }
 
-        record.push('t=' + value.testMode);
+        record.push("t=" + value.testMode);
     }
 
     if (value.ttl) {
-        return TXT(label, record.join('; '), TTL(value.ttl));
+        return TXT(label, record.join("; "), TTL(value.ttl));
     }
-    return TXT(label, record.join('; '));
+    return TXT(label, record.join("; "));
 }
 
 // Documentation of the records: https://learn.microsoft.com/en-us/microsoft-365/enterprise/external-domain-name-system-records?view=o365-worldwide
@@ -1826,21 +1826,21 @@ function M365_BUILDER(name, value) {
     }
 
     if (!value.label) {
-        value.label = '@';
+        value.label = "@";
     }
 
     if (!value.domainGUID) {
         // Does not work with dashes in domain name.
         // Microsoft uses its own, (probably) deterministic algorithm to transform these domains.
         // Unfortunately, underlying algorithm is not known to us.
-        if (name.indexOf('-') !== -1) {
+        if (name.indexOf("-") !== -1) {
             throw (
-                'M365_BUILDER requires domainGUID for domains with dashes: ' +
+                "M365_BUILDER requires domainGUID for domains with dashes: " +
                 name
             );
         }
 
-        value.domainGUID = name.replace(/\./g, '-');
+        value.domainGUID = name.replace(/\./g, "-");
     }
 
     if (value.dkim && !value.initialDomain) {
@@ -1858,20 +1858,20 @@ function M365_BUILDER(name, value) {
             MX(
                 value.label,
                 0,
-                value.domainGUID + '.mail.protection.outlook.com.'
+                value.domainGUID + ".mail.protection.outlook.com."
             )
         );
     }
 
     // Autodiscover (default: true)
     if (value.autodiscover) {
-        if ((value.label = '@')) {
-            r.push(CNAME('autodiscover', 'autodiscover.outlook.com.'));
+        if ((value.label = "@")) {
+            r.push(CNAME("autodiscover", "autodiscover.outlook.com."));
         } else {
             r.push(
                 CNAME(
-                    'autodiscover.' + value.label,
-                    'autodiscover.outlook.com.'
+                    "autodiscover." + value.label,
+                    "autodiscover.outlook.com."
                 )
             );
         }
@@ -1881,38 +1881,38 @@ function M365_BUILDER(name, value) {
     if (value.dkim) {
         r.push(
             CNAME(
-                'selector1._domainkey',
-                'selector1-' +
+                "selector1._domainkey",
+                "selector1-" +
                     value.domainGUID +
-                    '._domainkey.' +
+                    "._domainkey." +
                     value.initialDomain +
-                    '.'
+                    "."
             )
         );
         r.push(
             CNAME(
-                'selector2._domainkey',
-                'selector2-' +
+                "selector2._domainkey",
+                "selector2-" +
                     value.domainGUID +
-                    '._domainkey.' +
+                    "._domainkey." +
                     value.initialDomain +
-                    '.'
+                    "."
             )
         );
     }
 
     // Skype for Business (default: false)
     if (value.skypeForBusiness) {
-        r.push(CNAME('lyncdiscover', 'webdir.online.lync.com.'));
-        r.push(CNAME('sip', 'sipdir.online.lync.com.'));
-        r.push(SRV('_sip._tls', 100, 1, 443, 'sipdir.online.lync.com.'));
+        r.push(CNAME("lyncdiscover", "webdir.online.lync.com."));
+        r.push(CNAME("sip", "sipdir.online.lync.com."));
+        r.push(SRV("_sip._tls", 100, 1, 443, "sipdir.online.lync.com."));
         r.push(
             SRV(
-                '_sipfederationtls._tcp',
+                "_sipfederationtls._tcp",
                 100,
                 1,
                 5061,
-                'sipfed.online.lync.com.'
+                "sipfed.online.lync.com."
             )
         );
     }
@@ -1921,14 +1921,14 @@ function M365_BUILDER(name, value) {
     if (value.mdm) {
         r.push(
             CNAME(
-                'enterpriseregistration',
-                'enterpriseregistration.windows.net.'
+                "enterpriseregistration",
+                "enterpriseregistration.windows.net."
             )
         );
         r.push(
             CNAME(
-                'enterpriseenrollment',
-                'enterpriseenrollment.manage.microsoft.com.'
+                "enterpriseenrollment",
+                "enterpriseenrollment.manage.microsoft.com."
             )
         );
     }
@@ -1945,7 +1945,7 @@ function DKIM(arr) {
 // As the main function (in Go) is in our control anyway, all the values here are already sanity-checked.
 // Note: glob() is only an internal undocumented helper function. So use it on your own risk.
 function require_glob() {
-    arguments[2] = 'js'; // force to only include .js files.
+    arguments[2] = "js"; // force to only include .js files.
     var files = glob.apply(null, arguments);
     for (var i = 0; i < files.length; i++) {
         require(files[i]);
@@ -1956,7 +1956,7 @@ function require_glob() {
 // Set default values for CLI variables
 function CLI_DEFAULTS(defaults) {
     for (var key in defaults) {
-        if (typeof this[key] === 'undefined') {
+        if (typeof this[key] === "undefined") {
             this[key] = defaults[key];
         }
     }
@@ -2005,7 +2005,7 @@ var END = {}; // This is null. It permits the last item to include a comma.
 // Record modifiers:
 
 // Permit labels like "foo.bar.com.bar.com" (normally an error):
-var DISABLE_REPEATED_DOMAIN_CHECK = { skip_fqdn_check: 'true' };
+var DISABLE_REPEATED_DOMAIN_CHECK = { skip_fqdn_check: "true" };
 // D("bar.com", ...
 //     A("foo.bar.com", "10.1.1.1", DISABLE_REPEATED_DOMAIN_CHECK),
 // )
@@ -2031,7 +2031,7 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
     return function () {
         var rawArgs = [];
         if (noLabel !== undefined && noLabel) {
-            rawArgs.push('@');
+            rawArgs.push("@");
         }
         // Copy the raw args locally.
         for (var i = 0; i < arguments.length; i++) {
@@ -2044,7 +2044,7 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
         // out the line number. That's inefficient but I can't find anything better.
         // This will certainly break if we change to a different Javascript interpreter.
         // Hopefully any other interpreter will have a better way to do this.
-        var positionLines = new Error().stack.split('\n');
+        var positionLines = new Error().stack.split("\n");
         var position = positionLines[positionLines.length - 2];
 
         return function (d) {
@@ -2074,7 +2074,7 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
                     // mirroring the legacy recordBuilder. Arrays are never
                     // metadata, so this must be checked before _.isObject()
                     // (which is true for arrays).
-                    processedArgs.push(r.join(''));
+                    processedArgs.push(r.join(""));
                 } else if (_.isObject(r)) {
                     // Convert a transform array to its encoded string form
                     // (see format_tt), mirroring the legacy recordBuilder.
@@ -2127,53 +2127,53 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
 
 // PLEASE KEEP THIS LIST ALPHABETICAL!
 
-var A = rawrecordBuilder('A');
-var AAAA = rawrecordBuilder('AAAA');
+var A = rawrecordBuilder("A");
+var AAAA = rawrecordBuilder("AAAA");
 var ADGUARDHOME_AAAA_PASSTHROUGH = rawrecordBuilder(
-    'ADGUARDHOME_AAAA_PASSTHROUGH'
+    "ADGUARDHOME_AAAA_PASSTHROUGH"
 );
-var ADGUARDHOME_A_PASSTHROUGH = rawrecordBuilder('ADGUARDHOME_A_PASSTHROUGH');
-var AKAMAICDN = rawrecordBuilder('AKAMAICDN');
-var AKAMAITLC = rawrecordBuilder('AKAMAITLC');
-var ALIAS = rawrecordBuilder('ALIAS');
-var AZURE_ALIAS = rawrecordBuilder('AZURE_ALIAS');
-var BUNNY_DNS_PZ = rawrecordBuilder('BUNNY_DNS_PZ');
-var BUNNY_DNS_RDR = rawrecordBuilder('BUNNY_DNS_RDR');
-var CAA = rawrecordBuilder('CAA', false, caaOptions);
-var CF_REDIRECT = rawrecordBuilder('CF_REDIRECT', true);
+var ADGUARDHOME_A_PASSTHROUGH = rawrecordBuilder("ADGUARDHOME_A_PASSTHROUGH");
+var AKAMAICDN = rawrecordBuilder("AKAMAICDN");
+var AKAMAITLC = rawrecordBuilder("AKAMAITLC");
+var ALIAS = rawrecordBuilder("ALIAS");
+var AZURE_ALIAS = rawrecordBuilder("AZURE_ALIAS");
+var BUNNY_DNS_PZ = rawrecordBuilder("BUNNY_DNS_PZ");
+var BUNNY_DNS_RDR = rawrecordBuilder("BUNNY_DNS_RDR");
+var CAA = rawrecordBuilder("CAA", false, caaOptions);
+var CF_REDIRECT = rawrecordBuilder("CF_REDIRECT", true);
 var CF_SINGLE_REDIRECT = rawrecordBuilder(
-    'CLOUDFLAREAPI_SINGLE_REDIRECT',
+    "CLOUDFLAREAPI_SINGLE_REDIRECT",
     true
 );
-var CF_TEMP_REDIRECT = rawrecordBuilder('CF_TEMP_REDIRECT', true);
-var CF_WORKER_ROUTE = rawrecordBuilder('CF_WORKER_ROUTE', true);
-var CLOUDNS_WR = rawrecordBuilder('CLOUDNS_WR');
-var CNAME = rawrecordBuilder('CNAME');
-var DHCID = rawrecordBuilder('DHCID');
-var DNAME = rawrecordBuilder('DNAME');
-var DNSKEY = rawrecordBuilder('DNSKEY');
-var DS = rawrecordBuilder('DS');
-var FRAME = rawrecordBuilder('FRAME');
-var HTTPS = rawrecordBuilder('HTTPS');
-var LOC = rawrecordBuilder('LOC');
-var LUA = rawrecordBuilder('LUA');
-var MIKROTIK_FORWARDER = rawrecordBuilder('MIKROTIK_FORWARDER');
-var MIKROTIK_FWD = rawrecordBuilder('MIKROTIK_FWD');
-var MIKROTIK_NXDOMAIN = rawrecordBuilder('MIKROTIK_NXDOMAIN');
-var MX = rawrecordBuilder('MX');
-var NAPTR = rawrecordBuilder('NAPTR');
-var NS = rawrecordBuilder('NS');
-var OPENPGPKEY = rawrecordBuilder('OPENPGPKEY');
-var PORKBUN_URLFWD = rawrecordBuilder('PORKBUN_URLFWD');
-var PTR = rawrecordBuilder('PTR');
-var R53_ALIAS = rawrecordBuilder('R53_ALIAS', false, r53AliasOptions);
-var RP = rawrecordBuilder('RP');
-var SMIMEA = rawrecordBuilder('SMIMEA');
-var SOA = rawrecordBuilder('SOA');
-var SRV = rawrecordBuilder('SRV');
-var SSHFP = rawrecordBuilder('SSHFP');
-var SVCB = rawrecordBuilder('SVCB');
-var TLSA = rawrecordBuilder('TLSA');
-var TXT = rawrecordBuilder('TXT');
-var URL = rawrecordBuilder('URL');
-var URL301 = rawrecordBuilder('URL301');
+var CF_TEMP_REDIRECT = rawrecordBuilder("CF_TEMP_REDIRECT", true);
+var CF_WORKER_ROUTE = rawrecordBuilder("CF_WORKER_ROUTE", true);
+var CLOUDNS_WR = rawrecordBuilder("CLOUDNS_WR");
+var CNAME = rawrecordBuilder("CNAME");
+var DHCID = rawrecordBuilder("DHCID");
+var DNAME = rawrecordBuilder("DNAME");
+var DNSKEY = rawrecordBuilder("DNSKEY");
+var DS = rawrecordBuilder("DS");
+var FRAME = rawrecordBuilder("FRAME");
+var HTTPS = rawrecordBuilder("HTTPS");
+var LOC = rawrecordBuilder("LOC");
+var LUA = rawrecordBuilder("LUA");
+var MIKROTIK_FORWARDER = rawrecordBuilder("MIKROTIK_FORWARDER");
+var MIKROTIK_FWD = rawrecordBuilder("MIKROTIK_FWD");
+var MIKROTIK_NXDOMAIN = rawrecordBuilder("MIKROTIK_NXDOMAIN");
+var MX = rawrecordBuilder("MX");
+var NAPTR = rawrecordBuilder("NAPTR");
+var NS = rawrecordBuilder("NS");
+var OPENPGPKEY = rawrecordBuilder("OPENPGPKEY");
+var PORKBUN_URLFWD = rawrecordBuilder("PORKBUN_URLFWD");
+var PTR = rawrecordBuilder("PTR");
+var R53_ALIAS = rawrecordBuilder("R53_ALIAS", false, r53AliasOptions);
+var RP = rawrecordBuilder("RP");
+var SMIMEA = rawrecordBuilder("SMIMEA");
+var SOA = rawrecordBuilder("SOA");
+var SRV = rawrecordBuilder("SRV");
+var SSHFP = rawrecordBuilder("SSHFP");
+var SVCB = rawrecordBuilder("SVCB");
+var TLSA = rawrecordBuilder("TLSA");
+var TXT = rawrecordBuilder("TXT");
+var URL = rawrecordBuilder("URL");
+var URL301 = rawrecordBuilder("URL301");
