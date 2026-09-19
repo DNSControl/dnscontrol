@@ -319,7 +319,7 @@ For any other transformation:
 
 1. Set .Type and .TypeNum
 
-2. Create the RDATA using a MakeFOO() function and use the SetRDATA() to store it.  Be sure to use SetDATA() last since it rebuilds any pre-computed strings.
+2. Create the RDATA using a MakeFOO() function and use the SetRDATA() to store it.  Be sure to use SetRDATA() last since it rebuilds any pre-computed strings.
 
 Example:
 
