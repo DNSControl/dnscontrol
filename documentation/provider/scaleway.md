@@ -1,4 +1,4 @@
-# Configuration
+## Configuration
 
 To use this provider, add an entry to `creds.json` with `TYPE` set to `SCALEWAY`
 along with a Scaleway API key (access key + secret key). You can generate one
@@ -54,7 +54,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_SCALEWAY),
 ```
 {% endcode %}
 
-# Activation
+## Activation
 
 DNSControl uses the [Scaleway Domains & DNS API](https://www.scaleway.com/en/developers/api/domains-and-dns/)
 to manage records. You need a Scaleway account with a DNS zone already created
