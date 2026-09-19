@@ -1,78 +1,178 @@
 # Provider conversion golden files
 
+Provider conversion golden tests replay the exact calls made at the boundary
+between a provider's native record type and `models.RecordConfig`, and check the
+result against recorded fixtures. They prove the current conversion code still
+produces the expected output. Replay needs neither credentials nor a `*_DOMAIN`
+variable.
+
+Fixtures live in `providers/<pkg>/test_data`. `pkg/providergolden` records and
+replays them. **`providers/cloudns` is a complete, minimal example**
+(`api.go`, `cloudnsProvider.go`, `convert_golden_test.go`, `test_data/`) — copy it.
+
 - [Provider conversion golden files](#provider-conversion-golden-files)
-  - [Recording](#recording)
+  - [Run the golden tests](#run-the-golden-tests)
+  - [Update the expected output](#update-the-expected-output)
+  - [Record new fixtures](#record-new-fixtures)
   - [Files](#files)
-  - [Intentional output changes](#intentional-output-changes)
-  - [Mutation checks](#mutation-checks)
+  - [Add golden tests to a provider](#add-golden-tests-to-a-provider)
+    - [1. Instrument the provider](#1-instrument-the-provider)
+    - [2. Add the replay tests](#2-add-the-replay-tests)
+    - [3. Hydrate the fixtures](#3-hydrate-the-fixtures)
 
-Provider conversion tests replay the exact calls made at the boundary between a
-provider's native record type and `models.RecordConfig`. The fixtures live in
-`providers/<package>/test_data` and require neither credentials nor a domain
-environment variable when replayed.
+## Run the golden tests
 
-## Recording
+Replay the fixtures to verify the current code still yields the recorded output
+(and that conversions don't mutate their inputs):
 
-Run a known-good integration test with `-record`:
+```shell
+go test ./providers/cloudns/
+```
+
+The `*Golden` tests read `test_data/` and compare. A mismatch is a test
+failure: either the code regressed (fix it), or the output changed on purpose
+(update the fixtures, next).
+
+## Update the expected output
+
+When a conversion's output *should* change, rewrite the expected-output files
+from the current code. `-update` keeps the recorded **inputs** and rewrites only
+the **expected outputs**:
+
+```shell
+go test ./providers/cloudns/ -update
+```
+
+Review the diff before committing. `-update` blesses whatever the code currently
+emits — including a bug — so use it only when the change is intentional. (Flag
+defined in `pkg/providergolden`.)
+
+## Record new fixtures
+
+To create fixtures for the first time, or to refresh both sides, replay a
+known-good integration test with `-record`. Recording writes the input **and**
+its resulting output as a matched pair, so no separate `-update` is needed:
 
 ```shell
 go test -failfast -run TestDNSProviders -v ./integrationTest \
   -args -verbose -profile CLOUDNS -record
 ```
 
-The conversion observer is injected while the provider is constructed. Each
-instrumented conversion reports its input and result. `-record` writes both as
-a matched, indexed pair, so recording does not require a later `-update` step.
-Only check in recordings from successful integration tests.
-
-Use `-recorddir` to override the provider's normal `test_data` directory. A
-relative path is resolved from the repository root.
+The recorder is injected while the provider is constructed; each instrumented
+conversion reports its input and result. Only record from a **successful**
+integration run. `-recorddir <dir>` overrides the provider's `test_data`
+directory (a relative path resolves from the repo root). (Flags defined in
+`integrationTest/helpers_test.go`.)
 
 {% hint style="danger" %}
-Review every recorded file for credentials, private names, addresses, zone IDs,
-and other sensitive data before committing it.
+Recordings can contain credentials, private names, addresses, and zone IDs.
+Review every file before committing it.
 {% endhint %}
+
+Mutation is checked here too: a `ToRC` conversion must not mutate its native
+input, and a `ToNative` conversion must not mutate its `RecordConfig` input.
+Recording reports mutations as errors; replay reports them as test failures.
 
 ## Files
 
-`test_data/meta.json` stores the fixture version and the domains and conversion
-functions recorded for the provider. A provider may have more than one domain.
+`test_data/meta.json` holds the fixture version and, per domain, the recorded
+`to_rc` and `to_native` function names (one provider may cover several domains).
 
-For native-to-RecordConfig (`ToRC`) conversions:
+Per direction and function:
 
-- `recorded_torc_input_<func>_<domain>.json`
-- `expected_torc_output_<func>_<domain>.records`
+- `ToRC` (native → `RecordConfig`):
+  - `recorded_torc_input_<func>_<domain>.json`
+  - `expected_torc_output_<func>_<domain>.records`
+- `ToNative` (`RecordConfig` → native):
+  - `recorded_tonative_input_<func>_<domain>.records`
+  - `expected_tonative_output_<func>_<domain>.json`
 
-For RecordConfig-to-native (`ToNative`) conversions:
+The provider name is omitted (the package identifies it); the domain is
+included. Each JSON value and each `.records` line carries an `index`. A
+repeated index is one conversion that consumed or produced multiple records, so
+one-to-many and many-to-one conversions stay synchronized even when the record
+counts differ.
 
-- `recorded_tonative_input_<func>_<domain>.records`
-- `expected_tonative_output_<func>_<domain>.json`
+## Add golden tests to a provider
 
-The provider name is omitted because the containing package already identifies
-it. The domain is included because one provider can be tested against several
-zones.
+Three steps: instrument the conversion boundaries, add replay tests, then
+hydrate the fixtures. `providers/cloudns` shows the whole pattern.
 
-Every JSON value has an `index` and a `value`. Every `.records` line starts
-with the same integer and a tab. Repeated indexes represent one conversion
-which consumes or produces multiple records. Consequently, one-to-many and
-many-to-one conversions remain synchronized even when record counts differ.
+### 1. Instrument the provider
 
-## Intentional output changes
+Add an observer field and setter. `CreateDNSProvider` calls
+`SetConversionObserver` when the provider implements it (see
+`pkg/providers/conversion_observer.go`):
 
-`-record` replaces both sides of the fixture pair using a passing integration
-run. `-update` is separate: it preserves recorded inputs and rewrites only the
-expected outputs using the current conversion code.
+```go
+type cloudnsProvider struct {
+	observer providers.ConversionObserver
+	// ...
+}
 
-```shell
-go test ./providers/cloudns -update
+func (c *cloudnsProvider) SetConversionObserver(o providers.ConversionObserver) {
+	c.observer = o
+}
 ```
 
-Review the resulting diff. `-update` can bless current behavior, including a
-bug, so use it only when an output change is intentional.
+At every conversion boundary that integration tests exercise, wrap the call:
+`Begin*` with the input before, `End*` with the same input plus the result and
+error after. Use the conversion function's exact name as the observer name.
 
-## Mutation checks
+Native → `RecordConfig`:
 
-The observer snapshots both sides of each boundary. A `ToRC` conversion must
-not mutate its native input, and a `ToNative` conversion must not mutate its
-`RecordConfig` input. Recording reports these mutations as errors; replay tests
-report them as test failures.
+```go
+before := providers.BeginToRC(c.observer, "toRc", &records[i])
+rc, err := toRc(dc, &records[i])
+providers.EndToRC(c.observer, "toRc", before, &records[i], models.Records{rc}, err)
+```
+
+`RecordConfig` → native:
+
+```go
+input := models.Records{desired}
+before := providers.BeginToNative(c.observer, "toReq", input)
+req, err := toReq(desired)
+providers.EndToNative(c.observer, "toReq", before, input, req, err)
+```
+
+The `providers.Begin*`/`End*` helpers are nil-safe, so instrumentation is inert
+in production.
+
+### 2. Add the replay tests
+
+Add `convert_golden_test.go` (see `providers/cloudns/convert_golden_test.go`).
+Each adapter runs one recorded call; the domain comes from `meta.json`, so no
+env var is needed:
+
+```go
+func TestToRcGolden(t *testing.T) {
+	providergolden.CheckToRC(t, "toRc",
+		func(dc *models.DomainConfig, native domainRecord) (models.Records, error) {
+			rc, err := toRc(dc, &native)
+			return models.Records{rc}, err
+		})
+}
+
+func TestToReqGolden(t *testing.T) {
+	providergolden.CheckToNative(t, "toReq",
+		func(_ *models.DomainConfig, records models.Records) (requestParams, error) {
+			return toReq(records[0])
+		})
+}
+```
+
+`CheckToNative` passes all records sharing an index in one call, which supports
+record-set conversions. `CheckRoundTrip` additionally verifies providers whose
+two conversions are inverses. A function with no recording is skipped.
+
+### 3. Hydrate the fixtures
+
+Record once from a passing integration run, inspect (and redact) the new files,
+commit them, then run the package normally to confirm replay:
+
+```shell
+go test -failfast -run TestDNSProviders -v ./integrationTest \
+  -args -verbose -profile CLOUDNS -record   # writes providers/cloudns/test_data
+go test ./providers/cloudns/                # replay must pass
+```
