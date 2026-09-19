@@ -17,9 +17,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "rdata": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -40,9 +38,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "rdata": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -52,9 +48,7 @@
           "filepos": "[line:10:5]",
           "name": "local",
           "name_unicode": "local",
-          "rdata": {
-            "Addr": "127.0.0.1"
-          },
+          "rdata": "127.0.0.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1

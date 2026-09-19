@@ -10,13 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Algorithm": 13,
-            "Flags": 257,
-            "Protocol": 3,
-            "PublicKey": "AABBCCDD",
-            "Tag": 0
-          },
+          "rdata": "257 3 13 AABBCCDD",
           "ttl": 300,
           "type": "DNSKEY",
           "typenum": 48

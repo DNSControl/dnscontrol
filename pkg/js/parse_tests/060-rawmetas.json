@@ -13,10 +13,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Mbox": "user2.example.com.",
-            "Txt": "mytxt.example.com."
-          },
+          "rdata": "user2.example.com. mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17
@@ -29,10 +26,7 @@
           },
           "name": "foo",
           "name_unicode": "foo",
-          "rdata": {
-            "Mbox": "user2.example.com.",
-            "Txt": "mytxt.example.com."
-          },
+          "rdata": "user2.example.com. mytxt.example.com.",
           "ttl": 300,
           "type": "RP",
           "typenum": 17

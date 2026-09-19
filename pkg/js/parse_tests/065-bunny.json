@@ -13,9 +13,7 @@
           },
           "name": "cdn",
           "name_unicode": "cdn",
-          "rdata": {
-            "PullZoneID": 12345
-          },
+          "rdata": "12345",
           "ttl": 300,
           "type": "BUNNY_DNS_PZ",
           "typenum": 65287
@@ -28,9 +26,7 @@
           },
           "name": "go",
           "name_unicode": "go",
-          "rdata": {
-            "Target": "https://example.com"
-          },
+          "rdata": "\"https://example.com\"",
           "ttl": 300,
           "type": "BUNNY_DNS_RDR",
           "typenum": 65320

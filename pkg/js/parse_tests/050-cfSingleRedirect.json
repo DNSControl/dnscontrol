@@ -10,14 +10,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 301,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "name1",
-            "SRThen": "then1",
-            "SRWhen": "when1"
-          },
+          "rdata": "name1 301 when1 then1",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -27,14 +20,7 @@
           "filepos": "[line:6:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 302,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "name2",
-            "SRThen": "then2",
-            "SRWhen": "when2"
-          },
+          "rdata": "name2 302 when2 then2",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -44,14 +30,7 @@
           "filepos": "[line:7:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 301,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "name3",
-            "SRThen": "then3",
-            "SRWhen": "when3"
-          },
+          "rdata": "name3 301 when3 then3",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -65,14 +44,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 302,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "namemeta",
-            "SRThen": "thenmeta",
-            "SRWhen": "whenmeta"
-          },
+          "rdata": "namemeta 302 whenmeta thenmeta",
           "ttl": 300,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -82,14 +54,7 @@
           "filepos": "[line:8:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Code": 302,
-            "RT_SRRRulesetID": "",
-            "RT_SRRRulesetRuleID": "",
-            "SRName": "namettl",
-            "SRThen": "thenttl",
-            "SRWhen": "whenttl"
-          },
+          "rdata": "namettl 302 whenttl thenttl",
           "ttl": 999,
           "type": "CLOUDFLAREAPI_SINGLE_REDIRECT",
           "typenum": 65289
@@ -102,9 +67,7 @@
           },
           "name": "name1",
           "name_unicode": "name1",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "rdata": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1

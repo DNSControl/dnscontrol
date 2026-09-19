@@ -10,9 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Digest": "Test"
-          },
+          "rdata": "Test",
           "ttl": 300,
           "type": "DHCID",
           "typenum": 49
