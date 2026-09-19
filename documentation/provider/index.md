@@ -229,7 +229,7 @@ Jump to a table:
 | [`ROUTE53`](route53.md) | ❌ | ❔ | ❌ | ✅ | ✅ |
 | [`RWTH`](rwth.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
 | [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
-| [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
 | [`SOFTLAYER`](softlayer.md) | ❔ | ❔ | ❌ | ❔ | ❔ |
 | [`TENCENTDNS`](tencentdns.md) | ❌ | ❔ | ❔ | ❌ | ❔ |
 | [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
