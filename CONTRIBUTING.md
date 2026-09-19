@@ -50,22 +50,36 @@ bin/generate-all.sh
 
 It runs `go fmt`, `go generate`, `go mod tidy`, JSON formatting, and optionally `golangci-lint` and `staticcheck` if they are installed.
 
-## Commit message conventions
+## Pull request titles
 
-Prefix your commit message title with one of the following categories:
+DNSControl squash-merges pull requests, so the pull request title becomes the commit message on `main`. The title must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary): `type(scope): subject`. The `PR: Commitlint` check enforces this with the rules in `commitlint.config.js`. The commits inside your pull request are not checked.
 
-| Prefix | Use for |
+| Type | Use for |
 | --- | --- |
-| `FEATURE:` | New functionality |
-| `BUG:` | Bug fixes |
-| `DOCS:` | Documentation changes |
-| `CHORE:` or `MAINT:` | Maintenance, dependency updates |
-| `BUILD:` or `CICD:` | CI/CD and build changes |
-| `REFACTOR:` | Code refactoring |
-| `TEST:` | Test additions or changes |
-| `PROVIDERNAME:` | Provider-specific changes (e.g. `CLOUDFLAREAPI:`, `ROUTE53:`) |
+| `feat` | New functionality |
+| `fix` | Bug fixes |
+| `docs` | Documentation changes |
+| `perf` | Performance improvements |
+| `refactor` | Code refactoring |
+| `style` | Code style changes |
+| `test` | Test additions or changes |
+| `build` or `ci` | Build and CI/CD changes |
+| `chore` | Maintenance, dependency updates |
 
-These prefixes are used by GoReleaser to categorize the release changelog. See `.goreleaser.yml` for the full list of recognized patterns.
+Rules:
+
+- Provider-specific changes use the scope `p/PROVIDERNAME`, for example `fix(p/CLOUDFLAREAPI): correct TTL rounding` or `feat(p/ROUTE53): support alias records for NS`.
+- Other scopes are optional and must be a single word, for example `chore(deps): update dependencies`.
+- The subject starts with a lowercase letter. `fix(p/ROUTE53): Fix ...` fails the check.
+- Mark a breaking change with `!` after the type or scope, for example `feat(p/BIND)!: ...`.
+
+To check a title locally, run `npm install` once, then:
+
+```shell
+echo "fix(p/ROUTE53): correct TTL rounding" | npx commitlint
+```
+
+GoReleaser uses the type and scope to group the release changelog. `test` and `chore` changes are left out of the changelog. See `.goreleaser.yml` for the exact patterns.
 
 ## Integration tests
 
