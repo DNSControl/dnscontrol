@@ -322,6 +322,13 @@
     "api_token": "$NS1_TOKEN",
     "domain": "$NS1_DOMAIN"
   },
+  "OPENPROVIDER": {
+    "TYPE": "OPENPROVIDER",
+    "api_url": "$OPENPROVIDER_API_URL",
+    "domain": "$OPENPROVIDER_DOMAIN",
+    "password": "$OPENPROVIDER_PASSWORD",
+    "username": "$OPENPROVIDER_USERNAME"
+  },
   "OPENWRT": {
     "TYPE": "OPENWRT",
     "domain": "$OPENWRT_DOMAIN",

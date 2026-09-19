@@ -73,6 +73,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ❌ |
 | [`NEXDNS`](nexdns.md) | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ❌ | ✅ | ❌ |
+| [`OPENPROVIDER`](openprovider.md) | ❌ | ✅ | ❌ |
 | [`OPENSRS`](opensrs.md) | ❌ | ❌ | ✅ |
 | [`OPENWRT`](openwrt.md) | ❌ | ✅ | ❌ |
 | [`ORACLE`](oracle.md) | ❌ | ✅ | ❌ |
@@ -148,6 +149,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ❔ | ✅ | ✅ | ✅ |
 | [`NEXDNS`](nexdns.md) | ❔ | ❌ | ✅ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
+| [`OPENPROVIDER`](openprovider.md) | ❔ | ❌ | ✅ | ✅ |
 | [`OPENSRS`](opensrs.md) | ❔ | ❔ | ❌ | ❔ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ❌ | ✅ |
 | [`ORACLE`](oracle.md) | ❔ | ✅ | ✅ | ✅ |
@@ -219,6 +221,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
 | [`NEXDNS`](nexdns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❌ | ✅ | ❔ |
+| [`OPENPROVIDER`](openprovider.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`OPENWRT`](openwrt.md) | ❌ | ❔ | ❔ | ❔ | ❔ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ❔ |
 | [`OVH`](ovh.md) | ❌ | ❔ | ❔ | ❌ | ❔ |
@@ -288,6 +291,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ❌ | ✅ | ✅ | ✅ |
 | [`NEXDNS`](nexdns.md) | ❌ | ❌ | ✅ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
+| [`OPENPROVIDER`](openprovider.md) | ❌ | ❌ | ✅ | ❌ |
 | [`OPENWRT`](openwrt.md) | ❔ | ❔ | ✅ | ❔ |
 | [`ORACLE`](oracle.md) | ❔ | ✅ | ✅ | ❔ |
 | [`OVH`](ovh.md) | ❔ | ❔ | ✅ | ❔ |
@@ -356,6 +360,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`NEXDNS`](nexdns.md) | ✅ | ❌ | ❌ | ❌ | ✅ |
 | [`NS1`](ns1.md) | ✅ | ✅ | ❔ | ❔ | ✅ |
+| [`OPENPROVIDER`](openprovider.md) | ✅ | ❌ | ❌ | ❌ | ✅ |
 | [`ORACLE`](oracle.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`OVH`](ovh.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`PORKBUN`](porkbun.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
@@ -410,6 +415,7 @@ Jump to a table:
 | [`NETNOD`](netnod.md) | ❌ | ❌ | ❌ |
 | [`NEXDNS`](nexdns.md) | ❔ | ❌ | ❌ |
 | [`NS1`](ns1.md) | ✅ | ❔ | ✅ |
+| [`OPENPROVIDER`](openprovider.md) | ❔ | ❌ | ❌ |
 | [`ORACLE`](oracle.md) | ❔ | ❔ | ❌ |
 | [`PORKBUN`](porkbun.md) | ❌ | ❔ | ❌ |
 | [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ |
@@ -500,6 +506,7 @@ Providers in this category and their maintainers are:
 |[`NETLIFY`](netlify.md)|@SphericalKat|
 |[`NETNOD`](netnod.md)|@Netnod @vilhelmprytz|
 |[`NS1`](ns1.md)|@costasd|
+|[`OPENPROVIDER`](openprovider.md)|@nvanlaerebeke|
 |[`OPENSRS`](opensrs.md)|@philhug|
 |[`OPENWRT`](openwrt.md)|@huskyistaken|
 |[`ORACLE`](oracle.md)|@kallsyms|

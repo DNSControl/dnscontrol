@@ -506,6 +506,7 @@ func makeTests() []*TestGroup {
 				"NETCUP",            // NS records not currently supported.
 				"NEXDNS",            // The apex NS records follow the zone's nameserver group and are not editable.
 				"NS1",               // Test leaves NS1 in a confused state.
+				"OPENPROVIDER",      // OpenProvider manages the apex NS records and does not allow changing them.
 				"PORKBUN",           // Record ignored.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.

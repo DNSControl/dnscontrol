@@ -48,6 +48,7 @@ providers/netlify @SphericalKat
 providers/netnod @Netnod @vilhelmprytz
 providers/nexdns @nexdns
 providers/ns1 @costasd
+providers/openprovider @nvanlaerebeke
 # providers/opensrs NEEDS VOLUNTEER
 providers/openwrt @huskyistaken
 providers/oracle @kallsyms

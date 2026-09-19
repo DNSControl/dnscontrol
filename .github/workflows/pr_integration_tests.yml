@@ -201,6 +201,7 @@ jobs:
       NETNOD_DOMAIN: ${{ vars.NETNOD_DOMAIN }}
       NEXDNS_DOMAIN: ${{ vars.NEXDNS_DOMAIN }}
       NS1_DOMAIN: ${{ vars.NS1_DOMAIN }}
+      OPENPROVIDER_DOMAIN: ${{ vars.OPENPROVIDER_DOMAIN }}
       ORACLE_DOMAIN: ${{ vars.ORACLE_DOMAIN }}
       OVH_DOMAIN: ${{ vars.OVH_DOMAIN }}
       PACKETFRAME_DOMAIN: ${{ vars.PACKETFRAME_DOMAIN }}
@@ -370,6 +371,10 @@ jobs:
       NEXDNS_API_TOKEN: ${{ secrets.NEXDNS_API_TOKEN }}
       #
       NS1_TOKEN: ${{ secrets.NS1_TOKEN }}
+      #
+      OPENPROVIDER_API_URL: ${{ secrets.OPENPROVIDER_API_URL }}
+      OPENPROVIDER_PASSWORD: ${{ secrets.OPENPROVIDER_PASSWORD }}
+      OPENPROVIDER_USERNAME: ${{ secrets.OPENPROVIDER_USERNAME }}
       #
       ORACLE_COMPARTMENT: ${{ secrets.ORACLE_COMPARTMENT }}
       ORACLE_FINGERPRINT: ${{ secrets.ORACLE_FINGERPRINT }}
