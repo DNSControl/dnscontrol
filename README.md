@@ -18,7 +18,7 @@ extensible, so more providers can be added.
 ```js
 // define our registrar and providers
 var REG_NAMECOM = NewRegistrar("ndc_main");
-var DSP_ROUTE53 = NewDnsProvider("r53_main")
+var DSP_ROUTE53 = NewDnsProvider("r53_main");
 
 D("example.com", REG_NAMECOM, DnsProvider(DSP_ROUTE53),
   A("@", "1.2.3.4"),
@@ -101,18 +101,18 @@ DNSControl supports 65 DNS providers and registrars:
 
 ## Installation
 
-DNSControl can be installed via packages for macOS, Linux and Windows, or from source code. See the [official instructions](https://docs.dnscontrol.org/getting-started/getting-started#1-install-the-software).
+DNSControl can be installed via packages for macOS, Linux and Windows, or from source code. See the [official instructions](https://docs.dnscontrol.org/getting-started/getting-started#id-1.-install-the-software).
 
 ## Via GitHub Actions (GHA)
 
-The official Github Action is: [github.com/dnscontrol/dnscontrol-action](https://github.com/dnscontrol/dnscontrol-action)
+The official GitHub Action is: [github.com/dnscontrol/dnscontrol-action](https://github.com/dnscontrol/dnscontrol-action)
 
 Others have been created such as:
 
 * [github.com/metabrainz/dnscontrol-action](https://github.com/metabrainz/dnscontrol-action)
 * [github.com/gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol)
 
-## Deprecation warnings (updated 2025-11-21)
+## Deprecation warnings (updated 2026-08-17)
 
 - **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
 - **NAMEDOTCOM, OPENSRS, and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes. Interested in being a hero and adopting them?  Contact tal at what exit dot org.
