@@ -49,14 +49,14 @@ Download binaries from [GitHub](https://github.com/DNSControl/dnscontrol/release
 
 ### Source
 
-DNSControl can be built from source with Go version 1.18 or higher.
+DNSControl can be built from source with Go 1.27 or higher (see `go.mod` for the exact version).
 
 The `go install` command will download the source, compile it, and install `dnscontrol` in your `$GOBIN` directory.
 
 To install, simply run
 
 ```shell
-go install github.com/DNSControl/dnscontrol/v4@latest
+go install github.com/DNSControl/dnscontrol/v5@latest
 ```
 
 To download the source

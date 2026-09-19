@@ -57,7 +57,7 @@ rc2, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
 - `LABEL`: Must be the output of one of these functions:
   - `dc.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
   - `dc.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
-  - `dc.LabelFromFQDNWithDot()`: Use this if your provider always give syou the FQDN+"." (`foo.example.com.`)
+  - `dc.LabelFromFQDNWithDot()`: Use this if your provider always gives you the FQDN+"." (`foo.example.com.`)
 - Which to use?
   - Unsurer? Try LabelFromFQDNWithDot() and watch for errors. They often suggest what function to use.
   - Errors like `DEBUG: LabelFromFQDNWithDot(quux.a.dnscontrol-azure.com) called WRONG.'

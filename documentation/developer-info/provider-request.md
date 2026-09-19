@@ -65,7 +65,7 @@ Add and commit the modified file:
 
 ```shell
 git add documentation/provider/index.md
-git commit -m "DOCS: Added requested provider ${PROVIDER_NAME} (#${GITHUB_ISSUE_NUMBER})"
+git commit -m "docs: add requested provider ${PROVIDER_NAME} (#${GITHUB_ISSUE_NUMBER})"
 ```
 
 ## 5. Push and open a pull request
@@ -79,5 +79,5 @@ echo "Added ${PROVIDER_NAME} #${GITHUB_ISSUE_NUMBER} to the list of requested pr
 ```
 
 {% hint style="info" %}
-**NOTE**: GitHub does not support pre-filling pull request titles or descriptions via URL parameters. The title will be auto-filled using your commit message. You can adjust it manually after opening the PR.
+**NOTE**: GitHub does not support pre-filling pull request titles or descriptions via URL parameters. The title will be auto-filled using your commit message, which already follows the [pull request title](https://github.com/DNSControl/dnscontrol/blob/main/CONTRIBUTING.md#pull-request-titles) convention. If you adjust it after opening the PR, keep the `docs:` prefix and the lowercase subject.
 {% endhint %}
