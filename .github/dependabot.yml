@@ -12,6 +12,9 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    commit-message:
+      prefix: "build"
+      include: "scope"
 
   # Maintain dependencies for Go
   - package-ecosystem: "gomod"
@@ -26,6 +29,9 @@ updates:
       - dependency-name: "github.com/vultr/govultr"
     cooldown:
       default-days: 7
+    commit-message:
+      prefix: "build"
+      include: "scope"
 
   # Maintain dependencies for Docker
   - package-ecosystem: "docker"
@@ -34,6 +40,9 @@ updates:
       interval: "monthly"
     cooldown:
       default-days: 7
+    commit-message:
+      prefix: "build"
+      include: "scope"
 
   # Maintain dependencies for npm
   # (Needed for Prettier.  Remove this if we switch to Homebrew prettier or other install method.)
@@ -43,3 +52,6 @@ updates:
       interval: "monthly"
     cooldown:
       default-days: 7
+    commit-message:
+      prefix: "build"
+      include: "scope"

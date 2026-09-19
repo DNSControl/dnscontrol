@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+
 	"github.com/DNSControl/dnscontrol/v5/models"
 	domain "github.com/scaleway/scaleway-sdk-go/api/domain/v2beta1"
 )
@@ -62,14 +64,40 @@ func fromRecordConfig(rc *models.RecordConfig) domain.Record {
 		TTL:  rc.TTL,
 	}
 
-	if rc.Type == "TXT" {
+	switch rc.Type {
+	case "TXT":
 		// Scaleway accepts the TXT data BIND-style quoted, so build that form
 		// from the joined value directly.
 		rec.Data = quoteTXT(rc.GetTargetTXTJoined())
-		return rec
+	case "SVCB", "HTTPS":
+		// The RDATA's String() quotes every SvcParam value (e.g. port="80",
+		// alpn="h2,h3"), which Scaleway's parser rejects. Build the data with
+		// unquoted params (port=80, alpn=h2,h3) instead.
+		rec.Data = svcbData(rc)
+	case "SSHFP":
+		// dnscontrol stores the fingerprint uppercase (for case-insensitive
+		// comparison) but Scaleway only accepts lowercase hex.
+		rec.Data = strings.ToLower(rc.GetRDATA().String())
+	default:
+		rec.Data = rc.GetRDATA().String()
 	}
-	rec.Data = rc.GetRDATA().String()
 	return rec
+}
+
+// svcbData renders a SVCB or HTTPS record as "<priority> <target> <params>",
+// with the params left unquoted.
+func svcbData(rc *models.RecordConfig) string {
+	var f dnsrdatav2.SVCB
+	if rc.Type == "HTTPS" {
+		f = rc.AsHTTPS()
+	} else {
+		f = rc.AsSVCB()
+	}
+	params := models.Svcbv2ValueToString(f.Value)
+	if params == "" {
+		return fmt.Sprintf("%d %s", f.Priority, f.Target)
+	}
+	return fmt.Sprintf("%d %s %s", f.Priority, f.Target, params)
 }
 
 // quoteTXT returns s as a BIND-style quoted string: every `\` and `"` is
@@ -89,8 +117,14 @@ func quoteTXT(s string) string {
 	return b.String()
 }
 
-// unquoteTXT parses a BIND-style quoted TXT value back to its raw bytes.
-// If the input has no surrounding quotes, it is returned unchanged.
+// unquoteTXT recovers the raw TXT value from what Scaleway returns.
+//
+// Scaleway unescapes the BIND-quoted value we send on write. On read it wraps
+// the raw stored bytes in a pair of quotes and escapes only interior double
+// quotes (`"` -> `\"`); backslashes are returned verbatim, NOT re-escaped. So
+// the correct inverse is to strip the surrounding quotes and unescape `\"`
+// only — unescaping `\` as well would double-unescape (e.g. halving runs of
+// backslashes). If the input has no surrounding quotes it is returned as-is.
 func unquoteTXT(s string) (string, error) {
 	if len(s) < 2 || s[0] != '"' || s[len(s)-1] != '"' {
 		return s, nil
@@ -99,13 +133,12 @@ func unquoteTXT(s string) (string, error) {
 	var b strings.Builder
 	b.Grow(len(inner))
 	for i := 0; i < len(inner); i++ {
-		c := inner[i]
-		if c == '\\' && i+1 < len(inner) {
+		if inner[i] == '\\' && i+1 < len(inner) && inner[i+1] == '"' {
+			b.WriteByte('"')
 			i++
-			b.WriteByte(inner[i])
 			continue
 		}
-		b.WriteByte(c)
+		b.WriteByte(inner[i])
 	}
 	return b.String(), nil
 }

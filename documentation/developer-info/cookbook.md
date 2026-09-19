@@ -54,12 +54,12 @@ rc2, err := dc.NewRecordConfigParse(LABEL, TTL, TYPE_STR_OR_NUM, RFC1038_STRING)
 - `NewRecordConfig()` takes a list of arguments. It doesn't matter if the arguments are strings, ints, `netip.Addrs`... the function will convert them to the correct type and return and error if they can't be converted.
 - `NewRecordConfigParse()` takes the arguments as one long string, which is parsed. If your provider returns (for example) the MX record data as `10 mx.example.com.` and the SRV record data as `4 100 123 three.example.com.`, you can just send the whole string to this function. This replaces `models.PopulateFromString()`
 
-- `LABEL`: Must be the output of one of these functions:
+- `LABEL`: Must be the result of one of these functions:
   - `dc.LabelFromShort()`: Use this if your provider always gives you the shortname (`foo` of `foo.example.com`)
   - `dc.LabelFromFQDNNoDot()`: Use this if your provider always gives you the FQDN (`foo.example.com`)
   - `dc.LabelFromFQDNWithDot()`: Use this if your provider always gives you the FQDN+"." (`foo.example.com.`)
 - Which to use?
-  - Unsurer? Try LabelFromFQDNWithDot() and watch for errors. They often suggest what function to use.
+  - Unsure? Try LabelFromFQDNWithDot() and watch for errors. They often suggest what function to use.
   - Errors like `DEBUG: LabelFromFQDNWithDot(quux.a.dnscontrol-azure.com) called WRONG.'
   - In this case, the hostname (`quux.a.dnscontrol-azure.com`) indicates `LabelFromFQDNNoDot` is more appropriate.
   - If you see a shortname, use `dc.LabelFromShort()`
@@ -109,7 +109,30 @@ In this example, `*Parse` works just fine for all cases except `MX` records. The
     dc.AddRecord(rc)
 ```
 
-Deprecated:
+Flags
+
+You can modify NewRecordConfig() and NewRecordConfigParse() behavior with flags [documented here](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/nrc)
+
+Does your SRV data have the "priority" field separate?
+
+```go
+case "SRV":
+        rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, r.Priority, r.Answer,
+                        nrc.Flags{SrvWeirdSplit: true})
+```
+
+Does the record's target NOT include a dot?
+
+```go
+        dc.NewRecordConfig(...  nrc.Flags{TargetIsFqdnNoDot: true})
+        dc.NewRecordConfigParse(...  nrc.Flags{TargetIsFqdnNoDot: true})
+```
+
+Is your TXT record the plain string, not requring any de-quoting or unescaping?
+
+```go
+        dc.NewRecordConfigParse(... nrc.Flags{TxtDontParse: true})
+```
 
 Please do not create your own `RecordConfig`'s:
 
