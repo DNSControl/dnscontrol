@@ -14,6 +14,8 @@ func AuditRecords(records models.Records) []error {
 	a.Add("TXT", rejectif.TxtIsEmpty)
 	a.Add("TXT", rejectif.TxtHasTrailingSpace)
 	a.Add("CAA", rejectif.CaaTargetContainsWhitespace)
+	a.Add("MX", rejectif.MxNull)            // Last verified 2026-09-20: API 422 "Exchange field is required"
+	a.Add("SRV", rejectif.SrvHasNullTarget) // Last verified 2026-09-20: API 422 "Target field is required"
 	a.Add("NS", rejectif.NsAtApex)
 	a.Add("ALIAS", func(rc *models.RecordConfig) error {
 		if rc.GetLabel() == "@" {

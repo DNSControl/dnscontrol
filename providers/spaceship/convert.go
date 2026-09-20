@@ -72,7 +72,7 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 	case dnsv2.TypeMX:
 		f := rc.AsMX()
 		rec.Preference = ptrInt(int(f.Preference))
-		rec.Exchange = trimDot(f.Mx)
+		rec.Exchange = hostTargetOut(f.Mx)
 	case dnsv2.TypeTXT:
 		rec.Value = rc.GetTargetTXTJoined()
 	case dnsv2.TypeNS:
@@ -96,7 +96,7 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 		rec.Priority = ptrInt(int(f.Priority))
 		rec.Weight = ptrInt(int(f.Weight))
 		rec.Port = client.NewIntPortValue(int(f.Port))
-		rec.Target = trimDot(f.Target)
+		rec.Target = hostTargetOut(f.Target)
 	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
 		f := rc.AsSVCB()
 		prefix, name, ok := optionalPrefixedLabel(rc.GetLabel(), 2)
@@ -189,6 +189,16 @@ func ensureDot(s string) string {
 
 func trimDot(s string) string {
 	return strings.TrimSuffix(s, ".")
+}
+
+// hostTargetOut keeps a bare "." so null MX (RFC 7505) and null SRV are not
+// serialized as an empty field. strings.TrimSuffix(".", ".") is "" and the
+// SDK omits empty exchange/target, which the API then 422s as required.
+func hostTargetOut(s string) string {
+	if s == "." {
+		return "."
+	}
+	return trimDot(s)
 }
 
 func httpsTarget(s string) string {

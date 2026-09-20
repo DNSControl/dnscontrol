@@ -96,6 +96,8 @@ TTL values are clamped to 60–3600 seconds (Spaceship's API range). A TTL of 0 
 
 Apex CNAME is allowed. Apex ALIAS is rejected because Spaceship stores it as a CNAME; declare an apex CNAME instead.
 
+Null MX ([RFC 7505](https://www.rfc-editor.org/rfc/rfc7505.html), `MX("@", 0, ".")`) and SRV records whose target is `.` are not supported. The API requires a hostname for those fields and returns HTTP 422 otherwise.
+
 ## Feature Summary
 
 <!-- provider-features-start -->

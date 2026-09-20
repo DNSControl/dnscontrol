@@ -185,6 +185,26 @@ func TestNameserverUpdateBasicVsCustom(t *testing.T) {
 	}
 }
 
+func TestToNativePreservesNullMXAndSRVDot(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+
+	mx, err := toNative(dc.MustNewRecordConfig("@", 300, "MX", 0, "."))
+	if err != nil {
+		t.Fatalf("MX: %v", err)
+	}
+	if mx.Exchange != "." {
+		t.Errorf("MX Exchange = %q, want %q", mx.Exchange, ".")
+	}
+
+	srv, err := toNative(dc.MustNewRecordConfig("_sip._tcp", 300, "SRV", 15, 65, 75, "."))
+	if err != nil {
+		t.Fatalf("SRV: %v", err)
+	}
+	if srv.Target != "." {
+		t.Errorf("SRV Target = %q, want %q", srv.Target, ".")
+	}
+}
+
 func TestJoinAndSplitPrefixedLabel(t *testing.T) {
 	label := joinPrefixedLabel([]string{"_sip", "_tcp"}, "@")
 	if label != "_sip._tcp" {
