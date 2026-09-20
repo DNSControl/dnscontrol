@@ -1,10 +1,8 @@
 package spaceship
 
-import "context"
-
 // ListZones returns every domain in the Spaceship account.
 func (c *spaceshipProvider) ListZones() ([]string, error) {
-	list, err := c.client.GetDomainList(context.Background())
+	list, err := c.getDomainList()
 	if err != nil {
 		return nil, err
 	}

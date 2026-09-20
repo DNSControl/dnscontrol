@@ -77,6 +77,17 @@ When used as a registrar, Spaceship updates nameserver delegation. If the desire
 
 The domain must already exist in the Spaceship account. This provider cannot create zones.
 
+## Rate limiting
+
+Spaceship returns HTTP 429 with a `Retry-After` header when an endpoint's quota is exceeded. Some quotas are tight: domain info is 5 requests per domain per 300 seconds; DNS record reads and writes are 300 per 300 seconds. The provider waits and retries, honoring `Retry-After`, for up to 10 minutes per request.
+
+A large `push` or an integration-test run can therefore pause for minutes. Increase the Go test timeout when running the suite:
+
+```shell
+cd integrationTest
+go test -timeout 0 -v -args -verbose -profile SPACESHIP
+```
+
 ## Record types
 
 Writable custom DNS types: A, AAAA, ALIAS, CAA, CNAME, HTTPS, MX, NS (non-apex), PTR, SRV, SVCB, TLSA, TXT.

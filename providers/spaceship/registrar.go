@@ -1,7 +1,6 @@
 package spaceship
 
 import (
-	"context"
 	"fmt"
 	"slices"
 	"strings"
@@ -12,7 +11,7 @@ import (
 
 // GetRegistrarCorrections updates nameserver delegation at Spaceship.
 func (c *spaceshipProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
-	info, err := c.client.GetDomainInfo(context.Background(), dc.Name)
+	info, err := c.getDomainInfo(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +33,7 @@ func (c *spaceshipProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]
 		{
 			Msg: fmt.Sprintf("Update nameservers [%s] -> [%s]", strings.Join(existingNorm, ","), strings.Join(desiredNorm, ",")),
 			F: func() error {
-				return c.client.UpdateDomainNameServers(context.Background(), dc.Name, req)
+				return c.updateDomainNameServers(dc.Name, req)
 			},
 		},
 	}, nil

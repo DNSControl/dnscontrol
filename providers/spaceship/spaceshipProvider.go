@@ -1,11 +1,11 @@
 package spaceship
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
@@ -84,6 +84,9 @@ func init() {
 type spaceshipProvider struct {
 	observer providers.ConversionObserver
 	client   *client.Client
+	// sleep is time.Sleep, replaced in tests so rate-limit backoff does not
+	// cost the wall-clock time it is waiting out.
+	sleep func(time.Duration)
 }
 
 func (c *spaceshipProvider) SetConversionObserver(observer providers.ConversionObserver) {
@@ -107,12 +110,12 @@ func newSpaceship(m map[string]string) (*spaceshipProvider, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &spaceshipProvider{client: cl}, nil
+	return &spaceshipProvider{client: cl, sleep: time.Sleep}, nil
 }
 
 // GetNameservers returns the nameservers Spaceship uses when it hosts the zone.
 func (c *spaceshipProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	info, err := c.client.GetDomainInfo(context.Background(), domain)
+	info, err := c.getDomainInfo(domain)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +130,7 @@ func (c *spaceshipProvider) GetNameservers(domain string) ([]*models.Nameserver,
 // records have no documented write API, so DNSControl leaves them alone
 // and does not register URL, URL301, or FRAME.
 func (c *spaceshipProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	records, err := c.client.GetDNSRecords(context.Background(), dc.Name)
+	records, err := c.getDNSRecords(dc.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +207,7 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 			corr = &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {
-					if err := c.client.DeleteDNSRecords(context.Background(), dc.Name, []client.DNSRecord{oldNative}); err != nil {
+					if err := c.deleteRecords(dc.Name, []client.DNSRecord{oldNative}); err != nil {
 						return err
 					}
 					return c.upsertRecords(dc.Name, []client.DNSRecord{req})
@@ -218,7 +221,7 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 			corr = &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {
-					return c.client.DeleteDNSRecords(context.Background(), dc.Name, []client.DNSRecord{oldNative})
+					return c.deleteRecords(dc.Name, []client.DNSRecord{oldNative})
 				},
 			}
 		default:
@@ -228,10 +231,6 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 	}
 
 	return corrections, actualChangeCount, nil
-}
-
-func (c *spaceshipProvider) upsertRecords(domain string, records []client.DNSRecord) error {
-	return c.client.UpsertDNSRecords(context.Background(), domain, true, records)
 }
 
 func nativeFromExisting(rc *models.RecordConfig) (client.DNSRecord, error) {
