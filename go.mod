@@ -1,6 +1,6 @@
 module github.com/DNSControl/dnscontrol/v5
 
-go 1.27
+go 1.27.0
 
 require (
 	codeberg.org/miekg/dns v0.6.109
@@ -189,4 +189,4 @@ require (
 
 tool golang.org/x/tools/cmd/stringer
 
-replace codeberg.org/miekg/dns => codeberg.org/TomOnTime/dns v0.5.4-0.20260810000946-b7d86015068d
+replace codeberg.org/miekg/dns => codeberg.org/TomOnTime/dns v0.6.116-0.20260922034352-350ee117c567
