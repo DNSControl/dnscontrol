@@ -484,12 +484,12 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		// DnsControl uses the API to get this info. NAMESERVER() is just
 		// to override that when needed.
 		if rec.Name == "@" {
-			return fmt.Sprintf(`//NAMESERVER("%s")`, rec.AsNS().Ns)
+			return fmt.Sprintf(`//NAMESERVER(%s)`, jsonQuoted(rec.AsNS().Ns))
 		}
-		target = `"` + rec.AsNS().Ns + `"`
+		target = jsonQuoted(rec.AsNS().Ns)
 	case "MIKROTIK_FORWARDER":
 		// Forwarder: target is dns-servers, metadata has doh_servers/verify_doh_cert
-		target = `"` + rec.GetRDATA().String() + `"`
+		target = jsonQuoted(rec.GetRDATA().String())
 		if rec.Metadata != nil {
 			var fwdParts []string
 			if v := rec.Metadata["doh_servers"]; v != "" {
@@ -510,18 +510,18 @@ func formatDsl(rec *models.RecordConfig, defaultTTL uint32) string {
 		target = strings.Join(fj, ", ")
 	}
 
-	return fmt.Sprintf(`%s("%s", %s%s%s%s%s%s%s%s)`, rec.Type, rec.Name, target, cfproxy, cfflatten, cfcomment, cftags, mtmeta, hednsDynamic, ttlop)
+	return fmt.Sprintf(`%s(%s, %s%s%s%s%s%s%s%s)`, rec.Type, jsonQuoted(rec.Name), target, cfproxy, cfflatten, cfcomment, cftags, mtmeta, hednsDynamic, ttlop)
 }
 
 func makeCaa(rec *models.RecordConfig, ttlop string) string {
 	f := rec.AsCAA()
 	var target string
 	if f.Flag == 128 {
-		target = fmt.Sprintf(`"%s", "%s", CAA_CRITICAL`, f.Tag, f.Value)
+		target = fmt.Sprintf(`%s, %s, CAA_CRITICAL`, jsonQuoted(f.Tag), jsonQuoted(f.Value))
 	} else {
-		target = fmt.Sprintf(`"%s", "%s"`, f.Tag, f.Value)
+		target = fmt.Sprintf(`%s, %s`, jsonQuoted(f.Tag), jsonQuoted(f.Value))
 	}
-	return fmt.Sprintf(`%s("%s", %s%s)`, rec.Type, rec.Name, target, ttlop)
+	return fmt.Sprintf(`%s(%s, %s%s)`, rec.Type, jsonQuoted(rec.Name), target, ttlop)
 
 	// TODO(tlim): Generate a CAA_BUILDER() instead?
 }
@@ -529,12 +529,12 @@ func makeCaa(rec *models.RecordConfig, ttlop string) string {
 func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
 	f := rec.AsR53ALIAS()
 	items := []string{
-		`"` + rec.Name + `"`,
-		`"` + f.AliasType + `"`,
-		`"` + f.Target + `"`,
+		jsonQuoted(rec.Name),
+		jsonQuoted(f.AliasType),
+		jsonQuoted(f.Target),
 	}
 	if f.ZoneID != "" {
-		items = append(items, `R53_ZONE("`+f.ZoneID+`")`)
+		items = append(items, `R53_ZONE(`+jsonQuoted(f.ZoneID)+`)`)
 	}
 	if f.EvalTargetHealth == "true" {
 		items = append(items, "R53_EVALUATE_TARGET_HEALTH(true)")
@@ -546,5 +546,5 @@ func makeR53alias(rec *models.RecordConfig, ttl uint32) string {
 }
 
 func makeUknown(rc *models.RecordConfig, ttl uint32) string {
-	return fmt.Sprintf(`// %s("%s", TTL(%d))`, rc.UnknownTypeName, rc.GetRDATA().String(), ttl)
+	return fmt.Sprintf(`// %s(%s, TTL(%d))`, strings.NewReplacer("\r", " ", "\n", " ").Replace(rc.UnknownTypeName), jsonQuoted(rc.GetRDATA().String()), ttl)
 }
