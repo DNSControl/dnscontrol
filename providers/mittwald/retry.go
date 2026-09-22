@@ -1,7 +1,10 @@
 package mittwald
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 	"strconv"
 	"sync"
@@ -24,7 +27,8 @@ import (
 //
 // The API is eventually consistent: a write answers with the ID of its event
 // (ETag), and a request that sends it as If-Event-Reached waits until the
-// event is processed, or answers 412 after 10 seconds without doing anything.
+// event is processed, or answers 412 of type FailedPrecondition without doing
+// anything. (Other 412s, such as a CNAME on a name with records, are final.)
 // Every request after a write waits for it this way, so that a read sees it
 // and a write to a zone just created finds the zone, and is repeated after a
 // 412. The permissions of a zone just created can still lag behind: a request
@@ -100,11 +104,23 @@ func retryable(req *http.Request, resp *http.Response) bool {
 	case http.StatusTooManyRequests:
 		return true
 	case http.StatusPreconditionFailed:
-		return req.Header.Get("If-Event-Reached") != ""
+		return req.Header.Get("If-Event-Reached") != "" && eventNotReached(resp)
 	case http.StatusInternalServerError, http.StatusBadGateway, http.StatusServiceUnavailable, http.StatusGatewayTimeout:
 		return req.Method != http.MethodPost
 	}
 	return false
+}
+
+// eventNotReached reports whether a 412 says that the event of
+// If-Event-Reached is not processed yet. It reads the body and puts it back.
+func eventNotReached(resp *http.Response) bool {
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 64<<10))
+	_ = resp.Body.Close()
+	resp.Body = io.NopCloser(bytes.NewReader(body))
+	var e struct {
+		Type string `json:"type"`
+	}
+	return err == nil && json.Unmarshal(body, &e) == nil && e.Type == "FailedPrecondition"
 }
 
 // lagging reports a 403 or 404 that may only mean that a write before it,
