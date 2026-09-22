@@ -9,11 +9,11 @@ import (
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
 func AuditRecords(records models.Records) []error {
-	auditor := rejectif.Auditor{}
+	a := rejectif.Auditor{}
 
-	auditor.Add("TXT", rejectif.TxtHasTrailingSpace) // Last verified 2024-01-03
+	a.Add("TXT", rejectif.TxtHasTrailingSpace) // Last verified 2024-01-03
 
-	auditor.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2024-01-03
+	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2024-01-03
 
-	return auditor.Audit(records)
+	return a.Audit(records)
 }
