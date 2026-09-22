@@ -6,6 +6,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/mittwald/api-client-go/mittwaldv2/generated/clients/domainclientv2"
 	mwdns "github.com/mittwald/api-client-go/mittwaldv2/generated/schemas/dnsv2"
 )
@@ -145,6 +146,34 @@ func toRC(dc *models.DomainConfig, z mwdns.Zone) (models.Records, error) {
 		}
 	}
 	return recs, nil
+}
+
+// TTL limits of the API.
+const (
+	minTTL = 60
+	maxTTL = 86400
+)
+
+// prepDesiredRecords brings the TTLs of the desired records to what mStudio
+// can store, so that the next run finds no difference: into minTTL..maxTTL,
+// and, since A and AAAA of a name share one TTL, the lower of the two for
+// both, with a warning.
+func prepDesiredRecords(dc *models.DomainConfig) {
+	lowest := map[string]uint32{} // name -> lowest TTL of its A and AAAA records
+	for _, rc := range dc.Records {
+		rc.TTL = min(max(rc.TTL, minTTL), maxTTL)
+		if rc.TypeNum == dnsv2.TypeA || rc.TypeNum == dnsv2.TypeAAAA {
+			if t, ok := lowest[rc.NameFQDN]; !ok || rc.TTL < t {
+				lowest[rc.NameFQDN] = rc.TTL
+			}
+		}
+	}
+	for _, rc := range dc.Records {
+		if t, ok := lowest[rc.NameFQDN]; ok && (rc.TypeNum == dnsv2.TypeA || rc.TypeNum == dnsv2.TypeAAAA) && rc.TTL != t {
+			printer.Warnf("MITTWALD: %s: A and AAAA share one TTL in mStudio, using %d instead of %d\n", rc.NameFQDN, t, rc.TTL)
+			rc.TTL = t
+		}
+	}
 }
 
 // toNative groups the records of one name into the record sets the API

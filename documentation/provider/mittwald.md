@@ -48,7 +48,7 @@ mStudio stores every name as its own zone: `example.com`, `www.example.com` and 
 
 ### Record sets
 
-Each name holds one set per type: A and AAAA together, CNAME, MX, TXT, SRV and CAA. All records of a set share one TTL, so A and AAAA records of one name must have the same TTL. A set holds at most 10 A, 10 AAAA, 10 MX or 20 TXT records.
+Each name holds one set per type: A and AAAA together, CNAME, MX, TXT, SRV and CAA. All records of a set share one TTL; when the A and AAAA records of a name have different TTLs, the provider uses the lower one for both and warns about it. A set holds at most 10 A, 10 AAAA, 10 MX or 20 TXT records.
 
 ### Records managed by mStudio
 
@@ -60,7 +60,7 @@ Wildcard names (`*`), NS records, a null MX (`MX("@", 0, ".")`), an MX preferenc
 
 ### TTL
 
-A TTL must be between 60 and 86400 seconds. A set whose TTL is "auto" in mStudio is served with a TTL of 60 and read as such.
+mStudio accepts TTLs between 60 and 86400 seconds; the provider raises a lower TTL to 60 and lowers a higher one to 86400. A set whose TTL is "auto" in mStudio is served with a TTL of 60 and read as such.
 
 ### Rate limit
 

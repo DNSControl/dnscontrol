@@ -128,6 +128,25 @@ func TestToNativeRejectsTwoTTLsInOneSet(t *testing.T) {
 	}
 }
 
+func TestPrepDesiredRecordsClampsAndSharesTheATTL(t *testing.T) {
+	dc := newDC(t)
+	low := mustRecord(t, dc, "low", 30, dnsv2.TypeTXT, "x")
+	high := mustRecord(t, dc, "high", 172800, dnsv2.TypeTXT, "x")
+	a := mustRecord(t, dc, "www", 600, dnsv2.TypeA, "192.0.2.1")
+	aaaa := mustRecord(t, dc, "www", 300, dnsv2.TypeAAAA, "2001:db8::1")
+	other := mustRecord(t, dc, "other", 900, dnsv2.TypeA, "192.0.2.2")
+	dc.Records = models.Records{low, high, a, aaaa, other}
+	prepDesiredRecords(dc)
+	for _, c := range []struct {
+		rc   *models.RecordConfig
+		want uint32
+	}{{low, 60}, {high, 86400}, {a, 300}, {aaaa, 300}, {other, 900}} {
+		if c.rc.TTL != c.want {
+			t.Errorf("%s %s: TTL %d, want %d", c.rc.Name, c.rc.Type, c.rc.TTL, c.want)
+		}
+	}
+}
+
 func TestAuditRecords(t *testing.T) {
 	dc := newDC(t)
 	for _, tc := range []struct {
@@ -138,7 +157,6 @@ func TestAuditRecords(t *testing.T) {
 		{"plain A", mustRecord(t, dc, "www", 300, dnsv2.TypeA, "192.0.2.1"), true},
 		{"underscore label", mustRecord(t, dc, "_dmarc", 300, dnsv2.TypeTXT, "v=DMARC1; p=none"), true},
 		{"wildcard", mustRecord(t, dc, "*", 300, dnsv2.TypeA, "192.0.2.1"), false},
-		{"TTL below 60", mustRecord(t, dc, "www", 30, dnsv2.TypeA, "192.0.2.1"), false},
 		{"MX preference above 100", mustRecord(t, dc, "@", 300, dnsv2.TypeMX, 200, "mx.example.net."), false},
 		{"null MX", mustRecord(t, dc, "@", 300, dnsv2.TypeMX, 0, "."), false},
 		{"TXT with trailing space", mustRecord(t, dc, "t", 300, dnsv2.TypeTXT, "x "), false},
