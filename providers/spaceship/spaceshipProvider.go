@@ -191,10 +191,7 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 			if err != nil {
 				return nil, 0, err
 			}
-			oldNative, err := nativeFromExisting(change.Old[0])
-			if err != nil {
-				return nil, 0, err
-			}
+			oldNative := change.Old[0].Original.(client.DNSRecord)
 			if change.HintOnlyTTL {
 				corr = &models.Correction{
 					Msg: change.Msgs[0],
@@ -214,10 +211,7 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 				},
 			}
 		case diff2.DELETE:
-			oldNative, err := nativeFromExisting(change.Old[0])
-			if err != nil {
-				return nil, 0, err
-			}
+			oldNative := change.Old[0].Original.(client.DNSRecord)
 			corr = &models.Correction{
 				Msg: change.Msgs[0],
 				F: func() error {
@@ -231,16 +225,6 @@ func (c *spaceshipProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, e
 	}
 
 	return corrections, actualChangeCount, nil
-}
-
-func nativeFromExisting(rc *models.RecordConfig) (client.DNSRecord, error) {
-	if native, ok := rc.Original.(client.DNSRecord); ok {
-		return native, nil
-	}
-	if native, ok := rc.Original.(*client.DNSRecord); ok && native != nil {
-		return *native, nil
-	}
-	return toNative(rc)
 }
 
 func clampTTL(ttl uint32) uint32 {

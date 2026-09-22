@@ -7,6 +7,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/namecheap/go-spaceship-sdk/client"
 )
@@ -17,32 +18,35 @@ func toRC(dc *models.DomainConfig, rec client.DNSRecord) (*models.RecordConfig, 
 
 	var rc *models.RecordConfig
 	var err error
-	switch strings.ToUpper(rec.Type) {
-	case "A", "AAAA":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, rec.Address)
+	switch rtype := strings.ToUpper(rec.Type); rtype {
+	case "A":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeA, rec.Address)
+	case "AAAA":
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeAAAA, rec.Address)
 	case "CNAME":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, ensureDot(rec.CName))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCNAME, rec.CName,
+			nrc.Flags{TargetIsFqdnNoDot: true})
 	case "ALIAS":
 		rc, err = dc.NewRecordConfig(label, ttl, privatetypes.TypeALIAS, ensureDot(rec.AliasName))
 	case "MX":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, derefInt(rec.Preference), ensureDot(rec.Exchange))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeMX, derefInt(rec.Preference), ensureDot(rec.Exchange))
 	case "TXT":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, rec.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeTXT, rec.Value)
 	case "NS":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, ensureDot(rec.Nameserver))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeNS, ensureDot(rec.Nameserver))
 	case "PTR":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, ensureDot(rec.Pointer))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypePTR, ensureDot(rec.Pointer))
 	case "CAA":
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, derefInt(rec.Flag), rec.Tag, rec.Value)
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, derefInt(rec.Flag), rec.Tag, rec.Value)
 	case "SRV":
 		label = joinPrefixedLabel([]string{rec.Service, rec.Protocol}, rec.Name)
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, derefInt(rec.Priority), derefInt(rec.Weight), srvPort(rec.Port), ensureDot(rec.Target))
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, derefInt(rec.Priority), derefInt(rec.Weight), srvPort(rec.Port), ensureDot(rec.Target))
 	case "HTTPS", "SVCB":
 		label = joinPrefixedLabel([]string{portString(rec.Port), rec.Scheme}, rec.Name)
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, derefInt(rec.SvcPriority), httpsTarget(rec.TargetName), rec.SvcParams)
+		rc, err = dc.NewRecordConfig(dc.LabelFromShort(label), ttl, rtype, derefInt(rec.SvcPriority), httpsTarget(rec.TargetName), rec.SvcParams)
 	case "TLSA":
 		label = joinPrefixedLabel([]string{portString(rec.Port), rec.Protocol}, rec.Name)
-		rc, err = dc.NewRecordConfig(label, ttl, rec.Type, derefInt(rec.Usage), derefInt(rec.Selector), derefInt(rec.Matching), rec.AssociationData)
+		rc, err = dc.NewRecordConfig(dc.LabelFromShort(label), ttl, dnsv2.TypeTLSA, derefInt(rec.Usage), derefInt(rec.Selector), derefInt(rec.Matching), rec.AssociationData)
 	default:
 		return nil, fmt.Errorf("spaceship.toRC: unsupported record type %q", rec.Type)
 	}
