@@ -322,7 +322,7 @@ func TestCNAMECloudflareProxied(t *testing.T) {
 	dc.AddRecordConfig(recCNAME)
 	recMX := dc.MustNewRecordConfig("mail", 0, dnsv2.TypeMX, 10, "smtp.example.com.")
 	dc.AddRecordConfig(recMX)
-	errs := checkCNAMEs(dc)
+	errs := checkCNAMEs(dc, nil)
 	if len(errs) != 0 {
 		t.Errorf("Expected no errors for proxied CNAME + MX, got: %v", errs)
 	}
@@ -334,7 +334,7 @@ func TestCNAMECloudflareProxied(t *testing.T) {
 	recMX2 := dc2.MustNewRecordConfig("mail", 0, dnsv2.TypeMX, 10, "smtp.example.com.")
 	dc2.AddRecordConfig(recCNAME2)
 	dc2.AddRecordConfig(recMX2)
-	errs2 := checkCNAMEs(dc2)
+	errs2 := checkCNAMEs(dc2, nil)
 	if len(errs2) == 0 {
 		t.Error("Expected error for non-proxied CNAME + MX, got none")
 	}
@@ -355,7 +355,7 @@ func TestCheckDuplicates(t *testing.T) {
 	dc.AddTestRC(t, "@", 0, dnsv2.TypeNS, "ns3.foo.com.")
 
 	// NOTE: The comparison ignores ttl. Therefore we don't test that.
-	errs := checkDuplicates(dc.Records)
+	errs := checkDuplicates(dc.Records, nil)
 	if len(errs) != 0 {
 		t.Errorf("Expected duplicate NOT found but found %q", errs)
 	}
@@ -368,7 +368,7 @@ func TestCheckDuplicates_dup_a(t *testing.T) {
 	dc.AddTestRC(t, "@", 0, dnsv2.TypeA, "1.1.1.1")
 	dc.AddTestRC(t, "@", 0, dnsv2.TypeA, "1.1.1.1")
 
-	errs := checkDuplicates(dc.Records)
+	errs := checkDuplicates(dc.Records, nil)
 	if len(errs) == 0 {
 		t.Error("Expect duplicate found but found none")
 	}
@@ -383,7 +383,7 @@ func TestCheckDuplicates_dup_ns(t *testing.T) {
 	dc.AddTestRC(t, "@", 0, dnsv2.TypeNS, "ns2.foo.com.")
 	dc.AddTestRC(t, "@", 0, dnsv2.TypeNS, "ns2.foo.com.")
 
-	errs := checkDuplicates(dc.Records)
+	errs := checkDuplicates(dc.Records, nil)
 	if len(errs) == 0 {
 		t.Error("Expect duplicate found but found none")
 	}

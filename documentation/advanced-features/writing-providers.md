@@ -295,6 +295,30 @@ Enable optional capabilities in the `nameProvider.go` file and run the integrati
 
 FYI: If a provider's capabilities changes, run `go generate` to update the documentation.
 
+### Record identity for providers with per-line records
+
+Some providers store the same name and type several times, splitting the answers by record line, region or routing policy. DNSPod lines, Huawei Cloud lines, Gcore GeoDNS and ClouDNS geodns work that way. Those records share a label, type and RDATA, so validation would report them as duplicates.
+
+Such a provider can declare `RecordIdentity` in its `DspFuncs`:
+
+{% code title="nameProvider.go" %}
+```go
+fns := providers.DspFuncs{
+    Initializer:    newNameDsp,
+    RecordAuditor:  AuditRecords,
+    RecordIdentity: recordIdentity,
+}
+```
+{% endcode %}
+
+`recordIdentity` takes one `models.RecordConfig` and returns the text that makes the record distinct, for example `"line_id=10=1"`. Validation appends that text to the key it uses for duplicate detection. A provider that does not declare it keeps the default rules.
+
+The function runs during validation, before the provider has read the zone, so it must depend only on the record it is given. Anything that needs the live zone belongs in the comparable function that the provider passes to `diff2.ByRecord`, not here. Turning a configured line name into a line ID is an example: only the zone knows the mapping.
+
+When a domain has several providers, the first one that declares an identity function is used. The exception applies to the whole domain, so a second provider on the same domain inherits it; two providers that both store per-line records should declare the same rule.
+
+`dnscontrol check` does not read `creds.json`, so a provider declared as `NewDnsProvider("name")` has no type at that point and its identity function does not run. Use the two-argument form when `check` should see it.
+
 ## Step 13: Automated code tests
 
 We use a number of automated code-checking systems. Please run your code through all of them and fix all warnings and errors.  Some of the automated fixes may not alway sbe perfect. Therefore, it is best to commit your code before running these and verify that you agree with the changes.
