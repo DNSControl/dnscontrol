@@ -121,6 +121,9 @@ provider-LUADNS:
 provider-MIKROTIK:
   - changed-files:
       - any-glob-to-any-file: providers/mikrotik/**
+provider-MITTWALD:
+  - changed-files:
+      - any-glob-to-any-file: providers/mittwald/**
 provider-MYTHICBEASTS:
   - changed-files:
       - any-glob-to-any-file: providers/mythicbeasts/**
