@@ -136,6 +136,8 @@ func (p *mittwaldProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		return nil, 0, errors.New("GetZoneRecords must run before GetZoneRecordsCorrections")
 	}
 
+	prepDesiredRecords(dc)
+
 	// A zone holds every record set of one name, so a name is the unit of change.
 	instructions, count, err := diff2.ByLabel(existing, dc, nil)
 	if err != nil {

@@ -13,8 +13,6 @@ import (
 
 // Limits of the mStudio API (OpenAPI schema de.mittwald.v1.dns.*).
 const (
-	minTTL       = 60
-	maxTTL       = 86400
 	maxMXPrio    = 100
 	maxTXTLength = 2048
 )
@@ -39,7 +37,6 @@ func AuditRecords(records models.Records) []error {
 	a.TypesSupported([]string{"A", "AAAA", "CAA", "CNAME", "MX", "SRV", "TXT"})
 	a.Add("*", rejectif.LabelIsWildcard) // Last verified 2026-09-22
 	a.Add("*", labelHasInvalidChars)     // Last verified 2026-09-22
-	a.Add("*", ttlOutOfRange)
 	a.Add("CAA", caaTagUnsupported)
 	a.Add("CAA", caaValueNotHostname) // Last verified 2026-09-22
 	a.Add("MX", rejectif.MxNull)      // Last verified 2026-09-22
@@ -60,13 +57,6 @@ func labelHasInvalidChars(rc *models.RecordConfig) error {
 		if !labelRE.MatchString(l) {
 			return fmt.Errorf("label %q is not accepted by mStudio", l)
 		}
-	}
-	return nil
-}
-
-func ttlOutOfRange(rc *models.RecordConfig) error {
-	if rc.TTL < minTTL || rc.TTL > maxTTL {
-		return fmt.Errorf("TTL %d is outside %d..%d", rc.TTL, minTTL, maxTTL)
 	}
 	return nil
 }
