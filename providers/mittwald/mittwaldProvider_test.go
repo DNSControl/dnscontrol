@@ -182,12 +182,22 @@ func (f *fakeRunner) Do(req *http.Request) (*http.Response, error) {
 }
 
 func response(code int, headers ...string) *http.Response {
+	return responseWithBody(code, "", headers...)
+}
+
+func responseWithBody(code int, body string, headers ...string) *http.Response {
 	h := http.Header{}
 	for i := 0; i+1 < len(headers); i += 2 {
 		h.Set(headers[i], headers[i+1])
 	}
-	return &http.Response{StatusCode: code, Header: h, Body: io.NopCloser(strings.NewReader(""))}
+	return &http.Response{StatusCode: code, Header: h, Body: io.NopCloser(strings.NewReader(body))}
 }
+
+// The bodies of the two kinds of 412, as the API sends them.
+const (
+	eventNotReachedBody = `{"params":{"traceId":"0"},"message":"lastEventID not reached","type":"FailedPrecondition"}`
+	cnameConflictBody   = `{"params":{"traceId":"0"},"message":"zone for domain 'x.example.com' contains active records - unable to set CNAME","type":"VError"}`
+)
 
 // testRunner returns a runner on a fake clock that advances when it sleeps.
 func testRunner(inner *fakeRunner) (*apiRunner, *time.Duration) {
@@ -234,7 +244,7 @@ func TestAPIRunnerRepeatsOnlyIdempotentRequestsAfterServerErrors(t *testing.T) {
 func TestAPIRunnerLetsRequestsWaitForTheLastWrite(t *testing.T) {
 	inner := &fakeRunner{responses: []*http.Response{
 		response(204, "ETag", "event-1"),
-		response(412),
+		responseWithBody(412, eventNotReachedBody),
 		response(200),
 	}}
 	r, _ := testRunner(inner)
@@ -270,6 +280,26 @@ func TestAPIRunnerRepeatsA403AfterAWriteAFewTimes(t *testing.T) {
 	}
 	if inner.calls != 1+1+maxLagRetries {
 		t.Errorf("calls=%d, want %d", inner.calls, 2+maxLagRetries)
+	}
+}
+
+func TestAPIRunnerDoesNotRepeatAConflict(t *testing.T) {
+	inner := &fakeRunner{responses: []*http.Response{response(204, "ETag", "event-1"), responseWithBody(412, cnameConflictBody)}}
+	r, _ := testRunner(inner)
+	for range 2 {
+		req, _ := http.NewRequest(http.MethodPut, "https://api.example/v2/x", strings.NewReader("{}"))
+		resp, err := r.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if resp.StatusCode == 412 {
+			if body, _ := io.ReadAll(resp.Body); string(body) != cnameConflictBody {
+				t.Errorf("the caller gets the body, got %q", body)
+			}
+		}
+	}
+	if inner.calls != 2 {
+		t.Errorf("a CNAME conflict is final, calls=%d", inner.calls)
 	}
 }
 
