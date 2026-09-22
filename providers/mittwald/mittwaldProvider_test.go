@@ -128,6 +128,29 @@ func TestToNativeRejectsTwoTTLsInOneSet(t *testing.T) {
 	}
 }
 
+func TestKeepZone(t *testing.T) {
+	var managed mwdns.Zone
+	if err := json.Unmarshal([]byte(zoneJSON), &managed); err != nil {
+		t.Fatal(err)
+	}
+	zones := map[string]mwdns.Zone{"example.com": {}, "x.example.com": {}, "b.a.example.com": {}, "a.example.com": {}}
+	for _, c := range []struct {
+		desc string
+		name string
+		zone mwdns.Zone
+		keep bool
+	}{
+		{"plain name", "x.example.com", mwdns.Zone{}, false},
+		{"the domain", "example.com", mwdns.Zone{}, true},
+		{"managed set", "x.example.com", managed, true},
+		{"zones below", "a.example.com", mwdns.Zone{}, true},
+	} {
+		if got := keepZone("example.com", c.name, c.zone, zones); got != c.keep {
+			t.Errorf("%s: keep=%v, want %v", c.desc, got, c.keep)
+		}
+	}
+}
+
 func TestPrepDesiredRecordsClampsAndSharesTheATTL(t *testing.T) {
 	dc := newDC(t)
 	low := mustRecord(t, dc, "low", 30, dnsv2.TypeTXT, "x")
