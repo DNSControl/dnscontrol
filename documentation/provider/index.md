@@ -64,6 +64,7 @@ Jump to a table:
 | [`LOOPIA`](loopia.md) | ❌ | ✅ | ✅ |
 | [`LUADNS`](luadns.md) | ❌ | ✅ | ❌ |
 | [`MIKROTIK`](mikrotik.md) | ❌ | ✅ | ❌ |
+| [`MITTWALD`](mittwald.md) | ❌ | ✅ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ❌ | ✅ | ❌ |
 | [`NAMECHEAP`](namecheap.md) | ❌ | ✅ | ✅ |
 | [`NAMEDOTCOM`](namedotcom.md) | ❌ | ✅ | ✅ |
@@ -141,6 +142,7 @@ Jump to a table:
 | [`LOOPIA`](loopia.md) | ❔ | ✅ | ❌ | ✅ |
 | [`LUADNS`](luadns.md) | ✅ | ✅ | ✅ | ✅ |
 | [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ | ✅ |
+| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ✅ | ✅ | ❌ | ✅ |
 | [`NAMECHEAP`](namecheap.md) | ✅ | ❌ | ❌ | ✅ |
 | [`NAMEDOTCOM`](namedotcom.md) | ❔ | ✅ | ❌ | ✅ |
@@ -214,6 +216,7 @@ Jump to a table:
 | [`LOOPIA`](loopia.md) | ❌ | ❔ | ✅ | ❌ | ❌ |
 | [`LUADNS`](luadns.md) | ✅ | ❔ | ❌ | ✅ | ❔ |
 | [`MIKROTIK`](mikrotik.md) | ❌ | ❔ | ❌ | ❌ | ❌ |
+| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
 | [`NAMECHEAP`](namecheap.md) | ✅ | ❔ | ❌ | ❌ | ❔ |
 | [`NAMEDOTCOM`](namedotcom.md) | ✅ | ❔ | ❌ | ❌ | ❔ |
@@ -285,6 +288,7 @@ Jump to a table:
 | [`LOOPIA`](loopia.md) | ❌ | ✅ | ✅ | ❌ |
 | [`LUADNS`](luadns.md) | ❔ | ❔ | ✅ | ❔ |
 | [`MIKROTIK`](mikrotik.md) | ❔ | ❌ | ✅ | ❌ |
+| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ✅ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NAMECHEAP`](namecheap.md) | ❔ | ❔ | ✅ | ❔ |
 | [`NAMEDOTCOM`](namedotcom.md) | ❔ | ❔ | ✅ | ❔ |
@@ -356,6 +360,7 @@ Jump to a table:
 | [`LOOPIA`](loopia.md) | ✅ | ❌ | ❔ | ✅ | ✅ |
 | [`LUADNS`](luadns.md) | ✅ | ✅ | ❔ | ✅ | ✅ |
 | [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❔ | ❌ | ❌ |
+| [`MITTWALD`](mittwald.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
 | [`MYTHICBEASTS`](mythicbeasts.md) | ✅ | ❔ | ❔ | ✅ | ✅ |
 | [`NAMECHEAP`](namecheap.md) | ✅ | ❔ | ❔ | ❔ | ❌ |
 | [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -416,6 +421,7 @@ Jump to a table:
 | [`JOKER`](joker.md) | ❔ | ❌ | ❌ |
 | [`LOOPIA`](loopia.md) | ❌ | ❌ | ❌ |
 | [`MIKROTIK`](mikrotik.md) | ❌ | ❔ | ❌ |
+| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ |
 | [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ |
 | [`NETLIFY`](netlify.md) | ❌ | ❔ | ❌ |
 | [`NETNOD`](netnod.md) | ❌ | ❌ | ❌ |

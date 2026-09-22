@@ -1,0 +1,5694 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 1000
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "mittwald-test.example",
+              "priority": 2
+            },
+            {
+              "fqdn": "www.mittwald-test.example",
+              "priority": 8
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "asimple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "4.4.4.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "caa": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issue",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "caa": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issuewild",
+              "value": "example.com"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "caa": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issuewild",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "caa": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": {
+          "records": [
+            {
+              "flags": 128,
+              "tag": "issue",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 500
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 666
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 52,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 52,
+              "weight": 62
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 72,
+              "priority": 52,
+              "weight": 62
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo3.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo2.com",
+              "port": 70,
+              "priority": 5,
+              "weight": 60
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo2.com",
+              "port": 70,
+              "priority": 5,
+              "weight": 60
+            },
+            {
+              "fqdn": "foo3.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 333
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "srv": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 4400
+            }
+          }
+        },
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "xn--ndaaa.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "redact2.acm-validations.aws",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "91.42.1.1"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:ce77"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "91.42.1.2"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:ce78"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "TestDNSProviders was successful!"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "11.11.11.11"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "12.12.12.12"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "13.13.13.13"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "14.14.14.14"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "9.9.9.9"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "3.4.5.6"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.3.4.5",
+            "3.4.5.6"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.3.4.5",
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "4.5.6.7"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "mittwald-test.example",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "google.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "google2.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "redact1.acm-validations.aws",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "mx.google.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "mittwald-test.example",
+              "priority": 8
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "blah`blah"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "in\"side"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "\"left"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "in\"ter\"ior"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "right\""
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "1back\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "2back\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "3back\\\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "4back\\\\\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "semi;colon"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "wssemi ; colon"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "with spaces"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "quo'te"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "ghs.googlehosted.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "ghs.googlehosted.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      },
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "nmx.mittwald-test.example",
+              "priority": 3
+            },
+            {
+              "fqdn": "www.mittwald-test.example",
+              "priority": 9
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 333
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 999
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [],
+          "aaaa": [
+            "2607:f8b0:4006:820::2006"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [],
+          "aaaa": [
+            "2607:f8b0:4006:820::2013"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "foo.mittwald-test.example",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "www.google.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "www.yahoo.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "9.9.9.9"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            },
+            {
+              "fqdn": "bar.com",
+              "priority": 50
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "mx": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 50
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "changed"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "txt": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.1.1.1",
+            "2.2.2.2",
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.9"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 400
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 400
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 700
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "cname": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": null,
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": {
+          "fqdn": "xn--ndaaa.xn--vhquv",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "a": {
+        "AlternativeRecordUnset": null,
+        "AlternativeCombinedACustom": {
+          "a": [
+            "3.3.3.3",
+            "4.4.4.4"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:cccc"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "AlternativeRecordMXCustom": null,
+        "AlternativeRecordTXTComponent": null,
+        "AlternativeRecordSRVComponent": null,
+        "AlternativeRecordCNAMEComponent": null,
+        "AlternativeRecordCAAComponent": null
+      }
+    }
+  }
+]

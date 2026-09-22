@@ -39,6 +39,7 @@ providers/linode @koesie10
 providers/loopia @systemcrash
 providers/luadns @riku22
 providers/mikrotik @hedger
+providers/mittwald @twiesing
 providers/mythicbeasts @tomfitzhenry
 providers/namecheap @willpower232
 # providers/namedotcom NEEDS VOLUNTEER

@@ -1,0 +1,6125 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo2.com",
+              "port": 70,
+              "priority": 5,
+              "weight": 60
+            },
+            {
+              "fqdn": "foo3.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo2.com",
+              "port": 70,
+              "priority": 5,
+              "weight": 60
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo3.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            },
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 52,
+              "weight": 62
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 52,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000001",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo4.com",
+              "port": 75,
+              "priority": 15,
+              "weight": 65
+            },
+            {
+              "fqdn": "foo.com",
+              "port": 72,
+              "priority": 52,
+              "weight": 62
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000002",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 333
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "domain": "_sip._tcp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000002",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "port": 7,
+              "priority": 5,
+              "weight": 6
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 4400
+            }
+          }
+        },
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "domain": "a.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000003",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "xn--ndaaa.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "domain": "bar.bat.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000004",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "domain": "bar.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000005",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "redact2.acm-validations.aws",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "domain": "bar.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000006",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "domain": "bar.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000007",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "domain": "bar.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000008",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "domain": "bar.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000009",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "domain": "decoy.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000010",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "domain": "decoy.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000010",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "domain": "decoy.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000010",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issue",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issuewild",
+              "value": "example.com"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {
+          "records": [
+            {
+              "flags": 0,
+              "tag": "issuewild",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {
+          "records": [
+            {
+              "flags": 128,
+              "tag": "issue",
+              "value": "letsencrypt.org"
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "mittwald-test.example",
+              "priority": 2
+            },
+            {
+              "fqdn": "www.mittwald-test.example",
+              "priority": 8
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "asimple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "4.4.4.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 1000
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 500
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 666
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "domain": "mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000011",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "domain": "dyndns-city1.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000012",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "91.42.1.1"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:ce77"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "domain": "dyndns-city2.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000013",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "91.42.1.2"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:ce78"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "domain": "final.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000014",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "TestDNSProviders was successful!"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "domain": "final.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000015",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "TestDNSProviders was successful!"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "domain": "foo.bat.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000016",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000017",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "redact1.acm-validations.aws",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000018",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "mittwald-test.example",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000019",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "11.11.11.11"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000019",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "12.12.12.12"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000019",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "13.13.13.13"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000019",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "14.14.14.14"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000019",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "9.9.9.9"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "aspmx.l.google.com",
+              "priority": 10
+            },
+            {
+              "fqdn": "alt1.aspmx.l.google.com",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000020",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "mittwald-test.example",
+              "priority": 8
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000021",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000022",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000022",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "3.4.5.6"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000022",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000023",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000023",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "4.5.6.7"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000023",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "mx.google.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000024",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000025",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000026",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.3.4.5",
+            "3.4.5.6"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000026",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.3.4.5",
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000026",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.mittwald-test.example",
+              "priority": 10
+            },
+            {
+              "fqdn": "bar.mittwald-test.example",
+              "priority": 20
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000027",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "2.3.4.5"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000028",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "google.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000028",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "google2.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "domain": "foo.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000028",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "domain": "foo254.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000029",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "domain": "foo255.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000030",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "domain": "foo256.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000031",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "domain": "foo509.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000032",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "domain": "foo510.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000033",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "domain": "foo511.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000034",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "domain": "foo764.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000035",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "domain": "foo765.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000036",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "domain": "foo766.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000037",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "domain": "foobt.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000038",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "blah`blah"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "domain": "foodq.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000039",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "in\"side"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "domain": "foodqs.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000040",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "b"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "domain": "foodqs.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000041",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "\"left"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "domain": "foodqs.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000041",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "in\"ter\"ior"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "domain": "foodqs.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000041",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "right\""
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "domain": "fooosbs1.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000042",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "1back\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "domain": "fooosbs2.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000043",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "2back\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "domain": "fooosbs3.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000044",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "3back\\\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "domain": "fooosbs4.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000045",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "4back\\\\\\\\slash"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "domain": "foosc1.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000046",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "semi;colon"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "domain": "foosc2.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000047",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "wssemi ; colon"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "domain": "foosp.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000048",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "with spaces"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "domain": "foosq.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000049",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "quo'te"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "domain": "mail.bat.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000050",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "ghs.googlehosted.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "domain": "mail.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000051",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "ghs.googlehosted.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "domain": "mail.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000052",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "ghs.googlehosted.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "domain": "nmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000053",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {
+          "records": [
+            {
+              "fqdn": "nmx.mittwald-test.example",
+              "priority": 3
+            },
+            {
+              "fqdn": "www.mittwald-test.example",
+              "priority": 9
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "domain": "pager101-rec0000.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000054",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "domain": "pager101-rec0001.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000055",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "domain": "pager101-rec0002.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000056",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "domain": "pager101-rec0003.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000057",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "domain": "pager101-rec0004.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000058",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "domain": "pager101-rec0005.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000059",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "domain": "pager101-rec0006.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000060",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "domain": "pager101-rec0007.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000061",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "domain": "pager101-rec0008.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000062",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "domain": "pager101-rec0009.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000063",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "domain": "pager101-rec0010.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000064",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "domain": "pager101-rec0011.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000065",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "domain": "pager101-rec0012.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000066",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "domain": "pager101-rec0013.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000067",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "domain": "pager101-rec0014.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000068",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "domain": "pager101-rec0015.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000069",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "domain": "pager101-rec0016.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000070",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "domain": "pager101-rec0017.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000071",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "domain": "pager101-rec0018.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000072",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "domain": "pager101-rec0019.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000073",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "domain": "pager101-rec0020.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000074",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "domain": "pager101-rec0021.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000075",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "domain": "pager101-rec0022.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000076",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "domain": "pager101-rec0023.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000077",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "domain": "pager101-rec0024.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000078",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "domain": "pager101-rec0025.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000079",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "domain": "pager101-rec0026.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000080",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "domain": "pager101-rec0027.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000081",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "domain": "pager101-rec0028.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000082",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "domain": "pager101-rec0029.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000083",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "domain": "pager101-rec0030.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000084",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "domain": "pager101-rec0031.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000085",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "domain": "pager101-rec0032.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000086",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "domain": "pager101-rec0033.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000087",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "domain": "pager101-rec0034.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000088",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "domain": "pager101-rec0035.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000089",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "domain": "pager101-rec0036.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000090",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "domain": "pager101-rec0037.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000091",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "domain": "pager101-rec0038.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000092",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "domain": "pager101-rec0039.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000093",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "domain": "pager101-rec0040.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000094",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "domain": "pager101-rec0041.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000095",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "domain": "pager101-rec0042.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000096",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "domain": "pager101-rec0043.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000097",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "domain": "pager101-rec0044.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000098",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "domain": "pager101-rec0045.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000099",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "domain": "pager101-rec0046.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000100",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "domain": "pager101-rec0047.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000101",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "domain": "pager101-rec0048.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000102",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "domain": "pager101-rec0049.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000103",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "domain": "pager101-rec0050.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000104",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "domain": "pager101-rec0051.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000105",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "domain": "pager101-rec0052.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000106",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "domain": "pager101-rec0053.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000107",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "domain": "pager101-rec0054.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000108",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "domain": "pager101-rec0055.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000109",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "domain": "pager101-rec0056.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000110",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "domain": "pager101-rec0057.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000111",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "domain": "pager101-rec0058.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000112",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "domain": "pager101-rec0059.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000113",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "domain": "pager101-rec0060.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000114",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "domain": "pager101-rec0061.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000115",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "domain": "pager101-rec0062.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000116",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "domain": "pager101-rec0063.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000117",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "domain": "pager101-rec0064.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000118",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "domain": "pager101-rec0065.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000119",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "domain": "pager101-rec0066.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000120",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "domain": "pager101-rec0067.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000121",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "domain": "pager101-rec0068.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000122",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "domain": "pager101-rec0069.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000123",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "domain": "pager101-rec0070.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000124",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "domain": "pager101-rec0071.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000125",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "domain": "pager101-rec0072.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000126",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "domain": "pager101-rec0073.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000127",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "domain": "pager101-rec0074.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000128",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "domain": "pager101-rec0075.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000129",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "domain": "pager101-rec0076.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000130",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "domain": "pager101-rec0077.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000131",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "domain": "pager101-rec0078.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000132",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "domain": "pager101-rec0079.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000133",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "domain": "pager101-rec0080.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000134",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "domain": "pager101-rec0081.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000135",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "domain": "pager101-rec0082.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000136",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "domain": "pager101-rec0083.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000137",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "domain": "pager101-rec0084.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000138",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "domain": "pager101-rec0085.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000139",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "domain": "pager101-rec0086.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000140",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "domain": "pager101-rec0087.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000141",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "domain": "pager101-rec0088.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000142",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "domain": "pager101-rec0089.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000143",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "domain": "pager101-rec0090.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000144",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "domain": "pager101-rec0091.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000145",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "domain": "pager101-rec0092.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000146",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "domain": "pager101-rec0093.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000147",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "domain": "pager101-rec0094.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000148",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "domain": "pager101-rec0095.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000149",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "domain": "pager101-rec0096.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000150",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "domain": "pager101-rec0097.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000151",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "domain": "pager101-rec0098.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000152",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "domain": "pager101-rec0099.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000153",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "domain": "pager101-rec0100.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000154",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "domain": "testa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000155",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "domain": "testa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000155",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "domain": "testa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000156",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 333
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "domain": "testa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000156",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 999
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "domain": "testaaaa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000157",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [],
+          "aaaa": [
+            "2607:f8b0:4006:820::2006"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "domain": "testaaaa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000157",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [],
+          "aaaa": [
+            "2607:f8b0:4006:820::2013"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "domain": "testcname.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000158",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "foo.mittwald-test.example",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "domain": "testcname.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000159",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "www.google.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "domain": "testcname.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000159",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "www.yahoo.com",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "domain": "testdefined.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000160",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "domain": "testdefined.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000160",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "9.9.9.9"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "domain": "testignore.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000161",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "8.8.8.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000162",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 50
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000162",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000163",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "bar.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000163",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000164",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            },
+            {
+              "fqdn": "bar.com",
+              "priority": 50
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000165",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            },
+            {
+              "fqdn": "bar.com",
+              "priority": 50
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "domain": "testmx.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000165",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {
+          "records": [
+            {
+              "fqdn": "foo.com",
+              "priority": 5
+            }
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "domain": "testtxt.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000166",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "changed"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "domain": "testtxt.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000166",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {
+          "entries": [
+            "simple"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000167",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000168",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "2.2.2.2",
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000168",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000168",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000169",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1",
+            "2.2.2.2",
+            "3.3.3.3"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000170",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.1.1.1"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000171",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 700
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000171",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 400
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000172",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "5.4.5.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000173",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000173",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000173",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2",
+            "5.6.7.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 400
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000174",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.9"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "domain": "www.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000175",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.8"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "domain": "xn--fiq228c.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000176",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "domain": "xn--ndaaa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000177",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "1.2.3.4"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "domain": "xn--ndaaa.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000177",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "2.2.2.2"
+          ],
+          "aaaa": [],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "domain": "xn--o-0gab.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000178",
+      "recordSet": {
+        "caa": {},
+        "cname": {
+          "fqdn": "xn--ndaaa.xn--vhquv",
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "combinedARecords": {},
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "domain": "zzz.mittwald-test.example",
+      "id": "00000000-0000-0000-0000-000000000179",
+      "recordSet": {
+        "caa": {},
+        "cname": {},
+        "combinedARecords": {
+          "a": [
+            "3.3.3.3",
+            "4.4.4.4"
+          ],
+          "aaaa": [
+            "2003:dd:d7ff::fe71:cccc"
+          ],
+          "settings": {
+            "ttl": {
+              "seconds": 300
+            }
+          }
+        },
+        "mx": {},
+        "srv": {},
+        "txt": {}
+      }
+    }
+  }
+]

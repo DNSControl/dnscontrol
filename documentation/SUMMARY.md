@@ -164,6 +164,7 @@
 * [Loopia](provider/loopia.md)
 * [LuaDNS](provider/luadns.md)
 * [MikroTik RouterOS](provider/mikrotik.md)
+* [mittwald](provider/mittwald.md)
 * [Mythic Beasts](provider/mythicbeasts.md)
 * [Namecheap](provider/namecheap.md)
 * [Name.com](provider/namedotcom.md)
