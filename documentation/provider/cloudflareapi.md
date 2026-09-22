@@ -544,6 +544,19 @@ The API key you use must be enabled to edit workers.  In the portal, edit the AP
 
 Please notice that if _any_ `CF_WORKER_ROUTE` function is used then `dnscontrol` will manage _all_ Worker Routes for the domain. To be clear: this means it will delete existing routes that were created outside of DNSControl.
 
+## Worker custom domains
+
+A [Workers Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) is different from a Worker Route: Cloudflare creates a DNS record for the hostname, which DNSControl sees as an `AAAA` record pointing to `100::`. If that record is not in `dnsconfig.js`, DNSControl treats it as unwanted and removes it on the next `push`, which breaks the custom domain. Keep the record in your configuration:
+
+{% code title="dnsconfig.js" %}
+```javascript
+D("foo.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+    // Keep the DNS record that Cloudflare created for the Workers Custom Domain `worker.foo.com`.
+    AAAA("worker", "100::"),
+);
+```
+{% endcode %}
+
 ## DS records
 
 Cloudflare has restrictions that may result in DNSControl's attempt to insert DS records to fail.

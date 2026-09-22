@@ -2,7 +2,7 @@
 
 [![DNSControl/dnscontrol/build](https://github.com/DNSControl/dnscontrol/actions/workflows/pr_build.yml/badge.svg)](https://github.com/DNSControl/dnscontrol/actions/workflows/pr_build.yml)
 [![Google Group](https://img.shields.io/badge/google%20group-chat-green.svg)](https://groups.google.com/forum/#!forum/dnscontrol-discuss)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/DNSControl/dnscontrol)](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v4)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/DNSControl/dnscontrol)](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5)
 
 [DNSControl](https://docs.dnscontrol.org/) is Infrastructure as Code for DNS.
 It includes a full-featured configuration language (Javascript-compatible),
@@ -18,7 +18,7 @@ extensible, so more providers can be added.
 ```js
 // define our registrar and providers
 var REG_NAMECOM = NewRegistrar("ndc_main");
-var DSP_ROUTE53 = NewDnsProvider("r53_main")
+var DSP_ROUTE53 = NewDnsProvider("r53_main");
 
 D("example.com", REG_NAMECOM, DnsProvider(DSP_ROUTE53),
   A("@", "1.2.3.4"),
@@ -38,9 +38,13 @@ The easiest way to run DNSControl is to use the Docker container:
 docker run --rm -it -v "$(pwd):/dns"  ghcr.io/dnscontrol/dnscontrol preview
 ```
 
-Want full "GitOps" control of your DNS data?  Clone this repo to get started!  [github.com/DNSControl/dns-config](https://github.com/DNSControl/dns-config)
+## Getting Started
 
-See [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on documentation site to get started!
+The quickest way to start is [`dnscontrol init`](https://docs.dnscontrol.org/commands/init). The interactive wizard asks for your DNS provider and registrar, verifies your credentials and writes a working `creds.json` and `dnsconfig.js`, including the records that already exist in your zones.
+
+See the [Getting Started](https://docs.dnscontrol.org/getting-started/getting-started) page on the documentation site for the full walkthrough.
+
+Want full "GitOps" control of your DNS data? Clone the [dns-config](https://github.com/DNSControl/dns-config) starter repo to get started!
 
 ## Supported Providers
 
@@ -101,18 +105,18 @@ DNSControl supports 65 DNS providers and registrars:
 
 ## Installation
 
-DNSControl can be installed via packages for macOS, Linux and Windows, or from source code. See the [official instructions](https://docs.dnscontrol.org/getting-started/getting-started#1-install-the-software).
+DNSControl can be installed via packages for macOS, Linux and Windows, or from source code. See the [official instructions](https://docs.dnscontrol.org/getting-started/getting-started#id-1.-install-the-software).
 
 ## Via GitHub Actions (GHA)
 
-The official Github Action is: [github.com/dnscontrol/dnscontrol-action](https://github.com/dnscontrol/dnscontrol-action)
+The official GitHub Action is: [github.com/dnscontrol/dnscontrol-action](https://github.com/dnscontrol/dnscontrol-action)
 
 Others have been created such as:
 
 * [github.com/metabrainz/dnscontrol-action](https://github.com/metabrainz/dnscontrol-action)
 * [github.com/gacts/install-dnscontrol](https://github.com/gacts/install-dnscontrol)
 
-## Deprecation warnings (updated 2025-11-21)
+## Deprecation warnings (updated 2026-08-17)
 
 - **REV() will switch from RFC2317 to RFC4183 sometime after v5.0 is released.** This is a breaking change. Warnings are output if your configuration is affected. See https://docs.dnscontrol.org/language-reference/top-level-functions/revcompat
 - **NAMEDOTCOM, OPENSRS, and SOFTLAYER need maintainers!** These providers have no maintainer. Maintainers respond to PRs and fix bugs in a timely manner, and try to stay on top of protocol changes. Interested in being a hero and adopting them?  Contact tal at what exit dot org.

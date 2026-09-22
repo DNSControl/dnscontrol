@@ -7,14 +7,14 @@ Please make sure you've run the following commands from the root directory.
 
 (this runs commands like "go generate", fixes formatting, and so on)
 
-## Release changelog section
+## Pull request title
 
-Help keep the release changelog clear by pre-naming the proper section in the GitHub pull request title.
+The pull request title becomes the commit message on main and must follow Conventional Commits (the "PR: Commitlint" check enforces this). Provider-specific changes use the scope "p/PROVIDERNAME". The subject starts with a lowercase letter.
 
 Some examples:
-* CICD: Add required GHA permissions for goreleaser
-* DOCS: Fixed providers with "contributor support" table
-* ROUTE53: Allow R53_ALIAS records to enable target health evaluation
+* ci: add required GHA permissions for goreleaser
+* docs: fix providers with "contributor support" table
+* feat(p/ROUTE53): allow R53_ALIAS records to enable target health evaluation
 
-More examples/context can be found in the file .goreleaser.yml under the 'build' > 'changelog' key.
+More details can be found in CONTRIBUTING.md under "Pull request titles".
 !-->

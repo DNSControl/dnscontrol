@@ -1,11 +1,12 @@
 {
+  "name": "dnscontrol",
   "dependencies": {
     "@umbrelladocs/linkspector": "^0.5.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
-    "prettier": "3.9.5"
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "prettier": "3.9.6"
   },
   "allowScripts": {
     "puppeteer@25.6.0": true
