@@ -1,6 +1,6 @@
 module github.com/DNSControl/dnscontrol/v5
 
-go 1.27.0
+go 1.27
 
 require (
 	codeberg.org/miekg/dns v0.6.109
