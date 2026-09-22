@@ -48,6 +48,7 @@ module.exports = {
     // of allowed values (case-sensitively), so the case rule is redundant.
     "type-case": [0],
     "scope-case": [0],
+    "subject-case": [0], // Permit capitalized subjects like "fix(foo): Correct TTL rounding"
     "provider-scope-format": [2, "always"],
   },
   plugins: [
