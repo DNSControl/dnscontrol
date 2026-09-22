@@ -1,16 +1,15 @@
 # How to "Modernize" a provider
 
-- [How to "Modernize" a provider](#how-to-modernize-a-provider)
-  - [What work do you need to do?](#what-work-do-you-need-to-do)
-  - [Dev tips](#dev-tips)
-  - [Step 1. Adopt `models.NewDomainConfig()`](#step-1-adopt-modelsnewdomainconfig)
-  - [Step 2. Adopt `models.NewRecordConfig()`](#step-2-adopt-modelsnewrecordconfig)
-  - [Step 3. Remove obsolete setters](#step-3-remove-obsolete-setters)
-  - [Step 4.  Replace dnsutilv1.AddOrigin()](#step-4--replace-dnsutilv1addorigin)
-  - [Step 5. Replace TrimDomainName()](#step-5-replace-trimdomainname)
-  - [Step 6. Upgrade any remaining dnsv1 or dnsutilv1 references](#step-6-upgrade-any-remaining-dnsv1-or-dnsutilv1-references)
-  - [Step 7. Remove obsolete setters](#step-7-remove-obsolete-setters)
-  - [Step 8. Remove obsolete getters](#step-8-remove-obsolete-getters)
+- [What work do you need to do?](#what-work-do-you-need-to-do)
+- [Dev tips](#dev-tips)
+- [Step 1. Adopt `models.NewDomainConfig()`](#step-1-adopt-modelsnewdomainconfig)
+- [Step 2. Adopt `models.NewRecordConfig()`](#step-2-adopt-modelsnewrecordconfig)
+- [Step 3. Remove obsolete setters](#step-3-remove-obsolete-setters)
+- [Step 4.  Replace dnsutilv1.AddOrigin()](#step-4--replace-dnsutilv1addorigin)
+- [Step 5. Replace TrimDomainName()](#step-5-replace-trimdomainname)
+- [Step 6. Upgrade any remaining dnsv1 or dnsutilv1 references](#step-6-upgrade-any-remaining-dnsv1-or-dnsutilv1-references)
+- [Step 7. Remove obsolete setters](#step-7-remove-obsolete-setters)
+- [Step 8. Remove obsolete getters](#step-8-remove-obsolete-getters)
 
 "Modernize" means adopting the new RecordConfig v3 structs, factories, etc.
 

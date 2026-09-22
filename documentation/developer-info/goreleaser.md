@@ -1,18 +1,11 @@
 # GoReleaser
 
-- [GoReleaser](#goreleaser)
-  - [Homebrew Tap](#homebrew-tap)
-    - [Homebrew TAP GitHub PAT](#homebrew-tap-github-pat)
-      - [Rotation procedure](#rotation-procedure)
-    - [macOS Code Signing \& Notarization](#macos-code-signing--notarization)
-      - [Steps to activate](#steps-to-activate)
-        - [1. Apple Developer Program](#1-apple-developer-program)
-        - [2. Developer ID Application Certificate](#2-developer-id-application-certificate)
-        - [3. Export as .p12](#3-export-as-p12)
-        - [4. App Store Connect API Key](#4-app-store-connect-api-key)
-        - [5. GitHub Actions Secrets](#5-github-actions-secrets)
-        - [6. Testing](#6-testing)
-      - [Background](#background)
+- [Homebrew Tap](#homebrew-tap)
+  - [Homebrew TAP GitHub PAT](#homebrew-tap-github-pat)
+    - [Rotation procedure](#rotation-procedure)
+  - [macOS Code Signing & Notarization](#macos-code-signing-and-notarization)
+    - [Steps to activate](#steps-to-activate)
+    - [Background](#background)
 
 ## Homebrew Tap
 

@@ -1,8 +1,7 @@
 # Bug Triage Process
 
-- [Bug Triage Process](#bug-triage-process)
-  - [Who to assign bugs to](#who-to-assign-bugs-to)
-  - [How bugs are classified](#how-bugs-are-classified)
+- [Who to assign bugs to](#who-to-assign-bugs-to)
+- [How bugs are classified](#how-bugs-are-classified)
 
 ## Who to assign bugs to
 

@@ -1,8 +1,7 @@
 # Adding provider conversion golden tests
 
-- [Adding provider conversion golden tests](#adding-provider-conversion-golden-tests)
-  - [Instrument the provider](#instrument-the-provider)
-  - [Add replay tests](#add-replay-tests)
+- [Instrument the provider](#instrument-the-provider)
+- [Add replay tests](#add-replay-tests)
 
 `pkg/providergolden` records and replays the exact conversion calls exercised by
 integration tests. See [Provider conversion golden files](goldenfiles.md) for the recording

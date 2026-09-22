@@ -1,18 +1,17 @@
 # GitHub Actions
 
-- [GitHub Actions](#github-actions)
-  - [PR Checks Overview](#pr-checks-overview)
-  - [Check: git status](#check-git-status)
-    - [Check: go fmt](#check-go-fmt)
-    - [Check: prettier](#check-prettier)
-    - [Check: fmtjson](#check-fmtjson)
-    - [Check: go mod tidy](#check-go-mod-tidy)
-    - [Check: go generate](#check-go-generate)
-    - [Check: go fix](#check-go-fix)
-  - [Lint](#lint)
-  - [Build \& Test](#build--test)
-  - [Commitlint](#commitlint)
-  - [Running all checks at once](#running-all-checks-at-once)
+- [PR Checks Overview](#pr-checks-overview)
+- [Check: git status](#check-git-status)
+  - [Check: go fmt](#check-go-fmt)
+  - [Check: prettier](#check-prettier)
+  - [Check: fmtjson](#check-fmtjson)
+  - [Check: go mod tidy](#check-go-mod-tidy)
+  - [Check: go generate](#check-go-generate)
+  - [Check: go fix](#check-go-fix)
+- [Lint](#lint)
+- [Build & Test](#build-and-test)
+- [Commitlint](#commitlint)
+- [Running all checks at once](#running-all-checks-at-once)
 
 ## PR Checks Overview
 

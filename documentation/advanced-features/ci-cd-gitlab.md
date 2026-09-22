@@ -1,11 +1,10 @@
 # GitLab CI/CD example
 
-- [GitLab CI/CD example](#gitlab-cicd-example)
-  - [DNSControl - Demo setup](#dnscontrol---demo-setup)
-  - [GitLab CI - Preparation](#gitlab-ci---preparation)
-  - [GitLab CI - DNSControl preview](#gitlab-ci---dnscontrol-preview)
-  - [GitLab CI - DNSControl push](#gitlab-ci---dnscontrol-push)
-  - [GitLab CI - Duplicate YAML configuration](#gitlab-ci---duplicate-yaml-configuration)
+- [DNSControl - Demo setup](#dnscontrol-demo-setup)
+- [GitLab CI - Preparation](#gitlab-ci-preparation)
+- [GitLab CI - DNSControl preview](#gitlab-ci-dnscontrol-preview)
+- [GitLab CI - DNSControl push](#gitlab-ci-dnscontrol-push)
+- [GitLab CI - Duplicate YAML configuration](#gitlab-ci-duplicate-yaml-configuration)
 
 Before discussing the GitLab CI/CD setup, let's assume you already have a working DNSControl setup. Aren't you there yet? Then first check out the '[Getting Started](../getting-started/getting-started.md)' section.
 
