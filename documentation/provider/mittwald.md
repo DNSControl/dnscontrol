@@ -44,7 +44,7 @@ Create an API token in mStudio under your user profile. A domain can be managed 
 
 ### One zone per name
 
-mStudio stores every name as its own zone: `example.com`, `www.example.com` and `_dmarc.example.com` are three zones. The provider creates the zone of a name when a record is added to it and deletes it when its last record is removed.
+mStudio stores every name as its own zone: `example.com`, `www.example.com` and `_dmarc.example.com` are three zones. The provider creates the zone of a name when a record is added to it and deletes it when its last record is removed; the domain's own zone, a zone with a set that mStudio manages and a zone with other zones below it stay.
 
 ### Record sets
 

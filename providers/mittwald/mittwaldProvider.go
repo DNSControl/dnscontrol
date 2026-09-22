@@ -191,9 +191,17 @@ func (p *mittwaldProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 			}))
 
 		case diff2.DELETE:
+			keep := keepZone(dc.Name, name, zone, zones)
 			corrections = append(corrections, inst.CreateCorrection(func() error {
-				// The root zone stays, and so does a zone with a set mStudio manages.
-				if name != dc.Name && !hasManagedSet(zone) {
+				if !keep {
+					// Once a zone is deleted while it has a CAA set, mStudio
+					// answers every CAA set of a new zone of that name with 500;
+					// a set unset before does not do this.
+					if slices.Contains(old, setCAA) {
+						if err := p.api.unsetRecordSet(zone.Id, setCAA); err != nil {
+							return err
+						}
+					}
 					return p.api.deleteZone(zone.Id)
 				}
 				for _, set := range old {
@@ -206,6 +214,21 @@ func (p *mittwaldProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		}
 	}
 	return corrections, count, nil
+}
+
+// keepZone reports whether the zone of name stays when its records go: the
+// domain's own zone does, a zone with a set that mStudio manages, and a zone
+// with other zones below it.
+func keepZone(domain, name string, zone mwdns.Zone, zones map[string]mwdns.Zone) bool {
+	if name == domain || hasManagedSet(zone) {
+		return true
+	}
+	for other := range zones {
+		if strings.HasSuffix(other, "."+name) {
+			return true
+		}
+	}
+	return false
 }
 
 // slotsOf returns the record sets that hold the records, each once, sorted.
