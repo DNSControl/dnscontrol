@@ -23,10 +23,10 @@ No additional setup is required in `creds.json`:
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP"
+    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP"
   }
 }
 ```
@@ -35,17 +35,17 @@ No additional setup is required in `creds.json`:
 You can also use environment variables:
 
 ```shell
-export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_RESOURCE_GROUP=YYYYYYYYY
 ```
 
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP"
+    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_RESOURCE_GROUP"
   }
 }
 ```
@@ -60,13 +60,13 @@ Example:
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
-    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
-    "ClientID": "AZURE_PRIVATE_DNS_CLIENT_ID",
-    "ClientSecret": "AZURE_PRIVATE_DNS_CLIENT_SECRET"
+    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_TENANT_ID",
+    "ClientID": "AZURE_PRIVATE_CLIENT_ID",
+    "ClientSecret": "AZURE_PRIVATE_CLIENT_SECRET"
   }
 }
 ```
@@ -75,23 +75,23 @@ Example:
 You can also use environment variables:
 
 ```shell
-export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
-export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
-export AZURE_PRIVATE_DNS_CLIENT_ID=AAAAAAAAA
-export AZURE_PRIVATE_DNS_CLIENT_SECRET=BBBBBBBBB
+export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_TENANT_ID=ZZZZZZZZ
+export AZURE_CLIENT_ID=AAAAAAAAA
+export AZURE_CLIENT_SECRET=BBBBBBBBB
 ```
 
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
-    "ClientID": "$AZURE_PRIVATE_DNS_CLIENT_ID",
-    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
-    "ClientSecret": "$AZURE_PRIVATE_DNS_CLIENT_SECRET"
+    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_RESOURCE_GROUP",
+    "ClientID": "$AZURE_CLIENT_ID",
+    "TenantID": "$AZURE_TENANT_ID",
+    "ClientSecret": "$AZURE_CLIENT_SECRET"
   }
 }
 ```
@@ -104,39 +104,38 @@ To enable OIDC for interactive login:
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
-    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
+    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_TENANT_ID",
     "UseOIDC": "true"
   }
 }
 ```
 {% endcode %}
 
-+You can also use environment variables:
+You can also use environment variables:
 ```shell
-export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
-export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
+export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_TENANT_ID=ZZZZZZZZ
 export UseOIDC=true
 ```
 
 {% code title="creds.json" %}
 ```json
 {
-  "azuredns_main": {
+  "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
-    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
+    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_RESOURCE_GROUP",
+    "TenantID": "$AZURE_TENANT_ID",
     "UseOIDC": "$UseOIDC"
   }
 }
 ```
 {% endcode %}
-
 
 ## Metadata
 This provider does not recognize any special metadata fields unique to Azure Private DNS.
@@ -207,7 +206,7 @@ az role assignment create \
 For AZURE_DNS the commands are slightly different.
 
 ## Activation
-DNSControl depends on a standard [Client credentials Authentication](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest) with permission to list, create and update private zones.
+DNSControl supports three authentication methods: DefaultAzureCredential (recommended), [Client credentials Authentication](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest), and OIDC interactive browser login. All methods require permission to list, create and update private zones.
 
 ## New domains
 
@@ -215,7 +214,7 @@ If a domain does not exist in your Azure account, DNSControl will *not* automati
 
 ## Caveats
 
-The ResourceGroup is case sensitive.
+The ResourceGroup is case-insensitive (it is lowercased internally).
 
 ## Feature Summary
 
