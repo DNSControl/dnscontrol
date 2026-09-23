@@ -89,6 +89,11 @@ func (a *api) findProject(domain string) (string, error) {
 	if id, ok := a.projectByZone[domain]; ok {
 		return id, nil
 	}
+	// The domain list names the project of a domain in one request.
+	if id, err := a.projectFromDomainList(domain); err != nil || id != "" {
+		return id, err
+	}
+	// A domain missing from that list is looked for in the zones of every project.
 	ids, err := a.listProjectIDs()
 	if err != nil {
 		return "", err
@@ -108,6 +113,30 @@ func (a *api) findProject(domain string) (string, error) {
 		return "", fmt.Errorf("domain %q not found in any mStudio project of this token", domain)
 	}
 	return id, nil
+}
+
+// projectFromDomainList returns the ID of the project that holds domain
+// according to the token's domain list, or "" when the list does not have it.
+func (a *api) projectFromDomainList(domain string) (string, error) {
+	search := domain
+	if u, err := idna.ToUnicode(domain); err == nil {
+		search = u // the API names domains in Unicode
+	}
+	domains, resp, err := a.client.Domain().ListDomains(context.Background(), domainclientv2.ListDomainsRequest{DomainSearchName: &search})
+	closeBody(resp)
+	if err != nil {
+		return "", fmt.Errorf("listing domains: %w", err)
+	}
+	for _, d := range *domains {
+		if name, err := idna.ToASCII(d.Domain); err == nil && name == domain && d.ProjectId != "" {
+			if a.projectByZone == nil {
+				a.projectByZone = map[string]string{}
+			}
+			a.projectByZone[domain] = d.ProjectId
+			return d.ProjectId, nil
+		}
+	}
+	return "", nil
 }
 
 // zonesOf returns the root zone of domain and every zone below it, keyed by
