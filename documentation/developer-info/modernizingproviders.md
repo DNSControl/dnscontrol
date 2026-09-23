@@ -2,14 +2,14 @@
 
 - [What work do you need to do?](#what-work-do-you-need-to-do)
 - [Dev tips](#dev-tips)
-- [Step 1. Adopt `models.NewDomainConfig()`](#step-1-adopt-modelsnewdomainconfig)
-- [Step 2. Adopt `models.NewRecordConfig()`](#step-2-adopt-modelsnewrecordconfig)
-- [Step 3. Remove obsolete setters](#step-3-remove-obsolete-setters)
-- [Step 4.  Replace dnsutilv1.AddOrigin()](#step-4--replace-dnsutilv1addorigin)
-- [Step 5. Replace TrimDomainName()](#step-5-replace-trimdomainname)
-- [Step 6. Upgrade any remaining dnsv1 or dnsutilv1 references](#step-6-upgrade-any-remaining-dnsv1-or-dnsutilv1-references)
-- [Step 7. Remove obsolete setters](#step-7-remove-obsolete-setters)
-- [Step 8. Remove obsolete getters](#step-8-remove-obsolete-getters)
+- [Step 1: Adopt `models.NewDomainConfig()`](#step-1-adopt-modelsnewdomainconfig)
+- [Step 2: Adopt `models.NewRecordConfig()`](#step-2-adopt-modelsnewrecordconfig)
+- [Step 3: Remove obsolete setters](#step-3-remove-obsolete-setters)
+- [Step 4: Replace dnsutilv1.AddOrigin()](#step-4-replace-dnsutilv1addorigin)
+- [Step 5: Replace TrimDomainName()](#step-5-replace-trimdomainname)
+- [Step 6: Upgrade any remaining dnsv1 or dnsutilv1 references](#step-6-upgrade-any-remaining-dnsv1-or-dnsutilv1-references)
+- [Step 7: Remove obsolete setters](#step-7-remove-obsolete-setters)
+- [Step 8: Remove obsolete getters](#step-8-remove-obsolete-getters)
 
 "Modernize" means adopting the new RecordConfig v3 structs, factories, etc.
 
@@ -64,7 +64,7 @@ Adopt the new code:
 rec.Metadata[metaOriginalIP] = rec.GetTargetIP().String()
 ```
 
-## Step 1. Adopt `models.NewDomainConfig()`
+## Step 1: Adopt `models.NewDomainConfig()`
 
 Change any `DomainConfig{}` to the new factory:
 
@@ -80,7 +80,7 @@ NEW:
 dc := models.NewDomainConfig(zoneName)
 ```
 
-## Step 2. Adopt `models.NewRecordConfig()`
+## Step 2: Adopt `models.NewRecordConfig()`
 
 Change any `RecordConfig{}` to the new factory:
 
@@ -125,7 +125,7 @@ function, wait for VS Code to report errors in the callers. Fix those.  If
 those don't have `dc`, change their signatures. Keep working you way up the
 chain.
 
-## Step 3. Remove obsolete setters
+## Step 3: Remove obsolete setters
 
 `PopulateFromString()` can be replaced by `dc.NewRecordConfigParse(...)`.
 
@@ -150,7 +150,7 @@ default:
 if err != nil { whatever }
 ```
 
-## Step 4.  Replace dnsutilv1.AddOrigin()
+## Step 4: Replace dnsutilv1.AddOrigin()
 
 OLD:
 
@@ -165,7 +165,7 @@ n1 := nameutil.ToFqdnWithDot(ns.Name, domain.Name) // result always ends with ".
 n2 := nameutil.ToFqdnNoDot(ns.Name, domain.Name)   // result never ends with "."
 ```
 
-## Step 5. Replace TrimDomainName()
+## Step 5: Replace TrimDomainName()
 
 OLD:
 
@@ -181,11 +181,11 @@ or
 shortname := dc.ToShort(label)
 ```
 
-## Step 6. Upgrade any remaining dnsv1 or dnsutilv1 references
+## Step 6: Upgrade any remaining dnsv1 or dnsutilv1 references
 
 Replace any remaining uses of dnsv1 or dnsutilv1 with dnsv2 and dnsutilv2 respectively.
 
-## Step 7. Remove obsolete setters
+## Step 7: Remove obsolete setters
 
 `rc.GetTargetCombined()` is now `rc.GetRDATA().String()`
 
@@ -214,7 +214,7 @@ If it is a TXT record, there are 3 permitted getters:
 - `rc.GetTargetTXTSegmented()`
 - `rc.GetRDATA().String()`   // quoted and escaped.
 
-## Step 8. Remove obsolete getters
+## Step 8: Remove obsolete getters
 
 OLD:
 
