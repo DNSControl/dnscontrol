@@ -3,7 +3,7 @@
 - [Homebrew Tap](#homebrew-tap)
   - [Homebrew TAP GitHub PAT](#homebrew-tap-github-pat)
     - [Rotation procedure](#rotation-procedure)
-  - [macOS Code Signing & Notarization](#macos-code-signing-and-notarization)
+  - [macOS Code Signing and Notarization](#macos-code-signing-and-notarization)
     - [Steps to activate](#steps-to-activate)
     - [Background](#background)
 
@@ -47,7 +47,7 @@ GoReleaser needs a GitHub Personal Access Token to push the Homebrew Cask formul
 3. Verify that the next GoReleaser release successfully updates the Homebrew tap
 4. Create a new tracking issue for the next rotation cycle
 
-### macOS Code Signing & Notarization
+### macOS Code Signing and Notarization
 
 Without code signing, macOS Gatekeeper shows an error on `brew install`:
 

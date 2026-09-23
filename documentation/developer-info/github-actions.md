@@ -9,7 +9,7 @@
   - [Check: go generate](#check-go-generate)
   - [Check: go fix](#check-go-fix)
 - [Lint](#lint)
-- [Build & Test](#build-and-test)
+- [Build and Test](#build-and-test)
 - [Commitlint](#commitlint)
 - [Running all checks at once](#running-all-checks-at-once)
 
@@ -116,7 +116,7 @@ golangci-lint run ./...
 
 See `.golangci.yml` for the list of enabled linters and their settings.
 
-## Build & Test
+## Build and Test
 
 Runs all unit tests with `gotestsum` and builds binaries for all platforms using GoReleaser.
 
