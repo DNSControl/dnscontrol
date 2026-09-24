@@ -235,17 +235,22 @@ func init() {
 Add a function called BuilderROBERT() with this signature:
 
 ```go
-func BuilderROBERT(dc *DomainConfig, ttl uint32, args []any, metadata map[string]string, subdomain string) (Records, error) {
+func BuilderROBERT(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error) {
 ```
 
 - `dc`: The domain the builder was called in.
 - `ttl`: the desired TTL or `0` if it is unknown. Unknown TTLs are converted into the default TTL.
 - `args`: the arguments passed to the function in `dnsconfig.js`. Each should be passed through a `mustbe.*` function before use.
-- `metadata`: Any `{foo: "foo"}` (Javascript objects) passed to the function in `dnsconfig.js`.
-- `subdomain`: If the builder was used in a `D_EXTEND()`, the subdomain will be non-nil.
+- `subdomain`: If the builder was used in a `D_EXTEND()`, the subdomain will be non-empty.
   - If `D("example.com")` is followed by `D_EXTEND("foo.example.com")`, subdomain will be `foo`.
-  - To calculate the label: `name, _ := dc.LabelFromDnsconfigjs(args[0].(string), subdomain)`
-  - To calcuate a target name: `name, _ := mustbe.TagetHostWithSubdoman(dc.Name, subdomain, name)`
+  - The builder receives the subdomain as it was written in `dnsconfig.js`, not in IDNA form. Convert it with `idna.ToASCII()` and `strings.ToLower()` before passing it on, and use the converted value for `RecordConfig.SubDomain` as well.
+  - To calculate the label: `name, _ := dc.LabelFromDnsconfigjs(args[0].(string), subdomainASCII)`
+  - To calculate a target name: `name, _ := mustbe.TargetHost(targetOrigin, isEnabled, name)`, where `targetOrigin` is `dc.Name`, or `subdomainASCII + "." + dc.Name` if the builder was used in a `D_EXTEND()`.
+
+A builder does not receive the `{foo: "foo"}` (Javascript objects) passed to the
+function in `dnsconfig.js`: `RecordBuilderFn` has no metadata parameter. A
+builder that needs an object has to move it into `args` in `pkg/js/helpers.js`
+(see `m365Options()`).
 
 The builder function can do basically anything and generate as many records as it wants. `SPF_BUILDER()` returns many records. `LOC()` returns just one record.
 
