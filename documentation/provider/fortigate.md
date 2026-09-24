@@ -6,7 +6,7 @@ This DNS provider lets you manage DNS zones hosted on a Fortinet FortiGate devic
 ## Supported Features
 
 - `dnscontrol get-zones` is supported. Lists all DNS zones configured on the FortiGate device.
-- Supported record types: `A`, `AAAA`, `CNAME`, `NS`, `MX`
+- Supported record types: `A`, `AAAA`, `CNAME`
 
 ## Configuration
 
@@ -78,9 +78,7 @@ To use this provider in a `dnsconfig.js`:
 ```javascript
 D("example.com", REG_NONE, DnsProvider("FORTIGATE"),
   A("www", "192.0.2.1"),
-  CNAME("blog", "external.example.net."),
-  MX("@", 10, "mail.example.com."),
-  NS("@", "ns1.example.net.")
+  CNAME("blog", "external.example.net.")
 )
 ```
 
@@ -111,10 +109,12 @@ Once you have the token, use it in your `creds.json` as shown above.
 
 ## Caveats
 
-- ✅ **NS and MX records are supported, with limitations:**  
-  - Only apex records (hostname `"@"`) are supported.  
-  - MX records must have a valid hostname (not `"."`).  
-  - FortiGate does not enforce priority uniqueness or ordering.
+ - ❌ **MX and NS records are NOT supported.**
+    *   The FortiGate DNS API does not support absolute FQDNs as targets.
+    *   Target values are always interpreted as relative labels, causing them to be
+      suffixed with the managed zone (e.g., `ns1.foo.com` → `ns1.foo.com.testdomain.tld`).
+    *   This makes it impossible to correctly configure external mail servers or
+      nameservers.
 
 - ❌ **PTR records are not supported.**  
   FortiGate stores reverse DNS data unconventionally. PTR records are excluded to prevent inconsistencies.
@@ -141,28 +141,28 @@ Debug logging of HTTP traffic can be enabled with the `debug_http` flag.
   - Registrar: ❌
 - Provider API
   - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
-  - [dual host](../advanced-features/dual-host.md): ❔
+  - [dual host](../advanced-features/dual-host.md): ❌
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
-  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❔
-  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
-  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
 - Service discovery
-  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
-  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❔
-  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ❔
-  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❌
+  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❌
+  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ❌
+  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❌
 - Security
-  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ❔
-  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❔
-  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
-  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❔
-  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❔
+  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ❌
+  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❌
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
+  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❌
+  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❌
 - DNSSEC
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
-  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
-  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
 <!-- provider-features-end -->
