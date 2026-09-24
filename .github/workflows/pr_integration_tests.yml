@@ -138,10 +138,6 @@ jobs:
   # integration-tests: Run the integration tests on any provider listed
   # in needs.integration-test-providers.outputs.integration_test_providers.
   integration-tests:
-    # Normally skipped on master/main (tests run on PRs / tlim_testpr). But when
-    # invoked as a release gate (workflow_call with full=true) it must run
-    # regardless of the branch it was called from.
-    if: ${{ inputs.full || (github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main') }}
     runs-on: ubuntu-latest
     container:
       image: golang:1.27
