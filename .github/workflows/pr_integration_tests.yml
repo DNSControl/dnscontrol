@@ -466,47 +466,33 @@ jobs:
           # Converts label names into a single string for easier grep/matching
           LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          END="2"
 
-          # Release gate: release_draft.yml calls this via workflow_call with
-          # full=true, which forces the entire suite (not just the smoke test).
+          # When do we do a long test?
+          #   When someone called us via workflow_call and set "full" == "true".
+          #       "${{ inputs.full }}" == "true"
+          #   When this is a pull request and the longtest label is set.
+          #       "${{ github.event_name }}" == "pull_request" AND " $LABELS " =~ " longtest "
+          #   When this is the "daily run" (which runs on "main"):
+          #       "${{ github.ref_name }}" == "main"
+
+          TEST_TYPE=short
           if [[ "${{ inputs.full }}" == "true" ]]; then
-            END="999"
-            echo "END: full input set (release gate). END=$END"
-          # Only for PRs
+            TEST_TYPE=long
+            echo "TEST_TYPE: LONG (because we were called like a function with full=true)"
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # Check for 'longtest' label
             if [[ " $LABELS " =~ " longtest " ]]; then
-              END="999"
-              echo "END: Pull request + longtest label. END=$END"
-            else
-              echo "END: longtest not set. No change. END=$END"
+              TEST_TYPE=long
+              echo "TEST_TYPE: LONG (because this is a PR and the longtest label exists)"
             fi
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            TEST_TYPE=long
+            echo "TEST_TYPE: LONG (because this is the daily run)"
           else
-              echo "END: Not a pull request. No change. END=$END"
+            echo "TEST_TYPE: SHORT"
           fi
-          # Check if branch is main
-          # NB(tlim): This used to be github.base_ref but it was changed to
-          #           github.ref_name in 2026-05-07 because that seemed more correct.
-          #           The original statement was created by an LLM and might have been
-          #           wrong.
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            END="999"
-            echo "END: github.ref_name is main. END=$END"
-          fi
-          # VERCEL it limited to 100 updates per hour. Therefore we never run more than the first few tests.
-          if [[ "${{ matrix.provider }}" == "VERCEL" ]]; then
-            END="3"
-            echo "END: Exception for VERCEL: Run fewer tests. END=$END"
-          fi
-          # HEDNS is very slow. Therefore, we only run some tests. The goal is to run enough tests to make
-          # the time about the same as other tests
-          if [[ "${{ matrix.provider }}" == "HEDNS" ]]; then
-            END="10"
-            echo "END: Exception for HEDNS: Run fewer tests. END=$END"
-          fi
-          echo "END: Final value: END=$END"
-          echo "END=$END" >> "$GITHUB_ENV"
+          END=$(bin/calculate_end.sh "$TEST_TYPE" "${{ matrix.provider }}")
+        echo "TEST_END:  $END"
+        echo "END=$END" >> "$GITHUB_ENV"
 
       - name: Run integration tests for ${{ matrix.provider }} provider
         shell: bash -eo pipefail {0}
