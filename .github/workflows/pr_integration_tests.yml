@@ -491,8 +491,8 @@ jobs:
             echo "TEST_TYPE: SHORT"
           fi
           END=$(bin/calculate_end.sh "$TEST_TYPE" "${{ matrix.provider }}")
-        echo "TEST_END:  $END"
-        echo "END=$END" >> "$GITHUB_ENV"
+          echo "TEST_END:  $END"
+          echo "END=$END" >> "$GITHUB_ENV"
 
       - name: Run integration tests for ${{ matrix.provider }} provider
         shell: bash -eo pipefail {0}
