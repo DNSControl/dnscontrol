@@ -368,64 +368,64 @@ func TestBuilderM365Errors(t *testing.T) {
 		zone      string
 		subdomain string
 		args      []any
-		want      string
-		// wantPrefix replaces want where the message ends in the wording of
+		wantErr   string
+		// wantErrPrefix replaces wantErr where the message ends in the wording of
 		// another library, which is not ours to pin down.
-		wantPrefix string
+		wantErrPrefix string
 	}{
 		{
-			name: "E1 no arguments",
-			zone: "example.com",
-			args: []any{},
-			want: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
+			name:    "E1 no arguments",
+			zone:    "example.com",
+			args:    []any{},
+			wantErr: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
 		},
 		{
-			name: "E1 first argument is all whitespace",
-			zone: "example.com",
-			args: []any{"   "},
-			want: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
+			name:    "E1 first argument is all whitespace",
+			zone:    "example.com",
+			args:    []any{"   "},
+			wantErr: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
 		},
 		{
-			name: "E1 first argument is not a string",
-			zone: "example.com",
-			args: []any{map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			want: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
+			name:    "E1 first argument is not a string",
+			zone:    "example.com",
+			args:    []any{map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
+			wantErr: `M365_BUILDER: the first argument must be the Microsoft 365 domain name, for example M365_BUILDER("example.com", { initialDomain: "contoso.onmicrosoft.com" })`,
 		},
 		{
-			name: "E2a too many arguments",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{}, map[string]any{}},
-			want: `M365_BUILDER("example.com"): expected the domain name and one options object, got 3 arguments`,
+			name:    "E2a too many arguments",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{}, map[string]any{}},
+			wantErr: `M365_BUILDER("example.com"): expected the domain name and one options object, got 3 arguments`,
 		},
 		{
-			name: "E2b second argument is not an object",
-			zone: "example.com",
-			args: []any{"example.com", "contoso.onmicrosoft.com"},
-			want: `M365_BUILDER("example.com"): the second argument must be an options object, got string`,
+			name:    "E2b second argument is not an object",
+			zone:    "example.com",
+			args:    []any{"example.com", "contoso.onmicrosoft.com"},
+			wantErr: `M365_BUILDER("example.com"): the second argument must be an options object, got string`,
 		},
 		{
-			name: "E2b second argument is a number",
-			zone: "example.com",
-			args: []any{"example.com", float64(5)},
-			want: `M365_BUILDER("example.com"): the second argument must be an options object, got number`,
+			name:    "E2b second argument is a number",
+			zone:    "example.com",
+			args:    []any{"example.com", float64(5)},
+			wantErr: `M365_BUILDER("example.com"): the second argument must be an options object, got number`,
 		},
 		{
-			name: "E2b second argument is a boolean",
-			zone: "example.com",
-			args: []any{"example.com", true},
-			want: `M365_BUILDER("example.com"): the second argument must be an options object, got boolean`,
+			name:    "E2b second argument is a boolean",
+			zone:    "example.com",
+			args:    []any{"example.com", true},
+			wantErr: `M365_BUILDER("example.com"): the second argument must be an options object, got boolean`,
 		},
 		{
-			name: "E2b second argument is null",
-			zone: "example.com",
-			args: []any{"example.com", nil},
-			want: `M365_BUILDER("example.com"): the second argument must be an options object, got null`,
+			name:    "E2b second argument is null",
+			zone:    "example.com",
+			args:    []any{"example.com", nil},
+			wantErr: `M365_BUILDER("example.com"): the second argument must be an options object, got null`,
 		},
 		{
-			name: "E3 unknown option",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"initialdomain": "contoso.onmicrosoft.com"}},
-			want: `M365_BUILDER("example.com"): unknown option "initialdomain"; valid options are autodiscover, autodiscoverTarget, dkim, dkimSelector1Target, dkimSelector2Target, domainGUID, initialDomain, label, mdm, mdmEnrollmentTarget, mdmRegistrationTarget, mx, mxPriority, mxTarget, sipFederationTarget, skypeForBusiness, verificationToken`,
+			name:    "E3 unknown option",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"initialdomain": "contoso.onmicrosoft.com"}},
+			wantErr: `M365_BUILDER("example.com"): unknown option "initialdomain"; valid options are autodiscover, autodiscoverTarget, dkim, dkimSelector1Target, dkimSelector2Target, domainGUID, initialDomain, label, mdm, mdmEnrollmentTarget, mdmRegistrationTarget, mx, mxPriority, mxTarget, sipFederationTarget, skypeForBusiness, verificationToken`,
 		},
 		{
 			// Go maps have no order, so the options are validated sorted by
@@ -437,7 +437,7 @@ func TestBuilderM365Errors(t *testing.T) {
 				"zzUnknown":    true,
 				"autodiscover": "yes",
 			}},
-			want: `M365_BUILDER("example.com"): unknown option "zzUnknown"; valid options are autodiscover, autodiscoverTarget, dkim, dkimSelector1Target, dkimSelector2Target, domainGUID, initialDomain, label, mdm, mdmEnrollmentTarget, mdmRegistrationTarget, mx, mxPriority, mxTarget, sipFederationTarget, skypeForBusiness, verificationToken`,
+			wantErr: `M365_BUILDER("example.com"): unknown option "zzUnknown"; valid options are autodiscover, autodiscoverTarget, dkim, dkimSelector1Target, dkimSelector2Target, domainGUID, initialDomain, label, mdm, mdmEnrollmentTarget, mdmRegistrationTarget, mx, mxPriority, mxTarget, sipFederationTarget, skypeForBusiness, verificationToken`,
 		},
 		{
 			name: "the alphabetically first bad option is reported",
@@ -446,121 +446,121 @@ func TestBuilderM365Errors(t *testing.T) {
 				"mxPriority": "10",
 				"dkim":       "false",
 			}},
-			want: `M365_BUILDER("example.com"): option "dkim" must be true or false`,
+			wantErr: `M365_BUILDER("example.com"): option "dkim" must be true or false`,
 		},
 		{
-			name: "E4 switch is not a boolean",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"dkim": "false"}},
-			want: `M365_BUILDER("example.com"): option "dkim" must be true or false`,
+			name:    "E4 switch is not a boolean",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"dkim": "false"}},
+			wantErr: `M365_BUILDER("example.com"): option "dkim" must be true or false`,
 		},
 		{
-			name: "E5 string option is not a string",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"label": true}},
-			want: `M365_BUILDER("example.com"): option "label" must be a string`,
+			name:    "E5 string option is not a string",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"label": true}},
+			wantErr: `M365_BUILDER("example.com"): option "label" must be a string`,
 		},
 		{
-			name: "E6 mxPriority is not a number",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxPriority": "10"}},
-			want: `M365_BUILDER("example.com"): option "mxPriority" must be a number`,
+			name:    "E6 mxPriority is not a number",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxPriority": "10"}},
+			wantErr: `M365_BUILDER("example.com"): option "mxPriority" must be a number`,
 		},
 		{
-			name: "E7 string option is empty",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"initialDomain": "  "}},
-			want: `M365_BUILDER("example.com"): option "initialDomain" must not be empty`,
+			name:    "E7 string option is empty",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"initialDomain": "  "}},
+			wantErr: `M365_BUILDER("example.com"): option "initialDomain" must not be empty`,
 		},
 		{
-			name: "E8 mxPriority is not a whole number",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxPriority": 0.5}},
-			want: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
+			name:    "E8 mxPriority is not a whole number",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxPriority": 0.5}},
+			wantErr: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
 		},
 		{
-			name: "E8 mxPriority is out of range",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxPriority": float64(65536)}},
-			want: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
+			name:    "E8 mxPriority is out of range",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxPriority": float64(65536)}},
+			wantErr: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
 		},
 		{
-			name: "E8 mxPriority is negative",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxPriority": float64(-1)}},
-			want: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
+			name:    "E8 mxPriority is negative",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxPriority": float64(-1)}},
+			wantErr: `M365_BUILDER("example.com"): option "mxPriority" must be a whole number between 0 and 65535`,
 		},
 		{
-			name: "E9 target is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxTarget": "contoso"}},
-			want: `M365_BUILDER("example.com"): option "mxTarget" must be a fully qualified host name, for example "contoso.mail.protection.office365.us"`,
+			name:    "E9 target is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxTarget": "contoso"}},
+			wantErr: `M365_BUILDER("example.com"): option "mxTarget" must be a fully qualified host name, for example "contoso.mail.protection.office365.us"`,
 		},
 		{
-			name: "E9 initialDomain is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"initialDomain": "contoso"}},
-			want: `M365_BUILDER("example.com"): option "initialDomain" must be a fully qualified host name, for example "contoso.onmicrosoft.com"`,
+			name:    "E9 initialDomain is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"initialDomain": "contoso"}},
+			wantErr: `M365_BUILDER("example.com"): option "initialDomain" must be a fully qualified host name, for example "contoso.onmicrosoft.com"`,
 		},
 		{
-			name: "E9 the only dot of a target is a leading one",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mxTarget": ".com"}},
-			want: `M365_BUILDER("example.com"): option "mxTarget" must be a fully qualified host name, for example "contoso.mail.protection.office365.us"`,
+			name:    "E9 the only dot of a target is a leading one",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mxTarget": ".com"}},
+			wantErr: `M365_BUILDER("example.com"): option "mxTarget" must be a fully qualified host name, for example "contoso.mail.protection.office365.us"`,
 		},
 		{
-			name: "E9 autodiscoverTarget is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"autodiscoverTarget": "autodiscover"}},
-			want: `M365_BUILDER("example.com"): option "autodiscoverTarget" must be a fully qualified host name, for example "autodiscover.office365.us"`,
+			name:    "E9 autodiscoverTarget is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"autodiscoverTarget": "autodiscover"}},
+			wantErr: `M365_BUILDER("example.com"): option "autodiscoverTarget" must be a fully qualified host name, for example "autodiscover.office365.us"`,
 		},
 		{
-			name: "E9 dkimSelector1Target is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"dkimSelector1Target": "selector1"}},
-			want: `M365_BUILDER("example.com"): option "dkimSelector1Target" must be a fully qualified host name, for example "selector1-contoso-com._domainkey.contoso.n-v1.dkim.mail.microsoft"`,
+			name:    "E9 dkimSelector1Target is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"dkimSelector1Target": "selector1"}},
+			wantErr: `M365_BUILDER("example.com"): option "dkimSelector1Target" must be a fully qualified host name, for example "selector1-contoso-com._domainkey.contoso.n-v1.dkim.mail.microsoft"`,
 		},
 		{
-			name: "E9 dkimSelector2Target is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"dkimSelector2Target": "selector2"}},
-			want: `M365_BUILDER("example.com"): option "dkimSelector2Target" must be a fully qualified host name, for example "selector2-contoso-com._domainkey.contoso.n-v1.dkim.mail.microsoft"`,
+			name:    "E9 dkimSelector2Target is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"dkimSelector2Target": "selector2"}},
+			wantErr: `M365_BUILDER("example.com"): option "dkimSelector2Target" must be a fully qualified host name, for example "selector2-contoso-com._domainkey.contoso.n-v1.dkim.mail.microsoft"`,
 		},
 		{
-			name: "E9 mdmEnrollmentTarget is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mdmEnrollmentTarget": "enterpriseenrollment"}},
-			want: `M365_BUILDER("example.com"): option "mdmEnrollmentTarget" must be a fully qualified host name, for example "enterpriseenrollment-s.manage.microsoft.us"`,
+			name:    "E9 mdmEnrollmentTarget is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mdmEnrollmentTarget": "enterpriseenrollment"}},
+			wantErr: `M365_BUILDER("example.com"): option "mdmEnrollmentTarget" must be a fully qualified host name, for example "enterpriseenrollment-s.manage.microsoft.us"`,
 		},
 		{
-			name: "E9 mdmRegistrationTarget is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"mdmRegistrationTarget": "enterpriseregistration"}},
-			want: `M365_BUILDER("example.com"): option "mdmRegistrationTarget" must be a fully qualified host name, for example "enterpriseregistration.windows.net"`,
+			name:    "E9 mdmRegistrationTarget is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"mdmRegistrationTarget": "enterpriseregistration"}},
+			wantErr: `M365_BUILDER("example.com"): option "mdmRegistrationTarget" must be a fully qualified host name, for example "enterpriseregistration.windows.net"`,
 		},
 		{
-			name: "E9 sipFederationTarget is not fully qualified",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"sipFederationTarget": "sipfed"}},
-			want: `M365_BUILDER("example.com"): option "sipFederationTarget" must be a fully qualified host name, for example "sipfed.online.gov.skypeforbusiness.us"`,
+			name:    "E9 sipFederationTarget is not fully qualified",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"sipFederationTarget": "sipfed"}},
+			wantErr: `M365_BUILDER("example.com"): option "sipFederationTarget" must be a fully qualified host name, for example "sipfed.online.gov.skypeforbusiness.us"`,
 		},
 		{
-			name: "E10 domainGUID contains a dot",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"domainGUID": "example.com"}},
-			want: `M365_BUILDER("example.com"): option "domainGUID" must be a single label without dots, for example "example-com"`,
+			name:    "E10 domainGUID contains a dot",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"domainGUID": "example.com"}},
+			wantErr: `M365_BUILDER("example.com"): option "domainGUID" must be a single label without dots, for example "example-com"`,
 		},
 		{
-			name: "E11 verificationToken without the MS= prefix",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"verificationToken": "ms12345678"}},
-			want: `M365_BUILDER("example.com"): option "verificationToken" must be the full TXT value shown in the Microsoft 365 admin center, for example "MS=ms12345678"`,
+			name:    "E11 verificationToken without the MS= prefix",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"verificationToken": "ms12345678"}},
+			wantErr: `M365_BUILDER("example.com"): option "verificationToken" must be the full TXT value shown in the Microsoft 365 admin center, for example "MS=ms12345678"`,
 		},
 		{
-			name: "E11 verificationToken is the MS= prefix alone",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{"verificationToken": "MS="}},
-			want: `M365_BUILDER("example.com"): option "verificationToken" must be the full TXT value shown in the Microsoft 365 admin center, for example "MS=ms12345678"`,
+			name:    "E11 verificationToken is the MS= prefix alone",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{"verificationToken": "MS="}},
+			wantErr: `M365_BUILDER("example.com"): option "verificationToken" must be the full TXT value shown in the Microsoft 365 admin center, for example "MS=ms12345678"`,
 		},
 		{
 			name: "E12 only one DKIM target",
@@ -568,7 +568,7 @@ func TestBuilderM365Errors(t *testing.T) {
 			args: []any{"example.com", map[string]any{
 				"dkimSelector1Target": "selector1-example-com._domainkey.contoso.n-v1.dkim.mail.microsoft",
 			}},
-			want: `M365_BUILDER("example.com"): options "dkimSelector1Target" and "dkimSelector2Target" must be set together; Microsoft publishes a value for both selectors`,
+			wantErr: `M365_BUILDER("example.com"): options "dkimSelector1Target" and "dkimSelector2Target" must be set together; Microsoft publishes a value for both selectors`,
 		},
 		{
 			name: "E13 label is not in the zone",
@@ -577,47 +577,47 @@ func TestBuilderM365Errors(t *testing.T) {
 				"label":         "test.other.com.",
 				"initialDomain": "contoso.onmicrosoft.com",
 			}},
-			want: `M365_BUILDER("example.com"): label "test.other.com." is not in domain "example.com"`,
+			wantErr: `M365_BUILDER("example.com"): label "test.other.com." is not in domain "example.com"`,
 		},
 		{
-			name:       "the D_EXTEND() subdomain is not a valid IDNA name",
-			zone:       "example.com",
-			subdomain:  "xn--x",
-			args:       []any{"xn--x.example.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			wantPrefix: `M365_BUILDER("xn--x.example.com"): the D_EXTEND() subdomain "xn--x" is not a valid IDNA name: `,
+			name:          "the D_EXTEND() subdomain is not a valid IDNA name",
+			zone:          "example.com",
+			subdomain:     "xn--x",
+			args:          []any{"xn--x.example.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
+			wantErrPrefix: `M365_BUILDER("xn--x.example.com"): the D_EXTEND() subdomain "xn--x" is not a valid IDNA name: `,
 		},
 		{
-			name:       "E14 domain name is not a valid IDNA name",
-			zone:       "example.com",
-			args:       []any{"xn--x.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			wantPrefix: `M365_BUILDER("xn--x.com"): the domain name is not a valid IDNA name: `,
+			name:          "E14 domain name is not a valid IDNA name",
+			zone:          "example.com",
+			args:          []any{"xn--x.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
+			wantErrPrefix: `M365_BUILDER("xn--x.com"): the domain name is not a valid IDNA name: `,
 		},
 		{
 			name:      "E15 domain name is not where the records are created",
 			zone:      "example.com",
 			subdomain: "sub",
 			args:      []any{"example.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			want:      `M365_BUILDER("example.com"): the Microsoft 365 domain "example.com" is not the name these records are created under ("sub.example.com"); pass that name as the first argument, set "label", or set "domainGUID"`,
+			wantErr:   `M365_BUILDER("example.com"): the Microsoft 365 domain "example.com" is not the name these records are created under ("sub.example.com"); pass that name as the first argument, set "label", or set "domainGUID"`,
 		},
 		{
-			name: "E16 domain name contains a dash",
-			zone: "my-example.com",
-			args: []any{"my-example.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			want: `M365_BUILDER("my-example.com"): "domainGUID" has no default for a domain name that contains a dash, because Microsoft assigns an opaque value (for example "myexample-com01c"); copy the value from the MX record shown in the Microsoft 365 admin center`,
+			name:    "E16 domain name contains a dash",
+			zone:    "my-example.com",
+			args:    []any{"my-example.com", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
+			wantErr: `M365_BUILDER("my-example.com"): "domainGUID" has no default for a domain name that contains a dash, because Microsoft assigns an opaque value (for example "myexample-com01c"); copy the value from the MX record shown in the Microsoft 365 admin center`,
 		},
 		{
 			// Every internationalized name reaches this error, because its
 			// punycode form begins with "xn--".
-			name: "E16 internationalized domain name",
-			zone: "xn--mnchen-3ya.de",
-			args: []any{"münchen.de", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
-			want: `M365_BUILDER("münchen.de"): "domainGUID" has no default for a domain name that contains a dash, because Microsoft assigns an opaque value (for example "myexample-com01c"); copy the value from the MX record shown in the Microsoft 365 admin center`,
+			name:    "E16 internationalized domain name",
+			zone:    "xn--mnchen-3ya.de",
+			args:    []any{"münchen.de", map[string]any{"initialDomain": "contoso.onmicrosoft.com"}},
+			wantErr: `M365_BUILDER("münchen.de"): "domainGUID" has no default for a domain name that contains a dash, because Microsoft assigns an opaque value (for example "myexample-com01c"); copy the value from the MX record shown in the Microsoft 365 admin center`,
 		},
 		{
-			name: "E17 DKIM without initialDomain",
-			zone: "example.com",
-			args: []any{"example.com", map[string]any{}},
-			want: `M365_BUILDER("example.com"): option "initialDomain" is required to derive the DKIM targets ("dkim" defaults to true); set it to your tenant's initial domain, for example "contoso.onmicrosoft.com", set "dkimSelector1Target" and "dkimSelector2Target" to the values shown in the Microsoft 365 admin center, or set "dkim": false`,
+			name:    "E17 DKIM without initialDomain",
+			zone:    "example.com",
+			args:    []any{"example.com", map[string]any{}},
+			wantErr: `M365_BUILDER("example.com"): option "initialDomain" is required to derive the DKIM targets ("dkim" defaults to true); set it to your tenant's initial domain, for example "contoso.onmicrosoft.com", set "dkimSelector1Target" and "dkimSelector2Target" to the values shown in the Microsoft 365 admin center, or set "dkim": false`,
 		},
 	}
 
@@ -627,16 +627,16 @@ func TestBuilderM365Errors(t *testing.T) {
 
 			records, err := BuilderM365(dc, 300, tt.args, tt.subdomain)
 			if err == nil {
-				t.Fatalf("BuilderM365() created %d records, want error %q", len(records), tt.want)
+				t.Fatalf("BuilderM365() created %d records, want error %q", len(records), tt.wantErr)
 			}
-			if tt.wantPrefix != "" {
-				if !strings.HasPrefix(err.Error(), tt.wantPrefix) {
-					t.Errorf("BuilderM365() error =\n%q\nwant prefix:\n%q", err.Error(), tt.wantPrefix)
+			if tt.wantErrPrefix != "" {
+				if !strings.HasPrefix(err.Error(), tt.wantErrPrefix) {
+					t.Errorf("BuilderM365() error =\n%q\nwant prefix:\n%q", err.Error(), tt.wantErrPrefix)
 				}
 				return
 			}
-			if err.Error() != tt.want {
-				t.Errorf("BuilderM365() error =\n%q\nwant:\n%q", err.Error(), tt.want)
+			if err.Error() != tt.wantErr {
+				t.Errorf("BuilderM365() error =\n%q\nwant:\n%q", err.Error(), tt.wantErr)
 			}
 		})
 	}

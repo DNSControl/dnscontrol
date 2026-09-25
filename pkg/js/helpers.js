@@ -1830,6 +1830,8 @@ function m365Options(record, processedArgs, processedMetas) {
     return args;
 }
 
+var m365Record = rawrecordBuilder("M365_BUILDER", false, m365Options);
+
 // M365_BUILDER used to return an array of records, so calls of the form
 // M365_BUILDER(...).concat([...]) exist. processDargs() flattens arrays, so
 // returning the modifier in one keeps those calls working.
@@ -2058,8 +2060,6 @@ var FRAME = rawrecordBuilder("FRAME");
 var HTTPS = rawrecordBuilder("HTTPS");
 var LOC = rawrecordBuilder("LOC");
 var LUA = rawrecordBuilder("LUA");
-// M365_BUILDER wraps this one; see m365Options().
-var m365Record = rawrecordBuilder("M365_BUILDER", false, m365Options);
 var MIKROTIK_FORWARDER = rawrecordBuilder("MIKROTIK_FORWARDER");
 var MIKROTIK_FWD = rawrecordBuilder("MIKROTIK_FWD");
 var MIKROTIK_NXDOMAIN = rawrecordBuilder("MIKROTIK_NXDOMAIN");
