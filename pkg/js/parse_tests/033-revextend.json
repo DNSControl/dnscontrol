@@ -17,9 +17,7 @@
           "filepos": "[line:8:5]",
           "name": "1.2",
           "name_unicode": "1.2.8.9.in-addr.arpa",
-          "rdata": {
-            "Ns": "ns1.example.com."
-          },
+          "rdata": "ns1.example.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -29,9 +27,7 @@
           "filepos": "[line:11:5]",
           "name": "6.7",
           "name_unicode": "6.7.8.9.in-addr.arpa",
-          "rdata": {
-            "Ns": "ns2.example.org."
-          },
+          "rdata": "ns2.example.org.",
           "subdomain": "7",
           "ttl": 300,
           "type": "NS",
@@ -52,9 +48,7 @@
           "filepos": "[line:17:5]",
           "name": "foo",
           "name_unicode": "foo",
-          "rdata": {
-            "Ns": "ns1.fooexample.com."
-          },
+          "rdata": "ns1.fooexample.com.",
           "ttl": 300,
           "type": "NS",
           "typenum": 2
@@ -64,9 +58,7 @@
           "filepos": "[line:20:5]",
           "name": "more.lego",
           "name_unicode": "more.lego",
-          "rdata": {
-            "Ns": "ns1.example.com."
-          },
+          "rdata": "ns1.example.com.",
           "subdomain": "lego",
           "ttl": 300,
           "type": "NS",
@@ -77,9 +69,7 @@
           "filepos": "[line:21:5]",
           "name": "short.lego",
           "name_unicode": "short.lego",
-          "rdata": {
-            "Ns": "ns1.lego.example.com."
-          },
+          "rdata": "ns1.lego.example.com.",
           "subdomain": "lego",
           "ttl": 300,
           "type": "NS",

@@ -26,12 +26,7 @@
           },
           "name": "atest",
           "name_unicode": "atest",
-          "rdata": {
-            "AliasType": "A",
-            "EvalTargetHealth": "false",
-            "Target": "foo.com.",
-            "ZoneID": "Z2FTEDLFRTZ"
-          },
+          "rdata": "A foo.com. false Z2FTEDLFRTZ",
           "ttl": 300,
           "type": "R53_ALIAS",
           "typenum": 65298

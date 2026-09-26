@@ -13,9 +13,7 @@
           },
           "name": "a",
           "name_unicode": "a",
-          "rdata": {
-            "Target": ""
-          },
+          "rdata": "\"\"",
           "ttl": 300,
           "type": "ADGUARDHOME_A_PASSTHROUGH",
           "typenum": 65280
@@ -28,9 +26,7 @@
           },
           "name": "aaaa",
           "name_unicode": "aaaa",
-          "rdata": {
-            "Target": ""
-          },
+          "rdata": "\"\"",
           "ttl": 300,
           "type": "ADGUARDHOME_AAAA_PASSTHROUGH",
           "typenum": 65281

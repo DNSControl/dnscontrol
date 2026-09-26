@@ -15,9 +15,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "ForwardTo": "8.8.8.8"
-          },
+          "rdata": "8.8.8.8",
           "ttl": 300,
           "type": "MIKROTIK_FWD",
           "typenum": 65293
@@ -29,7 +27,6 @@
           },
           "name": "blocked",
           "name_unicode": "blocked",
-          "rdata": {},
           "ttl": 300,
           "type": "MIKROTIK_NXDOMAIN",
           "typenum": 65294
@@ -42,9 +39,7 @@
           },
           "name": "corp.example.com",
           "name_unicode": "corp.example.com",
-          "rdata": {
-            "Target": "10.0.0.53"
-          },
+          "rdata": "10.0.0.53",
           "ttl": 300,
           "type": "MIKROTIK_FORWARDER",
           "typenum": 65321

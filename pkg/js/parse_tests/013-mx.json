@@ -10,10 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Mx": "foo.com.",
-            "Preference": 15
-          },
+          "rdata": "15 foo.com.",
           "ttl": 300,
           "type": "MX",
           "typenum": 15

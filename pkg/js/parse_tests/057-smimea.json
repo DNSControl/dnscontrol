@@ -10,12 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73",
           "name_unicode": "f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73",
-          "rdata": {
-            "Certificate": "MDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiAgLQo=",
-            "MatchingType": 0,
-            "Selector": 0,
-            "Usage": 3
-          },
+          "rdata": "3 0 0 MDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiAgLQo=",
           "ttl": 300,
           "type": "SMIMEA",
           "typenum": 53

@@ -10,11 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "a",
           "name_unicode": "a",
-          "rdata": {
-            "Txt": [
-              "simple"
-            ]
-          },
+          "rdata": "\"simple\"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -24,11 +20,7 @@
           "filepos": "[line:3:5]",
           "name": "b",
           "name_unicode": "b",
-          "rdata": {
-            "Txt": [
-              "ws at end "
-            ]
-          },
+          "rdata": "\"ws at end \"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -38,11 +30,7 @@
           "filepos": "[line:4:5]",
           "name": "c",
           "name_unicode": "c",
-          "rdata": {
-            "Txt": [
-              "one"
-            ]
-          },
+          "rdata": "\"one\"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -52,11 +40,7 @@
           "filepos": "[line:5:5]",
           "name": "d",
           "name_unicode": "d",
-          "rdata": {
-            "Txt": [
-              "bonieclyde"
-            ]
-          },
+          "rdata": "\"bonieclyde\"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -66,11 +50,7 @@
           "filepos": "[line:6:5]",
           "name": "e",
           "name_unicode": "e",
-          "rdata": {
-            "Txt": [
-              "strawwoodbrick"
-            ]
-          },
+          "rdata": "\"strawwoodbrick\"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
