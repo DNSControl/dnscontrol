@@ -7,15 +7,16 @@ function calculate_short() {
 	# The goal is to include 5 minutes worth of tests.
 	case "$1" in
 		ALIDNS) END=98 ;;
-		AZURE_DNS) END=60 ;;
+		AZURE_DNS) END=55 ;;
 		CLOUDFLAREAPI) END=41 ;;
 		CNR) END=46 ;;
 		GANDI_V5) END=104 ;;
 		HEDNS) END=20 ;;
-		HOSTINGDE) END=25 ;;
+		HOSTINGDE) END=23 ;;
 		MYTHICBEASTS) END=97 ;;
-		NETLIFY) END=99 ;;
-		VULTR) END=32 ;;
+		NETLIFY) END=50 ;;
+		TRANSIP) END=99 ;;
+		VULTR) END=10 ;;
 
 		*) END=999 ;;
 	esac
