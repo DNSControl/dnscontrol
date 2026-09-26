@@ -1,9 +1,8 @@
 # Unit Testing DNS Data
 
-- [Unit Testing DNS Data](#unit-testing-dns-data)
-  - [Built-in Tests](#built-in-tests)
-  - [External tests](#external-tests)
-  - [Future directions](#future-directions)
+- [Built-in Tests](#built-in-tests)
+- [External tests](#external-tests)
+- [Future directions](#future-directions)
 
 ## Built-in Tests
 

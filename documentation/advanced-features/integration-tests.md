@@ -1,9 +1,8 @@
 # Integration Tests
 
-- [Integration Tests](#integration-tests)
-  - [Configuration](#configuration)
-  - [Running a test](#running-a-test)
-  - [Bonus: How to test for 32-bit compatibility](#bonus-how-to-test-for-32-bit-compatibility)
+- [Configuration](#configuration)
+- [Running a test](#running-a-test)
+- [Bonus: How to test for 32-bit compatibility](#bonus-how-to-test-for-32-bit-compatibility)
 
 This is a simple framework for testing dns providers by making real requests.
 

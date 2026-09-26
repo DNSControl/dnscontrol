@@ -1,9 +1,8 @@
 # Migrating zones to DNSControl
 
-- [Migrating zones to DNSControl](#migrating-zones-to-dnscontrol)
-  - [General advice](#general-advice)
-  - [Create the first draft](#create-the-first-draft)
-  - [Example workflow](#example-workflow)
+- [General advice](#general-advice)
+- [Create the first draft](#create-the-first-draft)
+- [Example workflow](#example-workflow)
 
 This document explains how to migrate (convert) DNS zones from other systems to DNSControl's `dnsconfig.js` file.
 

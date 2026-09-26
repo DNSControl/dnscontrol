@@ -1,9 +1,9 @@
 # Debugging Tips
 
-- [Debugger](#debugger)
-  - [Debug a particular function](#debug-a-particular-function)
-  - [Debug an integration tests](#debug-an-integration-tests)
-  - [Debug the `dnscontrol` command](#debug-the-dnscontrol-command)
+- [Debug a particular function](#debug-a-particular-function)
+- [Debug an integration tests](#debug-an-integration-tests)
+- [Debug the `dnscontrol` command](#debug-the-dnscontrol-command)
+- [Debug `helpers.js`](#debug-helpers.js)
 
 ## Debug a particular function
 

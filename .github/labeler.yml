@@ -148,6 +148,9 @@ provider-NEXDNS:
 provider-NS1:
   - changed-files:
       - any-glob-to-any-file: providers/ns1/**
+provider-OPENPROVIDER:
+  - changed-files:
+      - any-glob-to-any-file: providers/openprovider/**
 provider-OPENSRS:
   - changed-files:
       - any-glob-to-any-file: providers/opensrs/**

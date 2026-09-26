@@ -1,14 +1,13 @@
 # TXT record testing
 
-- [TXT record testing](#txt-record-testing)
-  - [The problem](#the-problem)
-  - [The test](#the-test)
-    - [Step 1: Create the test records](#step-1-create-the-test-records)
-    - [Step 2: Update `dnsconfig.js`](#step-2-update-dnsconfigjs)
-    - [Step 3: Preview](#step-3-preview)
-    - [Step 4: Push](#step-4-push)
-    - [Step 5: That's it!](#step-5-thats-it)
-  - [Fixing a failed test](#fixing-a-failed-test)
+- [The problem](#the-problem)
+- [The test](#the-test)
+  - [Step 1: Create the test records](#step-1-create-the-test-records)
+  - [Step 2: Update `dnsconfig.js`](#step-2-update-dnsconfig.js)
+  - [Step 3: Preview](#step-3-preview)
+  - [Step 4: Push](#step-4-push)
+  - [Step 5: That's it!](#step-5-thats-it)
+- [Fixing a failed test](#fixing-a-failed-test)
 
 We recently discovered a strange bug with processing TXT records and double-quotes. Sadly we haven't been able to determine a way to test this automatically. Therefore, I've written up this methodology.
 

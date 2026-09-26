@@ -2,17 +2,16 @@
 
 This document provides "cookbook" recipes for doing common tasks.
 
-- [Cookbook](#cookbook)
-  - [Create a `models.DomainConfig`](#create-a-modelsdomainconfig)
-  - [Create a `models.RecordConfig`](#create-a-modelsrecordconfig)
-  - [Getters/Setters for RDATA in `models.RecordConfig`](#getterssetters-for-rdata-in-modelsrecordconfig)
-  - [Create `models.RecordConfig` literals for testdata](#create-modelsrecordconfig-literals-for-testdata)
-  - [How to create a "builder"](#how-to-create-a-builder)
-  - [How to manipulate domain/zone names](#how-to-manipulate-domainzone-names)
-  - [What you should know about TXT records](#what-you-should-know-about-txt-records)
-    - [TXT functions](#txt-functions)
-  - [How to change the rtype of a RecordConfig](#how-to-change-the-rtype-of-a-recordconfig)
-  - [How to label imports](#how-to-label-imports)
+- [Create a `models.DomainConfig`](#create-a-models.domainconfig)
+- [Create a `models.RecordConfig`](#create-a-models.recordconfig)
+- [Getters/Setters for RDATA in `models.RecordConfig`](#getters-setters-for-rdata-in-models.recordconfig)
+- [Create `models.RecordConfig` literals for testdata](#create-models.recordconfig-literals-for-testdata)
+- [How to create a "builder"](#how-to-create-a-builder)
+- [How to manipulate domain/zone names](#how-to-manipulate-domain-zone-names)
+- [What you should know about TXT records](#what-you-should-know-about-txt-records)
+  - [TXT functions](#txt-functions)
+- [How to change the rtype of a RecordConfig](#how-to-change-the-rtype-of-a-recordconfig)
+- [How to label imports](#how-to-label-imports)
 
 ## Create a `models.DomainConfig`
 

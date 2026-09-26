@@ -55,6 +55,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/netnod"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/nexdns"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/ns1"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/openprovider"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/opensrs"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/openwrt"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/oracle"
