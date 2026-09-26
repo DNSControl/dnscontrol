@@ -268,6 +268,11 @@
     "password": "$MIKROTIK_PASSWORD",
     "username": "$MIKROTIK_USERNAME"
   },
+  "MITTWALD": {
+    "TYPE": "MITTWALD",
+    "api_token": "$MITTWALD_API_TOKEN",
+    "domain": "$MITTWALD_DOMAIN"
+  },
   "MYTHICBEASTS": {
     "TYPE": "MYTHICBEASTS",
     "domain": "$MYTHICBEASTS_DOMAIN",

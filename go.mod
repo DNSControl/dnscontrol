@@ -42,6 +42,7 @@ require (
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
+	github.com/mittwald/api-client-go v0.2.240
 	github.com/mittwald/go-powerdns v0.6.7
 	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04
 	github.com/netnod/netnod-primary-dns-client v1.1.1
