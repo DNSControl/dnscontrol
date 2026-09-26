@@ -25,9 +25,8 @@ function calculate_long() {
 	# The goal is to include all tests, but no more than 30 minutes.
 	case "$1" in
 
-		ALIDNS) END=999 ;;
-		HEDNS) END=10 ;;
-		HOSTINGDE) END=38 ;;
+		HEDNS) END=50 ;;
+		HOSTINGDE) END=80 ;;
 		VULTR) END=93 ;;
 
 		*) END=999 ;;
@@ -37,13 +36,11 @@ function calculate_long() {
 function calculate_capped() {
 	# Overrides for specific providers.
 	case "$1" in
-		BIND)
-			# BIND is very fast. We always run all the tests.
-			END=999
-			;;
+		BIND) # BIND is very fast. We always run all the tests.
+			END=999 ;;
 
-		# VERCEL it limited to 100 updates per hour. Never run more than the first few tests.
-		VERCEL) END=3 ;;
+		VERCEL) # VERCEL it limited to 100 updates per hour. Never run more than the first few tests.
+	       		END=3 ;;
 
 	esac
 }
