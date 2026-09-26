@@ -17,7 +17,7 @@ function calculate_short() {
 		NETLIFY) END=99 ;;
 		VULTR) END=32 ;;
 
-		*) END=60 ;;
+		*) END=999 ;;
 	esac
 }
 
