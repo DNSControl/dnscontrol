@@ -7,6 +7,6 @@ D("ds.com", REG_CHANGEME,
 	{no_ns: "true"},
 	DnsProvider(DSP_BIND),
 	//SOA("@", "ns3.serverfault.com.", "sysadmin.stackoverflow.com.", 3600, 600, 604800, 1440),
-	DS("geo", 14480, 13, 2, "BB1C4B615CDED2B34347CF23710471934D972F1E34F53B54ED8D5F786202C73B"),
+	DS("geo", 14480, 13, 2, "bb1c4b615cded2b34347cf23710471934d972f1e34f53b54ed8d5f786202c73b"),
 );
 
