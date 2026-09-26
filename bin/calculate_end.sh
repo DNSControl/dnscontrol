@@ -10,12 +10,12 @@ function calculate_short() {
 		AZURE_DNS) END=55 ;;
 		CLOUDFLAREAPI) END=41 ;;
 		CNR) END=46 ;;
-		GANDI_V5) END=104 ;;
+		GANDI_V5) END=80 ;;
 		HEDNS) END=20 ;;
 		HOSTINGDE) END=23 ;;
 		MYTHICBEASTS) END=97 ;;
 		NETLIFY) END=50 ;;
-		TRANSIP) END=99 ;;
+		TRANSIP) END=80 ;;
 		VULTR) END=10 ;;
 
 		*) END=999 ;;
