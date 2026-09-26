@@ -1,13 +1,12 @@
 # get-zones
 
-- [get-zones](#get-zones)
-  - [Use case 1: Bootstrapping a new system](#use-case-1-bootstrapping-a-new-system)
-  - [Use case 2: Generating BIND ZONE files](#use-case-2-generating-bind-zone-files)
-  - [Use case 3: TAB separated values](#use-case-3-tab-separated-values)
-  - [Use case 4: List zones](#use-case-4-list-zones)
-  - [Syntax](#syntax)
-  - [Examples](#examples)
-  - [Developer Notes](#developer-notes)
+- [Use case 1: Bootstrapping a new system](#use-case-1-bootstrapping-a-new-system)
+- [Use case 2: Generating BIND ZONE files](#use-case-2-generating-bind-zone-files)
+- [Use case 3: TAB separated values](#use-case-3-tab-separated-values)
+- [Use case 4: List zones](#use-case-4-list-zones)
+- [Syntax](#syntax)
+- [Examples](#examples)
+- [Developer Notes](#developer-notes)
 
 DNSControl has a stand-alone utility that will contact a provider, download the records of one or more zones, and output them to a file in a variety of formats.
 

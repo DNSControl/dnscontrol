@@ -1,27 +1,26 @@
 # Creating new DNS Resource Types (rtypes)
 
-- [Creating new DNS Resource Types (rtypes)](#creating-new-dns-resource-types-rtypes)
-  - [How to add a CUSTOM record type (rtype)](#how-to-add-a-custom-record-type-rtype)
-    - [Step 1. Pick a unique id](#step-1-pick-a-unique-id)
-    - [Step 2. Describe the custom type in YAML](#step-2-describe-the-custom-type-in-yaml)
-    - [Step 3. Generate the code](#step-3-generate-the-code)
-    - [Step 4. Test](#step-4-test)
-    - [Step 5. Write the remaining functions](#step-5-write-the-remaining-functions)
-  - [How to add a new record type (rtype)](#how-to-add-a-new-record-type-rtype)
-    - [Step 1. Update `pkg/js/helpers.js`](#step-1-update-pkgjshelpersjs)
-    - [Step 2. Update `models/makers.go` (NOT NEEDED FOR CUSTOM TYPES)](#step-2-update-modelsmakersgo-not-needed-for-custom-types)
-    - [Step 3. Add a `CanUseTYPENAME`](#step-3-add-a-canusetypename)
-    - [Step 4. Document it](#step-4-document-it)
-    - [Step 5. Update the matrix](#step-5-update-the-matrix)
-    - [Step 6: Add a `parse_tests` test case](#step-6-add-a-parse_tests-test-case)
-    - [Step 7. Test it out with BIND](#step-7-test-it-out-with-bind)
-    - [Step 8. Add an integration test helper](#step-8-add-an-integration-test-helper)
-    - [Step 9. Add Integration tests](#step-9-add-integration-tests)
-    - [Step 10: Support more providers](#step-10-support-more-providers)
-    - [Step 11: Write documentation](#step-11-write-documentation)
-    - [Step 12: "go generate"](#step-12-go-generate)
-  - [How to enable an rtype in a provider](#how-to-enable-an-rtype-in-a-provider)
-  - [How to add a "builder"](#how-to-add-a-builder)
+- [How to add a CUSTOM record type (rtype)](#how-to-add-a-custom-record-type-rtype)
+  - [Step 1: Pick a unique id](#step-1-pick-a-unique-id)
+  - [Step 2: Describe the custom type in YAML](#step-2-describe-the-custom-type-in-yaml)
+  - [Step 3: Generate the code](#step-3-generate-the-code)
+  - [Step 4: Test](#step-4-test)
+  - [Step 5: Write the remaining functions](#step-5-write-the-remaining-functions)
+- [How to add a new record type (rtype)](#how-to-add-a-new-record-type-rtype)
+  - [Step 1: Update `pkg/js/helpers.js`](#step-1-update-pkg-js-helpers.js)
+  - [Step 2: Update `models/makers.go` (NOT NEEDED FOR CUSTOM TYPES)](#step-2-update-models-makers.go-not-needed-for-custom-types)
+  - [Step 3: Add a `CanUseTYPENAME`](#step-3-add-a-canusetypename)
+  - [Step 4: Document it](#step-4-document-it)
+  - [Step 5: Update the matrix](#step-5-update-the-matrix)
+  - [Step 6: Add a `parse_tests` test case](#step-6-add-a-parse_tests-test-case)
+  - [Step 7: Test it out with BIND](#step-7-test-it-out-with-bind)
+  - [Step 8: Add an integration test helper](#step-8-add-an-integration-test-helper)
+  - [Step 9: Add Integration tests](#step-9-add-integration-tests)
+  - [Step 10: Support more providers](#step-10-support-more-providers)
+  - [Step 11: Write documentation](#step-11-write-documentation)
+  - [Step 12: "go generate"](#step-12-go-generate)
+- [How to enable an rtype in a provider](#how-to-enable-an-rtype-in-a-provider)
+- [How to add a "builder"](#how-to-add-a-builder)
 
 Everyone is familiar with A, AAAA, CNAME, NS and other Rtypes. However DNSControl also supports:
 
@@ -52,7 +51,7 @@ Note: This is different than a "builder". A builder is a function that can be us
 
 To add a custom type, follow these steps:
 
-### Step 1. Pick a unique id
+### Step 1: Pick a unique id
 
 Each custom type is assigned a codepoint.
 
@@ -62,7 +61,7 @@ Here's the last id used. Add one to this value. (There is plenty of error-checki
 grep codepoint pkg/privatetypes/types_generate.yaml | sort | tail -1
 ```
 
-### Step 2. Describe the custom type in YAML
+### Step 2: Describe the custom type in YAML
 
 Custom types are described in `pkg/privatetypes/types_generate.yaml`.  The generator will create 3 Go files in `pkg/privatetypes`:
 
@@ -92,7 +91,7 @@ Here's what the fields mean:
   - `optionalFields:` (optional) fields that are optional. The Make*() function won't expect them, but they will always be output in the `.String()` function.
   - `runtimeFields:` (optional, rarely used) are fields that store data needed during `preview/push`. For example, in `Cloudflareapi_Single_Redirect` the API sends a `SRRRulesetID` which needs to be stored later for use with any updates.
 
-### Step 3. Generate the code
+### Step 3: Generate the code
 
 Now that you've created the `types_generate.yaml` file, generate all the code.
 
@@ -100,7 +99,7 @@ Now that you've created the `types_generate.yaml` file, generate all the code.
 cd pkg/privatetypes && go generate
 ```
 
-### Step 4. Test
+### Step 4: Test
 
 ```shell
 go test -failfast -count=1 ./...
@@ -123,7 +122,7 @@ Custom types:
 - `privatetypes.AKAMAICDN{}` -- the entire struct (header + RDATA) (rarely used)
 - `privatetypesrdata.AKAMAICDN{}` -- the RDATA struct
 
-### Step 5. Write the remaining functions
+### Step 5: Write the remaining functions
 
 Your type is now registered with the system and can be treated
 the same as a standard type.
@@ -141,18 +140,18 @@ Addding a new type has 2 major parts.  First DNSControl must be updated to suppo
 
 Enable the type in DNSControl itself:
 
-### Step 1. Update `pkg/js/helpers.js`
+### Step 1: Update `pkg/js/helpers.js`
 
 - Add to list at the end. Just follow the pattern.
 - This enables the record to be used in `dnsconfig.js`.
 
-### Step 2. Update `models/makers.go` (NOT NEEDED FOR CUSTOM TYPES)
+### Step 2: Update `models/makers.go` (NOT NEEDED FOR CUSTOM TYPES)
 
 - Add a Make$TYPENAME
   - This takes arguments of any type (like NewRecordConfig()). Every argument must pass through a `mustbe.` function. See `pkg/mustbe/README.md` for details.
 - Add this new Make$TYPENAME to the func init().
 
-### Step 3. Add a `CanUseTYPENAME`
+### Step 3: Add a `CanUseTYPENAME`
 
 Since not all providers support this new record type, add a "capability" so that providers can mark themselves as willing.
 
@@ -166,14 +165,14 @@ go tool stringer
 - Update `build/generate/featureMatrix.go` (search for SRV and do something similar for your type)
 - Run: `cd pkg/providers && go generate`
 
-### Step 4. Document it
+### Step 4: Document it
 
 Add documentation:
 
 - `documentation/language-reference/domain-modifiers/TYPENAME.md` (see SRV.md as an example)
 - `documentation/SUMMARY.md` Add your doc to the TOC.
 
-### Step 5. Update the matrix
+### Step 5: Update the matrix
 
 Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Add it to the variable `matrix` maintaining alphabetical ordering, which should look like this:
 
@@ -262,7 +261,7 @@ If these tests pass you know the `dnsconfig.js` and `helpers.js` code is working
 
 The tests also verify that for every "capability" there is a validation. This is explained in Step 2 (search for `TestCapabilitiesAreFiltered` or `MISSING`)
 
-### Step 7. Test it out with BIND
+### Step 7: Test it out with BIND
 
 The `BIND` provider supports all record types. Update `providers/bind` to support this
 record type.  The next section describes how to enable a new record type on a provider.
@@ -274,12 +273,12 @@ cd integrationTest
 go test -failfast -v -args -verbose -profile BIND
 ```
 
-### Step 8. Add an integration test helper
+### Step 8: Add an integration test helper
 
 - Edit `integrationTest/helpers_integration_test.go`
 - Add a typename() function (alphabetically). For example, there are functions like `mx()` and `a()` which make it easy to write test cases.
 
-### Step 9. Add Integration tests
+### Step 9: Add Integration tests
 
 Add at least one test case to the `integrationTest/integration_test.go` file.  Add tests that create the type then changes each field individually.  For example, the MX records are tested by creating an MX record, changing the target, changing the preference, then deleting the record.
 

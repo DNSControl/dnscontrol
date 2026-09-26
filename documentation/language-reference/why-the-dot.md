@@ -1,10 +1,9 @@
 # Why the dot?
 
-- [Why the dot?](#why-the-dot)
-  - [Short version](#short-version)
-  - [Why CNAME/MX/NS targets require a trailing "dot"](#why-cnamemxns-targets-require-a-trailing-dot)
-  - [Simple mental models are better](#simple-mental-models-are-better)
-  - [Future](#future)
+- [Short version](#short-version)
+- [Why CNAME/MX/NS targets require a trailing "dot"](#why-cname-mx-ns-targets-require-a-trailing-dot)
+- [Simple mental models are better](#simple-mental-models-are-better)
+- [Future](#future)
 
 ## Short version
 

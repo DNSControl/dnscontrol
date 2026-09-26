@@ -1,10 +1,9 @@
 # Provider conversion golden files
 
-- [Provider conversion golden files](#provider-conversion-golden-files)
-  - [Recording](#recording)
-  - [Files](#files)
-  - [Intentional output changes](#intentional-output-changes)
-  - [Mutation checks](#mutation-checks)
+- [Recording](#recording)
+- [Files](#files)
+- [Intentional output changes](#intentional-output-changes)
+- [Mutation checks](#mutation-checks)
 
 Provider conversion tests replay the exact calls made at the boundary between a
 provider's native record type and `models.RecordConfig`. The fixtures live in

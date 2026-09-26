@@ -1,10 +1,9 @@
 # "Builders"
 
-- ["Builders"](#builders)
-  - [Trailing commas](#trailing-commas)
-  - [Repeat records in many domains (macros)](#repeat-records-in-many-domains-macros)
-  - [Many domains with the exact same records](#many-domains-with-the-exact-same-records)
-  - [Caveats about getting too fancy](#caveats-about-getting-too-fancy)
+- [Trailing commas](#trailing-commas)
+- [Repeat records in many domains (macros)](#repeat-records-in-many-domains-macros)
+- [Many domains with the exact same records](#many-domains-with-the-exact-same-records)
+- [Caveats about getting too fancy](#caveats-about-getting-too-fancy)
 
 Problem: It is difficult to get CAA and other records exactly right.
 

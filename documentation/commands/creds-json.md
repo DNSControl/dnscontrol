@@ -1,17 +1,16 @@
 # creds.json
 
-- [creds.json](#credsjson)
-  - [Format](#format)
-  - [The TYPE subkey](#the-type-subkey)
-  - [Error messages](#error-messages)
-    - [Missing](#missing)
-    - [cleanup](#cleanup)
-    - [mismatch](#mismatch)
-    - [fixcreds](#fixcreds)
-    - [hyphen](#hyphen)
-  - [Using a different file name](#using-a-different-file-name)
-    - [Example commands](#example-commands)
-  - [Don't store creds.json in a Git repo!](#dont-store-credsjson-in-a-git-repo)
+- [Format](#format)
+- [The TYPE subkey](#the-type-subkey)
+- [Error messages](#error-messages)
+  - [Missing](#missing)
+  - [cleanup](#cleanup)
+  - [mismatch](#mismatch)
+  - [fixcreds](#fixcreds)
+  - [hyphen](#hyphen)
+- [Using a different file name](#using-a-different-file-name)
+  - [Example commands](#example-commands)
+- [Don't store creds.json in a Git repo!](#dont-store-creds.json-in-a-git-repo)
 
 When DNSControl interacts with a provider, any API keys, credentials, or other configuration parameters required are stored in `creds.json`.   The file contains a set of key/value pairs for each configuration.  That is, since a provider can be used multiple times with different credentials, the file contains a section for each set of credentials.
 

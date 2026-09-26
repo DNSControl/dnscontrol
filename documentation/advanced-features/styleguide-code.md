@@ -1,15 +1,14 @@
 # Coding Style
 
-- [Coding Style](#coding-style)
-  - [Use the Google Go Style Guide](#use-the-google-go-style-guide)
-  - [Always favor simplicity](#always-favor-simplicity)
-  - [Filenames](#filenames)
-  - [JavaScript annotations](#javascript-annotations)
-  - [Don't conditionally add/remove trailing dots](#dont-conditionally-addremove-trailing-dots)
-    - [Why?](#why)
-    - [But isn't future-proofing good? What if the API changes?](#but-isnt-future-proofing-good-what-if-the-api-changes)
-    - [But what if it changes anyway?](#but-what-if-it-changes-anyway)
-    - [What should we do instead?](#what-should-we-do-instead)
+- [Use the Google Go Style Guide](#use-the-google-go-style-guide)
+- [Always favor simplicity](#always-favor-simplicity)
+- [Filenames](#filenames)
+- [JavaScript annotations](#javascript-annotations)
+- [Don't conditionally add/remove trailing dots](#dont-conditionally-add-remove-trailing-dots)
+  - [Why?](#why)
+  - [But isn't future-proofing good? What if the API changes?](#but-isnt-future-proofing-good-what-if-the-api-changes)
+  - [But what if it changes anyway?](#but-what-if-it-changes-anyway)
+  - [What should we do instead?](#what-should-we-do-instead)
 
 ## Use the Google Go Style Guide
 

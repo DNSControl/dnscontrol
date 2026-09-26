@@ -1,11 +1,10 @@
 # CLI variables
 
-- [CLI variables](#cli-variables)
-  - [Passing variables](#passing-variables)
-  - [Define defaults](#define-defaults)
-  - [Example 1: Different IPs for internal/external DNS](#example-1-different-ips-for-internalexternal-dns)
-  - [Example 2: Different DNS records](#example-2-different-dns-records)
-    - [ProTips](#protips)
+- [Passing variables](#passing-variables)
+- [Define defaults](#define-defaults)
+- [Example 1: Different IPs for internal/external DNS](#example-1-different-ips-for-internal-external-dns)
+- [Example 2: Different DNS records](#example-2-different-dns-records)
+  - [ProTips](#protips)
 
 You can pass variables into your configuration from the command line using the `-v key=value` flag. There is also a mechanism called `CLI_DEFAULTS` which lets you easily set the defaults on variables that are otherwise controlled from the command line.
 
