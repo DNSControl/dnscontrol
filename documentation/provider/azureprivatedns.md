@@ -25,8 +25,8 @@ No additional setup is required in `creds.json`:
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP"
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP"
   }
 }
 ```
@@ -35,8 +35,8 @@ No additional setup is required in `creds.json`:
 You can also use environment variables:
 
 ```shell
-export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
 ```
 
 {% code title="creds.json" %}
@@ -44,8 +44,8 @@ export AZURE_RESOURCE_GROUP=YYYYYYYYY
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_RESOURCE_GROUP"
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP"
   }
 }
 ```
@@ -62,11 +62,11 @@ Example:
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP",
-    "TenantID": "AZURE_PRIVATE_TENANT_ID",
-    "ClientID": "AZURE_PRIVATE_CLIENT_ID",
-    "ClientSecret": "AZURE_PRIVATE_CLIENT_SECRET"
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
+    "ClientID": "AZURE_DNS_CLIENT_ID",
+    "ClientSecret": "AZURE_DNS_CLIENT_SECRET"
   }
 }
 ```
@@ -75,11 +75,11 @@ Example:
 You can also use environment variables:
 
 ```shell
-export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_RESOURCE_GROUP=YYYYYYYYY
-export AZURE_TENANT_ID=ZZZZZZZZ
-export AZURE_CLIENT_ID=AAAAAAAAA
-export AZURE_CLIENT_SECRET=BBBBBBBBB
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
+export AZURE_DNS_CLIENT_ID=AAAAAAAAA
+export AZURE_DNS_CLIENT_SECRET=BBBBBBBBB
 ```
 
 {% code title="creds.json" %}
@@ -87,11 +87,11 @@ export AZURE_CLIENT_SECRET=BBBBBBBBB
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_RESOURCE_GROUP",
-    "ClientID": "$AZURE_CLIENT_ID",
-    "TenantID": "$AZURE_TENANT_ID",
-    "ClientSecret": "$AZURE_CLIENT_SECRET"
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "ClientID": "$AZURE_DNS_CLIENT_ID",
+    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
+    "ClientSecret": "$AZURE_DNS_CLIENT_SECRET"
   }
 }
 ```
@@ -106,9 +106,9 @@ To enable OIDC for interactive login:
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP",
-    "TenantID": "AZURE_PRIVATE_TENANT_ID",
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
     "UseOIDC": "true"
   }
 }
@@ -117,9 +117,9 @@ To enable OIDC for interactive login:
 
 You can also use environment variables:
 ```shell
-export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_RESOURCE_GROUP=YYYYYYYYY
-export AZURE_TENANT_ID=ZZZZZZZZ
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
 export UseOIDC=true
 ```
 
@@ -128,9 +128,9 @@ export UseOIDC=true
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_RESOURCE_GROUP",
-    "TenantID": "$AZURE_TENANT_ID",
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
     "UseOIDC": "$UseOIDC"
   }
 }
