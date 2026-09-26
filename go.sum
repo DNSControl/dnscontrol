@@ -120,6 +120,8 @@ github.com/digitalocean/godo v1.211.0 h1:94qw4VzKmK38db2ENSbpXHXd7smb4wZPc5JWBw6
 github.com/digitalocean/godo v1.211.0/go.mod h1:xQsWpVCCbkDrWisHA72hPzPlnC+4W5w/McZY5ij9uvU=
 github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c h1:+Zo5Ca9GH0RoeVZQKzFJcTLoAixx5s5Gq3pTIS+n354=
 github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c/go.mod h1:HJGU9ULdREjOcVGZVPB5s6zYmHi1RxzT71l2wQyLmnE=
+github.com/dlclark/regexp2 v1.12.0 h1:0j4c5qQmnC6XOWNjP3PIXURXN2gWx76rd3KvgdPkCz8=
+github.com/dlclark/regexp2 v1.12.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/dnsimple/dnsimple-go/v8 v8.3.1 h1:Koz1DUqz9gOFcWLz9VqAiXzRdlAryw7umJ8Y0R0el8U=
 github.com/dnsimple/dnsimple-go/v8 v8.3.1/go.mod h1:61MdYHRL+p2TBBUVEkxo1n4iRF6s3R9fZcvQvyt5du8=
 github.com/dustin/go-humanize v1.1.0 h1:dbKTrvD0klcbBV/h4AWJdMuZogJACoMlvWIWZ5b2xWg=
@@ -313,6 +315,8 @@ github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjY
 github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe/go.mod h1:wL8QJuTMNUDYhXwkmfOly8iTdp5TEcJFWZD2D7SIkUc=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
+github.com/namecheap/go-spaceship-sdk v0.2.1 h1:rmObp6HiI79rxub+qn8cRD3MyOzeDiMQm2U9y5s3AKA=
+github.com/namecheap/go-spaceship-sdk v0.2.1/go.mod h1:YT+i3Q8pptPZonjQti8fjQ70bE0Vb3ae7ubcVFpxptk=
 github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04 h1:o6uBwrhM5C8Ll3MAAxrQxRHEu7FkapwTuI2WmL1rw4g=
 github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04/go.mod h1:5sN+Lt1CaY4wsPvgQH/jsuJi4XO2ssZbdsIizr4CVC8=
 github.com/netnod/netnod-primary-dns-client v1.1.1 h1:hGZIMTNmsSLicgMOJ7yneLvbQiSmBDBMkko8ndE7i1Q=

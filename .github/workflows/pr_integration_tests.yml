@@ -208,6 +208,7 @@ jobs:
       SAKURACLOUD_DOMAIN: ${{ vars.SAKURACLOUD_DOMAIN }}
       SCALEWAY_DOMAIN: ${{ vars.SCALEWAY_DOMAIN }}
       SL_DOMAIN: ${{ vars.SL_DOMAIN }}
+      SPACESHIP_DOMAIN: ${{ vars.SPACESHIP_DOMAIN }}
       TENCENTDNS_DOMAIN: ${{ vars.TENCENTDNS_DOMAIN }}
       TRANSIP_DOMAIN: ${{ vars.TRANSIP_DOMAIN }}
       VERCEL_DOMAIN: ${{ vars.VERCEL_DOMAIN }}
@@ -412,6 +413,9 @@ jobs:
       #
       SL_API_KEY: ${{ secrets.SL_API_KEY }}
       SL_USERNAME: ${{ secrets.SL_USERNAME }}
+      #
+      SPACESHIP_API_KEY: ${{ secrets.SPACESHIP_API_KEY }}
+      SPACESHIP_API_SECRET: ${{ secrets.SPACESHIP_API_SECRET }}
       #
       TENCENTDNS_SECRET_ID: ${{ secrets.TENCENTDNS_SECRET_ID }}
       TENCENTDNS_SECRET_KEY: ${{ secrets.TENCENTDNS_SECRET_KEY }}

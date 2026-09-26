@@ -1,0 +1,14 @@
+1	@ 600 IN A 192.0.2.1
+2	www 600 IN A 192.0.2.2
+3	www 600 IN AAAA 2001:db8::1
+4	docs 600 IN ALIAS origin.example.com.
+5	@ 600 IN CAA 0 issue "letsencrypt.org"
+6	alias 600 IN CNAME www.example.com.
+7	@ 600 IN HTTPS 1 . alpn="h3,h2"
+8	@ 3600 IN MX 10 mail.example.com.
+9	sub 3600 IN NS ns1.example.net.
+10	ptr 600 IN PTR host.example.com.
+11	_sip._tcp 600 IN SRV 10 20 5060 sip.example.com.
+12	_8443._https.svc 600 IN SVCB 1 svc.example.net. alpn="h2"
+13	_25._tcp.mail 600 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+14	@ 600 IN TXT "v=spf1 include:_spf.example.net -all"
