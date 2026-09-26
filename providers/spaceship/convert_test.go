@@ -218,3 +218,32 @@ func TestJoinAndSplitPrefixedLabel(t *testing.T) {
 		t.Fatalf("split = %v %q", prefix, rest)
 	}
 }
+
+func TestSrvPort(t *testing.T) {
+	tests := []struct {
+		name    string
+		port    *client.PortValue
+		want    uint16
+		wantErr bool
+	}{
+		{name: "nil", want: 0},
+		{name: "integer", port: client.NewIntPortValue(5060), want: 5060},
+		{name: "string", port: client.NewStringPortValue("_443"), want: 443},
+		{name: "negative integer", port: client.NewIntPortValue(-1), wantErr: true},
+		{name: "oversized integer", port: client.NewIntPortValue(65536), wantErr: true},
+		{name: "invalid string", port: client.NewStringPortValue("_invalid"), wantErr: true},
+		{name: "oversized string", port: client.NewStringPortValue("_65536"), wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := srvPort(tt.port)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("srvPort() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if got != tt.want {
+				t.Errorf("srvPort() = %d, want %d", got, tt.want)
+			}
+		})
+	}
+}

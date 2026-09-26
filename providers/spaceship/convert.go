@@ -40,7 +40,11 @@ func toRC(dc *models.DomainConfig, rec client.DNSRecord) (*models.RecordConfig, 
 		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeCAA, derefInt(rec.Flag), rec.Tag, rec.Value)
 	case "SRV":
 		label = joinPrefixedLabel([]string{rec.Service, rec.Protocol}, rec.Name)
-		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, derefInt(rec.Priority), derefInt(rec.Weight), srvPort(rec.Port), ensureDot(rec.Target))
+		port, portErr := srvPort(rec.Port)
+		if portErr != nil {
+			return nil, fmt.Errorf("spaceship.toRC: %w", portErr)
+		}
+		rc, err = dc.NewRecordConfig(label, ttl, dnsv2.TypeSRV, derefInt(rec.Priority), derefInt(rec.Weight), port, ensureDot(rec.Target))
 	case "HTTPS", "SVCB":
 		label = joinPrefixedLabel([]string{portString(rec.Port), rec.Scheme}, rec.Name)
 		rc, err = dc.NewRecordConfig(dc.LabelFromShort(label), ttl, rtype, derefInt(rec.SvcPriority), httpsTarget(rec.TargetName), rec.SvcParams)
@@ -75,7 +79,7 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 		rec.AliasName = trimDot(rc.AsALIAS().Target)
 	case dnsv2.TypeMX:
 		f := rc.AsMX()
-		rec.Preference = ptrInt(int(f.Preference))
+		rec.Preference = new(int(f.Preference))
 		rec.Exchange = hostTargetOut(f.Mx)
 	case dnsv2.TypeTXT:
 		rec.Value = rc.GetTargetTXTJoined()
@@ -85,7 +89,7 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 		rec.Pointer = trimDot(rc.AsPTR().Ptr)
 	case dnsv2.TypeCAA:
 		f := rc.AsCAA()
-		rec.Flag = ptrInt(int(f.Flag))
+		rec.Flag = new(int(f.Flag))
 		rec.Tag = f.Tag
 		rec.Value = f.Value
 	case dnsv2.TypeSRV:
@@ -97,8 +101,8 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 		rec.Service = prefix[0]
 		rec.Protocol = prefix[1]
 		rec.Name = nativeName(name)
-		rec.Priority = ptrInt(int(f.Priority))
-		rec.Weight = ptrInt(int(f.Weight))
+		rec.Priority = new(int(f.Priority))
+		rec.Weight = new(int(f.Weight))
 		rec.Port = client.NewIntPortValue(int(f.Port))
 		rec.Target = hostTargetOut(f.Target)
 	case dnsv2.TypeHTTPS, dnsv2.TypeSVCB:
@@ -109,7 +113,7 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 			rec.Scheme = prefix[1]
 			rec.Name = nativeName(name)
 		}
-		rec.SvcPriority = ptrInt(int(f.Priority))
+		rec.SvcPriority = new(int(f.Priority))
 		rec.TargetName = httpsTargetOut(f.Target)
 		rec.SvcParams = models.Svcbv2ValueToString(f.Value)
 	case dnsv2.TypeTLSA:
@@ -121,9 +125,9 @@ func toNative(rc *models.RecordConfig) (client.DNSRecord, error) {
 		rec.Port = client.NewStringPortValue(prefix[0])
 		rec.Protocol = prefix[1]
 		rec.Name = nativeName(name)
-		rec.Usage = ptrInt(int(f.Usage))
-		rec.Selector = ptrInt(int(f.Selector))
-		rec.Matching = ptrInt(int(f.MatchingType))
+		rec.Usage = new(int(f.Usage))
+		rec.Selector = new(int(f.Selector))
+		rec.Matching = new(int(f.MatchingType))
 		rec.AssociationData = f.Certificate
 	default:
 		return rec, fmt.Errorf("spaceship.toNative: unsupported record type %q", rc.Type)
@@ -222,10 +226,6 @@ func httpsTargetOut(s string) string {
 	return trimDot(s)
 }
 
-func ptrInt(v int) *int {
-	return &v
-}
-
 func derefInt(p *int) int {
 	if p == nil {
 		return 0
@@ -246,17 +246,23 @@ func portString(p *client.PortValue) string {
 	return ""
 }
 
-func srvPort(p *client.PortValue) uint16 {
+func srvPort(p *client.PortValue) (uint16, error) {
 	if p == nil {
-		return 0
+		return 0, nil
 	}
 	if p.Int != nil {
-		return uint16(*p.Int)
+		if *p.Int < 0 || *p.Int > 65535 {
+			return 0, fmt.Errorf("SRV port %d is outside the valid range", *p.Int)
+		}
+		return uint16(*p.Int), nil
 	}
 	if p.String != nil {
 		raw := strings.TrimPrefix(*p.String, "_")
-		n, _ := strconv.Atoi(raw)
-		return uint16(n)
+		n, err := strconv.ParseUint(raw, 10, 16)
+		if err != nil {
+			return 0, fmt.Errorf("invalid SRV port %q: %w", *p.String, err)
+		}
+		return uint16(n), nil
 	}
-	return 0
+	return 0, nil
 }
