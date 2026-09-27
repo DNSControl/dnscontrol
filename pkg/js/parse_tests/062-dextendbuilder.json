@@ -17,15 +17,7 @@
           "filepos": "[line:16:5]",
           "name": "loctest1",
           "name_unicode": "loctest1",
-          "rdata": {
-            "Altitude": 9997600,
-            "HorizPre": 0,
-            "Latitude": 2299997648,
-            "Longitude": 1891505648,
-            "Size": 51,
-            "Version": 0,
-            "VertPre": 0
-          },
+          "rdata": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29
@@ -35,15 +27,7 @@
           "filepos": "[line:22:5]",
           "name": "loctest2.ssub",
           "name_unicode": "loctest2.ssub",
-          "rdata": {
-            "Altitude": 9997600,
-            "HorizPre": 0,
-            "Latitude": 2299997648,
-            "Longitude": 1891505648,
-            "Size": 51,
-            "Version": 0,
-            "VertPre": 0
-          },
+          "rdata": "42 21 54.000 N 71 06 18.000 W -24m 30m 0.00m 0.00m",
           "ttl": 300,
           "type": "LOC",
           "typenum": 29

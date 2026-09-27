@@ -10,31 +10,7 @@
           "filepos": "[line:3:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Priority": 2,
-            "Target": ".",
-            "Value": [
-              {
-                "Alpn": [
-                  "h3",
-                  "h2"
-                ]
-              },
-              {
-                "Port": 443
-              },
-              {
-                "Hint": [
-                  "123.123.123.123"
-                ]
-              },
-              {
-                "Hint": [
-                  "dead::beaf"
-                ]
-              }
-            ]
-          },
+          "rdata": "2 . alpn=\"h3,h2\" port=\"443\" ipv4hint=\"123.123.123.123\" ipv6hint=\"dead::beaf\"",
           "ttl": 300,
           "type": "HTTPS",
           "typenum": 65
@@ -44,11 +20,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Priority": 1,
-            "Target": ".",
-            "Value": null
-          },
+          "rdata": "1 .",
           "ttl": 300,
           "type": "SVCB",
           "typenum": 64

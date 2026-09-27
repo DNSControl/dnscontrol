@@ -17,9 +17,7 @@
           "filepos": "[line:7:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "rdata": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -29,9 +27,7 @@
           "filepos": "[line:8:5]",
           "name": "p1",
           "name_unicode": "p1",
-          "rdata": {
-            "Addr": "1.2.3.5"
-          },
+          "rdata": "1.2.3.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -41,9 +37,7 @@
           "filepos": "[line:9:5]",
           "name": "p255",
           "name_unicode": "p255",
-          "rdata": {
-            "Addr": "1.2.4.3"
-          },
+          "rdata": "1.2.4.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -53,9 +47,7 @@
           "filepos": "[line:12:5]",
           "name": "yyy",
           "name_unicode": "yyy",
-          "rdata": {
-            "Addr": "190.2.3.4"
-          },
+          "rdata": "190.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1

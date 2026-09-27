@@ -10,12 +10,7 @@
           "filepos": "[line:3:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Algorithm": 1,
-            "Digest": "FFFF",
-            "DigestType": 1,
-            "KeyTag": 1
-          },
+          "rdata": "1 1 1 FFFF",
           "ttl": 300,
           "type": "DS",
           "typenum": 43
@@ -25,12 +20,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Algorithm": 13,
-            "Digest": "AABBCCDDEEFF",
-            "DigestType": 2,
-            "KeyTag": 1000
-          },
+          "rdata": "1000 13 2 AABBCCDDEEFF",
           "ttl": 300,
           "type": "DS",
           "typenum": 43

@@ -10,11 +10,7 @@
           "filepos": "[line:12:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flag": 128,
-            "Tag": "iodef",
-            "Value": "https://example.com"
-          },
+          "rdata": "128 iodef \"https://example.com\"",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -24,11 +20,7 @@
           "filepos": "[line:8:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flag": 128,
-            "Tag": "iodef",
-            "Value": "mailto:test@example.com"
-          },
+          "rdata": "128 iodef \"mailto:test@example.com\"",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -38,11 +30,7 @@
           "filepos": "[line:10:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "iodef",
-            "Value": "http://example.com"
-          },
+          "rdata": "0 iodef \"http://example.com\"",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -52,11 +40,7 @@
           "filepos": "[line:3:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "issue",
-            "Value": "letsencrypt.org"
-          },
+          "rdata": "0 issue \"letsencrypt.org\"",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257
@@ -66,11 +50,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Flag": 0,
-            "Tag": "issuewild",
-            "Value": ";"
-          },
+          "rdata": "0 issuewild \";\"",
           "ttl": 300,
           "type": "CAA",
           "typenum": 257

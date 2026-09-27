@@ -20,9 +20,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "3.3.3.3"
-          },
+          "rdata": "3.3.3.3",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -35,9 +33,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "4.4.4.4"
-          },
+          "rdata": "4.4.4.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -50,9 +46,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "5.5.5.5"
-          },
+          "rdata": "5.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1

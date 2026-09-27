@@ -13,10 +13,7 @@
           },
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Then": "test-worker",
-            "When": "test.foo.com"
-          },
+          "rdata": "test.foo.com \"test-worker\"",
           "ttl": 300,
           "type": "CF_WORKER_ROUTE",
           "typenum": 65288

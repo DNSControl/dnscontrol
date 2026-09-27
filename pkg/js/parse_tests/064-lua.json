@@ -13,10 +13,7 @@
           },
           "name": "_diag",
           "name_unicode": "_diag",
-          "rdata": {
-            "LuaPayload": "; return 'ok'",
-            "LuaType": "TXT"
-          },
+          "rdata": "TXT \"; return 'ok'\"",
           "ttl": 30,
           "type": "LUA",
           "typenum": 65292
@@ -29,10 +26,7 @@
           },
           "name": "app",
           "name_unicode": "app",
-          "rdata": {
-            "LuaPayload": "return_127_0_0_1",
-            "LuaType": "A"
-          },
+          "rdata": "A \"return_127_0_0_1\"",
           "ttl": 60,
           "type": "LUA",
           "typenum": 65292
