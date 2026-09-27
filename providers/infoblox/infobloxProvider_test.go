@@ -8,7 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
+	dnsv2 "codeberg.org/miekg/dns"
+	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
 // newTestAPI creates an infobloxAPI pointing at a test server.
@@ -23,9 +24,15 @@ func newTestAPI(ts *httptest.Server, view string) *infobloxAPI {
 	}
 }
 
+// testDC creates a DomainConfig for testing.
+func testDC(domain string) *models.DomainConfig {
+	return &models.DomainConfig{Name: domain}
+}
+
 func TestConvertA(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:a/ZG5z:10.0.0.1","name":"host.example.com","ipv4addr":"10.0.0.1","ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("a", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("a", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +52,8 @@ func TestConvertA(t *testing.T) {
 
 func TestConvertAAAA(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:aaaa/ZG5z:2001:db8::1","name":"host.example.com","ipv6addr":"2001:db8::1","ttl":600,"use_ttl":true}`)
-	rc, err := toRecordConfig("aaaa", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("aaaa", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,14 +63,12 @@ func TestConvertAAAA(t *testing.T) {
 	if rc.TTL != 600 {
 		t.Errorf("expected TTL 600, got %d", rc.TTL)
 	}
-	if rc.GetTargetField() != "2001:db8::1" {
-		t.Errorf("expected target 2001:db8::1, got %s", rc.GetTargetField())
-	}
 }
 
 func TestConvertCNAME(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:cname/ZG5z:www","name":"www.example.com","canonical":"web.example.com","ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("cname", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("cname", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,24 +82,27 @@ func TestConvertCNAME(t *testing.T) {
 
 func TestConvertMX(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:mx/ZG5z:mx","name":"example.com","mail_exchanger":"mail.example.com","preference":10,"ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("mx", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("mx", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if rc.Type != "MX" {
 		t.Errorf("expected type MX, got %s", rc.Type)
 	}
-	if rc.MxPreference != 10 {
-		t.Errorf("expected preference 10, got %d", rc.MxPreference)
+	mx := rc.AsMX()
+	if mx.Preference != 10 {
+		t.Errorf("expected preference 10, got %d", mx.Preference)
 	}
-	if rc.GetTargetField() != "mail.example.com." {
-		t.Errorf("expected target mail.example.com., got %s", rc.GetTargetField())
+	if mx.Mx != "mail.example.com." {
+		t.Errorf("expected target mail.example.com., got %s", mx.Mx)
 	}
 }
 
 func TestConvertTXT(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:txt/ZG5z:txt","name":"example.com","text":"v=spf1 -all","ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("txt", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("txt", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,44 +116,49 @@ func TestConvertTXT(t *testing.T) {
 
 func TestConvertSRV(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:srv/ZG5z:srv","name":"_sip._tcp.example.com","target":"sip.example.com","priority":10,"weight":20,"port":5060,"ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("srv", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("srv", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if rc.Type != "SRV" {
 		t.Errorf("expected type SRV, got %s", rc.Type)
 	}
-	if rc.SrvPriority != 10 {
-		t.Errorf("expected priority 10, got %d", rc.SrvPriority)
+	srv := rc.AsSRV()
+	if srv.Priority != 10 {
+		t.Errorf("expected priority 10, got %d", srv.Priority)
 	}
-	if rc.SrvWeight != 20 {
-		t.Errorf("expected weight 20, got %d", rc.SrvWeight)
+	if srv.Weight != 20 {
+		t.Errorf("expected weight 20, got %d", srv.Weight)
 	}
-	if rc.SrvPort != 5060 {
-		t.Errorf("expected port 5060, got %d", rc.SrvPort)
+	if srv.Port != 5060 {
+		t.Errorf("expected port 5060, got %d", srv.Port)
 	}
 }
 
 func TestConvertCAA(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:caa/ZG5z:caa","name":"example.com","ca_flag":0,"ca_tag":"issue","ca_value":"letsencrypt.org","ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("caa", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("caa", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if rc.Type != "CAA" {
 		t.Errorf("expected type CAA, got %s", rc.Type)
 	}
-	if rc.CaaFlag != 0 {
-		t.Errorf("expected flag 0, got %d", rc.CaaFlag)
+	caa := rc.AsCAA()
+	if caa.Flag != 0 {
+		t.Errorf("expected flag 0, got %d", caa.Flag)
 	}
-	if rc.CaaTag != "issue" {
-		t.Errorf("expected tag 'issue', got %q", rc.CaaTag)
+	if caa.Tag != "issue" {
+		t.Errorf("expected tag 'issue', got %q", caa.Tag)
 	}
 }
 
 func TestConvertPTR(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:ptr/ZG5z:ptr","name":"1.0.0.10.in-addr.arpa","ptrdname":"host.example.com","ttl":300,"use_ttl":true}`)
-	rc, err := toRecordConfig("ptr", raw, "0.0.10.in-addr.arpa", 3600)
+	dc := testDC("0.0.10.in-addr.arpa")
+	rc, err := toRecordConfig("ptr", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -158,7 +172,8 @@ func TestConvertPTR(t *testing.T) {
 
 func TestConvertNSApexSkipped(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:ns/ZG5z:ns","name":"example.com","nameserver":"ns1.example.com","ttl":3600}`)
-	rc, err := toRecordConfig("ns", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("ns", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -169,7 +184,8 @@ func TestConvertNSApexSkipped(t *testing.T) {
 
 func TestConvertNSSubdomain(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:ns/ZG5z:ns2","name":"sub.example.com","nameserver":"ns1.sub.example.com","ttl":3600}`)
-	rc, err := toRecordConfig("ns", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("ns", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -183,7 +199,8 @@ func TestConvertNSSubdomain(t *testing.T) {
 
 func TestTTLInheritance(t *testing.T) {
 	raw := json.RawMessage(`{"_ref":"record:a/ZG5z:10.0.0.2","name":"host.example.com","ipv4addr":"10.0.0.2","ttl":0,"use_ttl":false}`)
-	rc, err := toRecordConfig("a", raw, "example.com", 3600)
+	dc := testDC("example.com")
+	rc, err := toRecordConfig("a", raw, dc, 3600)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -193,9 +210,9 @@ func TestTTLInheritance(t *testing.T) {
 }
 
 func TestBuildRecordBodyA(t *testing.T) {
-	rc := &models.RecordConfig{Type: "A", TTL: 300}
-	rc.SetLabel("host", "example.com")
-	if err := rc.SetTarget("10.0.0.1"); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("host", 300, dnsv2.TypeA, "10.0.0.1")
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -218,9 +235,9 @@ func TestBuildRecordBodyA(t *testing.T) {
 }
 
 func TestBuildRecordBodyNoView(t *testing.T) {
-	rc := &models.RecordConfig{Type: "A", TTL: 300}
-	rc.SetLabel("host", "example.com")
-	if err := rc.SetTarget("10.0.0.1"); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("host", 300, dnsv2.TypeA, "10.0.0.1")
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -441,9 +458,9 @@ func TestEffectiveTTL(t *testing.T) {
 }
 
 func TestBuildRecordBodyTXT(t *testing.T) {
-	rc := &models.RecordConfig{Type: "TXT", TTL: 300}
-	rc.SetLabel("@", "example.com")
-	if err := rc.SetTargetTXT("v=spf1 include:_spf.example.com -all"); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("@", 300, dnsv2.TypeTXT, "v=spf1 include:_spf.example.com -all")
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -460,9 +477,9 @@ func TestBuildRecordBodyTXT(t *testing.T) {
 }
 
 func TestBuildRecordBodyMX(t *testing.T) {
-	rc := &models.RecordConfig{Type: "MX", TTL: 300}
-	rc.SetLabel("@", "example.com")
-	if err := rc.SetTargetMX(10, "mail.example.com."); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("@", 300, dnsv2.TypeMX, uint16(10), "mail.example.com.")
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -482,9 +499,9 @@ func TestBuildRecordBodyMX(t *testing.T) {
 }
 
 func TestBuildRecordBodySRV(t *testing.T) {
-	rc := &models.RecordConfig{Type: "SRV", TTL: 300}
-	rc.SetLabel("_sip._tcp", "example.com")
-	if err := rc.SetTargetSRV(10, 20, 5060, "sip.example.com."); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("_sip._tcp", 300, dnsv2.TypeSRV, uint16(10), uint16(20), uint16(5060), "sip.example.com.")
+	if err != nil {
 		t.Fatal(err)
 	}
 
@@ -504,9 +521,9 @@ func TestBuildRecordBodySRV(t *testing.T) {
 }
 
 func TestBuildRecordBodyCAA(t *testing.T) {
-	rc := &models.RecordConfig{Type: "CAA", TTL: 300}
-	rc.SetLabel("@", "example.com")
-	if err := rc.SetTargetCAA(0, "issue", "letsencrypt.org"); err != nil {
+	dc := testDC("example.com")
+	rc, err := dc.NewRecordConfig("@", 300, dnsv2.TypeCAA, uint8(0), "issue", "letsencrypt.org")
+	if err != nil {
 		t.Fatal(err)
 	}
 

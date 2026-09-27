@@ -3,8 +3,8 @@ package infoblox
 import (
 	"fmt"
 
-	"github.com/DNSControl/dnscontrol/v4/models"
-	"github.com/DNSControl/dnscontrol/v4/pkg/diff2"
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
@@ -35,7 +35,7 @@ func (p *infobloxProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 		}
 
 		for _, raw := range raws {
-			rc, err := toRecordConfig(recType, raw, domain, defaultTTL)
+			rc, err := toRecordConfig(recType, raw, dc, defaultTTL)
 			if err != nil {
 				return nil, err
 			}
