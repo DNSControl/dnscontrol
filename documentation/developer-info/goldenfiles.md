@@ -2,17 +2,19 @@
 
 Q: How can we test DNSControl without hitting the provider's API all the time?
 
-A: We record the API calls, save them as "golden files", and run tests against that data.
+A: We record what goes into/out of API calls (these are called "golden files") then we write tests that run against the datafiles. These datafiles (fixtures) are called "golden files".  This allows us to run tests without API access. It is useful when the project doesn't have API access, or when we do have access but want to be able to run tests in isolation.
 
-Provider conversion golden tests replay the exact calls made at the boundary
-between a provider's native record type and `models.RecordConfig`, and check the
-result against recorded fixtures (fixtures are datasets used in tests). They prove the current conversion code still
-produces the expected output. Replay needs neither credentials nor a `*_DOMAIN`
-variable.
+One of the most fundamental things that a DNS provider module does is convert to and from `models.RecordConfig` structs.  That structure is how DNSControl stores one DNS record.
 
-Fixtures live in `providers/<pkg>/test_data`. `pkg/providergolden` records and
-replays them. **`providers/cloudns` is a complete, minimal example**
-(`api.go`, `cloudnsProvider.go`, `convert_golden_test.go`, `test_data/`) — copy it.
+The "conversion golden tests" replay the exact calls made at the boundary between a provider's native record type and `models.RecordConfig`, and check the result against recorded fixtures. These tests prove the current conversion code still produces the expected output. Replay needs neither credential nor access to the real provider.
+
+{% hint style="info" %}
+**Fixtures** are datasets created exclusively for use in tests. They tend to be *static, updated only when required for new tests or code changes.
+{% endhint %}
+
+Fixtures live in `providers/<pkg>/test_data`. `pkg/providergolden` records and replays them. **`providers/cloudns` is a complete, minimal example** (`api.go`, `cloudnsProvider.go`, `convert_golden_test.go`, `test_data/`) — copy it.
+
+## Table of Contents
 
 - [Provider conversion golden files](#provider-conversion-golden-files)
   - [How to: Run the golden tests](#how-to-run-the-golden-tests)
@@ -24,25 +26,19 @@ replays them. **`providers/cloudns` is a complete, minimal example**
     - [Step 2. Add the replay tests](#step-2-add-the-replay-tests)
     - [Step 3. Hydrate the fixtures](#step-3-hydrate-the-fixtures)
 
-## How to: Run the golden tests
+## How to: Run the golden tests (i.e. test code against the golden files)
 
-Normal "go test" runs the tests. This replays the fixtures using
-the current code and verifies that it still
-yields the outputs that werer previously recorded.
-It also verifies that conversions don't mutate their inputs.
+Normal "go test" runs the tests. This replays the fixtures using the current code and verifies that it still yields the outputs that werer previously recorded.  It also verifies that conversions don't mutate their inputs.
 
 ```shell
 go test ./providers/cloudns/
 ```
 
-The `*Golden` tests read `test_data/`. Failures indicate that either
-the code regressed (fix it), or the output changed on purpose
-(update the fixtures, next).
+The `*Golden` tests read `test_data/`. Failures indicate that either the code regressed (fix it), or the output changed on purpose (update the fixtures, next).
 
 ## How to: Update the expected output
 
-"Updating" means to keep the recorded **inputs** and rewrites only
-the **expected outputs**.
+"Updating" means to keep the recorded **inputs** and rewrites only the **expected outputs**.
 
 Use this when a the conversion's output *should* change.
 
@@ -50,41 +46,32 @@ Use this when a the conversion's output *should* change.
 go test ./providers/cloudns/ -update
 ```
 
-Review the diff before committing. `-update` blesses whatever the code currently
-emits--including bugs! Use it only when the change is intentional. (Flag
-defined in `pkg/providergolden`.)
+Review the diff before committing. `-update` blesses whatever the code currently emits--including bugs! Use it only when the change is intentional. (Flag defined in `pkg/providergolden`.)
 
 ## How to: Update the recorded inputs (fixtures)
 
-To create fixtures for the first time, or to refresh both sides, replay a
-known-good integration test with `-record`. Recording writes the input **and**
-its resulting output as a matched pair, so no separate `-update` is needed:
+To create fixtures for the first time, or to refresh both sides, replay a known-good integration test with `-record`. Recording writes the input **and** its resulting output as a matched pair, so no separate `-update` is needed:
 
 ```shell
 go test -failfast -run TestDNSProviders -v ./integrationTest \
   -args -verbose -profile CLOUDNS -record
 ```
 
-The recorder is injected while the provider is constructed; each instrumented
-conversion reports its input and result. Only record from a **successful**
-integration run.
+With the `-record` flag, when DNSControl initializes the provider, it installs a "recorder". (In software enginering terms: We use an observer pattern. The observer is installed at provider construction.) The code is instrumented in a way that if a recorder exists, the inputs (what goes out to the API) and the result (what we receive) are recored.
 
-There is a `-recorddir <dir>` flag to change where the output is written.
-You'll never need this.  (Flag defined in `integrationTest/helpers_test.go`.)
+Only record from a **successful** integration run. We don't want fixtures based on failed integration tests.
+
+There is a `-recorddir <dir>` flag to change where the output is written.  You'll never need this.  (Flag defined in `integrationTest/helpers_test.go`.)
 
 {% hint style="danger" %}
-Recordings can contain credentials, private names, addresses, and zone IDs.
-Review every file before committing it.
+Recordings can contain credentials, private names, addresses, and zone IDs.  Review every file before committing it. Redact anything that shouldn't be public!
 {% endhint %}
 
-Mutation is checked here too: a `ToRC` conversion must not mutate its native
-input, and a `ToNative` conversion must not mutate its `RecordConfig` input.
-Recording reports mutations as errors; replay reports them as test failures.
+These tests also check to make sure that a provider doesn't modify (mutate) the "desired" DNS records (i.e. the datastructure that represents what's in dnsconfig.js).  A `ToRC` conversion must not mutate its native input, and a `ToNative` conversion must not mutate its `RecordConfig` input.  Recording reports mutations as errors; replay reports them as test failures.
 
 ## Files
 
-`test_data/meta.json` holds the fixture version and, per domain, the recorded
-`to_rc` and `to_native` function names (one provider may cover several domains).
+`test_data/meta.json` holds the fixture version and, per domain, the recorded `to_rc` and `to_native` function names (one provider may cover several domains).
 
 Per direction and function:
 
@@ -95,21 +82,15 @@ Per direction and function:
   - `recorded_tonative_input_<func>_<domain>.records`
   - `expected_tonative_output_<func>_<domain>.json`
 
-Each JSON value and each `.records` line carries an `index`. A
-repeated index is one conversion that consumed or produced multiple records, so
-one-to-many and many-to-one conversions stay synchronized even when the record
-counts differ.
+Each JSON value and each `.records` line carries an `index`. A repeated index is one conversion that consumed or produced multiple records, so one-to-many and many-to-one conversions stay synchronized even when the record counts differ.
 
 ## How to: Add golden tests to a provider
 
-Three steps: instrument the conversion boundaries, add replay tests, then
-hydrate the fixtures. `providers/cloudns` shows the whole pattern.
+Three steps: instrument the conversion boundaries, add replay tests, then hydrate the fixtures. `providers/cloudns` shows the whole pattern.
 
 ### Step 1. Instrument the provider
 
-Add an observer field and setter. `CreateDNSProvider` calls
-`SetConversionObserver` when the provider implements it (see
-`pkg/providers/conversion_observer.go`):
+Add an observer field and setter. `CreateDNSProvider` calls `SetConversionObserver` when the provider implements it (see `pkg/providers/conversion_observer.go`):
 
 ```go
 type cloudnsProvider struct {
@@ -122,9 +103,7 @@ func (c *cloudnsProvider) SetConversionObserver(o providers.ConversionObserver) 
 }
 ```
 
-At every conversion boundary that integration tests exercise, wrap the call:
-`Begin*` with the input before, `End*` with the same input plus the result and
-error after. Use the conversion function's exact name as the observer name.
+At every conversion boundary that integration tests exercise, wrap the call: `Begin*` with the input before, `End*` with the same input plus the result and error after. Use the conversion function's exact name as the observer name.
 
 Native → `RecordConfig`:
 
@@ -148,9 +127,7 @@ in production.
 
 ### Step 2. Add the replay tests
 
-Add `convert_golden_test.go` (see `providers/cloudns/convert_golden_test.go`).
-Each adapter runs one recorded call; the domain comes from `meta.json`, so no
-env var is needed:
+Add `convert_golden_test.go` (see `providers/cloudns/convert_golden_test.go`).  Each adapter runs one recorded call; the domain comes from `meta.json`, so no env var is needed:
 
 ```go
 func TestToRcGolden(t *testing.T) {
@@ -169,17 +146,13 @@ func TestToReqGolden(t *testing.T) {
 }
 ```
 
-NOTE: Some providers do not have a `ToReq()` or equivalent. In that case, just
-leave out `TestToReqGolden()`.
+NOTE: Some providers do not have a `ToReq()` or equivalent. In that case, just leave out `TestToReqGolden()`.
 
-`CheckToNative` passes all records sharing an index in one call, which supports
-record-set conversions. `CheckRoundTrip` additionally verifies providers whose
-two conversions are inverses. A function with no recording is skipped.
+`CheckToNative` passes all records sharing an index in one call, which supports record-set conversions. `CheckRoundTrip` additionally verifies providers whose two conversions are inverses. A function with no recording is skipped.
 
 ### Step 3. Hydrate the fixtures
 
-Record once from a passing integration run, inspect (and redact) the new files,
-commit them, then run the package normally to confirm replay:
+Record once from a passing integration run, inspect (and redact) the new files, commit them, then run the package normally to confirm replay:
 
 ```shell
 go test -failfast -run TestDNSProviders -v ./integrationTest \
