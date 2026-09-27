@@ -37,8 +37,9 @@ func init() {
 	const providerName = "TENCENTDNS"
 	const providerMaintainer = "@cylonchau"
 	fns := providers.DspFuncs{
-		Initializer:   newTencentDNSDsp,
-		RecordAuditor: AuditRecords,
+		Initializer:    newTencentDNSDsp,
+		RecordAuditor:  AuditRecords,
+		RecordIdentity: recordIdentity,
 	}
 	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterRegistrarType(providerName, newTencentDNSReg)
@@ -240,6 +241,27 @@ func recordMetadataComparable(existingRecords models.Records) diff2.ComparableFu
 		}
 		return lineComparable + " weight=" + weight
 	}
+}
+
+// recordIdentity returns the identity text used by validation-time duplicate
+// detection. Validation runs before the provider has read the zone, so this
+// reads nothing but the record itself: the line ID when set, otherwise the line
+// name. Weight stays out, because it is not part of the key the service uses.
+func recordIdentity(rc *models.RecordConfig) string {
+	if rc.Metadata != nil {
+		if lineID := rc.Metadata[metaRecordLineID]; lineID != "" {
+			return "line_id=" + lineID
+		}
+		if line := rc.Metadata[metaRecordLine]; line != "" {
+			// The default line has one name and one ID.
+			if line == defaultRecordLine {
+				return "line_id=" + defaultRecordLineID
+			}
+			return "line=" + line
+		}
+	}
+	// A record without line metadata answers on the default line.
+	return "line_id=" + defaultRecordLineID
 }
 
 func (p *tencentdnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {

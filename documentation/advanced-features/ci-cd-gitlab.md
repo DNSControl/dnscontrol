@@ -1,15 +1,14 @@
 # GitLab CI/CD example
 
-- [GitLab CI/CD example](#gitlab-cicd-example)
-  - [DNSControl - Demo setup](#dnscontrol---demo-setup)
-  - [GitLab CI - Preparation](#gitlab-ci---preparation)
-  - [GitLab CI - DNSControl preview](#gitlab-ci---dnscontrol-preview)
-  - [GitLab CI - DNSControl push](#gitlab-ci---dnscontrol-push)
-  - [GitLab CI - Duplicate YAML configuration](#gitlab-ci---duplicate-yaml-configuration)
+- [DNSControl: Demo setup](#dnscontrol-demo-setup)
+- [GitLab CI: Preparation](#gitlab-ci-preparation)
+- [GitLab CI: DNSControl preview](#gitlab-ci-dnscontrol-preview)
+- [GitLab CI: DNSControl push](#gitlab-ci-dnscontrol-push)
+- [GitLab CI: Duplicate YAML configuration](#gitlab-ci-duplicate-yaml-configuration)
 
 Before discussing the GitLab CI/CD setup, let's assume you already have a working DNSControl setup. Aren't you there yet? Then first check out the '[Getting Started](../getting-started/getting-started.md)' section.
 
-## DNSControl - Demo setup
+## DNSControl: Demo setup
 
 For this tutorial, there is a [GitLab repository](https://gitlab.com/cafferata/dnscontrol/) ready with an example DNSControl setup/domain.
 
@@ -50,7 +49,7 @@ D("cafferata.dev",
 ```
 {% endcode %}
 
-## GitLab CI - Preparation
+## GitLab CI: Preparation
 
 You may have noticed that the `creds.json` file contains a variable `$TRANSIP_PRIVATE_KEY`. This variable is populated from the GitLab CI variables and contain the TransIP API key.
 
@@ -71,7 +70,7 @@ _Example of variable `$TRANSIP_PRIVATE_KEY` contents._
 
 ![Insert GitLab CI/CD variable TRANSIP_PRIVATE_KEY](../assets/ci-cd-gitlab/settings-ci-cd-variables-insert.png)
 
-## GitLab CI - DNSControl preview
+## GitLab CI: DNSControl preview
 
 Now it's time to apply the power of DNSControl within GitLab CI merge requests. We'll start by adding the basic GitLab CI setup. You can view the git diff online in the [GitLab merge request #1](https://gitlab.com/cafferata/dnscontrol/-/merge_requests/1/diffs). The GitLab CI setup has also been added for convenience.
 
@@ -142,7 +141,7 @@ Done. 1 corrections.
 
 ![CI/CD job output for DNSControl preview](../assets/ci-cd-gitlab/ci-cd-job-output-dnscontrol-preview.png)
 
-## GitLab CI - DNSControl push
+## GitLab CI: DNSControl push
 
 We just saw that we can view the DNSControl diff from the [GitLab job](https://gitlab.com/cafferata/dnscontrol/-/jobs/3115895010). Now it's time to make GitLab CI responsible for the command `dnscontrol push`.
 
@@ -193,7 +192,7 @@ Done. 1 corrections.
 
 ![CI/CD job output for DNSControl push](../assets/ci-cd-gitlab/ci-cd-job-output-dnscontrol-push.png)
 
-## GitLab CI - Duplicate YAML configuration
+## GitLab CI: Duplicate YAML configuration
 
 We have a working setup at this point that includes a `dnscontrol preview` and a `dnscontrol push` command. Well done! You might consider cleaning up the duplicate GitLab YAML configuration. We can move the DNSControl `image` `name` and `entrypoint` to a GitLab YAML `extends`. Then we can also move the duplicate `dnscontrol version` command to a GitLab `before_script`. See the third (_and also last_) [GitLab merge request #3](https://gitlab.com/cafferata/dnscontrol/-/merge_requests/3).
 

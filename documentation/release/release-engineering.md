@@ -1,24 +1,23 @@
 # How to build and ship a release
 
-- [How to build and ship a release](#how-to-build-and-ship-a-release)
-  - [Step 1. Verify everything is up to date](#step-1-verify-everything-is-up-to-date)
-    - [Automated](#automated)
-    - [Manual](#manual)
-  - [Step 2. Cut the release](#step-2-cut-the-release)
-    - [Create an empty PR for the release](#create-an-empty-pr-for-the-release)
-    - [Start the release automation](#start-the-release-automation)
-  - [Manual (escape hatch)](#manual-escape-hatch)
-  - [Release it to the public](#release-it-to-the-public)
-  - [Step 3. Create the release notes](#step-3-create-the-release-notes)
-  - [Step 4. Announce it via email](#step-4-announce-it-via-email)
-  - [Tip: How to bump the major version](#tip-how-to-bump-the-major-version)
-  - [Tip: Configuring GHA integration tests](#tip-configuring-gha-integration-tests)
-    - [Overview](#overview)
-    - [How do I add a single new integration test?](#how-do-i-add-a-single-new-integration-test)
-    - [How do I add a "bring your own keys" integration test?](#how-do-i-add-a-bring-your-own-keys-integration-test)
-  - [Tip: How to rebuild flattener](#tip-how-to-rebuild-flattener)
-  - [Tip: How to update modules](#tip-how-to-update-modules)
-  - [Tip: How to test GoReleaser](#tip-how-to-test-goreleaser)
+- [Step 1: Verify everything is up to date](#step-1-verify-everything-is-up-to-date)
+  - [Automated](#automated)
+  - [Manual](#manual)
+- [Step 2: Cut the release](#step-2-cut-the-release)
+  - [Create an empty PR for the release](#create-an-empty-pr-for-the-release)
+  - [Start the release automation](#start-the-release-automation)
+- [Manual (escape hatch)](#manual-escape-hatch)
+- [Release it to the public](#release-it-to-the-public)
+- [Step 3: Create the release notes](#step-3-create-the-release-notes)
+- [Step 4: Announce it via email](#step-4-announce-it-via-email)
+- [Tip: How to bump the major version](#tip-how-to-bump-the-major-version)
+- [Tip: Configuring GHA integration tests](#tip-configuring-gha-integration-tests)
+  - [Overview](#overview)
+  - [How do I add a single new integration test?](#how-do-i-add-a-single-new-integration-test)
+  - [How do I add a "bring your own keys" integration test?](#how-do-i-add-a-bring-your-own-keys-integration-test)
+- [Tip: How to rebuild flattener](#tip-how-to-rebuild-flattener)
+- [Tip: How to update modules](#tip-how-to-update-modules)
+- [Tip: How to test GoReleaser](#tip-how-to-test-goreleaser)
 
 These are the instructions for producing a release.
 
@@ -26,7 +25,7 @@ GitHub Actions (GHA) will do most of the work for you. You will need to edit the
 
 Please change the version number as appropriate.  Substitute (for example) `v4.2.0` any place you see `$VERSION` in this doc.
 
-## Step 1. Verify everything is up to date
+## Step 1: Verify everything is up to date
 
 ### Automated
 
@@ -64,7 +63,7 @@ git status
 git commit -am "CHORE: generate-all.sh"
 ```
 
-## Step 2. Cut the release
+## Step 2: Cut the release
 
 Pick the next release number:
 
@@ -183,7 +182,7 @@ When you submit it:
 - "Pre-Release" for rc releases, "Latest" for real releases.
 - Create a discussion for this release
 
-## Step 3. Create the release notes
+## Step 3: Create the release notes
 
 The draft release notes are created for you. In this step you'll edit them.
 
@@ -199,7 +198,7 @@ Release notes style guide:
 
 See [https://github.com/DNSControl/dnscontrol/releases](https://github.com/DNSControl/dnscontrol/releases) for examples for recent release notes and copy that style.
 
-## Step 4. Announce it via email
+## Step 4: Announce it via email
 
 Email the release notes to the mailing list: (note the format of the Subject line and that the first line of the email is the URL of the release)
 

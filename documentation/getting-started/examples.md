@@ -1,17 +1,16 @@
 # Examples
 
-- [Examples](#examples)
-  - [Typical DNS Records](#typical-dns-records)
-  - [Set TTLs](#set-ttls)
-  - [Variables for common IP Addresses](#variables-for-common-ip-addresses)
-  - [Variables to swap active Data Center](#variables-to-swap-active-data-center)
-  - [Macro for repeated records](#macro-for-repeated-records)
-  - [Use SPF\_BUILDER to add comments to SPF records](#use-spf_builder-to-add-comments-to-spf-records)
-  - [Set default records modifiers](#set-default-records-modifiers)
-  - [Advanced Examples](#advanced-examples)
-    - [Dual DNS Providers](#dual-dns-providers)
-    - [Automate Fastmail DKIM records](#automate-fastmail-dkim-records)
-    - [More advanced examples](#more-advanced-examples)
+- [Typical DNS Records](#typical-dns-records)
+- [Set TTLs](#set-ttls)
+- [Variables for common IP Addresses](#variables-for-common-ip-addresses)
+- [Variables to swap active Data Center](#variables-to-swap-active-data-center)
+- [Macro for repeated records](#macro-for-repeated-records)
+- [Use SPF_BUILDER to add comments to SPF records](#use-spf_builder-to-add-comments-to-spf-records)
+- [Set default records modifiers](#set-default-records-modifiers)
+- [Advanced Examples](#advanced-examples)
+  - [Dual DNS Providers](#dual-dns-providers)
+  - [Automate Fastmail DKIM records](#automate-fastmail-dkim-records)
+  - [More advanced examples](#more-advanced-examples)
 
 ## Typical DNS Records
 

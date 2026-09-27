@@ -325,6 +325,21 @@ func makeLineRecord(domain, target string, metadata map[string]string) *models.R
 	return rc
 }
 
+// The validation identity must read nothing but the record it is given. A
+// record without line metadata answers on the default line, and weight stays
+// out because the service keys records without it.
+func TestRecordIdentityReadsOnlyTheRecord(t *testing.T) {
+	assert.Equal(t, "line_id=0", recordIdentity(makeLineRecord("example.com", "1.2.3.4", nil)))
+	assert.Equal(t, "line_id=10=1", recordIdentity(makeLineRecord("example.com", "1.2.3.4",
+		map[string]string{metaRecordLineID: "10=1"})))
+	assert.Equal(t, "line=电信", recordIdentity(makeLineRecord("example.com", "1.2.3.4",
+		map[string]string{metaRecordLine: "电信"})))
+	assert.Equal(t, "line_id=10=1", recordIdentity(makeLineRecord("example.com", "1.2.3.4",
+		map[string]string{metaRecordLineID: "10=1", metaRecordWeight: "10"})))
+	assert.Equal(t, "line_id=10=1", recordIdentity(makeLineRecord("example.com", "1.2.3.4",
+		map[string]string{metaRecordLineID: "10=1", metaRecordWeight: "20"})))
+}
+
 func TestMinTTLForGrade(t *testing.T) {
 	packages := []*dnspod.PackageDetailItem{
 		{

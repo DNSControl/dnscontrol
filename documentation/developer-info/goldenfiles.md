@@ -6,7 +6,7 @@ A: We record the API calls, save them as "golden files", and run tests against t
 
 Provider conversion golden tests replay the exact calls made at the boundary
 between a provider's native record type and `models.RecordConfig`, and check the
-result against recorded fixtures. They prove the current conversion code still
+result against recorded fixtures (fixtures are datasets used in tests). They prove the current conversion code still
 produces the expected output. Replay needs neither credentials nor a `*_DOMAIN`
 variable.
 

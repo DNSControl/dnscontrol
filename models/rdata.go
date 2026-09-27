@@ -11,6 +11,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
@@ -117,6 +118,9 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 		v.Txt = TXTSegmented(v)
 		return v
 
+	case dnsrdatav2.CNAME:
+		v.Target = domaintags.EfficientToASCII(v.Target)
+		return v
 	}
 
 	return rd2

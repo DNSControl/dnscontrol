@@ -42,18 +42,40 @@ func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers
 
 func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, error) {
 	subID, rg := m["SubscriptionID"], m["ResourceGroup"]
+	rg = strings.ToLower(rg)
 	clientID, clientSecret, tenantID := m["ClientID"], m["ClientSecret"], m["TenantID"]
-	credential, authErr := aauth.NewClientSecretCredential(tenantID, clientID, clientSecret, nil)
-	if authErr != nil {
-		return nil, authErr
+	useOIDC := m["UseOIDC"] == "true"
+
+	var credential azcore.TokenCredential
+	var authErr error
+
+	if useOIDC {
+		oidcCredentialOpts := aauth.InteractiveBrowserCredentialOptions{
+			TenantID: tenantID,
+		}
+		credential, authErr = aauth.NewInteractiveBrowserCredential(&oidcCredentialOpts)
+		if authErr != nil {
+			return nil, fmt.Errorf("failed to create OIDC credential: %w", authErr)
+		}
+	} else if clientID != "" && clientSecret != "" {
+		credential, authErr = aauth.NewClientSecretCredential(tenantID, clientID, clientSecret, nil)
+		if authErr != nil {
+			return nil, fmt.Errorf("failed to create Client Secret credential: %w", authErr)
+		}
+	} else {
+		credential, authErr = aauth.NewDefaultAzureCredential(nil)
+		if authErr != nil {
+			return nil, fmt.Errorf("failed to create Default Azure credential: %w", authErr)
+		}
 	}
+
 	zonesClient, zoneErr := adns.NewPrivateZonesClient(subID, credential, nil)
 	if zoneErr != nil {
-		return nil, zoneErr
+		return nil, fmt.Errorf("failed to create zones client: %w", zoneErr)
 	}
 	recordsClient, recordErr := adns.NewRecordSetsClient(subID, credential, nil)
 	if recordErr != nil {
-		return nil, recordErr
+		return nil, fmt.Errorf("failed to create records client: %w", recordErr)
 	}
 
 	api := &azurednsProvider{
@@ -64,8 +86,7 @@ func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, err
 		rawRecords:     map[string][]*adns.RecordSet{},
 		zoneName:       map[string]string{},
 	}
-	err := api.getZones()
-	if err != nil {
+	if err := api.getZones(); err != nil {
 		return nil, err
 	}
 	return api, nil
@@ -74,11 +95,14 @@ func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, err
 var features = providers.DocumentationNotes{
 	// The default for unlisted capabilities is 'Cannot'.
 	// See providers/capabilities.go for the entire list of capabilities.
+	providers.CanConcur:              providers.Can(),
 	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
+	providers.CanAutoDNSSEC:          providers.Cannot(),
 	providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
 	providers.CanUseAzureAlias:       providers.Cannot(),
 	providers.CanUseCAA:              providers.Cannot("Azure Private DNS does not support CAA records"),
+	providers.CanUseDHCID:            providers.Cannot(),
+	providers.CanUseDNAME:            providers.Cannot(),
 	providers.CanUseLOC:              providers.Cannot(),
 	providers.CanUseNAPTR:            providers.Cannot(),
 	providers.CanUsePTR:              providers.Can(),
@@ -114,27 +138,29 @@ func init() {
 			{
 				Key:      "ResourceGroup",
 				Label:    "Resource group",
-				Help:     "Azure resource group that contains the private DNS zones.",
+				Help:     "Azure resource group that contains the private DNS zones. Case-insensitive (lowercased internally).",
 				Required: true,
 			},
 			{
-				Key:      "TenantID",
-				Label:    "Tenant ID",
-				Help:     "Azure AD tenant ID for the service principal.",
-				Required: true,
+				Key:   "TenantID",
+				Label: "Tenant ID",
+				Help:  "Azure AD tenant ID. Required for Client Secret and OIDC authentication.",
 			},
 			{
-				Key:      "ClientID",
-				Label:    "Client ID",
-				Help:     "Service principal client (application) ID.",
-				Required: true,
+				Key:   "ClientID",
+				Label: "Client ID",
+				Help:  "Service principal client (application) ID. Required for Client Secret authentication.",
 			},
 			{
-				Key:      "ClientSecret",
-				Label:    "Client secret",
-				Help:     "Service principal client secret.",
-				Secret:   true,
-				Required: true,
+				Key:    "ClientSecret",
+				Label:  "Client secret",
+				Help:   "Service principal client secret. Required for Client Secret authentication.",
+				Secret: true,
+			},
+			{
+				Key:   "UseOIDC",
+				Label: "Use OIDC",
+				Help:  "Set to 'true' to use interactive browser authentication (OIDC).",
 			},
 		},
 	})
@@ -537,7 +563,7 @@ func (a *azurednsProvider) fetchRecordSets(zoneName string) ([]*adns.RecordSet, 
 
 		if recordsErr != nil {
 			err := recordsErr
-			if e, ok := err.(*azcore.ResponseError); ok {
+			if e, ok := errors.AsType[*azcore.ResponseError](err); ok {
 				if e.StatusCode == http.StatusTooManyRequests {
 					waitTime = waitTime * 2
 					if waitTime > 300 {

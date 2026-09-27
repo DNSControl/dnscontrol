@@ -3,18 +3,30 @@
 This provider is for the [Azure Private DNS Service](https://learn.microsoft.com/en-us/azure/dns/private-dns-overview).  This provider can only manage Azure Private DNS zones and will not manage public Azure DNS zones. To use this provider, add an entry to `creds.json` with `TYPE` set to `AZURE_PRIVATE_DNS`
 along with the API credentials.
 
-Example:
+The provider supports three authentication methods:
+
+1. **DefaultAzureCredential (Recommended)**: Simplifies authentication by leveraging Azure's credential chain (e.g., environment variables, managed identities, Azure CLI, etc.).
+2. **Client ID and Secret**: Provides backward compatibility for users who prefer this method.
+3. **OIDC (InteractiveBrowserCredential)**: Allows interactive login via the browser for specific scenarios.
+
+### Example Configurations
+
+#### **DefaultAzureCredential (Recommended)**
+
+This method does not require explicit credentials in `creds.json` and leverages Azure's default authentication chain:
+- Managed Identity (if running in Azure)
+- Environment variables
+- Azure CLI credentials
+
+No additional setup is required in `creds.json`:
 
 {% code title="creds.json" %}
 ```json
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "AZURE_PRIVATE_SUBSCRIPTION_ID",
-    "ResourceGroup": "AZURE_PRIVATE_RESOURCE_GROUP",
-    "TenantID": "AZURE_PRIVATE_TENANT_ID",
-    "ClientID": "AZURE_PRIVATE_CLIENT_ID",
-    "ClientSecret": "AZURE_PRIVATE_CLIENT_SECRET"
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP"
   }
 }
 ```
@@ -23,11 +35,8 @@ Example:
 You can also use environment variables:
 
 ```shell
-export AZURE_SUBSCRIPTION_ID=XXXXXXXXX
-export AZURE_RESOURCE_GROUP=YYYYYYYYY
-export AZURE_TENANT_ID=ZZZZZZZZ
-export AZURE_CLIENT_ID=AAAAAAAAA
-export AZURE_CLIENT_SECRET=BBBBBBBBB
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
 ```
 
 {% code title="creds.json" %}
@@ -35,11 +44,94 @@ export AZURE_CLIENT_SECRET=BBBBBBBBB
 {
   "azure_private_dns_main": {
     "TYPE": "AZURE_PRIVATE_DNS",
-    "SubscriptionID": "$AZURE_PRIVATE_SUBSCRIPTION_ID",
-    "ResourceGroup": "$AZURE_PRIVATE_RESOURCE_GROUP",
-    "ClientID": "$AZURE_PRIVATE_CLIENT_ID",
-    "TenantID": "$AZURE_PRIVATE_TENANT_ID",
-    "ClientSecret": "$AZURE_PRIVATE_CLIENT_SECRET"
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP"
+  }
+}
+```
+{% endcode %}
+
+#### **Client ID and Secret (Backward Compatibility)**
+
+To use the client ID and secret-based authentication:
+
+Example:
+
+{% code title="creds.json" %}
+```json
+{
+  "azure_private_dns_main": {
+    "TYPE": "AZURE_PRIVATE_DNS",
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
+    "ClientID": "AZURE_DNS_CLIENT_ID",
+    "ClientSecret": "AZURE_DNS_CLIENT_SECRET"
+  }
+}
+```
+{% endcode %}
+
+You can also use environment variables:
+
+```shell
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
+export AZURE_DNS_CLIENT_ID=AAAAAAAAA
+export AZURE_DNS_CLIENT_SECRET=BBBBBBBBB
+```
+
+{% code title="creds.json" %}
+```json
+{
+  "azure_private_dns_main": {
+    "TYPE": "AZURE_PRIVATE_DNS",
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "ClientID": "$AZURE_DNS_CLIENT_ID",
+    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
+    "ClientSecret": "$AZURE_DNS_CLIENT_SECRET"
+  }
+}
+```
+{% endcode %}
+
+#### **OIDC (Interactive Browser Authentication)**
+
+To enable OIDC for interactive login:
+
+{% code title="creds.json" %}
+```json
+{
+  "azure_private_dns_main": {
+    "TYPE": "AZURE_PRIVATE_DNS",
+    "SubscriptionID": "AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "AZURE_PRIVATE_DNS_TENANT_ID",
+    "UseOIDC": "true"
+  }
+}
+```
+{% endcode %}
+
+You can also use environment variables:
+```shell
+export AZURE_PRIVATE_DNS_SUBSCRIPTION_ID=XXXXXXXXX
+export AZURE_PRIVATE_DNS_RESOURCE_GROUP=YYYYYYYYY
+export AZURE_PRIVATE_DNS_TENANT_ID=ZZZZZZZZ
+export UseOIDC=true
+```
+
+{% code title="creds.json" %}
+```json
+{
+  "azure_private_dns_main": {
+    "TYPE": "AZURE_PRIVATE_DNS",
+    "SubscriptionID": "$AZURE_PRIVATE_DNS_SUBSCRIPTION_ID",
+    "ResourceGroup": "$AZURE_PRIVATE_DNS_RESOURCE_GROUP",
+    "TenantID": "$AZURE_PRIVATE_DNS_TENANT_ID",
+    "UseOIDC": "$UseOIDC"
   }
 }
 ```
@@ -114,7 +206,7 @@ az role assignment create \
 For AZURE_DNS the commands are slightly different.
 
 ## Activation
-DNSControl depends on a standard [Client credentials Authentication](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest) with permission to list, create and update private zones.
+DNSControl supports three authentication methods: DefaultAzureCredential (recommended), [Client credentials Authentication](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest), and OIDC interactive browser login. All methods require permission to list, create and update private zones.
 
 ## New domains
 
@@ -122,7 +214,7 @@ If a domain does not exist in your Azure account, DNSControl will *not* automati
 
 ## Caveats
 
-The ResourceGroup is case sensitive.
+The ResourceGroup is case-insensitive (it is lowercased internally).
 
 ## Feature Summary
 
@@ -132,18 +224,18 @@ The ResourceGroup is case sensitive.
   - DNS Provider: ✅
   - Registrar: ❌
 - Provider API
-  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❔
+  - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ❌
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
-  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
   - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
 - Service discovery
-  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❌
   - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ❌
   - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
   - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❔
@@ -154,7 +246,7 @@ The ResourceGroup is case sensitive.
   - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❌
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ❌
 - DNSSEC
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❔
+  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
   - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
   - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
 <!-- provider-features-end -->

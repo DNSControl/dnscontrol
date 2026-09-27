@@ -1,15 +1,14 @@
 # DNSControl is an opinionated system
 
-- [DNSControl is an opinionated system](#dnscontrol-is-an-opinionated-system)
-  - [Opinion #1: DNS should be treated like code](#opinion-1-dns-should-be-treated-like-code)
-  - [Opinion #2: Non-experts should be able to safely make DNS changes](#opinion-2-non-experts-should-be-able-to-safely-make-dns-changes)
-  - [Opinion #3: dnsconfig.js are not zonefiles](#opinion-3-dnsconfigjs-are-not-zonefiles)
-  - [Opinion #4: All DNS is lowercase for languages that have such a concept](#opinion-4-all-dns-is-lowercase-for-languages-that-have-such-a-concept)
-  - [Opinion #5: Users should state what they want, and DNSControl should do the rest](#opinion-5-users-should-state-what-they-want-and-dnscontrol-should-do-the-rest)
-  - [Opinion #6: If it is ambiguous in DNS, it is forbidden in DNSControl](#opinion-6-if-it-is-ambiguous-in-dns-it-is-forbidden-in-dnscontrol)
-  - [Opinion #7: Hostnames don't have underscores](#opinion-7-hostnames-dont-have-underscores)
-  - [Opinion #8: TXT Records are one long string](#opinion-8-txt-records-are-one-long-string)
-  - [Opinion #9: RFC 4183 is better than RFC 2317](#opinion-9-rfc-4183-is-better-than-rfc-2317)
+- [Opinion #1: DNS should be treated like code](#opinion-1-dns-should-be-treated-like-code)
+- [Opinion #2: Non-experts should be able to safely make DNS changes](#opinion-2-non-experts-should-be-able-to-safely-make-dns-changes)
+- [Opinion #3: dnsconfig.js are not zonefiles](#opinion-3-dnsconfig.js-are-not-zonefiles)
+- [Opinion #4: All DNS is lowercase for languages that have such a concept](#opinion-4-all-dns-is-lowercase-for-languages-that-have-such-a-concept)
+- [Opinion #5: Users should state what they want, and DNSControl should do the rest](#opinion-5-users-should-state-what-they-want-and-dnscontrol-should-do-the-rest)
+- [Opinion #6: If it is ambiguous in DNS, it is forbidden in DNSControl](#opinion-6-if-it-is-ambiguous-in-dns-it-is-forbidden-in-dnscontrol)
+- [Opinion #7: Hostnames don't have underscores](#opinion-7-hostnames-dont-have-underscores)
+- [Opinion #8: TXT Records are one long string](#opinion-8-txt-records-are-one-long-string)
+- [Opinion #9: RFC 4183 is better than RFC 2317](#opinion-9-rfc-4183-is-better-than-rfc-2317)
 
 DNSControl is an opinionated system. That means that we have certain opinions about how things should work.
 

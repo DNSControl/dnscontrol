@@ -550,8 +550,9 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	}
 
 	for _, d := range config.Domains {
+		identityFn := domainRecordIdentity(d)
 		// Check that CNAMES don't have to co-exist with any other records
-		errs = append(errs, checkCNAMEs(d)...)
+		errs = append(errs, checkCNAMEs(d, identityFn)...)
 		// Check that only one SOA record exist for a zone
 		errs = append(errs, checkMultipleSOAs(d)...)
 		// Check that if any advanced record types are used in a domain, every provider for that domain supports them
@@ -560,7 +561,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			errs = append(errs, err)
 		}
 		// Check for duplicates
-		errs = append(errs, checkDuplicates(d.Records)...)
+		errs = append(errs, checkDuplicates(d.Records, identityFn)...)
 		// Check for different TTLs under the same label
 		errs = append(errs, checkRecordSetHasMultipleTTLs(d.Records)...)
 		// Check for inconsistent R53 weighted routing metadata within a group
@@ -632,14 +633,57 @@ func checkAutoDNSSEC(dc *models.DomainConfig) (errs []error) {
 	return
 }
 
-func checkCNAMEs(dc *models.DomainConfig) (errs []error) {
+// recordIdentityString returns the string used to detect duplicate records.
+// It is the label, the rType, the RDATA and any provider-declared identity
+// text (for example DNSPod's record line).
+func recordIdentityString(r *models.RecordConfig, extra func(*models.RecordConfig) string) string {
+	id := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
+	if x := providerIdentity(r, extra); x != "" {
+		id += " " + x
+	}
+	return id
+}
+
+// domainRecordIdentity returns the identity function declared by one of the
+// domain's DNS providers, or nil if none declares one.
+func domainRecordIdentity(d *models.DomainConfig) func(*models.RecordConfig) string {
+	for _, provider := range d.DNSProviderInstances {
+		if provider.ProviderType == "-" {
+			continue
+		}
+		if f := providers.GetRecordIdentity(provider.ProviderType); f != nil {
+			return f
+		}
+	}
+	return nil
+}
+
+// providerIdentity returns the provider-declared identity text for a record,
+// or "" when no provider declares one.
+func providerIdentity(r *models.RecordConfig, extra func(*models.RecordConfig) string) string {
+	if extra == nil {
+		return ""
+	}
+	return extra(r)
+}
+
+func checkCNAMEs(dc *models.DomainConfig, extra func(*models.RecordConfig) string) (errs []error) {
 	cnames := map[string]bool{}
 	proxiedCnames := map[string]bool{}
+	seenIdentity := map[string]bool{}
 	for _, r := range dc.Records {
 		if r.Type == "CNAME" {
-			if cnames[r.GetLabel()] {
+			// Without a provider-declared identity this is exactly the old
+			// rule: one CNAME per label. With one, two CNAMEs may share a
+			// label as long as the provider treats them as separate objects.
+			id := r.GetLabel()
+			if x := providerIdentity(r, extra); x != "" {
+				id += "|" + x
+			}
+			if seenIdentity[id] {
 				errs = append(errs, fmt.Errorf("%s: cannot have multiple CNAMEs with same name: %s", r.FilePos, r.GetLabelFQDN()))
 			}
+			seenIdentity[id] = true
 			cnames[r.GetLabel()] = true
 			if p, ok := r.Metadata["cloudflare_proxy"]; ok && (p == "on" || p == "full") {
 				proxiedCnames[r.GetLabel()] = true
@@ -677,10 +721,10 @@ func checkMultipleSOAs(dc *models.DomainConfig) (errs []error) {
 	return
 }
 
-func checkDuplicates(records models.Records) (errs []error) {
+func checkDuplicates(records models.Records, extra func(*models.RecordConfig) string) (errs []error) {
 	seen := make(map[string]*models.RecordConfig)
 	for _, r := range records {
-		diffable := fmt.Sprintf("%s %s %s", r.GetLabelFQDN(), r.Type, r.ComparableV3)
+		diffable := recordIdentityString(r, extra)
 
 		if seen[diffable] != nil {
 			errs = append(errs, fmt.Errorf("exact duplicate record found: %s", diffable))

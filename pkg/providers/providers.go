@@ -50,11 +50,30 @@ type DspInitializerWithOptions func(map[string]string, json.RawMessage, CreateOp
 // detailing records that this provider can not support.
 type RecordAuditor func(models.Records) []error
 
+// RecordIdentityFunc returns the identity text of a record: text that
+// distinguishes two records which share a label, rType and RDATA but are stored
+// by the provider as separate objects (DNSPod record lines, Route 53 routing
+// policies). Validation uses it for duplicate detection, and validation runs
+// before the provider has read the zone, so the function must depend only on
+// the record it is given.
+type RecordIdentityFunc func(*models.RecordConfig) string
+
 // DspFuncs lists functions registered with a provider.
 type DspFuncs struct {
 	Initializer            DspInitializer
 	InitializerWithOptions DspInitializerWithOptions
 	RecordAuditor          RecordAuditor
+	RecordIdentity         RecordIdentityFunc
+}
+
+// GetRecordIdentity returns the provider's RecordIdentity function, or nil if
+// the provider does not declare one.
+func GetRecordIdentity(dType string) RecordIdentityFunc {
+	p, ok := DNSProviderTypes[dType]
+	if !ok {
+		return nil
+	}
+	return p.RecordIdentity
 }
 
 // DNSProviderTypes stores initializer for each DSP.

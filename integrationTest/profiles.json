@@ -322,6 +322,13 @@
     "api_token": "$NS1_TOKEN",
     "domain": "$NS1_DOMAIN"
   },
+  "OPENPROVIDER": {
+    "TYPE": "OPENPROVIDER",
+    "api_url": "$OPENPROVIDER_API_URL",
+    "domain": "$OPENPROVIDER_DOMAIN",
+    "password": "$OPENPROVIDER_PASSWORD",
+    "username": "$OPENPROVIDER_USERNAME"
+  },
   "OPENWRT": {
     "TYPE": "OPENWRT",
     "domain": "$OPENWRT_DOMAIN",
@@ -399,6 +406,12 @@
     "api_key": "$SL_API_KEY",
     "domain": "$SL_DOMAIN",
     "username": "$SL_USERNAME"
+  },
+  "SPACESHIP": {
+    "TYPE": "SPACESHIP",
+    "api_key": "$SPACESHIP_API_KEY",
+    "api_secret": "$SPACESHIP_API_SECRET",
+    "domain": "$SPACESHIP_DOMAIN"
   },
   "TENCENTDNS": {
     "TYPE": "TENCENTDNS",

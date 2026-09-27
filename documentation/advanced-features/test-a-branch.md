@@ -1,8 +1,7 @@
 # Test A Branch
 
-- [Test A Branch](#test-a-branch)
-  - [Using Docker](#using-docker)
-  - [Not using Docker](#not-using-docker)
+- [Using Docker](#using-docker)
+- [Not using Docker](#not-using-docker)
 
 Instructions for testing DNSControl at a particular PR or branch.
 

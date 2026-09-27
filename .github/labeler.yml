@@ -148,6 +148,9 @@ provider-NEXDNS:
 provider-NS1:
   - changed-files:
       - any-glob-to-any-file: providers/ns1/**
+provider-OPENPROVIDER:
+  - changed-files:
+      - any-glob-to-any-file: providers/openprovider/**
 provider-OPENSRS:
   - changed-files:
       - any-glob-to-any-file: providers/opensrs/**
@@ -187,6 +190,9 @@ provider-SCALEWAY:
 provider-SOFTLAYER:
   - changed-files:
       - any-glob-to-any-file: providers/softlayer/**
+provider-SPACESHIP:
+  - changed-files:
+      - any-glob-to-any-file: providers/spaceship/**
 provider-TENCENTDNS:
   - changed-files:
       - any-glob-to-any-file: providers/tencentdns/**

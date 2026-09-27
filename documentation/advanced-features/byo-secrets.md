@@ -1,10 +1,9 @@
 # Bring-Your-Own-Secrets for automated testing
 
-- [Bring-Your-Own-Secrets for automated testing](#bring-your-own-secrets-for-automated-testing)
-  - [Background: How GitHub Actions protects secrets](#background-how-github-actions-protects-secrets)
-  - [Which providers are selected for testing?](#which-providers-are-selected-for-testing)
-  - [Bring your own secrets](#bring-your-own-secrets)
-  - [Donate secrets to the project](#donate-secrets-to-the-project)
+- [Background: How GitHub Actions protects secrets](#background-how-github-actions-protects-secrets)
+- [Which providers are selected for testing?](#which-providers-are-selected-for-testing)
+- [Bring your own secrets](#bring-your-own-secrets)
+- [Donate secrets to the project](#donate-secrets-to-the-project)
 
 Goal: Enable automated integration testing without accidentally leaking credentials (API keys and other secrets); at the same time permit everyone to automate their own tests without having to share their credentials.
 

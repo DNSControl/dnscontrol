@@ -14,41 +14,42 @@
 
 /** @type {import('@commitlint/types').UserConfig} */
 module.exports = {
-  extends: ['@commitlint/config-conventional'],
+  extends: ["@commitlint/config-conventional"],
   parserPreset: {
     parserOpts: {
       // The default header pattern only allows a single word (\w+) as the
       // type. We widen it to also accept the literal types "BREAKING CHANGE"
       // and "BREAKING CHANGES", which contain a space.
       headerPattern: /^([a-zA-Z ]+)(?:\(([^)]+)\))?(!)?: (.+)$/,
-      headerCorrespondence: ['type', 'scope', 'breaking', 'subject'],
+      headerCorrespondence: ["type", "scope", "breaking", "subject"],
     },
   },
   rules: {
-    'type-enum': [
+    "type-enum": [
       2,
-      'always',
+      "always",
       [
-        'build',
-        'chore',
-        'ci',
-        'docs',
-        'feat',
-        'fix',
-        'perf',
-        'refactor',
-        'style',
-        'test',
-        'BREAKING CHANGE',
-        'BREAKING CHANGES',
+        "build",
+        "chore",
+        "ci",
+        "docs",
+        "feat",
+        "fix",
+        "perf",
+        "refactor",
+        "style",
+        "test",
+        "BREAKING CHANGE",
+        "BREAKING CHANGES",
       ],
     ],
     // type-case can't be "always lower-case" since BREAKING CHANGE(S) is
     // uppercase by convention; type-enum above already constrains the set
     // of allowed values (case-sensitively), so the case rule is redundant.
-    'type-case': [0],
-    'scope-case': [0],
-    'provider-scope-format': [2, 'always'],
+    "type-case": [0],
+    "scope-case": [0],
+    "subject-case": [0], // Permit capitalized subjects like "fix(foo): Correct TTL rounding"
+    "provider-scope-format": [2, "always"],
   },
   plugins: [
     {
@@ -56,7 +57,7 @@ module.exports = {
         // If a scope is given, it must be "p/PROVIDER" (provider-specific
         // change) or one of the config-conventional defaults are allowed too
         // (e.g. "deps" for dependency bumps). Everything else is free-form.
-        'provider-scope-format': ({ scope }) => {
+        "provider-scope-format": ({ scope }) => {
           if (!scope) {
             return [true];
           }

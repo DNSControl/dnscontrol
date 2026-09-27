@@ -1,25 +1,25 @@
 # Writing new DNS providers
 
-- [Writing new DNS providers](#writing-new-dns-providers)
-  - [Overview](#overview)
-  - [Step 1: General advice](#step-1-general-advice)
-  - [Step 2: Pick a base provider](#step-2-pick-a-base-provider)
-  - [Step 3: Create the driver skeleton](#step-3-create-the-driver-skeleton)
-  - [Step 4: Activate the driver](#step-4-activate-the-driver)
-  - [Step 5: Onboarding metadata for `dnscontrol init` (optional)](#step-5-onboarding-metadata-for-dnscontrol-init-optional)
-  - [Step 6: Implement the provider](#step-6-implement-the-provider)
-  - [Step 7: Create `auditrecords.go`](#step-7-create-auditrecordsgo)
-  - [Step 8: Unit Test](#step-8-unit-test)
-  - [Step 9: Integration Test](#step-9-integration-test)
-  - [Step 10: Verify TXT records](#step-10-verify-txt-records)
-  - [Step 11: Update docs, CICD and other files](#step-11-update-docs-cicd-and-other-files)
-  - [Step 12: Capabilities](#step-12-capabilities)
-  - [Step 13: Automated code tests](#step-13-automated-code-tests)
-  - [Step 14: Dependencies](#step-14-dependencies)
-  - [Step 15: Update `pr_integration_tests.yml`](#step-15-update-pr_integration_testsyml)
-  - [Step 16: Check your work](#step-16-check-your-work)
-  - [Step 17: Submit a PR](#step-17-submit-a-pr)
-  - [Step 18: After the PR is merged](#step-18-after-the-pr-is-merged)
+- [Overview](#overview)
+- [Step 1: General advice](#step-1-general-advice)
+- [Step 2: Pick a base provider](#step-2-pick-a-base-provider)
+- [Step 3: Create the driver skeleton](#step-3-create-the-driver-skeleton)
+- [Step 4: Activate the driver](#step-4-activate-the-driver)
+- [Step 5: Onboarding metadata for `dnscontrol init` (optional)](#step-5-onboarding-metadata-for-dnscontrol-init-optional)
+- [Step 6: Implement the provider](#step-6-implement-the-provider)
+- [Step 7: Create `auditrecords.go`](#step-7-create-auditrecords.go)
+- [Step 8: Unit Test](#step-8-unit-test)
+- [Step 9: Integration Test](#step-9-integration-test)
+- [Step 10: Verify TXT records](#step-10-verify-txt-records)
+- [Step 11: Update docs, CICD and other files](#step-11-update-docs-cicd-and-other-files)
+- [Step 12: Capabilities](#step-12-capabilities)
+  - [Record identity for providers with per-line records](#record-identity-for-providers-with-per-line-records)
+- [Step 13: Automated code tests](#step-13-automated-code-tests)
+- [Step 14: Dependencies](#step-14-dependencies)
+- [Step 15: Update `pr_integration_tests.yml`](#step-15-update-pr_integration_tests.yml)
+- [Step 16: Check your work](#step-16-check-your-work)
+- [Step 17: Submit a PR](#step-17-submit-a-pr)
+- [Step 18: After the PR is merged](#step-18-after-the-pr-is-merged)
 
 Writing a new DNS provider is a relatively straightforward process. You essentially need to implement the [providers.DNSServiceProvider interface.](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider) and the system takes care of the rest.
 
@@ -294,6 +294,30 @@ Capabilities are processed early by DNSControl.  For example if a provider doesn
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
 FYI: If a provider's capabilities changes, run `go generate` to update the documentation.
+
+### Record identity for providers with per-line records
+
+Some providers store the same name and type several times, splitting the answers by record line, region or routing policy. DNSPod lines, Huawei Cloud lines, Gcore GeoDNS and ClouDNS geodns work that way. Those records share a label, type and RDATA, so validation would report them as duplicates.
+
+Such a provider can declare `RecordIdentity` in its `DspFuncs`:
+
+{% code title="nameProvider.go" %}
+```go
+fns := providers.DspFuncs{
+    Initializer:    newNameDsp,
+    RecordAuditor:  AuditRecords,
+    RecordIdentity: recordIdentity,
+}
+```
+{% endcode %}
+
+`recordIdentity` takes one `models.RecordConfig` and returns the text that makes the record distinct, for example `"line_id=10=1"`. Validation appends that text to the key it uses for duplicate detection. A provider that does not declare it keeps the default rules.
+
+The function runs during validation, before the provider has read the zone, so it must depend only on the record it is given. Anything that needs the live zone belongs in the comparable function that the provider passes to `diff2.ByRecord`, not here. Turning a configured line name into a line ID is an example: only the zone knows the mapping.
+
+When a domain has several providers, the first one that declares an identity function is used. The exception applies to the whole domain, so a second provider on the same domain inherits it; two providers that both store per-line records should declare the same rule.
+
+`dnscontrol check` does not read `creds.json`, so a provider declared as `NewDnsProvider("name")` has no type at that point and its identity function does not run. Use the two-argument form when `check` should see it.
 
 ## Step 13: Automated code tests
 
