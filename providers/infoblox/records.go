@@ -69,7 +69,7 @@ func (p *infobloxProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 			corrections = append(corrections, &models.Correction{
 				Msg: msg,
 				F: func() error {
-					recType, body, err := buildRecordBody(rc, dc.Name, p.api.view, true)
+					recType, body, err := buildRecordBody(rc, p.api.view, true)
 					if err != nil {
 						return err
 					}
@@ -89,7 +89,7 @@ func (p *infobloxProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 			corrections = append(corrections, &models.Correction{
 				Msg: msg,
 				F: func() error {
-					_, body, err := buildRecordBody(rc, dc.Name, p.api.view, false)
+					_, body, err := buildRecordBody(rc, p.api.view, false)
 					if err != nil {
 						return err
 					}

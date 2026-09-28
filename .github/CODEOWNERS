@@ -31,7 +31,7 @@ providers/hedns @rblenkinsopp
 providers/hetznerv2 @das7pad
 providers/hostingde @juliusrickert
 providers/huaweicloud @huihuimoe
-providers/infoblox @matthewmgamble
+providers/infoblox @mgamble
 providers/infomaniak @jbelien
 providers/internetbs @pragmaton
 providers/inwx @patschi
