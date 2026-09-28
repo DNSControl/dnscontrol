@@ -99,18 +99,18 @@ func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 	switch v := rd2.(type) {
 
 	case dnsrdatav2.DS:
-		// Uppercase to make comparisons case-insensitive.
-		v.Digest = strings.ToUpper(v.Digest)
+		// Lowercase to make comparisons case-insensitive.
+		v.Digest = strings.ToLower(v.Digest)
 		return v
 
 	case dnsrdatav2.SSHFP:
-		// Uppercase to make comparisons case-insensitive.
-		v.FingerPrint = strings.ToUpper(v.FingerPrint)
+		// Lowercase to make comparisons case-insensitive.
+		v.FingerPrint = strings.ToLower(v.FingerPrint)
 		return v
 
 	case dnsrdatav2.TLSA:
-		// Uppercase to make comparisons case-insensitive.
-		v.Certificate = strings.ToUpper(v.Certificate)
+		// Lowercase to make comparisons case-insensitive.
+		v.Certificate = strings.ToLower(v.Certificate)
 		return v
 
 	case dnsrdatav2.TXT:

@@ -6,12 +6,12 @@
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "3 1 1 MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
+          "comparablev3": "3 1 1 mdfiytq3mtljodbinmzlotexyja5mwe3yza1mti0yjy0zwvly2u5njrlmdljmdu4zwy4zjk4mdvkywnhntq2yiaglqo=",
           "filepos": "[line:2:5]",
           "name": "_443._tcp",
           "name_unicode": "_443._tcp",
           "rdata": {
-            "Certificate": "MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=",
+            "Certificate": "mdfiytq3mtljodbinmzlotexyja5mwe3yza1mti0yjy0zwvly2u5njrlmdljmdu4zwy4zjk4mdvkywnhntq2yiaglqo=",
             "MatchingType": 1,
             "Selector": 1,
             "Usage": 3

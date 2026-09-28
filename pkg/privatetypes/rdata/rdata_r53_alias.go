@@ -14,7 +14,7 @@ import (
 
 type R53ALIAS struct {
 	AliasType        string
-	Target           string
+	Target           string `dnscontrol:"targethost"`
 	EvalTargetHealth string
 	ZoneID           string
 }

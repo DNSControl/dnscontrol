@@ -316,7 +316,7 @@
       "algorithm": "1",
       "fptype": "1",
       "host": "",
-      "record": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "record": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
       "record-type": "SSHFP",
       "ttl": "300"
     }
@@ -327,7 +327,7 @@
       "algorithm": "2",
       "fptype": "1",
       "host": "",
-      "record": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+      "record": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
       "record-type": "SSHFP",
       "ttl": "300"
     }
@@ -338,7 +338,7 @@
       "algorithm": "2",
       "fptype": "2",
       "host": "",
-      "record": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+      "record": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
       "record-type": "SSHFP",
       "ttl": "300"
     }
@@ -383,7 +383,7 @@
     "index": 36,
     "value": {
       "host": "_443._tcp",
-      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "record-type": "TLSA",
       "tlsa_matching_type": "1",
       "tlsa_selector": "0",
@@ -395,7 +395,7 @@
     "index": 37,
     "value": {
       "host": "_443._tcp",
-      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "record-type": "TLSA",
       "tlsa_matching_type": "2",
       "tlsa_selector": "0",
@@ -407,7 +407,7 @@
     "index": 38,
     "value": {
       "host": "_443._tcp",
-      "record": "FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+      "record": "fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
       "record-type": "TLSA",
       "tlsa_matching_type": "2",
       "tlsa_selector": "0",
@@ -419,7 +419,7 @@
     "index": 39,
     "value": {
       "host": "_443._tcp",
-      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "record-type": "TLSA",
       "tlsa_matching_type": "1",
       "tlsa_selector": "1",
@@ -431,7 +431,7 @@
     "index": 40,
     "value": {
       "host": "_443._tcp",
-      "record": "0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "record": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "record-type": "TLSA",
       "tlsa_matching_type": "1",
       "tlsa_selector": "1",
@@ -605,7 +605,7 @@
       "digest-type": "4",
       "host": "another-child",
       "key-tag": "2159",
-      "record": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "record": "f50befea333ee2901d72d31a08e1a3cd3f7e943ff4b38cf7c8ad92807f5302f76fb0b419182c0f47ffc71cbcb6ef4bd4",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -617,7 +617,7 @@
       "digest-type": "4",
       "host": "another-child",
       "key-tag": "35632",
-      "record": "F5F32ABCA6B01AA7A9963012F90B7C8523A1D946185A3AD70B67F3C9F18E7312FA9DD6AB2F7D8382F789213DB173D429",
+      "record": "f5f32abca6b01aa7a9963012f90b7c8523a1d946185a3ad70b67f3c9f18e7312fa9dd6ab2f7d8382f789213db173d429",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -629,7 +629,7 @@
       "digest-type": "4",
       "host": "another-child",
       "key-tag": "63909",
-      "record": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "record": "eec7fa02e6788da889b2ce41d43d92f948ab126edcf83b7037e73ce9531c8e7e45653abbaa76c2d6e42f98316ede599b",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -738,7 +738,7 @@
       "digest-type": "1",
       "host": "child",
       "key-tag": "2075",
-      "record": "2706D12E256C8FDD9BFB45EFB25FE537E21A82F6",
+      "record": "2706d12e256c8fdd9bfb45efb25fe537e21a82f6",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -750,7 +750,7 @@
       "digest-type": "2",
       "host": "child",
       "key-tag": "2075",
-      "record": "3F7A1EAC8C813A0BEBD0C3B8AAB387E31945EA0CD5E1D84A2E8E27674566C156",
+      "record": "3f7a1eac8c813a0bebd0c3b8aab387e31945ea0cd5e1d84a2e8e27674566c156",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -762,7 +762,7 @@
       "digest-type": "4",
       "host": "child",
       "key-tag": "2159",
-      "record": "F50BEFEA333EE2901D72D31A08E1A3CD3F7E943FF4B38CF7C8AD92807F5302F76FB0B419182C0F47FFC71CBCB6EF4BD4",
+      "record": "f50befea333ee2901d72d31a08e1a3cd3f7e943ff4b38cf7c8ad92807f5302f76fb0b419182c0f47ffc71cbcb6ef4bd4",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -774,7 +774,7 @@
       "digest-type": "1",
       "host": "child",
       "key-tag": "35632",
-      "record": "1E07663FF507A40874B8605463DD41DE482079D6",
+      "record": "1e07663ff507a40874b8605463dd41de482079d6",
       "record-type": "DS",
       "ttl": "300"
     }
@@ -786,7 +786,7 @@
       "digest-type": "4",
       "host": "child",
       "key-tag": "63909",
-      "record": "EEC7FA02E6788DA889B2CE41D43D92F948AB126EDCF83B7037E73CE9531C8E7E45653ABBAA76C2D6E42F98316EDE599B",
+      "record": "eec7fa02e6788da889b2ce41d43d92f948ab126edcf83b7037e73ce9531c8e7e45653abbaa76c2d6e42f98316ede599b",
       "record-type": "DS",
       "ttl": "300"
     }

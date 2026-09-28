@@ -14,7 +14,7 @@ import (
 
 type AKAMAITLC struct {
 	AnswerType string
-	Target     string
+	Target     string `dnscontrol:"targethost"`
 }
 
 func (rd AKAMAITLC) Len() int {

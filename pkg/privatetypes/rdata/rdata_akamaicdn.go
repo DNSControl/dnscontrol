@@ -12,7 +12,7 @@ import (
 )
 
 type AKAMAICDN struct {
-	Target string
+	Target string `dnscontrol:"targethost"`
 }
 
 func (rd AKAMAICDN) Len() int {

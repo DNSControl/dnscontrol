@@ -12,7 +12,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 1,
-            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "FingerPrint": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
             "Type": 1
           },
           "ttl": 300,
@@ -26,7 +26,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 1,
-            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "FingerPrint": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
             "Type": 2
           },
           "ttl": 300,
@@ -40,7 +40,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 2,
-            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "FingerPrint": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
             "Type": 1
           },
           "ttl": 300,
@@ -54,7 +54,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 2,
-            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "FingerPrint": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
             "Type": 2
           },
           "ttl": 300,
@@ -68,7 +68,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 3,
-            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "FingerPrint": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
             "Type": 1
           },
           "ttl": 300,
@@ -82,7 +82,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 3,
-            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "FingerPrint": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
             "Type": 2
           },
           "ttl": 300,
@@ -96,7 +96,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 4,
-            "FingerPrint": "66C7D5540B7D75A1FB4C84FEBFA178AD99BDD67C",
+            "FingerPrint": "66c7d5540b7d75a1fb4c84febfa178ad99bdd67c",
             "Type": 1
           },
           "ttl": 300,
@@ -110,7 +110,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 4,
-            "FingerPrint": "745A635BC46A397A5C4F21D437483005BCC40D7511FF15FBFAFE913A081559BC",
+            "FingerPrint": "745a635bc46a397a5c4f21d437483005bcc40d7511ff15fbfafe913a081559bc",
             "Type": 2
           },
           "ttl": 300,

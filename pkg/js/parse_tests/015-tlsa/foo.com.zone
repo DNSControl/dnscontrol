@@ -1,2 +1,2 @@
 $TTL 300
-_443._tcp        IN TLSA  3 1 1 MDFIYTQ3MTLJODBINMZLOTEXYJA5MWE3YZA1MTI0YJY0ZWVLY2U5NJRLMDLJMDU4ZWY4ZJK4MDVKYWNHNTQ2YIAGLQO=
+_443._tcp        IN TLSA  3 1 1 mdfiytq3mtljodbinmzlotexyja5mwe3yza1mti0yjy0zwvly2u5njrlmdljmdu4zwy4zjk4mdvkywnhntq2yiaglqo=

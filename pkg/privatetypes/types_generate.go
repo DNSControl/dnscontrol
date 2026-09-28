@@ -72,6 +72,20 @@ var typeInfo = map[string]TypeInfo{
 	"IPv6":             {GoType: "netip.Addr", NeedsNetip: true},
 }
 
+// fieldTag returns the struct tag (including the leading space) that
+// pkg/rdatafields uses to classify this field, or "" if the field needs no
+// tag.
+//
+// The miekg rdata structs carry `dns:"cname"` etc. on their hostname fields;
+// these structs are dnscontrol-only and never packed on the wire, so we use
+// our own `dnscontrol:` namespace rather than borrow miekg's.
+func fieldTag(f FieldDef) string {
+	if f.Type == "TargetHost" {
+		return " `dnscontrol:\"targethost\"`"
+	}
+	return ""
+}
+
 func info(typeName string) TypeInfo {
 	ti, ok := typeInfo[typeName]
 	if !ok {
@@ -538,13 +552,13 @@ func generateRdataFile(t *TypeDef) error {
 
 	fmt.Fprintf(&buf, "type %s struct {\n", typeName)
 	for _, f := range t.Fields {
-		fmt.Fprintf(&buf, "\t%-20s %s\n", f.Name, info(f.Type).GoType)
+		fmt.Fprintf(&buf, "\t%-20s %s%s\n", f.Name, info(f.Type).GoType, fieldTag(f))
 	}
 	for _, f := range t.OptionalFields {
-		fmt.Fprintf(&buf, "\t%-20s %s\n", f.Name, info(f.Type).GoType)
+		fmt.Fprintf(&buf, "\t%-20s %s%s\n", f.Name, info(f.Type).GoType, fieldTag(f))
 	}
 	for _, f := range t.RuntimeFields {
-		fmt.Fprintf(&buf, "\t%-20s %s\n", f.Name, info(f.Type).GoType)
+		fmt.Fprintf(&buf, "\t%-20s %s%s\n", f.Name, info(f.Type).GoType, fieldTag(f))
 	}
 	buf.WriteString("}\n\n")
 

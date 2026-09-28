@@ -12,7 +12,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 1,
-            "Digest": "FFFF",
+            "Digest": "ffff",
             "DigestType": 1,
             "KeyTag": 1
           },
@@ -27,7 +27,7 @@
           "name_unicode": "@",
           "rdata": {
             "Algorithm": 13,
-            "Digest": "AABBCCDDEEFF",
+            "Digest": "aabbccddeeff",
             "DigestType": 2,
             "KeyTag": 1000
           },

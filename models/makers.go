@@ -145,7 +145,7 @@ func MakeDS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeDS expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.ToUpperRawString(args[3])}, nil
+	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.ToLowerRawString(args[3])}, nil
 }
 
 func MakeHTTPS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -358,7 +358,7 @@ func MakeSSHFP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	if len(args) != 3 {
 		return nil, fmt.Errorf("MakeSSHFP expects exactly 3 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.ToUpperRawString(args[2])}, nil
+	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.ToLowerRawString(args[2])}, nil
 }
 
 func MakeSVCB(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -407,7 +407,7 @@ func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeTLSA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToUpperRawString(args[3])}, nil
+	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}, nil
 }
 
 func MakeTXT(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

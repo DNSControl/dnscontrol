@@ -603,7 +603,7 @@
       {
         "name": "_443._tcp.dnscontroltest-luadns.com.",
         "type": "TLSA",
-        "content": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "content": "2 0 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
         "ttl": 300
       }
     ]
@@ -614,7 +614,7 @@
       {
         "name": "_443._tcp.dnscontroltest-luadns.com.",
         "type": "TLSA",
-        "content": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "content": "2 0 2 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
         "ttl": 300
       }
     ]
@@ -625,7 +625,7 @@
       {
         "name": "_443._tcp.dnscontroltest-luadns.com.",
         "type": "TLSA",
-        "content": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+        "content": "2 0 2 fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
         "ttl": 300
       }
     ]
@@ -636,7 +636,7 @@
       {
         "name": "_443._tcp.dnscontroltest-luadns.com.",
         "type": "TLSA",
-        "content": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "content": "2 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
         "ttl": 300
       }
     ]
@@ -647,7 +647,7 @@
       {
         "name": "_443._tcp.dnscontroltest-luadns.com.",
         "type": "TLSA",
-        "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "content": "3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
         "ttl": 300
       }
     ]

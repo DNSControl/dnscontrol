@@ -85,7 +85,7 @@
   {
     "index": 10,
     "value": {
-      "content": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "content": "3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "name": "_25._tcp.mail",
       "ttl": "600",
       "type": "TLSA"

@@ -79,7 +79,7 @@ func TestRecordRoundTrip(t *testing.T) {
 		{
 			name:    "DS sends the bare digest",
 			stored:  apiRecord{ID: "r7", Name: "child", Type: "DS", Content: "12345 13 2 2bb183af5f22588179a53b0a98631fad1a292118bd8e9ba3d3a1e01f2e1bd9c1", TTL: 300},
-			content: "2BB183AF5F22588179A53B0A98631FAD1A292118BD8E9BA3D3A1E01F2E1BD9C1",
+			content: "2bb183af5f22588179a53b0a98631fad1a292118bd8e9ba3d3a1e01f2e1bd9c1",
 			verify: func(t *testing.T, req recordRequest) {
 				if req.KeyTag == nil || *req.KeyTag != 12345 {
 					t.Errorf("keytag = %v, want 12345", req.KeyTag)
@@ -95,7 +95,7 @@ func TestRecordRoundTrip(t *testing.T) {
 		{
 			name:    "TLSA sends the bare certificate data",
 			stored:  apiRecord{ID: "r8", Name: "_443._tcp", Type: "TLSA", Content: "3 1 1 abcdef0123456789", TTL: 300},
-			content: "ABCDEF0123456789",
+			content: "abcdef0123456789",
 			verify: func(t *testing.T, req recordRequest) {
 				if req.Usage == nil || req.Selector == nil || req.MatchingType == nil {
 					t.Fatalf("tlsa fields = %v %v %v, want all three", req.Usage, req.Selector, req.MatchingType)

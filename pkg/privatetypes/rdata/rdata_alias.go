@@ -12,7 +12,7 @@ import (
 )
 
 type ALIAS struct {
-	Target string
+	Target string `dnscontrol:"targethost"`
 }
 
 func (rd ALIAS) Len() int {
