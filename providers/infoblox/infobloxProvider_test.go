@@ -216,7 +216,7 @@ func TestBuildRecordBodyA(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recType, body, err := buildRecordBody(rc, "default", true)
+	recType, body, err := buildRecordBody(rc, "example.com", "default", true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -241,7 +241,7 @@ func TestBuildRecordBodyNoView(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, body, err := buildRecordBody(rc, "default", false)
+	_, body, err := buildRecordBody(rc, "example.com", "default", false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -289,7 +289,7 @@ func TestCreateRecord(t *testing.T) {
 	var receivedBody string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, "method not allowed", 405)
 			return
 		}
 		body, _ := readBody(r)
@@ -322,7 +322,7 @@ func TestDeleteRecord(t *testing.T) {
 	var deletedRef string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "DELETE" {
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, "method not allowed", 405)
 			return
 		}
 		deletedRef = strings.TrimPrefix(r.URL.Path, "/wapi/v2.12/")
@@ -345,7 +345,7 @@ func TestUpdateRecord(t *testing.T) {
 	var updatedRef string
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "PUT" {
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			http.Error(w, "method not allowed", 405)
 			return
 		}
 		updatedRef = strings.TrimPrefix(r.URL.Path, "/wapi/v2.12/")
@@ -370,7 +370,7 @@ func TestUpdateRecord(t *testing.T) {
 
 func TestHTTPError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Error(w, `{"error":"unauthorized"}`, http.StatusUnauthorized)
+		http.Error(w, `{"error":"unauthorized"}`, 401)
 	}))
 	defer ts.Close()
 
@@ -464,7 +464,7 @@ func TestBuildRecordBodyTXT(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recType, body, err := buildRecordBody(rc, "default", true)
+	recType, body, err := buildRecordBody(rc, "example.com", "default", true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -483,7 +483,7 @@ func TestBuildRecordBodyMX(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recType, body, err := buildRecordBody(rc, "default", true)
+	recType, body, err := buildRecordBody(rc, "example.com", "default", true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -505,7 +505,7 @@ func TestBuildRecordBodySRV(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recType, body, err := buildRecordBody(rc, "default", true)
+	recType, body, err := buildRecordBody(rc, "example.com", "default", true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -527,7 +527,7 @@ func TestBuildRecordBodyCAA(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recType, body, err := buildRecordBody(rc, "default", true)
+	recType, body, err := buildRecordBody(rc, "example.com", "default", true)
 	if err != nil {
 		t.Fatal(err)
 	}

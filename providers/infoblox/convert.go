@@ -285,7 +285,7 @@ func convertCAA(raw json.RawMessage, dc *models.DomainConfig, defaultTTL uint32)
 
 // buildRecordBody constructs the JSON body for a create or update API call
 // from a DNSControl RecordConfig.
-func buildRecordBody(rc *models.RecordConfig, view string, includeView bool) (string, map[string]any, error) {
+func buildRecordBody(rc *models.RecordConfig, domain, view string, includeView bool) (string, map[string]any, error) {
 	fqdn := rc.GetLabelFQDN()
 	ttl := rc.TTL
 
