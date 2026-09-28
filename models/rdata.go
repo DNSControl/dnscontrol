@@ -22,7 +22,7 @@ func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
 		txt.Txt = TXTSegmented(txt)
 		rd = txt
 	}
-	rd = normalizeRDATA(rd)
+	rd = rc.normalizeRDATA(rd)
 	rc.rdata = rd
 	rc.validateRDATA()
 	rc.generateComparableV3()
@@ -46,7 +46,7 @@ func (rc *RecordConfig) ClearRDATA() {
 	rc.ComparableV3 = ""
 }
 
-func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
+func myNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, error) {
 	switch typeNum {
 
 	case dnsv2.TypeTXT:
@@ -61,7 +61,10 @@ func MyNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 	if err != nil {
 		return nil, fmt.Errorf("NewData(%d, %q, %q) failed: %w", typeNum, contents, origin+".", err)
 	}
-	return normalizeRDATA(rd2), nil
+	// Not normalized here. normalizeRDATA is a method on RecordConfig and
+	// there is no RecordConfig yet at this point. Every caller passes the
+	// result to newRecordConfigHelper, whose SetRDATA normalizes it.
+	return rd2, nil
 }
 
 // validateRDATA is used to verify that .rdata didn't accidentally get set to
@@ -90,7 +93,11 @@ func (rc *RecordConfig) validateRDATA() {
 	panic(l)
 }
 
-func normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
+// normalizeRDATA rewrites the fields of rd2 that are case-insensitive so that
+// later comparisons do not have to be case-aware. It is a method because the
+// Normalizer interface described below hands the RecordConfig to the rdata
+// type, which will need it for origin and label information.
+func (rc *RecordConfig) normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
 	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
 	// sadly those functions aren't called by dnsv2.NewData().
 	// Fixing this would be difficult since we can't add methods to the

@@ -7,7 +7,7 @@
 // and a small inclusion list (fields that are hostnames but carry no usable
 // tag, mostly in pkg/privatetypes/rdata).
 //
-// Callers: models.normalizeRDATA() and its generator. See Classify and
+// Callers: models.RecordConfig.normalizeRDATA() and its generator. See
 // Fields.
 package rdatafields
 

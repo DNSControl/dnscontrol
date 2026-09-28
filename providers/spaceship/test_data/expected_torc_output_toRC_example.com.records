@@ -10,5 +10,5 @@
 10	ptr 600 IN PTR host.example.com.
 11	_sip._tcp 600 IN SRV 10 20 5060 sip.example.com.
 12	_8443._https.svc 600 IN SVCB 1 svc.example.net. alpn="h2"
-13	_25._tcp.mail 600 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+13	_25._tcp.mail 600 IN TLSA 3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 14	@ 600 IN TXT "v=spf1 include:_spf.example.net -all"

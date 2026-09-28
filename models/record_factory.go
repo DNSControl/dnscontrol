@@ -96,7 +96,7 @@ func (dc *DomainConfig) NewRecordConfigParse(name string, ttl uint32, typeAny an
 		return dc.NewRecordConfig(name, ttl, typeNum, data, isEnabled)
 	}
 
-	rd, err := MyNewData(typeNum, data, origin)
+	rd, err := myNewData(typeNum, data, origin)
 	if err != nil {
 		return nil, err
 	}
