@@ -268,6 +268,11 @@
     "password": "$MIKROTIK_PASSWORD",
     "username": "$MIKROTIK_USERNAME"
   },
+  "MITTWALD": {
+    "TYPE": "MITTWALD",
+    "api_token": "$MITTWALD_API_TOKEN",
+    "domain": "$MITTWALD_DOMAIN"
+  },
   "MYTHICBEASTS": {
     "TYPE": "MYTHICBEASTS",
     "domain": "$MYTHICBEASTS_DOMAIN",
@@ -406,6 +411,12 @@
     "api_key": "$SL_API_KEY",
     "domain": "$SL_DOMAIN",
     "username": "$SL_USERNAME"
+  },
+  "SPACESHIP": {
+    "TYPE": "SPACESHIP",
+    "api_key": "$SPACESHIP_API_KEY",
+    "api_secret": "$SPACESHIP_API_SECRET",
+    "domain": "$SPACESHIP_DOMAIN"
   },
   "TENCENTDNS": {
     "TYPE": "TENCENTDNS",

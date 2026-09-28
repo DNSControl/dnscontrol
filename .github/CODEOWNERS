@@ -39,6 +39,7 @@ providers/linode @koesie10
 providers/loopia @systemcrash
 providers/luadns @riku22
 providers/mikrotik @hedger
+providers/mittwald @twiesing
 providers/mythicbeasts @tomfitzhenry
 providers/namecheap @willpower232
 # providers/namedotcom NEEDS VOLUNTEER
@@ -62,6 +63,7 @@ providers/rwth @mistererwin
 providers/sakuracloud @ttkzw
 providers/scaleway @alessiopcc
 # providers/softlayer NEEDS VOLUNTEER
+providers/spaceship @rootful
 providers/tencentdns @cylonchau
 providers/transip @blackshadev
 providers/unifi @zupolgec

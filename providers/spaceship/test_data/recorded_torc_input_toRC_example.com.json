@@ -1,0 +1,147 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "type": "A",
+      "name": "@",
+      "ttl": 600,
+      "address": "192.0.2.1"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "type": "A",
+      "name": "www",
+      "ttl": 600,
+      "address": "192.0.2.2"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "type": "AAAA",
+      "name": "www",
+      "ttl": 600,
+      "address": "2001:db8::1"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "type": "ALIAS",
+      "name": "docs",
+      "ttl": 600,
+      "aliasName": "origin.example.com"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "type": "CAA",
+      "name": "@",
+      "ttl": 600,
+      "flag": 0,
+      "tag": "issue",
+      "value": "letsencrypt.org"
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "type": "CNAME",
+      "name": "alias",
+      "ttl": 600,
+      "cname": "www.example.com"
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "type": "HTTPS",
+      "name": "@",
+      "ttl": 600,
+      "svcPriority": 1,
+      "targetName": ".",
+      "svcParams": "alpn=h3,h2"
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "type": "MX",
+      "name": "@",
+      "ttl": 3600,
+      "exchange": "mail.example.com",
+      "preference": 10
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "type": "NS",
+      "name": "sub",
+      "ttl": 3600,
+      "nameserver": "ns1.example.net"
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "type": "PTR",
+      "name": "ptr",
+      "ttl": 600,
+      "pointer": "host.example.com"
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "type": "SRV",
+      "name": "@",
+      "ttl": 600,
+      "port": 5060,
+      "service": "_sip",
+      "protocol": "_tcp",
+      "priority": 10,
+      "weight": 20,
+      "target": "sip.example.com"
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "type": "SVCB",
+      "name": "svc",
+      "ttl": 600,
+      "port": "_8443",
+      "scheme": "_https",
+      "svcPriority": 1,
+      "targetName": "svc.example.net",
+      "svcParams": "alpn=h2"
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "type": "TLSA",
+      "name": "mail",
+      "ttl": 600,
+      "port": "_25",
+      "protocol": "_tcp",
+      "usage": 3,
+      "selector": 1,
+      "matching": 1,
+      "associationData": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "type": "TXT",
+      "name": "@",
+      "ttl": 600,
+      "value": "v=spf1 include:_spf.example.net -all"
+    }
+  }
+]

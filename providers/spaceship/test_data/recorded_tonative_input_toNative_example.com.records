@@ -1,0 +1,14 @@
+1	@ 3600 IN MX 10 mail.example.com.
+2	@ 600 IN A 192.0.2.1
+3	@ 600 IN CAA 0 issue "letsencrypt.org"
+4	@ 600 IN HTTPS 1 . alpn="h3,h2"
+5	@ 600 IN TXT "v=spf1 include:_spf.example.net -all"
+6	_25._tcp.mail 600 IN TLSA 3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+7	_8443._https.svc 600 IN SVCB 1 svc.example.net. alpn="h2"
+8	_sip._tcp 600 IN SRV 10 20 5060 sip.example.com.
+9	alias 600 IN CNAME www.example.com.
+10	docs 600 IN ALIAS origin.example.com.
+11	ptr 600 IN PTR host.example.com.
+12	sub 3600 IN NS ns1.example.net.
+13	www 600 IN A 192.0.2.2
+14	www 600 IN AAAA 2001:db8::1
