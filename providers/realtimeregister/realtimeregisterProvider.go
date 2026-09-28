@@ -264,7 +264,6 @@ func toRecord(rc *models.RecordConfig) Record {
 	case dnsv2.TypeNAPTR, dnsv2.TypeSSHFP, dnsv2.TypeTLSA, dnsv2.TypeCAA:
 		record.Content = rc.GetRDATA().String()
 	case dnsv2.TypeTXT:
-		//record.Content = addEscapeChars(record.Content)
 		record.Content = rc.GetTargetTXTJoined()
 	case dnsv2.TypeDS:
 		f := rc.AsDS()
