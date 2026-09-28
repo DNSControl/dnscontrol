@@ -19,4 +19,7 @@ func main() {
 	if err := generateLabelerFile(); err != nil {
 		log.Fatal(err)
 	}
+	if err := generateReadmeProvidersTable(); err != nil {
+		log.Fatal(err)
+	}
 }

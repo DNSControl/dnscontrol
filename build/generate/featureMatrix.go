@@ -53,7 +53,7 @@ func updateProviderDocs() {
 	matrix := matrixData()
 	docDir := "documentation/provider"
 	for _, providerName := range allProviderNames() {
-		docFile := filepath.Join(docDir, strings.ToLower(strings.ReplaceAll(providerName, "_", ""))+".md")
+		docFile := filepath.Join(docDir, providerDocSlug(providerName)+".md")
 		if _, err := os.Stat(docFile); os.IsNotExist(err) {
 			fmt.Printf("WARNING: Missing documentation page for provider %s: %s\n", providerName, docFile)
 		} else {
