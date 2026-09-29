@@ -53,7 +53,7 @@ func updateProviderDocs() {
 	matrix := matrixData()
 	docDir := "documentation/provider"
 	for _, providerName := range allProviderNames() {
-		docFile := filepath.Join(docDir, strings.ToLower(strings.ReplaceAll(providerName, "_", ""))+".md")
+		docFile := filepath.Join(docDir, providerDocSlug(providerName)+".md")
 		if _, err := os.Stat(docFile); os.IsNotExist(err) {
 			fmt.Printf("WARNING: Missing documentation page for provider %s: %s\n", providerName, docFile)
 		} else {
@@ -73,11 +73,19 @@ func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
 	featureMap := matrix.Providers[providerName]
 
 	for i, category := range matrix.FeatureTablesTitles {
-		sb.WriteString("- " + category + "\n")
+		sb.WriteString("- ")
+		sb.WriteString(category)
+		sb.WriteString("\n")
+
 		for _, feature := range matrix.FeatureTables[i] {
 			emoji := featureEmoji(featureMap, feature)
-			sb.WriteString("  - " + feature + ": " + emoji + "\n")
+			sb.WriteString("  - ")
+			sb.WriteString(feature)
+			sb.WriteString(": ")
+			sb.WriteString(emoji)
+			sb.WriteString("\n")
 		}
+
 	}
 
 	return sb.String()

@@ -48,27 +48,32 @@ Want full "GitOps" control of your DNS data? Clone the [dns-config](https://gith
 
 ## Supported Providers
 
-DNSControl supports 68 DNS providers and registrars:
+<!-- provider-table-start -->
+
+DNSControl supports 74 DNS providers and registrars:
 
 | | | | | |
 | ----- | ----- | ----- | ----- | ----- |
-| [AdGuard Home](https://docs.dnscontrol.org/provider/adguardhome) | [Akamai Edge DNS](https://docs.dnscontrol.org/provider/akamaiedgedns) | [Alibaba Cloud DNS](https://docs.dnscontrol.org/provider/alidns) | [AutoDNS](https://docs.dnscontrol.org/provider/autodns) | [AWS Route 53](https://docs.dnscontrol.org/provider/route53)¹ |
-| [AXFR+DDNS](https://docs.dnscontrol.org/provider/axfrddns) | [Azure DNS](https://docs.dnscontrol.org/provider/azuredns) | [Azure Private DNS](https://docs.dnscontrol.org/provider/azureprivatedns) | [BIND](https://docs.dnscontrol.org/provider/bind) | [Bunny DNS](https://docs.dnscontrol.org/provider/bunnydns) |
-| [CentralNic Reseller](https://docs.dnscontrol.org/provider/cnr)¹ | [Cloudflare](https://docs.dnscontrol.org/provider/cloudflareapi) | [ClouDNS](https://docs.dnscontrol.org/provider/cloudns) | [CSC Global](https://docs.dnscontrol.org/provider/cscglobal)¹ | [deSEC](https://docs.dnscontrol.org/provider/desec) |
-| [DigitalOcean](https://docs.dnscontrol.org/provider/digitalocean) | [DNS Made Easy](https://docs.dnscontrol.org/provider/dnsmadeeasy) | [DNSOVERHTTPS](https://docs.dnscontrol.org/provider/dnsoverhttps)² | [DNScale](https://docs.dnscontrol.org/provider/dnscale) | [DNSimple](https://docs.dnscontrol.org/provider/dnsimple)¹ |
-| [Domainnameshop](https://docs.dnscontrol.org/provider/domainnameshop) | [Dynadot](https://docs.dnscontrol.org/provider/dynadot)² | [easyname](https://docs.dnscontrol.org/provider/easyname)² | [Exoscale](https://docs.dnscontrol.org/provider/exoscale) | [Fortigate](https://docs.dnscontrol.org/provider/fortigate) |
-| [Gandi](https://docs.dnscontrol.org/provider/gandiv5)¹ | [Gcore](https://docs.dnscontrol.org/provider/gcore) | [Gidinet](https://docs.dnscontrol.org/provider/gidinet)¹ | [Google DNS](https://docs.dnscontrol.org/provider/gcloud) | [Hetzner](https://docs.dnscontrol.org/provider/hetzner) |
-| [hosting.de](https://docs.dnscontrol.org/provider/hostingde)¹ | [Huawei Cloud DNS](https://docs.dnscontrol.org/provider/huaweicloud) | [Hurricane Electric DNS](https://docs.dnscontrol.org/provider/hedns) | [Infomaniak](https://docs.dnscontrol.org/provider/infomaniak) | [Internet.bs](https://docs.dnscontrol.org/provider/internetbs)² |
-| [INWX](https://docs.dnscontrol.org/provider/inwx)¹ | [Joker](https://docs.dnscontrol.org/provider/joker) | [Linode](https://docs.dnscontrol.org/provider/linode) | [Loopia](https://docs.dnscontrol.org/provider/loopia)¹ | [LuaDNS](https://docs.dnscontrol.org/provider/luadns) |
-| Windows Server DNS | [MikroTik RouterOS](https://docs.dnscontrol.org/provider/mikrotik) | [Mythic Beasts](https://docs.dnscontrol.org/provider/mythicbeasts) | [Name.com](https://docs.dnscontrol.org/provider/namedotcom)¹ | [Namecheap](https://docs.dnscontrol.org/provider/namecheap)¹ |
-| [Netcup](https://docs.dnscontrol.org/provider/netcup) | [Netlify](https://docs.dnscontrol.org/provider/netlify) | [Netnod](https://docs.dnscontrol.org/provider/netnod) | [NexDNS](https://docs.dnscontrol.org/provider/nexdns) | [NS1](https://docs.dnscontrol.org/provider/ns1) |
-| [Openprovider](https://docs.dnscontrol.org/provider/openprovider) | [OpenSRS](https://docs.dnscontrol.org/provider/opensrs)² | [Oracle Cloud](https://docs.dnscontrol.org/provider/oracle) | [OVH](https://docs.dnscontrol.org/provider/ovh)¹ | [Packetframe](https://docs.dnscontrol.org/provider/packetframe) |
-| [Porkbun](https://docs.dnscontrol.org/provider/porkbun)¹ | [PowerDNS](https://docs.dnscontrol.org/provider/powerdns) | [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH DNS-Admin](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) |
-| [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) | [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ | [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi Network](https://docs.dnscontrol.org/provider/unifi) | [Vercel](https://docs.dnscontrol.org/provider/vercel) |
-| [Vultr](https://docs.dnscontrol.org/provider/vultr) | [Netbird](https://docs.dnscontrol.org/provider/netbird) | [WebSupport](https://docs.dnscontrol.org/provider/websupport) | [Spaceship](https://docs.dnscontrol.org/provider/spaceship)¹ | [mittwald](https://docs.dnscontrol.org/provider/mittwald) |
+| [`ADGUARDHOME`](https://docs.dnscontrol.org/provider/adguardhome) | [`AKAMAIEDGEDNS`](https://docs.dnscontrol.org/provider/akamaiedgedns) | [`ALIDNS`](https://docs.dnscontrol.org/provider/alidns) | [`AUTODNS`](https://docs.dnscontrol.org/provider/autodns)¹ | [`AXFRDDNS`](https://docs.dnscontrol.org/provider/axfrddns) |
+| [`AZURE_DNS`](https://docs.dnscontrol.org/provider/azuredns) | [`AZURE_PRIVATE_DNS`](https://docs.dnscontrol.org/provider/azureprivatedns) | [`BIND`](https://docs.dnscontrol.org/provider/bind) | [`BUNNY_DNS`](https://docs.dnscontrol.org/provider/bunnydns) | [`CLOUDFLAREAPI`](https://docs.dnscontrol.org/provider/cloudflareapi) |
+| [`CLOUDNS`](https://docs.dnscontrol.org/provider/cloudns)¹ | [`CNR`](https://docs.dnscontrol.org/provider/cnr)¹ | [`CSCGLOBAL`](https://docs.dnscontrol.org/provider/cscglobal)¹ | [`DESEC`](https://docs.dnscontrol.org/provider/desec) | [`DIGITALOCEAN`](https://docs.dnscontrol.org/provider/digitalocean) |
+| [`DNSCALE`](https://docs.dnscontrol.org/provider/dnscale) | [`DNSIMPLE`](https://docs.dnscontrol.org/provider/dnsimple)¹ | [`DNSMADEEASY`](https://docs.dnscontrol.org/provider/dnsmadeeasy) | [`DNSOVERHTTPS`](https://docs.dnscontrol.org/provider/dnsoverhttps)² | [`DOMAINNAMESHOP`](https://docs.dnscontrol.org/provider/domainnameshop) |
+| [`DYNADOT`](https://docs.dnscontrol.org/provider/dynadot)² | [`DYNU`](https://docs.dnscontrol.org/provider/dynu) | [`EASYNAME`](https://docs.dnscontrol.org/provider/easyname)² | [`EXOSCALE`](https://docs.dnscontrol.org/provider/exoscale) | [`FORTIGATE`](https://docs.dnscontrol.org/provider/fortigate) |
+| [`GANDI_V5`](https://docs.dnscontrol.org/provider/gandiv5)¹ | [`GCLOUD`](https://docs.dnscontrol.org/provider/gcloud) | [`GCORE`](https://docs.dnscontrol.org/provider/gcore) | [`GIDINET`](https://docs.dnscontrol.org/provider/gidinet)¹ | [`GIGAHOST`](https://docs.dnscontrol.org/provider/gigahost) |
+| [`HEDNS`](https://docs.dnscontrol.org/provider/hedns) | [`HETZNER_V2`](https://docs.dnscontrol.org/provider/hetznerv2) | [`HOSTINGDE`](https://docs.dnscontrol.org/provider/hostingde)¹ | [`HUAWEICLOUD`](https://docs.dnscontrol.org/provider/huaweicloud) | [`INFOBLOX`](https://docs.dnscontrol.org/provider/infoblox) |
+| [`INFOMANIAK`](https://docs.dnscontrol.org/provider/infomaniak) | [`INTERNETBS`](https://docs.dnscontrol.org/provider/internetbs)² | [`INWX`](https://docs.dnscontrol.org/provider/inwx)¹ | [`JOKER`](https://docs.dnscontrol.org/provider/joker) | [`LINODE`](https://docs.dnscontrol.org/provider/linode) |
+| [`LOOPIA`](https://docs.dnscontrol.org/provider/loopia)¹ | [`LUADNS`](https://docs.dnscontrol.org/provider/luadns) | [`MIKROTIK`](https://docs.dnscontrol.org/provider/mikrotik) | [`MITTWALD`](https://docs.dnscontrol.org/provider/mittwald) | [`MYTHICBEASTS`](https://docs.dnscontrol.org/provider/mythicbeasts) |
+| [`NAMECHEAP`](https://docs.dnscontrol.org/provider/namecheap)¹ | [`NAMEDOTCOM`](https://docs.dnscontrol.org/provider/namedotcom)¹ | [`NETBIRD`](https://docs.dnscontrol.org/provider/netbird) | [`NETCUP`](https://docs.dnscontrol.org/provider/netcup) | [`NETLIFY`](https://docs.dnscontrol.org/provider/netlify) |
+| [`NETNOD`](https://docs.dnscontrol.org/provider/netnod) | [`NEXDNS`](https://docs.dnscontrol.org/provider/nexdns) | [`NS1`](https://docs.dnscontrol.org/provider/ns1) | [`OPENPROVIDER`](https://docs.dnscontrol.org/provider/openprovider) | [`OPENSRS`](https://docs.dnscontrol.org/provider/opensrs)² |
+| [`OPENWRT`](https://docs.dnscontrol.org/provider/openwrt) | [`ORACLE`](https://docs.dnscontrol.org/provider/oracle) | [`OVH`](https://docs.dnscontrol.org/provider/ovh)¹ | [`PACKETFRAME`](https://docs.dnscontrol.org/provider/packetframe) | [`PORKBUN`](https://docs.dnscontrol.org/provider/porkbun)¹ |
+| [`POWERDNS`](https://docs.dnscontrol.org/provider/powerdns) | [`REALTIMEREGISTER`](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [`ROUTE53`](https://docs.dnscontrol.org/provider/route53)¹ | [`RWTH`](https://docs.dnscontrol.org/provider/rwth) | [`SAKURACLOUD`](https://docs.dnscontrol.org/provider/sakuracloud) |
+| [`SCALEWAY`](https://docs.dnscontrol.org/provider/scaleway) | [`SOFTLAYER`](https://docs.dnscontrol.org/provider/softlayer) | [`SPACESHIP`](https://docs.dnscontrol.org/provider/spaceship)¹ | [`TENCENTDNS`](https://docs.dnscontrol.org/provider/tencentdns)¹ | [`TRANSIP`](https://docs.dnscontrol.org/provider/transip) |
+| [`UNIFI`](https://docs.dnscontrol.org/provider/unifi) | [`VERCEL`](https://docs.dnscontrol.org/provider/vercel) | [`VULTR`](https://docs.dnscontrol.org/provider/vultr) | [`WEBSUPPORT`](https://docs.dnscontrol.org/provider/websupport) |  |
 
 ¹also supports registrar functions
 ²registrar only
+
+<!-- provider-table-end -->
 
 ## Benefits
 

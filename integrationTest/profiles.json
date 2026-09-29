@@ -226,6 +226,15 @@
     "TYPE": "HUAWEICLOUD",
     "domain": "$HUAWEICLOUD_DOMAIN"
   },
+  "INFOBLOX": {
+    "TYPE": "INFOBLOX",
+    "domain": "$INFOBLOX_DOMAIN",
+    "host": "$INFOBLOX_HOST",
+    "password": "$INFOBLOX_PASSWORD",
+    "tls_skip_verify": "true",
+    "username": "$INFOBLOX_USERNAME",
+    "view": "$INFOBLOX_VIEW"
+  },
   "INFOMANIAK": {
     "TYPE": "INFOMANIAK",
     "domain": "$INFOMANIAK_DOMAIN",

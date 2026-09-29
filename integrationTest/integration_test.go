@@ -2318,7 +2318,7 @@ func makeTests() []*TestGroup {
 				"gcore_filters":            "healthcheck,false;geodns,false;first_n,false,3",
 				"gcore_failover_protocol":  "HTTP",
 				"gcore_failover_port":      "443",
-				"gcore_failover_frequency": "30",
+				"gcore_failover_frequency": "300",
 				"gcore_failover_timeout":   "10",
 				"gcore_failover_method":    "POST",
 				"gcore_failover_url":       "/test",
@@ -2376,6 +2376,35 @@ func makeTests() []*TestGroup {
 			tc("SMIMEA change selector", smimea("_443._tcp", 2, 0, 1, sha256hash)),
 			tc("SMIMEA change matchingtype", smimea("_443._tcp", 2, 0, 2, sha512hash)),
 			tc("SMIMEA change certificate", smimea("_443._tcp", 2, 0, 2, reversedSha512)),
+		),
+
+		testgroup("Bunny DNS smart routing",
+			only("BUNNY_DNS"),
+			tc("Create geographic A", withMeta(a("smart", "1.2.3.4"), map[string]string{
+				"bunny_smart_routing_type":    "geographic",
+				"bunny_geolocation_latitude":  "40.7128",
+				"bunny_geolocation_longitude": "-74.006",
+			})),
+			tc("Ignore unrelated metadata", withMeta(a("smart", "1.2.3.4"), map[string]string{
+				"bunny_smart_routing_type":    "geographic",
+				"bunny_geolocation_latitude":  "40.7128",
+				"bunny_geolocation_longitude": "-74.006",
+				"unrelated":                   "ignored",
+			})).ExpectNoChanges(),
+			tc("Change geographic coordinates", withMeta(a("smart", "1.2.3.4"), map[string]string{
+				"bunny_smart_routing_type":    "geographic",
+				"bunny_geolocation_latitude":  "48.8566",
+				"bunny_geolocation_longitude": "2.3522",
+			})),
+			tc("Switch to latency routing", withMeta(a("smart", "1.2.3.4"), map[string]string{
+				"bunny_smart_routing_type": "latency",
+				"bunny_latency_zone":       "NY",
+			})),
+			tc("Disable smart routing", a("smart", "1.2.3.4")),
+			tc("Create latency AAAA", withMeta(aaaa("smartv6", "2607:f8b0:4006:820::2006"), map[string]string{
+				"bunny_smart_routing_type": "latency",
+				"bunny_latency_zone":       "NY",
+			})),
 		),
 
 		testgroup("Bunny DNS Pull Zone",

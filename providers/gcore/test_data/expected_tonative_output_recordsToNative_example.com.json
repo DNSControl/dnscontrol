@@ -1,0 +1,5421 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "type": "",
+      "ttl": 1000,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {
+            "asn": [
+              1234,
+              2345
+            ],
+            "continents": [
+              "as",
+              "na",
+              "an",
+              "sa",
+              "oc",
+              "eu",
+              "af"
+            ],
+            "countries": [
+              "cn",
+              "us"
+            ],
+            "ip": [
+              "1.2.3.4"
+            ],
+            "latlong": [
+              12.34,
+              67.89
+            ],
+            "notes": "test",
+            "weight": 12
+          },
+          "enabled": true
+        }
+      ],
+      "filters": [
+        {
+          "limit": 0,
+          "type": "geodistance",
+          "strict": false
+        },
+        {
+          "limit": 2,
+          "type": "first_n",
+          "strict": false
+        }
+      ],
+      "meta": {}
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {
+            "asn": [
+              2345,
+              3456
+            ],
+            "continents": [
+              "as",
+              "na"
+            ],
+            "countries": [
+              "gb",
+              "fr"
+            ],
+            "ip": [
+              "4.3.2.1"
+            ],
+            "latlong": [
+              12.89,
+              34.56
+            ],
+            "notes": "test2",
+            "weight": 34
+          },
+          "enabled": true
+        }
+      ],
+      "filters": [
+        {
+          "limit": 0,
+          "type": "healthcheck",
+          "strict": false
+        },
+        {
+          "limit": 0,
+          "type": "geodns",
+          "strict": false
+        },
+        {
+          "limit": 3,
+          "type": "first_n",
+          "strict": false
+        }
+      ],
+      "meta": {
+        "failover": {
+          "frequency": 300,
+          "host": "example.com",
+          "method": "POST",
+          "port": 443,
+          "protocol": "HTTP",
+          "regexp": "",
+          "timeout": 10,
+          "tls": false,
+          "url": "/test"
+        }
+      }
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4.4.4.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issue",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issue",
+            "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            ";"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            "example.com"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            128,
+            "issue",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "test.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              80
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "yetanother.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            2,
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            8,
+            "www.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "test.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              80
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "yetanother.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "asimple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "type": "",
+      "ttl": 500,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "type": "",
+      "ttl": 666,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            62,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            62,
+            72,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo3.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            5,
+            60,
+            70,
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            5,
+            60,
+            70,
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo3.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "type": "",
+      "ttl": 333,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "type": "",
+      "ttl": 4400,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "xn--ndaaa.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "redact2.acm-validations.aws."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "91.42.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:ce77"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "91.42.1.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:ce78"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "11.11.11.11"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "12.12.12.12"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "13.13.13.13"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "14.14.14.14"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "9.9.9.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.4.5.6"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.4.5.6"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4.5.6.7"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "google2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "redact1.acm-validations.aws."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            10,
+            "aspmx.l.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            20,
+            "alt1.aspmx.l.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            10,
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            20,
+            "bar.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "mx.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            8,
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            ""
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "blah`blah"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "in\"side"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "\"left"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "in\"ter\"ior"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "right\""
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1back\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2back\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3back\\\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4back\\\\\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "semi;colon"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "wssemi ; colon"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "with spaces"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "quo'te"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "trailingws "
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ghs.googlehosted.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ghs.googlehosted.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "nmx.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            9,
+            "www.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "type": "",
+      "ttl": 333,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "type": "",
+      "ttl": 999,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2607:f8b0:4006:820::2006"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2607:f8b0:4006:820::2013"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "www.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "www.yahoo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "9.9.9.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            50,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            50,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "changed"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "type": "",
+      "ttl": 400,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "type": "",
+      "ttl": 400,
+      "resource_records": [
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "type": "",
+      "ttl": 700,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "xn--ndaaa.xn--vhquv."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "4.4.4.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "type": "",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:cccc"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  }
+]

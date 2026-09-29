@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "domain": "example.com",
+      "to_rc": [
+        "nativeToRecords"
+      ],
+      "to_native": [
+        "recordsToNative"
+      ]
+    }
+  ]
+}

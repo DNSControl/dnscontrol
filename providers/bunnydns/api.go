@@ -40,7 +40,20 @@ type record struct {
 	Tag        string     `json:"Tag"`
 	PullZoneID int64      `json:"PullZoneId,omitempty"`
 	LinkName   string     `json:"LinkName,omitempty"`
+
+	SmartRoutingType     smartRoutingType `json:"SmartRoutingType,omitempty"`
+	GeolocationLatitude  *float64         `json:"GeolocationLatitude,omitempty"`
+	GeolocationLongitude *float64         `json:"GeolocationLongitude,omitempty"`
+	LatencyZone          string           `json:"LatencyZone,omitempty"`
 }
+
+type smartRoutingType int
+
+const (
+	smartRoutingNone       smartRoutingType = 0
+	smartRoutingLatency    smartRoutingType = 1
+	smartRoutingGeographic smartRoutingType = 2
+)
 
 type listZonesResponse struct {
 	Items        []zone `json:"Items"`
@@ -137,7 +150,15 @@ func (b *bunnydnsProvider) createRecord(zoneID int64, r *record) error {
 
 func (b *bunnydnsProvider) modifyRecord(zoneID int64, recordID int64, r *record) error {
 	url := fmt.Sprintf("/dnszone/%d/records/%d", zoneID, recordID)
-	return b.request("POST", url, nil, r, nil, []int{http.StatusNoContent})
+	body := any(r)
+	if r.Type == recordTypeA || r.Type == recordTypeAAAA {
+		// Updating an A/AAAA record to disable smart routing must send type 0 explicitly.
+		body = struct {
+			*record
+			SmartRoutingType smartRoutingType `json:"SmartRoutingType"`
+		}{r, r.SmartRoutingType}
+	}
+	return b.request("POST", url, nil, body, nil, []int{http.StatusNoContent})
 }
 
 func (b *bunnydnsProvider) deleteRecord(zoneID, recordID int64) error {

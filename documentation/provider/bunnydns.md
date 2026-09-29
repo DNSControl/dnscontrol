@@ -35,7 +35,80 @@ export BUNNY_DNS_API_KEY=XXXXXXXXX
 
 ## Metadata
 
-This provider does not recognize any special metadata fields unique to Bunny DNS.
+This provider supports the following metadata fields, used to configure Bunny DNS smart routing (geographic and latency-based routing) for `A` and `AAAA` records.
+
+All metadata values are strings. Numeric values must be specified in their string forms.
+
+### Smart routing metadata
+
+These metadata fields can be set on individual `A` or `AAAA` records:
+
+- `bunny_smart_routing_type`: The smart routing type. Valid values are:
+  - `geographic` (or `geo`): Route queries based on the end user's geographical location. The record closest to the user is returned.
+  - `latency`: Route queries based on estimated latency to the Bunny.net datacenter region closest to your server.
+  - `none`: Disable smart routing (default; does not need to be specified).
+- `bunny_geolocation_latitude`: The latitude coordinate of the server's location, as a string. Only used when `bunny_smart_routing_type` is `geographic`.
+- `bunny_geolocation_longitude`: The longitude coordinate of the server's location, as a string. Only used when `bunny_smart_routing_type` is `geographic`.
+- `bunny_latency_zone`: The Bunny.net datacenter region code closest to your server, e.g. `NY`. Only used when `bunny_smart_routing_type` is `latency`.
+
+  The valid region codes can be retrieved from Bunny's public region list API, which does not require an API key:
+
+  ```shell
+  curl https://api.bunny.net/region
+  ```
+
+  This returns a JSON array of region objects. The `RegionCode` field is the value to use for `bunny_latency_zone`. Only regions where `AllowLatencyRouting` is `true` are valid for latency routing. For example:
+
+  ```json
+  {
+    "Id": 2,
+    "Name": "NA: New York City, NY",
+    "RegionCode": "NY",
+    "ContinentCode": "NA",
+    "CountryCode": "US",
+    "AllowLatencyRouting": true
+  }
+  ```
+
+  See the [Region list API documentation](https://docs.bunny.net/api-reference/core/region/region-list) for full details.
+
+For more information, see the [Bunny DNS Smart Records documentation](https://docs.bunny.net/dns/records#smart-records).
+
+### Example with geographic routing
+
+{% code title="dnsconfig.js" %}
+```javascript
+D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+    A("www", "1.2.3.4", {
+        bunny_smart_routing_type: "geographic",
+        bunny_geolocation_latitude: "40.7128",
+        bunny_geolocation_longitude: "-74.0060",
+    }),
+    A("www", "5.6.7.8", {
+        bunny_smart_routing_type: "geographic",
+        bunny_geolocation_latitude: "48.8566",
+        bunny_geolocation_longitude: "2.3522",
+    }),
+);
+```
+{% endcode %}
+
+### Example with latency routing
+
+{% code title="dnsconfig.js" %}
+```javascript
+D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+    A("www", "1.2.3.4", {
+        bunny_smart_routing_type: "latency",
+        bunny_latency_zone: "NY",
+    }),
+    A("www", "5.6.7.8", {
+        bunny_smart_routing_type: "latency",
+        bunny_latency_zone: "FRA",
+    }),
+);
+```
+{% endcode %}
 
 ## Usage
 

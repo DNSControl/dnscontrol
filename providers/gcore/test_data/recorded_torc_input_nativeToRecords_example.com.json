@@ -1,0 +1,5688 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "name": "*.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "name": "4.example.com",
+      "type": "PTR",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "name": "4.example.com",
+      "type": "PTR",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            62,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            52,
+            62,
+            72,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo3.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo4.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            5,
+            60,
+            70,
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            15,
+            65,
+            75,
+            "foo3.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            5,
+            60,
+            70,
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 333,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "ttl": 4400,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            6,
+            7,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "name": "a.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "xn--ndaaa.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "name": "bar.bat.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "name": "bar.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "name": "bar.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "name": "bar.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "redact2.acm-validations.aws."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "name": "bar.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "name": "decoy.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "name": "decoy.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "name": "decoy.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "name": "dyndns-city1.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "91.42.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "name": "dyndns-city1.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:ce77"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "name": "dyndns-city2.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "91.42.1.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "name": "dyndns-city2.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:ce78"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "name": "foo.bat.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "name": "foo.bat.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "11.11.11.11"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "12.12.12.12"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "13.13.13.13"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "14.14.14.14"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "9.9.9.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.4.5.6"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.4.5.6"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "name": "foo.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4.5.6.7"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "name": "foo.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:aaaa"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "google2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "redact1.acm-validations.aws."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "name": "foo.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            10,
+            "aspmx.l.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            20,
+            "alt1.aspmx.l.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "name": "foo.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            10,
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            20,
+            "bar.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "name": "foo.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "mx.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "name": "foo.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            8,
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "name": "foo.example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "name": "foo.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "name": "foo.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "v=spf1 ip4:99.99.99.99 -all"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "name": "foo0.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            ""
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "name": "foo254.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "name": "foo255.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "name": "foo256.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "name": "foo509.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "name": "foo510.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "name": "foo511.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "name": "foo764.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "name": "foo765.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "name": "foo766.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "name": "foobt.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "blah`blah"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "name": "foodq.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "in\"side"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "name": "foodqs.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "\"left"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "name": "foodqs.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "in\"ter\"ior"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "name": "foodqs.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "right\""
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "name": "fooosbs1.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1back\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "name": "fooosbs2.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2back\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "name": "fooosbs3.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3back\\\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "name": "fooosbs4.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4back\\\\\\\\slash"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "name": "foosc1.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "semi;colon"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "name": "foosc2.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "wssemi ; colon"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "name": "foosp.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "with spaces"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "name": "foosq.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "quo'te"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "name": "foows1.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "trailingws "
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "name": "mail.bat.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ghs.googlehosted.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "name": "mail.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ghs.googlehosted.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "name": "nmx.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "name": "nmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "name": "nmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "nmx.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            9,
+            "www.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "name": "pager101-rec0000.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "name": "pager101-rec0001.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "name": "pager101-rec0002.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "name": "pager101-rec0003.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "name": "pager101-rec0004.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "name": "pager101-rec0005.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "name": "pager101-rec0006.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "name": "pager101-rec0007.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "name": "pager101-rec0008.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "name": "pager101-rec0009.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "name": "pager101-rec0010.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "name": "pager101-rec0011.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "name": "pager101-rec0012.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "name": "pager101-rec0013.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "name": "pager101-rec0014.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "name": "pager101-rec0015.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "name": "pager101-rec0016.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "name": "pager101-rec0017.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "name": "pager101-rec0018.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "name": "pager101-rec0019.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "name": "pager101-rec0020.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "name": "pager101-rec0021.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "name": "pager101-rec0022.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "name": "pager101-rec0023.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "name": "pager101-rec0024.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "name": "pager101-rec0025.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "name": "pager101-rec0026.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "name": "pager101-rec0027.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "name": "pager101-rec0028.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "name": "pager101-rec0029.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "name": "pager101-rec0030.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "name": "pager101-rec0031.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "name": "pager101-rec0032.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "name": "pager101-rec0033.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "name": "pager101-rec0034.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "name": "pager101-rec0035.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "name": "pager101-rec0036.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "name": "pager101-rec0037.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "name": "pager101-rec0038.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "name": "pager101-rec0039.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "name": "pager101-rec0040.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "name": "pager101-rec0041.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "name": "pager101-rec0042.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "name": "pager101-rec0043.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "name": "pager101-rec0044.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "name": "pager101-rec0045.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "name": "pager101-rec0046.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "name": "pager101-rec0047.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "name": "pager101-rec0048.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "name": "pager101-rec0049.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "name": "pager101-rec0050.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "name": "pager101-rec0051.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "name": "pager101-rec0052.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "name": "pager101-rec0053.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "name": "pager101-rec0054.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "name": "pager101-rec0055.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "name": "pager101-rec0056.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "name": "pager101-rec0057.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "name": "pager101-rec0058.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "name": "pager101-rec0059.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "name": "pager101-rec0060.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "name": "pager101-rec0061.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "name": "pager101-rec0062.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "name": "pager101-rec0063.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "name": "pager101-rec0064.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "name": "pager101-rec0065.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "name": "pager101-rec0066.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "name": "pager101-rec0067.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "name": "pager101-rec0068.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "name": "pager101-rec0069.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "name": "pager101-rec0070.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "name": "pager101-rec0071.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "name": "pager101-rec0072.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "name": "pager101-rec0073.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "name": "pager101-rec0074.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "name": "pager101-rec0075.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "name": "pager101-rec0076.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "name": "pager101-rec0077.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "name": "pager101-rec0078.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "name": "pager101-rec0079.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "name": "pager101-rec0080.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "name": "pager101-rec0081.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "name": "pager101-rec0082.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "name": "pager101-rec0083.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "name": "pager101-rec0084.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "name": "pager101-rec0085.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "name": "pager101-rec0086.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "name": "pager101-rec0087.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "name": "pager101-rec0088.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "name": "pager101-rec0089.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "name": "pager101-rec0090.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "name": "pager101-rec0091.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "name": "pager101-rec0092.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "name": "pager101-rec0093.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "name": "pager101-rec0094.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "name": "pager101-rec0095.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "name": "pager101-rec0096.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "name": "pager101-rec0097.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "name": "pager101-rec0098.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "name": "pager101-rec0099.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "name": "pager101-rec0100.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 1000,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {
+            "asn": [
+              1234,
+              2345
+            ],
+            "continents": [
+              "as",
+              "na",
+              "an",
+              "sa",
+              "oc",
+              "eu",
+              "af"
+            ],
+            "countries": [
+              "cn",
+              "us"
+            ],
+            "ip": [
+              "1.2.3.4"
+            ],
+            "latlong": [
+              12.34,
+              67.89
+            ],
+            "notes": "test",
+            "weight": 12
+          },
+          "enabled": true
+        }
+      ],
+      "filters": [
+        {
+          "limit": 0,
+          "type": "geodistance",
+          "strict": false
+        },
+        {
+          "limit": 2,
+          "type": "first_n",
+          "strict": false
+        }
+      ],
+      "meta": {}
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {
+            "asn": [
+              2345,
+              3456
+            ],
+            "continents": [
+              "as",
+              "na"
+            ],
+            "countries": [
+              "gb",
+              "fr"
+            ],
+            "ip": [
+              "4.3.2.1"
+            ],
+            "latlong": [
+              12.89,
+              34.56
+            ],
+            "notes": "test2",
+            "weight": 34
+          },
+          "enabled": true
+        }
+      ],
+      "filters": [
+        {
+          "limit": 0,
+          "type": "healthcheck",
+          "strict": false
+        },
+        {
+          "limit": 0,
+          "type": "geodns",
+          "strict": false
+        },
+        {
+          "limit": 3,
+          "type": "first_n",
+          "strict": false
+        }
+      ],
+      "meta": {
+        "failover": {
+          "protocol": "HTTP",
+          "port": 443,
+          "frequency": 300,
+          "timeout": 10,
+          "method": "POST",
+          "url": "/test",
+          "tls": false,
+          "regexp": "",
+          "host": "example.com"
+        }
+      }
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.3.4.5"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "4.4.4.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 500,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "name": "example.com",
+      "type": "A",
+      "ttl": 666,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issue",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issue",
+            "letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            ";"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            "example.com"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "issuewild",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "name": "example.com",
+      "type": "CAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            128,
+            "issue",
+            "letsencrypt.org"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "name": "example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "name": "example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "name": "example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "test.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              80
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "name": "example.com",
+      "type": "HTTPS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "yetanother.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "name": "example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "name": "example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            2,
+            "example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            8,
+            "www.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "name": "example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "name": "example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "name": "example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "name": "example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "name": "example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns1.gcorelabs.net."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns2.gcdn.services."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            0,
+            "test.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              80
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            1,
+            "test.com.",
+            [
+              "port",
+              99
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2",
+              "h3"
+            ],
+            [
+              "port",
+              999
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "example.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "some+base64+encoded+value///"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "name": "example.com",
+      "type": "SVCB",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            3,
+            "yetanother.com.",
+            [
+              "alpn",
+              "h2"
+            ],
+            [
+              "port",
+              80
+            ],
+            [
+              "ech",
+              "another+base64+encoded+value"
+            ]
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "name": "example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "asimple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "name": "example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "name": "test.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "name": "test.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo2.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "name": "testa.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "name": "testa.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "name": "testa.example.com",
+      "type": "A",
+      "ttl": 333,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "name": "testa.example.com",
+      "type": "A",
+      "ttl": 999,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "name": "testaaaa.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2607:f8b0:4006:820::2006"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "name": "testaaaa.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2607:f8b0:4006:820::2013"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "foo.example.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "www.google.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "www.yahoo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "name": "testdefined.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "name": "testdefined.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "9.9.9.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "name": "testignore.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "8.8.8.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "name": "testmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "name": "testmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            50,
+            "bar.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "name": "testmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            5,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "name": "testmx.example.com",
+      "type": "MX",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            50,
+            "foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "name": "testtxt.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "changed"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "name": "testtxt.example.com",
+      "type": "TXT",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "simple"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.1.1.1"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.9"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.4.5.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 400,
+      "resource_records": [
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 400,
+      "resource_records": [
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "name": "www.example.com",
+      "type": "A",
+      "ttl": 700,
+      "resource_records": [
+        {
+          "content": [
+            "5.6.7.8"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "name": "xn--fiq228c.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "name": "xn--ndaaa.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "1.2.3.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "name": "xn--ndaaa.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2.2.2.2"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "name": "xn--o-0gab.example.com",
+      "type": "CNAME",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "xn--ndaaa.xn--vhquv."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "name": "xyz.example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "ns1.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "name": "xyz.example.com",
+      "type": "NS",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "ns2.foo.com."
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "name": "zzz.example.com",
+      "type": "A",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "3.3.3.3"
+          ],
+          "meta": {},
+          "enabled": true
+        },
+        {
+          "content": [
+            "4.4.4.4"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "name": "zzz.example.com",
+      "type": "AAAA",
+      "ttl": 300,
+      "resource_records": [
+        {
+          "content": [
+            "2003:dd:d7ff::fe71:cccc"
+          ],
+          "meta": {},
+          "enabled": true
+        }
+      ],
+      "filters": null,
+      "meta": {}
+    }
+  }
+]

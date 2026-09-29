@@ -34,8 +34,13 @@ var features = providers.DocumentationNotes{
 }
 
 type bunnydnsProvider struct {
-	apiKey string
-	zones  map[string]*zone
+	apiKey   string
+	zones    map[string]*zone
+	observer providers.ConversionObserver
+}
+
+func (b *bunnydnsProvider) SetConversionObserver(observer providers.ConversionObserver) {
+	b.observer = observer
 }
 
 func init() {
