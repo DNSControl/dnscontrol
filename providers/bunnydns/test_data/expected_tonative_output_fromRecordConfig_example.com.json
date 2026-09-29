@@ -679,7 +679,7 @@
     "value": {
       "Type": 15,
       "Name": "_443._tcp",
-      "Value": "2 0 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "Value": "2 0 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
@@ -694,7 +694,7 @@
     "value": {
       "Type": 15,
       "Name": "_443._tcp",
-      "Value": "2 0 2 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "Value": "2 0 2 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
@@ -709,7 +709,7 @@
     "value": {
       "Type": 15,
       "Name": "_443._tcp",
-      "Value": "2 0 2 FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210FEDCBA9876543210",
+      "Value": "2 0 2 fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
@@ -724,7 +724,7 @@
     "value": {
       "Type": 15,
       "Name": "_443._tcp",
-      "Value": "2 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "Value": "2 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
@@ -739,7 +739,7 @@
     "value": {
       "Type": 15,
       "Name": "_443._tcp",
-      "Value": "3 1 1 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF",
+      "Value": "3 1 1 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
