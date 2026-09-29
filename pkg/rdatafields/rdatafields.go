@@ -60,6 +60,52 @@ func (k Kind) String() string {
 	return "Other"
 }
 
+// Field is one classified field of an rdata struct.
+type Field struct {
+	Name  string // Go field name, e.g. "Target"
+	Index int    // index into the struct, for reflect.Value.Field
+	Kind  Kind
+	Slice bool // true if the field is a []string, e.g. HIP.RendezvousServers
+}
+
+// Fields returns the classified fields of rd's struct type. rd may be a
+// struct or a pointer to one. Results are cached per type.
+func Fields(rd any) []Field {
+	// What is this?
+	t := reflect.TypeOf(rd)
+	for t != nil && t.Kind() == reflect.Pointer {
+		t = t.Elem()
+	}
+	if t == nil || t.Kind() != reflect.Struct {
+		return nil
+	}
+
+	// Do we have a cached answer?
+	if v, ok := cache.Load(t); ok {
+		return v.([]Field)
+	}
+
+	// Generate the answer.
+	var out []Field
+	for i := range t.NumField() {
+		f := t.Field(i)
+		k := Classify(t.Name(), f)
+		if k == KindOther {
+			continue
+		}
+		out = append(out, Field{
+			Name:  f.Name,
+			Index: i,
+			Kind:  k,
+			Slice: f.Type.Kind() == reflect.Slice,
+		})
+	}
+
+	// Cache the answer.
+	cache.Store(t, out)
+	return out
+}
+
 // tagKind maps a `dns:"..."` tag value to its default classification.
 //
 // "cname", "name" and "mname" are all domain names on the wire; miekg uses
@@ -147,46 +193,7 @@ var obsolete = map[string]bool{
 // so a generator can log what it left out.
 func IsObsolete(structName string) bool { return obsolete[structName] }
 
-// Field is one classified field of an rdata struct.
-type Field struct {
-	Name  string // Go field name, e.g. "Target"
-	Index int    // index into the struct, for reflect.Value.Field
-	Kind  Kind
-	Slice bool // true if the field is a []string, e.g. HIP.RendezvousServers
-}
-
 var cache sync.Map // reflect.Type -> []Field
-
-// Fields returns the classified fields of rd's struct type. rd may be a
-// struct or a pointer to one. Results are cached per type.
-func Fields(rd any) []Field {
-	t := reflect.TypeOf(rd)
-	for t != nil && t.Kind() == reflect.Pointer {
-		t = t.Elem()
-	}
-	if t == nil || t.Kind() != reflect.Struct {
-		return nil
-	}
-	if v, ok := cache.Load(t); ok {
-		return v.([]Field)
-	}
-	var out []Field
-	for i := range t.NumField() {
-		f := t.Field(i)
-		k := Classify(t.Name(), f)
-		if k == KindOther {
-			continue
-		}
-		out = append(out, Field{
-			Name:  f.Name,
-			Index: i,
-			Kind:  k,
-			Slice: f.Type.Kind() == reflect.Slice,
-		})
-	}
-	cache.Store(t, out)
-	return out
-}
 
 // Classify returns the Kind of one field of the rdata struct named
 // structName. structName is the Go struct name ("CNAME"), not the rtype
