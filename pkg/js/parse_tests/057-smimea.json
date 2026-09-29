@@ -6,13 +6,13 @@
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "3 0 0 MDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiAgLQo=",
+          "comparablev3": "3 0 1 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
           "filepos": "[line:2:5]",
           "name": "f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73",
           "name_unicode": "f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73",
           "rdata": {
-            "Certificate": "MDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiAgLQo=",
-            "MatchingType": 0,
+            "Certificate": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+            "MatchingType": 1,
             "Selector": 0,
             "Usage": 3
           },

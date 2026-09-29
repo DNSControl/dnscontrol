@@ -60,13 +60,9 @@ func report() string {
 		}
 		seen[rt.String()] = true
 
-		for i := range rt.NumField() {
-			f := rt.Field(i)
-			k := rdatafields.Classify(rt.Name(), f)
-			if k == rdatafields.KindOther {
-				continue
-			}
-			lines = append(lines, fmt.Sprintf("%-12s %-20s %-12s dns:%q", rt.Name(), f.Name, k, f.Tag.Get("dns")))
+		for _, field := range rdatafields.Fields(rd) {
+			f := rt.Field(field.Index)
+			lines = append(lines, fmt.Sprintf("%-12s %-20s %-12s dns:%q", rt.Name(), field.Name, field.Kind, f.Tag.Get("dns")))
 		}
 	}
 	sort.Strings(lines)

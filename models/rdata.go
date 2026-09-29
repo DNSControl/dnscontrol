@@ -1,30 +1,25 @@
 package models
 
 //go:generate go run github.com/DNSControl/dnscontrol/v5/build/astypegen
+//go:generate go run github.com/DNSControl/dnscontrol/v5/build/normalizergen
 
 import (
 	"fmt"
 	"os"
 	"reflect"
 	"runtime/debug"
-	"strings"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
-	"github.com/DNSControl/dnscontrol/v5/pkg/domaintags"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
-	if txt, ok := rd.(dnsrdatav2.TXT); ok {
-		txt.Txt = TXTSegmented(txt)
-		rd = txt
-	}
-	rd = rc.normalizeRDATA(rd)
 	rc.rdata = rd
 	rc.validateRDATA()
+	rc.normalizeRDATA()
 	rc.generateComparableV3()
 }
 
@@ -92,60 +87,6 @@ func (rc *RecordConfig) validateRDATA() {
 	fmt.Println(string(debug.Stack()))
 	panic(l)
 }
-
-// normalizeRDATA rewrites the fields of rd2 that are case-insensitive so that
-// later comparisons do not have to be case-aware. It is a method because the
-// Normalizer interface described below hands the RecordConfig to the rdata
-// type, which will need it for origin and label information.
-func (rc *RecordConfig) normalizeRDATA(rd2 dnsv2.RDATA) dnsv2.RDATA {
-	// TODO(tlim): This duplicates code in the MakeTYPE() functions, but
-	// sadly those functions aren't called by dnsv2.NewData().
-	// Fixing this would be difficult since we can't add methods to the
-	// dnsv2.RDATA interface.  We could use interfaces that only get called when they exist.
-
-	switch v := rd2.(type) {
-
-	case dnsrdatav2.DS:
-		// Lowercase to make comparisons case-insensitive.
-		v.Digest = strings.ToLower(v.Digest)
-		return v
-
-	case dnsrdatav2.SSHFP:
-		// Lowercase to make comparisons case-insensitive.
-		v.FingerPrint = strings.ToLower(v.FingerPrint)
-		return v
-
-	case dnsrdatav2.TLSA:
-		// Lowercase to make comparisons case-insensitive.
-		v.Certificate = strings.ToLower(v.Certificate)
-		return v
-
-	case dnsrdatav2.TXT:
-		// Store TXT data segments with each segment being 255 octets, the remainder in the final segment.
-		v.Txt = TXTSegmented(v)
-		return v
-
-	case dnsrdatav2.CNAME:
-		v.Target = domaintags.EfficientToASCII(v.Target)
-		return v
-	}
-
-	return rd2
-}
-
-/*
-
-FUTURE():
-
-Add this interface. normalizeRDATA() will call the interface (if it exists for
-the RDATA).  The type-specific code currently in normalizeRDATA will move to
-files such as t_ds.go, t_sshfp.go, t_tlsa.go, t_txt.go.
-
-type Normalizer interface {
-	Normalize(*RecordConfig)
-}
-
-*/
 
 /*
 

@@ -7,8 +7,8 @@
 // and a small inclusion list (fields that are hostnames but carry no usable
 // tag, mostly in pkg/privatetypes/rdata).
 //
-// Callers: models.RecordConfig.normalizeRDATA() and its generator. See
-// Fields.
+// build/normalizergen uses Fields to generate
+// models.RecordConfig.normalizeRDATA without runtime reflection.
 package rdatafields
 
 import (
