@@ -23,7 +23,7 @@ var features = providers.DocumentationNotes{
 
 func init() {
 	const providerName = "INFOBLOX"
-	const providerMaintainer = "@mgamble"
+	const providerMaintainer = "@matthewmgamble"
 	fns := providers.DspFuncs{
 		Initializer:   newInfobloxDsp,
 		RecordAuditor: AuditRecords,
