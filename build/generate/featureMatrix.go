@@ -73,11 +73,19 @@ func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
 	featureMap := matrix.Providers[providerName]
 
 	for i, category := range matrix.FeatureTablesTitles {
-		sb.WriteString("- " + category + "\n")
+		sb.WriteString("- ")
+		sb.WriteString(category)
+		sb.WriteString("\n")
+
 		for _, feature := range matrix.FeatureTables[i] {
 			emoji := featureEmoji(featureMap, feature)
-			sb.WriteString("  - " + feature + ": " + emoji + "\n")
+			sb.WriteString("  - ")
+			sb.WriteString(feature)
+			sb.WriteString(": ")
+			sb.WriteString(emoji)
+			sb.WriteString("\n")
 		}
+
 	}
 
 	return sb.String()

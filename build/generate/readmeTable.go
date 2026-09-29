@@ -7,16 +7,14 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-// readmeTableColumns is how many providers appear per row of the README
-// table. Change it here and re-run the generator; no hand-editing required.
+// readmeTableColumns is how many providers appear per row of the README table.
 const readmeTableColumns = 5
 
 // generateReadmeProvidersTable rewrites the "Supported Providers" section of
-// README.md. Everything it emits is derived from the provider registries, so
-// adding a provider is enough to make it appear: the name is the one passed to
-// RegisterDomainServiceProviderType/RegisterRegistrarType, the documentation
-// link follows the same convention as updateProviderDocs(), and the footnote
-// markers come from which registries the provider appears in.
+// README.md.
+// name:  one passed to  RegisterDomainServiceProviderType/RegisterRegistrarType
+// link: the same convention as updateProviderDocs()
+// footnote markers: come from which registries the provider appears in.
 func generateReadmeProvidersTable() error {
 	names := allProviderNames()
 
@@ -33,10 +31,17 @@ func generateReadmeProvidersTable() error {
 	var content strings.Builder
 	fmt.Fprintf(&content, "\nDNSControl supports %d DNS providers and registrars:\n\n", len(names))
 
-	content.WriteString(strings.Repeat("| ", readmeTableColumns) + "|\n")
-	content.WriteString("|" + strings.Repeat(" ----- |", readmeTableColumns) + "\n")
+	content.WriteString(strings.Repeat("| ", readmeTableColumns))
+	content.WriteString("|\n")
+
+	content.WriteString("|")
+	content.WriteString(strings.Repeat(" ----- |", readmeTableColumns))
+	content.WriteString("\n")
+
 	for i := 0; i < len(cells); i += readmeTableColumns {
-		content.WriteString("| " + strings.Join(cells[i:i+readmeTableColumns], " | ") + " |\n")
+		content.WriteString("| ")
+		content.WriteString(strings.Join(cells[i:i+readmeTableColumns], " | "))
+		content.WriteString(" |\n")
 	}
 
 	content.WriteString("\n")
