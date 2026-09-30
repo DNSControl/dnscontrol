@@ -5,7 +5,7 @@ go 1.27.0
 require (
 	codeberg.org/miekg/dns v0.6.115
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.2
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns v1.2.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns v1.3.0
@@ -24,12 +24,12 @@ require (
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.21
 	github.com/cloudflare/cloudflare-go v0.119.0
-	github.com/digitalocean/godo v1.215.0
+	github.com/digitalocean/godo v1.216.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.1
 	github.com/dustin/go-humanize v1.1.0
 	github.com/exoscale/egoscale/v3 v3.1.53
-	github.com/failsafe-go/failsafe-go v0.9.7
+	github.com/failsafe-go/failsafe-go v0.9.8
 	github.com/fatih/color v1.19.0
 	github.com/fbiville/markdown-table-formatter v0.3.0
 	github.com/go-gandi/go-gandi v0.7.0
@@ -50,7 +50,7 @@ require (
 	github.com/nicholas-fedor/shoutrrr v0.21.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/nrdcg/goinwx v0.12.0
-	github.com/oracle/oci-go-sdk/v65 v65.126.0
+	github.com/oracle/oci-go-sdk/v65 v65.126.1
 	github.com/ovh/go-ovh v1.9.0
 	github.com/philhug/opensrs-go v0.0.0-20171126225031-9dfa7433020d
 	github.com/pkg/errors v0.9.1
@@ -60,8 +60,8 @@ require (
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.37
 	github.com/softlayer/softlayer-go v1.2.1
 	github.com/stretchr/testify v1.12.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1496+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.187
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1498+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.189
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.28.0
