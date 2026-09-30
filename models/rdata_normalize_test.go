@@ -105,9 +105,9 @@ func TestRDATANormalization(t *testing.T) {
 			if tc.input.String() != before {
 				t.Error("normalization mutated the caller's RDATA")
 			}
-			comparable := rc.ComparableV3
+			comp := rc.ComparableV3
 			rc.SetRDATA(rc.GetRDATA())
-			if diff := cmp.Diff(tc.want, rc.GetRDATA()); diff != "" || comparable != rc.ComparableV3 {
+			if diff := cmp.Diff(tc.want, rc.GetRDATA()); diff != "" || comp != rc.ComparableV3 {
 				t.Errorf("normalization is not idempotent: %s", diff)
 			}
 		})

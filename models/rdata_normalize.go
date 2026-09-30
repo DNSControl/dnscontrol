@@ -11,10 +11,10 @@ import (
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
-// normalizeRDATA canonicalizes hostname and hex fields in rd for comparison.
-// Constructors resolve relative hostnames before SetRDATA calls this function.
-// Hostnames are already ASCII: makers convert IDNA, and provider imports supply ASCII.
-// Mailboxes, opaque names, and unclassified fields are preserved.
+// normalizeRDATA canonicalizes the fields of an dnsv2.RDATA.
+// Fields that are case-insensitive are downcased to make later comparisons easier.
+// Hostnames are assumed to already be ASCII (not IDNA/PunyCode).
+// Mailboxes, opaque names, and unclassified fields are untouched.
 func normalizeRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
 	switch v := rd.(type) {
 	case dnsrdatav2.TXT:
