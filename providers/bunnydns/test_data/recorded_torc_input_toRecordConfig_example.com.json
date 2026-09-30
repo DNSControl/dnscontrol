@@ -3,9 +3,9 @@
     "index": 1,
     "value": {
       "Id": 0,
-      "Type": 1,
-      "Name": "smartv6",
-      "Value": "2607:f8b0:4006:820::2006",
+      "Type": 2,
+      "Name": "monitorc",
+      "Value": "www.google.com",
       "Disabled": false,
       "Ttl": 300,
       "Flags": 0,
@@ -13,10 +13,8 @@
       "Weight": 0,
       "Port": 0,
       "Tag": "",
-      "SmartRoutingType": 1,
       "GeolocationLatitude": 0,
-      "GeolocationLongitude": 0,
-      "LatencyZone": "NY"
+      "GeolocationLongitude": 0
     }
   },
   {
@@ -5586,6 +5584,118 @@
       "GeolocationLatitude": 0,
       "GeolocationLongitude": 0,
       "LatencyZone": "NY"
+    }
+  },
+  {
+    "index": 311,
+    "value": {
+      "Id": 0,
+      "Type": 0,
+      "Name": "monitor",
+      "Value": "1.2.3.4",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0,
+      "MonitorType": 1
+    }
+  },
+  {
+    "index": 312,
+    "value": {
+      "Id": 0,
+      "Type": 0,
+      "Name": "monitor",
+      "Value": "1.2.3.4",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0,
+      "MonitorType": 2
+    }
+  },
+  {
+    "index": 313,
+    "value": {
+      "Id": 0,
+      "Type": 0,
+      "Name": "monitor",
+      "Value": "1.2.3.4",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0
+    }
+  },
+  {
+    "index": 314,
+    "value": {
+      "Id": 0,
+      "Type": 1,
+      "Name": "monitorv6",
+      "Value": "2607:f8b0:4006:820::2006",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0,
+      "MonitorType": 1
+    }
+  },
+  {
+    "index": 315,
+    "value": {
+      "Id": 0,
+      "Type": 2,
+      "Name": "monitorc",
+      "Value": "www.google.com",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0,
+      "MonitorType": 2
+    }
+  },
+  {
+    "index": 316,
+    "value": {
+      "Id": 0,
+      "Type": 2,
+      "Name": "monitorc",
+      "Value": "www.google.com",
+      "Disabled": false,
+      "Ttl": 300,
+      "Flags": 0,
+      "Priority": 0,
+      "Weight": 0,
+      "Port": 0,
+      "Tag": "",
+      "GeolocationLatitude": 0,
+      "GeolocationLongitude": 0
     }
   }
 ]

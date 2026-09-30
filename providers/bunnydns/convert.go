@@ -120,6 +120,17 @@ func fromRecordConfig(rc *models.RecordConfig) (*record, error) {
 		}
 	}
 
+	// Health monitoring applies to A, AAAA, and CNAME records.
+	if r.Type == recordTypeA || r.Type == recordTypeAAAA || r.Type == recordTypeCNAME {
+		if mtStr, ok := rc.Metadata[metaMonitorType]; ok {
+			mt, err := parseMonitorType(mtStr)
+			if err != nil {
+				return nil, err
+			}
+			r.MonitorType = mt
+		}
+	}
+
 	return &r, nil
 }
 
@@ -172,7 +183,9 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 	// Smart routing (geographic / latency) metadata only applies to A and AAAA records.
 	if r.Type == recordTypeA || r.Type == recordTypeAAAA {
 		if r.SmartRoutingType != smartRoutingNone {
-			rc.Metadata = make(map[string]string)
+			if rc.Metadata == nil {
+				rc.Metadata = make(map[string]string)
+			}
 			rc.Metadata[metaSmartRoutingType] = smartRoutingTypeToString(r.SmartRoutingType)
 
 			switch r.SmartRoutingType {
@@ -188,6 +201,16 @@ func toRecordConfig(dc *models.DomainConfig, r *record) (*models.RecordConfig, e
 					rc.Metadata[metaLatencyZone] = r.LatencyZone
 				}
 			}
+		}
+	}
+
+	// Health monitoring applies to A, AAAA, and CNAME records.
+	if r.Type == recordTypeA || r.Type == recordTypeAAAA || r.Type == recordTypeCNAME {
+		if r.MonitorType != monitorNone {
+			if rc.Metadata == nil {
+				rc.Metadata = make(map[string]string)
+			}
+			rc.Metadata[metaMonitorType] = monitorTypeToString(r.MonitorType)
 		}
 	}
 
@@ -315,6 +338,36 @@ func smartRoutingTypeToString(srt smartRoutingType) string {
 		return "latency"
 	case smartRoutingGeographic:
 		return "geographic"
+	default:
+		return "none"
+	}
+}
+
+var errInvalidMonitorType = fmt.Errorf("invalid %s: valid values are 'ping' and 'http'", metaMonitorType)
+
+func parseMonitorType(s string) (monitorType, error) {
+	switch strings.ToLower(s) {
+	case "", "none":
+		return monitorNone, nil
+	case "ping":
+		return monitorPing, nil
+	case "http":
+		return monitorHTTP, nil
+	case "monitor":
+		return monitorCustom, nil
+	default:
+		return monitorNone, errInvalidMonitorType
+	}
+}
+
+func monitorTypeToString(mt monitorType) string {
+	switch mt {
+	case monitorPing:
+		return "ping"
+	case monitorHTTP:
+		return "http"
+	case monitorCustom:
+		return "monitor"
 	default:
 		return "none"
 	}

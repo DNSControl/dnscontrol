@@ -291,3 +291,174 @@ func TestParseSmartRoutingType(t *testing.T) {
 		}
 	}
 }
+
+func TestFromRecordConfigMonitorPing(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "A", "1.2.3.4")
+	rc.Metadata = map[string]string{metaMonitorType: "ping"}
+
+	rec, err := fromRecordConfig(rc)
+	if err != nil {
+		t.Fatalf("fromRecordConfig returned error: %v", err)
+	}
+	if rec.MonitorType != monitorPing {
+		t.Fatalf("expected MonitorType=%d; got=%d", monitorPing, rec.MonitorType)
+	}
+}
+
+func TestFromRecordConfigMonitorHTTP(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "AAAA", "::1")
+	rc.Metadata = map[string]string{metaMonitorType: "http"}
+
+	rec, err := fromRecordConfig(rc)
+	if err != nil {
+		t.Fatalf("fromRecordConfig returned error: %v", err)
+	}
+	if rec.MonitorType != monitorHTTP {
+		t.Fatalf("expected MonitorType=%d; got=%d", monitorHTTP, rec.MonitorType)
+	}
+}
+
+func TestFromRecordConfigMonitorCNAME(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "CNAME", "target.example.com.")
+	rc.Metadata = map[string]string{metaMonitorType: "ping"}
+
+	rec, err := fromRecordConfig(rc)
+	if err != nil {
+		t.Fatalf("fromRecordConfig returned error: %v", err)
+	}
+	if rec.MonitorType != monitorPing {
+		t.Fatalf("expected MonitorType=%d; got=%d", monitorPing, rec.MonitorType)
+	}
+}
+
+func TestFromRecordConfigMonitorOnlyOnSupportedTypes(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "TXT", "text")
+	rc.Metadata = map[string]string{metaMonitorType: "ping"}
+
+	rec, err := fromRecordConfig(rc)
+	if err != nil {
+		t.Fatalf("fromRecordConfig returned error: %v", err)
+	}
+	if rec.MonitorType != monitorNone {
+		t.Fatalf("expected MonitorType=0 for TXT; got=%d", rec.MonitorType)
+	}
+}
+
+func TestFromRecordConfigInvalidMonitorType(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc := dc.MustNewRecordConfig("www", 300, "A", "1.2.3.4")
+	rc.Metadata = map[string]string{metaMonitorType: "invalid"}
+
+	_, err := fromRecordConfig(rc)
+	if err == nil {
+		t.Fatalf("expected error for invalid monitor type")
+	}
+}
+
+func TestToRecordConfigMonitorPing(t *testing.T) {
+	rec := &record{
+		Type:        recordTypeA,
+		Name:        "www",
+		Value:       "1.2.3.4",
+		TTL:         300,
+		MonitorType: monitorPing,
+	}
+
+	rc, err := toRecordConfig(models.MustNewDomainConfig("example.com"), rec)
+	if err != nil {
+		t.Fatalf("toRecordConfig returned error: %v", err)
+	}
+	if rc.Metadata[metaMonitorType] != "ping" {
+		t.Fatalf("expected metadata %s=ping; got=%q", metaMonitorType, rc.Metadata[metaMonitorType])
+	}
+}
+
+func TestToRecordConfigMonitorHTTP(t *testing.T) {
+	rec := &record{
+		Type:        recordTypeAAAA,
+		Name:        "www",
+		Value:       "::1",
+		TTL:         300,
+		MonitorType: monitorHTTP,
+	}
+
+	rc, err := toRecordConfig(models.MustNewDomainConfig("example.com"), rec)
+	if err != nil {
+		t.Fatalf("toRecordConfig returned error: %v", err)
+	}
+	if rc.Metadata[metaMonitorType] != "http" {
+		t.Fatalf("expected metadata %s=http; got=%q", metaMonitorType, rc.Metadata[metaMonitorType])
+	}
+}
+
+func TestToRecordConfigMonitorCNAME(t *testing.T) {
+	rec := &record{
+		Type:        recordTypeCNAME,
+		Name:        "www",
+		Value:       "target",
+		TTL:         300,
+		MonitorType: monitorPing,
+	}
+
+	rc, err := toRecordConfig(models.MustNewDomainConfig("example.com"), rec)
+	if err != nil {
+		t.Fatalf("toRecordConfig returned error: %v", err)
+	}
+	if rc.Metadata[metaMonitorType] != "ping" {
+		t.Fatalf("expected metadata %s=ping; got=%q", metaMonitorType, rc.Metadata[metaMonitorType])
+	}
+}
+
+func TestToRecordConfigNoMonitor(t *testing.T) {
+	rec := &record{
+		Type:  recordTypeA,
+		Name:  "www",
+		Value: "1.2.3.4",
+		TTL:   300,
+	}
+
+	rc, err := toRecordConfig(models.MustNewDomainConfig("example.com"), rec)
+	if err != nil {
+		t.Fatalf("toRecordConfig returned error: %v", err)
+	}
+	if _, ok := rc.Metadata[metaMonitorType]; ok {
+		t.Fatalf("expected no %s metadata for record without monitoring", metaMonitorType)
+	}
+}
+
+func TestParseMonitorType(t *testing.T) {
+	tests := []struct {
+		input string
+		want  monitorType
+		err   bool
+	}{
+		{"", monitorNone, false},
+		{"none", monitorNone, false},
+		{"ping", monitorPing, false},
+		{"PING", monitorPing, false},
+		{"http", monitorHTTP, false},
+		{"HTTP", monitorHTTP, false},
+		{"monitor", monitorCustom, false},
+		{"invalid", monitorNone, true},
+	}
+	for _, tt := range tests {
+		got, err := parseMonitorType(tt.input)
+		if tt.err {
+			if err == nil {
+				t.Errorf("parseMonitorType(%q) expected error; got nil", tt.input)
+			}
+			continue
+		}
+		if err != nil {
+			t.Errorf("parseMonitorType(%q) unexpected error: %v", tt.input, err)
+			continue
+		}
+		if got != tt.want {
+			t.Errorf("parseMonitorType(%q) expected %d; got %d", tt.input, tt.want, got)
+		}
+	}
+}

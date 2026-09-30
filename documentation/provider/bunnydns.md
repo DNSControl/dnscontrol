@@ -74,6 +74,17 @@ These metadata fields can be set on individual `A` or `AAAA` records:
 
 For more information, see the [Bunny DNS Smart Records documentation](https://docs.bunny.net/dns/records#smart-records).
 
+### Health monitoring metadata
+
+Bunny DNS provides built-in health monitoring for `A`, `AAAA`, and `CNAME` records. When monitoring is enabled, each IP is tested every 30 seconds from 3 regions around the world. In a record set, offline records are automatically removed from responses.
+
+- `bunny_monitor_type`: The monitoring type. Valid values are:
+  - `ping`: Sends 4 ICMP ping packets to the monitored IP. At least one packet must return successfully within 2500ms.
+  - `http`: Sends HTTP requests to the configured IP on port 80. The request must complete within 10 seconds and return a non-5xx status code.
+  - `none`: Disable monitoring (default; does not need to be specified).
+
+For more information, see the [Bunny DNS Monitoring documentation](https://docs.bunny.net/dns/records#health-monitoring).
+
 ### Example with geographic routing
 
 {% code title="dnsconfig.js" %}
@@ -105,6 +116,21 @@ D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
     A("www", "5.6.7.8", {
         bunny_smart_routing_type: "latency",
         bunny_latency_zone: "FRA",
+    }),
+);
+```
+{% endcode %}
+
+### Example with health monitoring
+
+{% code title="dnsconfig.js" %}
+```javascript
+D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+    A("www", "1.2.3.4", {
+        bunny_monitor_type: "ping",
+    }),
+    A("www", "5.6.7.8", {
+        bunny_monitor_type: "http",
     }),
 );
 ```

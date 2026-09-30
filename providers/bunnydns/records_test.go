@@ -39,11 +39,28 @@ func TestComparableFuncSmartRoutingMetadata(t *testing.T) {
 			metadata: map[string]string{"unrelated": "ignored"},
 		},
 		{
-			name:    "unsupported record type",
+			name:    "monitored A",
+			recType: "A",
+			metadata: map[string]string{
+				metaMonitorType: "ping",
+			},
+			want: `{"bunny_monitor_type":"ping"}`,
+		},
+		{
+			name:    "monitored CNAME",
 			recType: "CNAME",
+			metadata: map[string]string{
+				metaMonitorType: "http",
+			},
+			want: `{"bunny_monitor_type":"http"}`,
+		},
+		{
+			name:    "unsupported record type",
+			recType: "TXT",
 			metadata: map[string]string{
 				metaSmartRoutingType: "latency",
 				metaLatencyZone:      "NY",
+				metaMonitorType:      "ping",
 			},
 		},
 		{

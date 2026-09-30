@@ -2407,6 +2407,28 @@ func makeTests() []*TestGroup {
 			})),
 		),
 
+		testgroup("Bunny DNS health monitoring",
+			only("BUNNY_DNS"),
+			tc("Create monitored A", withMeta(a("monitor", "1.2.3.4"), map[string]string{
+				"bunny_monitor_type": "ping",
+			})),
+			tc("Ignore unrelated metadata", withMeta(a("monitor", "1.2.3.4"), map[string]string{
+				"bunny_monitor_type": "ping",
+				"unrelated":          "ignored",
+			})).ExpectNoChanges(),
+			tc("Change monitor type", withMeta(a("monitor", "1.2.3.4"), map[string]string{
+				"bunny_monitor_type": "http",
+			})),
+			tc("Disable monitoring", a("monitor", "1.2.3.4")),
+			tc("Create monitored AAAA", withMeta(aaaa("monitorv6", "2607:f8b0:4006:820::2006"), map[string]string{
+				"bunny_monitor_type": "ping",
+			})),
+			tc("Create monitored CNAME", withMeta(cname("monitorc", "www.google.com."), map[string]string{
+				"bunny_monitor_type": "http",
+			})),
+			tc("Disable CNAME monitoring", cname("monitorc", "www.google.com.")),
+		),
+
 		testgroup("Bunny DNS Pull Zone",
 			only("BUNNY_DNS"),
 			tc("Create PZ", bunnyPullZone("@", "6214614")),

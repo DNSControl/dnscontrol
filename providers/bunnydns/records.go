@@ -157,12 +157,18 @@ func (b *bunnydnsProvider) mkDeleteCorrection(zoneID int64, oldRec *models.Recor
 }
 
 func comparableFunc(rec *models.RecordConfig) string {
-	if rec.Type != "A" && rec.Type != "AAAA" {
+	var metadataKeys []string
+	switch rec.Type {
+	case "A", "AAAA":
+		metadataKeys = []string{metaSmartRoutingType, metaGeolocationLatitude, metaGeolocationLongitude, metaLatencyZone, metaMonitorType}
+	case "CNAME":
+		metadataKeys = []string{metaMonitorType}
+	default:
 		return ""
 	}
 
 	metadata := make(map[string]string)
-	for _, key := range []string{metaSmartRoutingType, metaGeolocationLatitude, metaGeolocationLongitude, metaLatencyZone} {
+	for _, key := range metadataKeys {
 		if value, ok := rec.Metadata[key]; ok {
 			metadata[key] = value
 		}

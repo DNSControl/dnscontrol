@@ -45,6 +45,7 @@ type record struct {
 	GeolocationLatitude  *float64         `json:"GeolocationLatitude,omitempty"`
 	GeolocationLongitude *float64         `json:"GeolocationLongitude,omitempty"`
 	LatencyZone          string           `json:"LatencyZone,omitempty"`
+	MonitorType          monitorType      `json:"MonitorType,omitempty"`
 }
 
 type smartRoutingType int
@@ -53,6 +54,15 @@ const (
 	smartRoutingNone       smartRoutingType = 0
 	smartRoutingLatency    smartRoutingType = 1
 	smartRoutingGeographic smartRoutingType = 2
+)
+
+type monitorType int
+
+const (
+	monitorNone   monitorType = 0
+	monitorPing   monitorType = 1
+	monitorHTTP   monitorType = 2
+	monitorCustom monitorType = 3
 )
 
 type listZonesResponse struct {
@@ -145,18 +155,37 @@ func (b *bunnydnsProvider) getAllRecords(zoneID int64) ([]*record, error) {
 
 func (b *bunnydnsProvider) createRecord(zoneID int64, r *record) error {
 	url := fmt.Sprintf("/dnszone/%d/records", zoneID)
-	return b.request("PUT", url, nil, r, nil, []int{http.StatusCreated})
+	created := &record{}
+	if err := b.request("PUT", url, nil, r, created, []int{http.StatusCreated}); err != nil {
+		return err
+	}
+
+	// Bunny ignores MonitorType when creating a CNAME; apply it with an update.
+	if r.Type == recordTypeCNAME && r.MonitorType != monitorNone {
+		return b.modifyRecord(zoneID, created.ID, r)
+	}
+
+	return nil
 }
 
 func (b *bunnydnsProvider) modifyRecord(zoneID int64, recordID int64, r *record) error {
 	url := fmt.Sprintf("/dnszone/%d/records/%d", zoneID, recordID)
 	body := any(r)
-	if r.Type == recordTypeA || r.Type == recordTypeAAAA {
-		// Updating an A/AAAA record to disable smart routing must send type 0 explicitly.
+	switch r.Type {
+	case recordTypeA, recordTypeAAAA:
+		// Updating an A/AAAA record to disable smart routing or monitoring must
+		// send the fields with 0 explicitly; omitted fields keep their old value.
 		body = struct {
 			*record
 			SmartRoutingType smartRoutingType `json:"SmartRoutingType"`
-		}{r, r.SmartRoutingType}
+			MonitorType      monitorType      `json:"MonitorType"`
+		}{r, r.SmartRoutingType, r.MonitorType}
+	case recordTypeCNAME:
+		// Updating a CNAME to disable monitoring must send 0 explicitly.
+		body = struct {
+			*record
+			MonitorType monitorType `json:"MonitorType"`
+		}{r, r.MonitorType}
 	}
 	return b.request("POST", url, nil, body, nil, []int{http.StatusNoContent})
 }

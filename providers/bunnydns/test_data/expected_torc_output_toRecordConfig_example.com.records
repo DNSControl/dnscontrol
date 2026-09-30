@@ -1,4 +1,4 @@
-1	smartv6 300 IN AAAA 2607:f8b0:4006:820::2006 ; bunny_latency_zone="NY" bunny_smart_routing_type="latency"
+1	monitorc 300 IN CNAME www.google.com.
 2	testa 300 IN A 1.1.1.1
 3	testa 300 IN A 3.3.3.3
 4	@ 300 IN A 2.2.2.2
@@ -308,3 +308,9 @@
 308	smart 300 IN A 1.2.3.4 ; bunny_geolocation_latitude="40.7128" bunny_geolocation_longitude="-74.006" bunny_smart_routing_type="geographic"
 309	smart 300 IN A 1.2.3.4 ; bunny_geolocation_latitude="48.8566" bunny_geolocation_longitude="2.3522" bunny_smart_routing_type="geographic"
 310	smartv6 300 IN AAAA 2607:f8b0:4006:820::2006 ; bunny_latency_zone="NY" bunny_smart_routing_type="latency"
+311	monitor 300 IN A 1.2.3.4 ; bunny_monitor_type="ping"
+312	monitor 300 IN A 1.2.3.4 ; bunny_monitor_type="http"
+313	monitor 300 IN A 1.2.3.4
+314	monitorv6 300 IN AAAA 2607:f8b0:4006:820::2006 ; bunny_monitor_type="ping"
+315	monitorc 300 IN CNAME www.google.com. ; bunny_monitor_type="http"
+316	monitorc 300 IN CNAME www.google.com.
