@@ -91,7 +91,7 @@ func TestSpotChecks(t *testing.T) {
 		{"MB", "Mb", `dns:"cname"`, rdatafields.KindOther},
 		{"PX", "Map822", `dns:"name"`, rdatafields.KindOther},
 	} {
-		f := reflect.StructField{Name: tc.field, Tag: reflect.StructTag(tc.tag), Type: reflect.TypeOf("")}
+		f := reflect.StructField{Name: tc.field, Tag: reflect.StructTag(tc.tag), Type: reflect.TypeFor[string]()}
 		if got := rdatafields.Classify(tc.structName, f); got != tc.want {
 			t.Errorf("Classify(%s.%s, %s) = %v, want %v", tc.structName, tc.field, tc.tag, got, tc.want)
 		}
