@@ -6,60 +6,61 @@ import (
 	"slices"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
-// normalizeRDATA canonicalizes hostname and hex fields in rc.rdata for comparison.
-// Constructors resolve relative hostnames before SetRDATA calls this method.
+// normalizeRDATA canonicalizes hostname and hex fields in rd for comparison.
+// Constructors resolve relative hostnames before SetRDATA calls this function.
 // Hostnames are already ASCII: makers convert IDNA, and provider imports supply ASCII.
 // Mailboxes, opaque names, and unclassified fields are preserved.
-func (rc *RecordConfig) normalizeRDATA() {
-	switch v := rc.rdata.(type) {
+func normalizeRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
+	switch v := rd.(type) {
 	case dnsrdatav2.TXT:
 		if !txtProperlySegmented(v.Txt) {
 			v.Txt = TXTSegmented(v)
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.AFSDB:
 		if normalized := strings.ToLower(v.Hostname); normalized != v.Hostname {
 			v.Hostname = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case privatetypesrdata.AKAMAICDN:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case privatetypesrdata.AKAMAITLC:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case privatetypesrdata.ALIAS:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.DS:
 		if normalized := strings.ToLower(v.Digest); normalized != v.Digest {
 			v.Digest = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.CNAME:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.DNAME:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.DSYNC:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.HIP:
 		clonedRendezvousServers := false
@@ -73,82 +74,83 @@ func (rc *RecordConfig) normalizeRDATA() {
 			}
 		}
 		if clonedRendezvousServers {
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.SVCB:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.KX:
 		if normalized := strings.ToLower(v.Exchanger); normalized != v.Exchanger {
 			v.Exchanger = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.LP:
 		if normalized := strings.ToLower(v.Fqdn); normalized != v.Fqdn {
 			v.Fqdn = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.MX:
 		if normalized := strings.ToLower(v.Mx); normalized != v.Mx {
 			v.Mx = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.NAPTR:
 		if normalized := strings.ToLower(v.Replacement); normalized != v.Replacement {
 			v.Replacement = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.NS:
 		if normalized := strings.ToLower(v.Ns); normalized != v.Ns {
 			v.Ns = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.PTR:
 		if normalized := strings.ToLower(v.Ptr); normalized != v.Ptr {
 			v.Ptr = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case privatetypesrdata.R53ALIAS:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.RT:
 		if normalized := strings.ToLower(v.Host); normalized != v.Host {
 			v.Host = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.SMIMEA:
 		if normalized := strings.ToLower(v.Certificate); normalized != v.Certificate {
 			v.Certificate = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.SOA:
 		if normalized := strings.ToLower(v.Ns); normalized != v.Ns {
 			v.Ns = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.SRV:
 		if normalized := strings.ToLower(v.Target); normalized != v.Target {
 			v.Target = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.SSHFP:
 		if normalized := strings.ToLower(v.FingerPrint); normalized != v.FingerPrint {
 			v.FingerPrint = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.TLSA:
 		if normalized := strings.ToLower(v.Certificate); normalized != v.Certificate {
 			v.Certificate = normalized
-			rc.rdata = v
+			rd = v
 		}
 	case dnsrdatav2.ZONEMD:
 		if normalized := strings.ToLower(v.Digest); normalized != v.Digest {
 			v.Digest = normalized
-			rc.rdata = v
+			rd = v
 		}
 	}
+	return rd
 }

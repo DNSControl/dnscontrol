@@ -8,7 +8,7 @@
 // tag, mostly in pkg/privatetypes/rdata).
 //
 // build/normalizergen uses Fields to generate
-// models.RecordConfig.normalizeRDATA without runtime reflection.
+// models.normalizeRDATA without runtime reflection.
 package rdatafields
 
 import (

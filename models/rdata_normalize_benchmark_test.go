@@ -25,12 +25,10 @@ func BenchmarkNormalizeRDATA(b *testing.B) {
 		{"hip/changed", dnsrdatav2.HIP{RendezvousServers: []string{"one.example.", "TWO.Example.", "THREE.Example."}}},
 	} {
 		b.Run(tc.name, func(b *testing.B) {
-			var rc RecordConfig
 			b.ReportAllocs()
 			for b.Loop() {
-				// Reset every time so the changed cases keep measuring conversion.
-				rc.rdata = tc.input
-				rc.normalizeRDATA()
+				// Use the original input every time so the changed cases keep measuring conversion.
+				_ = normalizeRDATA(tc.input)
 			}
 		})
 	}

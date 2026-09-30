@@ -37,20 +37,21 @@ import (
 	"slices"
 	"strings"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
-// normalizeRDATA canonicalizes hostname and hex fields in rc.rdata for comparison.
-// Constructors resolve relative hostnames before SetRDATA calls this method.
+// normalizeRDATA canonicalizes hostname and hex fields in rd for comparison.
+// Constructors resolve relative hostnames before SetRDATA calls this function.
 // Hostnames are already ASCII: makers convert IDNA, and provider imports supply ASCII.
 // Mailboxes, opaque names, and unclassified fields are preserved.
-func (rc *RecordConfig) normalizeRDATA() {
-	switch v := rc.rdata.(type) {
+func normalizeRDATA(rd dnsv2.RDATA) dnsv2.RDATA {
+	switch v := rd.(type) {
 	case dnsrdatav2.TXT:
 		if !txtProperlySegmented(v.Txt) {
 			v.Txt = TXTSegmented(v)
-			rc.rdata = v
+			rd = v
 		}
 `)
 
@@ -95,13 +96,13 @@ func (rc *RecordConfig) normalizeRDATA() {
 			}
 		}
 		if cloned%[1]s {
-			rc.rdata = v
+			rd = v
 		}
 `, field.Name)
 			} else {
 				fmt.Fprintf(&body, `		if normalized := strings.ToLower(v.%[1]s); normalized != v.%[1]s {
 			v.%[1]s = normalized
-			rc.rdata = v
+			rd = v
 		}
 `, field.Name)
 			}
@@ -121,6 +122,6 @@ func (rc *RecordConfig) normalizeRDATA() {
 		}
 		fmt.Fprintf(&buf, "\tcase %s.%s:\n%s", pkg, rt.Name(), body.String())
 	}
-	buf.WriteString("\t}\n}\n")
+	buf.WriteString("\t}\n\treturn rd\n}\n")
 	return format.Source(buf.Bytes())
 }

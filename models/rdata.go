@@ -17,9 +17,8 @@ import (
 
 // SetRDATA is a setter for RecordConfig.rdata.
 func (rc *RecordConfig) SetRDATA(rd dnsv2.RDATA) {
-	rc.rdata = rd
+	rc.rdata = normalizeRDATA(rd)
 	rc.validateRDATA()
-	rc.normalizeRDATA()
 	rc.generateComparableV3()
 }
 
@@ -56,9 +55,8 @@ func myNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 	if err != nil {
 		return nil, fmt.Errorf("NewData(%d, %q, %q) failed: %w", typeNum, contents, origin+".", err)
 	}
-	// Not normalized here. normalizeRDATA is a method on RecordConfig and
-	// there is no RecordConfig yet at this point. Every caller passes the
-	// result to newRecordConfigHelper, whose SetRDATA normalizes it.
+	// Every caller passes the result to newRecordConfigHelper, whose
+	// SetRDATA normalizes it.
 	return rd2, nil
 }
 

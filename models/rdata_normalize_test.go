@@ -162,10 +162,8 @@ func TestRDATANormalizationUnchangedAllocations(t *testing.T) {
 		{"nil slice", dnsrdatav2.HIP{}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			var rc RecordConfig
 			allocs := testing.AllocsPerRun(100, func() {
-				rc.rdata = tc.input
-				rc.normalizeRDATA()
+				_ = normalizeRDATA(tc.input)
 			})
 			if allocs != 0 {
 				t.Errorf("unchanged RDATA allocated %g times, want 0", allocs)
