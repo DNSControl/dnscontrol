@@ -44,20 +44,18 @@ func (r *route53Provider) SetConversionObserver(observer providers.ConversionObs
 	r.observer = observer
 }
 
-func newRoute53Reg(conf map[string]string) (providers.Registrar, error) {
+func (r *route53Provider) Initialize(conf map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
+	opts := options.WithDefaults()
+	r.observer = opts.ConversionObserver
 	// AWS European Sovereign Cloud (aws.eu) does not support registering domains, at least not yet.
 	// Let us assume only the global AWS is capable of registering domains currently.
-	if conf["Region"] != "" && conf["Region"] != "us-east-1" {
-		return nil, errors.New("domain register endpoint is only supported on the global AWS region us-east-1")
+	if opts.RequestedRole == providers.KindRegistrar && conf["Region"] != "" && conf["Region"] != "us-east-1" {
+		return errors.New("domain register endpoint is only supported on the global AWS region us-east-1")
 	}
-	return newRoute53(conf, nil)
+	return r.initializeAWS(conf)
 }
 
-func newRoute53Dsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newRoute53(conf, metadata)
-}
-
-func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error) {
+func (r *route53Provider) initializeAWS(m map[string]string) error {
 	optFns := []func(*config.LoadOptions) error{}
 
 	if m["Region"] != "" {
@@ -78,7 +76,7 @@ func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error
 
 	profile := m["Profile"]
 	if profile != "" && (keyID != "" || secretKey != "") {
-		return nil, errors.New("route53: cannot set both Profile and KeyId/SecretKey")
+		return errors.New("route53: cannot set both Profile and KeyId/SecretKey")
 	}
 	if profile != "" {
 		optFns = append(optFns, config.WithSharedConfigProfile(profile))
@@ -86,7 +84,7 @@ func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error
 
 	config, err := config.LoadDefaultConfig(context.Background(), optFns...)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if roleArn != "" {
@@ -108,18 +106,12 @@ func newRoute53(m map[string]string, _ json.RawMessage) (*route53Provider, error
 		printer.Printf("ROUTE53 DelegationSet %s configured\n", val)
 		dls = aws.String(val)
 	}
-	api := &route53Provider{
-		client:        r53.NewFromConfig(config),
-		registrar:     r53d.NewFromConfig(config),
-		delegationSet: dls,
-		zonesByDomain: make(map[string]r53Types.HostedZone),
-		zonesByID:     make(map[string]r53Types.HostedZone),
-	}
-	err = api.getZones()
-	if err != nil {
-		return nil, err
-	}
-	return api, nil
+	r.client = r53.NewFromConfig(config)
+	r.registrar = r53d.NewFromConfig(config)
+	r.delegationSet = dls
+	r.zonesByDomain = make(map[string]r53Types.HostedZone)
+	r.zonesByID = make(map[string]r53Types.HostedZone)
+	return r.getZones()
 }
 
 var features = providers.DocumentationNotes{
@@ -146,21 +138,15 @@ var features = providers.DocumentationNotes{
 func init() {
 	const providerName = "ROUTE53"
 	const providerMaintainer = "@tresni"
-	fns := providers.DspFuncs{
-		Initializer:   newRoute53Dsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newRoute53Reg)
 	providers.RegisterCustomRecordType("R53_ALIAS", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Amazon Route 53",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/route53",
-		PortalURL:   "https://console.aws.amazon.com/route53/",
-		Notes:       "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
-		Fields: []providers.CredsField{
+	providers.Register[*route53Provider](providerName, providers.Definition{
+		FriendlyName: "Amazon Route 53",
+		Maintainer:   providerMaintainer,
+		Features:     features,
+		DocsURL:      "https://docs.dnscontrol.org/provider/route53",
+		PortalURL:    "https://console.aws.amazon.com/route53/",
+		Notes:        "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
+		CredFields: []providers.CredsField{
 			{
 				Key:    "Region",
 				Label:  "AWS Region to use for Route 53 control plane",
