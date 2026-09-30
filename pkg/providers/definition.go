@@ -27,19 +27,35 @@ type RecordAuditingProvider interface {
 type Initializer func(map[string]string, json.RawMessage, *CreateOptions) (any, error)
 
 // Definition describes a provider implementation, never a configured account.
-// Register fills the derived fields from the implementation's method set.
+// providers.Register is the main entry point. It registers the provider, generates
+// the derived fields, and cross-checks for errors.
 // Definitions and their nested metadata are read-only after registration.
 type Definition struct {
+	// FriendlyName is the brand name ("Google", not "GCLOUD")
 	FriendlyName string
-	Aliases      []string
-	Maintainer   string
-	DefaultTTL   uint32
 
+	// Aliases (optional) is an optional list of aliases. For example, if
+	// we rename GCLOUD to GOOGLEDNS, we would make GCLOUD an alias to
+	// support legacy configurations.
+	Aliases []string
+
+	// Maintainer is the github username of the maintainer.
+	Maintainer string
+
+	// DefaultTTL (optional) minimum TTL when `get-zone` writes .js files
+	DefaultTTL uint32
+
+	// CredFields is a description of the creds.json fields for this provider. Used by "init".
 	CredFields []CredsField
-	DocsURL    string
-	PortalURL  string
-	Notes      string
-	PostWrite  func(map[string]string) error
+
+	// DocsURL see CredsMetadata
+	DocsURL string
+	// PortalURL see CredsMetadata
+	PortalURL string
+	// Notes CredsMetadata
+	Notes string
+	// PostWrite CredsMetadata
+	PostWrite func(map[string]string) error
 
 	// Nil capability notes fall back to Features. Explicit notes take precedence.
 	CanAutoDNSSEC          *DocumentationNote
@@ -50,7 +66,7 @@ type Definition struct {
 	RecordIdentity         RecordIdentityFunc
 	Features               DocumentationNotes
 
-	// Derived by Register; providers must leave these fields unset.
+	// Calculated at providers.Register time. Providers must leave these fields unset.
 	TypeName           string
 	ImplementationType reflect.Type
 	Kind               ProviderKind
@@ -76,19 +92,24 @@ func Register[T InitializableProvider](name string, definition Definition) {
 	if typ.Kind() != reflect.Pointer || typ.Elem().Kind() != reflect.Struct {
 		panic(fmt.Sprintf("provider %q: implementation must be a pointer to a concrete struct, got %v", name, typ))
 	}
+	// Validate FriendlyName
 	if strings.TrimSpace(definition.FriendlyName) == "" {
 		panic(fmt.Sprintf("provider %q: FriendlyName is required", name))
 	}
+	// Validate Features
 	for capability, note := range definition.Features {
 		if note == nil {
 			panic(fmt.Sprintf("provider %q: Features[%v] must not be nil", name, capability))
 		}
 	}
+	// Make sure caller didn't set fields that are generated.
 	if definition.TypeName != "" || definition.ImplementationType != nil || definition.Kind != 0 ||
 		definition.Initializer != nil || definition.RecordAuditor != nil || definition.CanGetZones ||
 		definition.DocCreateDomains || definition.DerivedFeatures != nil {
 		panic(fmt.Sprintf("provider %q: derived definition fields must be left unset", name))
 	}
+
+	// Verify no duplicate/invalid names.
 	names := append([]string{name}, definition.Aliases...)
 	seen := map[string]bool{}
 	for _, n := range names {
