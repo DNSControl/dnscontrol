@@ -89,7 +89,7 @@ type jokerProvider struct {
 }
 
 // newJoker creates a new Joker DMAPI provider.
-func newJoker(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newJoker(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	api := &jokerProvider{
 		apiURL:     "https://dmapi.joker.com/request/",
 		httpClient: &http.Client{Timeout: 30 * time.Second},

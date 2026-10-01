@@ -107,7 +107,7 @@ func newRegistrar(m map[string]string) (providers.Registrar, error) {
 }
 
 // NewGidinet creates a new Gidinet DNS provider.
-func NewGidinet(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewGidinet(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["username"] == "" {
 		return nil, errors.New("missing Gidinet username")
 	}

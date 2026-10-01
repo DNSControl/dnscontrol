@@ -66,7 +66,7 @@ var defaultNS = []string{
 }
 
 // NewProvider initializes a Vultr DNSServiceProvider.
-func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewProvider(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	token := m["token"]
 	if token == "" {
 		return nil, errors.New("missing Vultr API token")

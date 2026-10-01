@@ -227,9 +227,9 @@ func TestProviderConversionGuide(t *testing.T) {
 	guide, err := os.ReadFile("../documentation/getting-started/converting-dnsconfig.md")
 	require.NoError(t, err)
 	examples := regexp.MustCompile("(?s)```javascript\\n(.*?)```").FindAllStringSubmatch(string(guide), -1)
-	require.Len(t, examples, 4, "two complete before/after pairs")
+	require.Len(t, examples, 2, "one complete before/after pair")
 	credsPath := filepath.Join(t.TempDir(), "creds.json")
-	require.NoError(t, os.WriteFile(credsPath, []byte(`{"dnsimple":{"TYPE":"DNSIMPLE"}}`), 0o600))
+	require.NoError(t, os.WriteFile(credsPath, []byte(`{"gandi_main":{"TYPE":"GANDI_V5"}}`), 0o600))
 	creds, err := credsfile.LoadProviderConfigs(credsPath)
 	require.NoError(t, err)
 	for i := 0; i < len(examples); i += 2 {

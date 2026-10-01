@@ -37,7 +37,7 @@ func newCloudns(m map[string]string) (*cloudnsProvider, error) {
 	return c, nil
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	return newCloudns(conf)
 }
 

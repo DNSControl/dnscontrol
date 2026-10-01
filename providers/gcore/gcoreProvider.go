@@ -32,7 +32,7 @@ func (c *gcoreProvider) SetConversionObserver(observer providers.ConversionObser
 }
 
 // NewGCore creates the provider.
-func NewGCore(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewGCore(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["api-key"] == "" {
 		return nil, errors.New("missing G-Core API key")
 	}
