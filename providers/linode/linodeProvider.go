@@ -62,7 +62,7 @@ var defaultNameServerNames = []string{
 }
 
 // NewLinode creates the provider.
-func NewLinode(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewLinode(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["token"] == "" {
 		return nil, errors.New("missing Linode token")
 	}

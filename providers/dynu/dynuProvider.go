@@ -58,7 +58,7 @@ func init() {
 }
 
 // New creates a Dynu provider from credentials.
-func New(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func New(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	apiKey := m["api_key"]
 	if apiKey == "" {
 		return nil, errors.New("missing Dynu API key")
