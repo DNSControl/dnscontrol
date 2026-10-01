@@ -36,34 +36,6 @@ import (
 // directory.
 const defaultZonesDir = "zones"
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Can(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDNSKEY:           providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRP:               providers.Can(),
-	providers.CanUseSMIMEA:           providers.Can(),
-	providers.CanUseSOA:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
 func (c *bindProvider) Initialize(config map[string]string, providermeta json.RawMessage, _ *providers.CreateOptions) error {
 	// config -- the key/values from creds.json
 	// meta -- the json blob from NewReq('name', 'TYPE', meta)
@@ -103,14 +75,38 @@ func (c *bindProvider) Initialize(config map[string]string, providermeta json.Ra
 }
 
 func init() {
-	const providerName = "BIND"
-	const providerMaintainer = "@TomOnTime"
-	providers.Register[*bindProvider](providerName, providers.Definition{
+	providers.Register[*bindProvider]("BIND", providers.Definition{
 		FriendlyName: "ISC BIND",
-		Maintainer:   providerMaintainer,
-		Features:     features,
-		DocsURL:      "https://docs.dnscontrol.org/provider/bind",
-		Notes:        "BIND writes zone files to a local directory; no API credentials are needed.",
+		Maintainer:   "@TomOnTime",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Can(),
+			providers.CanUseDNAME:            providers.Can(),
+			providers.CanUseDNSKEY:           providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseRP:               providers.Can(),
+			providers.CanUseSMIMEA:           providers.Can(),
+			providers.CanUseSOA:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Can(),
+		},
+		DocsURL: "https://docs.dnscontrol.org/provider/bind",
+		Notes:   "BIND writes zone files to a local directory; no API credentials are needed.",
 		CredFields: []providers.CredsField{
 			{
 				Key:     "directory",

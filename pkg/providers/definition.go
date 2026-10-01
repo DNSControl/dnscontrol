@@ -35,7 +35,7 @@ type Definition struct {
 	FriendlyName string
 
 	// Aliases (optional) is an optional list of aliases. For example, if
-	// we rename GCLOUD to GOOGLEDNS, we would make GCLOUD an alias to
+	// we rename CLOUDFLAREAPI to CLOUDFLARE, we would make CLOUDFLAREAPI an alias to
 	// support legacy configurations.
 	Aliases []string
 
@@ -224,6 +224,7 @@ func AllDefinitions() []*Definition {
 	names := slices.Sorted(maps.Keys(definitions))
 	result := make([]*Definition, 0, len(names))
 	for _, name := range names {
+		// Only copy the canonical item. Not aliases.
 		if def := definitions[name]; name == def.TypeName {
 			result = append(result, def)
 		}
@@ -233,9 +234,14 @@ func AllDefinitions() []*Definition {
 
 func definitionCredsMetadata(def *Definition) CredsMetadata {
 	return CredsMetadata{
-		TypeName: def.TypeName, DisplayName: def.FriendlyName, Kind: def.Kind,
-		DocsURL: def.DocsURL, PortalURL: def.PortalURL, Notes: def.Notes,
-		Fields: def.CredFields, PostWrite: def.PostWrite,
+		TypeName:    def.TypeName,
+		DisplayName: def.FriendlyName,
+		Kind:        def.Kind,
+		DocsURL:     def.DocsURL,
+		PortalURL:   def.PortalURL,
+		Notes:       def.Notes,
+		Fields:      def.CredFields,
+		PostWrite:   def.PostWrite,
 	}
 }
 

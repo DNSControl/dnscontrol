@@ -114,38 +114,35 @@ func (r *route53Provider) initializeAWS(m map[string]string) error {
 	return r.getZones()
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Cannot("R53 does not provide a generic ALIAS functionality. Use R53_ALIAS instead."),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRoute53Alias:     providers.Can(),
-	providers.CanUseSOA:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
 func init() {
 	const providerName = "ROUTE53"
-	const providerMaintainer = "@tresni"
 	providers.RegisterCustomRecordType("R53_ALIAS", providerName, "")
 	providers.Register[*route53Provider](providerName, providers.Definition{
 		FriendlyName: "Amazon Route 53",
-		Maintainer:   providerMaintainer,
-		Features:     features,
-		DocsURL:      "https://docs.dnscontrol.org/provider/route53",
-		PortalURL:    "https://console.aws.amazon.com/route53/",
-		Notes:        "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
+		Maintainer:   "@tresni",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Cannot("R53 does not provide a generic ALIAS functionality. Use R53_ALIAS instead."),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseRoute53Alias:     providers.Can(),
+			providers.CanUseSOA:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Can(),
+		},
+		DocsURL:   "https://docs.dnscontrol.org/provider/route53",
+		PortalURL: "https://console.aws.amazon.com/route53/",
+		Notes:     "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",
 		CredFields: []providers.CredsField{
 			{
 				Key:    "Region",

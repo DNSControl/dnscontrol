@@ -12,7 +12,7 @@ func TestRegisteredDefinition(t *testing.T) {
 	if !ok || def.Kind != providers.KindDNS|providers.KindRegistrar || !def.CanGetZones || def.DocCreateDomains {
 		t.Fatalf("DNSimple definition = %+v", def)
 	}
-	if !reflect.DeepEqual(def.DerivedFeatures, features) {
+	if !reflect.DeepEqual(def.DerivedFeatures, def.Features) {
 		t.Fatal("migration changed legacy capabilities")
 	}
 	if errors := providers.AuditRecords("DNSIMPLE", nil); len(errors) != 0 {

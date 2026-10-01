@@ -15,7 +15,7 @@ func TestRegisteredDefinition(t *testing.T) {
 	if !ok || def.Kind != providers.KindDNS || !def.CanGetZones || !def.DocCreateDomains {
 		t.Fatalf("BIND definition = %+v", def)
 	}
-	if !reflect.DeepEqual(def.DerivedFeatures, features) {
+	if !reflect.DeepEqual(def.DerivedFeatures, def.Features) {
 		t.Fatal("migration changed legacy capabilities or documentation notes")
 	}
 	if errors := providers.AuditRecords("BIND", nil); len(errors) != 0 {

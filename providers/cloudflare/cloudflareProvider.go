@@ -44,40 +44,37 @@ Domain level metadata available:
    - ip_conversions
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can("CF automatically flattens CNAME records into A records dynamically"),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot("Cloudflare will not work well in situations where it is not the only DNS server"),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
 func init() {
 	const providerName = "CLOUDFLAREAPI"
-	const providerMaintainer = "@tresni"
 	providers.RegisterCustomRecordType("CF_WORKER_ROUTE", providerName, "")
 	providers.Register[*cloudflareProvider](providerName, providers.Definition{
 		FriendlyName: "Cloudflare",
-		Maintainer:   providerMaintainer,
-		Features:     features,
-		DocsURL:      "https://docs.dnscontrol.org/provider/cloudflareapi",
-		PortalURL:    "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
-		Notes:        "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
+		Maintainer:   "@tresni",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can("CF automatically flattens CNAME records into A records dynamically"),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot("Cloudflare will not work well in situations where it is not the only DNS server"),
+			providers.DocOfficiallySupported: providers.Can(),
+		},
+		DocsURL:   "https://docs.dnscontrol.org/provider/cloudflareapi",
+		PortalURL: "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
+		Notes:     "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
 		CredFields: []providers.CredsField{
 			{
 				Key:      "_authMethod",
