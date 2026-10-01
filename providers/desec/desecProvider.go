@@ -20,7 +20,7 @@ Info required in `creds.json`:
 */
 
 // NewDeSec creates the provider.
-func NewDeSec(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewDeSec(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	c := &desecProvider{}
 	c.token = strings.TrimSpace(m["auth-token"])
 	if c.token == "" {

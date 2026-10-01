@@ -79,7 +79,7 @@ type domainVersionInfo struct {
 	maxTTL      uint32
 }
 
-func newAliDNSDsp(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newAliDNSDsp(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	accessKeyID := config["access_key_id"]
 	if accessKeyID == "" {
 		return nil, errors.New("creds.json: access_key_id must not be empty")

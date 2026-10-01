@@ -81,7 +81,7 @@ func init() {
 	})
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if conf["keyID"] == "" {
 		return nil, errors.New("missing Mythic Beasts auth keyID")
 	}

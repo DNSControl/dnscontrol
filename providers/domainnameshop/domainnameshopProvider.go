@@ -60,7 +60,7 @@ func init() {
 }
 
 // newDomainNameShopProvider creates a Domainnameshop specific DNS provider.
-func newDomainNameShopProvider(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newDomainNameShopProvider(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if conf["token"] == "" {
 		return nil, errors.New("no Domainnameshop token provided")
 	} else if conf["secret"] == "" {

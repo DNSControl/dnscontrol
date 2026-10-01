@@ -122,7 +122,7 @@ func newReg(conf map[string]string) (providers.Registrar, error) {
 	return newProvider(conf, nil)
 }
 
-func newProvider(m map[string]string, metadata json.RawMessage) (*opensrsProvider, error) {
+func newProvider(m map[string]string, _ json.RawMessage) (*opensrsProvider, error) {
 	api := &opensrsProvider{}
 	api.APIKey = m["apikey"]
 

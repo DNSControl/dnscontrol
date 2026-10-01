@@ -90,7 +90,7 @@ func (l *luadnsProvider) SetConversionObserver(observer providers.ConversionObse
 }
 
 // NewLuaDNS creates the provider.
-func NewLuaDNS(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewLuaDNS(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["email"] == "" || m["apikey"] == "" {
 		return nil, errors.New("missing LuaDNS email or apikey")
 	}

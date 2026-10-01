@@ -45,7 +45,7 @@ type netbirdProvider struct {
 }
 
 // NewNetbird creates a NetBird-specific DNS provider.
-func NewNetbird(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewNetbird(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["token"] == "" {
 		return nil, errors.New("no NetBird token provided")
 	}

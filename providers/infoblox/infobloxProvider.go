@@ -36,7 +36,7 @@ type infobloxProvider struct {
 	api *infobloxAPI
 }
 
-func newInfobloxDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newInfobloxDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	return newInfoblox(conf)
 }
 

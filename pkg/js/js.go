@@ -106,6 +106,12 @@ func ExecuteJavascriptString(script []byte, devMode bool, variables map[string]s
 		return nil, err
 	}
 
+	// Neutral providers acquire roles from the completed domains, including any
+	// defaults, extensions, helpers and asynchronous changes made by the script.
+	if _, err := vm.Call("_finalizeProviders", nil); err != nil {
+		return nil, err
+	}
+
 	// export conf as string and unmarshal
 	value, err := vm.Run(`JSON.stringify(conf)`)
 	if err != nil {

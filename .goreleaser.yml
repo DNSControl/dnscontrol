@@ -178,8 +178,12 @@ release:
 
     ## Monthly video call!
 
-    Everyone is invited to the __Monthly DNSControl Community Video Conference Call__ on the 2nd Tuesday of each  month. Join whether you are a new user with questions or an experienced developer that wants to discuss DNSControl internals... or anything in between! Meeting details on
+    Everyone is invited to the __Monthly DNSControl Community Video Conference Call__ on the 2nd Tuesday of each month. Join whether you are a new user with questions or an experienced developer that wants to discuss DNSControl internals... or anything in between! Meeting details on
     [GitHub Discussions](https://github.com/DNSControl/dnscontrol/discussions?discussions_q=label%3AAnnouncement%3Afuture_vc).
+
+    ## SECRET BETA: Try the new D() syntax!
+
+    The new D() syntax in dnsconfig.js attempts to improve usability.  It is fully backwards compatible. See the examples in the [conversion guide](https://docs.dnscontrol.org/getting-started/converting-dnsconfig). Feedback needed!
 
   footer: |
     ## Deprecation warnings
