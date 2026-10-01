@@ -47,7 +47,7 @@ var defaultNameServerNames = []string{
 const perPageSize = 100
 
 // NewDo creates a DO-specific DNS provider.
-func NewDo(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewDo(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["token"] == "" {
 		return nil, errors.New("no DigitalOcean token provided")
 	}

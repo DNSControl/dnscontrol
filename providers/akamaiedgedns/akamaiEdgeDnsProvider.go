@@ -119,7 +119,7 @@ func init() {
 }
 
 // DnsServiceProvider.
-func newEdgeDNSDSP(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newEdgeDNSDSP(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	clientSecret := config["client_secret"]
 	host := config["host"]
 	accessToken := config["access_token"]

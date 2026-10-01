@@ -7,6 +7,7 @@
 * [Overview](getting-started/getting-started.md)
 * [Examples](getting-started/examples.md)
 * [Migrating zones to DNSControl](getting-started/migrating.md)
+* [The new `D()` syntax (preview)](getting-started/converting-dnsconfig.md)
 * [TypeScript autocomplete and type checking](getting-started/typescript.md)
 
 ## Language Reference

@@ -68,7 +68,7 @@ var features = providers.DocumentationNotes{
 }
 
 // NewTransip creates a new TransIP provider.
-func NewTransip(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func NewTransip(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["AccessToken"] == "" && m["PrivateKey"] == "" {
 		return nil, errors.New("no TransIP AccessToken or PrivateKey provided")
 	}

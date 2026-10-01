@@ -195,7 +195,7 @@ func newInwxReg(m map[string]string) (providers.Registrar, error) {
 }
 
 // new InwxDsp is called to initialize the INWX domain service provider.
-func newInwxDsp(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newInwxDsp(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	return newInwx(m)
 }
 

@@ -86,7 +86,7 @@ type tencentdnsProvider struct {
 	client *tencentCloudClient
 }
 
-func newTencentDNSDsp(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newTencentDNSDsp(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	return newTencentDNS(config)
 }
 

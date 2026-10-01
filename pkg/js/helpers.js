@@ -27,14 +27,20 @@ var conf = {
 };
 
 var defaultArgs = [];
+// Neutral declarations stay outside conf so unused providers never reach the IR.
+var _neutralProviders = Object.create(null);
+var _neutralProviderOrder = [];
 
 function initialize() {
     conf = {
         registrars: [],
         dns_providers: [],
         domains: [],
+        domain_names: [],
     };
     defaultArgs = [];
+    _neutralProviders = Object.create(null);
+    _neutralProviderOrder = [];
 }
 
 function _isDomain(d) {
@@ -106,6 +112,131 @@ function oldNewDnsProvider(name, type, meta) {
     return name;
 }
 
+function _checkProviderName(name, caller) {
+    if (typeof name !== "string" || name.length === 0) {
+        throw caller + " requires a nonempty credential entry name.";
+    }
+}
+
+// PROVIDER declares a credential entry without selecting a role or reading credentials.
+function PROVIDER(name, meta) {
+    _checkProviderName(name, "PROVIDER");
+    if (
+        arguments.length > 2 ||
+        (typeof meta !== "undefined" &&
+            (meta === null || typeof meta !== "object" || _.isArray(meta)))
+    ) {
+        throw "PROVIDER accepts (name) or (name, metadata). Put the provider TYPE in creds.json.";
+    }
+    var declaration = { name: name, meta: _copyProviderMetadata(meta) };
+    if (Object.prototype.hasOwnProperty.call(_neutralProviders, name)) {
+        if (!_.isEqual(_neutralProviders[name], declaration)) {
+            throw 'Conflicting PROVIDER declarations for "' + name + '".';
+        }
+    } else {
+        _neutralProviders[name] = declaration;
+        _neutralProviderOrder.push(name);
+    }
+    return name;
+}
+
+function _copyProviderMetadata(meta) {
+    return typeof meta === "undefined"
+        ? undefined
+        : JSON.parse(JSON.stringify(meta));
+}
+
+// REGISTRAR explicitly selects the registrar for a domain.
+function REGISTRAR(name) {
+    _checkProviderName(name, "REGISTRAR");
+    return function (d) {
+        var state = d._registrarState;
+        var key = state.applyingDefaults ? "defaultName" : "explicitName";
+        if (typeof state[key] !== "undefined" && state[key] !== name) {
+            throw (
+                'Conflicting registrars for domain "' +
+                d.name +
+                '": "' +
+                state[key] +
+                '" and "' +
+                name +
+                '".'
+            );
+        }
+        state[key] = name;
+        state.requireRegistrar = true;
+        d.registrar =
+            typeof state.explicitName !== "undefined"
+                ? state.explicitName
+                : state.defaultName;
+    };
+}
+
+// Resolve roles only after all domains, defaults, extensions and async work exist.
+function _finalizeProviders() {
+    var registrarNames = Object.create(null);
+    var dnsNames = Object.create(null);
+    for (var i = 0; i < conf.domains.length; i++) {
+        var d = conf.domains[i];
+        if (
+            d._registrarState &&
+            d._registrarState.requireRegistrar &&
+            (typeof d.registrar !== "string" || d.registrar.length === 0)
+        ) {
+            throw (
+                'Domain "' +
+                d.name +
+                '" requires a registrar. Use REGISTRAR(PROVIDER("none")) for no registrar management.'
+            );
+        }
+        registrarNames[d.registrar] = true;
+        var names = Object.keys(d.dnsProviders || {});
+        for (var j = 0; j < names.length; j++) {
+            dnsNames[names[j]] = true;
+        }
+    }
+    // Declaration order keeps the output deterministic, independent of async usage.
+    for (var i = 0; i < _neutralProviderOrder.length; i++) {
+        var name = _neutralProviderOrder[i];
+        var declaration = _neutralProviders[name];
+        if (registrarNames[name]) {
+            _materializeProvider(declaration, conf.registrars, false);
+        }
+        if (dnsNames[name]) {
+            _materializeProvider(declaration, conf.dns_providers, true);
+        }
+    }
+}
+
+function _materializeProvider(declaration, entries, isDNS) {
+    var meta = _copyProviderMetadata(declaration.meta);
+    // A legacy declaration may already have formatted a shared metadata object.
+    if (isDNS && meta && _.isArray(meta.ip_conversions)) {
+        meta.ip_conversions = format_tt(meta.ip_conversions);
+    }
+    // Legacy duplicate declarations retain their last-entry-wins behavior.
+    for (var i = entries.length - 1; i >= 0; i--) {
+        if (entries[i].name === declaration.name) {
+            if (
+                typeof meta !== "undefined" &&
+                !_.isEqual(entries[i].meta, meta)
+            ) {
+                throw (
+                    'PROVIDER metadata for "' +
+                    declaration.name +
+                    '" conflicts with its legacy ' +
+                    (isDNS ? "DNS provider" : "registrar") +
+                    " declaration."
+                );
+            }
+            // Keep the legacy explicit type and role-specific metadata. The
+            // existing credential resolver will check TYPE and its fallbacks.
+            return;
+        }
+    }
+    entries.push({ name: declaration.name, type: "-", meta: meta });
+}
+
 function newDomain(name, registrar) {
     return {
         name: name,
@@ -144,13 +275,23 @@ function processDargs(m, domain) {
     }
 }
 
-// D(name,registrar): Create a DNS Domain. Use the parameters as records and mods.
+// D(name, registrar, ...) or D(name, ...): Create a domain with records and modifiers.
 function D(name, registrar) {
-    var domain = newDomain(name, registrar);
+    var positionalRegistrar = typeof registrar === "string";
+    var domain = newDomain(name, positionalRegistrar ? registrar : undefined);
+    // Track default versus explicit assignments without adding fields to the IR.
+    Object.defineProperty(domain, "_registrarState", {
+        value: {
+            applyingDefaults: true,
+            explicitName: positionalRegistrar ? registrar : undefined,
+            requireRegistrar: !positionalRegistrar,
+        },
+    });
     for (var i = 0; i < defaultArgs.length; i++) {
         processDargs(defaultArgs[i], domain);
     }
-    for (var i = 2; i < arguments.length; i++) {
+    domain._registrarState.applyingDefaults = false;
+    for (var i = positionalRegistrar ? 2 : 1; i < arguments.length; i++) {
         var m = arguments[i];
         processDargs(m, domain);
     }
@@ -329,11 +470,28 @@ function caaOptions(record, processedArgs) {
 // nsCount of 0 means don't use or register any nameservers.
 // nsCount not provider means use all.
 function DnsProvider(name, nsCount) {
+    return _dnsProviderModifier(name, nsCount);
+}
+
+// DNS_SERVICE selects a DNS service using the same nameserver-count rules as DnsProvider.
+function DNS_SERVICE(name, nsCount) {
+    _checkProviderName(name, "DNS_SERVICE");
+    return _dnsProviderModifier(name, nsCount);
+}
+
+// Legacy helpers must not call new public globals: configurations may shadow them.
+function _dnsProviderModifier(name, nsCount) {
     if (typeof nsCount === "undefined") {
         nsCount = -1;
     }
     return function (d) {
-        d.dnsProviders[name] = nsCount;
+        // Credential names such as "__proto__" must be ordinary map keys.
+        Object.defineProperty(d.dnsProviders, name, {
+            value: nsCount,
+            enumerable: true,
+            configurable: true,
+            writable: true,
+        });
     };
 }
 

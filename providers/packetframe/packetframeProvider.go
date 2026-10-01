@@ -28,7 +28,7 @@ func (api *packetframeProvider) SetConversionObserver(observer providers.Convers
 }
 
 // newPacketframe creates the provider.
-func newPacketframe(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+func newPacketframe(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
 	if m["token"] == "" {
 		return nil, errors.New("missing Packetframe token")
 	}
