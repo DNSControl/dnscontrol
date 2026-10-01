@@ -9,6 +9,7 @@ providers/bind @TomOnTime
 providers/bunnydns @ppmathis
 providers/cloudflare @tresni
 providers/cloudns @pragmaton
+providers/cloudpress @arnoschoon
 providers/cnr @AsifNawaz-cnic
 providers/cscglobal @mikenz
 providers/desec @D3luxee
