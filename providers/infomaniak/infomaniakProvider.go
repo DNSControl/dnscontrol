@@ -17,37 +17,32 @@ type infomaniakProvider struct {
 	apiToken string // the account access token
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanUseCAA:   providers.Can(),
-	providers.CanUseDNAME: providers.Can(),
-	providers.CanUseDS:    providers.Can(),
-	providers.CanUseSSHFP: providers.Can(),
-	providers.CanUseTLSA:  providers.Can(),
-	providers.CanUseSRV:   providers.Can(),
-	// providers.DocCreateDomains: providers.Can(),
-}
-
-func newInfomaniak(m map[string]string, message json.RawMessage) (providers.DNSServiceProvider, error) {
-	api := &infomaniakProvider{}
-	api.apiToken = m["token"]
-	if api.apiToken == "" {
-		return nil, errors.New("missing Infomaniak personal access token")
+// Initialize initializes a fresh provider instance.
+func (p *infomaniakProvider) Initialize(m map[string]string, message json.RawMessage, _ *providers.CreateOptions) error {
+	p.apiToken = m["token"]
+	if p.apiToken == "" {
+		return errors.New("missing Infomaniak personal access token")
 	}
 
-	return api, nil
+	return nil
 }
 
 func init() {
-	const providerName = "INFOMANIAK"
-	const providerMaintainer = "@jbelien"
-	fns := providers.DspFuncs{
-		Initializer:   newInfomaniak,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*infomaniakProvider]("INFOMANIAK", providers.Definition{
+		FriendlyName: "Infomaniak",
+		Maintainer:   "@jbelien",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanUseCAA:   providers.Can(),
+			providers.CanUseDNAME: providers.Can(),
+			providers.CanUseDS:    providers.Can(),
+			providers.CanUseSSHFP: providers.Can(),
+			providers.CanUseTLSA:  providers.Can(),
+			providers.CanUseSRV:   providers.Can(),
+			// providers.DocCreateDomains: providers.Can(),
+		},
+	})
 }
 
 func (p *infomaniakProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {

@@ -13,7 +13,7 @@ func TestAuditRecords_Valid(t *testing.T) {
 		makeRC("TXT", "@", "example.com", "v=spf1 ~all"),
 	}
 
-	errs := AuditRecords(records)
+	errs := new(mikrotikProvider).AuditRecords(records)
 	if len(errs) != 0 {
 		t.Errorf("expected 0 errors, got %d: %v", len(errs), errs)
 	}
@@ -23,7 +23,7 @@ func TestAuditRecords_MXValid(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("@", 0, "MX", 10, "mail.example.com.")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(mikrotikProvider).AuditRecords(models.Records{rc})
 	if len(errs) != 0 {
 		t.Errorf("expected 0 errors for valid MX, got %d: %v", len(errs), errs)
 	}
@@ -33,7 +33,7 @@ func TestAuditRecords_MXNull(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("@", 0, "MX", 0, ".")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(mikrotikProvider).AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Error("expected error for null MX (priority=0, target=.), got none")
 	}

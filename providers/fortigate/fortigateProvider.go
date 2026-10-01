@@ -12,49 +12,12 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-// Feature Declaration
-
-var features = providers.DocumentationNotes{
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Cannot(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot("does not really support ARPA Zones and handles PTR records weirdly"),
-	providers.CanUseSMIMEA:           providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Cannot(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
-// Provider Registration
-
 func init() {
-	const providerName = "FORTIGATE"
-	const providerMaintainer = "@KlettIT"
-	providers.RegisterDomainServiceProviderType(providerName, providers.DspFuncs{
-		Initializer:   NewFortiGate,
-		RecordAuditor: AuditRecords,
-	}, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "FortiGate",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/fortigate",
-		PortalURL:   "https://docs.fortinet.com/", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*fortigateProvider]("FORTIGATE", providers.Definition{
+		FriendlyName: "FortiGate",
+		DocsURL:      "https://docs.dnscontrol.org/provider/fortigate",
+		PortalURL:    "https://docs.fortinet.com/", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "host",
 				Label:    "FortiGate host",
@@ -87,6 +50,31 @@ func init() {
 				ConfirmValue: "true",
 			},
 		},
+		Maintainer: "@KlettIT",
+		Features: providers.DocumentationNotes{
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Cannot(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDNAME:            providers.Cannot(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot("does not really support ARPA Zones and handles PTR records weirdly"),
+			providers.CanUseSMIMEA:           providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Cannot(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseSVCB:             providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
@@ -100,8 +88,8 @@ type fortigateProvider struct {
 	client   *apiClient
 }
 
-// NewFortiGate creates a new instance of the FortiGate DNS provider.
-func NewFortiGate(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *fortigateProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	host, vdom, apiKey := m["host"], m["vdom"], m["apiKey"]
 
 	var missing []string
@@ -115,20 +103,20 @@ func NewFortiGate(m map[string]string, _ json.RawMessage) (providers.DNSServiceP
 		missing = append(missing, "apiKey")
 	}
 	if len(missing) > 0 {
-		return nil, errors.New("[FORTIGATE] Missing required field(s): " + strings.Join(missing, ", "))
+		return errors.New("[FORTIGATE] Missing required field(s): " + strings.Join(missing, ", "))
 	}
 
 	insecure := strings.EqualFold(m["insecure_tls"], "true")
 	debug := strings.EqualFold(m["debug_http"], "true")
 
-	p := &fortigateProvider{
+	*p = fortigateProvider{
 		host:     host,
 		vdom:     vdom,
 		apiKey:   apiKey,
 		insecure: insecure,
 	}
 	p.client = newClient(host, vdom, apiKey, insecure, debug)
-	return p, nil
+	return nil
 }
 
 // Record Fetching

@@ -35,24 +35,13 @@ import (
 
 // Section 1: Register this provider in the system.
 
-// init registers the provider to dnscontrol.
 func init() {
-	const providerName = "GANDI_V5"
-	const providerMaintainer = "@TomOnTime"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newReg)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Gandi v5",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/gandi_v5",
-		PortalURL:   "https://admin.gandi.net/dashboard/",
-		Notes:       "Gandi supports two auth methods: the newer Personal Access Token (recommended) or the legacy API key.",
-		Fields: []providers.CredsField{
+	providers.Register[*gandiv5Provider]("GANDI_V5", providers.Definition{
+		FriendlyName: "Gandi v5",
+		DocsURL:      "https://docs.dnscontrol.org/provider/gandi_v5",
+		PortalURL:    "https://admin.gandi.net/dashboard/",
+		Notes:        "Gandi supports two auth methods: the newer Personal Access Token (recommended) or the legacy API key.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "_authMethod",
 				Label:    "Which authentication method do you want to use?",
@@ -78,31 +67,30 @@ func init() {
 				ShowIf:   map[string]string{"_authMethod": "API key (deprecated)"},
 			},
 		},
+		Maintainer: "@TomOnTime",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Can("Only on the bare domain. Otherwise CNAME will be substituted"),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot("Only supports DS records at the apex"),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseRP:               providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Cannot("Can only manage domains registered through their service"),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
-}
-
-// features declares which features and options are available.
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can("Only on the bare domain. Otherwise CNAME will be substituted"),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot("Only supports DS records at the apex"),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRP:               providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("Can only manage domains registered through their service"),
-	providers.DocOfficiallySupported: providers.Cannot(),
 }
 
 // DNSSEC: platform supports it, but it doesn't fit our GetDomainCorrections
@@ -124,32 +112,22 @@ func (client *gandiv5Provider) SetConversionObserver(observer providers.Conversi
 	client.observer = observer
 }
 
-// newDsp generates a DNS Service Provider client handle.
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newHelper(conf, metadata)
-}
-
-// newReg generates a Registrar Provider client handle.
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newHelper(conf, nil)
-}
-
-// newHelper generates a handle.
-func newHelper(m map[string]string, _ json.RawMessage) (*gandiv5Provider, error) {
-	api := &gandiv5Provider{}
-	api.apikey = m["apikey"]
-	api.token = m["token"]
-	if (api.apikey == "") && (api.token == "") {
-		return nil, errors.New("missing Gandi personal access token (or apikey - deprecated)")
+// Initialize initializes a fresh provider instance.
+func (client *gandiv5Provider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
+	client.apikey = m["apikey"]
+	client.token = m["token"]
+	if (client.apikey == "") && (client.token == "") {
+		return errors.New("missing Gandi personal access token (or apikey - deprecated)")
 	}
-	api.sharingid = m["sharing_id"]
-	api.apiurl = m["apiurl"]
+	client.sharingid = m["sharing_id"]
+	client.apiurl = m["apiurl"]
 	debug, err := strconv.ParseBool(os.Getenv("GANDI_V5_DEBUG"))
 	if err == nil {
-		api.debug = debug
+		client.debug = debug
 	}
 
-	return api, nil
+	client.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // Section 3: Domain Service Provider (DSP) related functions

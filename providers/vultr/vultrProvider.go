@@ -26,32 +26,27 @@ Info required in `creds.json`:
 
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "VULTR"
-	const providerMaintainer = "@pgaskin"
-	fns := providers.DspFuncs{
-		Initializer:   NewProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*vultrProvider]("VULTR", providers.Definition{
+		FriendlyName: "Vultr",
+		Maintainer:   "@pgaskin",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 // vultrProvider represents the Vultr DNSServiceProvider.
@@ -65,11 +60,11 @@ var defaultNS = []string{
 	"ns2.vultr.com",
 }
 
-// NewProvider initializes a Vultr DNSServiceProvider.
-func NewProvider(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *vultrProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	token := m["token"]
 	if token == "" {
-		return nil, errors.New("missing Vultr API token")
+		return errors.New("missing Vultr API token")
 	}
 
 	config := &oauth2.Config{}
@@ -78,7 +73,8 @@ func NewProvider(m map[string]string, _ json.RawMessage) (providers.DNSServicePr
 	client.SetUserAgent("dnscontrol")
 
 	_, _, err := client.Account.Get(context.Background())
-	return &vultrProvider{client}, err
+	*api = vultrProvider{client}
+	return err
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.

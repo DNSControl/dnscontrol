@@ -106,8 +106,7 @@ type APIClient struct {
 	requestRateLimiter requestRateLimiter
 }
 
-// NewClient creates a new LoopiaClient.
-func NewClient(apiUser, apiPassword string, region string, modifyns bool, fetchns bool, debug bool) *APIClient {
+func (c *APIClient) initializeClient(apiUser, apiPassword string, region string, modifyns bool, fetchns bool, debug bool) {
 	// DefaultBaseURL is url to the XML-RPC api.
 	var DefaultBaseURL string
 	switch region {
@@ -120,7 +119,7 @@ func NewClient(apiUser, apiPassword string, region string, modifyns bool, fetchn
 	default:
 		DefaultBaseURL = DefaultBaseSEURL
 	}
-	return &APIClient{
+	*c = APIClient{
 		APIUser:           apiUser,
 		APIPassword:       apiPassword,
 		BaseURL:           DefaultBaseURL,

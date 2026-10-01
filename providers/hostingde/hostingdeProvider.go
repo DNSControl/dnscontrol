@@ -18,44 +18,12 @@ import (
 
 var defaultNameservers = []string{"ns1.hosting.de", "ns2.hosting.de", "ns3.hosting.de"}
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "HOSTINGDE"
-	const providerMaintainer = "@juliusrickert"
-	providers.RegisterRegistrarType(providerName, newHostingdeReg)
-	fns := providers.DspFuncs{
-		Initializer:   newHostingdeDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "hosting.de",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/hostingde",
-		PortalURL:   "https://secure.hosting.de/",
-		Fields: []providers.CredsField{
+	providers.Register[*hostingdeProvider]("HOSTINGDE", providers.Definition{
+		FriendlyName: "hosting.de",
+		DocsURL:      "https://docs.dnscontrol.org/provider/hostingde",
+		PortalURL:    "https://secure.hosting.de/",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "authToken",
 				Label:    "Auth token",
@@ -64,6 +32,28 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@juliusrickert",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSOA:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
@@ -71,11 +61,12 @@ type providerMeta struct {
 	DefaultNS []string `json:"default_ns"`
 }
 
-func newHostingde(m map[string]string, providermeta json.RawMessage) (*hostingdeProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (hp *hostingdeProvider) Initialize(m map[string]string, providermeta json.RawMessage, _ *providers.CreateOptions) error {
 	authToken, ownerAccountID, filterAccountID, baseURL := m["authToken"], m["ownerAccountId"], m["filterAccountId"], m["baseURL"]
 
 	if authToken == "" {
-		return nil, errors.New("hosting.de: authtoken must be provided")
+		return errors.New("hosting.de: authtoken must be provided")
 	}
 
 	if baseURL == "" {
@@ -83,7 +74,7 @@ func newHostingde(m map[string]string, providermeta json.RawMessage) (*hostingde
 	}
 	baseURL = strings.TrimSuffix(baseURL, "/")
 
-	hp := &hostingdeProvider{
+	*hp = hostingdeProvider{
 		authToken:       authToken,
 		ownerAccountID:  ownerAccountID,
 		filterAccountID: filterAccountID,
@@ -94,7 +85,7 @@ func newHostingde(m map[string]string, providermeta json.RawMessage) (*hostingde
 	if len(providermeta) > 0 {
 		var pm providerMeta
 		if err := json.Unmarshal(providermeta, &pm); err != nil {
-			return nil, fmt.Errorf("hosting.de: could not parse providermeta: %w", err)
+			return fmt.Errorf("hosting.de: could not parse providermeta: %w", err)
 		}
 
 		if len(pm.DefaultNS) > 0 {
@@ -102,15 +93,7 @@ func newHostingde(m map[string]string, providermeta json.RawMessage) (*hostingde
 		}
 	}
 
-	return hp, nil
-}
-
-func newHostingdeDsp(m map[string]string, providermeta json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newHostingde(m, providermeta)
-}
-
-func newHostingdeReg(m map[string]string) (providers.Registrar, error) {
-	return newHostingde(m, json.RawMessage{})
+	return nil
 }
 
 func (hp *hostingdeProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {

@@ -10,43 +10,39 @@ import (
 	"github.com/mittwald/go-powerdns/apis/zones"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/guides/alias.html"),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseDHCID:            providers.Can(),
-	providers.CanUseLOC:              providers.Unimplemented("Normalization within the PowerDNS API seems to be buggy, so disabled", "https://github.com/PowerDNS/pdns/issues/10558"),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.CanUseDNAME:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/settings.html#setting-dname-processing"),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseDNSKEY:           providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
 	const providerName = "POWERDNS"
-	const providerMaintainer = "@jpbede"
-	fns := providers.DspFuncs{
-		Initializer:   newDSP,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
 	providers.RegisterCustomRecordType("LUA", providerName, "")
+	providers.Register[*powerdnsProvider](providerName, providers.Definition{
+		FriendlyName: "PowerDNS",
+		Maintainer:   "@jpbede",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanUseAlias:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/guides/alias.html"),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseDHCID:            providers.Can(),
+			providers.CanUseLOC:              providers.Unimplemented("Normalization within the PowerDNS API seems to be buggy, so disabled", "https://github.com/PowerDNS/pdns/issues/10558"),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSOA:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.CanUseDNAME:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/settings.html#setting-dname-processing"),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseDNSKEY:           providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 // powerdnsProvider represents the powerdnsProvider DNSServiceProvider.
@@ -75,30 +71,28 @@ func (dsp *powerdnsProvider) zoneName(domain string, tag string) string {
 	return base
 }
 
-// newDSP initializes a PowerDNS DNSServiceProvider.
-func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	dsp := &powerdnsProvider{}
-
+// Initialize initializes a fresh provider instance.
+func (dsp *powerdnsProvider) Initialize(m map[string]string, metadata json.RawMessage, _ *providers.CreateOptions) error {
 	dsp.APIKey = m["apiKey"]
 	if dsp.APIKey == "" {
-		return nil, errors.New("PowerDNS API Key is required")
+		return errors.New("PowerDNS API Key is required")
 	}
 
 	dsp.APIUrl = m["apiUrl"]
 	if dsp.APIUrl == "" {
-		return nil, errors.New("PowerDNS API URL is required")
+		return errors.New("PowerDNS API URL is required")
 	}
 
 	dsp.ServerName = m["serverName"]
 	if dsp.ServerName == "" {
-		return nil, errors.New("PowerDNS server name is required")
+		return errors.New("PowerDNS server name is required")
 	}
 
 	// load js config
 	if len(metadata) != 0 {
 		err := json.Unmarshal(metadata, dsp)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	var nss []string
@@ -108,7 +102,7 @@ func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSService
 	var err error
 	dsp.nameservers, err = models.ToNameservers(nss)
 	if err != nil {
-		return dsp, err
+		return err
 	}
 
 	var clientErr error
@@ -116,5 +110,5 @@ func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSService
 		pdns.WithBaseURL(dsp.APIUrl),
 		pdns.WithAPIKeyAuthentication(dsp.APIKey),
 	)
-	return dsp, clientErr
+	return clientErr
 }

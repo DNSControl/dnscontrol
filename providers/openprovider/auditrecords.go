@@ -24,7 +24,7 @@ var supportedRecordTypes = []string{
 var supportedCAATags = []string{"issue", "issuewild", "iodef"}
 
 // AuditRecords returns errors for records that Openprovider cannot represent.
-func AuditRecords(records models.Records) []error {
+func (*openproviderProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 	a.TypesSupported(supportedRecordTypes)
 	a.Add("NS", rejectUnsupportedNS)          // Last verified 2026-09-21

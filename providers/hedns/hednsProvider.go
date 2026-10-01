@@ -46,51 +46,12 @@ Additionally
 
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRP:               providers.Can(),
-	providers.CanUseSMIMEA:           providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "HEDNS"
-	const providerMaintainer = "@rblenkinsopp"
-	fns := providers.DspFuncs{
-		Initializer:   newHEDNSProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Hurricane Electric DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/hedns",
-		PortalURL:   "https://dns.he.net/",
-		Fields: []providers.CredsField{
+	providers.Register[*hednsProvider]("HEDNS", providers.Definition{
+		FriendlyName: "Hurricane Electric DNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/hedns",
+		PortalURL:    "https://dns.he.net/",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "username",
 				Label:    "Username",
@@ -116,6 +77,36 @@ func init() {
 				Help:    "Path to a directory where the .hedns-session file is stored to reuse the authenticated session. Leave blank to log in each run.",
 				Default: ".",
 			},
+		},
+		Maintainer: "@rblenkinsopp",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDNAME:            providers.Cannot(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseRP:               providers.Can(),
+			providers.CanUseSMIMEA:           providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -175,22 +166,23 @@ type Record struct {
 	DDNSEnabled bool
 }
 
-func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *hednsProvider) Initialize(cfg map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	username, password := cfg["username"], cfg["password"]
 	totpSecret, totpValue := cfg["totp-key"], cfg["totp"]
 	sessionFilePath := cfg["session-file-path"]
 
 	if username == "" {
-		return nil, errors.New("username must be provided")
+		return errors.New("username must be provided")
 	}
 	if password == "" {
-		return nil, errors.New("password must be provided")
+		return errors.New("password must be provided")
 	}
 	if totpSecret != "" && totpValue != "" {
-		return nil, errors.New("totp and totp-key must not be specified at the same time")
+		return errors.New("totp and totp-key must not be specified at the same time")
 	}
 
-	client := &hednsProvider{
+	*c = hednsProvider{
 		Username:        username,
 		Password:        password,
 		TfaSecret:       totpSecret,
@@ -200,15 +192,16 @@ func newHEDNSProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSSe
 
 	// Create storage for the cookies.
 	cookieJar, _ := cookiejar.New(nil)
-	client.httpClient = http.Client{Jar: cookieJar}
-	client.zoneCache = zonecache.New(client.listDomains)
+	c.httpClient = http.Client{Jar: cookieJar}
+	c.zoneCache = zonecache.New(c.listDomains)
 
 	// Reuse cached session file if one is set.
-	if client.SessionFilePath != "" {
-		_ = client.loadSessionFile()
+	if c.SessionFilePath != "" {
+		_ = c.loadSessionFile()
 	}
 
-	return client, nil
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // ListZones list all zones on this provider.

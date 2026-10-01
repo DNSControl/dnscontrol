@@ -14,38 +14,12 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 )
 
-var features = providers.DocumentationNotes{
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-	providers.DocDualHost:            providers.Can("Alibaba Cloud DNS allows full management of apex NS records"),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.CanUseRoute53Alias:     providers.Cannot(),
-}
-
 func init() {
-	const providerName = "ALIDNS"
-	const providerMaintainer = "@bytemain"
-	fns := providers.DspFuncs{
-		Initializer:   newAliDNSDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Alibaba Cloud DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/alidns",
-		PortalURL:   "https://ram.console.aliyun.com/manage/ak", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*aliDNSDsp]("ALIDNS", providers.Definition{
+		FriendlyName: "Alibaba Cloud DNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/alidns",
+		PortalURL:    "https://ram.console.aliyun.com/manage/ak", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "access_key_id",
 				Label:    "Access key ID",
@@ -60,11 +34,25 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@bytemain",
+		DefaultTTL: 600,
+		Features: providers.DocumentationNotes{
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanConcur:              providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocDualHost:            providers.Can("Alibaba Cloud DNS allows full management of apex NS records"),
+			providers.DocCreateDomains:       providers.Cannot(),
+			providers.CanUseRoute53Alias:     providers.Cannot(),
+		},
 	})
-	// Register default TTL of 600 seconds (10 minutes) for Alibaba Cloud DNS
-	// This is the minimum TTL for free/personal edition domains
-	providers.RegisterDefaultTTL(providerName, 600)
-
 }
 
 type aliDNSDsp struct {
@@ -79,15 +67,16 @@ type domainVersionInfo struct {
 	maxTTL      uint32
 }
 
-func newAliDNSDsp(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (a *aliDNSDsp) Initialize(config map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	accessKeyID := config["access_key_id"]
 	if accessKeyID == "" {
-		return nil, errors.New("creds.json: access_key_id must not be empty")
+		return errors.New("creds.json: access_key_id must not be empty")
 	}
 
 	accessKeySecret := config["access_key_secret"]
 	if accessKeySecret == "" {
-		return nil, errors.New("creds.json: access_key_secret must not be empty")
+		return errors.New("creds.json: access_key_secret must not be empty")
 	}
 
 	// Region ID defaults to "cn-hangzhou". The region value does not affect
@@ -105,12 +94,13 @@ func newAliDNSDsp(config map[string]string, _ json.RawMessage) (providers.DNSSer
 		accessKeySecret,
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &aliDNSDsp{
+	*a = aliDNSDsp{
 		client:             client,
 		domainVersionCache: make(map[string]*domainVersionInfo),
-	}, nil
+	}
+	return nil
 }
 
 func (a *aliDNSDsp) GetNameservers(domain string) ([]*models.Nameserver, error) {

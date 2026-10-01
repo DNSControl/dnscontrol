@@ -37,44 +37,14 @@ func (n *transipProvider) SetConversionObserver(observer providers.ConversionObs
 	n.observer = observer
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAKAMAICDN:        providers.Cannot(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseAzureAlias:       providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseRoute53Alias:     providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
-// NewTransip creates a new TransIP provider.
-func NewTransip(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (n *transipProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	if m["AccessToken"] == "" && m["PrivateKey"] == "" {
-		return nil, errors.New("no TransIP AccessToken or PrivateKey provided")
+		return errors.New("no TransIP AccessToken or PrivateKey provided")
 	}
 
 	if m["PrivateKey"] != "" && m["AccountName"] == "" {
-		return nil, errors.New("no AccountName given, required for authenticating with PrivateKey")
+		return errors.New("no AccountName given, required for authenticating with PrivateKey")
 	}
 
 	client, err := gotransip.NewClient(gotransip.ClientConfiguration{
@@ -83,32 +53,23 @@ func NewTransip(m map[string]string, _ json.RawMessage) (providers.DNSServicePro
 		PrivateKeyReader: strings.NewReader(m["PrivateKey"]),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("TransIP client fail %s", err.Error())
+		return fmt.Errorf("TransIP client fail %s", err.Error())
 	}
 
-	api := &transipProvider{}
-	api.client = &client
-	api.domains = &domain.Repository{Client: client}
+	n.client = &client
+	n.domains = &domain.Repository{Client: client}
 
-	return api, nil
+	n.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "TRANSIP"
-	const providerMaintainer = "@blackshadev"
-	fns := providers.DspFuncs{
-		Initializer:   NewTransip,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "TransIP",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/transip",
-		PortalURL:   "https://www.transip.nl/cp/account/api/",
-		Notes:       "TransIP supports two auth methods: a short lived access token, or an account name paired with a long lived private key.",
-		Fields: []providers.CredsField{
+	providers.Register[*transipProvider]("TRANSIP", providers.Definition{
+		FriendlyName: "TransIP",
+		DocsURL:      "https://docs.dnscontrol.org/provider/transip",
+		PortalURL:    "https://www.transip.nl/cp/account/api/",
+		Notes:        "TransIP supports two auth methods: a short lived access token, or an account name paired with a long lived private key.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "_authMethod",
 				Label:    "Which authentication method do you want to use?",
@@ -140,6 +101,36 @@ func init() {
 				Required:  true,
 				ShowIf:    map[string]string{"_authMethod": "Account name + private key"},
 			},
+		},
+		Maintainer: "@blackshadev",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAKAMAICDN:        providers.Cannot(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseAzureAlias:       providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDNAME:            providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseRoute53Alias:     providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Cannot(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.DocCreateDomains:       providers.Cannot(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }

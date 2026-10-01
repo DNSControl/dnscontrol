@@ -22,36 +22,12 @@ const (
 	metaRecordWeight    = "tencentdns_weight"
 )
 
-var features = providers.DocumentationNotes{
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "TENCENTDNS"
-	const providerMaintainer = "@cylonchau"
-	fns := providers.DspFuncs{
-		Initializer:    newTencentDNSDsp,
-		RecordAuditor:  AuditRecords,
-		RecordIdentity: recordIdentity,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newTencentDNSReg)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	// Default TTL for Tencent Cloud DNSPod is 600 for free plan.
-	providers.RegisterDefaultTTL(providerName, defaultTTL)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Tencent Cloud DNS",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/tencentdns",
-		PortalURL:   "https://console.intl.cloud.tencent.com/cam/capi",
-		Fields: []providers.CredsField{
+	providers.Register[*tencentdnsProvider]("TENCENTDNS", providers.Definition{
+		FriendlyName: "Tencent Cloud DNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/tencentdns",
+		PortalURL:    "https://console.intl.cloud.tencent.com/cam/capi",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "secret_id",
 				Label:    "Secret ID",
@@ -79,6 +55,19 @@ func init() {
 				Default: "cn",
 			},
 		},
+		Maintainer:     "@cylonchau",
+		DefaultTTL:     defaultTTL,
+		RecordIdentity: recordIdentity,
+		Features: providers.DocumentationNotes{
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
@@ -86,19 +75,12 @@ type tencentdnsProvider struct {
 	client *tencentCloudClient
 }
 
-func newTencentDNSDsp(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newTencentDNS(config)
-}
-
-func newTencentDNSReg(config map[string]string) (providers.Registrar, error) {
-	return newTencentDNS(config)
-}
-
-func newTencentDNS(config map[string]string) (*tencentdnsProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *tencentdnsProvider) Initialize(config map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	secretID := config["secret_id"]
 	secretKey := config["secret_key"]
 	if secretID == "" || secretKey == "" {
-		return nil, errors.New("missing tencent cloud credentials (secret_id, secret_key)")
+		return errors.New("missing tencent cloud credentials (secret_id, secret_key)")
 	}
 
 	region := config["region"]
@@ -108,17 +90,18 @@ func newTencentDNS(config map[string]string) (*tencentdnsProvider, error) {
 
 	siteConfig, err := siteConfigForSite(config["site"])
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	client, err := newClient(secretID, secretKey, region, siteConfig.dnspodEndpoint, siteConfig.useIntlDomainClient)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &tencentdnsProvider{
+	*p = tencentdnsProvider{
 		client: client,
-	}, nil
+	}
+	return nil
 }
 
 type tencentSiteConfig struct {

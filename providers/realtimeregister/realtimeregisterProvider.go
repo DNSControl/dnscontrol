@@ -26,66 +26,52 @@ Additional settings available in `creds.json`:
   - sandbox (set to 1 to use the sandbox API from realtime register)
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot("Only for subdomains"),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
-// init registers the domain service provider with dnscontrol.
 func init() {
-	const providerName = "REALTIMEREGISTER"
-	const providerMaintainer = "@PJEilers"
-	fns := providers.DspFuncs{
-		Initializer:   newRtrDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newRtrReg)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*realtimeregisterAPI]("REALTIMEREGISTER", providers.Definition{
+		FriendlyName: "Realtime Register",
+		Maintainer:   "@PJEilers",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot("Only for subdomains"),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
-func newRtr(config map[string]string, _ json.RawMessage) (*realtimeregisterAPI, error) {
+// Initialize initializes a fresh provider instance.
+func (api *realtimeregisterAPI) Initialize(config map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	apikey := config["apikey"]
 	sandbox := config["sandbox"] == "1"
 
 	if apikey == "" {
-		return nil, errors.New("realtime register: apikey must be provided")
+		return errors.New("realtime register: apikey must be provided")
 	}
 
-	api := &realtimeregisterAPI{
+	*api = realtimeregisterAPI{
 		apikey:      apikey,
 		endpoint:    getEndpoint(sandbox),
 		Zones:       make(map[string]*Zone),
 		ServiceType: getServiceType(config["premium"] == "1"),
 	}
 
-	return api, nil
-}
-
-func newRtrDsp(config map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newRtr(config, metadata)
-}
-
-func newRtrReg(config map[string]string) (providers.Registrar, error) {
-	return newRtr(config, nil)
+	return nil
 }
 
 // GetNameservers Default name servers should not be included in the update.

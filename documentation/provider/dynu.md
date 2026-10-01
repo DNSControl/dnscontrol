@@ -119,7 +119,7 @@ MX records with a null target (RFC 7505, priority 0, target `.`) are fully suppo
   - [Concurrency Verified](../advanced-features/concurrency-verified.md): ❌
   - [dual host](../advanced-features/dual-host.md): ❔
   - create-domains: ❌
-  - [get-zones](../commands/get-zones.md): ✅
+  - [get-zones](../commands/get-zones.md): ❌
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ✅

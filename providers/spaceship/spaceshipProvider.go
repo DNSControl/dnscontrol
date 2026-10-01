@@ -14,55 +14,21 @@ import (
 )
 
 const (
-	providerName       = "SPACESHIP"
-	providerMaintainer = "@rootful"
-	apiBaseURL         = "https://spaceship.dev/api/v1"
-	minTTL             = 60
-	maxTTL             = 3600
-	defaultTTL         = 3600
+	apiBaseURL = "https://spaceship.dev/api/v1"
+	minTTL     = 60
+	maxTTL     = 3600
+	defaultTTL = 3600
 )
 
 var defaultNS = client.DefaultBasicNameserverHosts()
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot("Spaceship does not expose DNSSEC via the public API"),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can("Apex ALIAS is stored as CNAME; declare an apex CNAME instead"),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("The domain must already exist in the Spaceship account"),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	providers.RegisterRegistrarType(providerName, newReg)
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Spaceship",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/spaceship",
-		PortalURL:   "https://www.spaceship.com/application/api-manager/",
-		Notes:       "Create an API key in Spaceship API Manager with dnsrecords and domains read/write scopes.",
-		Fields: []providers.CredsField{
+	providers.Register[*spaceshipProvider]("SPACESHIP", providers.Definition{
+		FriendlyName: "Spaceship",
+		DocsURL:      "https://docs.dnscontrol.org/provider/spaceship",
+		PortalURL:    "https://www.spaceship.com/application/api-manager/",
+		Notes:        "Create an API key in Spaceship API Manager with dnsrecords and domains read/write scopes.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
 				Label:    "API key",
@@ -77,6 +43,30 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@rootful",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot("Spaceship does not expose DNSSEC via the public API"),
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Can("Apex ALIAS is stored as CNAME; declare an apex CNAME instead"),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Cannot("The domain must already exist in the Spaceship account"),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -93,24 +83,19 @@ func (c *spaceshipProvider) SetConversionObserver(observer providers.ConversionO
 	c.observer = observer
 }
 
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newSpaceship(conf)
-}
-
-func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newSpaceship(conf)
-}
-
-func newSpaceship(m map[string]string) (*spaceshipProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *spaceshipProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	apiKey, apiSecret := m["api_key"], m["api_secret"]
 	if apiKey == "" || apiSecret == "" {
-		return nil, errors.New("missing spaceship api_key or api_secret")
+		return errors.New("missing spaceship api_key or api_secret")
 	}
 	cl, err := client.NewClient(apiBaseURL, apiKey, apiSecret)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &spaceshipProvider{client: cl, sleep: time.Sleep}, nil
+	*c = spaceshipProvider{client: cl, sleep: time.Sleep}
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // GetNameservers returns the nameservers Spaceship uses when it hosts the zone.

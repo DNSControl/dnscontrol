@@ -21,23 +21,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/providers/bind"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 type autoDNSProvider struct {
 	baseURL         url.URL
 	defaultHeaders  http.Header
@@ -47,33 +30,11 @@ type autoDNSProvider struct {
 }
 
 func init() {
-	const providerName = "AUTODNS"
-	const providerMaintainer = "@arnoschoon"
-	fns := providers.DspFuncs{
-		Initializer: func(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-			api, err := newAutoDNSProvider(settings)
-			if err != nil {
-				return nil, err
-			}
-			return api, nil
-		},
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterRegistrarType(providerName, func(settings map[string]string) (providers.Registrar, error) {
-		api, err := newAutoDNSProvider(settings)
-		if err != nil {
-			return nil, err
-		}
-		return api, nil
-	}, features)
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "AutoDNS",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/autodns",
-		PortalURL:   "https://login.autodns.com/", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*autoDNSProvider]("AUTODNS", providers.Definition{
+		FriendlyName: "AutoDNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/autodns",
+		PortalURL:    "https://login.autodns.com/", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "username",
 				Label:    "Username",
@@ -105,12 +66,28 @@ func init() {
 				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
 			},
 		},
+		Maintainer: "@arnoschoon",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Cannot(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
-func newAutoDNSProvider(settings map[string]string) (*autoDNSProvider, error) {
-	api := &autoDNSProvider{}
-
+// Initialize initializes a fresh provider instance.
+func (api *autoDNSProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	api.baseURL = url.URL{
 		Scheme: "https",
 		User: url.UserPassword(
@@ -134,16 +111,16 @@ func newAutoDNSProvider(settings map[string]string) (*autoDNSProvider, error) {
 	api.totpValue, api.totpKey = settings["totp"], settings["totp-key"]
 
 	if api.totpValue != "" && api.totpKey != "" {
-		return nil, errors.New("AUTODNS: totp and totp-key must not be specified at the same time")
+		return errors.New("AUTODNS: totp and totp-key must not be specified at the same time")
 	}
 
 	if api.totpKey != "" {
 		if _, err := totp.GenerateCode(api.totpKey, time.Now()); err != nil {
-			return nil, fmt.Errorf("AUTODNS: unable to generate a 2FA token from totp-key: %w", err)
+			return fmt.Errorf("AUTODNS: unable to generate a 2FA token from totp-key: %w", err)
 		}
 	}
 
-	return api, nil
+	return nil
 }
 
 func (api *autoDNSProvider) otp() (string, error) {

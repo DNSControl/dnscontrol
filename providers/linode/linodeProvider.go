@@ -61,10 +61,10 @@ var defaultNameServerNames = []string{
 	"ns5.linode.com",
 }
 
-// NewLinode creates the provider.
-func NewLinode(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *linodeProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if m["token"] == "" {
-		return nil, errors.New("missing Linode token")
+		return errors.New("missing Linode token")
 	}
 
 	ctx := context.Background()
@@ -75,48 +75,25 @@ func NewLinode(m map[string]string, _ json.RawMessage) (providers.DNSServiceProv
 
 	baseURL, err := url.Parse(defaultBaseURL)
 	if err != nil {
-		return nil, errors.New("invalid base URL for Linode")
+		return errors.New("invalid base URL for Linode")
 	}
 
-	api := &linodeProvider{client: client, baseURL: baseURL}
+	*api = linodeProvider{client: client, baseURL: baseURL}
 
 	// Get a domain to validate the token
 	if err := api.fetchDomainList(); err != nil {
-		return nil, err
+		return err
 	}
 
-	return api, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseCAA:              providers.Can("Linode doesn't support changing the CAA flag"),
-	providers.CanUseSRV:              providers.Can("Linode requires non-zero priority"),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	return nil
 }
 
 func init() {
-	const providerName = "LINODE"
-	const providerMaintainer = "@koesie10"
-	// SRV support is in this provider, but Linode doesn't seem to support it properly
-	fns := providers.DspFuncs{
-		Initializer:   NewLinode,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Linode",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/linode",
-		PortalURL:   "https://cloud.linode.com/profile/tokens", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*linodeProvider]("LINODE", providers.Definition{
+		FriendlyName: "Linode",
+		DocsURL:      "https://docs.dnscontrol.org/provider/linode",
+		PortalURL:    "https://cloud.linode.com/profile/tokens", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "token",
 				Label:    "API token",
@@ -124,6 +101,19 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@koesie10",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUseCAA:              providers.Can("Linode doesn't support changing the CAA flag"),
+			providers.CanUseSRV:              providers.Can("Linode requires non-zero priority"),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }

@@ -32,38 +32,12 @@ type mythicBeastsProvider struct {
 	client *http.Client
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("Requires domain registered through Web UI"),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "MYTHICBEASTS"
-	const providerMaintainer = "@tomfitzhenry"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Mythic Beasts",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/mythicbeasts",
-		PortalURL:   "https://www.mythic-beasts.com/customer/api-users", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*mythicBeastsProvider]("MYTHICBEASTS", providers.Definition{
+		FriendlyName: "Mythic Beasts",
+		DocsURL:      "https://docs.dnscontrol.org/provider/mythicbeasts",
+		PortalURL:    "https://www.mythic-beasts.com/customer/api-users", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "keyID",
 				Label:    "Key ID",
@@ -78,15 +52,33 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@tomfitzhenry",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Cannot("Requires domain registered through Web UI"),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
-func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (n *mythicBeastsProvider) Initialize(conf map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if conf["keyID"] == "" {
-		return nil, errors.New("missing Mythic Beasts auth keyID")
+		return errors.New("missing Mythic Beasts auth keyID")
 	}
 	if conf["secret"] == "" {
-		return nil, errors.New("missing Mythic Beasts auth secret")
+		return errors.New("missing Mythic Beasts auth secret")
 	}
 	// Use https://www.mythic-beasts.com/support/api/auth
 	cfg := clientcredentials.Config{
@@ -96,9 +88,10 @@ func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProv
 		Scopes:       []string{"client_credentials"},
 		AuthStyle:    oauth2.AuthStyleInHeader,
 	}
-	return &mythicBeastsProvider{
+	*n = mythicBeastsProvider{
 		client: cfg.Client(context.Background()),
-	}, nil
+	}
+	return nil
 }
 
 func (n *mythicBeastsProvider) httpRequest(method, url string, body io.Reader) (*http.Response, error) {

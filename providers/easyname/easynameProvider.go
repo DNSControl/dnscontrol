@@ -1,6 +1,7 @@
 package easyname
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sort"
@@ -17,31 +18,29 @@ type easynameProvider struct {
 	domains  map[string]easynameDomain
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur: providers.Unimplemented(),
-}
-
 func init() {
-	const providerName = "EASYNAME"
-	const providerMaintainer = "@tresni"
-	providers.RegisterRegistrarType(providerName, newEasyname, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*easynameProvider]("EASYNAME", providers.Definition{
+		FriendlyName: "easyname",
+		Maintainer:   "@tresni",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur: providers.Unimplemented(),
+		},
+	})
 }
 
-func newEasyname(m map[string]string) (providers.Registrar, error) {
-	api := &easynameProvider{}
-
+// Initialize initializes a fresh provider instance.
+func (c *easynameProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if m["email"] == "" || m["userid"] == "" || m["apikey"] == "" || m["authsalt"] == "" || m["signsalt"] == "" {
-		return nil, errors.New("missing easyname email, userid, apikey, authsalt and/or signsalt")
+		return errors.New("missing easyname email, userid, apikey, authsalt and/or signsalt")
 	}
 
-	api.apikey, api.signSalt = m["apikey"], m["signsalt"]
+	c.apikey, c.signSalt = m["apikey"], m["signsalt"]
 	composed := fmt.Sprintf(m["authsalt"], m["userid"], m["email"])
-	api.apiauth = hashEncodeString(composed)
+	c.apiauth = hashEncodeString(composed)
 
-	return api, nil
+	return nil
 }
 
 // GetRegistrarCorrections gathers corrections that would bring n to match dc.

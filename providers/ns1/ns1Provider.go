@@ -9,48 +9,15 @@ import (
 	"gopkg.in/ns1/ns1-go.v2/rest"
 )
 
-var docNotes = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseDHCID:            providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 // clientRetries is the number of retries for API backend requests in case of StatusTooManyRequests responses.
 const clientRetries = 10
 
 func init() {
-	const providerName = "NS1"
-	const providerMaintainer = "@costasd"
-	fns := providers.DspFuncs{
-		Initializer:   newProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, docNotes)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "NS1",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/ns1",
-		PortalURL:   "https://my.nsone.net/#/account/settings/keys",
-		Fields: []providers.CredsField{
+	providers.Register[*nsone]("NS1", providers.Definition{
+		FriendlyName: "NS1",
+		DocsURL:      "https://docs.dnscontrol.org/provider/ns1",
+		PortalURL:    "https://my.nsone.net/#/account/settings/keys",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_token",
 				Label:    "API token",
@@ -58,6 +25,30 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@costasd",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDNAME:            providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseDHCID:            providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -71,19 +62,22 @@ func (n *nsone) SetConversionObserver(observer providers.ConversionObserver) {
 	n.observer = observer
 }
 
-func newProvider(creds map[string]string, meta json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (n *nsone) Initialize(creds map[string]string, meta json.RawMessage, options *providers.CreateOptions) error {
 	if creds["api_token"] == "" {
-		return nil, errors.New("api_token required for ns1")
+		return errors.New("api_token required for ns1")
 	}
 
 	// Enable Sleep API Rate limit strategy - it will sleep until new tokens are available
 	// see https://help.ns1.com/hc/en-us/articles/360020250573-About-API-rate-limiting
 	// this strategy would imply the least sleep time for non-parallel client requests
-	return &nsone{Client: rest.NewClient(
+	*n = nsone{Client: rest.NewClient(
 		http.DefaultClient,
 		rest.SetAPIKey(creds["api_token"]),
 		func(c *rest.Client) {
 			c.RateLimitStrategySleep()
 		},
-	)}, nil
+	)}
+	n.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }

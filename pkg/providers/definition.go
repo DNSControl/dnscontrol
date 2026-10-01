@@ -17,12 +17,6 @@ type InitializableProvider interface {
 	Initialize(map[string]string, json.RawMessage, *CreateOptions) error
 }
 
-// RecordAuditingProvider validates records without credentials or initialization.
-// AuditRecords must neither depend on nor mutate receiver state.
-type RecordAuditingProvider interface {
-	AuditRecords(models.Records) []error
-}
-
 // Initializer allocates and initializes a fresh instance, returning nil on error.
 type Initializer func(map[string]string, json.RawMessage, *CreateOptions) (any, error)
 
@@ -77,8 +71,8 @@ type Definition struct {
 	DerivedFeatures    DocumentationNotes
 }
 
-// Only migrated providers appear here. Legacy registrations continue to use the
-// compatibility registries until all providers and consumers have migrated.
+// Provider implementations register here. Legacy registries remain as
+// compatibility views until their consumers have migrated.
 // Canonical names and aliases point directly to the same definition.
 var definitions = map[string]*Definition{}
 
@@ -124,19 +118,15 @@ func Register[T InitializableProvider](name string, definition Definition) {
 	def.ImplementationType = typ
 	if typ.Implements(reflect.TypeFor[DNSServiceProvider]()) {
 		def.Kind |= KindDNS
+		// This uninitialized receiver is separate from every runtime account.
+		auditor := reflect.New(typ.Elem()).Interface().(models.DNSProvider)
+		def.RecordAuditor = auditor.AuditRecords
 	}
 	if typ.Implements(reflect.TypeFor[Registrar]()) {
 		def.Kind |= KindRegistrar
 	}
 	if def.Kind == 0 {
 		panic(fmt.Sprintf("provider %q: implementation supports neither DNS nor registrar operations", name))
-	}
-	if typ.Implements(reflect.TypeFor[RecordAuditingProvider]()) {
-		// This receiver is separate from every runtime account instance.
-		auditor := reflect.New(typ.Elem()).Interface().(RecordAuditingProvider)
-		def.RecordAuditor = auditor.AuditRecords
-	} else if def.Kind.Has(KindDNS) {
-		panic(fmt.Sprintf("provider %q: DNS implementations must implement RecordAuditingProvider", name))
 	}
 	def.CanGetZones = typ.Implements(reflect.TypeFor[ZoneLister]())
 	def.DocCreateDomains = typ.Implements(reflect.TypeFor[ZoneCreator]())
