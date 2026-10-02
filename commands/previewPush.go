@@ -53,7 +53,7 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 			rCfg := cfg.RegistrarsByName[d.RegistrarName]
 			r, err := providers.CreateRegistrar(rCfg.Type, providerConfigs[d.RegistrarName])
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed to initialize registrar %q: %w", rCfg.Name, err)
 			}
 			registrars[d.RegistrarName] = r
 		}
@@ -64,7 +64,7 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
 				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
 				if err != nil {
-					return nil, fmt.Errorf("failed to initialize %q: %w", dCfg.Name, err)
+					return nil, fmt.Errorf("failed to initialize DNS provider %q: %w", dCfg.Name, err)
 				}
 				dnsProviders[pInst.Name] = prov
 			}
@@ -162,6 +162,11 @@ func uniqueStrings(stringSlice []string) []string {
 }
 
 func refineProviderType(credEntryName string, t string, credFields map[string]string, source string) (replacementType string, warnMsg string, err error) {
+	defer func() {
+		if err == nil {
+			replacementType = providers.CanonicalName(replacementType)
+		}
+	}()
 	// t="" and t="-" are processed the same. Standardize on "-" to reduce the number of cases to check.
 	if t == "" {
 		t = "-"
@@ -198,8 +203,9 @@ func refineProviderType(credEntryName string, t string, credFields map[string]st
 			), nil
 		}
 
-		switch ct := credFields[providerTypeFieldName]; ct {
-		case "":
+		ct := credFields[providerTypeFieldName]
+		switch {
+		case ct == "":
 			// Warn the user to update creds.json in preparation for 4.0:
 			// In 4.0 this should be an error.
 			return t, fmt.Sprintf(`WARNING: For future compatibility, update the %q entry in creds.json by adding: %q: %q, (See %s#missing)`,
@@ -207,13 +213,13 @@ func refineProviderType(credEntryName string, t string, credFields map[string]st
 				providerTypeFieldName, t,
 				url,
 			), nil
-		case "-":
+		case ct == "-":
 			// This should never happen. The user is specifying "-" in a place that it shouldn't be used.
 			return "-", "", fmt.Errorf(`ERROR: creds.json entry %q has invalid %q value %q (See %s#hyphen)`,
 				credEntryName, providerTypeFieldName, ct,
 				url,
 			)
-		case t:
+		case providers.CanonicalName(ct) == providers.CanonicalName(t):
 			// creds.json file is compatible with and dnsconfig.js can be updated.
 			return ct, fmt.Sprintf(`INFO: In dnsconfig.js %s(%q, %q) can be simplified to %s(%q) (See %s#cleanup)`,
 				source, credEntryName, t,

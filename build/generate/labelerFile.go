@@ -8,14 +8,15 @@ import (
 )
 
 func generateLabelerFile() error {
-	maintainers := providers.ProviderMaintainers
-	sortedProviderNames := getSortedProviderNames(maintainers)
 
 	var labelerData strings.Builder
-	for _, providerName := range sortedProviderNames {
-		providerDirectory := getProviderDirectory(providerName)
+	for _, def := range providers.AllDefinitions() {
+		if def.Maintainer == "" {
+			continue
+		}
+		providerDirectory := getProviderDirectory(def)
 		labelerData.WriteString("provider-")
-		labelerData.WriteString(providerName)
+		labelerData.WriteString(def.TypeName)
 		labelerData.WriteString(":\n")
 		labelerData.WriteString("  - changed-files:\n")
 		labelerData.WriteString("      - any-glob-to-any-file: providers/")

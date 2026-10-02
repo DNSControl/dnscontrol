@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -52,8 +51,9 @@ func generateFeatureMatrix() error {
 func updateProviderDocs() {
 	matrix := matrixData()
 	docDir := "documentation/provider"
-	for _, providerName := range allProviderNames() {
-		docFile := filepath.Join(docDir, providerDocSlug(providerName)+".md")
+	for _, def := range publicDefinitions() {
+		providerName := def.TypeName
+		docFile := filepath.Join(docDir, providerDocSlug(def)+".md")
 		if _, err := os.Stat(docFile); os.IsNotExist(err) {
 			fmt.Printf("WARNING: Missing documentation page for provider %s: %s\n", providerName, docFile)
 		} else {
@@ -97,10 +97,11 @@ func markdownTable(matrix *FeatureMatrix, tableNumber int32) (string, error) {
 	tableHeaders = append(tableHeaders, matrix.FeatureTables[tableNumber]...)
 
 	var tableData [][]string
-	for _, providerName := range allProviderNames() {
+	for _, def := range publicDefinitions() {
+		providerName := def.TypeName
 		featureMap := matrix.Providers[providerName]
 
-		var providerLink = strings.ReplaceAll(strings.ToLower(providerName), "_", "")
+		providerLink := providerDocSlug(def)
 
 		var tableDataRow []string
 		tableDataRow = append(tableDataRow, "[`"+providerName+"`]("+providerLink+".md)")
@@ -225,9 +226,10 @@ func matrixData() *FeatureMatrix {
 		},
 	}
 
-	for _, providerName := range allProviderNames() {
+	for _, def := range publicDefinitions() {
+		providerName := def.TypeName
 		featureMap := FeatureMap{}
-		providerNotes := providers.Notes[providerName]
+		providerNotes := def.DerivedFeatures
 		if providerNotes == nil {
 			providerNotes = providers.DocumentationNotes{}
 		}
@@ -269,12 +271,12 @@ func matrixData() *FeatureMatrix {
 		featureMap.SetSimple(
 			ProviderDNSProvider,
 			false,
-			func() bool { return providers.DNSProviderTypes[providerName].Initializer != nil },
+			func() bool { return def.Kind.Has(providers.KindDNS) },
 		)
 		featureMap.SetSimple(
 			ProviderRegistrar,
 			false,
-			func() bool { return providers.RegistrarTypes[providerName] != nil },
+			func() bool { return def.Kind.Has(providers.KindRegistrar) },
 		)
 		setCapability(
 			ProviderThreadSafe,
@@ -385,32 +387,6 @@ func matrixData() *FeatureMatrix {
 		matrix.Providers[providerName] = featureMap
 	}
 	return matrix
-}
-
-func allProviderNames() []string {
-	const ProviderNameNone = "NONE"
-
-	allProviderNames := map[string]bool{}
-	for providerName := range providers.RegistrarTypes {
-		if providerName == ProviderNameNone {
-			continue
-		}
-		allProviderNames[providerName] = true
-	}
-	for providerName := range providers.DNSProviderTypes {
-		if providerName == ProviderNameNone {
-			continue
-		}
-		allProviderNames[providerName] = true
-	}
-
-	var allProviderNamesAsString []string
-	for providerName := range allProviderNames {
-		allProviderNamesAsString = append(allProviderNamesAsString, providerName)
-	}
-	sort.Strings(allProviderNamesAsString)
-
-	return allProviderNamesAsString
 }
 
 // FeatureMap maps provider names to compliance documentation.

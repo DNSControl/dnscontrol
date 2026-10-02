@@ -10,28 +10,9 @@ import (
 )
 
 func TestAllProvidersUseDefinitions(t *testing.T) {
-	// During the consumer migration, every legacy entry must be a view of a
-	// unified definition, never a provider registered only through the old API.
-	roles := map[string]providers.ProviderKind{}
-	for name := range providers.DNSProviderTypes {
-		roles[name] |= providers.KindDNS
-	}
-	for name := range providers.RegistrarTypes {
-		roles[name] |= providers.KindRegistrar
-	}
-	for name, kind := range roles {
-		def, ok := providers.GetDefinition(name)
-		if !ok {
-			t.Errorf("%s has no unified definition", name)
-			continue
-		}
-		if def.Kind != kind {
-			t.Errorf("%s: definition roles = %v, legacy roles = %v", name, def.Kind, kind)
-		}
-	}
 	for _, def := range providers.AllDefinitions() {
-		if roles[def.TypeName] != def.Kind {
-			t.Errorf("%s is missing from the legacy views", def.TypeName)
+		if got, ok := providers.GetDefinition(def.TypeName); !ok || got != def {
+			t.Fatalf("%s: canonical definition lookup failed", def.TypeName)
 		}
 		if !def.Kind.Has(providers.KindDNS) {
 			continue

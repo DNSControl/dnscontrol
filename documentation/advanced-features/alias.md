@@ -11,7 +11,12 @@ A few notes:
 
 ```go
 func init() {
-    providers.RegisterDomainServiceProviderType("CLOUDFLAREAPI", newCloudflare, providers.CanUseAlias)
+    providers.Register[*cloudflareProvider]("CLOUDFLAREAPI", providers.Definition{
+        FriendlyName: "Cloudflare",
+        Features: providers.DocumentationNotes{
+            providers.CanUseAlias: providers.Can(),
+        },
+    })
 }
 ```
 
