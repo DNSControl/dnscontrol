@@ -42,13 +42,13 @@ type Definition struct {
 	// CredFields is a description of the creds.json fields for this provider. Used by "init".
 	CredFields []CredsField
 
-	// DocsURL see CredsMetadata
+	// DocsURL points to the provider documentation page.
 	DocsURL string
-	// PortalURL see CredsMetadata
+	// PortalURL points to where a user can obtain API credentials.
 	PortalURL string
-	// Notes CredsMetadata
+	// Notes is optional onboarding text shown before prompting for credentials.
 	Notes string
-	// PostWrite CredsMetadata
+	// PostWrite prepares local resources after the wizard writes creds.json.
 	PostWrite func(map[string]string) error
 
 	// Nil capability notes fall back to Features. Explicit notes take precedence.
@@ -71,8 +71,7 @@ type Definition struct {
 	DerivedFeatures    DocumentationNotes
 }
 
-// Provider implementations register here. Legacy registries and accessors
-// remain available for compatibility until their consumers have migrated.
+// Provider implementations register here.
 // Canonical names and aliases point directly to the same definition.
 var definitions = map[string]*Definition{}
 
@@ -107,7 +106,7 @@ func Register[T InitializableProvider](name string, definition Definition) {
 	names := append([]string{name}, definition.Aliases...)
 	seen := map[string]bool{}
 	for _, n := range names {
-		if strings.TrimSpace(n) == "" || n == "-" || seen[n] || providerNameInUse(n) {
+		if strings.TrimSpace(n) == "" || n == "-" || seen[n] || definitions[n] != nil {
 			panic(fmt.Sprintf("provider %q: invalid or already registered name %q", name, n))
 		}
 		seen[n] = true
@@ -171,35 +170,18 @@ func Register[T InitializableProvider](name string, definition Definition) {
 	for _, n := range names {
 		definitions[n] = def
 	}
-	publishLegacyDefinition(def)
 }
 
-func providerNameInUse(name string) bool {
-	_, definition := definitions[name]
-	_, dns := DNSProviderTypes[name]
-	_, registrar := RegistrarTypes[name]
-	_, creds := CredsMetadataByType[name]
-	_, maintainer := ProviderMaintainers[name]
-	_, ttl := ProviderDefaultTTLs[name]
-	return definition || dns || registrar || creds || maintainer || ttl
-}
-
-// rejectUnifiedRegistration prevents mixing legacy writes with a completed
-// definition, including aliases whose canonical provider has a different role.
-func rejectUnifiedRegistration(name string) {
-	if _, ok := definitions[name]; ok {
-		panic(fmt.Sprintf("provider %q is already registered with Register", name))
-	}
-}
-
-func canonicalProviderName(name string) string {
+// CanonicalName resolves a provider-type alias. Unknown names are returned
+// unchanged so callers can retain their existing validation and diagnostics.
+func CanonicalName(name string) string {
 	if def, ok := definitions[name]; ok {
 		return def.TypeName
 	}
 	return name
 }
 
-// GetDefinition returns the stored definition for a migrated provider. Canonical
+// GetDefinition returns the stored provider definition. Canonical
 // names and aliases return the same pointer. The definition and its nested
 // metadata must be treated as read-only.
 func GetDefinition(name string) (*Definition, bool) {
@@ -207,9 +189,8 @@ func GetDefinition(name string) (*Definition, bool) {
 	return def, ok
 }
 
-// AllDefinitions returns migrated canonical definitions sorted by TypeName.
+// AllDefinitions returns canonical definitions sorted by TypeName.
 // The returned pointers and their nested metadata must be treated as read-only.
-// Legacy providers remain available through the compatibility registries.
 func AllDefinitions() []*Definition {
 	names := slices.Sorted(maps.Keys(definitions))
 	result := make([]*Definition, 0, len(names))
@@ -220,48 +201,4 @@ func AllDefinitions() []*Definition {
 		}
 	}
 	return result
-}
-
-func definitionCredsMetadata(def *Definition) CredsMetadata {
-	return CredsMetadata{
-		TypeName:    def.TypeName,
-		DisplayName: def.FriendlyName,
-		Kind:        def.Kind,
-		DocsURL:     def.DocsURL,
-		PortalURL:   def.PortalURL,
-		Notes:       def.Notes,
-		Fields:      def.CredFields,
-		PostWrite:   def.PostWrite,
-	}
-}
-
-// publishLegacyDefinition maintains canonical-only compatibility views for
-// consumers not yet migrated. These exported maps must be treated as read-only;
-// accessor/factory calls use the private definition as their source of truth.
-func publishLegacyDefinition(def *Definition) {
-	name := def.TypeName
-	if def.Kind.Has(KindDNS) {
-		DNSProviderTypes[name] = DspFuncs{
-			Initializer: func(config map[string]string, meta json.RawMessage) (DNSServiceProvider, error) {
-				return CreateDNSProvider(name, config, meta)
-			},
-			InitializerWithOptions: func(config map[string]string, meta json.RawMessage, options CreateOptions) (DNSServiceProvider, error) {
-				return CreateDNSProvider(name, config, meta, func(o *CreateOptions) { *o = options })
-			},
-			RecordAuditor: def.RecordAuditor, RecordIdentity: def.RecordIdentity,
-		}
-	}
-	if def.Kind.Has(KindRegistrar) {
-		RegistrarTypes[name] = func(config map[string]string) (Registrar, error) {
-			return CreateRegistrar(name, config)
-		}
-	}
-	CredsMetadataByType[name] = definitionCredsMetadata(def)
-	if def.Maintainer != "" {
-		ProviderMaintainers[name] = def.Maintainer
-	}
-	if def.DefaultTTL != 0 {
-		ProviderDefaultTTLs[name] = def.DefaultTTL
-	}
-	unwrapProviderCapabilities(name, []ProviderMetadata{def.DerivedFeatures})
 }

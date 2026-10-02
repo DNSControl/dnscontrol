@@ -43,6 +43,7 @@ func (c *vercelProvider) SetConversionObserver(observer providers.ConversionObse
 func init() {
 	providers.Register[*vercelProvider]("VERCEL", providers.Definition{
 		FriendlyName: "Vercel",
+		DocsURL:      "https://docs.dnscontrol.org/provider/vercel",
 		Maintainer:   "@SukkaW",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

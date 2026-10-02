@@ -3,6 +3,7 @@ package providers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"reflect"
 	"slices"
 	"strings"
@@ -15,20 +16,8 @@ import (
 func isolateDefinitions(t *testing.T) {
 	t.Helper()
 	oldDefs := definitions
-	oldDNS, oldRegistrars := DNSProviderTypes, RegistrarTypes
-	oldCreds, oldMaintainers := CredsMetadataByType, ProviderMaintainers
-	oldTTLs, oldNotes, oldCapabilities := ProviderDefaultTTLs, Notes, providerCapabilities
-	t.Cleanup(func() {
-		definitions = oldDefs
-		DNSProviderTypes, RegistrarTypes = oldDNS, oldRegistrars
-		CredsMetadataByType, ProviderMaintainers = oldCreds, oldMaintainers
-		ProviderDefaultTTLs, Notes, providerCapabilities = oldTTLs, oldNotes, oldCapabilities
-	})
+	t.Cleanup(func() { definitions = oldDefs })
 	definitions = map[string]*Definition{}
-	DNSProviderTypes, RegistrarTypes = map[string]DspFuncs{}, map[string]RegistrarInitializer{}
-	CredsMetadataByType, ProviderMaintainers = map[string]CredsMetadata{}, map[string]string{}
-	ProviderDefaultTTLs, Notes = map[string]uint32{}, map[string]DocumentationNotes{}
-	providerCapabilities = map[string]map[Capability]bool{}
 }
 
 type definitionDNS struct {
@@ -167,7 +156,7 @@ func TestRegisterFactoriesAndAuditing(t *testing.T) {
 	}
 }
 
-func TestDefinitionPointersAndCompatibility(t *testing.T) {
+func TestDefinitionPointersAndMetadata(t *testing.T) {
 	isolateDefinitions(t)
 	postWrites := 0
 	input := Definition{
@@ -219,19 +208,14 @@ func TestDefinitionPointersAndCompatibility(t *testing.T) {
 	if GetDefaultTTL("ALIAS") != 300 || GetRecordIdentity("ALIAS")(&models.RecordConfig{}) != "identity" {
 		t.Fatal("alias accessors lost metadata")
 	}
-	meta, _ := GetCredsMetadata("ALIAS")
-	if meta.TypeName != "ZZZ" || meta.DisplayName != "Example" || meta.Kind != KindDNS || meta.DocsURL != "docs" || meta.PortalURL != "portal" || meta.Notes != "notes" || meta.Fields[0].Choices[0] != "one" {
-		t.Fatalf("credential metadata = %+v", meta)
+	if def.FriendlyName != "Example" || def.Kind != KindDNS || def.DocsURL != "docs" || def.PortalURL != "portal" || def.Notes != "notes" || def.Maintainer != "@example" {
+		t.Fatalf("definition metadata = %+v", def)
 	}
-	if err := meta.PostWrite(nil); err != nil || postWrites != 1 {
+	if err := def.PostWrite(nil); err != nil || postWrites != 1 {
 		t.Fatal("PostWrite not preserved")
 	}
-	if ProviderMaintainers["ZZZ"] != "@example" || ProviderDefaultTTLs["ZZZ"] != 300 {
-		t.Fatal("legacy metadata views not published")
-	}
-	p, err := DNSProviderTypes["ZZZ"].InitializerWithOptions(nil, nil, CreateOptions{RequestedRole: KindRegistrar})
-	if err != nil || p.(*definitionDNS).options.RequestedRole != KindDNS {
-		t.Fatalf("compatibility initializer did not enforce its role: %v", err)
+	if CanonicalName("ALIAS") != "ZZZ" || CanonicalName("MISSING") != "MISSING" {
+		t.Fatal("canonical name resolution failed")
 	}
 }
 
@@ -266,7 +250,7 @@ func TestRegisterRejectsInvalidDefinitions(t *testing.T) {
 	for _, check := range checks {
 		t.Run(check.name, func(t *testing.T) {
 			assertRegistrationPanics(t, check.message, check.register)
-			if len(definitions) != 0 || len(DNSProviderTypes) != 0 || len(RegistrarTypes) != 0 {
+			if len(definitions) != 0 {
 				t.Fatal("invalid registration was partially published")
 			}
 		})
@@ -299,22 +283,21 @@ func assertRegistrationPanics(t *testing.T, message string, f func()) {
 }
 
 func TestRegistrationNameCollisions(t *testing.T) {
-	for _, legacyFirst := range []bool{false, true} {
-		t.Run(map[bool]string{true: "legacy first", false: "unified first"}[legacyFirst], func(t *testing.T) {
+	for _, canonicalFirst := range []bool{false, true} {
+		t.Run(fmt.Sprint("canonical first=", canonicalFirst), func(t *testing.T) {
 			isolateDefinitions(t)
-			legacy := func() {
-				RegisterRegistrarType("ALIAS", func(map[string]string) (Registrar, error) { return &None{}, nil })
-			}
-			unified := func() { Register[*definitionDNS]("DNS", Definition{FriendlyName: "DNS", Aliases: []string{"ALIAS"}}) }
-			if legacyFirst {
-				legacy()
-				assertRegistrationPanics(t, "already registered", unified)
+			canonical := func() { Register[*None]("ALIAS", Definition{FriendlyName: "Registrar"}) }
+			alias := func() { Register[*definitionDNS]("DNS", Definition{FriendlyName: "DNS", Aliases: []string{"ALIAS"}}) }
+			if canonicalFirst {
+				canonical()
+				assertRegistrationPanics(t, "already registered", alias)
 			} else {
-				unified()
-				assertRegistrationPanics(t, "already registered", legacy)
+				alias()
+				assertRegistrationPanics(t, "already registered", canonical)
 			}
 		})
 	}
+
 	t.Run("canonical and alias conflicts", func(t *testing.T) {
 		isolateDefinitions(t)
 		Register[*None]("FIRST", Definition{FriendlyName: "First", Aliases: []string{"ALIAS"}})
@@ -326,9 +309,6 @@ func TestRegistrationNameCollisions(t *testing.T) {
 		}
 		assertRegistrationPanics(t, "already registered", func() { Register[*None]("ALIAS", Definition{FriendlyName: "Second"}) })
 		assertRegistrationPanics(t, "already registered", func() { Register[*None]("FIRST", Definition{FriendlyName: "Second"}) })
-		assertRegistrationPanics(t, "already registered", func() { RegisterCredsMetadata("ALIAS", CredsMetadata{}) })
-		assertRegistrationPanics(t, "already registered", func() { RegisterMaintainer("FIRST", "@changed") })
-		assertRegistrationPanics(t, "already registered", func() { RegisterDefaultTTL("FIRST", 60) })
 	})
 }
 

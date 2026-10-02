@@ -15,6 +15,7 @@ import (
 func init() {
 	providers.Register[*opensrsProvider]("OPENSRS", providers.Definition{
 		FriendlyName: "OpenSRS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/opensrs",
 		Maintainer:   "NEEDS VOLUNTEER",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

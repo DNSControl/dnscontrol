@@ -26,6 +26,7 @@ type softlayerProvider struct {
 func init() {
 	providers.Register[*softlayerProvider]("SOFTLAYER", providers.Definition{
 		FriendlyName: "SoftLayer",
+		DocsURL:      "https://docs.dnscontrol.org/provider/softlayer",
 		Maintainer:   "NEEDS VOLUNTEER",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

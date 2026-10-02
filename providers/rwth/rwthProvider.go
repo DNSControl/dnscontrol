@@ -15,6 +15,7 @@ type rwthProvider struct {
 func init() {
 	providers.Register[*rwthProvider]("RWTH", providers.Definition{
 		FriendlyName: "RWTH Aachen",
+		DocsURL:      "https://docs.dnscontrol.org/provider/rwth",
 		Maintainer:   "@mistererwin",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

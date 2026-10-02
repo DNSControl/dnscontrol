@@ -1,9 +1,5 @@
 package providers
 
-import (
-	"log"
-)
-
 // ProviderKind is a bitmask describing the capabilities a provider offers
 // from the perspective of the DNSControl configuration.
 type ProviderKind uint8
@@ -61,58 +57,4 @@ type CredsField struct {
 	// earlier field's Key to the value that must be selected for this
 	// field to appear. An empty map means always show.
 	ShowIf map[string]string
-}
-
-// CredsMetadata documents the creds.json layout for a single provider type
-// plus the onboarding hints a human needs to obtain the values.
-type CredsMetadata struct {
-	// TypeName matches the name passed to RegisterDomainServiceProviderType
-	// or RegisterRegistrarType (for example "CLOUDFLAREAPI").
-	TypeName string
-	// DisplayName is a friendly name for the provider (for example
-	// "Cloudflare").
-	DisplayName string
-	// Kind indicates which registry maps the provider appears in.
-	Kind ProviderKind
-	// DocsURL points to the provider documentation page.
-	DocsURL string
-	// PortalURL is the URL where a human can create the API credential.
-	PortalURL string
-	// Fields lists the creds.json keys in the order the init command should
-	// prompt for them.
-	Fields []CredsField
-	// Notes is an optional block of text shown once before prompting.
-	Notes string
-	// PostWrite, if set, is called after the wizard has written
-	// creds.json so the provider can prepare any local resources it
-	// needs. BIND uses this to create the zone files directory.
-	PostWrite func(fields map[string]string) error
-}
-
-// CredsMetadataByType stores every registered CredsMetadata keyed by
-// TypeName.
-var CredsMetadataByType = map[string]CredsMetadata{}
-
-// RegisterCredsMetadata records the creds.json metadata for a provider.
-// It is safe to call from a provider init() alongside RegisterMaintainer.
-func RegisterCredsMetadata(name string, meta CredsMetadata) {
-	rejectUnifiedRegistration(name)
-	if _, ok := CredsMetadataByType[name]; ok {
-		log.Fatalf("Cannot register creds metadata for %q multiple times", name)
-	}
-	if meta.TypeName == "" {
-		meta.TypeName = name
-	}
-	CredsMetadataByType[name] = meta
-}
-
-// GetCredsMetadata returns the metadata registered for the given provider
-// type, or a zero value and false when nothing is registered.
-// The returned metadata and its nested fields must be treated as read-only.
-func GetCredsMetadata(name string) (CredsMetadata, bool) {
-	if def, ok := definitions[name]; ok {
-		return definitionCredsMetadata(def), true
-	}
-	meta, found := CredsMetadataByType[name]
-	return meta, found
 }

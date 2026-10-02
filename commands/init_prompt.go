@@ -189,7 +189,7 @@ func fieldLabel(field providers.CredsField) string {
 // openPortalHint prints the portal URL plus any provider notes so the
 // user can open the link themselves before answering the credential
 // prompts.
-func openPortalHint(_ Asker, meta providers.CredsMetadata) error {
+func openPortalHint(_ Asker, meta *providers.Definition) error {
 	if meta.PortalURL == "" && meta.Notes == "" {
 		return nil
 	}
@@ -207,10 +207,10 @@ func openPortalHint(_ Asker, meta providers.CredsMetadata) error {
 // the resulting key/value map. Fields whose ShowIf condition does not
 // match are skipped. Internal fields are not written to the output.
 // Empty optional answers are dropped.
-func collectFields(asker Asker, meta providers.CredsMetadata) (map[string]string, error) {
+func collectFields(asker Asker, meta *providers.Definition) (map[string]string, error) {
 	answers := map[string]string{}
 	output := map[string]string{}
-	for _, field := range meta.Fields {
+	for _, field := range meta.CredFields {
 		if !showField(field, answers) {
 			continue
 		}
@@ -244,12 +244,12 @@ func showField(field providers.CredsField, answers map[string]string) bool {
 	return true
 }
 
-// displayName returns the human friendly DisplayName registered for the
+// displayName returns the human friendly FriendlyName registered for the
 // given provider type, falling back to the type name itself when no
-// metadata or DisplayName is registered.
+// metadata or FriendlyName is registered.
 func displayName(typeName string) string {
-	if meta, ok := providers.GetCredsMetadata(typeName); ok && meta.DisplayName != "" {
-		return meta.DisplayName
+	if meta, ok := providers.GetDefinition(typeName); ok && meta.FriendlyName != "" {
+		return meta.FriendlyName
 	}
 	return typeName
 }

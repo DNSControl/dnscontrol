@@ -56,6 +56,7 @@ func (provider *exoscaleProvider) Initialize(m map[string]string, _ json.RawMess
 func init() {
 	providers.Register[*exoscaleProvider]("EXOSCALE", providers.Definition{
 		FriendlyName: "Exoscale",
+		DocsURL:      "https://docs.dnscontrol.org/provider/exoscale",
 		Maintainer:   "@Giza",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

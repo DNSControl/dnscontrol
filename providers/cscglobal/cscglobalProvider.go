@@ -44,6 +44,7 @@ func (client *providerClient) Initialize(m map[string]string, _ json.RawMessage,
 func init() {
 	providers.Register[*providerClient]("CSCGLOBAL", providers.Definition{
 		FriendlyName: "CSC Global",
+		DocsURL:      "https://docs.dnscontrol.org/provider/cscglobal",
 		Maintainer:   "@mikenz",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

@@ -153,6 +153,7 @@ func (c *axfrddnsProvider) Initialize(config map[string]string, providermeta jso
 func init() {
 	providers.Register[*axfrddnsProvider]("AXFRDDNS", providers.Definition{
 		FriendlyName: "AXFR + DDNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/axfrddns",
 		Maintainer:   "@hnrgrgr",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

@@ -78,8 +78,8 @@ func TestAskFieldConfirmValue(t *testing.T) {
 
 func TestCollectFieldsConfirmValueNo(t *testing.T) {
 	asker := &stubAsker{t: t, confirm: []bool{false}}
-	meta := providers.CredsMetadata{
-		Fields: []providers.CredsField{
+	meta := &providers.Definition{
+		CredFields: []providers.CredsField{
 			{Key: "sandbox", Label: "Use the sandbox API?", ConfirmValue: "1"},
 		},
 	}

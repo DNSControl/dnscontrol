@@ -29,6 +29,7 @@ type scalewayProvider struct {
 func init() {
 	providers.Register[*scalewayProvider]("SCALEWAY", providers.Definition{
 		FriendlyName: "Scaleway",
+		DocsURL:      "https://docs.dnscontrol.org/provider/scaleway",
 		Maintainer:   "@alessiopcc",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

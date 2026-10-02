@@ -18,6 +18,7 @@ import (
 func init() {
 	providers.Register[*gigahostProvider]("GIGAHOST", providers.Definition{
 		FriendlyName: "Gigahost",
+		DocsURL:      "https://docs.dnscontrol.org/provider/gigahost",
 		CredFields: []providers.CredsField{
 			{
 				Key:      "apikey",

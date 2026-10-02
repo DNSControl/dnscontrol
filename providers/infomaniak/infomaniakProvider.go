@@ -30,6 +30,7 @@ func (p *infomaniakProvider) Initialize(m map[string]string, message json.RawMes
 func init() {
 	providers.Register[*infomaniakProvider]("INFOMANIAK", providers.Definition{
 		FriendlyName: "Infomaniak",
+		DocsURL:      "https://docs.dnscontrol.org/provider/infomaniak",
 		Maintainer:   "@jbelien",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

@@ -15,6 +15,7 @@ func init() {
 	providers.RegisterCustomRecordType("LUA", providerName, "")
 	providers.Register[*powerdnsProvider](providerName, providers.Definition{
 		FriendlyName: "PowerDNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/powerdns",
 		Maintainer:   "@jpbede",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

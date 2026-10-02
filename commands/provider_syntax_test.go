@@ -38,6 +38,8 @@ func (*syntaxTestProvider) GetZoneRecords(*models.DomainConfig) (models.Records,
 	return nil, nil
 }
 
+func (*syntaxTestProvider) ListZones() ([]string, error) { return []string{"example.com"}, nil }
+
 func (p *syntaxTestProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
 	names := make([]string, 0, len(dc.Nameservers))
 	for _, ns := range dc.Nameservers {
@@ -60,31 +62,30 @@ func (*syntaxTestProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 	return corrections, count, nil
 }
 
+var syntaxRegInstances, syntaxDNSInstances []*syntaxTestProvider
+
+func init() {
+	providers.Register[*syntaxTestProvider](providerSyntaxTestType, providers.Definition{
+		FriendlyName: "Syntax test",
+		Aliases:      []string{"TEST_PROVIDER_SYNTAX_ALIAS"},
+	})
+}
+
+func (p *syntaxTestProvider) Initialize(config map[string]string, meta json.RawMessage, options *providers.CreateOptions) error {
+	p.account, p.metadata = config["account"], meta
+	if options.RequestedRole == providers.KindRegistrar {
+		syntaxRegInstances = append(syntaxRegInstances, p)
+	} else {
+		syntaxDNSInstances = append(syntaxDNSInstances, p)
+	}
+	return nil
+}
+
 func registerSyntaxTestProvider(t *testing.T) (registrars, dns *[]*syntaxTestProvider) {
 	t.Helper()
-	var regInstances, dnsInstances []*syntaxTestProvider
-	_, regExists := providers.RegistrarTypes[providerSyntaxTestType]
-	_, dnsExists := providers.DNSProviderTypes[providerSyntaxTestType]
-	require.False(t, regExists)
-	require.False(t, dnsExists)
-	providers.RegistrarTypes[providerSyntaxTestType] = func(config map[string]string) (providers.Registrar, error) {
-		p := &syntaxTestProvider{account: config["account"]}
-		regInstances = append(regInstances, p)
-		return p, nil
-	}
-	providers.DNSProviderTypes[providerSyntaxTestType] = providers.DspFuncs{
-		Initializer: func(config map[string]string, meta json.RawMessage) (providers.DNSServiceProvider, error) {
-			p := &syntaxTestProvider{account: config["account"], metadata: meta}
-			dnsInstances = append(dnsInstances, p)
-			return p, nil
-		},
-		RecordAuditor: func(models.Records) []error { return nil },
-	}
-	t.Cleanup(func() {
-		delete(providers.RegistrarTypes, providerSyntaxTestType)
-		delete(providers.DNSProviderTypes, providerSyntaxTestType)
-	})
-	return &regInstances, &dnsInstances
+	syntaxRegInstances, syntaxDNSInstances = nil, nil
+	t.Cleanup(func() { syntaxRegInstances, syntaxDNSInstances = nil, nil })
+	return &syntaxRegInstances, &syntaxDNSInstances
 }
 
 var syntaxInitializers = []struct {
@@ -207,6 +208,12 @@ func TestProviderSyntaxCredentialResolution(t *testing.T) {
 			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"account": "one"}}, "", 0, 1},
 		{"mixed explicit type mismatch", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": "NONE"}}, "Mismatch", 0, 0},
+		{"alias credentials for both roles", `PROVIDER("account"); D("example.com", REGISTRAR("account"), DNS_SERVICE("account"));`,
+			map[string]map[string]string{"account": {"TYPE": "TEST_PROVIDER_SYNTAX_ALIAS"}}, "", 1, 1},
+		{"explicit alias with canonical credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX_ALIAS"); NewDnsProvider("account", "TEST_PROVIDER_SYNTAX_ALIAS"); D("example.com", "account", DnsProvider("account"));`,
+			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 1},
+		{"explicit canonical with alias credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); NewDnsProvider("account", "TEST_PROVIDER_SYNTAX"); D("example.com", "account", DnsProvider("account"));`,
+			map[string]map[string]string{"account": {"TYPE": "TEST_PROVIDER_SYNTAX_ALIAS"}}, "", 1, 1},
 	}
 	for _, initializer := range syntaxInitializers {
 		t.Run(initializer.name, func(t *testing.T) {
@@ -217,6 +224,12 @@ func TestProviderSyntaxCredentialResolution(t *testing.T) {
 					err := initializer.init(cfg, tt.creds)
 					if tt.wantError == "" {
 						require.NoError(t, err)
+						for _, d := range cfg.Domains {
+							require.NotEqual(t, "TEST_PROVIDER_SYNTAX_ALIAS", d.RegistrarInstance.ProviderType)
+							for _, p := range d.DNSProviderInstances {
+								require.Equal(t, providerSyntaxTestType, p.ProviderType)
+							}
+						}
 					} else {
 						require.ErrorContains(t, err, tt.wantError)
 					}

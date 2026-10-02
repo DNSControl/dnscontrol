@@ -29,6 +29,7 @@ Additional settings available in `creds.json`:
 func init() {
 	providers.Register[*realtimeregisterAPI]("REALTIMEREGISTER", providers.Definition{
 		FriendlyName: "Realtime Register",
+		DocsURL:      "https://docs.dnscontrol.org/provider/realtimeregister",
 		Maintainer:   "@PJEilers",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

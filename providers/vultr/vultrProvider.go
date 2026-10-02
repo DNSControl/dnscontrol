@@ -29,6 +29,7 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*vultrProvider]("VULTR", providers.Definition{
 		FriendlyName: "Vultr",
+		DocsURL:      "https://docs.dnscontrol.org/provider/vultr",
 		Maintainer:   "@pgaskin",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.
