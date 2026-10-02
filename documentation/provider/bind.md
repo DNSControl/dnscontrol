@@ -1,5 +1,10 @@
 This provider maintains a directory with a collection of .zone files as appropriate for ISC BIND, and other systems that use the RFC 1035 zone-file format.
 
+DNSControl's BIND provider can write every record type in its catalog, including
+provider-specific pseudo-types such as `ALIAS` and `R53_ALIAS`. It writes these
+types verbatim; it does not translate them into ordinary DNS records or
+implement the corresponding vendor features.
+
 This provider does not generate or update the named.conf file, nor does it deploy the .zone files to the BIND master. Both of those tasks are different at each site, so they are best done by a locally-written script.
 
 ## Configuration
@@ -142,7 +147,7 @@ If `filenameformat` is defined, `dnscontrol` makes a guess at which filenames ar
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
-  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❔
+  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ✅
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅

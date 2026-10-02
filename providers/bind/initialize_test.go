@@ -15,8 +15,13 @@ func TestRegisteredDefinition(t *testing.T) {
 	if !ok || def.Kind != providers.KindDNS || !def.CanGetZones || !def.DocCreateDomains {
 		t.Fatalf("BIND definition = %+v", def)
 	}
-	if !reflect.DeepEqual(def.DerivedFeatures, def.Features) {
-		t.Fatal("migration changed legacy capabilities or documentation notes")
+	for capability, note := range def.Features {
+		if !reflect.DeepEqual(def.DerivedFeatures[capability], note) {
+			t.Fatalf("migration changed legacy capability or note: %s", capability)
+		}
+	}
+	if !def.UsesSupportedTypes() || !providers.ProviderHasCapability("BIND", providers.CanUseAKAMAITLC) {
+		t.Fatal("BIND wildcard must enable exhaustive support, including pseudo-types")
 	}
 	if errors := providers.AuditRecords("BIND", nil); len(errors) != 0 {
 		t.Fatal(errors)

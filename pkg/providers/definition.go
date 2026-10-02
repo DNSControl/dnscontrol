@@ -23,7 +23,8 @@ type Initializer func(map[string]string, json.RawMessage, *CreateOptions) (any, 
 // Definition describes a provider implementation, never a configured account.
 // providers.Register is the main entry point. It registers the provider, generates
 // the derived fields, and cross-checks for errors.
-// Definitions and their nested metadata are read-only after registration.
+// Definitions and their nested metadata are read-only to callers. Framework
+// finalization completes derived type capabilities before concurrent reads.
 type Definition struct {
 	// FriendlyName is the brand name ("Google", not "GCLOUD")
 	FriendlyName string
@@ -64,7 +65,16 @@ type Definition struct {
 	RecordIdentity         RecordIdentityFunc
 	Features               DocumentationNotes
 
-	// Calculated at providers.Register time. Providers must leave these fields unset.
+	// SupportedTypes is an exhaustive declaration of record support. Nil means
+	// Default (A, AAAA, CAA, CNAME, MX, NS, SRV, TXT), except that non-nil
+	// Features retains legacy validation. A non-nil empty slice declares no
+	// support beyond Features.
+	SupportedTypes []string
+
+	typeSelectors   []typeSelector
+	exhaustiveTypes bool
+
+	// Calculated by Register and Finalize. Providers must leave these fields unset.
 	TypeName           string
 	ImplementationType reflect.Type
 	Kind               ProviderKind
@@ -118,6 +128,10 @@ func Register[T InitializableProvider](name string, definition Definition) {
 
 	def := &definition
 	def.TypeName = name
+	def.exhaustiveTypes = def.SupportedTypes != nil || def.Features == nil
+	if err := def.compileTypeSelectors(); err != nil {
+		panic(err)
+	}
 	defaultDocsURL := "https://docs.dnscontrol.org/provider/" + strings.ToLower(name)
 	if def.DocsURL == defaultDocsURL {
 		panic(fmt.Sprintf("provider %q: DocsURL override matches derived URL %q; omit it", name, defaultDocsURL))
@@ -181,6 +195,7 @@ func Register[T InitializableProvider](name string, definition Definition) {
 	for _, n := range names {
 		definitions[n] = def
 	}
+	definitionGeneration++
 }
 
 // CanonicalName resolves a provider-type alias. Unknown names are returned
@@ -196,6 +211,7 @@ func CanonicalName(name string) string {
 // names and aliases return the same pointer. The definition and its nested
 // metadata must be treated as read-only.
 func GetDefinition(name string) (*Definition, bool) {
+	mustFinalize()
 	def, ok := definitions[name]
 	return def, ok
 }
@@ -203,6 +219,11 @@ func GetDefinition(name string) (*Definition, bool) {
 // AllDefinitions returns canonical definitions sorted by TypeName.
 // The returned pointers and their nested metadata must be treated as read-only.
 func AllDefinitions() []*Definition {
+	mustFinalize()
+	return allDefinitions()
+}
+
+func allDefinitions() []*Definition {
 	names := slices.Sorted(maps.Keys(definitions))
 	result := make([]*Definition, 0, len(names))
 	for _, name := range names {

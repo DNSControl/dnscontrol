@@ -23,6 +23,45 @@ type MakerRn func(origin string, metadata map[string]string, isEnabled nrc.Flags
 
 var TypeToMakeRDATA = make(map[uint16]MakerRn)
 
+// pseudoTypes records classification explicitly, independently of names and
+// codepoint ranges. Types registered by Register are DNSControl pseudo-types.
+var pseudoTypes = map[uint16]bool{}
+var catalogVersion uint64 = 1
+
+// RecordType describes a zone record recognized by the parser.
+type RecordType struct {
+	Name   string
+	Pseudo bool
+}
+
+// CatalogVersion changes when record types or their makers are registered.
+// Registration must finish before concurrent reads begin.
+func CatalogVersion() uint64 { return catalogVersion }
+
+// LookupRecordType excludes protocol/query-only types from the zone catalog.
+func LookupRecordType(name string) (RecordType, bool) {
+	code, ok := dnsv2.StringToType[name]
+	if !ok || dnsv2.TypeToRR[code] == nil {
+		return RecordType{}, false
+	}
+	switch code {
+	case dnsv2.TypeANY, dnsv2.TypeAXFR, dnsv2.TypeIXFR, dnsv2.TypeOPT, dnsv2.TypeTKEY, dnsv2.TypeTSIG:
+		return RecordType{}, false
+	}
+	return RecordType{Name: name, Pseudo: pseudoTypes[code]}, true
+}
+
+// RecordTypes returns the complete zone record catalog, sorted by name.
+func RecordTypes() []RecordType {
+	var result []RecordType
+	for _, name := range GetAllTypeNames() {
+		if typ, ok := LookupRecordType(name); ok {
+			result = append(result, typ)
+		}
+	}
+	return result
+}
+
 // Register registers a new private RR type. It panics if the code point or name is already in use.
 func Register(codepoint uint16, typeName string, newFn func() dnsv2.RR, makeFn MakerRn) {
 
@@ -58,6 +97,7 @@ func Register(codepoint uint16, typeName string, newFn func() dnsv2.RR, makeFn M
 		panic(fmt.Sprintf("StringToType[%s] already in use by %d", typeName, s))
 	}
 	dnsv2.StringToType[typeName] = codepoint
+	pseudoTypes[codepoint] = true
 
 	RegisterMaker(codepoint, makeFn)
 }
@@ -72,6 +112,7 @@ func RegisterMaker(codepoint uint16, makeFn MakerRn) {
 		panic(fmt.Sprintf("TypeToMakeRDATA[%d] a.k.a. %s already in use by %T", codepoint, typeName, s))
 	}
 	TypeToMakeRDATA[codepoint] = makeFn
+	catalogVersion++
 }
 
 // GetAllTypeNames returns a sorted list of all type names.
