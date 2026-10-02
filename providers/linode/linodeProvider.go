@@ -91,7 +91,6 @@ func (api *linodeProvider) Initialize(m map[string]string, _ json.RawMessage, _ 
 func init() {
 	providers.Register[*linodeProvider]("LINODE", providers.Definition{
 		FriendlyName: "Linode",
-		DocsURL:      "https://docs.dnscontrol.org/provider/linode",
 		PortalURL:    "https://cloud.linode.com/profile/tokens", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

@@ -91,7 +91,6 @@ var defaultNameServerNames = []string{
 func init() {
 	providers.Register[*huaweicloudProvider]("HUAWEICLOUD", providers.Definition{
 		FriendlyName: "Huawei Cloud DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/huaweicloud",
 		PortalURL:    "https://console-intl.huaweicloud.com/iam/?locale=en-us#/iam/users",
 		CredFields: []providers.CredsField{
 			{

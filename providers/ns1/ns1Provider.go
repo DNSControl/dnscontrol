@@ -15,7 +15,6 @@ const clientRetries = 10
 func init() {
 	providers.Register[*nsone]("NS1", providers.Definition{
 		FriendlyName: "NS1",
-		DocsURL:      "https://docs.dnscontrol.org/provider/ns1",
 		PortalURL:    "https://my.nsone.net/#/account/settings/keys",
 		CredFields: []providers.CredsField{
 			{

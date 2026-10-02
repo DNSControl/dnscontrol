@@ -55,7 +55,6 @@ var defaultNameServerNames = []string{
 func init() {
 	providers.Register[*gcoreProvider]("GCORE", providers.Definition{
 		FriendlyName: "G-Core Labs",
-		DocsURL:      "https://docs.dnscontrol.org/provider/gcore",
 		PortalURL:    "https://accounts.gcore.com/profile/api-tokens", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

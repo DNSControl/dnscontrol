@@ -53,7 +53,6 @@ func (client *Client) Initialize(conf map[string]string, _ json.RawMessage, opti
 func init() {
 	providers.Register[*Client]("CNR", providers.Definition{
 		FriendlyName: "CentralNic Reseller",
-		DocsURL:      "https://docs.dnscontrol.org/provider/cnr",
 		PortalURL:    "https://www.rrpproxy.net/",
 		CredFields: []providers.CredsField{
 			{

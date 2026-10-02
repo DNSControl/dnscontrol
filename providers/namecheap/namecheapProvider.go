@@ -64,7 +64,6 @@ func init() {
 	providers.RegisterCustomRecordType("FRAME", providerName, "")
 	providers.Register[*namecheapProvider](providerName, providers.Definition{
 		FriendlyName: "Namecheap",
-		DocsURL:      "https://docs.dnscontrol.org/provider/namecheap",
 		PortalURL:    "https://ap.www.namecheap.com/settings/tools/apiaccess/",
 		CredFields: []providers.CredsField{
 			{

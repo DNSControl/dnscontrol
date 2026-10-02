@@ -42,7 +42,9 @@ type Definition struct {
 	// CredFields is a description of the creds.json fields for this provider. Used by "init".
 	CredFields []CredsField
 
-	// DocsURL see CredsMetadata
+	// DocsURL optionally overrides https://docs.dnscontrol.org/provider/<lowercase name>
+	// for legacy documentation paths. An override matching the default is an error.
+	// Register fills an empty value with the default URL.
 	DocsURL string
 	// PortalURL see CredsMetadata
 	PortalURL string
@@ -115,6 +117,13 @@ func Register[T InitializableProvider](name string, definition Definition) {
 
 	def := &definition
 	def.TypeName = name
+	defaultDocsURL := "https://docs.dnscontrol.org/provider/" + strings.ToLower(name)
+	if def.DocsURL == defaultDocsURL {
+		panic(fmt.Sprintf("provider %q: DocsURL override matches derived URL %q; omit it", name, defaultDocsURL))
+	}
+	if def.DocsURL == "" {
+		def.DocsURL = defaultDocsURL
+	}
 	def.ImplementationType = typ
 	if typ.Implements(reflect.TypeFor[DNSServiceProvider]()) {
 		def.Kind |= KindDNS

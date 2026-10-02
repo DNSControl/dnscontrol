@@ -18,7 +18,7 @@ import (
 func init() {
 	providers.Register[*hetznerv2Provider]("HETZNER_V2", providers.Definition{
 		FriendlyName: "Hetzner DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/hetzner_v2",
+		DocsURL:      "https://docs.dnscontrol.org/provider/hetznerv2",
 		PortalURL:    "https://console.hetzner.com/projects",
 		CredFields: []providers.CredsField{
 			{

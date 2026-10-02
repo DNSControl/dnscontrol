@@ -28,7 +28,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*luadnsProvider]("LUADNS", providers.Definition{
 		FriendlyName: "LuaDNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/luadns",
 		PortalURL:    "https://app.luadns.com/users/api_keys",
 		CredFields: []providers.CredsField{
 			{

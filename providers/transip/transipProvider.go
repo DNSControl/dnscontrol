@@ -66,7 +66,6 @@ func (n *transipProvider) Initialize(m map[string]string, _ json.RawMessage, opt
 func init() {
 	providers.Register[*transipProvider]("TRANSIP", providers.Definition{
 		FriendlyName: "TransIP",
-		DocsURL:      "https://docs.dnscontrol.org/provider/transip",
 		PortalURL:    "https://www.transip.nl/cp/account/api/",
 		Notes:        "TransIP supports two auth methods: a short lived access token, or an account name paired with a long lived private key.",
 		CredFields: []providers.CredsField{

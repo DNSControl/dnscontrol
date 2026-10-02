@@ -36,7 +36,6 @@ var defaultNameServerNames = []string{
 func init() {
 	providers.Register[*desecProvider]("DESEC", providers.Definition{
 		FriendlyName: "deSEC",
-		DocsURL:      "https://docs.dnscontrol.org/provider/desec",
 		PortalURL:    "https://desec.io/tokens", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

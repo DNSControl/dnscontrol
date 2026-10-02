@@ -40,7 +40,6 @@ func init() {
 	providers.RegisterCustomRecordType("MIKROTIK_FORWARDER", providerName, "")
 	providers.Register[*mikrotikProvider](providerName, providers.Definition{
 		FriendlyName: "MikroTik RouterOS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/mikrotik",
 		PortalURL:    "", // No portal; managed on-device
 		CredFields: []providers.CredsField{
 			{

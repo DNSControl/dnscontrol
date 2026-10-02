@@ -36,7 +36,6 @@ type nexdnsProvider struct {
 func init() {
 	providers.Register[*nexdnsProvider]("NEXDNS", providers.Definition{
 		FriendlyName: "NexDNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/nexdns",
 		PortalURL:    "https://nexdns.tech/settings/api-keys",
 		Notes:        "The API is available on a plan that includes API access. See https://nexdns.tech/pricing.",
 		CredFields: []providers.CredsField{

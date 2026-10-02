@@ -30,7 +30,6 @@ func (c *websupportProvider) SetConversionObserver(observer providers.Conversion
 func init() {
 	providers.Register[*websupportProvider]("WEBSUPPORT", providers.Definition{
 		FriendlyName: "WebSupport",
-		DocsURL:      "https://docs.dnscontrol.org/provider/websupport",
 		PortalURL:    "https://admin.websupport.sk/en/auth/security",
 		CredFields: []providers.CredsField{
 			{

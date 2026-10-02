@@ -38,7 +38,7 @@ import (
 func init() {
 	providers.Register[*gandiv5Provider]("GANDI_V5", providers.Definition{
 		FriendlyName: "Gandi v5",
-		DocsURL:      "https://docs.dnscontrol.org/provider/gandi_v5",
+		DocsURL:      "https://docs.dnscontrol.org/provider/gandiv5",
 		PortalURL:    "https://admin.gandi.net/dashboard/",
 		Notes:        "Gandi supports two auth methods: the newer Personal Access Token (recommended) or the legacy API key.",
 		CredFields: []providers.CredsField{

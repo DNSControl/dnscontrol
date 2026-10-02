@@ -34,7 +34,6 @@ import (
 func init() {
 	providers.Register[*APIClient]("LOOPIA", providers.Definition{
 		FriendlyName: "Loopia",
-		DocsURL:      "https://docs.dnscontrol.org/provider/loopia",
 		PortalURL:    "https://support.loopia.com/wiki/loopiaapi/",
 		CredFields: []providers.CredsField{
 			{

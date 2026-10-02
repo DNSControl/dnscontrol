@@ -57,7 +57,6 @@ type inwxAPI struct {
 func init() {
 	providers.Register[*inwxAPI]("INWX", providers.Definition{
 		FriendlyName: "INWX",
-		DocsURL:      "https://docs.dnscontrol.org/provider/inwx",
 		PortalURL:    "https://www.inwx.com/en/customer",
 		CredFields: []providers.CredsField{
 			{

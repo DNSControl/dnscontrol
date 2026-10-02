@@ -43,7 +43,6 @@ func init() {
 	providers.RegisterCustomRecordType("CLOUDNS_WR", providerName, "")
 	providers.Register[*cloudnsProvider](providerName, providers.Definition{
 		FriendlyName: "ClouDNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/cloudns",
 		PortalURL:    "https://www.cloudns.net/api-settings/",
 		Notes:        "ClouDNS supports two auth methods: a main API user (auth-id) or a sub-user API account (sub-auth-id). Both use the same auth-password.",
 		CredFields: []providers.CredsField{

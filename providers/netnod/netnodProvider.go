@@ -12,7 +12,6 @@ import (
 func init() {
 	providers.Register[*netnodProvider]("NETNOD", providers.Definition{
 		FriendlyName: "Netnod",
-		DocsURL:      "https://docs.dnscontrol.org/provider/netnod",
 		PortalURL:    "https://www.netnod.se/dns/dns-enterprise-services",
 		Notes:        "An API key is required. The API URL defaults to https://primarydnsapi.netnod.se and can be omitted.",
 		CredFields: []providers.CredsField{

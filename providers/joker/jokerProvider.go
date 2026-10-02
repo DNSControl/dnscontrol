@@ -25,7 +25,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*jokerProvider]("JOKER", providers.Definition{
 		FriendlyName: "Joker.com",
-		DocsURL:      "https://docs.dnscontrol.org/provider/joker",
 		PortalURL:    "https://joker.com/", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

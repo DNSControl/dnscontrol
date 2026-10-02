@@ -77,7 +77,6 @@ func init() {
 	providers.RegisterCustomRecordType("URL301", providerName, "")
 	providers.Register[*porkbunProvider](providerName, providers.Definition{
 		FriendlyName: "Porkbun",
-		DocsURL:      "https://docs.dnscontrol.org/provider/porkbun",
 		PortalURL:    "https://porkbun.com/account/api",
 		Notes:        "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
 		CredFields: []providers.CredsField{

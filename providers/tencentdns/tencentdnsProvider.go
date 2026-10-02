@@ -25,7 +25,6 @@ const (
 func init() {
 	providers.Register[*tencentdnsProvider]("TENCENTDNS", providers.Definition{
 		FriendlyName: "Tencent Cloud DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/tencentdns",
 		PortalURL:    "https://console.intl.cloud.tencent.com/cam/capi",
 		CredFields: []providers.CredsField{
 			{

@@ -41,7 +41,6 @@ func init() {
 	providers.RegisterCustomRecordType("AKAMAITLC", providerName, "")
 	providers.Register[*edgeDNSProvider](providerName, providers.Definition{
 		FriendlyName: "Akamai Edge DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/akamaiedgedns",
 		PortalURL:    "https://control.akamai.com/apps/identity-management/", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

@@ -105,8 +105,7 @@ func init() {
 			providers.DocDualHost:            providers.Can(),
 			providers.DocOfficiallySupported: providers.Can(),
 		},
-		DocsURL: "https://docs.dnscontrol.org/provider/bind",
-		Notes:   "BIND writes zone files to a local directory; no API credentials are needed.",
+		Notes: "BIND writes zone files to a local directory; no API credentials are needed.",
 		CredFields: []providers.CredsField{
 			{
 				Key:     "directory",
