@@ -28,9 +28,8 @@ type gidinetProvider struct {
 	client      *http.Client
 }
 
-// newClient creates a new Gidinet API client.
-func newClient(username, password string) *gidinetProvider {
-	return &gidinetProvider{
+func (c *gidinetProvider) initializeClient(username, password string) {
+	*c = gidinetProvider{
 		username:    username,
 		passwordB64: base64.StdEncoding.EncodeToString([]byte(password)),
 		client:      &http.Client{},

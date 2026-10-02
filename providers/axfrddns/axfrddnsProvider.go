@@ -38,41 +38,6 @@ const (
 	dnssecDummyTxt   = "Domain has DNSSec records, not displayed here."
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can("Just warn when DNSSEC is requested but no RRSIG is found in the AXFR or warn when DNSSEC is not requested but RRSIG are found in the AXFR."),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Can(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSMIMEA:           providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-	// Possible to support via catalog zones (RFC 9432), but those are not
-	// directly supported by DNSControl right now (although nothing is stopping
-	// you from manually updating a catalog zone using DNSControl if you wish).
-	providers.CanGetZones:      providers.Cannot(),
-	providers.DocCreateDomains: providers.Cannot(),
-	// Not a valid RR type, so impossible to encode in an RFC-compliant DNS
-	// packet.
-	providers.CanUseAlias: providers.Cannot(),
-	// These are both supported by RFC 2136 (DDNS), but neither work with
-	// DNSControl right now.
-	providers.CanUseSOA:    providers.Cannot(),
-	providers.CanUseDNSKEY: providers.Cannot(),
-}
-
 // axfrddnsProvider stores the client info for the provider.
 type axfrddnsProvider struct {
 	master         string
@@ -87,18 +52,19 @@ type axfrddnsProvider struct {
 	hasDnssecRecords map[string]bool
 }
 
-func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *axfrddnsProvider) Initialize(config map[string]string, providermeta json.RawMessage, _ *providers.CreateOptions) error {
 	// config -- the key/values from creds.json
 	// providermeta -- the json blob from NewReq('name', 'TYPE', providermeta)
 	var err error
-	api := &axfrddnsProvider{
+	*c = axfrddnsProvider{
 		hasDnssecRecords: map[string]bool{},
 	}
 	param := &Param{}
 	if len(providermeta) != 0 {
 		err := json.Unmarshal(providermeta, param)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	var nss []string
@@ -108,57 +74,57 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 	for _, ns := range param.DefaultNS {
 		nss = append(nss, ns[0:len(ns)-1])
 	}
-	api.nameservers, err = models.ToNameservers(nss)
+	c.nameservers, err = models.ToNameservers(nss)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if config["update-mode"] != "" {
 		switch config["update-mode"] {
 		case "tcp", "tcp-tls", "unix":
-			api.updateMode = config["update-mode"]
+			c.updateMode = config["update-mode"]
 		case "udp":
-			api.updateMode = ""
+			c.updateMode = ""
 		default:
 			printer.Printf("[Warning] AXFRDDNS: Unknown update-mode in `creds.json` (%s)\n", config["update-mode"])
 		}
 	} else {
-		api.updateMode = "tcp"
+		c.updateMode = "tcp"
 	}
 	if config["transfer-mode"] != "" {
 		switch config["transfer-mode"] {
 		case "tcp", "tcp-tls", "unix":
-			api.transferMode = config["transfer-mode"]
+			c.transferMode = config["transfer-mode"]
 		default:
 			printer.Printf("[Warning] AXFRDDNS: Unknown transfer-mode in `creds.json` (%s)\n", config["transfer-mode"])
 		}
 	} else {
-		api.transferMode = "tcp"
+		c.transferMode = "tcp"
 	}
 	if config["master"] != "" {
-		api.master = config["master"]
-		if api.updateMode != "unix" && !strings.Contains(api.master, ":") {
-			api.master = api.master + ":53"
+		c.master = config["master"]
+		if c.updateMode != "unix" && !strings.Contains(c.master, ":") {
+			c.master = c.master + ":53"
 		}
-	} else if len(api.nameservers) != 0 {
-		api.master = api.nameservers[0].Name + ":53"
+	} else if len(c.nameservers) != 0 {
+		c.master = c.nameservers[0].Name + ":53"
 	} else {
-		return nil, errors.New("nameservers list is empty: creds.json needs a default `nameservers` or an explicit `master`")
+		return errors.New("nameservers list is empty: creds.json needs a default `nameservers` or an explicit `master`")
 	}
 	if config["transfer-server"] != "" {
-		api.transferServer = config["transfer-server"]
-		if api.transferMode != "unix" && !strings.Contains(api.transferServer, ":") {
-			api.transferServer = api.transferServer + ":53"
+		c.transferServer = config["transfer-server"]
+		if c.transferMode != "unix" && !strings.Contains(c.transferServer, ":") {
+			c.transferServer = c.transferServer + ":53"
 		}
 	} else {
-		api.transferServer = api.master
+		c.transferServer = c.master
 	}
-	api.updateKey, err = readKey(config["update-key"], "update-key")
+	c.updateKey, err = readKey(config["update-key"], "update-key")
 	if err != nil {
-		return nil, err
+		return err
 	}
-	api.transferKey, err = readKey(config["transfer-key"], "transfer-key")
+	c.transferKey, err = readKey(config["transfer-key"], "transfer-key")
 	if err != nil {
-		return nil, err
+		return err
 	}
 	switch strings.ToLower(strings.TrimSpace(config["buggy-cname"])) {
 	case "yes", "true":
@@ -181,18 +147,48 @@ func initAxfrDdns(config map[string]string, providermeta json.RawMessage) (provi
 			printer.Printf("[Warning] AXFRDDNS: unknown key in `creds.json` (%s)\n", key)
 		}
 	}
-	return api, err
+	return err
 }
 
 func init() {
-	const providerName = "AXFRDDNS"
-	const providerMaintainer = "@hnrgrgr"
-	fns := providers.DspFuncs{
-		Initializer:   initAxfrDdns,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*axfrddnsProvider]("AXFRDDNS", providers.Definition{
+		FriendlyName: "AXFR + DDNS",
+		Maintainer:   "@hnrgrgr",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can("Just warn when DNSSEC is requested but no RRSIG is found in the AXFR or warn when DNSSEC is not requested but RRSIG are found in the AXFR."),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Can(),
+			providers.CanUseDNAME:            providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSMIMEA:           providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+			// Possible to support via catalog zones (RFC 9432), but those are not
+			// directly supported by DNSControl right now (although nothing is stopping
+			// you from manually updating a catalog zone using DNSControl if you wish).
+			providers.CanGetZones:      providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot(),
+			// Not a valid RR type, so impossible to encode in an RFC-compliant DNS
+			// packet.
+			providers.CanUseAlias: providers.Cannot(),
+			// These are both supported by RFC 2136 (DDNS), but neither work with
+			// DNSControl right now.
+			providers.CanUseSOA:    providers.Cannot(),
+			providers.CanUseDNSKEY: providers.Cannot(),
+		},
+	})
 }
 
 // Param is used to decode extra parameters sent to provider.

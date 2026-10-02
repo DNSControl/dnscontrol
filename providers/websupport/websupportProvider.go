@@ -12,26 +12,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Cannot("WebSupport has no list-all-zones endpoint."),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Cannot("WebSupport's ANAME is apex-only and conflicts with other apex records."),
-	providers.CanUseCAA:              providers.Cannot("The v2 API does not return CAA tag/flags on read, so records cannot be managed without churn."),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot("Zones must be created via the WebSupport portal."),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 type websupportProvider struct {
 	observer   providers.ConversionObserver
 	apiKey     string
@@ -48,20 +28,10 @@ func (c *websupportProvider) SetConversionObserver(observer providers.Conversion
 }
 
 func init() {
-	const providerName = "WEBSUPPORT"
-	const providerMaintainer = "@mtmn"
-	fns := providers.DspFuncs{
-		Initializer:   newWebsupport,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "WebSupport",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/websupport",
-		PortalURL:   "https://admin.websupport.sk/en/auth/security",
-		Fields: []providers.CredsField{
+	providers.Register[*websupportProvider]("WEBSUPPORT", providers.Definition{
+		FriendlyName: "WebSupport",
+		PortalURL:    "https://admin.websupport.sk/en/auth/security",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
 				Label:    "API key",
@@ -77,14 +47,35 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@mtmn",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Cannot("WebSupport has no list-all-zones endpoint."),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanUseAlias:            providers.Cannot("WebSupport's ANAME is apex-only and conflicts with other apex records."),
+			providers.CanUseCAA:              providers.Cannot("The v2 API does not return CAA tag/flags on read, so records cannot be managed without churn."),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.DocCreateDomains:       providers.Cannot("Zones must be created via the WebSupport portal."),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
-func newWebsupport(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *websupportProvider) Initialize(settings map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	apiKey := settings["api_key"]
 	secret := settings["secret"]
 	if apiKey == "" || secret == "" {
-		return nil, errors.New("WEBSUPPORT: missing api_key and/or secret")
+		return errors.New("WEBSUPPORT: missing api_key and/or secret")
 	}
 
 	baseURL := settings["base_url"]
@@ -92,13 +83,15 @@ func newWebsupport(settings map[string]string, _ json.RawMessage) (providers.DNS
 		baseURL = defaultBaseURL
 	}
 
-	return &websupportProvider{
+	*c = websupportProvider{
 		apiKey:     apiKey,
 		secret:     secret,
 		baseURL:    baseURL,
 		httpClient: &http.Client{Timeout: 30 * time.Second},
 		services:   map[string]int64{},
-	}, nil
+	}
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // GetNameservers returns the apex NS records of the zone. WebSupport's zone

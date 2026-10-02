@@ -27,44 +27,40 @@ func (api *packetframeProvider) SetConversionObserver(observer providers.Convers
 	api.observer = observer
 }
 
-// newPacketframe creates the provider.
-func newPacketframe(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *packetframeProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	if m["token"] == "" {
-		return nil, errors.New("missing Packetframe token")
+		return errors.New("missing Packetframe token")
 	}
 
 	baseURL, err := url.Parse(defaultBaseURL)
 	if err != nil {
-		return nil, errors.New("invalid base URL for Packetframe")
+		return errors.New("invalid base URL for Packetframe")
 	}
 	client := http.Client{}
 
-	api := &packetframeProvider{client: &client, baseURL: baseURL, token: m["token"]}
+	*api = packetframeProvider{client: &client, baseURL: baseURL, token: m["token"]}
 
-	return api, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Unimplemented(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	api.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "PACKETFRAME"
-	const providerMaintainer = "NEEDS VOLUNTEER"
-	fns := providers.DspFuncs{
-		Initializer:   newPacketframe,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*packetframeProvider]("PACKETFRAME", providers.Definition{
+		FriendlyName: "Packetframe",
+		Maintainer:   "NEEDS VOLUNTEER",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Unimplemented(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.

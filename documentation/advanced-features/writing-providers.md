@@ -21,7 +21,7 @@
 - [Step 17: Submit a PR](#step-17-submit-a-pr)
 - [Step 18: After the PR is merged](#step-18-after-the-pr-is-merged)
 
-Writing a new DNS provider is a relatively straightforward process. You essentially need to implement the [providers.DNSServiceProvider interface.](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider) and the system takes care of the rest.
+Writing a new DNS provider is a relatively straightforward process. You essentially need to implement the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider) and `providers.InitializableProvider`, and the system takes care of the rest.
 
 Please do note that if you submit a new provider you will be assigned bugs related to the provider in the future (unless you designate someone else as the maintainer). [More details here](../provider/index.md).
 
@@ -35,13 +35,15 @@ So, for example, you'll frequently see code with two variables: `var existing, d
 
 I'll ignore all the small stuff and get to the point.
 
-A typical provider implements 3 methods and DNSControl takes care of the rest:
+A typical DNS provider implements 5 methods and DNSControl takes care of the rest:
 
+- Initialize() -- Initialize a fresh provider instance from credentials and metadata.
 - GetZoneRecords() -- Download the list of DNS records.
 - GetZoneRecordsCorrections() -- Generate a list of corrections.
 - GetNameservers() -- Query the API and return the list of parent nameservers.
+- AuditRecords() -- Validate records without credentials or initialization.
 
-These three functions are all that's needed for `dnscontrol preview` and `dnscontrol push`.
+These methods cover initialization, validation, and the operations needed for `dnscontrol preview` and `dnscontrol push`.
 
 The goal of `GetZoneRecords()` is to download all the DNS records for that zone, convert them to `models.RecordConfig` format, and return them as one big list (`models.Records`).
 
@@ -109,23 +111,33 @@ Directory names should be consistent.  It should be all lowercase and match the 
 
 Edit [providers/\_all/all.go](https://github.com/DNSControl/dnscontrol/blob/main/pkg/providers/_all/all.go). Add the provider list so DNSControl knows it exists.
 
+Register the provider once in its Go `init()` function using
+`providers.Register[*myProvider]("MYPROVIDER", providers.Definition{...})`.
+Some fields are required, such as `FriendlyName`. Some fields are
+optional.  Some fields are generated for you based on things like whether
+or not Go interfaces for DNS and registrar are implemented.
+
 ## Step 5: Onboarding metadata for `dnscontrol init` (optional)
 
 This step allows users of your provider to use the interactive [`dnscontrol init`](../commands/init.md) wizard.
 
-Register a `CredsMetadata` block in the same `init()` function where you call `RegisterDomainServiceProviderType` and `RegisterMaintainer`. A simple provider reduces to a few lines:
+Add the optional onboarding fields to the `providers.Definition` used by
+`providers.Register` in `init()`. A simple provider reduces to a few lines:
 
 ```go
-providers.RegisterCredsMetadata("MYPROVIDER", providers.CredsMetadata{
-    DisplayName: "My Provider",
-    Kind:        providers.KindDNS, // or providers.KindDNS | providers.KindRegistrar
-    DocsURL:     "https://docs.dnscontrol.org/provider/myprovider",
-    PortalURL:   "https://portal.example.com/api-tokens",
-    Fields: []providers.CredsField{
+providers.Register[*myProvider]("MYPROVIDER", providers.Definition{
+    FriendlyName: "My Provider",
+    Maintainer:   "@yourhandle",
+    PortalURL:    "https://portal.example.com/api-tokens",
+    CredFields: []providers.CredsField{
         {Key: "apitoken", Label: "API Token", Required: true, Secret: true},
     },
 })
 ```
+
+`DocsURL` defaults to `https://docs.dnscontrol.org/provider/` plus the lowercase
+registered provider name. Set it only to preserve a different legacy documentation
+path; an override equal to the default is a registration error.
 
 The wizard appends the `creds.json` key and `(required)` or `(optional)` to the `Label` itself, so leave those out of the label text.
 
@@ -144,7 +156,7 @@ A field can carry any of the following flags:
 | `Default` | Suggested value shown in the prompt. |
 | `Validator` | Custom function that rejects invalid values with an error message. |
 
-The optional `PostWrite` hook on `CredsMetadata` lets the provider
+The optional `PostWrite` hook on `providers.Definition` lets the provider
 prepare local resources after the wizard writes `creds.json` (BIND uses
 this to create the zone files directory).
 
@@ -156,10 +168,16 @@ The BIND and TransIP registrations in this repository are worked examples mainta
 [bind-source]: https://github.com/DNSControl/dnscontrol/blob/main/providers/bind/bindProvider.go
 [transip-source]: https://github.com/DNSControl/dnscontrol/blob/main/providers/transip/transipProvider.go
 
-Providers without registered metadata still work; users just create the
+Providers without onboarding fields still work; users can create the
 `creds.json` entry manually, using the help of the provider's documentation page.
 
 ## Step 6: Implement the provider
+
+Both DNS providers and registrars implement `providers.InitializableProvider`:
+`Initialize(map[string]string, json.RawMessage, *providers.CreateOptions) error`.
+This method populates a fresh receiver; DNSControl allocates a separate instance
+for each credential entry and role. `CreateOptions.RequestedRole` identifies
+whether the instance is being created for DNS or registrar operations.
 
 **If you are implementing a DNS Registrar:**
 
@@ -169,12 +187,12 @@ The function `GetRegistrarCorrections()` returns a list of corrections to be mad
 
 **If you are implementing a DNS Service Provider:**
 
-Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider).
+Implement all the calls in the [providers.DNSServiceProvider interface](https://pkg.go.dev/github.com/DNSControl/dnscontrol/v5/pkg/providers#DNSServiceProvider), which embeds `models.DNSProvider`.
 
 - The function that converts the API's native records to `models.RecordConfig` structs should be called toRC().
 - There are helper functions (factories) for creating `models.RecordConfig`'s. See [The Cookbook](developer-info/cookbook.md) "Create a `models.RecordConfig`" for details.
 
-The function `GetDomainCorrections()` is a bit interesting. It returns a list of corrections to be made. These are in the form of functions that DNSControl can call to actually make the corrections.
+The function `GetZoneRecordsCorrections()` is a bit interesting. It returns a list of corrections to be made. These are in the form of functions that DNSControl can call to actually make the corrections.
 
 - The "create" function will probably need to convert an `models.RecordConfig` to the native API struct. Please name this function toNative()
 - To access or change the RDATA in a field, use `rd := rc.GetRDATA()` and `rc.SetRDATA(rd)`. Full details are in [The Cookbook](developer-info/cookbook.md) "Getters/Setters for RDATA in `models.RecordConfig`".
@@ -185,6 +203,10 @@ The remaining steps assume you're creating a DNS Service Provider.
 ## Step 7: Create `auditrecords.go`
 
 The `auditrecords.go` file lists special cases that a provider doesn't support.
+
+Implement `AuditRecords(models.Records) []error` as a method on the provider.
+It is required by `models.DNSProvider` and runs on an uninitialized instance,
+so it must not depend on credentials or read or mutate receiver state.
 
 For example, the `AXFRDDNS` provider doesn't support empty TXT records.  `providers/axfrddns/auditrecords.go` records that fact. The integration test system will skip any tests with empty TXT records.
 
@@ -291,21 +313,26 @@ Capabilities are processed early by DNSControl.  For example if a provider doesn
 
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
+Declare record-type capabilities in `providers.Definition.Features` using
+`providers.DocumentationNotes`. Named operational fields such as `CanConcur`
+can be set directly on the definition. Some fields are derived automatically for
+you, such as `CanGetZones` and `DocCreateDomains`
+(set based on the existance or absense of `providers.ZoneLister` and `providers.ZoneCreator`, respectively.)
+
 FYI: If a provider's capabilities changes, run `go generate` to update the documentation.
 
 ### Record identity for providers with per-line records
 
 Some providers store the same name and type several times, splitting the answers by record line, region or routing policy. DNSPod lines, Huawei Cloud lines, Gcore GeoDNS and ClouDNS geodns work that way. Those records share a label, type and RDATA, so validation would report them as duplicates.
 
-Such a provider can declare `RecordIdentity` in its `DspFuncs`:
+Such a provider can declare `RecordIdentity` in its `providers.Definition`:
 
 {% code title="nameProvider.go" %}
 ```go
-fns := providers.DspFuncs{
-    Initializer:    newNameDsp,
-    RecordAuditor:  AuditRecords,
+providers.Register[*myProvider]("MYPROVIDER", providers.Definition{
+    FriendlyName:   "My Provider",
     RecordIdentity: recordIdentity,
-}
+})
 ```
 {% endcode %}
 

@@ -31,7 +31,7 @@ var labelRE = regexp.MustCompile(`^[a-zA-Z0-9_][a-zA-Z0-9_-]{0,62}$`)
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
-func AuditRecords(records models.Records) []error {
+func (*mittwaldProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
 	a.TypesSupported([]string{"A", "AAAA", "CAA", "CNAME", "MX", "SRV", "TXT"})

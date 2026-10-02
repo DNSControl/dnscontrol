@@ -11,63 +11,54 @@ import (
 
 const defaultEndpoint = "https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1"
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "SAKURACLOUD"
-	const providerMaintainer = "@ttkzw"
-	fns := providers.DspFuncs{
-		Initializer:   newSakuracloudDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*sakuracloudProvider]("SAKURACLOUD", providers.Definition{
+		FriendlyName: "Sakura Cloud",
+		Maintainer:   "@ttkzw",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDNAME:            providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 type sakuracloudProvider struct {
 	api *sakuracloudAPI
 }
 
-func newSakuracloudDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newSakuracloud(conf, metadata)
-}
-
-// newDSP initializes a Sakura Cloud DNSServiceProvider.
-func newSakuracloud(config map[string]string, _ json.RawMessage) (*sakuracloudProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (s *sakuracloudProvider) Initialize(config map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	// config -- the key/values from creds.json
 	accessToken := config["access_token"]
 	if accessToken == "" {
-		return nil, errors.New("access_token is required")
+		return errors.New("access_token is required")
 	}
 
 	accessTokenSecret := config["access_token_secret"]
 	if accessTokenSecret == "" {
-		return nil, errors.New("access_token_secret is required")
+		return errors.New("access_token_secret is required")
 	}
 
 	endpoint := config["endpoint"]
@@ -77,12 +68,12 @@ func newSakuracloud(config map[string]string, _ json.RawMessage) (*sakuracloudPr
 
 	api, err := newSakuracloudAPI(accessToken, accessTokenSecret, endpoint)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	dsp := &sakuracloudProvider{
+	*s = sakuracloudProvider{
 		api: api,
 	}
-	return dsp, nil
+	return nil
 }
 
 type errNoExist struct {

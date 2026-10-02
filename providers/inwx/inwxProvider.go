@@ -47,29 +47,6 @@ var InwxProductionDefaultNs = []string{"ns.inwx.de", "ns2.inwx.de", "ns3.inwx.eu
 // InwxSandboxDefaultNs contains the default INWX nameservers in the sandbox / OTE.
 var InwxSandboxDefaultNs = []string{"ns.ote.inwx.de", "ns2.ote.inwx.de"}
 
-// features is used to let dnscontrol know which features are supported by INWX.
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Unimplemented("DS records are only supported at the apex and require a different API call that hasn't been implemented yet."),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Unimplemented(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can("PTR records with empty targets are not supported"),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 // inwxAPI is a thin wrapper around goinwx.Client.
 type inwxAPI struct {
 	client      *goinwx.Client
@@ -77,23 +54,11 @@ type inwxAPI struct {
 	domainIndex map[string]int // cache of domains existent in the INWX nameserver
 }
 
-// init registers the registrar and the domain service provider with dnscontrol.
 func init() {
-	const providerName = "INWX"
-	const providerMaintainer = "@patschi"
-	providers.RegisterRegistrarType(providerName, newInwxReg)
-	fns := providers.DspFuncs{
-		Initializer:   newInwxDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "INWX",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/inwx",
-		PortalURL:   "https://www.inwx.com/en/customer",
-		Fields: []providers.CredsField{
+	providers.Register[*inwxAPI]("INWX", providers.Definition{
+		FriendlyName: "INWX",
+		PortalURL:    "https://www.inwx.com/en/customer",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "username",
 				Label:    "Username",
@@ -113,6 +78,28 @@ func init() {
 				Help:         "Answer no for normal use. The sandbox is the INWX OT&E test environment.",
 				ConfirmValue: "1",
 			},
+		},
+		Maintainer: "@patschi",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Unimplemented("DS records are only supported at the apex and require a different API call that hasn't been implemented yet."),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Unimplemented(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can("PTR records with empty targets are not supported"),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -161,42 +148,32 @@ func (api *inwxAPI) loginHelper(TOTPValue string, TOTPKey string) error {
 	return nil
 }
 
-// newInwx initializes inwxAPI and create a session.
-func newInwx(m map[string]string) (*inwxAPI, error) {
+// Initialize initializes a fresh provider instance.
+func (api *inwxAPI) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	username, password := m["username"], m["password"]
 	TOTPValue, TOTPKey := m["totp"], m["totp-key"]
 	sandbox := m["sandbox"] == "1"
 
 	if username == "" {
-		return nil, errors.New("INWX: username must be provided")
+		return errors.New("INWX: username must be provided")
 	}
 	if password == "" {
-		return nil, errors.New("INWX: password must be provided")
+		return errors.New("INWX: password must be provided")
 	}
 	if TOTPValue != "" && TOTPKey != "" {
-		return nil, errors.New("INWX: totp and totp-key must not be specified at the same time")
+		return errors.New("INWX: totp and totp-key must not be specified at the same time")
 	}
 
 	opts := &goinwx.ClientOptions{Sandbox: sandbox}
 	client := goinwx.NewClient(username, password, opts)
-	api := &inwxAPI{client: client, sandbox: sandbox}
+	*api = inwxAPI{client: client, sandbox: sandbox}
 
 	err := api.loginHelper(TOTPValue, TOTPKey)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return api, nil
-}
-
-// newInwxReg is called to initialize the INWX registrar provider.
-func newInwxReg(m map[string]string) (providers.Registrar, error) {
-	return newInwx(m)
-}
-
-// new InwxDsp is called to initialize the INWX domain service provider.
-func newInwxDsp(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newInwx(m)
+	return nil
 }
 
 // makeNameserverRecordRequest is a helper function used to convert a RecordConfig to an INWX NS Record Request.

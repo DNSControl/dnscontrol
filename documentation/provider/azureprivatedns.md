@@ -226,7 +226,7 @@ The ResourceGroup is case-insensitive (it is lowercased internally).
 - Provider API
   - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ❌
-  - create-domains: ✅
+  - create-domains: ❌
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌

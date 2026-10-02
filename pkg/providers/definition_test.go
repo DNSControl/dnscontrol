@@ -252,7 +252,7 @@ func TestRegisterRejectsInvalidDefinitions(t *testing.T) {
 		{"value", func() { Register[valueInitializer]("BAD", valid) }, "pointer to a concrete struct"},
 		{"interface", func() { Register[InitializableProvider]("BAD", valid) }, "pointer to a concrete struct"},
 		{"no roles", func() { Register[*valueInitializer]("BAD", valid) }, "neither DNS nor registrar"},
-		{"no auditor", func() { Register[*missingAuditor]("BAD", valid) }, "RecordAuditingProvider"},
+		{"no auditor", func() { Register[*missingAuditor]("BAD", valid) }, "neither DNS nor registrar"},
 		{"no friendly name", func() { Register[*None]("BAD", Definition{}) }, "FriendlyName"},
 		{"nil feature note", func() {
 			Register[*None]("BAD", Definition{FriendlyName: "Bad", Features: DocumentationNotes{CanConcur: nil}})
@@ -273,7 +273,15 @@ func TestRegisterRejectsInvalidDefinitions(t *testing.T) {
 	}
 }
 
-type missingAuditor struct{ observerProvider }
+type missingAuditor struct{}
+
+func (*missingAuditor) GetNameservers(string) ([]*models.Nameserver, error) { return nil, nil }
+func (*missingAuditor) GetZoneRecords(*models.DomainConfig) (models.Records, error) {
+	return nil, nil
+}
+func (*missingAuditor) GetZoneRecordsCorrections(*models.DomainConfig, models.Records) ([]*models.Correction, int, error) {
+	return nil, 0, nil
+}
 
 func (*missingAuditor) Initialize(map[string]string, json.RawMessage, *CreateOptions) error {
 	return nil

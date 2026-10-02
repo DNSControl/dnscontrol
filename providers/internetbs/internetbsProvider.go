@@ -1,6 +1,7 @@
 package internetbs
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sort"
@@ -20,28 +21,26 @@ Info required in `creds.json`:
 
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur: providers.Unimplemented(),
-}
-
 func init() {
-	const providerName = "INTERNETBS"
-	const providerMaintainer = "@pragmaton"
-	providers.RegisterRegistrarType(providerName, newInternetBs, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*internetbsProvider]("INTERNETBS", providers.Definition{
+		FriendlyName: "Internet.bs",
+		Maintainer:   "@pragmaton",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur: providers.Unimplemented(),
+		},
+	})
 }
 
-func newInternetBs(m map[string]string) (providers.Registrar, error) {
-	api := &internetbsProvider{}
-
-	api.key, api.password = m["api-key"], m["password"]
-	if api.key == "" || api.password == "" {
-		return nil, errors.New("missing Internet.bs api-key and password")
+// Initialize initializes a fresh provider instance.
+func (c *internetbsProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	c.key, c.password = m["api-key"], m["password"]
+	if c.key == "" || c.password == "" {
+		return errors.New("missing Internet.bs api-key and password")
 	}
 
-	return api, nil
+	return nil
 }
 
 // GetRegistrarCorrections gathers corrections that would bring n to match dc.

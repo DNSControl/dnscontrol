@@ -12,42 +12,11 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can("System NS records cannot be edited. Custom apex NS records can be added/changed/deleted."),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "DNSMADEEASY"
-	const providerMaintainer = "@vojtad"
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "DNS Made Easy",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/dnsmadeeasy",
-		PortalURL:   "https://cp.dnsmadeeasy.com/",
-		Fields: []providers.CredsField{
+	providers.Register[*dnsMadeEasyProvider]("DNSMADEEASY", providers.Definition{
+		FriendlyName: "DNS Made Easy",
+		PortalURL:    "https://cp.dnsmadeeasy.com/",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
 				Label:    "API key",
@@ -69,26 +38,46 @@ func init() {
 				ConfirmValue: "1",
 			},
 		},
+		Maintainer: "@vojtad",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can("System NS records cannot be edited. Custom apex NS records can be added/changed/deleted."),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
 	})
 }
 
-// New creates a new API handle.
-func New(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *dnsMadeEasyProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if settings["api_key"] == "" {
-		return nil, errors.New("missing DNSMADEEASY api_key")
+		return errors.New("missing DNSMADEEASY api_key")
 	}
 
 	if settings["secret_key"] == "" {
-		return nil, errors.New("missing DNSMADEEASY secret_key")
+		return errors.New("missing DNSMADEEASY secret_key")
 	}
 
 	sandbox := settings["sandbox"] != ""
 
 	debug := os.Getenv("DNSMADEEASY_DEBUG_HTTP") == "1"
 
-	api := newProvider(settings["api_key"], settings["secret_key"], sandbox, debug)
+	api.initializeClient(settings["api_key"], settings["secret_key"], sandbox, debug)
 
-	return api, nil
+	return nil
 }
 
 func (api *dnsMadeEasyProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existingRecords models.Records) ([]*models.Correction, int, error) {

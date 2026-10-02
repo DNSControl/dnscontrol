@@ -139,7 +139,7 @@ func TestAuditRecords_PTRRejected(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("4", 300, "PTR", "foo.example.com.")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(exoscaleProvider).AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Error("expected PTR to be rejected, got no errors")
 	}
@@ -150,7 +150,7 @@ func TestAuditRecords_EmptyTXTRejected(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("foo", 300, "TXT", "")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(exoscaleProvider).AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Error("expected empty TXT to be rejected, got no errors")
 	}
@@ -164,7 +164,7 @@ func TestAuditRecords_ValidRecordsPass(t *testing.T) {
 		dc.MustNewRecordConfig("foo", 300, "TXT", "v=spf1 -all"),
 	}
 
-	errs := AuditRecords(records)
+	errs := new(exoscaleProvider).AuditRecords(records)
 	if len(errs) != 0 {
 		t.Errorf("expected no errors, got: %v", errs)
 	}

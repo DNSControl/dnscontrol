@@ -115,7 +115,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_AUTODNS),
 - Provider API
   - [Concurrency Verified](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ❌
-  - create-domains: ❌
+  - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅

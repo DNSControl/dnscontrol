@@ -18,36 +18,20 @@ type ovhProvider struct {
 	zones  map[string]bool
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Unimplemented(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("New domains require registration"),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
-func newOVH(m map[string]string, _ json.RawMessage) (*ovhProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *ovhProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	appKey, appSecretKey, consumerKey := m["app-key"], m["app-secret-key"], m["consumer-key"]
 
-	c, err := ovh.NewClient(getOVHEndpoint(m), appKey, appSecretKey, consumerKey)
-	if c == nil {
-		return nil, err
+	client, err := ovh.NewClient(getOVHEndpoint(m), appKey, appSecretKey, consumerKey)
+	if client == nil {
+		return err
 	}
 
-	ovh := &ovhProvider{client: c}
-	if err := ovh.fetchZones(); err != nil {
-		return nil, err
+	*c = ovhProvider{client: client}
+	if err := c.fetchZones(); err != nil {
+		return err
 	}
-	return ovh, nil
+	return nil
 }
 
 func getOVHEndpoint(params map[string]string) string {
@@ -66,24 +50,27 @@ func getOVHEndpoint(params map[string]string) string {
 	return ovh.OvhEU
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newOVH(conf, metadata)
-}
-
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newOVH(conf, nil)
-}
-
 func init() {
-	const providerName = "OVH"
-	const providerMaintainer = "@masterzen"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterRegistrarType(providerName, newReg)
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*ovhProvider]("OVH", providers.Definition{
+		FriendlyName: "OVHcloud",
+		Maintainer:   "@masterzen",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseLOC:              providers.Unimplemented(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Cannot("New domains require registration"),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 var NoListZone bool

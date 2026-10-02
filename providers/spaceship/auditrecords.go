@@ -8,7 +8,7 @@ import (
 )
 
 // AuditRecords returns errors for records this provider cannot represent.
-func AuditRecords(records models.Records) []error {
+func (*spaceshipProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
 	a.Add("TXT", rejectif.TxtIsEmpty)

@@ -20,27 +20,6 @@ import (
 
 const selfLinkBasePath = "https://www.googleapis.com/compute/v1/projects/"
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
 var (
 	visibilityCheck  = regexp.MustCompile("^(public|private)$")
 	networkURLCheck  = regexp.MustCompile("^" + regexp.QuoteMeta(selfLinkBasePath) + "[a-z][-a-z0-9]{4,28}[a-z0-9]/global/networks/[a-z]([-a-z0-9]{0,61}[a-z0-9])?$")
@@ -48,21 +27,11 @@ var (
 )
 
 func init() {
-	const providerName = "GCLOUD"
-	const providerMaintainer = "@riyadhalnur"
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Google Cloud DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/gcloud",
-		PortalURL:   "https://console.cloud.google.com/iam-admin/serviceaccounts", // TODO: Verify
-		Notes:       "These values come from a Google Cloud service account JSON key file.",
-		Fields: []providers.CredsField{
+	providers.Register[*gcloudProvider]("GCLOUD", providers.Definition{
+		FriendlyName: "Google Cloud DNS",
+		PortalURL:    "https://console.cloud.google.com/iam-admin/serviceaccounts", // TODO: Verify
+		Notes:        "These values come from a Google Cloud service account JSON key file.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "project_id",
 				Label:    "Project ID",
@@ -90,6 +59,27 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@riyadhalnur",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Can(),
+		},
 	})
 }
 
@@ -116,8 +106,8 @@ func (e errNoExist) Error() string {
 	return fmt.Sprintf("Domain '%s' not found in gcloud account", e.domain)
 }
 
-// New creates a new gcloud provider.
-func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (g *gcloudProvider) Initialize(cfg map[string]string, metadata json.RawMessage, options *providers.CreateOptions) error {
 	// the key as downloaded is json encoded with literal "\n" instead of newlines.
 	// in some cases (round-tripping through env vars) this tends to get messed up.
 	// fix it if we find that.
@@ -128,11 +118,11 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 		cfg["private_key"] = strings.ReplaceAll(key, "\\n", "\n")
 		raw, err := json.Marshal(cfg)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		config, err := gauth.JWTConfigFromJSON(raw, gdns.NdevClouddnsReadwriteScope)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		opt = option.WithTokenSource(config.TokenSource(ctx))
 	} else {
@@ -140,7 +130,7 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 	}
 	dcli, err := gdns.NewService(ctx, opt)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	var nss *string
 	if val, ok := cfg["name_server_set"]; ok {
@@ -148,7 +138,7 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 		nss = new(val)
 	}
 
-	g := &gcloudProvider{
+	*g = gcloudProvider{
 		client:        dcli,
 		nameServerSet: nss,
 		project:       cfg["project_id"],
@@ -156,11 +146,11 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 	if len(metadata) != 0 {
 		err := json.Unmarshal(metadata, g)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if len(g.Visibility) != 0 {
 			if ok := visibilityCheck.MatchString(g.Visibility); !ok {
-				return nil, errors.New("GCLOUD :visibility set but not one of \"public\" or \"private\"")
+				return errors.New("GCLOUD :visibility set but not one of \"public\" or \"private\"")
 			}
 			printer.Printf("GCLOUD :visibility %s configured\n", g.Visibility)
 		}
@@ -170,13 +160,17 @@ func New(cfg map[string]string, metadata json.RawMessage) (providers.DNSServiceP
 				continue
 			}
 			if ok := networkNameCheck.MatchString(v); !ok {
-				return nil, fmt.Errorf("GCLOUD :networks set but %s does not appear to be a valid network name or url", v)
+				return fmt.Errorf("GCLOUD :networks set but %s does not appear to be a valid network name or url", v)
 			}
 			// assume target vpc network exists in the same project as the dns zones
 			g.Networks[i] = fmt.Sprintf("%s%s/global/networks/%s", selfLinkBasePath, g.project, v)
 		}
 	}
-	return g, g.loadZoneInfo()
+	if err := g.loadZoneInfo(); err != nil {
+		return err
+	}
+	g.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func (g *gcloudProvider) loadZoneInfo() error {

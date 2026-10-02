@@ -12,17 +12,16 @@ import (
 	opensrs "github.com/philhug/opensrs-go/opensrs"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur: providers.Unimplemented(),
-}
-
 func init() {
-	const providerName = "OPENSRS"
-	const providerMaintainer = "NEEDS VOLUNTEER"
-	providers.RegisterRegistrarType(providerName, newReg, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*opensrsProvider]("OPENSRS", providers.Definition{
+		FriendlyName: "OpenSRS",
+		Maintainer:   "NEEDS VOLUNTEER",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur: providers.Unimplemented(),
+		},
+	})
 }
 
 var defaultNameServerNames = []string{
@@ -118,31 +117,27 @@ func (c *opensrsProvider) updateNameserversFunc(nameServerNames []string, domain
 
 // constructors
 
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newProvider(conf, nil)
-}
+// Initialize initializes a fresh provider instance.
+func (c *opensrsProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	c.APIKey = m["apikey"]
 
-func newProvider(m map[string]string, _ json.RawMessage) (*opensrsProvider, error) {
-	api := &opensrsProvider{}
-	api.APIKey = m["apikey"]
-
-	if api.APIKey == "" {
-		return nil, errors.New("openSRS apikey must be provided")
+	if c.APIKey == "" {
+		return errors.New("openSRS apikey must be provided")
 	}
 
-	api.UserName = m["username"]
-	if api.UserName == "" {
-		return nil, errors.New("openSRS username key must be provided")
+	c.UserName = m["username"]
+	if c.UserName == "" {
+		return errors.New("openSRS username key must be provided")
 	}
 
 	if m["baseurl"] != "" {
-		api.BaseURL = m["baseurl"]
+		c.BaseURL = m["baseurl"]
 	}
 
-	api.client = opensrs.NewClient(opensrs.NewApiKeyMD5Credentials(api.UserName, api.APIKey))
-	if api.BaseURL != "" {
-		api.client.BaseURL = api.BaseURL
+	c.client = opensrs.NewClient(opensrs.NewApiKeyMD5Credentials(c.UserName, c.APIKey))
+	if c.BaseURL != "" {
+		c.client.BaseURL = c.BaseURL
 	}
 
-	return api, nil
+	return nil
 }

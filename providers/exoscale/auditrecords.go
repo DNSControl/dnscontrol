@@ -9,7 +9,7 @@ import (
 
 // AuditRecords returns a list of errors corresponding to the records that aren't supported by this provider.
 // If all records are supported, an empty list is returned.
-func AuditRecords(records models.Records) []error {
+func (*exoscaleProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
 	a.Add("CAA", rejectif.CaaTargetContainsWhitespace) // Last verified 2022-07-11

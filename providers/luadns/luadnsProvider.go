@@ -25,40 +25,11 @@ Info required in `creds.json`:
    - apikey
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "LUADNS"
-	const providerMaintainer = "@riku22"
-	fns := providers.DspFuncs{
-		Initializer:   NewLuaDNS,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "LuaDNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/luadns",
-		PortalURL:   "https://app.luadns.com/users/api_keys",
-		Fields: []providers.CredsField{
+	providers.Register[*luadnsProvider]("LUADNS", providers.Definition{
+		FriendlyName: "LuaDNS",
+		PortalURL:    "https://app.luadns.com/users/api_keys",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "email",
 				Label:    "Email",
@@ -72,6 +43,25 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@riku22",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -89,25 +79,26 @@ func (l *luadnsProvider) SetConversionObserver(observer providers.ConversionObse
 	l.observer = observer
 }
 
-// NewLuaDNS creates the provider.
-func NewLuaDNS(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (l *luadnsProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	if m["email"] == "" || m["apikey"] == "" {
-		return nil, errors.New("missing LuaDNS email or apikey")
+		return errors.New("missing LuaDNS email or apikey")
 	}
 	ctx := context.Background()
 	rateLimiter := rate.NewLimiter(4, 1)
 	provider := api.NewClient(m["email"], m["apikey"])
 	user, err := provider.Me(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	l := &luadnsProvider{
+	*l = luadnsProvider{
 		provider:    provider,
 		ctx:         ctx,
 		rateLimiter: rateLimiter,
 		nameServers: user.NameServers,
 	}
-	return l, nil
+	l.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // GetNameservers returns the nameservers for a domain.
