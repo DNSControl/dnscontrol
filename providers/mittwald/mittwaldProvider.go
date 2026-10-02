@@ -27,7 +27,6 @@ returned nor changed.
 func init() {
 	providers.Register[*mittwaldProvider]("MITTWALD", providers.Definition{
 		FriendlyName: "mittwald mStudio",
-		DocsURL:      "https://docs.dnscontrol.org/provider/mittwald",
 		PortalURL:    "https://studio.mittwald.de",
 		CredFields: []providers.CredsField{
 			{Key: "api_token", Label: "API token", Help: "An mStudio API token of a user with access to the projects of the domains.", Required: true, Secret: true},

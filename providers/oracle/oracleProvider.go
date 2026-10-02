@@ -21,7 +21,6 @@ import (
 func init() {
 	providers.Register[*oracleProvider]("ORACLE", providers.Definition{
 		FriendlyName: "Oracle Cloud Infrastructure",
-		DocsURL:      "https://docs.dnscontrol.org/provider/oracle",
 		Maintainer:   "@kallsyms",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

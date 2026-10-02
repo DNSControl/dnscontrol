@@ -21,7 +21,6 @@ type easynameProvider struct {
 func init() {
 	providers.Register[*easynameProvider]("EASYNAME", providers.Definition{
 		FriendlyName: "easyname",
-		DocsURL:      "https://docs.dnscontrol.org/provider/easyname",
 		Maintainer:   "@tresni",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

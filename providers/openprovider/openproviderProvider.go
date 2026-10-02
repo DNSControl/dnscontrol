@@ -16,7 +16,6 @@ type openproviderProvider struct {
 func init() {
 	providers.Register[*openproviderProvider]("OPENPROVIDER", providers.Definition{
 		FriendlyName: "Openprovider",
-		DocsURL:      "https://docs.dnscontrol.org/provider/openprovider",
 		PortalURL:    "https://cp.openprovider.eu/",
 		CredFields: []providers.CredsField{
 			{Key: "username", Label: "Username", Required: true},

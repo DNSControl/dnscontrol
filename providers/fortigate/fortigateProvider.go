@@ -15,7 +15,6 @@ import (
 func init() {
 	providers.Register[*fortigateProvider]("FORTIGATE", providers.Definition{
 		FriendlyName: "FortiGate",
-		DocsURL:      "https://docs.dnscontrol.org/provider/fortigate",
 		PortalURL:    "https://docs.fortinet.com/", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

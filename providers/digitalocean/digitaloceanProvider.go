@@ -81,7 +81,6 @@ retry:
 func init() {
 	providers.Register[*digitaloceanProvider]("DIGITALOCEAN", providers.Definition{
 		FriendlyName: "DigitalOcean",
-		DocsURL:      "https://docs.dnscontrol.org/provider/digitalocean",
 		PortalURL:    "https://cloud.digitalocean.com/account/api/tokens",
 		CredFields: []providers.CredsField{
 			{

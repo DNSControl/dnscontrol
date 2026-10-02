@@ -53,7 +53,6 @@ func getOVHEndpoint(params map[string]string) string {
 func init() {
 	providers.Register[*ovhProvider]("OVH", providers.Definition{
 		FriendlyName: "OVHcloud",
-		DocsURL:      "https://docs.dnscontrol.org/provider/ovh",
 		Maintainer:   "@masterzen",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

@@ -33,7 +33,6 @@ Note on Registrar functionality:
 func init() {
 	providers.Register[*gidinetProvider]("GIDINET", providers.Definition{
 		FriendlyName: "Gidinet",
-		DocsURL:      "https://docs.dnscontrol.org/provider/gidinet",
 		PortalURL:    "https://www.gidinet.com/modules/private/account_password/",
 		Notes:        "The username is your usual Gidinet account username, but the password must be the dedicated \"API password\" generated in the Gidinet control panel — not your normal login password.",
 		CredFields: []providers.CredsField{

@@ -32,7 +32,6 @@ type autoDNSProvider struct {
 func init() {
 	providers.Register[*autoDNSProvider]("AUTODNS", providers.Definition{
 		FriendlyName: "AutoDNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/autodns",
 		PortalURL:    "https://login.autodns.com/", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

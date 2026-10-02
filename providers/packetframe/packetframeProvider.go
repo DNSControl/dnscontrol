@@ -48,7 +48,6 @@ func (api *packetframeProvider) Initialize(m map[string]string, _ json.RawMessag
 func init() {
 	providers.Register[*packetframeProvider]("PACKETFRAME", providers.Definition{
 		FriendlyName: "Packetframe",
-		DocsURL:      "https://docs.dnscontrol.org/provider/packetframe",
 		Maintainer:   "NEEDS VOLUNTEER",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

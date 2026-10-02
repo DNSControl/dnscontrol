@@ -186,14 +186,19 @@ func fieldLabel(field providers.CredsField) string {
 	return label + " (optional)"
 }
 
-// openPortalHint prints the portal URL plus any provider notes so the
-// user can open the link themselves before answering the credential
-// prompts.
+// openPortalHint prints documentation, the credential portal, and provider notes
+// before prompting for credentials.
 func openPortalHint(_ Asker, meta *providers.Definition) error {
-	if meta.PortalURL == "" && meta.Notes == "" {
+	if meta.DocsURL == "" && meta.VendorAPIDocURL == "" && meta.PortalURL == "" && meta.Notes == "" {
 		return nil
 	}
 	fmt.Println()
+	if meta.DocsURL != "" {
+		fmt.Printf("DNSControl documentation: %s\n", meta.DocsURL)
+	}
+	if meta.VendorAPIDocURL != "" {
+		fmt.Printf("Vendor API documentation: %s\n", meta.VendorAPIDocURL)
+	}
 	if meta.PortalURL != "" {
 		fmt.Printf("API settings for %s: %s\n", displayName(meta.TypeName), meta.PortalURL)
 	}

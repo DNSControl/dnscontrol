@@ -219,6 +219,29 @@ func TestDefinitionPointersAndMetadata(t *testing.T) {
 	}
 }
 
+func TestDefinitionDocumentationURLs(t *testing.T) {
+	for _, tc := range []struct {
+		name, override, vendorURL, want string
+	}{
+		{"MiXeD_TYPE", "", "", "https://docs.dnscontrol.org/provider/mixed_type"},
+		{"RENAMED", "https://docs.dnscontrol.org/provider/legacy", "https://api.example.test/docs", "https://docs.dnscontrol.org/provider/legacy"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			isolateDefinitions(t)
+			Register[*None](tc.name, Definition{
+				FriendlyName: "An unrelated brand name", Aliases: []string{"OLD_NAME"},
+				DocsURL: tc.override, VendorAPIDocURL: tc.vendorURL,
+			})
+			for _, name := range []string{tc.name, "OLD_NAME"} {
+				def, _ := GetDefinition(name)
+				if def.DocsURL != tc.want || def.VendorAPIDocURL != tc.vendorURL {
+					t.Fatalf("%s: documentation URLs = %q, %q; want %q, %q", name, def.DocsURL, def.VendorAPIDocURL, tc.want, tc.vendorURL)
+				}
+			}
+		})
+	}
+}
+
 type valueInitializer struct{}
 
 func (valueInitializer) Initialize(map[string]string, json.RawMessage, *CreateOptions) error {
@@ -238,6 +261,9 @@ func TestRegisterRejectsInvalidDefinitions(t *testing.T) {
 		{"no roles", func() { Register[*valueInitializer]("BAD", valid) }, "neither DNS nor registrar"},
 		{"no auditor", func() { Register[*missingAuditor]("BAD", valid) }, "neither DNS nor registrar"},
 		{"no friendly name", func() { Register[*None]("BAD", Definition{}) }, "FriendlyName"},
+		{"redundant documentation URL", func() {
+			Register[*None]("MiXeD_TYPE", Definition{FriendlyName: "Bad", DocsURL: "https://docs.dnscontrol.org/provider/mixed_type"})
+		}, "DocsURL override matches derived URL"},
 		{"nil feature note", func() {
 			Register[*None]("BAD", Definition{FriendlyName: "Bad", Features: DocumentationNotes{CanConcur: nil}})
 		}, "must not be nil"},

@@ -24,7 +24,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*internetbsProvider]("INTERNETBS", providers.Definition{
 		FriendlyName: "Internet.bs",
-		DocsURL:      "https://docs.dnscontrol.org/provider/internetbs",
 		Maintainer:   "@pragmaton",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

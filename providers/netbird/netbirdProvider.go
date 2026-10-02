@@ -74,7 +74,6 @@ func (api *netbirdProvider) Initialize(m map[string]string, _ json.RawMessage, _
 func init() {
 	providers.Register[*netbirdProvider]("NETBIRD", providers.Definition{
 		FriendlyName: "Netbird",
-		DocsURL:      "https://docs.dnscontrol.org/provider/netbird",
 		PortalURL:    "https://app.netbird.io/settings",
 		CredFields: []providers.CredsField{
 			{Key: "token", Label: "API Token", Required: true, Secret: true},

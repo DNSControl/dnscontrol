@@ -14,7 +14,6 @@ import (
 func init() {
 	providers.Register[*netcupProvider]("NETCUP", providers.Definition{
 		FriendlyName: "netcup",
-		DocsURL:      "https://docs.dnscontrol.org/provider/netcup",
 		Maintainer:   "@kordianbruck",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

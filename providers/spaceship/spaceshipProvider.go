@@ -25,7 +25,6 @@ var defaultNS = client.DefaultBasicNameserverHosts()
 func init() {
 	providers.Register[*spaceshipProvider]("SPACESHIP", providers.Definition{
 		FriendlyName: "Spaceship",
-		DocsURL:      "https://docs.dnscontrol.org/provider/spaceship",
 		PortalURL:    "https://www.spaceship.com/application/api-manager/",
 		Notes:        "Create an API key in Spaceship API Manager with dnsrecords and domains read/write scopes.",
 		CredFields: []providers.CredsField{

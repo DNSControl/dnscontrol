@@ -37,7 +37,6 @@ func init() {
 	providers.RegisterCustomRecordType("ADGUARDHOME_AAAA_PASSTHROUGH", providerName, "")
 	providers.Register[*adguardHomeProvider](providerName, providers.Definition{
 		FriendlyName: "AdGuard Home",
-		DocsURL:      "https://docs.dnscontrol.org/provider/adguardhome",
 		Maintainer:   "@ishanjain28",
 		Features: providers.DocumentationNotes{
 			providers.CanConcur:              providers.Unimplemented(),

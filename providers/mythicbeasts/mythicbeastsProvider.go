@@ -35,7 +35,6 @@ type mythicBeastsProvider struct {
 func init() {
 	providers.Register[*mythicBeastsProvider]("MYTHICBEASTS", providers.Definition{
 		FriendlyName: "Mythic Beasts",
-		DocsURL:      "https://docs.dnscontrol.org/provider/mythicbeasts",
 		PortalURL:    "https://www.mythic-beasts.com/customer/api-users", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

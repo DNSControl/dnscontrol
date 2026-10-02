@@ -19,7 +19,6 @@ func init() {
 	providers.RegisterCustomRecordType("NETLIFYv6", providerName, "")
 	providers.Register[*netlifyProvider](providerName, providers.Definition{
 		FriendlyName: "Netlify",
-		DocsURL:      "https://docs.dnscontrol.org/provider/netlify",
 		Maintainer:   "@SphericalKat",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

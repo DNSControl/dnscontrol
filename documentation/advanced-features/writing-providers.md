@@ -126,15 +126,20 @@ Add the optional onboarding fields to the `providers.Definition` used by
 
 ```go
 providers.Register[*myProvider]("MYPROVIDER", providers.Definition{
-    FriendlyName: "My Provider",
-    Maintainer:   "@yourhandle",
-    DocsURL:      "https://docs.dnscontrol.org/provider/myprovider",
-    PortalURL:    "https://portal.example.com/api-tokens",
+    FriendlyName:    "My Provider",
+    Maintainer:      "@yourhandle",
+    VendorAPIDocURL: "https://developer.example.com/api/",
+    PortalURL:       "https://portal.example.com/api-tokens",
     CredFields: []providers.CredsField{
         {Key: "apitoken", Label: "API Token", Required: true, Secret: true},
     },
 })
 ```
+
+`DocsURL` defaults to `https://docs.dnscontrol.org/provider/` plus the lowercase
+registered provider name. Set it only to preserve a different legacy documentation
+path; an override equal to the default is a registration error. The wizard displays
+this link and the optional `VendorAPIDocURL` alongside the credential portal.
 
 The wizard appends the `creds.json` key and `(required)` or `(optional)` to the `Label` itself, so leave those out of the label text.
 

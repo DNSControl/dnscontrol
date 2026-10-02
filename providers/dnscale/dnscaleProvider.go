@@ -31,7 +31,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*dnscaleProvider]("DNSCALE", providers.Definition{
 		FriendlyName: "dnscale",
-		DocsURL:      "https://docs.dnscontrol.org/provider/dnscale",
 		PortalURL:    "https://dnscale.net/", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

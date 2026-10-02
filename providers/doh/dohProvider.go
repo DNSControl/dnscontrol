@@ -21,7 +21,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*dohProvider]("DNSOVERHTTPS", providers.Definition{
 		FriendlyName: "DNS over HTTPS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/dnsoverhttps",
 		Maintainer:   "@mikenz",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

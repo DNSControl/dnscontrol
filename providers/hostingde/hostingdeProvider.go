@@ -21,7 +21,6 @@ var defaultNameservers = []string{"ns1.hosting.de", "ns2.hosting.de", "ns3.hosti
 func init() {
 	providers.Register[*hostingdeProvider]("HOSTINGDE", providers.Definition{
 		FriendlyName: "hosting.de",
-		DocsURL:      "https://docs.dnscontrol.org/provider/hostingde",
 		PortalURL:    "https://secure.hosting.de/",
 		CredFields: []providers.CredsField{
 			{

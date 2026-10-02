@@ -44,7 +44,6 @@ func (c *openwrtProvider) Initialize(conf map[string]string, _ json.RawMessage, 
 func init() {
 	providers.Register[*openwrtProvider]("OPENWRT", providers.Definition{
 		FriendlyName: "OpenWrt",
-		DocsURL:      "https://docs.dnscontrol.org/provider/openwrt",
 		Maintainer:   "@huskyistaken",
 		Features: providers.DocumentationNotes{
 			providers.CanGetZones:            providers.Can(),

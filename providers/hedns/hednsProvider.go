@@ -49,7 +49,6 @@ Additionally
 func init() {
 	providers.Register[*hednsProvider]("HEDNS", providers.Definition{
 		FriendlyName: "Hurricane Electric DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/hedns",
 		PortalURL:    "https://dns.he.net/",
 		CredFields: []providers.CredsField{
 			{

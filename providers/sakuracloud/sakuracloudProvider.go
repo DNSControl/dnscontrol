@@ -14,7 +14,6 @@ const defaultEndpoint = "https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1
 func init() {
 	providers.Register[*sakuracloudProvider]("SAKURACLOUD", providers.Definition{
 		FriendlyName: "Sakura Cloud",
-		DocsURL:      "https://docs.dnscontrol.org/provider/sakuracloud",
 		Maintainer:   "@ttkzw",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

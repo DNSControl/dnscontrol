@@ -17,7 +17,6 @@ import (
 func init() {
 	providers.Register[*aliDNSDsp]("ALIDNS", providers.Definition{
 		FriendlyName: "Alibaba Cloud DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/alidns",
 		PortalURL:    "https://ram.console.aliyun.com/manage/ak", // TODO: Verify
 		CredFields: []providers.CredsField{
 			{

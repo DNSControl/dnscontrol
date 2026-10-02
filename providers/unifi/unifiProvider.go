@@ -20,7 +20,6 @@ type unifiProvider struct {
 func init() {
 	providers.Register[*unifiProvider]("UNIFI", providers.Definition{
 		FriendlyName: "UniFi",
-		DocsURL:      "https://docs.dnscontrol.org/provider/unifi",
 		Maintainer:   "@zupolgec",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

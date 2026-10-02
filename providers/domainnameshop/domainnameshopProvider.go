@@ -25,7 +25,6 @@ type domainNameShopProvider struct {
 func init() {
 	providers.Register[*domainNameShopProvider]("DOMAINNAMESHOP", providers.Definition{
 		FriendlyName: "Domainnameshop",
-		DocsURL:      "https://docs.dnscontrol.org/provider/domainnameshop",
 		Maintainer:   "@SimenBai",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

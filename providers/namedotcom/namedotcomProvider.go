@@ -52,7 +52,6 @@ func (n *namedotcomProvider) Initialize(conf map[string]string, _ json.RawMessag
 func init() {
 	providers.Register[*namedotcomProvider]("NAMEDOTCOM", providers.Definition{
 		FriendlyName: "Name.com",
-		DocsURL:      "https://docs.dnscontrol.org/provider/namedotcom",
 		Maintainer:   "NEEDS VOLUNTEER",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

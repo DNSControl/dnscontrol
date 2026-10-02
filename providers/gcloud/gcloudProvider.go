@@ -29,7 +29,6 @@ var (
 func init() {
 	providers.Register[*gcloudProvider]("GCLOUD", providers.Definition{
 		FriendlyName: "Google Cloud DNS",
-		DocsURL:      "https://docs.dnscontrol.org/provider/gcloud",
 		PortalURL:    "https://console.cloud.google.com/iam-admin/serviceaccounts", // TODO: Verify
 		Notes:        "These values come from a Google Cloud service account JSON key file.",
 		CredFields: []providers.CredsField{

@@ -22,7 +22,6 @@ import (
 func init() {
 	providers.Register[*dynuProvider]("DYNU", providers.Definition{
 		FriendlyName: "Dynu",
-		DocsURL:      "https://docs.dnscontrol.org/provider/dynu",
 		PortalURL:    "https://www.dynu.com/en-US/ControlPanel",
 		CredFields: []providers.CredsField{
 			{Key: "api_key", Label: "API Key", Required: true, Secret: true},

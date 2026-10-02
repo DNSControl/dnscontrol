@@ -15,7 +15,6 @@ import (
 func init() {
 	providers.Register[*dnsMadeEasyProvider]("DNSMADEEASY", providers.Definition{
 		FriendlyName: "DNS Made Easy",
-		DocsURL:      "https://docs.dnscontrol.org/provider/dnsmadeeasy",
 		PortalURL:    "https://cp.dnsmadeeasy.com/",
 		CredFields: []providers.CredsField{
 			{

@@ -23,7 +23,6 @@ Info required in `creds.json`:
 func init() {
 	providers.Register[*dynadotProvider]("DYNADOT", providers.Definition{
 		FriendlyName: "Dynadot",
-		DocsURL:      "https://docs.dnscontrol.org/provider/dynadot",
 		Maintainer:   "@e-im",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.

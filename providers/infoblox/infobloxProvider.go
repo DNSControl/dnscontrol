@@ -11,7 +11,6 @@ import (
 func init() {
 	providers.Register[*infobloxProvider]("INFOBLOX", providers.Definition{
 		FriendlyName: "Infoblox",
-		DocsURL:      "https://docs.dnscontrol.org/provider/infoblox",
 		Maintainer:   "@matthewmgamble",
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.
