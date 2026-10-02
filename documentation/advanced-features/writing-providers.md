@@ -315,8 +315,36 @@ Capabilities are processed early by DNSControl.  For example if a provider doesn
 
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
-Declare record-type capabilities in `providers.Definition.Features` using
-`providers.DocumentationNotes`. Named operational fields such as `CanConcur`
+Declare supported record types in `providers.Definition.SupportedTypes`, for
+example `[]string{"Default", "TXT", "NS", "CAA", "SRV"}`. This list is exhaustive:
+`Default` contains only `A`, `AAAA`, `MX`, and `CNAME`. `RFC` includes all ordinary
+types in DNSControl's record catalog; `*` also includes pseudo-types. Patterns
+such as `BUNNY_*` match whole type names, with `*` matching zero or more characters.
+Unknown concrete type names are errors.
+
+An entry without a suffix means supported. Use `:Can`, `:Cannot`, or
+`:Unimplemented` on concrete names or patterns, for example
+`[]string{"RFC", "CAA:Cannot"}`. Both negative statuses reject records;
+`Unimplemented` retains a distinct documentation status. `Default` and `RFC`
+do not take suffixes. Type names are case-insensitive; status suffixes use the
+spellings shown here.
+
+Precedence is: exact entries, patterns with status suffixes, legacy `Features`,
+then unsuffixed patterns/categories. Conflicting statuses at the winning
+priority are errors, regardless of order. An exact entry can resolve conflicting
+patterns. Nil `SupportedTypes` means `Default`; a non-nil empty slice declares
+no support. During migration, legacy `Features` can still supply individual
+type statuses, and a non-nil `Features` with nil `SupportedTypes` retains legacy
+validation. General `DS` support includes child DS records; `CanUseDSForChildren`
+can independently allow child DS records even with `DS:Cannot`.
+
+Registration retains selectors until the complete catalog is available.
+Importing `pkg/providers/_all` finalizes the registry; definition accessors also
+ensure finalization for programs importing individual providers. Register all
+providers and record types before concurrent reads. Tests registering additional
+types or providers can call `providers.Finalize()` again to rebuild derived data.
+
+Named operational fields such as `CanConcur`
 can be set directly on the definition. Some fields are derived automatically for
 you, such as `CanGetZones` and `DocCreateDomains`
 (set based on the existance or absense of `providers.ZoneLister` and `providers.ZoneCreator`, respectively.)

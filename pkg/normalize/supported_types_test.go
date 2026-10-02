@@ -1,0 +1,149 @@
+package normalize
+
+import (
+	"errors"
+	"fmt"
+	"strings"
+	"testing"
+
+	"github.com/DNSControl/dnscontrol/v5/models"
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+)
+
+type supportedTypesAuditor struct{ validationProvider }
+
+func (*supportedTypesAuditor) AuditRecords(models.Records) []error {
+	return []error{errors.New("stage 5 audit ran")}
+}
+
+func init() {
+	for name, def := range map[string]providers.Definition{
+		"S5_DEFAULT":     {},
+		"S5_EMPTY":       {SupportedTypes: []string{}},
+		"S5_RFC":         {SupportedTypes: []string{"RFC"}},
+		"S5_ALL":         {SupportedTypes: []string{"*"}},
+		"S5_CHILD":       {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Can()},
+		"S5_FULL_DS":     {SupportedTypes: []string{"DS"}, CanUseDSForChildren: providers.Cannot()},
+		"S5_NO_DS":       {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Cannot()},
+		"S5_IMPORT_ONLY": {SupportedTypes: []string{"IMPORT_TRANSFORM"}},
+	} {
+		def.FriendlyName = name
+		providers.Register[*validationProvider](name, def)
+	}
+	providers.Register[*supportedTypesAuditor]("S5_AUDIT", providers.Definition{FriendlyName: "Auditor", SupportedTypes: []string{"*"}})
+}
+
+func TestExhaustiveRecordValidation(t *testing.T) {
+	for _, tc := range []struct {
+		provider, label, rtype, data string
+		allowed                      bool
+	}{
+		{"S5_DEFAULT", "@", "A", "192.0.2.1", true},
+		{"S5_EMPTY", "@", "A", "192.0.2.1", false},
+		{"S5_DEFAULT", "@", "TXT", `"text"`, false},
+		{"S5_DEFAULT", "child", "NS", "ns.example.net.", false},
+		{ProviderNoDS, "@", "TXT", `"text"`, true},
+		{ProviderNoDS, "child", "NS", "ns.example.net.", true},
+		{"S5_RFC", "@", "TXT", `"text"`, true},
+		{"S5_RFC", "@", "HINFO", `"CPU" "OS"`, true},
+		{"S5_RFC", "@", "ALIAS", "target.example.net.", false},
+		{"S5_ALL", "@", "ALIAS", "target.example.net.", true},
+		{"S5_ALL", "edge", "AKAMAITLC", "A target.example.net.", true},
+		{"S5_ALL", "edge", "AKAMAITLC", "AAAA target.example.net.", true},
+		{"S5_ALL", "edge", "AKAMAITLC", "DUAL target.example.net.", true},
+		{"S5_DEFAULT", "edge", "AKAMAITLC", "A target.example.net.", false},
+		{"S5_CHILD", "child", "DS", "12345 8 2 ABCD", true},
+		{"S5_CHILD", "@", "DS", "12345 8 2 ABCD", false},
+		{"S5_FULL_DS", "@", "DS", "12345 8 2 ABCD", true},
+		{"S5_FULL_DS", "child", "DS", "12345 8 2 ABCD", true},
+		{"S5_NO_DS", "child", "DS", "12345 8 2 ABCD", false},
+	} {
+		t.Run(tc.provider+"/"+tc.rtype+"/"+tc.label+"/"+tc.data, func(t *testing.T) {
+			dc := lineDomain(tc.provider)
+			r := dc.MustNewRecordConfigParse(tc.label, 300, tc.rtype, tc.data)
+			dc.AddRecordConfig(r)
+			errs := validateDomain(t, dc)
+			if (len(errs) == 0) != tc.allowed {
+				t.Fatalf("allowed=%v, errors=%v", tc.allowed, errs)
+			}
+			if tc.allowed && r.Metadata["orig_custom_type"] != "" {
+				t.Fatal("exhaustive validation added a legacy custom-type marker")
+			}
+		})
+	}
+}
+
+func TestSupportedTypesRetainsOtherValidation(t *testing.T) {
+	t.Run("auditor", func(t *testing.T) {
+		dc := lineDomain("S5_AUDIT")
+		dc.AddRecordConfig(dc.MustNewRecordConfig("www", 300, "A", "192.0.2.1"))
+		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "stage 5 audit ran") {
+			t.Fatalf("errors = %v", errs)
+		}
+	})
+	t.Run("placement", func(t *testing.T) {
+		dc := lineDomain("S5_ALL")
+		dc.AddRecordConfig(dc.MustNewRecordConfig("@", 300, "CNAME", "target.example.net."))
+		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "cannot create CNAME record for bare domain") {
+			t.Fatalf("errors = %v", errs)
+		}
+	})
+	t.Run("unknown", func(t *testing.T) {
+		dc := lineDomain("S5_ALL")
+		r := dc.MustNewRecordConfig("www", 300, "A", "192.0.2.1")
+		r.Type = "UNRECOGNIZED"
+		dc.AddRecordConfig(r)
+		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "unknown record type UNRECOGNIZED") {
+			t.Fatalf("errors = %v", errs)
+		}
+	})
+	t.Run("every provider", func(t *testing.T) {
+		dc := lineDomain("S5_ALL")
+		dc.DNSProviderInstances = append(dc.DNSProviderInstances, &models.DNSProviderInstance{Name: "second", ProviderType: "S5_DEFAULT"})
+		dc.AddRecordConfig(dc.MustNewRecordConfig("@", 300, "TXT", "text"))
+		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "S5_DEFAULT does not support") {
+			t.Fatalf("errors = %v", errs)
+		}
+	})
+	t.Run("operational", func(t *testing.T) {
+		dc := lineDomain("S5_ALL")
+		dc.AutoDNSSEC = "on"
+		if err := checkProviderCapabilities(dc); err == nil || !strings.Contains(err.Error(), "AUTODNSSEC") {
+			t.Fatalf("error = %v", err)
+		}
+	})
+}
+
+func TestSupportedTypesBeforeAndAfterTransforms(t *testing.T) {
+	for _, provider := range []string{"S5_DEFAULT", "S5_IMPORT_ONLY", "S5_ALL"} {
+		t.Run(provider, func(t *testing.T) {
+			source := models.MustNewDomainConfig("source.example")
+			source.AddRecordConfig(source.MustNewRecordConfig("www", 300, "A", "192.0.2.1"))
+			dest := lineDomain(provider)
+			transform := "0.0.0.0~255.255.255.255~~0.0.0.0"
+			r := dest.MustNewRecordConfig("@", 300, privatetypes.TypeIMPORTTRANSFORM, transform, 300, "", source.Name)
+			r.Metadata["transform_table"] = transform
+			dest.AddRecordConfig(r)
+			config := &models.DNSConfig{Domains: []*models.DomainConfig{source, dest}}
+			if err := config.PostProcess(); err != nil {
+				t.Fatal(err)
+			}
+			errs := ValidateAndNormalizeConfig(config)
+			switch provider {
+			case "S5_DEFAULT":
+				if !strings.Contains(fmt.Sprint(errs), "uses IMPORT_TRANSFORM records") {
+					t.Fatalf("original pseudo-type not checked: %v", errs)
+				}
+			case "S5_IMPORT_ONLY":
+				if !strings.Contains(fmt.Sprint(errs), "uses A records") {
+					t.Fatalf("transformed records not checked: %v", errs)
+				}
+			case "S5_ALL":
+				if len(errs) != 0 || len(dest.Records) != 1 || dest.Records[0].Type != "A" {
+					t.Fatalf("transform failed: records=%v, errors=%v", dest.Records, errs)
+				}
+			}
+		})
+	}
+}

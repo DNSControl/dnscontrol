@@ -116,7 +116,7 @@ const (
 
 // ProviderHasCapability returns true if provider has capability.
 func ProviderHasCapability(pType string, capa Capability) bool {
-	if def, ok := definitions[pType]; ok {
+	if def, ok := GetDefinition(pType); ok {
 		note := def.DerivedFeatures[capa]
 		return note != nil && note.HasFeature
 	}

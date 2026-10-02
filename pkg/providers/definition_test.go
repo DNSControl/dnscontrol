@@ -16,8 +16,9 @@ import (
 func isolateDefinitions(t *testing.T) {
 	t.Helper()
 	oldDefs := definitions
-	t.Cleanup(func() { definitions = oldDefs })
+	t.Cleanup(func() { definitions = oldDefs; definitionGeneration++ })
 	definitions = map[string]*Definition{}
+	definitionGeneration++
 }
 
 type definitionDNS struct {
@@ -275,7 +276,7 @@ func assertRegistrationPanics(t *testing.T, message string, f func()) {
 	t.Helper()
 	defer func() {
 		r := recover()
-		if r == nil || !strings.Contains(r.(string), message) {
+		if r == nil || !strings.Contains(fmt.Sprint(r), message) {
 			t.Errorf("panic = %v, want containing %q", r, message)
 		}
 	}()

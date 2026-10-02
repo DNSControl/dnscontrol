@@ -2,6 +2,8 @@
 package all
 
 import (
+	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+
 	// Define all known providers here. They should each register themselves with the providers package via init function.
 	_ "github.com/DNSControl/dnscontrol/v5/providers/adguardhome"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/akamaiedgedns"
@@ -79,3 +81,9 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/vultr"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/websupport"
 )
+
+func init() {
+	if err := providers.Finalize(); err != nil {
+		panic(err)
+	}
+}
