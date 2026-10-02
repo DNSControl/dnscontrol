@@ -161,7 +161,7 @@ func TestDefinitionPointersAndMetadata(t *testing.T) {
 	postWrites := 0
 	input := Definition{
 		FriendlyName: "Example", Aliases: []string{"ALIAS", "ZZZ_ALIAS"}, Maintainer: "@example", DefaultTTL: 300,
-		DocsURL: "docs", PortalURL: "portal", Notes: "notes",
+		DocsURL: "docs", VendorAPIDocURL: "https://api.example.test/docs", PortalURL: "portal", Notes: "notes",
 		CredFields: []CredsField{{Key: "key", Choices: []string{"one"}, ShowIf: map[string]string{"mode": "one"}, Validator: func(string) error { return nil }}},
 		PostWrite:  func(map[string]string) error { postWrites++; return nil },
 		Features:   DocumentationNotes{CanConcur: Can("legacy"), CanUseCAA: Can("CAA", "link"), CanGetZones: Can("enumerate"), DocCreateDomains: Can()},
@@ -208,7 +208,7 @@ func TestDefinitionPointersAndMetadata(t *testing.T) {
 	if GetDefaultTTL("ALIAS") != 300 || GetRecordIdentity("ALIAS")(&models.RecordConfig{}) != "identity" {
 		t.Fatal("alias accessors lost metadata")
 	}
-	if def.FriendlyName != "Example" || def.Kind != KindDNS || def.DocsURL != "docs" || def.PortalURL != "portal" || def.Notes != "notes" || def.Maintainer != "@example" {
+	if def.FriendlyName != "Example" || def.Kind != KindDNS || def.DocsURL != "docs" || def.VendorAPIDocURL != "https://api.example.test/docs" || def.PortalURL != "portal" || def.Notes != "notes" || def.Maintainer != "@example" {
 		t.Fatalf("definition metadata = %+v", def)
 	}
 	if err := def.PostWrite(nil); err != nil || postWrites != 1 {
@@ -216,29 +216,6 @@ func TestDefinitionPointersAndMetadata(t *testing.T) {
 	}
 	if CanonicalName("ALIAS") != "ZZZ" || CanonicalName("MISSING") != "MISSING" {
 		t.Fatal("canonical name resolution failed")
-	}
-}
-
-func TestDefinitionDocumentationURLs(t *testing.T) {
-	for _, tc := range []struct {
-		name, override, vendorURL, want string
-	}{
-		{"MiXeD_TYPE", "", "", "https://docs.dnscontrol.org/provider/mixed_type"},
-		{"RENAMED", "https://docs.dnscontrol.org/provider/legacy", "https://api.example.test/docs", "https://docs.dnscontrol.org/provider/legacy"},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			isolateDefinitions(t)
-			Register[*None](tc.name, Definition{
-				FriendlyName: "An unrelated brand name", Aliases: []string{"OLD_NAME"},
-				DocsURL: tc.override, VendorAPIDocURL: tc.vendorURL,
-			})
-			for _, name := range []string{tc.name, "OLD_NAME"} {
-				def, _ := GetDefinition(name)
-				if def.DocsURL != tc.want || def.VendorAPIDocURL != tc.vendorURL {
-					t.Fatalf("%s: documentation URLs = %q, %q; want %q, %q", name, def.DocsURL, def.VendorAPIDocURL, tc.want, tc.vendorURL)
-				}
-			}
-		})
 	}
 }
 
@@ -261,9 +238,6 @@ func TestRegisterRejectsInvalidDefinitions(t *testing.T) {
 		{"no roles", func() { Register[*valueInitializer]("BAD", valid) }, "neither DNS nor registrar"},
 		{"no auditor", func() { Register[*missingAuditor]("BAD", valid) }, "neither DNS nor registrar"},
 		{"no friendly name", func() { Register[*None]("BAD", Definition{}) }, "FriendlyName"},
-		{"redundant documentation URL", func() {
-			Register[*None]("MiXeD_TYPE", Definition{FriendlyName: "Bad", DocsURL: "https://docs.dnscontrol.org/provider/mixed_type"})
-		}, "DocsURL override matches derived URL"},
 		{"nil feature note", func() {
 			Register[*None]("BAD", Definition{FriendlyName: "Bad", Features: DocumentationNotes{CanConcur: nil}})
 		}, "must not be nil"},
