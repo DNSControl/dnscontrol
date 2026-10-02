@@ -51,33 +51,23 @@ func init() {
 			},
 		},
 		Maintainer: "@systemcrash",
+		SupportedTypes: []string{
+			"Basic8",
+			"LOC",
+			"NAPTR",
+			"SSHFP",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAKAMAICDN:        providers.Cannot(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseAzureAlias:       providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(), // Verified 2025-07-24
-			providers.CanUseDNSKEY:           providers.Cannot(), // Verified 2025-07-24
-			providers.CanUseDS:               providers.Cannot("Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end."),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Cannot(), // Verified 2025-07-24
-			providers.CanUseLOC:              providers.Can(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot("💩"),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseSVCB:             providers.Cannot(), // Verified 2025-07-24
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot("Can only manage domains registered through their service"),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseDS:         providers.Cannot("Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end."),
+			providers.CanUseSOA:        providers.Cannot("💩"),
+			providers.DocCreateDomains: providers.Cannot("Can only manage domains registered through their service"),
 		},
 	})
 }

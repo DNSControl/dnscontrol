@@ -35,22 +35,13 @@ func init() {
 		},
 		Maintainer: "@bytemain",
 		DefaultTTL: 600,
-		Features: providers.DocumentationNotes{
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-			providers.DocDualHost:            providers.Can("Alibaba Cloud DNS allows full management of apex NS records"),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.CanUseRoute53Alias:     providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
 		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		DocDualHost:            providers.Can("Alibaba Cloud DNS allows full management of apex NS records"),
 	})
 }
 

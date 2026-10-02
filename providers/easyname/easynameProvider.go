@@ -20,13 +20,10 @@ type easynameProvider struct {
 
 func init() {
 	providers.Register[*easynameProvider]("EASYNAME", providers.Definition{
-		FriendlyName: "easyname",
-		Maintainer:   "@tresni",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur: providers.Unimplemented(),
-		},
+		FriendlyName:   "easyname",
+		Maintainer:     "@tresni",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Unimplemented(),
 	})
 }
 

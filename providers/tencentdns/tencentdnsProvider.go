@@ -57,16 +57,11 @@ func init() {
 		Maintainer:     "@cylonchau",
 		DefaultTTL:     defaultTTL,
 		RecordIdentity: recordIdentity,
-		Features: providers.DocumentationNotes{
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
 		},
+		DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

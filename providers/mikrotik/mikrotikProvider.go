@@ -34,11 +34,7 @@ forwarding), MIKROTIK_NXDOMAIN, and MIKROTIK_FORWARDER.
 */
 
 func init() {
-	const providerName = "MIKROTIK"
-	providers.RegisterCustomRecordType("MIKROTIK_FWD", providerName, "")
-	providers.RegisterCustomRecordType("MIKROTIK_NXDOMAIN", providerName, "")
-	providers.RegisterCustomRecordType("MIKROTIK_FORWARDER", providerName, "")
-	providers.Register[*mikrotikProvider](providerName, providers.Definition{
+	providers.Register[*mikrotikProvider]("MIKROTIK", providers.Definition{
 		FriendlyName: "MikroTik RouterOS",
 		PortalURL:    "", // No portal; managed on-device
 		CredFields: []providers.CredsField{
@@ -63,27 +59,18 @@ func init() {
 			},
 		},
 		Maintainer: "@hedger",
-		Features: providers.DocumentationNotes{
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Cannot(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSVCB:             providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"MIKROTIK_FORWARDER",
+			"MIKROTIK_FWD",
+			"MIKROTIK_NXDOMAIN",
+			"CAA:Cannot",
 		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Cannot(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

@@ -10,7 +10,6 @@
           "filepos": "[line:4:5]",
           "meta": {
             "includePath": "yes",
-            "orig_custom_type": "PORKBUN_URLFWD",
             "type": "permanent",
             "wildcard": "no"
           },

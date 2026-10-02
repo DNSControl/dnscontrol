@@ -25,14 +25,6 @@ const (
 	// Reading explicitly named zones does not require this capability.
 	CanGetZones
 
-	// CanOnlyDiff1Features indicates the provider has not yet been upgraded to
-	// use the "diff2" differencing engine.  Instead, it uses the the backwards
-	// compatibility mode.  The diff2 engine is required to repliably provide
-	// IGNORE(), NO_PURGE, and other features.
-	// Providers using compatibility mode declare Can() in Definition.Features.
-	// All other values (Unimplemented and Cannot) are equivalent.
-	CanOnlyDiff1Features
-
 	// CanUseAKAMAICDN indicates the provider support the specific AKAMAICDN records that only the Akamai EdgeDns provider supports.
 	CanUseAKAMAICDN
 

@@ -57,20 +57,17 @@ func init() {
 	providers.Register[*exoscaleProvider]("EXOSCALE", providers.Definition{
 		FriendlyName: "Exoscale",
 		Maintainer:   "@Giza",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Cannot(),
+		DocDualHost:            providers.Cannot("Exoscale does not allow sufficient control over the apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Unimplemented(),
-			providers.CanConcur:              providers.Cannot(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported"),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot("Exoscale does not allow sufficient control over the apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseSRV: providers.Can("SRV records with empty targets are not supported"),
 		},
 	})
 }

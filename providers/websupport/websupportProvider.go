@@ -48,24 +48,20 @@ func init() {
 			},
 		},
 		Maintainer: "@mtmn",
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Cannot("WebSupport has no list-all-zones endpoint."),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Cannot("WebSupport's ANAME is apex-only and conflicts with other apex records."),
-			providers.CanUseCAA:              providers.Cannot("The v2 API does not return CAA tag/flags on read, so records cannot be managed without churn."),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot("Zones must be created via the WebSupport portal."),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanGetZones:      providers.Cannot("WebSupport has no list-all-zones endpoint."),
+			providers.CanUseAlias:      providers.Cannot("WebSupport's ANAME is apex-only and conflicts with other apex records."),
+			providers.CanUseCAA:        providers.Cannot("The v2 API does not return CAA tag/flags on read, so records cannot be managed without churn."),
+			providers.DocCreateDomains: providers.Cannot("Zones must be created via the WebSupport portal."),
 		},
 	})
 }

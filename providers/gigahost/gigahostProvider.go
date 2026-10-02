@@ -28,18 +28,14 @@ func init() {
 			},
 		},
 		Maintainer: "@jochristian",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones: providers.Can(),
-			providers.CanConcur:   providers.Unimplemented(),
-			providers.CanUseAlias: providers.Can(),
-			providers.CanUseCAA:   providers.Can(),
-			providers.CanUseDNAME: providers.Can(),
-			providers.CanUseNAPTR: providers.Can(),
-			providers.CanUsePTR:   providers.Can(),
-			providers.CanUseSRV:   providers.Can(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"DNAME",
+			"NAPTR",
+			"PTR",
 		},
+		CanConcur: providers.Unimplemented(),
 	})
 }
 

@@ -21,7 +21,7 @@ func TestWildcardRecordsRoundTrip(t *testing.T) {
 	dc.RegistrarName = "NONE"
 	dc.DNSProviderInstances = []*models.DNSProviderInstance{{Name: "bind", ProviderType: "BIND"}}
 	// Exercise real parsers, including a type that lacks a legacy capability,
-	// pseudo-types owned by other providers, and every AKAMAITLC answer mode.
+	// pseudo-types used by other providers, and every AKAMAITLC answer mode.
 	for _, record := range []struct{ label, rtype, data string }{
 		{"info", "HINFO", `"CPU" "OS"`},
 		{"alias", "ALIAS", "target.example.net."},
@@ -34,11 +34,6 @@ func TestWildcardRecordsRoundTrip(t *testing.T) {
 	}
 	if errs := normalize.ValidateAndNormalizeConfig(&models.DNSConfig{Domains: []*models.DomainConfig{dc}}); len(errs) != 0 {
 		t.Fatal(errs)
-	}
-	for _, r := range dc.Records {
-		if r.Metadata["orig_custom_type"] != "" {
-			t.Fatal("BIND acquired a legacy ownership marker")
-		}
 	}
 	corrections, count, err := p.GetZoneRecordsCorrections(dc, nil)
 	if err != nil || len(corrections) != 1 || count == 0 {

@@ -66,22 +66,14 @@ func init() {
 			},
 		},
 		Maintainer: "@arnoschoon",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"PTR",
 		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

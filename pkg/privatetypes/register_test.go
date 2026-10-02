@@ -19,7 +19,7 @@ func TestRecordCatalog(t *testing.T) {
 			t.Errorf("pseudo-type %s = %+v, %v", name, typ, ok)
 		}
 	}
-	for _, name := range []string{"UNRECOGNIZED", "ANY", "AXFR", "IXFR", "OPT", "TKEY", "TSIG"} {
+	for _, name := range []string{"UNRECOGNIZED", "ANY", "AXFR", "IXFR", "OPT", "TKEY", "TSIG", "IMPORT_TRANSFORM"} {
 		if _, ok := LookupRecordType(name); ok {
 			t.Errorf("non-zone type %s accepted", name)
 		}

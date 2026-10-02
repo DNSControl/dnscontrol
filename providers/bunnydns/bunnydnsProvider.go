@@ -19,10 +19,7 @@ func (b *bunnydnsProvider) SetConversionObserver(observer providers.ConversionOb
 }
 
 func init() {
-	const providerName = "BUNNY_DNS"
-	providers.RegisterCustomRecordType("BUNNY_DNS_RDR", providerName, "")
-	providers.RegisterCustomRecordType("BUNNY_DNS_PZ", providerName, "")
-	providers.Register[*bunnydnsProvider](providerName, providers.Definition{
+	providers.Register[*bunnydnsProvider]("BUNNY_DNS", providers.Definition{
 		FriendlyName: "Bunny DNS",
 		DocsURL:      "https://docs.dnscontrol.org/provider/bunnydns",
 		PortalURL:    "https://dash.bunny.net/account/api-key",
@@ -36,29 +33,24 @@ func init() {
 			},
 		},
 		Maintainer: "@ppmathis",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"BUNNY_DNS_PZ",
+			"BUNNY_DNS_RDR",
+			"HTTPS",
+			"PTR",
+			"SVCB",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Can("Bunny flattens CNAME records into A/AAAA records dynamically"),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseAlias: providers.Can("Bunny flattens CNAME records into A/AAAA records dynamically"),
 		},
 	})
 }

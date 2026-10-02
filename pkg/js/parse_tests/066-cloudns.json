@@ -8,9 +8,6 @@
         {
           "comparablev3": "\"https://example.com\"",
           "filepos": "[line:1:25]",
-          "meta": {
-            "orig_custom_type": "CLOUDNS_WR"
-          },
           "name": "www",
           "name_unicode": "www",
           "rdata": {

@@ -15,32 +15,18 @@ func init() {
 	providers.Register[*sakuracloudProvider]("SAKURACLOUD", providers.Definition{
 		FriendlyName: "Sakura Cloud",
 		Maintainer:   "@ttkzw",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDNAME:            providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.CanUseDNSKEY:           providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"PTR",
+			"SVCB",
 		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

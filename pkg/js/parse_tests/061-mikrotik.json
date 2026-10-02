@@ -10,8 +10,7 @@
           "filepos": "[line:2:5]",
           "meta": {
             "address_list": "vpn-list",
-            "match_subdomain": "true",
-            "orig_custom_type": "MIKROTIK_FWD"
+            "match_subdomain": "true"
           },
           "name": "@",
           "name_unicode": "@",
@@ -24,9 +23,6 @@
         },
         {
           "filepos": "[line:6:5]",
-          "meta": {
-            "orig_custom_type": "MIKROTIK_NXDOMAIN"
-          },
           "name": "blocked",
           "name_unicode": "blocked",
           "rdata": {},
@@ -37,9 +33,6 @@
         {
           "comparablev3": "10.0.0.53",
           "filepos": "[line:7:5]",
-          "meta": {
-            "orig_custom_type": "MIKROTIK_FORWARDER"
-          },
           "name": "corp.example.com",
           "name_unicode": "corp.example.com",
           "rdata": {

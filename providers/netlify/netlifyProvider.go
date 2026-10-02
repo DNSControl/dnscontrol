@@ -14,33 +14,20 @@ import (
 )
 
 func init() {
-	const providerName = "NETLIFY"
-	providers.RegisterCustomRecordType(providerName, providerName, "")
-	providers.RegisterCustomRecordType("NETLIFYv6", providerName, "")
-	providers.Register[*netlifyProvider](providerName, providers.Definition{
+	providers.Register[*netlifyProvider]("NETLIFY", providers.Definition{
 		FriendlyName: "Netlify",
 		Maintainer:   "@SphericalKat",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot("Netlify does not allow sufficient control over the apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"NETLIFY",
+			"NETLIFYV6",
 		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot("Netlify does not allow sufficient control over the apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

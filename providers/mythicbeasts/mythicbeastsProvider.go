@@ -52,21 +52,18 @@ func init() {
 			},
 		},
 		Maintainer: "@tomfitzhenry",
+		SupportedTypes: []string{
+			"Basic8",
+			"PTR",
+			"SSHFP",
+			"TLSA",
+		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot("Requires domain registered through Web UI"),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("Requires domain registered through Web UI"),
 		},
 	})
 }

@@ -66,26 +66,21 @@ func init() {
 			},
 		},
 		Maintainer: "@xddxdd",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"PTR",
+			"SVCB",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can("G-Core supports PTR records only in rDNS zones"),
-			providers.CanUseSRV:              providers.Can("G-Core doesn't support SRV records with empty targets"),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUsePTR: providers.Can("G-Core supports PTR records only in rDNS zones"),
+			providers.CanUseSRV: providers.Can("G-Core doesn't support SRV records with empty targets"),
 		},
 	})
 }

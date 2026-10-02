@@ -21,19 +21,17 @@ func init() {
 	providers.Register[*unifiProvider]("UNIFI", providers.Definition{
 		FriendlyName: "UniFi",
 		Maintainer:   "@zupolgec",
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			providers.CanGetZones:            providers.Cannot("UniFi stores records flat, not by zone"),
-			providers.CanConcur:              providers.Cannot(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot("UniFi does not have zone concept"),
+			providers.CanGetZones:      providers.Cannot("UniFi stores records flat, not by zone"),
+			providers.DocCreateDomains: providers.Cannot("UniFi does not have zone concept"),
 		},
 	})
 }

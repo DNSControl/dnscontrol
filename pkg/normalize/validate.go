@@ -32,18 +32,16 @@ func checkTarget(target string) error {
 	return nil
 }
 
-// validateSupportedRecordTypes checks original types before transformations and
-// resulting types afterwards. The bool reports whether all providers opted in.
-func validateSupportedRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) (bool, error) {
-	allExhaustive := len(pTypes) != 0
+// validateSupportedRecordTypes checks catalog recognition and provider support
+// for original types before transformations and resulting types afterwards.
+func validateSupportedRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
+	if _, known := privatetypes.LookupRecordType(rec.Type); !known {
+		return fmt.Errorf("unknown record type %s in domain %s", rec.Type, domain)
+	}
 	for _, pType := range pTypes {
 		def, ok := providers.GetDefinition(pType)
 		if !ok || !def.UsesSupportedTypes() {
-			allExhaustive = false
 			continue
-		}
-		if _, known := privatetypes.LookupRecordType(rec.Type); !known {
-			return false, fmt.Errorf("unknown record type %s in domain %s", rec.Type, domain)
 		}
 		if def.RecordTypeSupport(rec.Type).HasFeature {
 			continue
@@ -51,64 +49,7 @@ func validateSupportedRecordTypes(rec *models.RecordConfig, domain string, pType
 		if rec.Type == "DS" && rec.GetLabel() != "@" && providers.ProviderHasCapability(pType, providers.CanUseDSForChildren) {
 			continue
 		}
-		return false, fmt.Errorf("domain %s uses %s records, but DNS provider type %s does not support them at %s", domain, rec.Type, pType, rec.GetLabel())
-	}
-	return allExhaustive, nil
-}
-
-// validateLegacyRecordTypes retains legacy recognition, ownership, and conversion for
-// providers that have not declared SupportedTypes.
-func validateLegacyRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
-	switch rec.Type {
-	// RCv3 records do not need this validation step.
-	case "CLOUDFLAREAPI_SINGLE_REDIRECT", "RP", "DS":
-		return nil
-	}
-
-	// #rtype_variations
-	validTypes := map[string]bool{
-		"A":                true,
-		"AAAA":             true,
-		"ALIAS":            false,
-		"CAA":              true,
-		"CNAME":            true,
-		"DHCID":            true,
-		"DNAME":            true,
-		"DS":               true,
-		"DNSKEY":           true,
-		"HTTPS":            true,
-		"IMPORT_TRANSFORM": false,
-		"LOC":              true,
-		"MX":               true,
-		"NAPTR":            true,
-		"NS":               true,
-		"OPENPGPKEY":       true,
-		"PTR":              true,
-		"SMIMEA":           true,
-		"SOA":              true,
-		"SRV":              true,
-		"SSHFP":            true,
-		"SVCB":             true,
-		"TLSA":             true,
-		"TXT":              true,
-	}
-	_, ok := validTypes[rec.Type]
-	if !ok {
-
-		cType := providers.GetCustomRecordType(rec.Type)
-		if cType == nil {
-			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v Type=%s TypeNum=%d", rec.Type, domain, rec.GetLabel(), rec.Type, rec.TypeNum)
-		}
-		for _, providerType := range pTypes {
-			if providers.CanonicalName(providerType) != providers.CanonicalName(cType.Provider) {
-				return fmt.Errorf("custom record type %s is not compatible with provider type %s", rec.Type, providerType)
-			}
-		}
-		// it is ok. Lets replace the type with real type and add metadata to say we checked it
-		rec.Metadata["orig_custom_type"] = rec.Type
-		if cType.RealType != "" {
-			rec.Type = cType.RealType
-		}
+		return fmt.Errorf("domain %s uses %s records, but DNS provider type %s does not support them at %s", domain, rec.Type, pType, rec.GetLabel())
 	}
 	return nil
 }
@@ -260,11 +201,7 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	default:
 		if _, known := privatetypes.LookupRecordType(rec.Type); known && rec.GetRDATA() != nil {
 			// Catalog records have already been parsed and validated. Provider
-			// support is checked separately; no ownership marker is needed.
-			return errs
-		}
-		if rec.Metadata["orig_custom_type"] != "" {
-			// it is a valid custom type. We perform no validation on target
+			// support is checked separately.
 			return errs
 		}
 		errs = append(errs, fmt.Errorf("checkTargets: Unimplemented record type (%v) domain=%v name=%v",
@@ -440,14 +377,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				}
 			}
 
-			// Validate the unmodified inputs:
-			allExhaustive, err := validateSupportedRecordTypes(rec, domain.Name, pTypes)
-			if err != nil {
-				errs = append(errs, err)
-			} else if !allExhaustive {
-				// Legacy normalization historically used no ownership filter.
-				// Retain its coverage until these providers migrate in Stage 6.
-				if err := validateLegacyRecordTypes(rec, domain.Name, nil); err != nil {
+			// IMPORT_TRANSFORM is a deferred command, not a provider record.
+			// It is consumed below; the resulting records are validated afterwards.
+			if rec.Type != "IMPORT_TRANSFORM" {
+				if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
 					errs = append(errs, err)
 				}
 			}
@@ -958,7 +891,7 @@ func checkProviderCapabilities(dc *models.DomainConfig) error {
 		pTypes = append(pTypes, provider.ProviderType)
 	}
 	for _, rec := range dc.Records {
-		if _, err := validateSupportedRecordTypes(rec, dc.Name, pTypes); err != nil {
+		if err := validateSupportedRecordTypes(rec, dc.Name, pTypes); err != nil {
 			return err
 		}
 	}
