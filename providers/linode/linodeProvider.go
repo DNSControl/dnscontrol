@@ -101,18 +101,15 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@koesie10",
+		Maintainer:             "@koesie10",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseCAA:              providers.Can("Linode doesn't support changing the CAA flag"),
-			providers.CanUseSRV:              providers.Can("Linode requires non-zero priority"),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseCAA: providers.Can("Linode doesn't support changing the CAA flag"),
+			providers.CanUseSRV: providers.Can("Linode requires non-zero priority"),
 		},
 	})
 }

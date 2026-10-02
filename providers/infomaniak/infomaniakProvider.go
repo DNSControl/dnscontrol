@@ -29,19 +29,9 @@ func (p *infomaniakProvider) Initialize(m map[string]string, message json.RawMes
 
 func init() {
 	providers.Register[*infomaniakProvider]("INFOMANIAK", providers.Definition{
-		FriendlyName: "Infomaniak",
-		Maintainer:   "@jbelien",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanUseCAA:   providers.Can(),
-			providers.CanUseDNAME: providers.Can(),
-			providers.CanUseDS:    providers.Can(),
-			providers.CanUseSSHFP: providers.Can(),
-			providers.CanUseTLSA:  providers.Can(),
-			providers.CanUseSRV:   providers.Can(),
-			// providers.DocCreateDomains: providers.Can(),
-		},
+		FriendlyName:   "Infomaniak",
+		Maintainer:     "@jbelien",
+		SupportedTypes: []string{"Default", "DNAME", "DS", "IMPORT_TRANSFORM", "SSHFP", "TLSA"},
 	})
 }
 

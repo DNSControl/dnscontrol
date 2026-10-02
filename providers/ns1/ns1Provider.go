@@ -25,30 +25,13 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@costasd",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDNAME:            providers.Can(),
-			providers.CanUseDS:               providers.Can(),
-			providers.CanUseDSForChildren:    providers.Can(),
-			providers.CanUseDHCID:            providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@costasd",
+		SupportedTypes:         []string{"Default", "ALIAS", "DHCID", "DNAME", "DS", "HTTPS", "IMPORT_TRANSFORM", "NAPTR", "PTR", "SVCB", "TLSA"},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

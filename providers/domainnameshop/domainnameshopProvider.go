@@ -24,29 +24,21 @@ type domainNameShopProvider struct {
 
 func init() {
 	providers.Register[*domainNameShopProvider]("DOMAINNAMESHOP", providers.Definition{
-		FriendlyName: "Domainnameshop",
-		Maintainer:   "@SimenBai",
+		FriendlyName:           "Domainnameshop",
+		Maintainer:             "@SimenBai",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "ALIAS:Unimplemented", "DS:Unimplemented", "TLSA:Unimplemented"},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Unimplemented(),
+		DocDualHost:            providers.Unimplemented(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(), // Maybe there is support for it
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Unimplemented(), //
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAlias:            providers.Unimplemented("Needs custom implementation"), // Can possibly be implemented, needs further research
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Unimplemented(), // Seems to support but needs to be implemented
-			providers.CanUseDSForChildren:    providers.Unimplemented(), // Seems to support but needs to be implemented
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot("According to Domainnameshop this will probably never be supported"), // Does not seem to support it
-			providers.CanUsePTR:              providers.Cannot("According to Domainnameshop this will probably never be supported"), // Seems to support but needs to be implemented
-			providers.CanUseSOA:              providers.Cannot(),                                                                    // Does not seem to support it
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot("Might be supported in the future"),                                   // Does not seem to support it
-			providers.CanUseTLSA:             providers.Unimplemented("Has support but no documentation. Needs to be investigated."), // Seems to support but needs to be implemented
-			providers.DocCreateDomains:       providers.Unimplemented(),                                                              // Not tested
-			providers.DocDualHost:            providers.Unimplemented(),                                                              // Not tested
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseAlias: providers.Unimplemented("Needs custom implementation"),
+			providers.CanUseNAPTR: providers.Cannot("According to Domainnameshop this will probably never be supported"),
+			providers.CanUsePTR:   providers.Cannot("According to Domainnameshop this will probably never be supported"),
+			providers.CanUseSSHFP: providers.Cannot("Might be supported in the future"),
+			providers.CanUseTLSA:  providers.Unimplemented("Has support but no documentation. Needs to be investigated."),
 		},
 	})
 }

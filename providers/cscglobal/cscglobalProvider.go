@@ -43,17 +43,10 @@ func (client *providerClient) Initialize(m map[string]string, _ json.RawMessage,
 
 func init() {
 	providers.Register[*providerClient]("CSCGLOBAL", providers.Definition{
-		FriendlyName: "CSC Global",
-		Maintainer:   "@mikenz",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocOfficiallySupported: providers.Can(),
-		},
+		FriendlyName:           "CSC Global",
+		Maintainer:             "@mikenz",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		CanConcur:              providers.Can(),
+		DocOfficiallySupported: providers.Can(),
 	})
 }

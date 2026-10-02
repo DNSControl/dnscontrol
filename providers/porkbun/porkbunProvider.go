@@ -71,11 +71,7 @@ func (c *porkbunProvider) Initialize(m map[string]string, _ json.RawMessage, opt
 }
 
 func init() {
-	const providerName = "PORKBUN"
-	providers.RegisterCustomRecordType("PORKBUN_URLFWD", providerName, "")
-	providers.RegisterCustomRecordType("URL", providerName, "")
-	providers.RegisterCustomRecordType("URL301", providerName, "")
-	providers.Register[*porkbunProvider](providerName, providers.Definition{
+	providers.Register[*porkbunProvider]("PORKBUN", providers.Definition{
 		FriendlyName: "Porkbun",
 		PortalURL:    "https://porkbun.com/account/api",
 		Notes:        "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
@@ -105,30 +101,13 @@ func init() {
 				Help:  "Retry duration limit, such as 5m. Leave blank for no limit.",
 			},
 		},
-		Maintainer: "@imlonghao",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@imlonghao",
+		SupportedTypes:         []string{"Default", "ALIAS", "HTTPS", "IMPORT_TRANSFORM", "PORKBUN_URLFWD", "SSHFP", "SVCB", "TLSA", "URL", "URL301"},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

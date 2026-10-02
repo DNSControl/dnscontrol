@@ -8,9 +8,6 @@
         {
           "comparablev3": "AAAA foo.com.",
           "filepos": "[line:3:5]",
-          "meta": {
-            "orig_custom_type": "AZURE_ALIAS"
-          },
           "name": "aaaatest",
           "name_unicode": "aaaatest",
           "rdata": {
@@ -24,9 +21,6 @@
         {
           "comparablev3": "A foo.com.",
           "filepos": "[line:2:5]",
-          "meta": {
-            "orig_custom_type": "AZURE_ALIAS"
-          },
           "name": "atest",
           "name_unicode": "atest",
           "rdata": {
@@ -40,9 +34,6 @@
         {
           "comparablev3": "CNAME foo.com.",
           "filepos": "[line:4:5]",
-          "meta": {
-            "orig_custom_type": "AZURE_ALIAS"
-          },
           "name": "cnametest",
           "name_unicode": "cnametest",
           "rdata": {

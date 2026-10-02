@@ -309,14 +309,16 @@ If a provider doesn't advertise a particular capability, the integration test sy
 
 Don't feel obligated to implement everything at once. In fact, we'd prefer a few small PRs than one big one. Focus on getting the basic provider working well before adding these extras.
 
-Operational features have names like `providers.CanUseSRV` and `providers.CanUseAlias`.  The list of optional "capabilities" are in the file `dnscontrol/pkg/providers/providers.go` (look for `CanUseAlias`).
+Operational features such as `CanConcur` and `CanAutoDNSSEC` are named fields in
+`providers.Definition`. Record support is declared in `SupportedTypes` and also
+exposed through the compatibility capabilities in `pkg/providers/capabilities.go`.
 
 Capabilities are processed early by DNSControl.  For example if a provider doesn't support SRV records, DNSControl will error out when parsing `dnscontrol.js` rather than waiting until the API fails at the very end.
 
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
 Declare supported record types in `providers.Definition.SupportedTypes`, for
-example `[]string{"Default", "PTR"}`. This list is exhaustive:
+example `[]string{"Default", "PTR", "IMPORT_TRANSFORM"}`. This list is exhaustive:
 `Default` contains `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NS`, `SRV`, and `TXT`.
 It is a fixed baseline for typical authoritative DNS providers; verify each
 provider's implementation and declare exceptions such as `NS:Cannot` explicitly.
@@ -324,6 +326,11 @@ Specialized providers can supply their own complete list. `RFC` includes all ord
 types in DNSControl's record catalog; `*` also includes pseudo-types. Patterns
 such as `BUNNY_*` match whole type names, with `*` matching zero or more characters.
 Unknown concrete type names are errors.
+
+Include `IMPORT_TRANSFORM` to allow imported records; normalization consumes this
+pseudo-type and checks the resulting types against the same declaration. Custom
+pseudo-types need a parser registered with `privatetypes.Register` and an entry
+in `SupportedTypes`. Multiple providers can support the same pseudo-type.
 
 An entry without a suffix means supported. Use `:Can`, `:Cannot`, or
 `:Unimplemented` on concrete names or patterns, for example
@@ -336,9 +343,11 @@ Precedence is: exact entries, patterns with status suffixes, legacy `Features`,
 then unsuffixed patterns/categories. Conflicting statuses at the winning
 priority are errors, regardless of order. An exact entry can resolve conflicting
 patterns. Nil `SupportedTypes` means `Default`; a non-nil empty slice declares
-no support. During migration, legacy `Features` can still supply individual
-type statuses, and a non-nil `Features` with nil `SupportedTypes` retains legacy
-validation. General `DS` support includes child DS records; `CanUseDSForChildren`
+no support beyond `Features`. Built-in providers all declare `SupportedTypes`
+explicitly; registrar-only providers use `[]string{}`. `Features` remains a
+compatibility input and can retain comments and links for individual types or
+interface-derived capabilities. A non-nil `Features` with nil `SupportedTypes`
+retains legacy capability validation. General `DS` support includes child DS records; `CanUseDSForChildren`
 can independently allow child DS records even with `DS:Cannot`.
 
 Registration retains selectors until the complete catalog is available.

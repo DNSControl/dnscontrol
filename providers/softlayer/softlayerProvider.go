@@ -25,17 +25,10 @@ type softlayerProvider struct {
 
 func init() {
 	providers.Register[*softlayerProvider]("SOFTLAYER", providers.Definition{
-		FriendlyName: "SoftLayer",
-		Maintainer:   "NEEDS VOLUNTEER",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:            providers.Unimplemented(),
-			providers.CanGetZones:          providers.Unimplemented(),
-			providers.CanOnlyDiff1Features: providers.Can(),
-			providers.CanUseLOC:            providers.Cannot(),
-			providers.CanUseSRV:            providers.Can(),
-		},
+		FriendlyName:   "SoftLayer",
+		Maintainer:     "NEEDS VOLUNTEER",
+		SupportedTypes: []string{"Default", "IMPORT_TRANSFORM", "CAA:Cannot"},
+		CanConcur:      providers.Unimplemented(),
 	})
 }
 

@@ -115,30 +115,16 @@ func (r *route53Provider) initializeAWS(m map[string]string) error {
 }
 
 func init() {
-	const providerName = "ROUTE53"
-	providers.RegisterCustomRecordType("R53_ALIAS", providerName, "")
-	providers.Register[*route53Provider](providerName, providers.Definition{
-		FriendlyName: "Amazon Route 53",
-		Maintainer:   "@tresni",
+	providers.Register[*route53Provider]("ROUTE53", providers.Definition{
+		FriendlyName:           "Amazon Route 53",
+		Maintainer:             "@tresni",
+		SupportedTypes:         []string{"Default", "HTTPS", "IMPORT_TRANSFORM", "PTR", "R53_ALIAS", "SOA", "SSHFP", "SVCB", "TLSA"},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Cannot("R53 does not provide a generic ALIAS functionality. Use R53_ALIAS instead."),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseRoute53Alias:     providers.Can(),
-			providers.CanUseSOA:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Can(),
+			providers.CanUseAlias: providers.Cannot("R53 does not provide a generic ALIAS functionality. Use R53_ALIAS instead."),
 		},
 		PortalURL: "https://console.aws.amazon.com/route53/",
 		Notes:     "Route53 supports several auth methods: a named profile from ~/.aws/config (including AWS IAM Identity Center / SSO), static access keys, or the SDK's default credential chain (environment variables, EC2 instance role, etc.). RoleArn can be layered on top of any of these.",

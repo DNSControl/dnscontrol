@@ -31,33 +31,15 @@ func init() {
 		CredFields: []providers.CredsField{
 			{Key: "api_token", Label: "API token", Help: "An mStudio API token of a user with access to the projects of the domains.", Required: true, Secret: true},
 		},
-		Maintainer: "@twiesing",
+		Maintainer:             "@twiesing",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "NS:Cannot"},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			// The API knows A, AAAA, CNAME, MX, TXT, SRV and CAA only.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Cannot(),
-			providers.CanGetZones:            providers.Cannot(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDNAME:            providers.Cannot(),
-			providers.CanUseDNSKEY:           providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSMIMEA:           providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSVCB:             providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot("A domain's zone exists once the domain is in an mStudio project"),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("A domain's zone exists once the domain is in an mStudio project"),
 		},
 	})
 }

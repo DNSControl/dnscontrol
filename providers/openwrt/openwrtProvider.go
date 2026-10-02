@@ -43,14 +43,10 @@ func (c *openwrtProvider) Initialize(conf map[string]string, _ json.RawMessage, 
 
 func init() {
 	providers.Register[*openwrtProvider]("OPENWRT", providers.Definition{
-		FriendlyName: "OpenWrt",
-		Maintainer:   "@huskyistaken",
-		Features: providers.DocumentationNotes{
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		FriendlyName:           "OpenWrt",
+		Maintainer:             "@huskyistaken",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "CAA:Cannot", "NS:Cannot", "TXT:Cannot"},
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

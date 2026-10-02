@@ -58,12 +58,12 @@ Upon domain creation, the DNSKEY and DS records needed for DNSSEC setup are prin
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❔
-  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
-  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
 - Service discovery
-  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❔
+  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❌
   - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
   - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
   - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ✅

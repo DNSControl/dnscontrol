@@ -3,16 +3,6 @@
 Useful refactoring projects. Please feel free to pick up any of these.
 
 
-## Code that can probably be deleted
-
-* Retire RegisterCustomRecordType()/GetCustomRecordType() during the Stage 5–6
-  SupportedTypes rollout, after replacing their record recognition and
-  provider-support checks. Legacy validation still depends on them.
-
-* Remove the "orig_custom_type" metadata with that rollout. It is still read
-  by target validation and must remain until that dependency is replaced.
-
-
 ## Documentation updates
 
 * Improved "how to write a provider" docs. The process for creating a DNS or Registrar provider could be improved. We should provide templates to copy instead of asking people to find a similar provider.  The doc should start by creating a generic provider, then add features and options over time.  The first thing should test credentials and nothing else.  Then add a registrar (if needed) and then the "preview" functionality, then "push".

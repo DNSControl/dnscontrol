@@ -13,23 +13,12 @@ import (
 
 func init() {
 	providers.Register[*netcupProvider]("NETCUP", providers.Definition{
-		FriendlyName: "netcup",
-		Maintainer:   "@kordianbruck",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Cannot(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		FriendlyName:           "netcup",
+		Maintainer:             "@kordianbruck",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "TLSA", "NS:Cannot"},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

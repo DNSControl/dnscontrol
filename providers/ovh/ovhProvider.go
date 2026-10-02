@@ -52,23 +52,15 @@ func getOVHEndpoint(params map[string]string) string {
 
 func init() {
 	providers.Register[*ovhProvider]("OVH", providers.Definition{
-		FriendlyName: "OVHcloud",
-		Maintainer:   "@masterzen",
+		FriendlyName:           "OVHcloud",
+		Maintainer:             "@masterzen",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "SSHFP", "TLSA", "LOC:Unimplemented"},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Unimplemented(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot("New domains require registration"),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("New domains require registration"),
 		},
 	})
 }

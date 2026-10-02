@@ -26,26 +26,12 @@ func init() {
 		CredFields: []providers.CredsField{
 			{Key: "api_key", Label: "API Key", Required: true, Secret: true},
 		},
-		Features: providers.DocumentationNotes{
-			providers.CanGetZones:      providers.Can(),
-			providers.CanConcur:        providers.Cannot(),
-			providers.CanUseSRV:        providers.Can(),
-			providers.CanUseCAA:        providers.Can(),
-			providers.CanUseDNAME:      providers.Can(),
-			providers.CanUseDHCID:      providers.Can(),
-			providers.CanUseHTTPS:      providers.Can(),
-			providers.CanUseLOC:        providers.Can(),
-			providers.CanUseNAPTR:      providers.Can(),
-			providers.CanUseOPENPGPKEY: providers.Can(),
-			providers.CanUsePTR:        providers.Can(),
-			providers.CanUseRP:         providers.Can(),
-			providers.CanUseSMIMEA:     providers.Can(),
-			providers.CanUseSVCB:       providers.Can(),
-			providers.CanUseTLSA:       providers.Can(),
-			providers.CanUseSSHFP:      providers.Can(),
-			providers.CanUseAlias:      providers.Cannot(),
-			providers.CanAutoDNSSEC:    providers.Cannot(),
+		SupportedTypes: []string{
+			"Default", "DHCID", "DNAME", "HTTPS", "IMPORT_TRANSFORM", "LOC", "NAPTR", "OPENPGPKEY", "PTR",
+			"RP", "SMIMEA", "SSHFP", "SVCB", "TLSA",
 		},
+		CanConcur:     providers.Cannot(),
+		CanAutoDNSSEC: providers.Cannot(),
 	})
 }
 

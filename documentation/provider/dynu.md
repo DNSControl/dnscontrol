@@ -125,7 +125,7 @@ MX records with a null target (RFC 7505, priority 0, target `.`) are fully suppo
   - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ✅
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
-  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❔
+  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
 - Service discovery
   - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ✅
   - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
@@ -139,6 +139,6 @@ MX records with a null target (RFC 7505, priority 0, target `.`) are fully suppo
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
 - DNSSEC
   - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
-  - [`DS`](../language-reference/domain-modifiers/DS.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
+  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
 <!-- provider-features-end -->

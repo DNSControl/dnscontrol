@@ -58,11 +58,7 @@ func (e domainsGetListResponseError) Error() string {
 }
 
 func init() {
-	const providerName = "NAMECHEAP"
-	providers.RegisterCustomRecordType("URL", providerName, "")
-	providers.RegisterCustomRecordType("URL301", providerName, "")
-	providers.RegisterCustomRecordType("FRAME", providerName, "")
-	providers.Register[*namecheapProvider](providerName, providers.Definition{
+	providers.Register[*namecheapProvider]("NAMECHEAP", providers.Definition{
 		FriendlyName: "Namecheap",
 		PortalURL:    "https://ap.www.namecheap.com/settings/tools/apiaccess/",
 		CredFields: []providers.CredsField{
@@ -85,22 +81,14 @@ func init() {
 				Help:  "Override the API base URL (for example to use the sandbox). Leave blank to use the production URL.",
 			},
 		},
-		Maintainer: "@willpower232",
+		Maintainer:             "@willpower232",
+		SupportedTypes:         []string{"Default", "ALIAS", "FRAME", "IMPORT_TRANSFORM", "URL", "URL301"},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot("Doesn't allow control of apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(), // If you remove this, also update not() statements in integrationTest/integration_test.go
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot("Requires domain registered through their service"),
-			providers.DocDualHost:            providers.Cannot("Doesn't allow control of apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("Requires domain registered through their service"),
 		},
 	})
 }

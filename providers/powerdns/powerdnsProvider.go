@@ -11,36 +11,22 @@ import (
 )
 
 func init() {
-	const providerName = "POWERDNS"
-	providers.RegisterCustomRecordType("LUA", providerName, "")
-	providers.Register[*powerdnsProvider](providerName, providers.Definition{
+	providers.Register[*powerdnsProvider]("POWERDNS", providers.Definition{
 		FriendlyName: "PowerDNS",
 		Maintainer:   "@jpbede",
+		SupportedTypes: []string{
+			"Default", "ALIAS", "DHCID", "DNAME", "DNSKEY", "DS", "HTTPS", "IMPORT_TRANSFORM", "LUA",
+			"NAPTR", "OPENPGPKEY", "PTR", "SOA", "SSHFP", "SVCB", "TLSA", "LOC:Unimplemented",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/guides/alias.html"),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Can(),
-			providers.CanUseDHCID:            providers.Can(),
-			providers.CanUseLOC:              providers.Unimplemented("Normalization within the PowerDNS API seems to be buggy, so disabled", "https://github.com/PowerDNS/pdns/issues/10558"),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUseOPENPGPKEY:       providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSOA:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.CanUseDNAME:            providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/settings.html#setting-dname-processing"),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseDNSKEY:           providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseAlias: providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/guides/alias.html"),
+			providers.CanUseLOC:   providers.Unimplemented("Normalization within the PowerDNS API seems to be buggy, so disabled", "https://github.com/PowerDNS/pdns/issues/10558"),
+			providers.CanUseDNAME: providers.Can("Needs to be enabled in PowerDNS first", "https://doc.powerdns.com/authoritative/settings.html#setting-dname-processing"),
 		},
 	})
 }

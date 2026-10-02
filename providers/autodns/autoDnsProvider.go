@@ -65,23 +65,11 @@ func init() {
 				Help:  "Set to \"true\" so get-zones also lists zones owned by sub-users (master/admin accounts). Optional; defaults to off.",
 			},
 		},
-		Maintainer: "@arnoschoon",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@arnoschoon",
+		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "PTR"},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

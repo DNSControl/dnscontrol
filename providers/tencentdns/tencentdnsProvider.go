@@ -54,19 +54,12 @@ func init() {
 				Default: "cn",
 			},
 		},
-		Maintainer:     "@cylonchau",
-		DefaultTTL:     defaultTTL,
-		RecordIdentity: recordIdentity,
-		Features: providers.DocumentationNotes{
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@cylonchau",
+		DefaultTTL:             defaultTTL,
+		RecordIdentity:         recordIdentity,
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

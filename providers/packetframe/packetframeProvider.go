@@ -47,19 +47,12 @@ func (api *packetframeProvider) Initialize(m map[string]string, _ json.RawMessag
 
 func init() {
 	providers.Register[*packetframeProvider]("PACKETFRAME", providers.Definition{
-		FriendlyName: "Packetframe",
-		Maintainer:   "NEEDS VOLUNTEER",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Unimplemented(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		FriendlyName:           "Packetframe",
+		Maintainer:             "NEEDS VOLUNTEER",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "PTR", "CAA:Cannot"},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

@@ -130,27 +130,16 @@ func init() {
 				Help:  "Set to 'true' to use interactive browser authentication (OIDC).",
 			},
 		},
-		Maintainer: "@matthewmgamble",
+		Maintainer:             "@matthewmgamble",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "PTR", "CAA:Cannot", "NS:Cannot"},
+		CanConcur:              providers.Can(),
+		CanAutoDNSSEC:          providers.Cannot(),
+		DocDualHost:            providers.Cannot("Private zones can not change NS records"),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
-			providers.CanUseAzureAlias:       providers.Cannot(),
-			providers.CanUseCAA:              providers.Cannot("Azure Private DNS does not support CAA records"),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDNAME:            providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot("Private zones can not change NS records"),
-			providers.DocOfficiallySupported: providers.Can(),
+			providers.CanUseAlias: providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
+			providers.CanUseCAA:   providers.Cannot("Azure Private DNS does not support CAA records"),
 		},
 	})
 }

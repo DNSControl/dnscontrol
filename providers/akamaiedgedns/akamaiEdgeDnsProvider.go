@@ -36,10 +36,7 @@ func (a *edgeDNSProvider) SetConversionObserver(observer providers.ConversionObs
 }
 
 func init() {
-	const providerName = "AKAMAIEDGEDNS"
-	providers.RegisterCustomRecordType("AKAMAICDN", providerName, "")
-	providers.RegisterCustomRecordType("AKAMAITLC", providerName, "")
-	providers.Register[*edgeDNSProvider](providerName, providers.Definition{
+	providers.Register[*edgeDNSProvider]("AKAMAIEDGEDNS", providers.Definition{
 		FriendlyName: "Akamai Edge DNS",
 		PortalURL:    "https://control.akamai.com/apps/identity-management/", // TODO: Verify
 		CredFields: []providers.CredsField{
@@ -82,29 +79,16 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@meghanakudua02",
+		Maintainer:             "@meghanakudua02",
+		SupportedTypes:         []string{"Default", "AKAMAICDN", "AKAMAITLC", "ALIAS", "IMPORT_TRANSFORM", "LOC", "NAPTR", "PTR", "SSHFP", "TLSA"},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAKAMAICDN:        providers.Can(),
-			providers.CanUseAKAMAITLC:        providers.Can(),
-			providers.CanUseAlias:            providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Can(),
-			providers.CanUseLOC:              providers.Can(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseAlias: providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
 		},
 	})
 }

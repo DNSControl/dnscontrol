@@ -84,38 +84,23 @@ func init() {
 			},
 		},
 		Maintainer: "@AsifNawaz-cnic",
+		SupportedTypes: []string{
+			"Default", "ALIAS", "DHCID", "DNAME", "IMPORT_TRANSFORM", "LOC", "NAPTR", "PTR", "SMIMEA",
+			"SSHFP", "SVCB", "TLSA", "DNSKEY:Unimplemented", "DS:Unimplemented",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot("Actively maintained provider module."),
+		CanUseDSForChildren:    providers.Unimplemented("Ask for this feature."),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// See providers/capabilities.go for the entire list of capabilities.
-			// The default for unlisted capabilities is 'Cannot'.
-			// --- Supported Features ---
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot("Actively maintained provider module."),
-			// --- Supported record types ---
-			// providers.CanUseAKAMAICDN: 	      providers.Cannot(), // can only be supported by Akamai EdgeDns provider
-			providers.CanUseAlias: providers.Can("ALIAS records require an unsigned zone served through RCodeZero and cannot be used with DNSSEC-signed zones."),
-			// providers.CanUseAzureAlias:		  providers.Cannot(), // can only be supported by Azure provider
-			providers.CanUseCAA:           providers.Can(),
-			providers.CanUseDHCID:         providers.Can(),
-			providers.CanUseDNAME:         providers.Can(),
-			providers.CanUseDNSKEY:        providers.Unimplemented("Ask for this feature."),
-			providers.CanUseDS:            providers.Unimplemented("Ask for this feature."),
-			providers.CanUseDSForChildren: providers.Unimplemented("Ask for this feature."), // CanUseDS implies CanUseDSForChildren
-			providers.CanUseHTTPS:         providers.Cannot("Managed via (Query|Add|Modify|Delete)WebFwd API call. Data not accessible via the resource records list. Hard to integrate this into DNSControl by that."),
-			providers.CanUseLOC:           providers.Can(),
-			providers.CanUseNAPTR:         providers.Can(),
-			providers.CanUsePTR:           providers.Can(),
-			// providers.CanUseRoute53Alias:	  providers.Cannot(), // can only be supported by AWS Route53 provider
-			providers.CanUseSMIMEA: providers.Can(),
-			providers.CanUseSOA:    providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."), // supported by bind, honstingde
+			providers.CanUseAlias:  providers.Can("ALIAS records require an unsigned zone served through RCodeZero and cannot be used with DNSSEC-signed zones."),
+			providers.CanUseDNSKEY: providers.Unimplemented("Ask for this feature."),
+			providers.CanUseDS:     providers.Unimplemented("Ask for this feature."),
+			providers.CanUseHTTPS:  providers.Cannot("Managed via (Query|Add|Modify|Delete)WebFwd API call. Data not accessible via the resource records list. Hard to integrate this into DNSControl by that."),
+			providers.CanUseSOA:    providers.Cannot("The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that."),
 			providers.CanUseSRV:    providers.Can("SRV records with empty targets are not supported"),
-			providers.CanUseSSHFP:  providers.Can(),
-			providers.CanUseSVCB:   providers.Can(),
-			providers.CanUseTLSA:   providers.Can(),
 		},
 	})
 }

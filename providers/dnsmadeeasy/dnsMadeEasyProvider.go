@@ -38,26 +38,12 @@ func init() {
 				ConfirmValue: "1",
 			},
 		},
-		Maintainer: "@vojtad",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can("System NS records cannot be edited. Custom apex NS records can be added/changed/deleted."),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@vojtad",
+		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "PTR"},
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Can("System NS records cannot be edited. Custom apex NS records can be added/changed/deleted."),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

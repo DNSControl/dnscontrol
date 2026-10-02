@@ -74,9 +74,6 @@ func TestExhaustiveRecordValidation(t *testing.T) {
 			if (len(errs) == 0) != tc.allowed {
 				t.Fatalf("allowed=%v, errors=%v", tc.allowed, errs)
 			}
-			if tc.allowed && r.Metadata["orig_custom_type"] != "" {
-				t.Fatal("exhaustive validation added a legacy custom-type marker")
-			}
 		})
 	}
 }
@@ -152,5 +149,18 @@ func TestSupportedTypesBeforeAndAfterTransforms(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestCatalogValidationWithoutResolvedProvider(t *testing.T) {
+	for _, pTypes := range [][]string{nil, {"-"}, {plainProviderType}} {
+		r := &models.RecordConfig{Type: "UNKNOWN_TYPE"}
+		if err := validateSupportedRecordTypes(r, "example.com", pTypes); err == nil || !strings.Contains(err.Error(), "unknown record type") {
+			t.Fatalf("providers=%v, error=%v", pTypes, err)
+		}
+		r.Type = "URL"
+		if err := validateSupportedRecordTypes(r, "example.com", pTypes); err != nil {
+			t.Fatalf("providers=%v, error=%v", pTypes, err)
+		}
 	}
 }

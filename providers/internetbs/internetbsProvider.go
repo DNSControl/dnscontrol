@@ -23,13 +23,10 @@ Info required in `creds.json`:
 
 func init() {
 	providers.Register[*internetbsProvider]("INTERNETBS", providers.Definition{
-		FriendlyName: "Internet.bs",
-		Maintainer:   "@pragmaton",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur: providers.Unimplemented(),
-		},
+		FriendlyName:   "Internet.bs",
+		Maintainer:     "@pragmaton",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Unimplemented(),
 	})
 }
 

@@ -41,30 +41,12 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@atrull",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Cannot("Joker API has session-based authentication"),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDNSKEY:           providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSVCB:             providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-		},
+		Maintainer:             "@atrull",
+		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "NAPTR"},
+		CanConcur:              providers.Cannot("Joker API has session-based authentication"),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

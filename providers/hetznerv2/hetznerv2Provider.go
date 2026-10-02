@@ -29,31 +29,12 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@das7pad",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Can(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-			providers.DocDualHost:            providers.Can(),
-		},
+		Maintainer:             "@das7pad",
+		SupportedTypes:         []string{"Default", "DS", "HTTPS", "IMPORT_TRANSFORM", "PTR", "SVCB", "TLSA"},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		DocDualHost:            providers.Can(),
 	})
 }
 

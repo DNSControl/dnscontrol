@@ -28,29 +28,17 @@ Additional settings available in `creds.json`:
 
 func init() {
 	providers.Register[*realtimeregisterAPI]("REALTIMEREGISTER", providers.Definition{
-		FriendlyName: "Realtime Register",
-		Maintainer:   "@PJEilers",
+		FriendlyName:           "Realtime Register",
+		Maintainer:             "@PJEilers",
+		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "LOC", "NAPTR", "SSHFP", "TLSA"},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot("Only for subdomains"),
-			providers.CanUseDSForChildren:    providers.Can(),
-			providers.CanUseLOC:              providers.Can(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseDS: providers.Cannot("Only for subdomains"),
 		},
 	})
 }
