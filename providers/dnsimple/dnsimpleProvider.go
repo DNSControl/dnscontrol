@@ -47,7 +47,6 @@ func init() {
 			providers.DocDualHost:            providers.Cannot("DNSimple does not allow sufficient control over the apex NS records"),
 			providers.DocOfficiallySupported: providers.Cannot(),
 		},
-		DocsURL:   "https://docs.dnscontrol.org/provider/dnsimple",
 		PortalURL: "https://dnsimple.com/user",
 		CredFields: []providers.CredsField{
 			{

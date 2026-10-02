@@ -72,7 +72,6 @@ func init() {
 			providers.DocDualHost:            providers.Cannot("Cloudflare will not work well in situations where it is not the only DNS server"),
 			providers.DocOfficiallySupported: providers.Can(),
 		},
-		DocsURL:   "https://docs.dnscontrol.org/provider/cloudflareapi",
 		PortalURL: "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
 		Notes:     "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
 		CredFields: []providers.CredsField{
