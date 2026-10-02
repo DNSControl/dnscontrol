@@ -15,9 +15,15 @@ import (
 
 func init() {
 	providers.Register[*netlifyProvider]("NETLIFY", providers.Definition{
-		FriendlyName:           "Netlify",
-		Maintainer:             "@SphericalKat",
-		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "NETLIFY", "NETLIFYV6"},
+		FriendlyName: "Netlify",
+		Maintainer:   "@SphericalKat",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"IMPORT_TRANSFORM",
+			"NETLIFY",
+			"NETLIFYV6",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Can(),
 		CanUseDSForChildren:    providers.Cannot(),

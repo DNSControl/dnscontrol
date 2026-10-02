@@ -47,9 +47,14 @@ func (api *packetframeProvider) Initialize(m map[string]string, _ json.RawMessag
 
 func init() {
 	providers.Register[*packetframeProvider]("PACKETFRAME", providers.Definition{
-		FriendlyName:           "Packetframe",
-		Maintainer:             "NEEDS VOLUNTEER",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "PTR", "CAA:Cannot"},
+		FriendlyName: "Packetframe",
+		Maintainer:   "NEEDS VOLUNTEER",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"PTR",
+			"CAA:Cannot",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),

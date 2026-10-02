@@ -33,9 +33,17 @@ func (c *adguardHomeProvider) Initialize(m map[string]string, _ json.RawMessage,
 
 func init() {
 	providers.Register[*adguardHomeProvider]("ADGUARDHOME", providers.Definition{
-		FriendlyName:           "AdGuard Home",
-		Maintainer:             "@ishanjain28",
-		SupportedTypes:         []string{"A", "AAAA", "ADGUARDHOME_AAAA_PASSTHROUGH", "ADGUARDHOME_A_PASSTHROUGH", "ALIAS", "CNAME", "IMPORT_TRANSFORM"},
+		FriendlyName: "AdGuard Home",
+		Maintainer:   "@ishanjain28",
+		SupportedTypes: []string{
+			"A",
+			"AAAA",
+			"ADGUARDHOME_AAAA_PASSTHROUGH",
+			"ADGUARDHOME_A_PASSTHROUGH",
+			"ALIAS",
+			"CNAME",
+			"IMPORT_TRANSFORM",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocOfficiallySupported: providers.Cannot(),
 	})

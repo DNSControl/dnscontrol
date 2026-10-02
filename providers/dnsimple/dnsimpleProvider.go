@@ -23,9 +23,19 @@ import (
 
 func init() {
 	providers.Register[*dnsimpleProvider]("DNSIMPLE", providers.Definition{
-		FriendlyName:           "DNSimple",
-		Maintainer:             "@onlyhavecans",
-		SupportedTypes:         []string{"Default", "ALIAS", "HTTPS", "IMPORT_TRANSFORM", "NAPTR", "PTR", "SSHFP", "SVCB", "TLSA"},
+		FriendlyName: "DNSimple",
+		Maintainer:   "@onlyhavecans",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"HTTPS",
+			"IMPORT_TRANSFORM",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
 		CanAutoDNSSEC:          providers.Can(),
 		CanConcur:              providers.Can(),
 		CanUseDSForChildren:    providers.Cannot(),

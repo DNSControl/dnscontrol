@@ -43,9 +43,12 @@ func (client *providerClient) Initialize(m map[string]string, _ json.RawMessage,
 
 func init() {
 	providers.Register[*providerClient]("CSCGLOBAL", providers.Definition{
-		FriendlyName:           "CSC Global",
-		Maintainer:             "@mikenz",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		FriendlyName: "CSC Global",
+		Maintainer:   "@mikenz",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+		},
 		CanConcur:              providers.Can(),
 		DocOfficiallySupported: providers.Can(),
 	})

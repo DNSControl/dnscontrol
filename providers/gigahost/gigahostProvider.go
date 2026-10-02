@@ -27,9 +27,16 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer:     "@jochristian",
-		SupportedTypes: []string{"Default", "ALIAS", "DNAME", "IMPORT_TRANSFORM", "NAPTR", "PTR"},
-		CanConcur:      providers.Unimplemented(),
+		Maintainer: "@jochristian",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"DNAME",
+			"IMPORT_TRANSFORM",
+			"NAPTR",
+			"PTR",
+		},
+		CanConcur: providers.Unimplemented(),
 	})
 }
 

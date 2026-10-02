@@ -52,9 +52,15 @@ func getOVHEndpoint(params map[string]string) string {
 
 func init() {
 	providers.Register[*ovhProvider]("OVH", providers.Definition{
-		FriendlyName:           "OVHcloud",
-		Maintainer:             "@masterzen",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "SSHFP", "TLSA", "LOC:Unimplemented"},
+		FriendlyName: "OVHcloud",
+		Maintainer:   "@masterzen",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"SSHFP",
+			"TLSA",
+			"LOC:Unimplemented",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Can(),
 		DocOfficiallySupported: providers.Cannot(),

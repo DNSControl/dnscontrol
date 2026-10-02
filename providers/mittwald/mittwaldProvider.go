@@ -31,8 +31,12 @@ func init() {
 		CredFields: []providers.CredsField{
 			{Key: "api_token", Label: "API token", Help: "An mStudio API token of a user with access to the projects of the domains.", Required: true, Secret: true},
 		},
-		Maintainer:             "@twiesing",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "NS:Cannot"},
+		Maintainer: "@twiesing",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"NS:Cannot",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Cannot(),
 		DocDualHost:            providers.Cannot(),

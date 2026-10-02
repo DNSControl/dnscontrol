@@ -28,9 +28,17 @@ Additional settings available in `creds.json`:
 
 func init() {
 	providers.Register[*realtimeregisterAPI]("REALTIMEREGISTER", providers.Definition{
-		FriendlyName:           "Realtime Register",
-		Maintainer:             "@PJEilers",
-		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "LOC", "NAPTR", "SSHFP", "TLSA"},
+		FriendlyName: "Realtime Register",
+		Maintainer:   "@PJEilers",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"IMPORT_TRANSFORM",
+			"LOC",
+			"NAPTR",
+			"SSHFP",
+			"TLSA",
+		},
 		CanAutoDNSSEC:          providers.Can(),
 		CanConcur:              providers.Unimplemented(),
 		CanUseDSForChildren:    providers.Can(),

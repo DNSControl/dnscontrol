@@ -13,9 +13,14 @@ import (
 
 func init() {
 	providers.Register[*netcupProvider]("NETCUP", providers.Definition{
-		FriendlyName:           "netcup",
-		Maintainer:             "@kordianbruck",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "TLSA", "NS:Cannot"},
+		FriendlyName: "netcup",
+		Maintainer:   "@kordianbruck",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"TLSA",
+			"NS:Cannot",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),

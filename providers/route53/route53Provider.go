@@ -116,9 +116,19 @@ func (r *route53Provider) initializeAWS(m map[string]string) error {
 
 func init() {
 	providers.Register[*route53Provider]("ROUTE53", providers.Definition{
-		FriendlyName:           "Amazon Route 53",
-		Maintainer:             "@tresni",
-		SupportedTypes:         []string{"Default", "HTTPS", "IMPORT_TRANSFORM", "PTR", "R53_ALIAS", "SOA", "SSHFP", "SVCB", "TLSA"},
+		FriendlyName: "Amazon Route 53",
+		Maintainer:   "@tresni",
+		SupportedTypes: []string{
+			"Default",
+			"HTTPS",
+			"IMPORT_TRANSFORM",
+			"PTR",
+			"R53_ALIAS",
+			"SOA",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
 		CanConcur:              providers.Can(),
 		DocDualHost:            providers.Can(),
 		DocOfficiallySupported: providers.Can(),

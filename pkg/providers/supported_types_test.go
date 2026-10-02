@@ -104,7 +104,9 @@ func TestSupportedTypesErrors(t *testing.T) {
 		t.Run(selector, func(t *testing.T) {
 			isolateDefinitions(t)
 			assertRegistrationPanics(t, "provider \"INVALID\"", func() {
-				Register[*definitionDNS]("INVALID", Definition{FriendlyName: "Invalid", SupportedTypes: []string{selector}})
+				Register[*definitionDNS]("INVALID", Definition{FriendlyName: "Invalid", SupportedTypes: []string{
+					selector,
+				}})
 			})
 		})
 	}
@@ -135,10 +137,16 @@ func TestSupportedTypesFinalization(t *testing.T) {
 		codepoint++
 	}
 	lateName := fmt.Sprintf("STAGEFIVELATE%d", codepoint)
-	Register[*definitionDNS]("WILDCARD", Definition{FriendlyName: "Wildcard", SupportedTypes: []string{"*"}})
-	Register[*definitionDNS]("RFC", Definition{FriendlyName: "RFC", SupportedTypes: []string{"RFC"}})
+	Register[*definitionDNS]("WILDCARD", Definition{FriendlyName: "Wildcard", SupportedTypes: []string{
+		"*",
+	}})
+	Register[*definitionDNS]("RFC", Definition{FriendlyName: "RFC", SupportedTypes: []string{
+		"RFC",
+	}})
 	wildcard, _ := GetDefinition("WILDCARD")
-	Register[*definitionDNS]("EXACT", Definition{FriendlyName: "Exact", SupportedTypes: []string{lateName}})
+	Register[*definitionDNS]("EXACT", Definition{FriendlyName: "Exact", SupportedTypes: []string{
+		lateName,
+	}})
 	if err := Finalize(); err == nil {
 		t.Fatal("unknown exact type accepted")
 	}
@@ -178,7 +186,10 @@ func TestSupportedTypesFinalization(t *testing.T) {
 	// A later catalog addition can also reveal an overlap between patterns
 	// that previously matched nothing. Finalization must check it again.
 	conflictName := lateName + "CONFLICT"
-	Register[*definitionDNS]("CONFLICT", Definition{FriendlyName: "Conflict", SupportedTypes: []string{conflictName + "*:Can", "*" + conflictName + ":Cannot"}})
+	Register[*definitionDNS]("CONFLICT", Definition{FriendlyName: "Conflict", SupportedTypes: []string{
+		conflictName + "*:Can",
+		"*" + conflictName + ":Cannot",
+	}})
 	if err := Finalize(); err != nil {
 		t.Fatal(err)
 	}
@@ -190,7 +201,9 @@ func TestSupportedTypesFinalization(t *testing.T) {
 
 func TestSupportedTypesOperationalCapabilities(t *testing.T) {
 	isolateDefinitions(t)
-	Register[*definitionDNS]("ALL", Definition{FriendlyName: "All", SupportedTypes: []string{"*"}, CanUseDSForChildren: Cannot("obsolete")})
+	Register[*definitionDNS]("ALL", Definition{FriendlyName: "All", SupportedTypes: []string{
+		"*",
+	}, CanUseDSForChildren: Cannot("obsolete")})
 	d, _ := GetDefinition("ALL")
 	if !ProviderHasCapability("ALL", CanUseDSForChildren) || d.DerivedFeatures[CanUseDSForChildren].Comment != "" {
 		t.Fatal("general DS support must imply child support without contradictory notes")

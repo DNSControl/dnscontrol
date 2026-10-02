@@ -317,8 +317,18 @@ Capabilities are processed early by DNSControl.  For example if a provider doesn
 
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
-Declare supported record types in `providers.Definition.SupportedTypes`, for
-example `[]string{"Default", "PTR", "IMPORT_TRANSFORM"}`. This list is exhaustive:
+Declare supported record types in `providers.Definition.SupportedTypes`, with
+each string item on its own line to keep future diffs small:
+
+```go
+SupportedTypes: []string{
+    "Default",
+    "PTR",
+    "IMPORT_TRANSFORM",
+},
+```
+
+This list is exhaustive:
 `Default` contains `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NS`, `SRV`, and `TXT`.
 It is a fixed baseline for typical authoritative DNS providers; verify each
 provider's implementation and declare exceptions such as `NS:Cannot` explicitly.

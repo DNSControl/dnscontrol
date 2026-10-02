@@ -19,9 +19,14 @@ type unifiProvider struct {
 
 func init() {
 	providers.Register[*unifiProvider]("UNIFI", providers.Definition{
-		FriendlyName:           "UniFi",
-		Maintainer:             "@zupolgec",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "CAA:Cannot", "NS:Cannot"},
+		FriendlyName: "UniFi",
+		Maintainer:   "@zupolgec",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"CAA:Cannot",
+			"NS:Cannot",
+		},
 		CanConcur:              providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),
 		// Features retains annotations for record types and interface-derived facts.

@@ -42,9 +42,14 @@ func (c *vercelProvider) SetConversionObserver(observer providers.ConversionObse
 
 func init() {
 	providers.Register[*vercelProvider]("VERCEL", providers.Definition{
-		FriendlyName:           "Vercel",
-		Maintainer:             "@SukkaW",
-		SupportedTypes:         []string{"Default", "ALIAS", "HTTPS", "IMPORT_TRANSFORM"},
+		FriendlyName: "Vercel",
+		Maintainer:   "@SukkaW",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"HTTPS",
+			"IMPORT_TRANSFORM",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Unimplemented(),
 		CanUseDSForChildren:    providers.Cannot(),

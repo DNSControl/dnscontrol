@@ -101,8 +101,11 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer:             "@koesie10",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		Maintainer: "@koesie10",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),

@@ -24,9 +24,15 @@ type domainNameShopProvider struct {
 
 func init() {
 	providers.Register[*domainNameShopProvider]("DOMAINNAMESHOP", providers.Definition{
-		FriendlyName:           "Domainnameshop",
-		Maintainer:             "@SimenBai",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "ALIAS:Unimplemented", "DS:Unimplemented", "TLSA:Unimplemented"},
+		FriendlyName: "Domainnameshop",
+		Maintainer:   "@SimenBai",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"ALIAS:Unimplemented",
+			"DS:Unimplemented",
+			"TLSA:Unimplemented",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Unimplemented(),
 		CanUseDSForChildren:    providers.Unimplemented(),

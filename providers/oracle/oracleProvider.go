@@ -20,9 +20,18 @@ import (
 
 func init() {
 	providers.Register[*oracleProvider]("ORACLE", providers.Definition{
-		FriendlyName:           "Oracle Cloud Infrastructure",
-		Maintainer:             "@kallsyms",
-		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "NAPTR", "PTR", "SSHFP", "TLSA", "LOC:Unimplemented"},
+		FriendlyName: "Oracle Cloud Infrastructure",
+		Maintainer:   "@kallsyms",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"IMPORT_TRANSFORM",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"TLSA",
+			"LOC:Unimplemented",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Can(),
 		DocOfficiallySupported: providers.Cannot(),

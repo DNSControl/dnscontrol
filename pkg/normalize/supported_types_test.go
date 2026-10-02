@@ -19,20 +19,38 @@ func (*supportedTypesAuditor) AuditRecords(models.Records) []error {
 
 func init() {
 	for name, def := range map[string]providers.Definition{
-		"S5_DEFAULT":        {},
-		"S5_DEFAULT_EXCEPT": {SupportedTypes: []string{"Default", "NS:Cannot", "CAA:Cannot"}},
-		"S5_EMPTY":          {SupportedTypes: []string{}},
-		"S5_RFC":            {SupportedTypes: []string{"RFC"}},
-		"S5_ALL":            {SupportedTypes: []string{"*"}},
-		"S5_CHILD":          {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Can()},
-		"S5_FULL_DS":        {SupportedTypes: []string{"DS"}, CanUseDSForChildren: providers.Cannot()},
-		"S5_NO_DS":          {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Cannot()},
-		"S5_IMPORT_ONLY":    {SupportedTypes: []string{"IMPORT_TRANSFORM"}},
+		"S5_DEFAULT": {},
+		"S5_DEFAULT_EXCEPT": {SupportedTypes: []string{
+			"Default",
+			"NS:Cannot",
+			"CAA:Cannot",
+		}},
+		"S5_EMPTY": {SupportedTypes: []string{}},
+		"S5_RFC": {SupportedTypes: []string{
+			"RFC",
+		}},
+		"S5_ALL": {SupportedTypes: []string{
+			"*",
+		}},
+		"S5_CHILD": {SupportedTypes: []string{
+			"DS:Cannot",
+		}, CanUseDSForChildren: providers.Can()},
+		"S5_FULL_DS": {SupportedTypes: []string{
+			"DS",
+		}, CanUseDSForChildren: providers.Cannot()},
+		"S5_NO_DS": {SupportedTypes: []string{
+			"DS:Cannot",
+		}, CanUseDSForChildren: providers.Cannot()},
+		"S5_IMPORT_ONLY": {SupportedTypes: []string{
+			"IMPORT_TRANSFORM",
+		}},
 	} {
 		def.FriendlyName = name
 		providers.Register[*validationProvider](name, def)
 	}
-	providers.Register[*supportedTypesAuditor]("S5_AUDIT", providers.Definition{FriendlyName: "Auditor", SupportedTypes: []string{"*"}})
+	providers.Register[*supportedTypesAuditor]("S5_AUDIT", providers.Definition{FriendlyName: "Auditor", SupportedTypes: []string{
+		"*",
+	}})
 }
 
 func TestExhaustiveRecordValidation(t *testing.T) {

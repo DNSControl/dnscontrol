@@ -113,8 +113,11 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer:             "@huihuimoe",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		Maintainer: "@huihuimoe",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+		},
 		CanAutoDNSSEC:          providers.Can(),
 		DocDualHost:            providers.Can(),
 		DocOfficiallySupported: providers.Cannot(),

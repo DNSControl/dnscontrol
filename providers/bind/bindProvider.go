@@ -76,9 +76,11 @@ func (c *bindProvider) Initialize(config map[string]string, providermeta json.Ra
 
 func init() {
 	providers.Register[*bindProvider]("BIND", providers.Definition{
-		FriendlyName:           "ISC BIND",
-		Maintainer:             "@TomOnTime",
-		SupportedTypes:         []string{"*"},
+		FriendlyName: "ISC BIND",
+		Maintainer:   "@TomOnTime",
+		SupportedTypes: []string{
+			"*",
+		},
 		CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
 		CanConcur:              providers.Can(),
 		DocDualHost:            providers.Can(),

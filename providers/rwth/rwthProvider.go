@@ -14,9 +14,15 @@ type rwthProvider struct {
 
 func init() {
 	providers.Register[*rwthProvider]("RWTH", providers.Definition{
-		FriendlyName:           "RWTH Aachen",
-		Maintainer:             "@mistererwin",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "PTR", "SSHFP", "DS:Unimplemented"},
+		FriendlyName: "RWTH Aachen",
+		Maintainer:   "@mistererwin",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"PTR",
+			"SSHFP",
+			"DS:Unimplemented",
+		},
 		CanAutoDNSSEC:          providers.Unimplemented("Supported by RWTH but not implemented yet."),
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),

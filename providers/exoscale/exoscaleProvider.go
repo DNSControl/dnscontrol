@@ -55,9 +55,14 @@ func (provider *exoscaleProvider) Initialize(m map[string]string, _ json.RawMess
 
 func init() {
 	providers.Register[*exoscaleProvider]("EXOSCALE", providers.Definition{
-		FriendlyName:           "Exoscale",
-		Maintainer:             "@Giza",
-		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "NS:Cannot"},
+		FriendlyName: "Exoscale",
+		Maintainer:   "@Giza",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"IMPORT_TRANSFORM",
+			"NS:Cannot",
+		},
 		CanConcur:              providers.Cannot(),
 		DocDualHost:            providers.Cannot("Exoscale does not allow sufficient control over the apex NS records"),
 		DocOfficiallySupported: providers.Cannot(),

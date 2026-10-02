@@ -29,9 +29,16 @@ func (p *infomaniakProvider) Initialize(m map[string]string, message json.RawMes
 
 func init() {
 	providers.Register[*infomaniakProvider]("INFOMANIAK", providers.Definition{
-		FriendlyName:   "Infomaniak",
-		Maintainer:     "@jbelien",
-		SupportedTypes: []string{"Default", "DNAME", "DS", "IMPORT_TRANSFORM", "SSHFP", "TLSA"},
+		FriendlyName: "Infomaniak",
+		Maintainer:   "@jbelien",
+		SupportedTypes: []string{
+			"Default",
+			"DNAME",
+			"DS",
+			"IMPORT_TRANSFORM",
+			"SSHFP",
+			"TLSA",
+		},
 	})
 }
 

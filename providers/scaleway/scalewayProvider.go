@@ -28,9 +28,19 @@ type scalewayProvider struct {
 
 func init() {
 	providers.Register[*scalewayProvider]("SCALEWAY", providers.Definition{
-		FriendlyName:           "Scaleway",
-		Maintainer:             "@alessiopcc",
-		SupportedTypes:         []string{"Default", "ALIAS", "DNAME", "HTTPS", "IMPORT_TRANSFORM", "NAPTR", "SSHFP", "SVCB", "TLSA"},
+		FriendlyName: "Scaleway",
+		Maintainer:   "@alessiopcc",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"DNAME",
+			"HTTPS",
+			"IMPORT_TRANSFORM",
+			"NAPTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Unimplemented(),
 		CanUseDSForChildren:    providers.Cannot(),

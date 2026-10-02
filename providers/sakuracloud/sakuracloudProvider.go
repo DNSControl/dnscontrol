@@ -13,9 +13,16 @@ const defaultEndpoint = "https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1
 
 func init() {
 	providers.Register[*sakuracloudProvider]("SAKURACLOUD", providers.Definition{
-		FriendlyName:           "Sakura Cloud",
-		Maintainer:             "@ttkzw",
-		SupportedTypes:         []string{"Default", "ALIAS", "HTTPS", "IMPORT_TRANSFORM", "PTR", "SVCB"},
+		FriendlyName: "Sakura Cloud",
+		Maintainer:   "@ttkzw",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"HTTPS",
+			"IMPORT_TRANSFORM",
+			"PTR",
+			"SVCB",
+		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Unimplemented(),
 		CanUseDSForChildren:    providers.Cannot(),

@@ -10,7 +10,10 @@ import (
 func init() {
 	providers.Register[*validationProvider]("TEST_CUSTOM_PROVIDER", providers.Definition{
 		FriendlyName: "Custom type test", Aliases: []string{"TEST_CUSTOM_ALIAS"},
-		SupportedTypes: []string{"R53_ALIAS", "ALIAS"},
+		SupportedTypes: []string{
+			"R53_ALIAS",
+			"ALIAS",
+		},
 	})
 }
 

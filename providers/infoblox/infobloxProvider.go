@@ -10,9 +10,14 @@ import (
 
 func init() {
 	providers.Register[*infobloxProvider]("INFOBLOX", providers.Definition{
-		FriendlyName:           "Infoblox",
-		Maintainer:             "@matthewmgamble",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM", "PTR", "NS:Cannot"},
+		FriendlyName: "Infoblox",
+		Maintainer:   "@matthewmgamble",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+			"PTR",
+			"NS:Cannot",
+		},
 		CanConcur:              providers.Can(),
 		DocDualHost:            providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),

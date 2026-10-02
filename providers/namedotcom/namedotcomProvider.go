@@ -51,9 +51,14 @@ func (n *namedotcomProvider) Initialize(conf map[string]string, _ json.RawMessag
 
 func init() {
 	providers.Register[*namedotcomProvider]("NAMEDOTCOM", providers.Definition{
-		FriendlyName:           "Name.com",
-		Maintainer:             "NEEDS VOLUNTEER",
-		SupportedTypes:         []string{"Default", "ALIAS", "IMPORT_TRANSFORM", "CAA:Cannot"},
+		FriendlyName: "Name.com",
+		Maintainer:   "NEEDS VOLUNTEER",
+		SupportedTypes: []string{
+			"Default",
+			"ALIAS",
+			"IMPORT_TRANSFORM",
+			"CAA:Cannot",
+		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Can(),
 		DocOfficiallySupported: providers.Cannot(),

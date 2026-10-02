@@ -91,8 +91,11 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer:             "@chicks-net",
-		SupportedTypes:         []string{"Default", "IMPORT_TRANSFORM"},
+		Maintainer: "@chicks-net",
+		SupportedTypes: []string{
+			"Default",
+			"IMPORT_TRANSFORM",
+		},
 		CanAutoDNSSEC:          providers.Cannot("Digital Ocean documents that this is not supported."),
 		CanConcur:              providers.Can(),
 		DocDualHost:            providers.Can(),
