@@ -96,6 +96,7 @@ var CredsMetadataByType = map[string]CredsMetadata{}
 // RegisterCredsMetadata records the creds.json metadata for a provider.
 // It is safe to call from a provider init() alongside RegisterMaintainer.
 func RegisterCredsMetadata(name string, meta CredsMetadata) {
+	rejectUnifiedRegistration(name)
 	if _, ok := CredsMetadataByType[name]; ok {
 		log.Fatalf("Cannot register creds metadata for %q multiple times", name)
 	}
@@ -107,7 +108,11 @@ func RegisterCredsMetadata(name string, meta CredsMetadata) {
 
 // GetCredsMetadata returns the metadata registered for the given provider
 // type, or a zero value and false when nothing is registered.
+// The returned metadata and its nested fields must be treated as read-only.
 func GetCredsMetadata(name string) (CredsMetadata, bool) {
+	if def, ok := definitions[name]; ok {
+		return definitionCredsMetadata(def), true
+	}
 	meta, found := CredsMetadataByType[name]
 	return meta, found
 }

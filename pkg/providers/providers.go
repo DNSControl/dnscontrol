@@ -69,6 +69,9 @@ type DspFuncs struct {
 // GetRecordIdentity returns the provider's RecordIdentity function, or nil if
 // the provider does not declare one.
 func GetRecordIdentity(dType string) RecordIdentityFunc {
+	if def, ok := definitions[dType]; ok {
+		return def.RecordIdentity
+	}
 	p, ok := DNSProviderTypes[dType]
 	if !ok {
 		return nil
@@ -81,6 +84,7 @@ var DNSProviderTypes = map[string]DspFuncs{}
 
 // RegisterRegistrarType adds a registrar type to the registry by providing a suitable initialization function.
 func RegisterRegistrarType(name string, init RegistrarInitializer, pm ...ProviderMetadata) {
+	rejectUnifiedRegistration(name)
 	if _, ok := RegistrarTypes[name]; ok {
 		log.Fatalf("Cannot register registrar type %q multiple times", name)
 	}
@@ -90,6 +94,7 @@ func RegisterRegistrarType(name string, init RegistrarInitializer, pm ...Provide
 
 // RegisterDomainServiceProviderType adds a dsp to the registry with the given initialization function.
 func RegisterDomainServiceProviderType(name string, fns DspFuncs, pm ...ProviderMetadata) {
+	rejectUnifiedRegistration(name)
 	if _, ok := DNSProviderTypes[name]; ok {
 		log.Fatalf("Cannot register registrar type %q multiple times", name)
 	}
@@ -106,6 +111,7 @@ func RegisterMaintainer(
 	providerName string,
 	gitHubUsername string,
 ) {
+	rejectUnifiedRegistration(providerName)
 	ProviderMaintainers[providerName] = gitHubUsername
 }
 
@@ -115,20 +121,36 @@ var ProviderDefaultTTLs = map[string]uint32{}
 // RegisterDefaultTTL registers a default TTL for a provider.
 // This is used by get-zones to determine the DefaultTTL when generating output.
 func RegisterDefaultTTL(providerName string, defaultTTL uint32) {
+	rejectUnifiedRegistration(providerName)
 	ProviderDefaultTTLs[providerName] = defaultTTL
 }
 
 // GetDefaultTTL returns the default TTL for a provider, or 0 if not registered.
 func GetDefaultTTL(providerName string) uint32 {
+	if def, ok := definitions[providerName]; ok {
+		return def.DefaultTTL
+	}
 	return ProviderDefaultTTLs[providerName]
 }
 
 // CreateRegistrar initializes a registrar instance from given credentials.
-func CreateRegistrar(rType string, config map[string]string) (Registrar, error) {
+func CreateRegistrar(rType string, config map[string]string, opts ...CreateOption) (Registrar, error) {
 	var err error
 	rType, err = beCompatible(rType, config)
 	if err != nil {
 		return nil, err
+	}
+	if def, ok := definitions[rType]; ok {
+		if !def.Kind.Has(KindRegistrar) {
+			return nil, fmt.Errorf("no such registrar type: %q", rType)
+		}
+		options := newCreateOptions(opts)
+		options.RequestedRole = KindRegistrar
+		instance, err := def.Initializer(config, nil, &options)
+		if err != nil {
+			return nil, err
+		}
+		return instance.(Registrar), nil
 	}
 
 	initer, ok := RegistrarTypes[rType]
@@ -145,12 +167,23 @@ func CreateDNSProvider(providerTypeName string, config map[string]string, meta j
 	if err != nil {
 		return nil, err
 	}
+	options := newCreateOptions(opts)
+	options.RequestedRole = KindDNS
+	if def, ok := definitions[providerTypeName]; ok {
+		if !def.Kind.Has(KindDNS) {
+			return nil, fmt.Errorf("no such DNS service provider: %q", providerTypeName)
+		}
+		instance, err := def.Initializer(config, meta, &options)
+		if err != nil {
+			return nil, err
+		}
+		return instance.(DNSServiceProvider), nil
+	}
 
 	p, ok := DNSProviderTypes[providerTypeName]
 	if !ok {
 		return nil, fmt.Errorf("no such DNS service provider: %q", providerTypeName)
 	}
-	options := newCreateOptions(opts)
 	if p.InitializerWithOptions != nil {
 		return p.InitializerWithOptions(config, meta, options)
 	}
@@ -177,16 +210,16 @@ func beCompatible(n string, config map[string]string) (string, error) {
 			return "-", errors.New("creds.json entry missing TYPE field")
 		}
 		// Otherwise, use the value from creds.json.
-		return ct, nil
+		return canonicalProviderName(ct), nil
 	}
 
 	// Pre 4.0: The user specified the name manually.
 	// Cross check to detect user-error.
-	if ct != "" && n != ct {
+	if ct != "" && canonicalProviderName(n) != canonicalProviderName(ct) {
 		return "", fmt.Errorf("creds.json entry mismatch: specified=%q TYPE=%q", n, ct)
 	}
 	// Seems like the user did it the right way. Return the original value.
-	return n, nil
+	return canonicalProviderName(n), nil
 
 	// NB(tlim): My hope is that in 4.0 this entire function will simply be the
 	// following, but I may be wrong:
@@ -195,6 +228,12 @@ func beCompatible(n string, config map[string]string) (string, error) {
 
 // AuditRecords calls the RecordAudit function for a provider.
 func AuditRecords(dType string, rcs models.Records) []error {
+	if def, ok := definitions[dType]; ok {
+		if !def.Kind.Has(KindDNS) {
+			return []error{fmt.Errorf("provider %q does not support the DNS role", dType)}
+		}
+		return def.RecordAuditor(rcs)
+	}
 	p, ok := DNSProviderTypes[dType]
 	if !ok {
 		return []error{fmt.Errorf("unknown DNS service provider type: %q", dType)}
@@ -213,35 +252,16 @@ func (n None) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correc
 	return nil, nil
 }
 
-// GetNameservers returns the current nameservers for a domain.
-func (n None) GetNameservers(string) ([]*models.Nameserver, error) {
-	return nil, nil
-}
-
-// GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n None) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	return nil, nil
-}
-
-// GetZoneRecordsCorrections gets the records of a zone and returns them in RecordConfig format.
-func (n None) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
-	return nil, 0, nil
-}
-
-var featuresNone = DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	CanConcur: Can(),
+// Initialize needs no credentials or setup for the placeholder registrar.
+func (*None) Initialize(map[string]string, json.RawMessage, *CreateOptions) error {
+	return nil
 }
 
 func init() {
-	RegisterRegistrarType("NONE", func(map[string]string) (Registrar, error) {
-		return None{}, nil
-	}, featuresNone)
-	RegisterCredsMetadata("NONE", CredsMetadata{
-		DisplayName: "No registrar",
-		Kind:        KindRegistrar,
-		Notes:       "Use NONE when you do not want DNSControl to manage nameserver delegation (that is, the nameservers for this domain will be managed manually).",
+	Register[*None]("NONE", Definition{
+		FriendlyName: "No registrar",
+		CanConcur:    Can(),
+		Notes:        "Use NONE when you do not want DNSControl to manage nameserver delegation (that is, the nameservers for this domain will be managed manually).",
 	})
 }
 

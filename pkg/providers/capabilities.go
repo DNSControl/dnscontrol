@@ -25,7 +25,8 @@ const (
 	// work when used concurrently.  The default is Cannot().
 	CanConcur
 
-	// CanGetZones indicates the provider supports the get-zones subcommand.
+	// CanGetZones indicates the provider can enumerate zones (get-zones ... all).
+	// Reading explicitly named zones does not require this capability.
 	CanGetZones
 
 	// CanOnlyDiff1Features indicates the provider has not yet been upgraded to
@@ -123,6 +124,10 @@ var providerCapabilities = map[string]map[Capability]bool{}
 
 // ProviderHasCapability returns true if provider has capability.
 func ProviderHasCapability(pType string, capa Capability) bool {
+	if def, ok := definitions[pType]; ok {
+		note := def.DerivedFeatures[capa]
+		return note != nil && note.HasFeature
+	}
 	if providerCapabilities[pType] == nil {
 		return false
 	}

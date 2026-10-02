@@ -44,46 +44,37 @@ Domain level metadata available:
    - ip_conversions
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can("CF automatically flattens CNAME records into A records dynamically"),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot("Cloudflare will not work well in situations where it is not the only DNS server"),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
 func init() {
 	const providerName = "CLOUDFLAREAPI"
-	const providerMaintainer = "@tresni"
-	fns := providers.DspFuncs{
-		Initializer:   newCloudflare,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
 	providers.RegisterCustomRecordType("CF_WORKER_ROUTE", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Cloudflare",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/cloudflareapi",
-		PortalURL:   "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
-		Notes:       "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
-		Fields: []providers.CredsField{
+	providers.Register[*cloudflareProvider](providerName, providers.Definition{
+		FriendlyName: "Cloudflare",
+		Maintainer:   "@tresni",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanUseAlias:            providers.Can("CF automatically flattens CNAME records into A records dynamically"),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot("Cloudflare will not work well in situations where it is not the only DNS server"),
+			providers.DocOfficiallySupported: providers.Can(),
+		},
+		PortalURL: "https://dash.cloudflare.com/profile/api-tokens", // TODO: Verify
+		Notes:     "Cloudflare supports two auth methods: a scoped API token (recommended) or the legacy global API key paired with the account email.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "_authMethod",
 				Label:    "Which authentication method do you want to use?",
@@ -734,15 +725,15 @@ func (c *cloudflareProvider) LogTranscode(zone string, redirect privatetypesrdat
 	return err
 }
 
-func newCloudflare(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	api := &cloudflareProvider{}
-	api.zoneCache = zonecache.New(api.fetchAllZones)
+func (c *cloudflareProvider) Initialize(m map[string]string, metadata json.RawMessage, options *providers.CreateOptions) error {
+	c.observer = options.WithDefaults().ConversionObserver
+	c.zoneCache = zonecache.New(c.fetchAllZones)
 	// check api keys from creds json file
 	if m["apitoken"] == "" && (m["apikey"] == "" || m["apiuser"] == "") {
-		return nil, errors.New("if cloudflare apitoken is not set, apikey and apiuser must be provided")
+		return errors.New("if cloudflare apitoken is not set, apikey and apiuser must be provided")
 	}
 	if m["apitoken"] != "" && (m["apikey"] != "" || m["apiuser"] != "") {
-		return nil, errors.New("if cloudflare apitoken is set, apikey and apiuser should not be provided")
+		return errors.New("if cloudflare apitoken is set, apikey and apiuser should not be provided")
 	}
 
 	optRP := cloudflare.UsingRetryPolicy(20, 1, 120)
@@ -752,23 +743,23 @@ func newCloudflare(m map[string]string, metadata json.RawMessage) (providers.DNS
 
 	var err error
 	if m["apitoken"] != "" {
-		api.cfClient, err = cloudflare.NewWithAPIToken(m["apitoken"], optRP)
+		c.cfClient, err = cloudflare.NewWithAPIToken(m["apitoken"], optRP)
 	} else {
-		api.cfClient, err = cloudflare.New(m["apikey"], m["apiuser"], optRP)
+		c.cfClient, err = cloudflare.New(m["apikey"], m["apiuser"], optRP)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("cloudflare credentials: %w", err)
+		return fmt.Errorf("cloudflare credentials: %w", err)
 	}
 
 	// Check account data if set
 	if m["accountid"] != "" {
-		api.accountID = m["accountid"]
+		c.accountID = m["accountid"]
 	}
 
 	debug, err := strconv.ParseBool(os.Getenv("CLOUDFLAREAPI_DEBUG"))
 	if err == nil {
-		api.cfClient.Debug = debug
+		c.cfClient.Debug = debug
 	}
 
 	if len(metadata) > 0 {
@@ -782,25 +773,25 @@ func newCloudflare(m map[string]string, metadata json.RawMessage) (providers.DNS
 		}{}
 		err := json.Unmarshal([]byte(metadata), parsedMeta)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		api.manageSingleRedirects = parsedMeta.ManageSingleRedirects
-		api.tcLogFilename = parsedMeta.TranscodeLogFilename
-		api.manageWorkers = parsedMeta.ManageWorkers
+		c.manageSingleRedirects = parsedMeta.ManageSingleRedirects
+		c.tcLogFilename = parsedMeta.TranscodeLogFilename
+		c.manageWorkers = parsedMeta.ManageWorkers
 		// ignored_labels:
-		api.ignoredLabels = append(api.ignoredLabels, parsedMeta.IgnoredLabels...)
-		if len(api.ignoredLabels) > 0 {
+		c.ignoredLabels = append(c.ignoredLabels, parsedMeta.IgnoredLabels...)
+		if len(c.ignoredLabels) > 0 {
 			printer.Warnf("Cloudflare 'ignored_labels' configuration is deprecated and might be removed. Please use the IGNORE domain directive to achieve the same effect.\n")
 		}
 		// parse provider level metadata
 		if len(parsedMeta.IPConversions) > 0 {
-			api.ipConversions, err = transform.DecodeTransformTable(parsedMeta.IPConversions)
+			c.ipConversions, err = transform.DecodeTransformTable(parsedMeta.IPConversions)
 			if err != nil {
-				return nil, err
+				return err
 			}
 		}
 	}
-	return api, nil
+	return nil
 }
 
 // Used on the "existing" records.

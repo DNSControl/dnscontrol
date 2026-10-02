@@ -14,8 +14,7 @@ func RawString(a any) string {
 
 }
 
-// ToLowerRawString upcases a field so that comparisons do not need to be
-// case-aware.
+// ToUpperRawString upcases a field so that comparisons do not need to be case-aware.
 func ToUpperRawString(a any) string {
 	switch v := a.(type) {
 	case string:
@@ -24,8 +23,7 @@ func ToUpperRawString(a any) string {
 	return strings.ToUpper(fmt.Sprintf("%s", a))
 }
 
-// ToLowerRawString downcases a field so that comparisons do not need to be
-// case-aware.
+// ToLowerRawString downcases a field so that comparisons do not need to be case-aware.
 func ToLowerRawString(a any) string {
 	switch v := a.(type) {
 	case string:

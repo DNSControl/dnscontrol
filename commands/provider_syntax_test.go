@@ -22,7 +22,6 @@ const providerSyntaxTestType = "TEST_PROVIDER_SYNTAX"
 
 // Both roles use a deterministic local provider; corrections are never executed.
 type syntaxTestProvider struct {
-	providers.None
 	account   string
 	metadata  json.RawMessage
 	nsLookups int
@@ -31,6 +30,10 @@ type syntaxTestProvider struct {
 func (p *syntaxTestProvider) GetNameservers(string) ([]*models.Nameserver, error) {
 	p.nsLookups++
 	return models.ToNameservers([]string{"ns1.example.org", "ns2.example.org", "ns3.example.org"})
+}
+
+func (*syntaxTestProvider) GetZoneRecords(*models.DomainConfig) (models.Records, error) {
+	return nil, nil
 }
 
 func (p *syntaxTestProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {
