@@ -35,7 +35,6 @@ func init() {
 			"Default",
 			"DNAME",
 			"DS",
-			"IMPORT_TRANSFORM",
 			"SSHFP",
 			"TLSA",
 		},

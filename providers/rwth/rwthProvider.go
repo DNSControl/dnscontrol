@@ -18,7 +18,6 @@ func init() {
 		Maintainer:   "@mistererwin",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SSHFP",
 			"DS:Unimplemented",

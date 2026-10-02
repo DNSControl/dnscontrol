@@ -28,7 +28,6 @@ func init() {
 		Maintainer:   "@SimenBai",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"ALIAS:Unimplemented",
 			"DS:Unimplemented",
 			"TLSA:Unimplemented",

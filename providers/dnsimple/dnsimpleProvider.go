@@ -29,7 +29,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"NAPTR",
 			"PTR",
 			"SSHFP",

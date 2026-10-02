@@ -39,7 +39,6 @@ func init() {
 			"BUNNY_DNS_PZ",
 			"BUNNY_DNS_RDR",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SVCB",
 			"TLSA",

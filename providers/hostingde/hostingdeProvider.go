@@ -36,7 +36,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"DS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SOA",
 			"SSHFP",

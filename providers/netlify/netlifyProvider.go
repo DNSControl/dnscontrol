@@ -20,7 +20,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"NETLIFY",
 			"NETLIFYV6",
 		},

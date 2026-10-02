@@ -133,7 +133,6 @@ func init() {
 		Maintainer: "@matthewmgamble",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"CAA:Cannot",
 			"NS:Cannot",

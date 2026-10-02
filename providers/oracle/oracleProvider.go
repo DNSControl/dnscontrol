@@ -25,7 +25,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"NAPTR",
 			"PTR",
 			"SSHFP",

@@ -34,7 +34,6 @@ func init() {
 		Maintainer: "@twiesing",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"NS:Cannot",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),

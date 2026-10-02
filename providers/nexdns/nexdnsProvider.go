@@ -59,7 +59,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"DNAME",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"TLSA",
 		},

@@ -106,7 +106,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"PORKBUN_URLFWD",
 			"SSHFP",
 			"SVCB",

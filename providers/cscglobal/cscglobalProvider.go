@@ -47,7 +47,6 @@ func init() {
 		Maintainer:   "@mikenz",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 		},
 		CanConcur:              providers.Can(),
 		DocOfficiallySupported: providers.Can(),

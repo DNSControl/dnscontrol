@@ -48,7 +48,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Unimplemented(),

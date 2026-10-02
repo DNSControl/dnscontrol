@@ -44,7 +44,6 @@ func init() {
 		Maintainer: "@atrull",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"NAPTR",
 		},
 		CanConcur:              providers.Cannot("Joker API has session-based authentication"),

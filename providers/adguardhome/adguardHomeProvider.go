@@ -42,7 +42,6 @@ func init() {
 			"ADGUARDHOME_A_PASSTHROUGH",
 			"ALIAS",
 			"CNAME",
-			"IMPORT_TRANSFORM",
 		},
 		CanConcur:              providers.Unimplemented(),
 		DocOfficiallySupported: providers.Cannot(),

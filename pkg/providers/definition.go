@@ -69,6 +69,7 @@ type Definition struct {
 	// Default (A, AAAA, CAA, CNAME, MX, NS, SRV, TXT), except that non-nil
 	// Features retains legacy validation. A non-nil empty slice declares no
 	// support beyond Features.
+	// Internal commands such as IMPORT_TRANSFORM do not belong in this list.
 	SupportedTypes []string
 
 	typeSelectors   []typeSelector

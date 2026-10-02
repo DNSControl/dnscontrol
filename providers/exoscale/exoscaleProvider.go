@@ -60,7 +60,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"NS:Cannot",
 		},
 		CanConcur:              providers.Cannot(),

@@ -23,7 +23,6 @@ func init() {
 		Maintainer:   "@zupolgec",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"CAA:Cannot",
 			"NS:Cannot",
 		},

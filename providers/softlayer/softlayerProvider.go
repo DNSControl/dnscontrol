@@ -29,7 +29,6 @@ func init() {
 		Maintainer:   "NEEDS VOLUNTEER",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"CAA:Cannot",
 		},
 		CanConcur: providers.Unimplemented(),

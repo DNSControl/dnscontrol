@@ -53,7 +53,6 @@ func init() {
 		Maintainer: "@systemcrash",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"SSHFP",

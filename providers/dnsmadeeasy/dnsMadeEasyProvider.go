@@ -42,7 +42,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 		},
 		CanConcur:              providers.Unimplemented(),

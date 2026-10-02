@@ -116,7 +116,6 @@ func init() {
 		Maintainer: "@huihuimoe",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 		},
 		CanAutoDNSSEC:          providers.Can(),
 		DocDualHost:            providers.Can(),

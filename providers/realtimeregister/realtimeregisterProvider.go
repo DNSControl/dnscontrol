@@ -33,7 +33,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"SSHFP",

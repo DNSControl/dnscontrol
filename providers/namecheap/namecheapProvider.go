@@ -86,7 +86,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"FRAME",
-			"IMPORT_TRANSFORM",
 			"URL",
 			"URL301",
 		},

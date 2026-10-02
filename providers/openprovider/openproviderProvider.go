@@ -31,7 +31,6 @@ func init() {
 		DefaultTTL: minimumTTL,
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"TLSA",
 			"NS:Cannot",
 		},

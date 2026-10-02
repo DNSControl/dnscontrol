@@ -89,7 +89,6 @@ func init() {
 			"ALIAS",
 			"DHCID",
 			"DNAME",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"PTR",

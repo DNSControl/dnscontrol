@@ -55,7 +55,6 @@ func init() {
 			"CLOUDFLAREAPI_SINGLE_REDIRECT",
 			"DS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"PTR",

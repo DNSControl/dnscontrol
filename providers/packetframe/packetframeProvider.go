@@ -51,7 +51,6 @@ func init() {
 		Maintainer:   "NEEDS VOLUNTEER",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"CAA:Cannot",
 		},

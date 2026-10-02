@@ -85,7 +85,6 @@ func init() {
 			"AKAMAICDN",
 			"AKAMAITLC",
 			"ALIAS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"PTR",

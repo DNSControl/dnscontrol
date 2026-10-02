@@ -324,7 +324,6 @@ each string item on its own line to keep future diffs small:
 SupportedTypes: []string{
     "Default",
     "PTR",
-    "IMPORT_TRANSFORM",
 },
 ```
 
@@ -337,9 +336,11 @@ types in DNSControl's record catalog; `*` also includes pseudo-types. Patterns
 such as `BUNNY_*` match whole type names, with `*` matching zero or more characters.
 Unknown concrete type names are errors.
 
-Include `IMPORT_TRANSFORM` to allow imported records; normalization consumes this
-pseudo-type and checks the resulting types against the same declaration. Custom
-pseudo-types need a parser registered with `privatetypes.Register` and an entry
+`IMPORT_TRANSFORM` is a deferred configuration command, not a record type or
+pseudo-type. It works with every provider and must not appear in `SupportedTypes`.
+Normalization executes it before providers see records, then checks the copied
+records against each provider's declaration. Custom pseudo-types need a parser
+registered with `privatetypes.Register` and an entry
 in `SupportedTypes`. Multiple providers can support the same pseudo-type.
 
 An entry without a suffix means supported. Use `:Can`, `:Cannot`, or

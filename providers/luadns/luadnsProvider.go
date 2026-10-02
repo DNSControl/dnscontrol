@@ -49,7 +49,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"OPENPGPKEY",
 			"PTR",
 			"SSHFP",

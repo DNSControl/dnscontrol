@@ -24,7 +24,8 @@ type MakerRn func(origin string, metadata map[string]string, isEnabled nrc.Flags
 var TypeToMakeRDATA = make(map[uint16]MakerRn)
 
 // pseudoTypes records classification explicitly, independently of names and
-// codepoint ranges. Types registered by Register are DNSControl pseudo-types.
+// codepoint ranges. Register also handles internal commands, which are excluded
+// from the zone record catalog by LookupRecordType.
 var pseudoTypes = map[uint16]bool{}
 var catalogVersion uint64 = 1
 
@@ -38,7 +39,8 @@ type RecordType struct {
 // Registration must finish before concurrent reads begin.
 func CatalogVersion() uint64 { return catalogVersion }
 
-// LookupRecordType excludes protocol/query-only types from the zone catalog.
+// LookupRecordType excludes protocol/query-only types and internal commands
+// from the zone catalog.
 func LookupRecordType(name string) (RecordType, bool) {
 	code, ok := dnsv2.StringToType[name]
 	if !ok || dnsv2.TypeToRR[code] == nil {
@@ -47,6 +49,8 @@ func LookupRecordType(name string) (RecordType, bool) {
 	switch code {
 	case dnsv2.TypeANY, dnsv2.TypeAXFR, dnsv2.TypeIXFR, dnsv2.TypeOPT, dnsv2.TypeTKEY, dnsv2.TypeTSIG:
 		return RecordType{}, false
+	case TypeIMPORTTRANSFORM:
+		return RecordType{}, false // Deferred configuration command, never sent to providers.
 	}
 	return RecordType{Name: name, Pseudo: pseudoTypes[code]}, true
 }

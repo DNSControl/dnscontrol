@@ -139,7 +139,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"AZURE_ALIAS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 		},
 		CanConcur:              providers.Can(),

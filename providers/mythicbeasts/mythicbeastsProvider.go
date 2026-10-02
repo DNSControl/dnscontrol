@@ -54,7 +54,6 @@ func init() {
 		Maintainer: "@tomfitzhenry",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SSHFP",
 			"TLSA",

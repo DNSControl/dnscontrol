@@ -377,9 +377,12 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				}
 			}
 
-			// Validate the unmodified inputs:
-			if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
-				errs = append(errs, err)
+			// IMPORT_TRANSFORM is a deferred command, not a provider record.
+			// It is consumed below; the resulting records are validated afterwards.
+			if rec.Type != "IMPORT_TRANSFORM" {
+				if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
+					errs = append(errs, err)
+				}
 			}
 			if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name, rec.Metadata); err != nil {
 				errs = append(errs, err)

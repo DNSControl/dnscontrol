@@ -61,7 +61,6 @@ func init() {
 		Maintainer: "@hedger",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"MIKROTIK_FORWARDER",
 			"MIKROTIK_FWD",
 			"MIKROTIK_NXDOMAIN",

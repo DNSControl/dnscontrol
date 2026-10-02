@@ -48,7 +48,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SVCB",
 			"TLSA",

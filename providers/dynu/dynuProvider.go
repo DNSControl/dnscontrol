@@ -31,7 +31,6 @@ func init() {
 			"DHCID",
 			"DNAME",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"OPENPGPKEY",

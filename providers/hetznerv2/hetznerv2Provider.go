@@ -34,7 +34,6 @@ func init() {
 			"Default",
 			"DS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"SVCB",
 			"TLSA",

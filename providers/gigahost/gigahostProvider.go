@@ -32,7 +32,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"DNAME",
-			"IMPORT_TRANSFORM",
 			"NAPTR",
 			"PTR",
 		},

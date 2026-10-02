@@ -51,7 +51,6 @@ func init() {
 			"Default",
 			"DNSKEY",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"OPENPGPKEY",

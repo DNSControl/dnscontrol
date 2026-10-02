@@ -84,7 +84,6 @@ func init() {
 			"A",
 			"AAAA",
 			"CNAME",
-			"IMPORT_TRANSFORM",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Can(),

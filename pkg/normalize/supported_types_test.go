@@ -17,6 +17,17 @@ func (*supportedTypesAuditor) AuditRecords(models.Records) []error {
 	return []error{errors.New("stage 5 audit ran")}
 }
 
+type importedRecordsAuditor struct{ validationProvider }
+
+func (*importedRecordsAuditor) AuditRecords(records models.Records) []error {
+	for _, record := range records {
+		if record.Type != "A" {
+			return []error{fmt.Errorf("auditor received %s instead of a copied A record", record.Type)}
+		}
+	}
+	return nil
+}
+
 func init() {
 	for name, def := range map[string]providers.Definition{
 		"S5_DEFAULT": {},
@@ -41,15 +52,15 @@ func init() {
 		"S5_NO_DS": {SupportedTypes: []string{
 			"DS:Cannot",
 		}, CanUseDSForChildren: providers.Cannot()},
-		"S5_IMPORT_ONLY": {SupportedTypes: []string{
-			"IMPORT_TRANSFORM",
-		}},
 	} {
 		def.FriendlyName = name
 		providers.Register[*validationProvider](name, def)
 	}
 	providers.Register[*supportedTypesAuditor]("S5_AUDIT", providers.Definition{FriendlyName: "Auditor", SupportedTypes: []string{
 		"*",
+	}})
+	providers.Register[*importedRecordsAuditor]("S6_IMPORT_AUDIT", providers.Definition{FriendlyName: "Import auditor", SupportedTypes: []string{
+		"A",
 	}})
 }
 
@@ -137,12 +148,25 @@ func TestSupportedTypesRetainsOtherValidation(t *testing.T) {
 	})
 }
 
-func TestSupportedTypesBeforeAndAfterTransforms(t *testing.T) {
-	for _, provider := range []string{"S5_DEFAULT", "S5_IMPORT_ONLY", "S5_ALL"} {
-		t.Run(provider, func(t *testing.T) {
+func TestImportTransformChecksCopiedRecords(t *testing.T) {
+	for _, tc := range []struct {
+		name, provider string
+		copyRecord     bool
+		wantError      string
+	}{
+		{"default", "S5_DEFAULT", true, ""},
+		{"RFC", "S5_RFC", true, ""},
+		{"wildcard", "S5_ALL", true, ""},
+		{"auditor sees only copied records", "S6_IMPORT_AUDIT", true, ""},
+		{"empty declaration accepts command", "S5_EMPTY", false, ""},
+		{"empty declaration rejects copied records", "S5_EMPTY", true, "uses A records"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
 			source := models.MustNewDomainConfig("source.example")
-			source.AddRecordConfig(source.MustNewRecordConfig("www", 300, "A", "192.0.2.1"))
-			dest := lineDomain(provider)
+			if tc.copyRecord {
+				source.AddRecordConfig(source.MustNewRecordConfig("www", 300, "A", "192.0.2.1"))
+			}
+			dest := lineDomain(tc.provider)
 			transform := "0.0.0.0~255.255.255.255~~0.0.0.0"
 			r := dest.MustNewRecordConfig("@", 300, privatetypes.TypeIMPORTTRANSFORM, transform, 300, "", source.Name)
 			r.Metadata["transform_table"] = transform
@@ -152,19 +176,15 @@ func TestSupportedTypesBeforeAndAfterTransforms(t *testing.T) {
 				t.Fatal(err)
 			}
 			errs := ValidateAndNormalizeConfig(config)
-			switch provider {
-			case "S5_DEFAULT":
-				if !strings.Contains(fmt.Sprint(errs), "uses IMPORT_TRANSFORM records") {
-					t.Fatalf("original pseudo-type not checked: %v", errs)
+			if tc.wantError == "" && len(errs) != 0 || tc.wantError != "" && (len(errs) != 1 || !strings.Contains(errs[0].Error(), tc.wantError)) {
+				t.Fatalf("want error %q, got %v", tc.wantError, errs)
+			}
+			if tc.copyRecord {
+				if len(dest.Records) != 1 || dest.Records[0].Type != "A" {
+					t.Fatalf("command did not produce an A record: %v", dest.Records)
 				}
-			case "S5_IMPORT_ONLY":
-				if !strings.Contains(fmt.Sprint(errs), "uses A records") {
-					t.Fatalf("transformed records not checked: %v", errs)
-				}
-			case "S5_ALL":
-				if len(errs) != 0 || len(dest.Records) != 1 || dest.Records[0].Type != "A" {
-					t.Fatalf("transform failed: records=%v, errors=%v", dest.Records, errs)
-				}
+			} else if len(dest.Records) != 0 {
+				t.Fatalf("command was not consumed: %v", dest.Records)
 			}
 		})
 	}

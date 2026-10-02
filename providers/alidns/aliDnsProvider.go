@@ -37,7 +37,6 @@ func init() {
 		DefaultTTL: 600,
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Can(),

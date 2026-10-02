@@ -50,7 +50,6 @@ func init() {
 		Maintainer: "@mtmn",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"CAA:Cannot",
 			"NS:Cannot",
 		},

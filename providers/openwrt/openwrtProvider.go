@@ -47,7 +47,6 @@ func init() {
 		Maintainer:   "@huskyistaken",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"CAA:Cannot",
 			"NS:Cannot",
 			"TXT:Cannot",

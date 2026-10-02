@@ -80,7 +80,6 @@ func init() {
 			"ALIAS",
 			"CLOUDNS_WR",
 			"DNAME",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"PTR",

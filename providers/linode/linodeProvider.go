@@ -104,7 +104,6 @@ func init() {
 		Maintainer: "@koesie10",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),

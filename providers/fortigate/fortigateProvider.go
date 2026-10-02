@@ -54,7 +54,6 @@ func init() {
 			"A",
 			"AAAA",
 			"CNAME",
-			"IMPORT_TRANSFORM",
 			"PTR:Cannot",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),

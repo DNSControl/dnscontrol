@@ -160,7 +160,6 @@ func init() {
 			"DNAME",
 			"DS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"OPENPGPKEY",

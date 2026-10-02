@@ -59,7 +59,6 @@ func init() {
 		RecordIdentity: recordIdentity,
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 		},
 		DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
 		DocOfficiallySupported: providers.Cannot(),

@@ -32,7 +32,6 @@ func init() {
 		Maintainer:   "@pgaskin",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"SSHFP",
 		},
 		CanAutoDNSSEC:          providers.Can(),

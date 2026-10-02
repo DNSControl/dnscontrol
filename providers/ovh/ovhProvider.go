@@ -56,7 +56,6 @@ func init() {
 		Maintainer:   "@masterzen",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"SSHFP",
 			"TLSA",
 			"LOC:Unimplemented",

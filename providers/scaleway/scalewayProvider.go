@@ -35,7 +35,6 @@ func init() {
 			"ALIAS",
 			"DNAME",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"NAPTR",
 			"SSHFP",
 			"SVCB",

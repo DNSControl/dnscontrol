@@ -17,7 +17,6 @@ func init() {
 		Maintainer:   "@kordianbruck",
 		SupportedTypes: []string{
 			"Default",
-			"IMPORT_TRANSFORM",
 			"TLSA",
 			"NS:Cannot",
 		},

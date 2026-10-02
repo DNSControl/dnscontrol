@@ -55,6 +55,7 @@ func TestSupportedTypesResolution(t *testing.T) {
 		{"star pseudo", []string{"*"}, nil, "AKAMAITLC", Can()},
 		{"unknown", []string{"*"}, nil, "DOES_NOT_EXIST", Cannot()},
 		{"protocol type", []string{"*"}, nil, "AXFR", Cannot()},
+		{"internal command", []string{"*"}, nil, "IMPORT_TRANSFORM", Cannot()},
 		{"prefix", []string{"BUNNY_*"}, nil, "BUNNY_DNS_PZ", Can()},
 		{"whole name", []string{"BUNNY*:Can"}, nil, "A", Cannot()},
 		{"no match", []string{"FUTURE_*"}, nil, "A", Cannot()},
@@ -111,7 +112,7 @@ func TestSupportedTypesErrors(t *testing.T) {
 		})
 	}
 	for _, selectors := range [][]string{
-		{"Standard"}, {"UNREGISTERED"}, {"CAA", "CAA:Cannot"},
+		{"Standard"}, {"UNREGISTERED"}, {"IMPORT_TRANSFORM"}, {"CAA", "CAA:Cannot"},
 		{"CAA:Cannot", "CAA:Unimplemented"}, {"CA*:Cannot", "*AA:Can"},
 	} {
 		t.Run(strings.Join(selectors, ","), func(t *testing.T) {

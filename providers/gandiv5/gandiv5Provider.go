@@ -72,7 +72,6 @@ func init() {
 			"Default",
 			"ALIAS",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"LOC",
 			"NAPTR",
 			"OPENPGPKEY",

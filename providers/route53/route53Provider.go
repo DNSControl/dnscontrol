@@ -121,7 +121,6 @@ func init() {
 		SupportedTypes: []string{
 			"Default",
 			"HTTPS",
-			"IMPORT_TRANSFORM",
 			"PTR",
 			"R53_ALIAS",
 			"SOA",
