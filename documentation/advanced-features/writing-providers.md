@@ -316,8 +316,11 @@ Capabilities are processed early by DNSControl.  For example if a provider doesn
 Enable optional capabilities in the `nameProvider.go` file and run the integration tests to see what works and what doesn't.  Fix any bugs and repeat, repeat, repeat until you have all the capabilities you want to implement.
 
 Declare supported record types in `providers.Definition.SupportedTypes`, for
-example `[]string{"Default", "TXT", "NS", "CAA", "SRV"}`. This list is exhaustive:
-`Default` contains only `A`, `AAAA`, `MX`, and `CNAME`. `RFC` includes all ordinary
+example `[]string{"Default", "PTR"}`. This list is exhaustive:
+`Default` contains `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NS`, `SRV`, and `TXT`.
+It is a fixed baseline for typical authoritative DNS providers; verify each
+provider's implementation and declare exceptions such as `NS:Cannot` explicitly.
+Specialized providers can supply their own complete list. `RFC` includes all ordinary
 types in DNSControl's record catalog; `*` also includes pseudo-types. Patterns
 such as `BUNNY_*` match whole type names, with `*` matching zero or more characters.
 Unknown concrete type names are errors.

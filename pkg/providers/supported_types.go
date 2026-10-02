@@ -77,7 +77,11 @@ func (d *Definition) compileTypeSelectors() error {
 func (s typeSelector) matches(typ privatetypes.RecordType) bool {
 	switch s.name {
 	case "DEFAULT":
-		return typ.Name == "A" || typ.Name == "AAAA" || typ.Name == "MX" || typ.Name == "CNAME"
+		switch typ.Name {
+		case "A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT":
+			return true
+		}
+		return false
 	case "RFC":
 		return !typ.Pseudo
 	}

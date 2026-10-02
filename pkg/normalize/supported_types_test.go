@@ -19,14 +19,15 @@ func (*supportedTypesAuditor) AuditRecords(models.Records) []error {
 
 func init() {
 	for name, def := range map[string]providers.Definition{
-		"S5_DEFAULT":     {},
-		"S5_EMPTY":       {SupportedTypes: []string{}},
-		"S5_RFC":         {SupportedTypes: []string{"RFC"}},
-		"S5_ALL":         {SupportedTypes: []string{"*"}},
-		"S5_CHILD":       {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Can()},
-		"S5_FULL_DS":     {SupportedTypes: []string{"DS"}, CanUseDSForChildren: providers.Cannot()},
-		"S5_NO_DS":       {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Cannot()},
-		"S5_IMPORT_ONLY": {SupportedTypes: []string{"IMPORT_TRANSFORM"}},
+		"S5_DEFAULT":        {},
+		"S5_DEFAULT_EXCEPT": {SupportedTypes: []string{"Default", "NS:Cannot", "CAA:Cannot"}},
+		"S5_EMPTY":          {SupportedTypes: []string{}},
+		"S5_RFC":            {SupportedTypes: []string{"RFC"}},
+		"S5_ALL":            {SupportedTypes: []string{"*"}},
+		"S5_CHILD":          {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Can()},
+		"S5_FULL_DS":        {SupportedTypes: []string{"DS"}, CanUseDSForChildren: providers.Cannot()},
+		"S5_NO_DS":          {SupportedTypes: []string{"DS:Cannot"}, CanUseDSForChildren: providers.Cannot()},
+		"S5_IMPORT_ONLY":    {SupportedTypes: []string{"IMPORT_TRANSFORM"}},
 	} {
 		def.FriendlyName = name
 		providers.Register[*validationProvider](name, def)
@@ -41,8 +42,14 @@ func TestExhaustiveRecordValidation(t *testing.T) {
 	}{
 		{"S5_DEFAULT", "@", "A", "192.0.2.1", true},
 		{"S5_EMPTY", "@", "A", "192.0.2.1", false},
-		{"S5_DEFAULT", "@", "TXT", `"text"`, false},
-		{"S5_DEFAULT", "child", "NS", "ns.example.net.", false},
+		{"S5_DEFAULT", "@", "TXT", `"text"`, true},
+		{"S5_DEFAULT", "child", "NS", "ns.example.net.", true},
+		{"S5_DEFAULT", "@", "NS", "ns.example.net.", false},
+		{"S5_DEFAULT", "@", "CAA", `0 issue "ca.example.net"`, true},
+		{"S5_DEFAULT", "_sip._tcp", "SRV", "0 5 5060 sip.example.net.", true},
+		{"S5_DEFAULT_EXCEPT", "child", "NS", "ns.example.net.", false},
+		{"S5_DEFAULT_EXCEPT", "@", "CAA", `0 issue "ca.example.net"`, false},
+		{"S5_DEFAULT_EXCEPT", "@", "TXT", `"text"`, true},
 		{ProviderNoDS, "@", "TXT", `"text"`, true},
 		{ProviderNoDS, "child", "NS", "ns.example.net.", true},
 		{"S5_RFC", "@", "TXT", `"text"`, true},
@@ -101,7 +108,7 @@ func TestSupportedTypesRetainsOtherValidation(t *testing.T) {
 	t.Run("every provider", func(t *testing.T) {
 		dc := lineDomain("S5_ALL")
 		dc.DNSProviderInstances = append(dc.DNSProviderInstances, &models.DNSProviderInstance{Name: "second", ProviderType: "S5_DEFAULT"})
-		dc.AddRecordConfig(dc.MustNewRecordConfig("@", 300, "TXT", "text"))
+		dc.AddRecordConfig(dc.MustNewRecordConfigParse("@", 300, "HINFO", `"CPU" "OS"`))
 		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "S5_DEFAULT does not support") {
 			t.Fatalf("errors = %v", errs)
 		}

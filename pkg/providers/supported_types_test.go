@@ -20,8 +20,8 @@ func TestSupportedTypesDefaults(t *testing.T) {
 		exhaustive bool
 		allowed    []string
 	}{
-		{"nil", nil, nil, true, []string{"A", "AAAA", "MX", "CNAME"}},
-		{"Default", []string{"Default"}, nil, true, []string{"A", "AAAA", "MX", "CNAME"}},
+		{"nil", nil, nil, true, []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"}},
+		{"Default", []string{"Default"}, nil, true, []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"}},
 		{"empty", []string{}, nil, true, nil},
 		{"legacy", nil, DocumentationNotes{CanUseCAA: Can()}, false, []string{"CAA"}},
 		{"empty with legacy", []string{}, DocumentationNotes{CanUseCAA: Can()}, true, []string{"CAA"}},
@@ -60,6 +60,9 @@ func TestSupportedTypesResolution(t *testing.T) {
 		{"no match", []string{"FUTURE_*"}, nil, "A", Cannot()},
 		{"lowercase type", []string{"caa:Can"}, nil, "caa", Can()},
 		{"exact exclusion", []string{"RFC", "CAA:Cannot"}, nil, "CAA", Cannot()},
+		{"default exclusion", []string{"Default", "CAA:Cannot"}, nil, "CAA", Cannot()},
+		{"default legacy exception", []string{"Default"}, DocumentationNotes{CanUseCAA: Cannot("legacy limit")}, "CAA", Cannot("legacy limit")},
+		{"default legacy unimplemented", []string{"Default"}, DocumentationNotes{CanUseSRV: Unimplemented("pending")}, "SRV", Unimplemented("pending")},
 		{"pattern exclusion", []string{"*", "BUNNY_*:Cannot"}, nil, "BUNNY_DNS_PZ", Cannot()},
 		{"exact inclusion", []string{"*:Cannot", "CAA"}, nil, "CAA", Can()},
 		{"unimplemented pattern", []string{"*", "AKAMAI*:Unimplemented"}, nil, "AKAMAITLC", Unimplemented()},

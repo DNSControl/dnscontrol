@@ -66,8 +66,9 @@ type Definition struct {
 	Features               DocumentationNotes
 
 	// SupportedTypes is an exhaustive declaration of record support. Nil means
-	// Default (A, AAAA, MX, CNAME), except that non-nil Features retains legacy
-	// validation. A non-nil empty slice declares no support beyond Features.
+	// Default (A, AAAA, CAA, CNAME, MX, NS, SRV, TXT), except that non-nil
+	// Features retains legacy validation. A non-nil empty slice declares no
+	// support beyond Features.
 	SupportedTypes []string
 
 	typeSelectors   []typeSelector
