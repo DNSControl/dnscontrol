@@ -132,7 +132,7 @@ func init() {
 		},
 		Maintainer: "@matthewmgamble",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"PTR",
 			"CAA:Cannot",
 			"NS:Cannot",

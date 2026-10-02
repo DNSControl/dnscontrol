@@ -9,6 +9,12 @@ Useful refactoring projects. Please feel free to pick up any of these.
 
 ## Rewrites needed
 
+* Future provider concurrency change: default to allowing concurrency and replace
+  authored `CanConcur` declarations with `ConcurBroken: true` only for providers
+  that cannot run concurrently. Derive the compatibility `CanConcur` capability
+  as `!ConcurBroken`, and audit existing `Cannot`/`Unimplemented` notes to
+  distinguish known limitations from untested providers. Implement in a separate PR.
+
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
 cleaner and more testable. Plus it will consolidate the code into one place instead
 of being some in LabelFromDnsconfigjs() and other places.

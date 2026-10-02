@@ -46,7 +46,7 @@ func init() {
 		FriendlyName: "OpenWrt",
 		Maintainer:   "@huskyistaken",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"CAA:Cannot",
 			"NS:Cannot",
 			"TXT:Cannot",

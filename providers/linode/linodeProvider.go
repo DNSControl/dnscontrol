@@ -103,7 +103,7 @@ func init() {
 		},
 		Maintainer: "@koesie10",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		CanConcur:              providers.Unimplemented(),
 		DocDualHost:            providers.Cannot(),

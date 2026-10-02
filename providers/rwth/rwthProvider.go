@@ -17,7 +17,7 @@ func init() {
 		FriendlyName: "RWTH Aachen",
 		Maintainer:   "@mistererwin",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"PTR",
 			"SSHFP",
 			"DS:Unimplemented",

@@ -48,7 +48,7 @@ func init() {
 		},
 		Maintainer: "@D3luxee",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"DNSKEY",
 			"HTTPS",
 			"LOC",

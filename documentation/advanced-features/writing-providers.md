@@ -322,14 +322,14 @@ each string item on its own line to keep future diffs small:
 
 ```go
 SupportedTypes: []string{
-    "Default",
+    "Basic8",
     "PTR",
 },
 ```
 
 This list is exhaustive:
-`Default` contains `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NS`, `SRV`, and `TXT`.
-It is a fixed baseline for typical authoritative DNS providers; verify each
+`Basic8` contains `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NS`, `SRV`, and `TXT`.
+Its membership is fixed at these eight types; verify each
 provider's implementation and declare exceptions such as `NS:Cannot` explicitly.
 Specialized providers can supply their own complete list. `RFC` includes all ordinary
 types in DNSControl's record catalog; `*` also includes pseudo-types. Patterns
@@ -346,14 +346,14 @@ in `SupportedTypes`. Multiple providers can support the same pseudo-type.
 An entry without a suffix means supported. Use `:Can`, `:Cannot`, or
 `:Unimplemented` on concrete names or patterns, for example
 `[]string{"RFC", "CAA:Cannot"}`. Both negative statuses reject records;
-`Unimplemented` retains a distinct documentation status. `Default` and `RFC`
+`Unimplemented` retains a distinct documentation status. `Basic8` and `RFC`
 do not take suffixes. Type names are case-insensitive; status suffixes use the
 spellings shown here.
 
 Precedence is: exact entries, patterns with status suffixes, legacy `Features`,
 then unsuffixed patterns/categories. Conflicting statuses at the winning
 priority are errors, regardless of order. An exact entry can resolve conflicting
-patterns. Nil `SupportedTypes` means `Default`; a non-nil empty slice declares
+patterns. Nil `SupportedTypes` means `Basic8`; a non-nil empty slice declares
 no support beyond `Features`. Built-in providers all declare `SupportedTypes`
 explicitly; registrar-only providers use `[]string{}`. `Features` remains a
 compatibility input and can retain comments and links for individual types or

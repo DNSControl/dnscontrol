@@ -53,7 +53,7 @@ func init() {
 		},
 		Maintainer: "@tomfitzhenry",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"PTR",
 			"SSHFP",
 			"TLSA",

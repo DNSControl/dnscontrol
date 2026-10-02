@@ -32,7 +32,7 @@ func init() {
 		FriendlyName: "Infomaniak",
 		Maintainer:   "@jbelien",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"DNAME",
 			"DS",
 			"SSHFP",

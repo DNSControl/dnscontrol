@@ -81,7 +81,7 @@ func init() {
 		},
 		Maintainer: "@patschi",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"NAPTR",

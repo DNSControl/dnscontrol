@@ -46,7 +46,7 @@ func init() {
 		FriendlyName: "CSC Global",
 		Maintainer:   "@mikenz",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		CanConcur:              providers.Can(),
 		DocOfficiallySupported: providers.Can(),

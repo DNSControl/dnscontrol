@@ -49,7 +49,7 @@ func init() {
 		},
 		Maintainer: "@mtmn",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"CAA:Cannot",
 			"NS:Cannot",
 		},

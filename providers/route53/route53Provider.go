@@ -119,7 +119,7 @@ func init() {
 		FriendlyName: "Amazon Route 53",
 		Maintainer:   "@tresni",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"HTTPS",
 			"PTR",
 			"R53_ALIAS",

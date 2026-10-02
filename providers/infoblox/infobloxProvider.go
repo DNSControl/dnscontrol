@@ -13,7 +13,7 @@ func init() {
 		FriendlyName: "Infoblox",
 		Maintainer:   "@matthewmgamble",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"PTR",
 			"NS:Cannot",
 		},

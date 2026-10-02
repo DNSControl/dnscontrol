@@ -22,7 +22,7 @@ func init() {
 		FriendlyName: "UniFi",
 		Maintainer:   "@zupolgec",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"CAA:Cannot",
 			"NS:Cannot",
 		},

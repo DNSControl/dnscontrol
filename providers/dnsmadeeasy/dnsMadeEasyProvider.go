@@ -40,7 +40,7 @@ func init() {
 		},
 		Maintainer: "@vojtad",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"PTR",
 		},

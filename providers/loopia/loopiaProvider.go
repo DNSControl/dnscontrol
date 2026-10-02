@@ -52,7 +52,7 @@ func init() {
 		},
 		Maintainer: "@systemcrash",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"LOC",
 			"NAPTR",
 			"SSHFP",

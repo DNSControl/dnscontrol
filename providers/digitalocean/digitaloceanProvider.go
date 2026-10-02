@@ -93,7 +93,7 @@ func init() {
 		},
 		Maintainer: "@chicks-net",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		CanAutoDNSSEC:          providers.Cannot("Digital Ocean documents that this is not supported."),
 		CanConcur:              providers.Can(),

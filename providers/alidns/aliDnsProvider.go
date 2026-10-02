@@ -36,7 +36,7 @@ func init() {
 		Maintainer: "@bytemain",
 		DefaultTTL: 600,
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),
 		CanConcur:              providers.Can(),

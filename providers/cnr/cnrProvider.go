@@ -85,7 +85,7 @@ func init() {
 		},
 		Maintainer: "@AsifNawaz-cnic",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DHCID",
 			"DNAME",

@@ -76,7 +76,7 @@ func init() {
 		},
 		Maintainer: "@pragmaton",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"CLOUDNS_WR",
 			"DNAME",

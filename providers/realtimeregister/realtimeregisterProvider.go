@@ -31,7 +31,7 @@ func init() {
 		FriendlyName: "Realtime Register",
 		Maintainer:   "@PJEilers",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"LOC",
 			"NAPTR",

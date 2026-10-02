@@ -60,7 +60,7 @@ func init() {
 		},
 		Maintainer: "@hedger",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"MIKROTIK_FORWARDER",
 			"MIKROTIK_FWD",
 			"MIKROTIK_NXDOMAIN",

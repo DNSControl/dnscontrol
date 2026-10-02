@@ -16,7 +16,7 @@ func init() {
 		FriendlyName: "Sakura Cloud",
 		Maintainer:   "@ttkzw",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"PTR",

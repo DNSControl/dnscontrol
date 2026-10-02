@@ -34,7 +34,7 @@ func init() {
 		},
 		Maintainer: "@ppmathis",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"BUNNY_DNS_PZ",
 			"BUNNY_DNS_RDR",

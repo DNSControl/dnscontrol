@@ -27,7 +27,7 @@ func init() {
 			{Key: "api_key", Label: "API Key", Required: true, Secret: true},
 		},
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"DHCID",
 			"DNAME",
 			"HTTPS",

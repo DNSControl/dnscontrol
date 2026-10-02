@@ -83,7 +83,7 @@ func init() {
 		},
 		Maintainer: "@willpower232",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"FRAME",
 			"URL",

@@ -67,7 +67,7 @@ func init() {
 		},
 		Maintainer: "@xddxdd",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"PTR",

@@ -49,7 +49,7 @@ func init() {
 		FriendlyName: "Cloudflare",
 		Maintainer:   "@tresni",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"CF_WORKER_ROUTE",
 			"CLOUDFLAREAPI_SINGLE_REDIRECT",

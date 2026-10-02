@@ -29,7 +29,7 @@ func init() {
 		},
 		Maintainer: "@jochristian",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DNAME",
 			"NAPTR",

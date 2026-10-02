@@ -28,7 +28,7 @@ func init() {
 		FriendlyName: "SoftLayer",
 		Maintainer:   "NEEDS VOLUNTEER",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"CAA:Cannot",
 		},
 		CanConcur: providers.Unimplemented(),

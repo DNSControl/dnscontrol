@@ -115,7 +115,7 @@ func init() {
 		},
 		Maintainer: "@huihuimoe",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		CanAutoDNSSEC:          providers.Can(),
 		DocDualHost:            providers.Can(),

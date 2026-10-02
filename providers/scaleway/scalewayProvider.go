@@ -31,7 +31,7 @@ func init() {
 		FriendlyName: "Scaleway",
 		Maintainer:   "@alessiopcc",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DNAME",
 			"HTTPS",

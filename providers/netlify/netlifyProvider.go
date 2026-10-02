@@ -18,7 +18,7 @@ func init() {
 		FriendlyName: "Netlify",
 		Maintainer:   "@SphericalKat",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"NETLIFY",
 			"NETLIFYV6",

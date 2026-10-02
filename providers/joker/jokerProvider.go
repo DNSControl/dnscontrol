@@ -43,7 +43,7 @@ func init() {
 		},
 		Maintainer: "@atrull",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"NAPTR",
 		},
 		CanConcur:              providers.Cannot("Joker API has session-based authentication"),

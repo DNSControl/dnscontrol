@@ -26,7 +26,7 @@ func init() {
 		FriendlyName: "DNSimple",
 		Maintainer:   "@onlyhavecans",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"NAPTR",

@@ -31,7 +31,7 @@ func init() {
 		FriendlyName: "Vultr",
 		Maintainer:   "@pgaskin",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"SSHFP",
 		},
 		CanAutoDNSSEC:          providers.Can(),

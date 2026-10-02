@@ -137,7 +137,7 @@ func init() {
 		},
 		Maintainer: "@vatsalyagoel",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"AZURE_ALIAS",
 			"PTR",
 		},

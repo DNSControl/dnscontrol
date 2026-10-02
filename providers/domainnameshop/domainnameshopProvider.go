@@ -27,7 +27,7 @@ func init() {
 		FriendlyName: "Domainnameshop",
 		Maintainer:   "@SimenBai",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS:Unimplemented",
 			"DS:Unimplemented",
 			"TLSA:Unimplemented",

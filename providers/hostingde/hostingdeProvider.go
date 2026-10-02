@@ -33,7 +33,7 @@ func init() {
 		},
 		Maintainer: "@juliusrickert",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DS",
 			"PTR",

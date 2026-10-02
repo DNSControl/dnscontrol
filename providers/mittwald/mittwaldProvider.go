@@ -33,7 +33,7 @@ func init() {
 		},
 		Maintainer: "@twiesing",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"NS:Cannot",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),

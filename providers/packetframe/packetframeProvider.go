@@ -50,7 +50,7 @@ func init() {
 		FriendlyName: "Packetframe",
 		Maintainer:   "NEEDS VOLUNTEER",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"PTR",
 			"CAA:Cannot",
 		},

@@ -27,7 +27,7 @@ func TestCustomRecordProviderAliases(t *testing.T) {
 			if r.Type != rtype {
 				t.Fatal("validation changed the record type")
 			}
-			if err := validateSupportedRecordTypes(r, "example.com", []string{providerType, "S5_DEFAULT"}); err == nil {
+			if err := validateSupportedRecordTypes(r, "example.com", []string{providerType, "S5_BASIC8"}); err == nil {
 				t.Fatal("custom type accepted by an unrelated provider")
 			}
 		}

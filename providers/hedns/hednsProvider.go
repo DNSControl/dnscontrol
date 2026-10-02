@@ -79,7 +79,7 @@ func init() {
 		},
 		Maintainer: "@rblenkinsopp",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"LOC",

@@ -67,7 +67,7 @@ func init() {
 		},
 		Maintainer: "@arnoschoon",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"PTR",
 		},

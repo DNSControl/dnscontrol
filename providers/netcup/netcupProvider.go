@@ -16,7 +16,7 @@ func init() {
 		FriendlyName: "netcup",
 		Maintainer:   "@kordianbruck",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"TLSA",
 			"NS:Cannot",
 		},

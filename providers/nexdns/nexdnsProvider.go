@@ -56,7 +56,7 @@ func init() {
 		Maintainer: "@nexdns",
 		DefaultTTL: defaultTTL,
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DNAME",
 			"PTR",

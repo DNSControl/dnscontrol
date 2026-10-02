@@ -43,7 +43,7 @@ func init() {
 		},
 		Maintainer: "@dnscale-ops",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"PTR",

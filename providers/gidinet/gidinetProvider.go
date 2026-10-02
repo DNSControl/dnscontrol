@@ -52,7 +52,7 @@ func init() {
 		},
 		Maintainer: "@zupolgec",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"CAA:Cannot",
 		},
 		CanAutoDNSSEC:          providers.Cannot(),

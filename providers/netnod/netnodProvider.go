@@ -31,7 +31,7 @@ func init() {
 		},
 		Maintainer: "@Netnod @vilhelmprytz",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"NAPTR",

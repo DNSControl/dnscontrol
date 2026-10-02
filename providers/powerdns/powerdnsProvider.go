@@ -15,7 +15,7 @@ func init() {
 		FriendlyName: "PowerDNS",
 		Maintainer:   "@jpbede",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DHCID",
 			"DNAME",

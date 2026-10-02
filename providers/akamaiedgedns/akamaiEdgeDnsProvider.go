@@ -81,7 +81,7 @@ func init() {
 		},
 		Maintainer: "@meghanakudua02",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"AKAMAICDN",
 			"AKAMAITLC",
 			"ALIAS",

@@ -58,7 +58,7 @@ func init() {
 		FriendlyName: "Exoscale",
 		Maintainer:   "@Giza",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"NS:Cannot",
 		},

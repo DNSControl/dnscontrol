@@ -31,7 +31,7 @@ func init() {
 		},
 		Maintainer: "@das7pad",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"DS",
 			"HTTPS",
 			"PTR",

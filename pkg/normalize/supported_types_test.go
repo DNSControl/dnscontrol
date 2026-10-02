@@ -30,9 +30,9 @@ func (*importedRecordsAuditor) AuditRecords(records models.Records) []error {
 
 func init() {
 	for name, def := range map[string]providers.Definition{
-		"S5_DEFAULT": {},
-		"S5_DEFAULT_EXCEPT": {SupportedTypes: []string{
-			"Default",
+		"S5_BASIC8": {},
+		"S5_BASIC8_EXCEPT": {SupportedTypes: []string{
+			"Basic8",
 			"NS:Cannot",
 			"CAA:Cannot",
 		}},
@@ -69,16 +69,16 @@ func TestExhaustiveRecordValidation(t *testing.T) {
 		provider, label, rtype, data string
 		allowed                      bool
 	}{
-		{"S5_DEFAULT", "@", "A", "192.0.2.1", true},
+		{"S5_BASIC8", "@", "A", "192.0.2.1", true},
 		{"S5_EMPTY", "@", "A", "192.0.2.1", false},
-		{"S5_DEFAULT", "@", "TXT", `"text"`, true},
-		{"S5_DEFAULT", "child", "NS", "ns.example.net.", true},
-		{"S5_DEFAULT", "@", "NS", "ns.example.net.", false},
-		{"S5_DEFAULT", "@", "CAA", `0 issue "ca.example.net"`, true},
-		{"S5_DEFAULT", "_sip._tcp", "SRV", "0 5 5060 sip.example.net.", true},
-		{"S5_DEFAULT_EXCEPT", "child", "NS", "ns.example.net.", false},
-		{"S5_DEFAULT_EXCEPT", "@", "CAA", `0 issue "ca.example.net"`, false},
-		{"S5_DEFAULT_EXCEPT", "@", "TXT", `"text"`, true},
+		{"S5_BASIC8", "@", "TXT", `"text"`, true},
+		{"S5_BASIC8", "child", "NS", "ns.example.net.", true},
+		{"S5_BASIC8", "@", "NS", "ns.example.net.", false},
+		{"S5_BASIC8", "@", "CAA", `0 issue "ca.example.net"`, true},
+		{"S5_BASIC8", "_sip._tcp", "SRV", "0 5 5060 sip.example.net.", true},
+		{"S5_BASIC8_EXCEPT", "child", "NS", "ns.example.net.", false},
+		{"S5_BASIC8_EXCEPT", "@", "CAA", `0 issue "ca.example.net"`, false},
+		{"S5_BASIC8_EXCEPT", "@", "TXT", `"text"`, true},
 		{ProviderNoDS, "@", "TXT", `"text"`, true},
 		{ProviderNoDS, "child", "NS", "ns.example.net.", true},
 		{"S5_RFC", "@", "TXT", `"text"`, true},
@@ -88,7 +88,7 @@ func TestExhaustiveRecordValidation(t *testing.T) {
 		{"S5_ALL", "edge", "AKAMAITLC", "A target.example.net.", true},
 		{"S5_ALL", "edge", "AKAMAITLC", "AAAA target.example.net.", true},
 		{"S5_ALL", "edge", "AKAMAITLC", "DUAL target.example.net.", true},
-		{"S5_DEFAULT", "edge", "AKAMAITLC", "A target.example.net.", false},
+		{"S5_BASIC8", "edge", "AKAMAITLC", "A target.example.net.", false},
 		{"S5_CHILD", "child", "DS", "12345 8 2 ABCD", true},
 		{"S5_CHILD", "@", "DS", "12345 8 2 ABCD", false},
 		{"S5_FULL_DS", "@", "DS", "12345 8 2 ABCD", true},
@@ -133,9 +133,9 @@ func TestSupportedTypesRetainsOtherValidation(t *testing.T) {
 	})
 	t.Run("every provider", func(t *testing.T) {
 		dc := lineDomain("S5_ALL")
-		dc.DNSProviderInstances = append(dc.DNSProviderInstances, &models.DNSProviderInstance{Name: "second", ProviderType: "S5_DEFAULT"})
+		dc.DNSProviderInstances = append(dc.DNSProviderInstances, &models.DNSProviderInstance{Name: "second", ProviderType: "S5_BASIC8"})
 		dc.AddRecordConfig(dc.MustNewRecordConfigParse("@", 300, "HINFO", `"CPU" "OS"`))
-		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "S5_DEFAULT does not support") {
+		if errs := validateDomain(t, dc); !strings.Contains(fmt.Sprint(errs), "S5_BASIC8 does not support") {
 			t.Fatalf("errors = %v", errs)
 		}
 	})
@@ -154,7 +154,7 @@ func TestImportTransformChecksCopiedRecords(t *testing.T) {
 		copyRecord     bool
 		wantError      string
 	}{
-		{"default", "S5_DEFAULT", true, ""},
+		{"implicit Basic8", "S5_BASIC8", true, ""},
 		{"RFC", "S5_RFC", true, ""},
 		{"wildcard", "S5_ALL", true, ""},
 		{"auditor sees only copied records", "S6_IMPORT_AUDIT", true, ""},

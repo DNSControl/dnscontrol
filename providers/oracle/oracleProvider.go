@@ -23,7 +23,7 @@ func init() {
 		FriendlyName: "Oracle Cloud Infrastructure",
 		Maintainer:   "@kallsyms",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"NAPTR",
 			"PTR",

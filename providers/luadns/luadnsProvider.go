@@ -46,7 +46,7 @@ func init() {
 		},
 		Maintainer: "@riku22",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"OPENPGPKEY",

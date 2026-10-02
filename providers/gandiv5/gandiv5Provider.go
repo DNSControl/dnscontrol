@@ -69,7 +69,7 @@ func init() {
 		},
 		Maintainer: "@TomOnTime",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"LOC",

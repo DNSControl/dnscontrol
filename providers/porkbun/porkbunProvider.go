@@ -103,7 +103,7 @@ func init() {
 		},
 		Maintainer: "@imlonghao",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"HTTPS",
 			"PORKBUN_URLFWD",

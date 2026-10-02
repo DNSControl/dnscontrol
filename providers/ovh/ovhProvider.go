@@ -55,7 +55,7 @@ func init() {
 		FriendlyName: "OVHcloud",
 		Maintainer:   "@masterzen",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"SSHFP",
 			"TLSA",
 			"LOC:Unimplemented",

@@ -155,7 +155,7 @@ func init() {
 		FriendlyName: "AXFR + DDNS",
 		Maintainer:   "@hnrgrgr",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"DHCID",
 			"DNAME",
 			"DS",

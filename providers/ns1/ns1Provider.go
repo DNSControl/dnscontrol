@@ -27,7 +27,7 @@ func init() {
 		},
 		Maintainer: "@costasd",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"DHCID",
 			"DNAME",

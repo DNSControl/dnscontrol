@@ -58,7 +58,7 @@ func init() {
 		DefaultTTL:     defaultTTL,
 		RecordIdentity: recordIdentity,
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 		},
 		DocDualHost:            providers.Can("Tencent Cloud allows full management of apex NS records"),
 		DocOfficiallySupported: providers.Cannot(),

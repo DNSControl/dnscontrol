@@ -54,7 +54,7 @@ func init() {
 		FriendlyName: "Name.com",
 		Maintainer:   "NEEDS VOLUNTEER",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"CAA:Cannot",
 		},

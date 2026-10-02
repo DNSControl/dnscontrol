@@ -103,7 +103,7 @@ func init() {
 		},
 		Maintainer: "@blackshadev",
 		SupportedTypes: []string{
-			"Default",
+			"Basic8",
 			"ALIAS",
 			"NAPTR",
 			"SSHFP",
