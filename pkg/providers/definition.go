@@ -71,8 +71,8 @@ type Definition struct {
 	DerivedFeatures    DocumentationNotes
 }
 
-// Provider implementations register here. Legacy registries remain as
-// compatibility views until their consumers have migrated.
+// Provider implementations register here. Legacy registries and accessors
+// remain available for compatibility until their consumers have migrated.
 // Canonical names and aliases point directly to the same definition.
 var definitions = map[string]*Definition{}
 
