@@ -188,6 +188,7 @@ You can configure Bunny's Pull Zone type with `BUNNY_DNS_PZ`. The target is the 
 ## Caveats
 
 - Bunny DNS does not support dual-hosting or configuring custom TTLs for NS records on the zone apex.
+- NS records on the zone apex are managed by Bunny DNS and are not part of the zone as DNSControl sees it. The zone's nameservers are passed on to the registrar, so there is no need to list them with `NAMESERVER()`. An apex NS record that names any other nameserver is ignored with a warning.
 - While custom nameservers are properly recognized by this provider, it is currently not possible to configure them.
 
 ## Feature Summary
