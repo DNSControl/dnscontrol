@@ -530,6 +530,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				if c == nil {
 					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", targetDomain)
 					errs = append(errs, err)
+					continue
 				}
 				err = importTransform(c, domain, table, ttl, suffixstrip)
 				if err != nil {
