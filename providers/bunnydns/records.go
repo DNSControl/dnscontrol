@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
@@ -53,12 +54,14 @@ func (b *bunnydnsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 }
 
 func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, existing models.Records) ([]*models.Correction, int, error) {
-	// As no TTL can be configured or retrieved for these NS records, we set it to 0 to avoid unnecessary updates.
-	for _, rc := range dc.Records {
-		if rc.Name == "@" && rc.Type == "NS" {
-			rc.TTL = 0
-		}
+	zone, err := b.findZoneByDomain(dc.Name)
+	if err != nil {
+		return nil, 0, err
+	}
 
+	removeApexNS(dc, zone)
+
+	for _, rc := range dc.Records {
 		if rc.Type == "BUNNY_DNS_RDR" {
 			rc.TTL = 0
 		}
@@ -66,11 +69,6 @@ func (b *bunnydnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, ex
 		if rc.Type == "ALIAS" {
 			rc.ChangeTypeToCNAME(dc, rc.AsALIAS().Target)
 		}
-	}
-
-	zone, err := b.findZoneByDomain(dc.Name)
-	if err != nil {
-		return nil, 0, err
 	}
 
 	instructions, actualChangeCount, err := diff2.ByRecord(existing, dc, comparableFunc)
@@ -154,6 +152,28 @@ func (b *bunnydnsProvider) mkDeleteCorrection(zoneID int64, oldRec *models.Recor
 			return b.deleteRecord(zoneID, existingID)
 		},
 	}
+}
+
+// removeApexNS removes the apex NS records from the desired state.
+// Bunny DNS manages them itself: the API neither lists them nor accepts changes to them.
+// A record naming anything other than the zone's own nameservers can not be honored, so it is reported.
+func removeApexNS(dc *models.DomainConfig, zone *zone) {
+	nameservers := zone.Nameservers()
+
+	recs := make(models.Records, 0, len(dc.Records))
+	for _, rc := range dc.Records {
+		if rc.Type == "NS" && rc.GetLabel() == "@" {
+			ns := strings.TrimSuffix(rc.AsNS().Ns, ".")
+			if !slices.ContainsFunc(nameservers, func(zoneNS string) bool {
+				return strings.EqualFold(strings.TrimSuffix(zoneNS, "."), ns)
+			}) {
+				printer.Warnf("BUNNY_DNS: apex NS records cannot be changed. Ignoring %s on %s\n", ns, dc.Name)
+			}
+			continue
+		}
+		recs = append(recs, rc)
+	}
+	dc.Records = recs
 }
 
 func comparableFunc(rec *models.RecordConfig) string {

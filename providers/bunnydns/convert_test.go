@@ -462,3 +462,27 @@ func TestParseMonitorType(t *testing.T) {
 		}
 	}
 }
+
+func TestRemoveApexNS(t *testing.T) {
+	zone := &zone{Domain: "example.com", Nameserver1: "kiki.bunny.net", Nameserver2: "coco.bunny.net"}
+
+	dc := models.MustNewDomainConfig("example.com")
+	dc.Records = models.Records{
+		dc.MustNewRecordConfig("@", 300, "NS", "kiki.bunny.net."),
+		dc.MustNewRecordConfig("@", 300, "NS", "coco.bunny.net."),
+		dc.MustNewRecordConfig("@", 300, "NS", "ns1.example.net."),
+		dc.MustNewRecordConfig("sub", 300, "NS", "ns1.example.net."),
+		dc.MustNewRecordConfig("@", 300, "A", "192.0.2.1"),
+	}
+
+	removeApexNS(dc, zone)
+
+	if len(dc.Records) != 2 {
+		t.Fatalf("expected 2 records to remain; got=%d", len(dc.Records))
+	}
+	for _, rc := range dc.Records {
+		if rc.Type == "NS" && rc.GetLabel() == "@" {
+			t.Fatalf("expected apex NS records to be removed; got=%s", rc.AsNS().Ns)
+		}
+	}
+}

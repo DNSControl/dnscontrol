@@ -84,8 +84,13 @@ func newBunnydns(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 	}, nil
 }
 
-// GetNameservers returns empty array, since BunnyDNS does not permit apex NS records.
-// This prevents DNSControl from trying to create default NS records for the domain.
+// GetNameservers returns the nameservers Bunny DNS serves the zone from, so that a registrar can be pointed at them.
+// DNSControl also turns them into apex NS records, which Bunny DNS does not permit; removeApexNS drops those again.
 func (b *bunnydnsProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {
-	return []*models.Nameserver{}, nil
+	zone, err := b.findZoneByDomain(domain)
+	if err != nil {
+		return nil, err
+	}
+
+	return models.ToNameservers(zone.Nameservers())
 }

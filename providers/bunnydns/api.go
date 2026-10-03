@@ -26,6 +26,10 @@ type zone struct {
 	HasDNSSEC   bool   `json:"DnsSecEnabled"`
 }
 
+func (zone *zone) Nameservers() []string {
+	return []string{zone.Nameserver1, zone.Nameserver2}
+}
+
 type record struct {
 	ID         int64      `json:"Id,omitempty"`
 	Type       recordType `json:"Type"`
