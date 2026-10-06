@@ -2071,6 +2071,12 @@ var DISABLE_REPEATED_DOMAIN_CHECK = { skip_fqdn_check: "true" };
 //     A("foo.bar.com", "10.1.1.1", DISABLE_REPEATED_DOMAIN_CHECK),
 // )
 
+// Skip the provider's record audit for this record (see providers.AuditRecords):
+var SKIP_AUDIT = { skip_audit: "true" };
+// D("bar.com", ...
+//     TXT("weird.label", "value", SKIP_AUDIT),
+// )
+
 // ============================================================
 
 // RTYPES
