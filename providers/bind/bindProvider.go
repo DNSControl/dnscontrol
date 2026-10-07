@@ -76,8 +76,9 @@ func (c *bindProvider) Initialize(config map[string]string, providermeta json.Ra
 
 func init() {
 	providers.Register[*bindProvider]("BIND", providers.Definition{
-		FriendlyName: "ISC BIND",
-		Maintainer:   "@TomOnTime",
+		FriendlyName:   "ISC BIND",
+		Maintainer:     "@TomOnTime",
+		SupportedTypes: []string{"*"},
 		Features: providers.DocumentationNotes{
 			// The default for unlisted capabilities is 'Cannot'.
 			// See providers/capabilities.go for the entire list of capabilities.
@@ -352,9 +353,7 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 				if err != nil {
 					return fmt.Errorf("could not create zonefile: %w", err)
 				}
-				// Beware that if there are any fake types, then they will
-				// be commented out on write, but we don't reverse that when
-				// reading, so there will be a diff on every invocation.
+				// Preserve DNSControl pseudo-types along with ordinary records.
 				err = prettyzone.WriteZoneFileRC(zf, result.DesiredPlus, dc.Name, 0, comments)
 				if err != nil {
 					return fmt.Errorf("failed WriteZoneFile: %w", err)

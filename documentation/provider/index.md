@@ -189,7 +189,7 @@ Jump to a table:
 | [`AXFRDDNS`](axfrddns.md) | ❌ | ✅ | ✅ | ✅ | ❌ |
 | [`AZURE_DNS`](azuredns.md) | ❌ | ❔ | ❌ | ✅ | ❔ |
 | [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ❌ | ✅ | ❔ |
-| [`BIND`](bind.md) | ❔ | ✅ | ✅ | ✅ | ✅ |
+| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ❔ | ❌ | ✅ | ❌ |
 | [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❔ | ✅ | ✅ | ❔ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ | ❔ |
