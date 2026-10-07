@@ -28,39 +28,11 @@ Info required in `creds.json`:
 
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Cannot(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "DNSCALE"
-	const providerMaintainer = "@dnscale-ops"
-	fns := providers.DspFuncs{
-		Initializer:   NewProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "dnscale",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/dnscale",
-		PortalURL:   "https://dnscale.net/", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*dnscaleProvider]("DNSCALE", providers.Definition{
+		FriendlyName: "dnscale",
+		PortalURL:    "https://dnscale.net/", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
 				Label:    "API key",
@@ -68,6 +40,24 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@dnscale-ops",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Can(),
+			providers.CanConcur:              providers.Cannot(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
@@ -118,11 +108,11 @@ type recordsResponse struct {
 	Records []Record `json:"records"`
 }
 
-// NewProvider initializes a DNScale DNSServiceProvider.
-func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *dnscaleProvider) Initialize(m map[string]string, metadata json.RawMessage, _ *providers.CreateOptions) error {
 	apiKey := m["api_key"]
 	if apiKey == "" {
-		return nil, errors.New("missing DNScale api_key")
+		return errors.New("missing DNScale api_key")
 	}
 
 	baseURL := m["api_url"]
@@ -130,7 +120,7 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 		baseURL = "https://api.dnscale.eu/v1"
 	}
 
-	provider := &dnscaleProvider{
+	*p = dnscaleProvider{
 		client: &http.Client{
 			Timeout: 30 * time.Second,
 		},
@@ -139,12 +129,12 @@ func NewProvider(m map[string]string, metadata json.RawMessage) (providers.DNSSe
 	}
 
 	// Validate credentials by listing zones
-	_, err := provider.listZones()
+	_, err := p.listZones()
 	if err != nil {
-		return nil, fmt.Errorf("failed to validate DNScale credentials: %w", err)
+		return fmt.Errorf("failed to validate DNScale credentials: %w", err)
 	}
 
-	return provider, nil
+	return nil
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.

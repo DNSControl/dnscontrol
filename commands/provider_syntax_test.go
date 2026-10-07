@@ -27,6 +27,8 @@ type syntaxTestProvider struct {
 	nsLookups int
 }
 
+func (*syntaxTestProvider) AuditRecords(models.Records) []error { return nil }
+
 func (p *syntaxTestProvider) GetNameservers(string) ([]*models.Nameserver, error) {
 	p.nsLookups++
 	return models.ToNameservers([]string{"ns1.example.org", "ns2.example.org", "ns3.example.org"})

@@ -14,7 +14,7 @@ type dnsMadeEasyProvider struct {
 	domains map[string]int
 }
 
-func newProvider(apiKey string, secretKey string, sandbox bool, debug bool) *dnsMadeEasyProvider {
+func (api *dnsMadeEasyProvider) initializeClient(apiKey string, secretKey string, sandbox bool, debug bool) {
 	baseURL := baseURLV2_0
 	if sandbox {
 		baseURL = sandboxBaseURLV2_0
@@ -22,7 +22,7 @@ func newProvider(apiKey string, secretKey string, sandbox bool, debug bool) *dns
 
 	printer.Printf("Creating DNSMADEEASY provider for %q\n", baseURL)
 
-	return &dnsMadeEasyProvider{
+	*api = dnsMadeEasyProvider{
 		restAPI: &dnsMadeEasyRestAPI{
 			apiKey:    apiKey,
 			secretKey: secretKey,

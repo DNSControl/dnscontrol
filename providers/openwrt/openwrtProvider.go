@@ -15,20 +15,16 @@ type openwrtProvider struct {
 	host string
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newOpenwrt(conf, metadata)
-}
-
-// newOpenwrt creates the provider.
-func newOpenwrt(conf map[string]string, _ json.RawMessage) (*openwrtProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *openwrtProvider) Initialize(conf map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if conf["username"] == "" {
-		return nil, errors.New("missing openwrt username")
+		return errors.New("missing openwrt username")
 	}
 	if conf["password"] == "" {
-		return nil, errors.New("missing openwrt password")
+		return errors.New("missing openwrt password")
 	}
 	if conf["host"] == "" {
-		return nil, errors.New("missing openwrt host")
+		return errors.New("missing openwrt host")
 	}
 
 	host := conf["host"]
@@ -38,28 +34,24 @@ func newOpenwrt(conf map[string]string, _ json.RawMessage) (*openwrtProvider, er
 
 	auth, err := getAuthorization(conf["username"], conf["password"], host)
 	if err != nil {
-		return nil, fmt.Errorf("could not login: %w", err)
+		return fmt.Errorf("could not login: %w", err)
 	}
 
-	return &openwrtProvider{auth: auth, host: host}, nil
-}
-
-var features = providers.DocumentationNotes{
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	*c = openwrtProvider{auth: auth, host: host}
+	return nil
 }
 
 func init() {
-	const providerName = "OPENWRT"
-	const providerMaintainer = "@huskyistaken"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*openwrtProvider]("OPENWRT", providers.Definition{
+		FriendlyName: "OpenWrt",
+		Maintainer:   "@huskyistaken",
+		Features: providers.DocumentationNotes{
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.

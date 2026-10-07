@@ -44,10 +44,10 @@ type netbirdProvider struct {
 	zoneMap map[string]*zoneInfo // Cache of zone info by domain
 }
 
-// NewNetbird creates a NetBird-specific DNS provider.
-func NewNetbird(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *netbirdProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if m["token"] == "" {
-		return nil, errors.New("no NetBird token provided")
+		return errors.New("no NetBird token provided")
 	}
 
 	apiURL := m["apiurl"]
@@ -55,7 +55,7 @@ func NewNetbird(m map[string]string, _ json.RawMessage) (providers.DNSServicePro
 		apiURL = netbirdAPIURL
 	}
 
-	api := &netbirdProvider{
+	*api = netbirdProvider{
 		token:   m["token"],
 		client:  &http.Client{},
 		apiURL:  apiURL,
@@ -65,62 +65,52 @@ func NewNetbird(m map[string]string, _ json.RawMessage) (providers.DNSServicePro
 	// Test the token by listing zones
 	_, err := api.listZones()
 	if err != nil {
-		return nil, fmt.Errorf("NetBird token validation failed: %w", err)
+		return fmt.Errorf("NetBird token validation failed: %w", err)
 	}
 
-	return api, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Cannot(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Cannot(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSMIMEA:           providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	return nil
 }
 
 func init() {
-	const providerName = "NETBIRD"
-	const providerMaintainer = "@yzqzss"
-	fns := providers.DspFuncs{
-		Initializer:   NewNetbird,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Netbird",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/netbird",
-		PortalURL:   "https://app.netbird.io/settings",
-		Fields: []providers.CredsField{
+	providers.Register[*netbirdProvider]("NETBIRD", providers.Definition{
+		FriendlyName: "Netbird",
+		PortalURL:    "https://app.netbird.io/settings",
+		CredFields: []providers.CredsField{
 			{Key: "token", Label: "API Token", Required: true, Secret: true},
 			{Key: "apiurl", Label: "API Url", Default: netbirdAPIURL},
+		},
+		Maintainer: "@yzqzss",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Cannot(),
+			providers.CanUseDHCID:            providers.Cannot(),
+			providers.CanUseDNAME:            providers.Cannot(),
+			providers.CanUseDNSKEY:           providers.Cannot(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Cannot(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseSMIMEA:           providers.Cannot(),
+			providers.CanUseSVCB:             providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Cannot(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }
 
 // AuditRecords returns a list of errors for records that aren't supported.
-func AuditRecords(records models.Records) []error {
+func (*netbirdProvider) AuditRecords(records models.Records) []error {
 	var errs []error
 	for _, rc := range records {
 		if !supportedRecordTypes[rc.Type] {

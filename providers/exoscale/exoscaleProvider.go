@@ -22,14 +22,14 @@ type exoscaleProvider struct {
 	client *egoscale.Client
 }
 
-// NewExoscale creates a new Exoscale DNS provider.
-func NewExoscale(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (provider *exoscaleProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	apiKey, secretKey := m["apikey"], m["secretkey"]
 
 	creds := credentials.NewStaticCredentials(apiKey, secretKey)
 	client, err := egoscale.NewClient(creds)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Endpoint is only for internal use now, not for production.
@@ -42,41 +42,37 @@ func NewExoscale(m map[string]string, _ json.RawMessage) (providers.DNSServicePr
 	if zone, ok := m["apizone"]; ok {
 		endpoint, err := client.GetZoneAPIEndpoint(ctx, egoscale.ZoneName(zone))
 		if err != nil {
-			return nil, fmt.Errorf("switch client zone: %w", err)
+			return fmt.Errorf("switch client zone: %w", err)
 		}
 		client = client.WithEndpoint(endpoint)
 	}
 
-	return &exoscaleProvider{
+	*provider = exoscaleProvider{
 		client: client,
-	}, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Unimplemented(),
-	providers.CanConcur:              providers.Cannot(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported"),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot("Exoscale does not allow sufficient control over the apex NS records"),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	}
+	return nil
 }
 
 func init() {
-	const providerName = "EXOSCALE"
-	const providerMaintainer = "@Giza"
-	fns := providers.DspFuncs{
-		Initializer:   NewExoscale,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*exoscaleProvider]("EXOSCALE", providers.Definition{
+		FriendlyName: "Exoscale",
+		Maintainer:   "@Giza",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanGetZones:            providers.Unimplemented(),
+			providers.CanConcur:              providers.Cannot(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported"),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.DocCreateDomains:       providers.Cannot(),
+			providers.DocDualHost:            providers.Cannot("Exoscale does not allow sufficient control over the apex NS records"),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 // EnsureZoneExists creates a zone if it does not exist.

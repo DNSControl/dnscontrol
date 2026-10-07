@@ -49,18 +49,18 @@ const (
 	defaultLine   = "default_view"
 )
 
-// newHuaweicloud creates the provider.
-func newHuaweicloud(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *huaweicloudProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	auth, err := basic.NewCredentialsBuilder().
 		WithAk(m["KeyId"]).
 		WithSk(m["SecretKey"]).
 		SafeBuild()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	region, err := dnsRegion.SafeValueOf(m["Region"])
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	client, err := dnssdk.DnsClientBuilder().
@@ -68,37 +68,15 @@ func newHuaweicloud(m map[string]string, _ json.RawMessage) (providers.DNSServic
 		WithCredential(auth).
 		SafeBuild()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	c := &huaweicloudProvider{
+	*c = huaweicloudProvider{
 		client: dnssdk.NewDnsClient(client),
 		region: region,
 	}
 
-	return c, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	return nil
 }
 
 var defaultNameServerNames = []string{
@@ -111,20 +89,10 @@ var defaultNameServerNames = []string{
 }
 
 func init() {
-	const providerName = "HUAWEICLOUD"
-	const providerMaintainer = "@huihuimoe"
-	fns := providers.DspFuncs{
-		Initializer:   newHuaweicloud,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Huawei Cloud DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/huaweicloud",
-		PortalURL:   "https://console-intl.huaweicloud.com/iam/?locale=en-us#/iam/users",
-		Fields: []providers.CredsField{
+	providers.Register[*huaweicloudProvider]("HUAWEICLOUD", providers.Definition{
+		FriendlyName: "Huawei Cloud DNS",
+		PortalURL:    "https://console-intl.huaweicloud.com/iam/?locale=en-us#/iam/users",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "KeyId",
 				Label:    "Access key ID",
@@ -144,6 +112,28 @@ func init() {
 				Help:     "The Huawei Cloud region the DNS API call is routed through (for example ap-southeast-1).",
 				Required: true,
 			},
+		},
+		Maintainer: "@huihuimoe",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Cannot(),
+			providers.CanUseHTTPS:            providers.Cannot(),
+			providers.CanUseSVCB:             providers.Cannot(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }

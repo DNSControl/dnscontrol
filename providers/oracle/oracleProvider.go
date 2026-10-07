@@ -18,34 +18,29 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(), // should be supported, but getting 500s in tests
-	providers.CanUseLOC:              providers.Unimplemented(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "ORACLE"
-	const providerMaintainer = "@kallsyms"
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*oracleProvider]("ORACLE", providers.Definition{
+		FriendlyName: "Oracle Cloud Infrastructure",
+		Maintainer:   "@kallsyms",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:              providers.Unimplemented(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanUseAlias:            providers.Can(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Cannot(), // should be supported, but getting 500s in tests
+			providers.CanUseLOC:              providers.Unimplemented(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+		},
+	})
 }
 
 type oracleProvider struct {
@@ -53,8 +48,8 @@ type oracleProvider struct {
 	compartment string
 }
 
-// New creates a new provider for Oracle Cloud DNS.
-func New(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (o *oracleProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	client, err := dns.NewDnsClientWithConfigurationProvider(common.NewRawConfigurationProvider(
 		settings["tenancy_ocid"],
 		settings["user_ocid"],
@@ -64,7 +59,7 @@ func New(settings map[string]string, _ json.RawMessage) (providers.DNSServicePro
 		nil,
 	))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Set default retry policy to handle 429 automatically
@@ -73,10 +68,11 @@ func New(settings map[string]string, _ json.RawMessage) (providers.DNSServicePro
 		RetryPolicy: &defaultRetryPolicy,
 	})
 
-	return &oracleProvider{
+	*o = oracleProvider{
 		client:      client,
 		compartment: settings["compartment"],
-	}, nil
+	}
+	return nil
 }
 
 // ListZones lists the zones on this account.

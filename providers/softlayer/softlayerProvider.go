@@ -23,42 +23,38 @@ type softlayerProvider struct {
 	Session *session.Session
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:            providers.Unimplemented(),
-	providers.CanGetZones:          providers.Unimplemented(),
-	providers.CanOnlyDiff1Features: providers.Can(),
-	providers.CanUseLOC:            providers.Cannot(),
-	providers.CanUseSRV:            providers.Can(),
-}
-
 func init() {
-	const providerName = "SOFTLAYER"
-	const providerMaintainer = "NEEDS VOLUNTEER"
-	fns := providers.DspFuncs{
-		Initializer:   newReg,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*softlayerProvider]("SOFTLAYER", providers.Definition{
+		FriendlyName: "SoftLayer",
+		Maintainer:   "NEEDS VOLUNTEER",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanConcur:            providers.Unimplemented(),
+			providers.CanGetZones:          providers.Unimplemented(),
+			providers.CanOnlyDiff1Features: providers.Can(),
+			providers.CanUseLOC:            providers.Cannot(),
+			providers.CanUseSRV:            providers.Can(),
+		},
+	})
 }
 
-func newReg(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (s *softlayerProvider) Initialize(conf map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	printer.Warnf("The SOFTLAYER provider is unmaintained: https://github.com/DNSControl/dnscontrol/issues/1079")
-	s := session.New(conf["username"], conf["api_key"], conf["endpoint_url"], conf["timeout"])
+	client := session.New(conf["username"], conf["api_key"], conf["endpoint_url"], conf["timeout"])
 
-	if len(s.UserName) == 0 || len(s.APIKey) == 0 {
-		return nil, errors.New("SoftLayer UserName and APIKey must be provided")
+	if len(client.UserName) == 0 || len(client.APIKey) == 0 {
+		return errors.New("SoftLayer UserName and APIKey must be provided")
 	}
 
-	// s.Debug = true
+	// client.Debug = true
 
-	api := &softlayerProvider{
-		Session: s,
+	*s = softlayerProvider{
+		Session: client,
 	}
 
-	return api, nil
+	return nil
 }
 
 // GetNameservers returns the nameservers for a domain.

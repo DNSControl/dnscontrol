@@ -15,46 +15,12 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-	providers.DocDualHost:            providers.Can(),
-}
-
 func init() {
-	const providerName = "HETZNER_V2"
-	const providerMaintainer = "@das7pad"
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Hetzner DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/hetzner_v2",
-		PortalURL:   "https://console.hetzner.com/projects",
-		Fields: []providers.CredsField{
+	providers.Register[*hetznerv2Provider]("HETZNER_V2", providers.Definition{
+		FriendlyName: "Hetzner DNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/hetznerv2",
+		PortalURL:    "https://console.hetzner.com/projects",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_token",
 				Label:    "API token",
@@ -63,24 +29,49 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@das7pad",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Cannot(),
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUseAlias:            providers.Cannot(),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDS:               providers.Can(),
+			providers.CanUseDSForChildren:    providers.Cannot(),
+			providers.CanUseLOC:              providers.Cannot(),
+			providers.CanUseNAPTR:            providers.Cannot(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSOA:              providers.Cannot(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseSSHFP:            providers.Cannot(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocDualHost:            providers.Can(),
+		},
 	})
 }
 
-// New creates a new API handle.
-func New(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (h *hetznerv2Provider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	apiToken := settings["api_token"]
 	if apiToken == "" {
-		return nil, errors.New("missing HETZNER_V2 api_token")
+		return errors.New("missing HETZNER_V2 api_token")
 	}
 
-	h := &hetznerv2Provider{
+	*h = hetznerv2Provider{
 		client: hcloud.NewClient(
 			hcloud.WithToken(apiToken),
 			hcloud.WithApplication("dnscontrol", version.Version()),
 		),
 	}
 	h.zoneCache = zonecache.New(h.fetchAllZones)
-	return h, nil
+	return nil
 }
 
 type hetznerv2Provider struct {

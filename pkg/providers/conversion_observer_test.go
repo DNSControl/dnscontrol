@@ -13,6 +13,8 @@ type observerProvider struct {
 	observer ConversionObserver
 }
 
+func (*observerProvider) AuditRecords(models.Records) []error { return nil }
+
 func (*observerProvider) GetNameservers(string) ([]*models.Nameserver, error) { return nil, nil }
 func (*observerProvider) GetZoneRecords(*models.DomainConfig) (models.Records, error) {
 	return nil, nil

@@ -19,54 +19,47 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-var features = providers.DocumentationNotes{
-	providers.CanGetZones:      providers.Can(),
-	providers.CanConcur:        providers.Cannot(),
-	providers.CanUseSRV:        providers.Can(),
-	providers.CanUseCAA:        providers.Can(),
-	providers.CanUseDNAME:      providers.Can(),
-	providers.CanUseDHCID:      providers.Can(),
-	providers.CanUseHTTPS:      providers.Can(),
-	providers.CanUseLOC:        providers.Can(),
-	providers.CanUseNAPTR:      providers.Can(),
-	providers.CanUseOPENPGPKEY: providers.Can(),
-	providers.CanUsePTR:        providers.Can(),
-	providers.CanUseRP:         providers.Can(),
-	providers.CanUseSMIMEA:     providers.Can(),
-	providers.CanUseSVCB:       providers.Can(),
-	providers.CanUseTLSA:       providers.Can(),
-	providers.CanUseSSHFP:      providers.Can(),
-	providers.CanUseAlias:      providers.Cannot(),
-	providers.CanAutoDNSSEC:    providers.Cannot(),
-}
-
 func init() {
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType("DYNU", fns, features)
-	providers.RegisterCredsMetadata("DYNU", providers.CredsMetadata{
-		DisplayName: "Dynu",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/dynu",
-		PortalURL:   "https://www.dynu.com/en-US/ControlPanel",
-		Fields: []providers.CredsField{
+	providers.Register[*dynuProvider]("DYNU", providers.Definition{
+		FriendlyName: "Dynu",
+		PortalURL:    "https://www.dynu.com/en-US/ControlPanel",
+		CredFields: []providers.CredsField{
 			{Key: "api_key", Label: "API Key", Required: true, Secret: true},
+		},
+		Features: providers.DocumentationNotes{
+			providers.CanGetZones:      providers.Can(),
+			providers.CanConcur:        providers.Cannot(),
+			providers.CanUseSRV:        providers.Can(),
+			providers.CanUseCAA:        providers.Can(),
+			providers.CanUseDNAME:      providers.Can(),
+			providers.CanUseDHCID:      providers.Can(),
+			providers.CanUseHTTPS:      providers.Can(),
+			providers.CanUseLOC:        providers.Can(),
+			providers.CanUseNAPTR:      providers.Can(),
+			providers.CanUseOPENPGPKEY: providers.Can(),
+			providers.CanUsePTR:        providers.Can(),
+			providers.CanUseRP:         providers.Can(),
+			providers.CanUseSMIMEA:     providers.Can(),
+			providers.CanUseSVCB:       providers.Can(),
+			providers.CanUseTLSA:       providers.Can(),
+			providers.CanUseSSHFP:      providers.Can(),
+			providers.CanUseAlias:      providers.Cannot(),
+			providers.CanAutoDNSSEC:    providers.Cannot(),
 		},
 	})
 }
 
-// New creates a Dynu provider from credentials.
-func New(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (d *dynuProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	apiKey := m["api_key"]
 	if apiKey == "" {
-		return nil, errors.New("missing Dynu API key")
+		return errors.New("missing Dynu API key")
 	}
-	return &dynuProvider{
+	*d = dynuProvider{
 		apiKey:    apiKey,
 		domainIDs: map[string]int64{},
-	}, nil
+	}
+	return nil
 }
 
 // GetNameservers returns Dynu's authoritative nameservers.

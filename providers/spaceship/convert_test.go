@@ -131,7 +131,7 @@ func TestClampTTL(t *testing.T) {
 func TestApexAliasRejected(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("@", 600, "ALIAS", "target.example.com.")
-	errs := AuditRecords(models.Records{rc})
+	errs := new(spaceshipProvider).AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Fatal("expected apex ALIAS to be rejected")
 	}
@@ -140,7 +140,7 @@ func TestApexAliasRejected(t *testing.T) {
 func TestNsAtApexRejected(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("@", 600, "NS", "ns1.example.net.")
-	errs := AuditRecords(models.Records{rc})
+	errs := new(spaceshipProvider).AuditRecords(models.Records{rc})
 	if len(errs) == 0 {
 		t.Fatal("expected apex NS to be rejected")
 	}

@@ -38,7 +38,7 @@ func TestAuditRecords(t *testing.T) {
 	validA, err := dc.NewRecordConfig("foo", 0, dnsv2.TypeA, "1.2.3.4")
 	assert.NoError(t, err)
 
-	errs := AuditRecords(models.Records{mxNull, txtEmpty, txtSingleQuote, txtDoubleQuote, txtBackslash, txtTrailingSpace, srvNull, srvEmpty, validA})
+	errs := new(tencentdnsProvider).AuditRecords(models.Records{mxNull, txtEmpty, txtSingleQuote, txtDoubleQuote, txtBackslash, txtTrailingSpace, srvNull, srvEmpty, validA})
 
 	assert.Len(t, errs, 8)
 	assert.Contains(t, errs[0].Error(), "mx has null target")
@@ -73,7 +73,7 @@ func TestAuditRecordsValidatesWeight(t *testing.T) {
 				metaRecordWeight: tc.weight,
 			}
 
-			errs := AuditRecords(models.Records{rc})
+			errs := new(tencentdnsProvider).AuditRecords(models.Records{rc})
 			if tc.wantError {
 				if assert.Len(t, errs, 1) {
 					assert.Contains(t, errs[0].Error(), metaRecordWeight)
@@ -123,7 +123,7 @@ func TestAuditRecordsRejectsNonChineseIDNCNAMETarget(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, "xn--ndaaa.com.")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(tencentdnsProvider).AuditRecords(models.Records{rc})
 	assert.Len(t, errs, 1)
 	assert.Contains(t, errs[0].Error(), "target contains non-ASCII characters")
 }

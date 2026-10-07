@@ -19,41 +19,13 @@ Info required in `creds.json`:
    - auth-token
 */
 
-// NewDeSec creates the provider.
-func NewDeSec(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	c := &desecProvider{}
+// Initialize initializes a fresh provider instance.
+func (c *desecProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	c.token = strings.TrimSpace(m["auth-token"])
 	if c.token == "" {
-		return nil, errors.New("missing deSEC auth-token")
+		return errors.New("missing deSEC auth-token")
 	}
-	return c, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can("deSEC always signs all records. When trying to disable, a notice is printed."),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Unimplemented("Apex aliasing is supported via new SVCB and HTTPS record types. For details, check the deSEC docs."),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDNSKEY:           providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSMIMEA:           providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Unimplemented(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	return nil
 }
 
 var defaultNameServerNames = []string{
@@ -62,20 +34,10 @@ var defaultNameServerNames = []string{
 }
 
 func init() {
-	const providerName = "DESEC"
-	const providerMaintainer = "@D3luxee"
-	fns := providers.DspFuncs{
-		Initializer:   NewDeSec,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "deSEC",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/desec",
-		PortalURL:   "https://desec.io/tokens", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*desecProvider]("DESEC", providers.Definition{
+		FriendlyName: "deSEC",
+		PortalURL:    "https://desec.io/tokens", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "auth-token",
 				Label:    "Auth token",
@@ -83,6 +45,33 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@D3luxee",
+		Features: providers.DocumentationNotes{
+			// The default for unlisted capabilities is 'Cannot'.
+			// See providers/capabilities.go for the entire list of capabilities.
+			providers.CanAutoDNSSEC:          providers.Can("deSEC always signs all records. When trying to disable, a notice is printed."),
+			providers.CanConcur:              providers.Can(),
+			providers.CanGetZones:            providers.Can(),
+			providers.CanOnlyDiff1Features:   providers.Can(),
+			providers.CanUseAlias:            providers.Unimplemented("Apex aliasing is supported via new SVCB and HTTPS record types. For details, check the deSEC docs."),
+			providers.CanUseCAA:              providers.Can(),
+			providers.CanUseDNSKEY:           providers.Can(),
+			providers.CanUseDS:               providers.Cannot(),
+			providers.CanUseDSForChildren:    providers.Can(),
+			providers.CanUseHTTPS:            providers.Can(),
+			providers.CanUseLOC:              providers.Can(),
+			providers.CanUseNAPTR:            providers.Can(),
+			providers.CanUsePTR:              providers.Can(),
+			providers.CanUseSMIMEA:           providers.Can(),
+			providers.CanUseSRV:              providers.Can(),
+			providers.CanUseSSHFP:            providers.Can(),
+			providers.CanUseSVCB:             providers.Can(),
+			providers.CanUseTLSA:             providers.Can(),
+			providers.CanUseOPENPGPKEY:       providers.Can(),
+			providers.DocCreateDomains:       providers.Can(),
+			providers.DocDualHost:            providers.Unimplemented(),
+			providers.DocOfficiallySupported: providers.Cannot(),
 		},
 	})
 }

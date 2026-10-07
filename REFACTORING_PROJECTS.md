@@ -9,6 +9,11 @@ Useful refactoring projects. Please feel free to pick up any of these.
 
 * I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
 
+
+## Documentation updates
+
+* Improved "how to write a provider" docs. The process for creating a DNS or Registrar provider could be improved. We should provide templates to copy instead of asking people to find a similar provider.  The doc should start by creating a generic provider, then add features and options over time.  The first thing should test credentials and nothing else.  Then add a registrar (if needed) and then the "preview" functionality, then "push".
+
 ## Rewrites needed
 
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
@@ -31,6 +36,8 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
 something that is both a Reg and a DSP.
+
+* External providers: It should be possible to add a provider without updating the source code to "dnscontrol". Teraform does it, why can't we?
 
 * mustbe.TargetHost() accepts "." as a special flag. This can probably be replaced by nrc.Flags{}
 
