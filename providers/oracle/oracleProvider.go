@@ -22,24 +22,18 @@ func init() {
 	providers.Register[*oracleProvider]("ORACLE", providers.Definition{
 		FriendlyName: "Oracle Cloud Infrastructure",
 		Maintainer:   "@kallsyms",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Cannot(), // should be supported, but getting 500s in tests
-			providers.CanUseLOC:              providers.Unimplemented(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"TLSA",
+			"LOC:Unimplemented",
 		},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

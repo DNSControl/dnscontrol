@@ -30,22 +30,13 @@ func init() {
 	providers.Register[*vultrProvider]("VULTR", providers.Definition{
 		FriendlyName: "Vultr",
 		Maintainer:   "@pgaskin",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"SSHFP",
 		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

@@ -14,7 +14,23 @@ func TestAllProvidersUseDefinitions(t *testing.T) {
 		if got, ok := providers.GetDefinition(def.TypeName); !ok || got != def {
 			t.Fatalf("%s: canonical definition lookup failed", def.TypeName)
 		}
+		if def.SupportedTypes == nil || !def.UsesSupportedTypes() {
+			t.Errorf("%s: missing exhaustive SupportedTypes declaration", def.TypeName)
+		}
+		for capability, note := range def.Features {
+			switch capability {
+			case providers.CanAutoDNSSEC, providers.CanConcur, providers.CanUseDSForChildren,
+				providers.DocDualHost, providers.DocOfficiallySupported:
+				t.Errorf("%s: %s belongs in its named field", def.TypeName, capability)
+			}
+			if note.Comment == "" && note.Link == "" {
+				t.Errorf("%s: Features[%s] has no annotation to retain", def.TypeName, capability)
+			}
+		}
 		if !def.Kind.Has(providers.KindDNS) {
+			if len(def.SupportedTypes) != 0 {
+				t.Errorf("%s: registrar-only provider declares record support", def.TypeName)
+			}
 			continue
 		}
 		t.Run(def.TypeName, func(t *testing.T) {

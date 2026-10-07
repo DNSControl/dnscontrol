@@ -53,19 +53,19 @@ func init() {
 	providers.Register[*namedotcomProvider]("NAMEDOTCOM", providers.Definition{
 		FriendlyName: "Name.com",
 		Maintainer:   "NEEDS VOLUNTEER",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"CAA:Cannot",
+		},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot("PTR records are not supported (See Link)", "https://www.name.com/support/articles/205188508-Reverse-DNS-records"),
-			providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported"),
-			providers.DocCreateDomains:       providers.Cannot("New domains require registration"),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUsePTR:        providers.Cannot("PTR records are not supported (See Link)", "https://www.name.com/support/articles/205188508-Reverse-DNS-records"),
+			providers.CanUseSRV:        providers.Can("SRV records with empty targets are not supported"),
+			providers.DocCreateDomains: providers.Cannot("New domains require registration"),
 		},
 	})
 }

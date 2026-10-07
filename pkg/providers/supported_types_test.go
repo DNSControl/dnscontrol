@@ -21,7 +21,7 @@ func TestSupportedTypesDefaults(t *testing.T) {
 		allowed    []string
 	}{
 		{"nil", nil, nil, true, []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"}},
-		{"Default", []string{"Default"}, nil, true, []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"}},
+		{"Basic8", []string{"Basic8"}, nil, true, []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"}},
 		{"empty", []string{}, nil, true, nil},
 		{"legacy", nil, DocumentationNotes{CanUseCAA: Can()}, false, []string{"CAA"}},
 		{"empty with legacy", []string{}, DocumentationNotes{CanUseCAA: Can()}, true, []string{"CAA"}},
@@ -51,18 +51,20 @@ func TestSupportedTypesResolution(t *testing.T) {
 		want      *DocumentationNote
 	}{
 		{"RFC ordinary", []string{"RFC"}, nil, "HINFO", Can()},
+		{"lowercase Basic8", []string{"basic8"}, nil, "CAA", Can()},
 		{"RFC pseudo", []string{"RFC"}, nil, "AKAMAITLC", Cannot()},
 		{"star pseudo", []string{"*"}, nil, "AKAMAITLC", Can()},
 		{"unknown", []string{"*"}, nil, "DOES_NOT_EXIST", Cannot()},
 		{"protocol type", []string{"*"}, nil, "AXFR", Cannot()},
+		{"internal command", []string{"*"}, nil, "IMPORT_TRANSFORM", Cannot()},
 		{"prefix", []string{"BUNNY_*"}, nil, "BUNNY_DNS_PZ", Can()},
 		{"whole name", []string{"BUNNY*:Can"}, nil, "A", Cannot()},
 		{"no match", []string{"FUTURE_*"}, nil, "A", Cannot()},
 		{"lowercase type", []string{"caa:Can"}, nil, "caa", Can()},
 		{"exact exclusion", []string{"RFC", "CAA:Cannot"}, nil, "CAA", Cannot()},
-		{"default exclusion", []string{"Default", "CAA:Cannot"}, nil, "CAA", Cannot()},
-		{"default legacy exception", []string{"Default"}, DocumentationNotes{CanUseCAA: Cannot("legacy limit")}, "CAA", Cannot("legacy limit")},
-		{"default legacy unimplemented", []string{"Default"}, DocumentationNotes{CanUseSRV: Unimplemented("pending")}, "SRV", Unimplemented("pending")},
+		{"Basic8 exclusion", []string{"Basic8", "CAA:Cannot"}, nil, "CAA", Cannot()},
+		{"Basic8 legacy exception", []string{"Basic8"}, DocumentationNotes{CanUseCAA: Cannot("legacy limit")}, "CAA", Cannot("legacy limit")},
+		{"Basic8 legacy unimplemented", []string{"Basic8"}, DocumentationNotes{CanUseSRV: Unimplemented("pending")}, "SRV", Unimplemented("pending")},
 		{"pattern exclusion", []string{"*", "BUNNY_*:Cannot"}, nil, "BUNNY_DNS_PZ", Cannot()},
 		{"exact inclusion", []string{"*:Cannot", "CAA"}, nil, "CAA", Can()},
 		{"unimplemented pattern", []string{"*", "AKAMAI*:Unimplemented"}, nil, "AKAMAITLC", Unimplemented()},
@@ -100,16 +102,18 @@ func TestSupportedTypesResolution(t *testing.T) {
 }
 
 func TestSupportedTypesErrors(t *testing.T) {
-	for _, selector := range []string{"", " CAA", "CAA ", "CA?", "[A]", "A,B", "CAA:", "CAA:can", "CAA:cAn", "CAA:Can:Cannot", "RFC:Cannot", "Default:Can"} {
+	for _, selector := range []string{"", " CAA", "CAA ", "CA?", "[A]", "A,B", "CAA:", "CAA:can", "CAA:cAn", "CAA:Can:Cannot", "RFC:Cannot", "Basic8:Can"} {
 		t.Run(selector, func(t *testing.T) {
 			isolateDefinitions(t)
 			assertRegistrationPanics(t, "provider \"INVALID\"", func() {
-				Register[*definitionDNS]("INVALID", Definition{FriendlyName: "Invalid", SupportedTypes: []string{selector}})
+				Register[*definitionDNS]("INVALID", Definition{FriendlyName: "Invalid", SupportedTypes: []string{
+					selector,
+				}})
 			})
 		})
 	}
 	for _, selectors := range [][]string{
-		{"Standard"}, {"UNREGISTERED"}, {"CAA", "CAA:Cannot"},
+		{"Standard"}, {"Default"}, {"UNREGISTERED"}, {"IMPORT_TRANSFORM"}, {"CAA", "CAA:Cannot"},
 		{"CAA:Cannot", "CAA:Unimplemented"}, {"CA*:Cannot", "*AA:Can"},
 	} {
 		t.Run(strings.Join(selectors, ","), func(t *testing.T) {
@@ -135,10 +139,16 @@ func TestSupportedTypesFinalization(t *testing.T) {
 		codepoint++
 	}
 	lateName := fmt.Sprintf("STAGEFIVELATE%d", codepoint)
-	Register[*definitionDNS]("WILDCARD", Definition{FriendlyName: "Wildcard", SupportedTypes: []string{"*"}})
-	Register[*definitionDNS]("RFC", Definition{FriendlyName: "RFC", SupportedTypes: []string{"RFC"}})
+	Register[*definitionDNS]("WILDCARD", Definition{FriendlyName: "Wildcard", SupportedTypes: []string{
+		"*",
+	}})
+	Register[*definitionDNS]("RFC", Definition{FriendlyName: "RFC", SupportedTypes: []string{
+		"RFC",
+	}})
 	wildcard, _ := GetDefinition("WILDCARD")
-	Register[*definitionDNS]("EXACT", Definition{FriendlyName: "Exact", SupportedTypes: []string{lateName}})
+	Register[*definitionDNS]("EXACT", Definition{FriendlyName: "Exact", SupportedTypes: []string{
+		lateName,
+	}})
 	if err := Finalize(); err == nil {
 		t.Fatal("unknown exact type accepted")
 	}
@@ -178,7 +188,10 @@ func TestSupportedTypesFinalization(t *testing.T) {
 	// A later catalog addition can also reveal an overlap between patterns
 	// that previously matched nothing. Finalization must check it again.
 	conflictName := lateName + "CONFLICT"
-	Register[*definitionDNS]("CONFLICT", Definition{FriendlyName: "Conflict", SupportedTypes: []string{conflictName + "*:Can", "*" + conflictName + ":Cannot"}})
+	Register[*definitionDNS]("CONFLICT", Definition{FriendlyName: "Conflict", SupportedTypes: []string{
+		conflictName + "*:Can",
+		"*" + conflictName + ":Cannot",
+	}})
 	if err := Finalize(); err != nil {
 		t.Fatal(err)
 	}
@@ -190,7 +203,9 @@ func TestSupportedTypesFinalization(t *testing.T) {
 
 func TestSupportedTypesOperationalCapabilities(t *testing.T) {
 	isolateDefinitions(t)
-	Register[*definitionDNS]("ALL", Definition{FriendlyName: "All", SupportedTypes: []string{"*"}, CanUseDSForChildren: Cannot("obsolete")})
+	Register[*definitionDNS]("ALL", Definition{FriendlyName: "All", SupportedTypes: []string{
+		"*",
+	}, CanUseDSForChildren: Cannot("obsolete")})
 	d, _ := GetDefinition("ALL")
 	if !ProviderHasCapability("ALL", CanUseDSForChildren) || d.DerivedFeatures[CanUseDSForChildren].Comment != "" {
 		t.Fatal("general DS support must imply child support without contradictory notes")

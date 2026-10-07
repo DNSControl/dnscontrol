@@ -32,18 +32,19 @@ func (c *adguardHomeProvider) Initialize(m map[string]string, _ json.RawMessage,
 }
 
 func init() {
-	const providerName = "ADGUARDHOME"
-	providers.RegisterCustomRecordType("ADGUARDHOME_A_PASSTHROUGH", providerName, "")
-	providers.RegisterCustomRecordType("ADGUARDHOME_AAAA_PASSTHROUGH", providerName, "")
-	providers.Register[*adguardHomeProvider](providerName, providers.Definition{
+	providers.Register[*adguardHomeProvider]("ADGUARDHOME", providers.Definition{
 		FriendlyName: "AdGuard Home",
 		Maintainer:   "@ishanjain28",
-		Features: providers.DocumentationNotes{
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanGetZones:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"A",
+			"AAAA",
+			"ADGUARDHOME_AAAA_PASSTHROUGH",
+			"ADGUARDHOME_A_PASSTHROUGH",
+			"ALIAS",
+			"CNAME",
 		},
+		CanConcur:              providers.Unimplemented(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

@@ -122,7 +122,7 @@ Done. 2 corrections.
 - Security
   - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
   - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❌
-  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
   - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
 - DNSSEC

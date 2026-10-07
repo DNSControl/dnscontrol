@@ -12,17 +12,17 @@ func init() {
 	providers.Register[*infobloxProvider]("INFOBLOX", providers.Definition{
 		FriendlyName: "Infoblox",
 		Maintainer:   "@matthewmgamble",
+		SupportedTypes: []string{
+			"Basic8",
+			"PTR",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Cannot(), // MVP: no ListZones
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocCreateDomains:       providers.Cannot("zones must be pre-created"),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("zones must be pre-created"),
 		},
 	})
 }

@@ -45,12 +45,13 @@ func init() {
 	providers.Register[*openwrtProvider]("OPENWRT", providers.Definition{
 		FriendlyName: "OpenWrt",
 		Maintainer:   "@huskyistaken",
-		Features: providers.DocumentationNotes{
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
+			"NS:Cannot",
+			"TXT:Cannot",
 		},
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

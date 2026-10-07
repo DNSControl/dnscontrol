@@ -14,13 +14,10 @@ import (
 
 func init() {
 	providers.Register[*opensrsProvider]("OPENSRS", providers.Definition{
-		FriendlyName: "OpenSRS",
-		Maintainer:   "NEEDS VOLUNTEER",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur: providers.Unimplemented(),
-		},
+		FriendlyName:   "OpenSRS",
+		Maintainer:     "NEEDS VOLUNTEER",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Unimplemented(),
 	})
 }
 

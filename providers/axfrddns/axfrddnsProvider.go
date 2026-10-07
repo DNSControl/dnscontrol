@@ -154,40 +154,25 @@ func init() {
 	providers.Register[*axfrddnsProvider]("AXFRDDNS", providers.Definition{
 		FriendlyName: "AXFR + DDNS",
 		Maintainer:   "@hnrgrgr",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can("Just warn when DNSSEC is requested but no RRSIG is found in the AXFR or warn when DNSSEC is not requested but RRSIG are found in the AXFR."),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Can(),
-			providers.CanUseDNAME:            providers.Can(),
-			providers.CanUseDS:               providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Can(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUseOPENPGPKEY:       providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSMIMEA:           providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
-			// Possible to support via catalog zones (RFC 9432), but those are not
-			// directly supported by DNSControl right now (although nothing is stopping
-			// you from manually updating a catalog zone using DNSControl if you wish).
-			providers.CanGetZones:      providers.Cannot(),
-			providers.DocCreateDomains: providers.Cannot(),
-			// Not a valid RR type, so impossible to encode in an RFC-compliant DNS
-			// packet.
-			providers.CanUseAlias: providers.Cannot(),
-			// These are both supported by RFC 2136 (DDNS), but neither work with
-			// DNSControl right now.
-			providers.CanUseSOA:    providers.Cannot(),
-			providers.CanUseDNSKEY: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"DHCID",
+			"DNAME",
+			"DS",
+			"HTTPS",
+			"LOC",
+			"NAPTR",
+			"OPENPGPKEY",
+			"PTR",
+			"SMIMEA",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
 		},
+		CanAutoDNSSEC:          providers.Can("Just warn when DNSSEC is requested but no RRSIG is found in the AXFR or warn when DNSSEC is not requested but RRSIG are found in the AXFR."),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

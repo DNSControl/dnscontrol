@@ -44,31 +44,19 @@ func init() {
 	providers.Register[*vercelProvider]("VERCEL", providers.Definition{
 		FriendlyName: "Vercel",
 		Maintainer:   "@SukkaW",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot("Vercel does not allow sufficient control over the apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanGetZones:            providers.Cannot(),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanUseDNAME:            providers.Cannot(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseDSForChildren:    providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSVCB:             providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.CanUseDNSKEY:           providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot("Vercel requires a domain to be associated with a project before it can be added and managed"),
-			providers.DocDualHost:            providers.Cannot("Vercel does not allow sufficient control over the apex NS records"),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.DocCreateDomains: providers.Cannot("Vercel requires a domain to be associated with a project before it can be added and managed"),
 		},
 	})
 }

@@ -76,35 +76,18 @@ func (c *bindProvider) Initialize(config map[string]string, providermeta json.Ra
 
 func init() {
 	providers.Register[*bindProvider]("BIND", providers.Definition{
-		FriendlyName:   "ISC BIND",
-		Maintainer:     "@TomOnTime",
-		SupportedTypes: []string{"*"},
+		FriendlyName: "ISC BIND",
+		Maintainer:   "@TomOnTime",
+		SupportedTypes: []string{
+			"*",
+		},
+		CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDHCID:            providers.Can(),
-			providers.CanUseDNAME:            providers.Can(),
-			providers.CanUseDNSKEY:           providers.Can(),
-			providers.CanUseDS:               providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseLOC:              providers.Can(),
-			providers.CanUseNAPTR:            providers.Can(),
-			providers.CanUseOPENPGPKEY:       providers.Can(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseRP:               providers.Can(),
-			providers.CanUseSMIMEA:           providers.Can(),
-			providers.CanUseSOA:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
-			providers.DocDualHost:            providers.Can(),
-			providers.DocOfficiallySupported: providers.Can(),
+			providers.DocCreateDomains: providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
 		},
 		Notes: "BIND writes zone files to a local directory; no API credentials are needed.",
 		CredFields: []providers.CredsField{

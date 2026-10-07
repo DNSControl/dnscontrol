@@ -205,7 +205,7 @@ You can configure Bunny's Pull Zone type with `BUNNY_DNS_PZ`. The target is the 
   - [get-zones](../commands/get-zones.md): ✅
 - DNS extensions
   - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ✅
-  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❔
+  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
   - [`LOC`](../language-reference/domain-modifiers/LOC.md): ❌
   - [`PTR`](../language-reference/domain-modifiers/PTR.md): ✅
   - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
@@ -217,11 +217,11 @@ You can configure Bunny's Pull Zone type with `BUNNY_DNS_PZ`. The target is the 
 - Security
   - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
   - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ✅
-  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
   - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ❌
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
 - DNSSEC
   - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
-  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
   - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
 <!-- provider-features-end -->

@@ -45,15 +45,10 @@ func init() {
 	providers.Register[*providerClient]("CSCGLOBAL", providers.Definition{
 		FriendlyName: "CSC Global",
 		Maintainer:   "@mikenz",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanOnlyDiff1Features:   providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.DocOfficiallySupported: providers.Can(),
+		SupportedTypes: []string{
+			"Basic8",
 		},
+		CanConcur:              providers.Can(),
+		DocOfficiallySupported: providers.Can(),
 	})
 }

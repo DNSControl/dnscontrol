@@ -42,23 +42,17 @@ func init() {
 			},
 		},
 		Maintainer: "@dnscale-ops",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Cannot(),
-			providers.CanUseAlias:            providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Can(),
-			providers.CanUseHTTPS:            providers.Can(),
-			providers.CanUseSVCB:             providers.Can(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"PTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
 		},
+		CanConcur:              providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

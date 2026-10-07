@@ -3,21 +3,27 @@
 Useful refactoring projects. Please feel free to pick up any of these.
 
 
-## Code that can probably be deleted
-
-* Retire RegisterCustomRecordType()/GetCustomRecordType() during the Stage 5–6
-  SupportedTypes rollout, after replacing their record recognition and
-  provider-support checks. Legacy validation still depends on them.
-
-* Remove the "orig_custom_type" metadata with that rollout. It is still read
-  by target validation and must remain until that dependency is replaced.
-
-
 ## Documentation updates
 
 * Improved "how to write a provider" docs. The process for creating a DNS or Registrar provider could be improved. We should provide templates to copy instead of asking people to find a similar provider.  The doc should start by creating a generic provider, then add features and options over time.  The first thing should test credentials and nothing else.  Then add a registrar (if needed) and then the "preview" functionality, then "push".
 
 ## Rewrites needed
+
+* Rework how metadata is passed to providers and how provider state is owned.
+  Consider an explicit split between state specific to a `credEntry` (such as
+  account-wide caches and rate limiters) and state specific to a
+  `(domain, credEntry)` (such as domain-specific configuration). Revisit client
+  initialization and reuse as part of that design. Also consider a tiered
+  metadata system with explicit inheritance and precedence rules, or providers
+  implemented as external binaries that maintain their own state. Keep this as
+  a separate future project with appropriate provider testing, rather than
+  expanding the current configuration-syntax rollout.
+
+* Future provider concurrency change: default to allowing concurrency and replace
+  authored `CanConcur` declarations with `ConcurBroken: true` only for providers
+  that cannot run concurrently. Derive the compatibility `CanConcur` capability
+  as `!ConcurBroken`, and audit existing `Cannot`/`Unimplemented` notes to
+  distinguish known limitations from untested providers. Implement in a separate PR.
 
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
 cleaner and more testable. Plus it will consolidate the code into one place instead

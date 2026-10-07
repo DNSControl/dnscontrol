@@ -16,24 +16,21 @@ func init() {
 	providers.Register[*rwthProvider]("RWTH", providers.Definition{
 		FriendlyName: "RWTH Aachen",
 		Maintainer:   "@mistererwin",
+		SupportedTypes: []string{
+			"Basic8",
+			"PTR",
+			"SSHFP",
+			"DS:Unimplemented",
+		},
+		CanAutoDNSSEC:          providers.Unimplemented("Supported by RWTH but not implemented yet."),
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Unimplemented("Supported by RWTH but not implemented yet."),
-			providers.CanConcur:              providers.Unimplemented(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseDS:               providers.Unimplemented("DS records are only supported at the apex and require a different API call that hasn't been implemented yet."),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can("PTR records with empty targets are not supported"),
-			providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported."),
-			providers.CanUseSSHFP:            providers.Can(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Cannot(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+			providers.CanUseDS:  providers.Unimplemented("DS records are only supported at the apex and require a different API call that hasn't been implemented yet."),
+			providers.CanUsePTR: providers.Can("PTR records with empty targets are not supported"),
+			providers.CanUseSRV: providers.Can("SRV records with empty targets are not supported."),
 		},
 	})
 }

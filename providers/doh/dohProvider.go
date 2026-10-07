@@ -20,13 +20,10 @@ Info required in `creds.json`:
 
 func init() {
 	providers.Register[*dohProvider]("DNSOVERHTTPS", providers.Definition{
-		FriendlyName: "DNS over HTTPS",
-		Maintainer:   "@mikenz",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur: providers.Unimplemented(),
-		},
+		FriendlyName:   "DNS over HTTPS",
+		Maintainer:     "@mikenz",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Unimplemented(),
 	})
 }
 

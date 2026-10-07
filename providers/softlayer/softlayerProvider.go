@@ -27,15 +27,11 @@ func init() {
 	providers.Register[*softlayerProvider]("SOFTLAYER", providers.Definition{
 		FriendlyName: "SoftLayer",
 		Maintainer:   "NEEDS VOLUNTEER",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanConcur:            providers.Unimplemented(),
-			providers.CanGetZones:          providers.Unimplemented(),
-			providers.CanOnlyDiff1Features: providers.Can(),
-			providers.CanUseLOC:            providers.Cannot(),
-			providers.CanUseSRV:            providers.Can(),
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
 		},
+		CanConcur: providers.Unimplemented(),
 	})
 }
 

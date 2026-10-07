@@ -34,7 +34,7 @@ type typeSelector struct {
 func (d *Definition) compileTypeSelectors() error {
 	selectors := d.SupportedTypes
 	if selectors == nil && d.Features == nil {
-		selectors = []string{"Default"}
+		selectors = []string{"Basic8"}
 	}
 	for _, source := range selectors {
 		name, status, suffixed := strings.Cut(source, ":")
@@ -55,7 +55,7 @@ func (d *Definition) compileTypeSelectors() error {
 			}
 		}
 		switch {
-		case name == "DEFAULT" || name == "RFC":
+		case name == "BASIC8" || name == "RFC":
 			if suffixed {
 				return fmt.Errorf("provider %q: category %q cannot have a status suffix", d.TypeName, source)
 			}
@@ -76,7 +76,7 @@ func (d *Definition) compileTypeSelectors() error {
 
 func (s typeSelector) matches(typ privatetypes.RecordType) bool {
 	switch s.name {
-	case "DEFAULT":
+	case "BASIC8":
 		switch typ.Name {
 		case "A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT":
 			return true

@@ -98,9 +98,7 @@ func (a *azurednsProvider) Initialize(m map[string]string, _ json.RawMessage, op
 }
 
 func init() {
-	const providerName = "AZURE_DNS"
-	providers.RegisterCustomRecordType("AZURE_ALIAS", providerName, "")
-	providers.Register[*azurednsProvider](providerName, providers.Definition{
+	providers.Register[*azurednsProvider]("AZURE_DNS", providers.Definition{
 		FriendlyName: "Azure DNS",
 		DocsURL:      "https://docs.dnscontrol.org/provider/azuredns",
 		PortalURL:    "https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps",
@@ -138,23 +136,17 @@ func init() {
 			},
 		},
 		Maintainer: "@vatsalyagoel",
+		SupportedTypes: []string{
+			"Basic8",
+			"AZURE_ALIAS",
+			"PTR",
+		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can("Azure does not permit modifying the existing NS records, only adding/removing additional records."),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
 		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanGetZones:            providers.Can(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
-			providers.CanUseAzureAlias:       providers.Can(),
-			providers.CanUseCAA:              providers.Can(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Can(),
-			providers.CanUseSRV:              providers.Can(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Can("Azure does not permit modifying the existing NS records, only adding/removing additional records."),
-			providers.DocOfficiallySupported: providers.Can(),
+			providers.CanUseAlias: providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
 		},
 	})
 }

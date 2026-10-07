@@ -80,32 +80,15 @@ func init() {
 			{Key: "apiurl", Label: "API Url", Default: netbirdAPIURL},
 		},
 		Maintainer: "@yzqzss",
-		Features: providers.DocumentationNotes{
-			// The default for unlisted capabilities is 'Cannot'.
-			// See providers/capabilities.go for the entire list of capabilities.
-			providers.CanAutoDNSSEC:          providers.Cannot(),
-			providers.CanConcur:              providers.Can(),
-			providers.CanGetZones:            providers.Can(),
-			providers.CanUseAlias:            providers.Cannot(),
-			providers.CanUseCAA:              providers.Cannot(),
-			providers.CanUseDHCID:            providers.Cannot(),
-			providers.CanUseDNAME:            providers.Cannot(),
-			providers.CanUseDNSKEY:           providers.Cannot(),
-			providers.CanUseDS:               providers.Cannot(),
-			providers.CanUseHTTPS:            providers.Cannot(),
-			providers.CanUseLOC:              providers.Cannot(),
-			providers.CanUseNAPTR:            providers.Cannot(),
-			providers.CanUsePTR:              providers.Cannot(),
-			providers.CanUseSOA:              providers.Cannot(),
-			providers.CanUseSRV:              providers.Cannot(),
-			providers.CanUseSSHFP:            providers.Cannot(),
-			providers.CanUseSMIMEA:           providers.Cannot(),
-			providers.CanUseSVCB:             providers.Cannot(),
-			providers.CanUseTLSA:             providers.Cannot(),
-			providers.DocCreateDomains:       providers.Can(),
-			providers.DocDualHost:            providers.Cannot(),
-			providers.DocOfficiallySupported: providers.Cannot(),
+		SupportedTypes: []string{
+			"A",
+			"AAAA",
+			"CNAME",
 		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 

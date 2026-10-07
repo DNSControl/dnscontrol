@@ -91,11 +91,11 @@ managed by DNSControl.
 - Security
   - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
   - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ✅
-  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❔
+  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
   - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
 - DNSSEC
   - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❔
+  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
   - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
 <!-- provider-features-end -->
