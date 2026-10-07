@@ -47,7 +47,14 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 	}
 
 	registrars := map[string]providers.Registrar{}
-	dnsProviders := map[string]providers.DNSServiceProvider{}
+	// Preserve reuse across domains, while isolating different configMetadata.
+	// Compare raw JSON bytes: equivalent JSON with different formatting may create
+	// an extra client, which is preferable to imposing metadata normalization.
+	type dnsProviderKey struct {
+		credEntry string
+		metadata  string
+	}
+	dnsProviders := map[dnsProviderKey]providers.DNSServiceProvider{}
 	for _, d := range cfg.Domains {
 		if registrars[d.RegistrarName] == nil {
 			rCfg := cfg.RegistrarsByName[d.RegistrarName]
@@ -60,15 +67,16 @@ func InitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[s
 		d.RegistrarInstance.Driver = registrars[d.RegistrarName]
 		d.RegistrarInstance.IsDefault = !isNonDefault[d.RegistrarName]
 		for _, pInst := range d.DNSProviderInstances {
-			if dnsProviders[pInst.Name] == nil {
+			key := dnsProviderKey{credEntry: pInst.Name, metadata: string(pInst.Metadata)}
+			if dnsProviders[key] == nil {
 				dCfg := cfg.DNSProvidersByName[pInst.Name]
-				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
+				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], pInst.Metadata)
 				if err != nil {
 					return nil, fmt.Errorf("failed to initialize DNS provider %q: %w", dCfg.Name, err)
 				}
-				dnsProviders[pInst.Name] = prov
+				dnsProviders[key] = prov
 			}
-			pInst.Driver = dnsProviders[pInst.Name]
+			pInst.Driver = dnsProviders[key]
 			pInst.IsDefault = !isNonDefault[pInst.Name]
 		}
 	}

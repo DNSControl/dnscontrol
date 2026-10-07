@@ -197,15 +197,28 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 	// build name to type maps
 	cfg.RegistrarsByName = map[string]*models.RegistrarConfig{}
 	cfg.DNSProvidersByName = map[string]*models.DNSProviderConfig{}
+	providersWithMetadata := map[string]bool{}
 	for _, reg := range cfg.Registrars {
 		cfg.RegistrarsByName[reg.Name] = reg
 	}
 	for _, p := range cfg.DNSProviders {
 		cfg.DNSProvidersByName[p.Name] = p
+		// Include overwritten legacy declarations in duplicate metadata checks.
+		if len(p.Metadata) != 0 {
+			providersWithMetadata[p.Name] = true
+		}
 	}
 	// make registrar and dns provider shims. Include name, type, and other metadata, but can't instantiate
 	// driver until we load creds in later
 	for _, d := range cfg.Domains {
+		for name := range d.DNSProviderMetadata {
+			if _, ok := d.DNSProviderNames[name]; !ok {
+				return nil, fmt.Errorf("domain %q defines configMetadata for unused DNS provider %q", d.Name, name)
+			}
+			if providersWithMetadata[name] {
+				return nil, fmt.Errorf("duplicate configMetadata error: domain %q defines configMetadata for %q in both NewDnsProvider() and SERVICE()", d.Name, name)
+			}
+		}
 		reg, ok := cfg.RegistrarsByName[d.RegistrarName]
 		if !ok {
 			return nil, fmt.Errorf("registrar named %s expected for %s, but never registered", d.RegistrarName, d.Name)
@@ -219,10 +232,15 @@ func preloadProviders(cfg *models.DNSConfig) (*models.DNSConfig, error) {
 			if !ok {
 				return nil, fmt.Errorf("DNS Provider named %s expected for %s, but never registered", pName, d.Name)
 			}
+			metadata, hasMetadata := d.DNSProviderMetadata[pName]
+			if !hasMetadata {
+				metadata = prov.Metadata
+			}
 			d.DNSProviderInstances = append(d.DNSProviderInstances, &models.DNSProviderInstance{
 				Name:                pName,
 				ProviderType:        prov.Type,
 				NumberOfNameservers: n,
+				Metadata:            metadata,
 			})
 		}
 		// sort so everything is deterministic

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"sync"
@@ -23,6 +24,10 @@ type DomainConfig struct {
 
 	RegistrarName    string         `json:"registrar"`
 	DNSProviderNames map[string]int `json:"dnsProviders"`
+
+	// DNSProviderMetadata contains domain-specific configMetadata, keyed by credEntry.
+	// An absent entry inherits metadata from the legacy NewDnsProvider declaration.
+	DNSProviderMetadata map[string]json.RawMessage `json:"dnsProviderMetadata,omitempty"`
 
 	Metadata         map[string]string `json:"meta,omitempty"`
 	Records          Records           `json:"records"`

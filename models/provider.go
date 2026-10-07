@@ -1,5 +1,7 @@
 package models
 
+import "encoding/json"
+
 // DNSProvider is an interface for DNS Provider plug-ins.
 type DNSProvider interface {
 	// AuditRecords validates records without initialization or credentials.
@@ -34,4 +36,5 @@ type DNSProviderInstance struct {
 	ProviderBase
 	Driver              DNSProvider
 	NumberOfNameservers int
+	Metadata            json.RawMessage // Effective configMetadata for this domain and credEntry.
 }
