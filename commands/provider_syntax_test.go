@@ -122,9 +122,8 @@ func TestProviderSyntaxCorrectionPlans(t *testing.T) {
 		NewDnsProvider("primary", {setting: "dns"}); NewDnsProvider("secondary", {setting: "other"});
 		D("example.com", "primary", DnsProvider("primary", 2), DnsProvider("secondary", 0), A("@", "192.0.2.1"));
 		D("example.net", "primary", DnsProvider("primary"), A("@", "192.0.2.2"));`,
-		`PROVIDER("primary", {setting: "dns"}); PROVIDER("secondary", {setting: "other"}); PROVIDER("unused");
-		D("example.com", REGISTRAR("primary"), DNS_SERVICE("primary", 2), DNS_SERVICE("secondary", 0), A("@", "192.0.2.1"));
-		D("example.net", REGISTRAR("primary"), DNS_SERVICE("primary"), A("@", "192.0.2.2"));`,
+		`D("example.com", REGISTRAR("primary"), SERVICE("primary", 2, {setting: "dns"}), SERVICE("secondary", 0, {setting: "other"}), A("@", "192.0.2.1"));
+		D("example.net", REGISTRAR("primary"), SERVICE("primary", ALL_NS, {setting: "dns"}), A("@", "192.0.2.2"));`,
 	}
 	creds := map[string]map[string]string{
 		"primary":   {"TYPE": providerSyntaxTestType, "account": "one"},
@@ -132,7 +131,6 @@ func TestProviderSyntaxCorrectionPlans(t *testing.T) {
 	}
 	for _, initializer := range syntaxInitializers {
 		t.Run(initializer.name, func(t *testing.T) {
-			var expectedConfig string
 			var expectedPlan []string
 			for i, script := range scripts {
 				t.Run([]string{"legacy", "modern"}[i], func(t *testing.T) {
@@ -151,8 +149,6 @@ func TestProviderSyntaxCorrectionPlans(t *testing.T) {
 					require.Same(t, cfg.Domains[0].DNSProviderInstances[0].Driver, cfg.Domains[1].DNSProviderInstances[0].Driver)
 					require.False(t, cfg.Domains[0].DNSProviderInstances[1].IsDefault)
 					require.Empty(t, normalize.ValidateAndNormalizeConfig(cfg))
-					configJSON, err := json.Marshal(cfg)
-					require.NoError(t, err)
 
 					var plan []string
 					for _, domain := range cfg.Domains {
@@ -173,9 +169,8 @@ func TestProviderSyntaxCorrectionPlans(t *testing.T) {
 					require.Contains(t, plan, "delegate example.com (one) to ns1.example.org,ns2.example.org")
 					require.Equal(t, 0, (*dns)[1].nsLookups, "nsCount=0 must not fetch nameservers")
 					if i == 0 {
-						expectedConfig, expectedPlan = string(configJSON), plan
+						expectedPlan = plan
 					} else {
-						require.JSONEq(t, expectedConfig, string(configJSON))
 						require.Equal(t, expectedPlan, plan)
 					}
 				})
@@ -192,23 +187,23 @@ func TestProviderSyntaxCredentialResolution(t *testing.T) {
 		wantReg      int
 		wantDNS      int
 	}{
-		{"DNS only", `PROVIDER("none"); PROVIDER("account"); D("example.com", REGISTRAR("none"), DNS_SERVICE("account", 0));`,
+		{"DNS only", `D("example.com", REGISTRAR("none"), SERVICE("account", 0));`,
 			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"TYPE": providerSyntaxTestType}}, "", 0, 1},
-		{"registrar only", `PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
+		{"registrar only", `D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 0},
-		{"unused account without credentials", `PROVIDER("unused");`, nil, "", 0, 0},
-		{"missing entry", `PROVIDER("account"); D("example.com", REGISTRAR("account"));`, nil, "missing", 0, 0},
-		{"missing TYPE", `PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
+		{"unused account without credentials", `DEFAULTS(REGISTRAR("unused"), SERVICE("unused"));`, nil, "", 0, 0},
+		{"missing entry", `D("example.com", REGISTRAR("account"));`, nil, "missing", 0, 0},
+		{"missing TYPE", `D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"account": "one"}}, "missing", 0, 0},
-		{"unsupported registrar role", `PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
+		{"unsupported registrar role", `D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": "BIND"}}, "no such registrar type", 0, 0},
-		{"mixed explicit type without credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
+		{"mixed explicit type without credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("account"));`,
 			nil, "", 1, 0},
-		{"mixed explicit type without TYPE", `PROVIDER("account"); NewDnsProvider("account", "TEST_PROVIDER_SYNTAX"); PROVIDER("none"); D("example.com", REGISTRAR("none"), DNS_SERVICE("account"));`,
+		{"mixed explicit type without TYPE", `NewDnsProvider("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("none"), SERVICE("account"));`,
 			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"account": "one"}}, "", 0, 1},
-		{"mixed explicit type mismatch", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); PROVIDER("account"); D("example.com", REGISTRAR("account"));`,
+		{"mixed explicit type mismatch", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": "NONE"}}, "Mismatch", 0, 0},
-		{"alias credentials for both roles", `PROVIDER("account"); D("example.com", REGISTRAR("account"), DNS_SERVICE("account"));`,
+		{"alias credentials for both roles", `D("example.com", REGISTRAR("account"), SERVICE("account"));`,
 			map[string]map[string]string{"account": {"TYPE": "TEST_PROVIDER_SYNTAX_ALIAS"}}, "", 1, 1},
 		{"explicit alias with canonical credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX_ALIAS"); NewDnsProvider("account", "TEST_PROVIDER_SYNTAX_ALIAS"); D("example.com", "account", DnsProvider("account"));`,
 			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 1},
@@ -245,7 +240,7 @@ func TestProviderConversionGuide(t *testing.T) {
 	guide, err := os.ReadFile("../documentation/getting-started/converting-dnsconfig.md")
 	require.NoError(t, err)
 	examples := regexp.MustCompile("(?s)```javascript\\n(.*?)```").FindAllStringSubmatch(string(guide), -1)
-	require.Len(t, examples, 2, "one complete before/after pair")
+	require.Len(t, examples, 4, "two complete before/after pairs")
 	credsPath := filepath.Join(t.TempDir(), "creds.json")
 	require.NoError(t, os.WriteFile(credsPath, []byte(`{"gandi_main":{"TYPE":"GANDI_V5"}}`), 0o600))
 	creds, err := credsfile.LoadProviderConfigs(credsPath)
@@ -257,6 +252,21 @@ func TestProviderConversionGuide(t *testing.T) {
 		require.NoError(t, err)
 		_, err = populateProviderTypes(after, creds)
 		require.NoError(t, err)
+		// Moving metadata into SERVICE changes its IR location, not its effective
+		// value. Compare configs after resolving legacy metadata into domains.
+		for _, cfg := range []*models.DNSConfig{before, after} {
+			for _, domain := range cfg.Domains {
+				domain.DNSProviderMetadata = map[string]json.RawMessage{}
+				for _, instance := range domain.DNSProviderInstances {
+					if len(instance.Metadata) != 0 {
+						domain.DNSProviderMetadata[instance.Name] = instance.Metadata
+					}
+				}
+			}
+			for _, provider := range cfg.DNSProviders {
+				provider.Metadata = nil
+			}
+		}
 		beforeJSON, err := json.Marshal(before)
 		require.NoError(t, err)
 		afterJSON, err := json.Marshal(after)
@@ -266,9 +276,9 @@ func TestProviderConversionGuide(t *testing.T) {
 }
 
 func TestProviderSyntaxIRLoading(t *testing.T) {
-	// Role declarations must survive direct IR loading without a new schema or
-	// another JavaScript finalization pass.
-	cfg := loadSyntaxConfig(t, `PROVIDER("both"); D("example.com", REGISTRAR("both"), DNS_SERVICE("both", 0));`)
+	// Role declarations and domain metadata must survive direct IR loading
+	// without another JavaScript finalization pass.
+	cfg := loadSyntaxConfig(t, `D("example.com", REGISTRAR("both"), SERVICE("both", 0, {nested:[1,null]}));`)
 	want, err := json.Marshal(cfg)
 	require.NoError(t, err)
 	irPath := filepath.Join(t.TempDir(), "dnsconfig.json")
@@ -280,4 +290,50 @@ func TestProviderSyntaxIRLoading(t *testing.T) {
 	require.JSONEq(t, string(want), string(got))
 	require.Equal(t, "both", roundTrip.Domains[0].RegistrarInstance.Name)
 	require.Equal(t, "both", roundTrip.Domains[0].DNSProviderInstances[0].Name)
+}
+
+func TestServiceSyntaxDomainMetadata(t *testing.T) {
+	for _, initializer := range syntaxInitializers {
+		t.Run(initializer.name, func(t *testing.T) {
+			registrars, dns := registerSyntaxTestProvider(t)
+			cfg := loadSyntaxConfig(t, `
+				DEFAULTS(REGISTRAR("account"));
+				D("example.com", SERVICE("account", ALL_NS, {setting:"one"}));
+				D("example.net", SERVICE("account", 0, {setting:"two"}));
+				D("example.org");
+				setTimeout(function() {
+					D_EXTEND("example.org", SERVICE("account", 2, {setting:"one"}));
+				}, 1);`)
+			creds := map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}
+			require.NoError(t, initializer.init(cfg, creds))
+			require.Len(t, *registrars, 1)
+			require.Empty(t, (*registrars)[0].metadata)
+			require.Len(t, *dns, 2)
+			require.JSONEq(t, `{"setting":"one"}`, string((*dns)[0].metadata))
+			require.JSONEq(t, `{"setting":"two"}`, string((*dns)[1].metadata))
+			require.Same(t, cfg.Domains[0].DNSProviderInstances[0].Driver, cfg.Domains[2].DNSProviderInstances[0].Driver)
+			require.NotSame(t, cfg.Domains[0].DNSProviderInstances[0].Driver, cfg.Domains[1].DNSProviderInstances[0].Driver)
+		})
+	}
+}
+
+func TestServiceSyntaxDefaultCredentials(t *testing.T) {
+	for _, contents := range []string{"missing", "", " \n\t", "{}"} {
+		t.Run(fmt.Sprintf("%q", contents), func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "creds.json")
+			if contents != "missing" {
+				require.NoError(t, os.WriteFile(path, []byte(contents), 0o600))
+			}
+			creds, err := credsfile.LoadProviderConfigs(path)
+			require.NoError(t, err)
+			for _, initializer := range syntaxInitializers {
+				t.Run(initializer.name, func(t *testing.T) {
+					cfg := loadSyntaxConfig(t, `D("example.com", REGISTRAR("none"), SERVICE("bind", 0));`)
+					require.NoError(t, initializer.init(cfg, creds))
+					require.Equal(t, "NONE", cfg.Domains[0].RegistrarInstance.ProviderType)
+					require.Equal(t, "BIND", cfg.Domains[0].DNSProviderInstances[0].ProviderType)
+				})
+			}
+		})
+	}
 }

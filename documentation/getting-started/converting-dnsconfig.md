@@ -1,15 +1,8 @@
 # The new `D()` syntax
 
-## The problem
-
-The `D()` syntax in dnsconfig.js is a bit confusing:
-
-- Users find it confusing to define the same provider twice, once as a DSP and once as a registrar.
-- ....and then use it a 3rd time with DnsProvider()
-- The name DnsProvider() is confusingly similar to NewDnsProvider()
-- The "New" in NewRegistrar/NewDnsProvider is odd. It makes sense from a CS perspective but not typical users.
-
-## The solution:
+This experimental syntax selects providers directly using their entry names in
+creds.json. The legacy `NewRegistrar`, `NewDnsProvider`, and `DnsProvider` helpers
+remain supported.
 
 Before:
 
@@ -25,32 +18,69 @@ D("example.com", REG_GANDI, DnsProvider(DSP_GANDI),
 After:
 
 ```javascript
-var SVC_GANDI_MAIN = PROVIDER("gandi_main");  // `gandi_main` is the entry in creds.json
-
 D("example.com",
-    REGISTRAR(SVC_GANDI_MAIN),
-    DNS_SERVICE(SVC_GANDI_MAIN),
+    REGISTRAR("gandi_main"),
+    SERVICE("gandi_main"),
     A("@", "192.0.2.1")
 );
 ```
 
-That's it!
+`REGISTRAR()` must immediately follow the domain name. It may also appear in
+`DEFAULTS()`; an explicit registrar overrides that default. It accepts only the
+credential entry name, with no metadata.
 
-The old sytax is still supported. If people like this the docs will be updated
-to use the new syntax.
+`SERVICE(name, maxNS, configMetadata)` takes an optional nameserver limit and
+optional metadata. Omit maxNS to use all nameservers, use `0` to use none, or
+use `ALL_NS` (equal to `-1`) when supplying metadata without a limit.
 
-## Feedback needed
+## Moving provider metadata
 
-Post your comments here: https://github.com/orgs/DNSControl/discussions/4949
+Before:
 
-*We especially need feedback about the names!*  Is `DNS_SERVICE` too verbose? Is `SVC_GANDI_MAIN` too long?  What would you suggest instead?
+```javascript
+var DSP_GANDI = NewDnsProvider("gandi_main", {setting: "value"});
+var REG_GANDI = NewRegistrar("gandi_main");
+
+D("example.com", REG_GANDI, DnsProvider(DSP_GANDI),
+    A("@", "192.0.2.1")
+);
+```
+
+After:
+
+```javascript
+D("example.com",
+    REGISTRAR("gandi_main"),
+    SERVICE("gandi_main", ALL_NS, {setting: "value"}),
+    A("@", "192.0.2.1")
+);
+```
+
+Metadata may be any JSON value and must follow maxNS. Declare it only once per
+domain and credential entry. Remove the metadata-bearing `NewDnsProvider()`
+declaration when moving metadata to `SERVICE()`: keeping both is an error even
+if their values match. Different domains may use different metadata for the
+same credential entry.
 
 ## Substitutions
 
 | Before | After |
 | --- | --- |
-| `NewRegistrar(...)` or `NewDnsProvider(...)` | `PROVIDER(...)` |
-| `D(name, REG, ...)` | `D(name, REGISTRAR(REG), ...)` |
-| `DnsProvider(...)` | `DNS_SERVICE(...)` |
+| `D(name, REG, ...)` | `D(name, REGISTRAR("credEntry"), ...)` |
+| `DnsProvider(DSP)` | `SERVICE("credEntry")` |
+| `DnsProvider(DSP, maxNS)` | `SERVICE("credEntry", maxNS)` |
+| `NewDnsProvider("credEntry", metadata)` | Move metadata to `SERVICE("credEntry", ALL_NS, metadata)` for each domain. |
+| `NewRegistrar(...)` / `NewDnsProvider(...)` variables | Remove declarations once all their uses are converted. |
+| Experimental `PROVIDER("credEntry")` and `DNS_SERVICE(...)` from v5.3.0 | Remove the declaration; use the entry name directly with `REGISTRAR` / `SERVICE`. Move `PROVIDER` metadata to each `SERVICE`. |
+
+Leave creds.json unchanged, with provider `TYPE` values there. Empty or missing
+credential files still supply the default `none` and `bind` entries. These
+modifiers also work in `DEFAULTS()` and `D_EXTEND()`; an explicit `REGISTRAR` in
+`D_EXTEND()` must likewise follow the domain name.
+
+## Feedback needed
+
+The v5.3.0 syntax was experimental; `PROVIDER` and `DNS_SERVICE` have been
+replaced. Please test this revision and [share feedback](https://github.com/orgs/DNSControl/discussions/4949).
 
 Compare `dnscontrol preview` before and after conversion. The output should be the same. [Report problems or confusing conversions](https://github.com/orgs/DNSControl/discussions/4949) with your DNSControl version, provider type, and a minimal example without credentials.
