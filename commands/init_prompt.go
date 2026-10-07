@@ -186,14 +186,19 @@ func fieldLabel(field providers.CredsField) string {
 	return label + " (optional)"
 }
 
-// openPortalHint prints the portal URL plus any provider notes so the
-// user can open the link themselves before answering the credential
-// prompts.
-func openPortalHint(_ Asker, meta providers.CredsMetadata) error {
-	if meta.PortalURL == "" && meta.Notes == "" {
+// openPortalHint prints documentation, the credential portal, and provider notes
+// before prompting for credentials.
+func openPortalHint(_ Asker, meta *providers.Definition) error {
+	if meta.DocsURL == "" && meta.VendorAPIDocURL == "" && meta.PortalURL == "" && meta.Notes == "" {
 		return nil
 	}
 	fmt.Println()
+	if meta.DocsURL != "" {
+		fmt.Printf("DNSControl documentation: %s\n", meta.DocsURL)
+	}
+	if meta.VendorAPIDocURL != "" {
+		fmt.Printf("Vendor API documentation: %s\n", meta.VendorAPIDocURL)
+	}
 	if meta.PortalURL != "" {
 		fmt.Printf("API settings for %s: %s\n", displayName(meta.TypeName), meta.PortalURL)
 	}
@@ -207,10 +212,10 @@ func openPortalHint(_ Asker, meta providers.CredsMetadata) error {
 // the resulting key/value map. Fields whose ShowIf condition does not
 // match are skipped. Internal fields are not written to the output.
 // Empty optional answers are dropped.
-func collectFields(asker Asker, meta providers.CredsMetadata) (map[string]string, error) {
+func collectFields(asker Asker, meta *providers.Definition) (map[string]string, error) {
 	answers := map[string]string{}
 	output := map[string]string{}
-	for _, field := range meta.Fields {
+	for _, field := range meta.CredFields {
 		if !showField(field, answers) {
 			continue
 		}
@@ -244,12 +249,12 @@ func showField(field providers.CredsField, answers map[string]string) bool {
 	return true
 }
 
-// displayName returns the human friendly DisplayName registered for the
+// displayName returns the human friendly FriendlyName registered for the
 // given provider type, falling back to the type name itself when no
-// metadata or DisplayName is registered.
+// metadata or FriendlyName is registered.
 func displayName(typeName string) string {
-	if meta, ok := providers.GetCredsMetadata(typeName); ok && meta.DisplayName != "" {
-		return meta.DisplayName
+	if meta, ok := providers.GetDefinition(typeName); ok && meta.FriendlyName != "" {
+		return meta.FriendlyName
 	}
 	return typeName
 }

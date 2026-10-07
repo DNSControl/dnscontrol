@@ -1,7 +1,11 @@
 package main
 
 import (
+	"cmp"
 	"fmt"
+	"net/url"
+	"path"
+	"slices"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -12,15 +16,18 @@ const readmeTableColumns = 5
 
 // generateReadmeProvidersTable rewrites the "Supported Providers" section of
 // README.md.
-// name:  one passed to  RegisterDomainServiceProviderType/RegisterRegistrarType
-// link: the same convention as updateProviderDocs()
-// footnote markers: come from which registries the provider appears in.
 func generateReadmeProvidersTable() error {
-	names := allProviderNames()
+	defs := publicDefinitions()
+	slices.SortFunc(defs, func(a, b *providers.Definition) int {
+		if order := cmp.Compare(strings.ToLower(a.FriendlyName), strings.ToLower(b.FriendlyName)); order != 0 {
+			return order
+		}
+		return cmp.Compare(a.TypeName, b.TypeName)
+	})
 
-	cells := make([]string, 0, len(names))
-	for _, providerName := range names {
-		cells = append(cells, readmeTableCell(providerName))
+	cells := make([]string, 0, len(defs))
+	for _, def := range defs {
+		cells = append(cells, readmeTableCell(def))
 	}
 
 	// Pad the final row so every row has the same number of cells.
@@ -29,7 +36,7 @@ func generateReadmeProvidersTable() error {
 	}
 
 	var content strings.Builder
-	fmt.Fprintf(&content, "\nDNSControl supports %d DNS providers and registrars:\n\n", len(names))
+	fmt.Fprintf(&content, "\nDNSControl supports %d DNS providers and registrars:\n\n", len(defs))
 
 	content.WriteString(strings.Repeat("| ", readmeTableColumns))
 	content.WriteString("|\n")
@@ -60,9 +67,9 @@ func generateReadmeProvidersTable() error {
 
 // readmeTableCell renders one provider as a linked table cell, with a footnote
 // marker describing which roles it can fill.
-func readmeTableCell(providerName string) string {
-	isDNSProvider := providers.DNSProviderTypes[providerName].Initializer != nil
-	isRegistrar := providers.RegistrarTypes[providerName] != nil
+func readmeTableCell(def *providers.Definition) string {
+	isDNSProvider := def.Kind.Has(providers.KindDNS)
+	isRegistrar := def.Kind.Has(providers.KindRegistrar)
 
 	footnote := ""
 	switch {
@@ -72,12 +79,25 @@ func readmeTableCell(providerName string) string {
 		footnote = "²"
 	}
 
-	return fmt.Sprintf("[`%s`](https://docs.dnscontrol.org/provider/%s)%s",
-		providerName, providerDocSlug(providerName), footnote)
+	return fmt.Sprintf("[%s](%s)%s", def.FriendlyName, def.DocsURL, footnote)
 }
 
-// providerDocSlug converts a provider name into the basename of its
-// documentation page. This must match the naming used by updateProviderDocs().
-func providerDocSlug(providerName string) string {
-	return strings.ToLower(strings.ReplaceAll(providerName, "_", ""))
+// providerDocSlug uses the configured documentation path, independent of the
+// canonical type and its aliases.
+func providerDocSlug(def *providers.Definition) string {
+	u, err := url.Parse(def.DocsURL)
+	if err != nil || u.Path == "" {
+		panic(fmt.Sprintf("provider %s has an invalid documentation URL: %q", def.TypeName, def.DocsURL))
+	}
+	return path.Base(u.Path)
+}
+
+func publicDefinitions() []*providers.Definition {
+	var defs []*providers.Definition
+	for _, def := range providers.AllDefinitions() {
+		if def.TypeName != "NONE" {
+			defs = append(defs, def)
+		}
+	}
+	return defs
 }

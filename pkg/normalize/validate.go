@@ -75,7 +75,7 @@ func validateRecordTypes(rec *models.RecordConfig, domain string, pTypes []strin
 			return fmt.Errorf("unsupported record type (%v) domain=%v name=%v Type=%s TypeNum=%d", rec.Type, domain, rec.GetLabel(), rec.Type, rec.TypeNum)
 		}
 		for _, providerType := range pTypes {
-			if providerType != cType.Provider {
+			if providers.CanonicalName(providerType) != providers.CanonicalName(cType.Provider) {
 				return fmt.Errorf("custom record type %s is not compatible with provider type %s", rec.Type, providerType)
 			}
 		}

@@ -491,17 +491,14 @@ const (
 )
 
 func init() {
-	providers.RegisterDomainServiceProviderType(ProviderNoDS, providers.DspFuncs{}, providers.DocumentationNotes{})
-	providers.RegisterDomainServiceProviderType(ProviderFullDS, providers.DspFuncs{}, providers.DocumentationNotes{
-		providers.CanUseDS: providers.Can(),
-	})
-	providers.RegisterDomainServiceProviderType(ProviderChildDSOnly, providers.DspFuncs{}, providers.DocumentationNotes{
-		providers.CanUseDSForChildren: providers.Can(),
-	})
-	providers.RegisterDomainServiceProviderType(ProviderBothDSCaps, providers.DspFuncs{}, providers.DocumentationNotes{
-		providers.CanUseDS:            providers.Can(),
-		providers.CanUseDSForChildren: providers.Can(),
-	})
+	for name, features := range map[string]providers.DocumentationNotes{
+		ProviderNoDS:        {},
+		ProviderFullDS:      {providers.CanUseDS: providers.Can()},
+		ProviderChildDSOnly: {providers.CanUseDSForChildren: providers.Can()},
+		ProviderBothDSCaps:  {providers.CanUseDS: providers.Can(), providers.CanUseDSForChildren: providers.Can()},
+	} {
+		providers.Register[*validationProvider](name, providers.Definition{FriendlyName: name, Features: features})
+	}
 }
 
 func Test_DSChecks(t *testing.T) {

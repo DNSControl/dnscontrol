@@ -5,9 +5,12 @@ Useful refactoring projects. Please feel free to pick up any of these.
 
 ## Code that can probably be deleted
 
-* RegisterCustomRecordType()/GetCustomRecordType() is no longer needed. Remove.
+* Retire RegisterCustomRecordType()/GetCustomRecordType() during the Stage 5–6
+  SupportedTypes rollout, after replacing their record recognition and
+  provider-support checks. Legacy validation still depends on them.
 
-* I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
+* Remove the "orig_custom_type" metadata with that rollout. It is still read
+  by target validation and must remain until that dependency is replaced.
 
 
 ## Documentation updates

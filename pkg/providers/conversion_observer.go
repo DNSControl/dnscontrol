@@ -16,13 +16,6 @@ type ConversionObserver interface {
 	EndToNative(function string, before ConversionSnapshot, recordsAfter models.Records, result any, err error)
 }
 
-// ConversionObserverSetter supplies observers to legacy providers after
-// construction. Providers using Register receive the observer in Initialize's
-// options and install it there, before any conversions occur.
-type ConversionObserverSetter interface {
-	SetConversionObserver(ConversionObserver)
-}
-
 type noopConversionObserver struct{}
 
 func (noopConversionObserver) BeginToRC(string, any) ConversionSnapshot { return nil }

@@ -131,11 +131,9 @@ func runInit(args InitArgs, asker Asker) error {
 // and whether the registrar should reuse the DNS provider's credentials.
 func pickProviders(asker Asker) (registrarType, dnsProviderType string, sameAccount bool, err error) {
 	// DNS first because most users think in terms of where their records
-	// live. NONE defers the choice. The picker only lists providers
-	// whose maintainers have registered onboarding metadata so the
-	// wizard can drive the prompts. Other providers should be set up
-	// from the documentation.
-	dnsOptions := providersWithMetadata(keysOf(providers.DNSProviderTypes))
+	// live. NONE defers the choice. Canonical definitions provide the
+	// roles and onboarding metadata for each choice.
+	dnsOptions := providerNamesForRole(providers.KindDNS)
 	dnsOptions = append([]string{"NONE"}, dnsOptions...)
 	fmt.Println()
 	fmt.Println("A DNS provider hosts the records (A, MX, TXT, CNAME, and so on) for your zones.")
@@ -150,8 +148,7 @@ func pickProviders(asker Asker) (registrarType, dnsProviderType string, sameAcco
 	// reuse it; otherwise ask which registrar to use, with NONE as the
 	// default.
 	if dnsProviderType != "NONE" {
-		if _, alsoRegistrar := providers.RegistrarTypes[dnsProviderType]; alsoRegistrar {
-			meta, _ := providers.GetCredsMetadata(dnsProviderType)
+		if meta, ok := providers.GetDefinition(dnsProviderType); ok && meta.Kind.Has(providers.KindRegistrar) {
 			sameAccount, err = asker.Confirm(
 				fmt.Sprintf("Use the same %s account for the registrar role too?", displayName(meta.TypeName)),
 				"",
@@ -171,7 +168,7 @@ func pickProviders(asker Asker) (registrarType, dnsProviderType string, sameAcco
 	fmt.Println("Pick NONE if you manage the registrar outside DNSControl.")
 	fmt.Println("Registrars not listed below can be configured from their documentation page at https://docs.dnscontrol.org/provider/.")
 	registrarType, err = pickProvider(asker, "Which registrar do you want to configure?",
-		providersWithMetadata(keysOf(providers.RegistrarTypes)))
+		providerNamesForRole(providers.KindRegistrar))
 	if err != nil {
 		return "", "", false, err
 	}
@@ -234,7 +231,7 @@ func confirmAndWrite(asker Asker, args InitArgs, existingCreds map[string]map[st
 	return nil
 }
 
-func verifyAndRetry(asker Asker, meta providers.CredsMetadata, entry InitCredsEntry, role string, verify func(InitCredsEntry) ([]string, error)) (map[string]string, []string, error) {
+func verifyAndRetry(asker Asker, meta *providers.Definition, entry InitCredsEntry, role string, verify func(InitCredsEntry) ([]string, error)) (map[string]string, []string, error) {
 	fields := entry.Fields
 	for {
 		fmt.Println()
@@ -632,15 +629,17 @@ func dnscontrolBinary() string {
 // returns the entries plus the dnsconfig.js choice record. DNS is
 // collected first because that is the primary workflow for most users.
 func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAccount bool) ([]InitCredsEntry, InitDnsconfigChoice, []string, error) {
+	registrarType = providers.CanonicalName(registrarType)
+	dnsProviderType = providers.CanonicalName(dnsProviderType)
 	var entries []InitCredsEntry
 	var availableZones []string
 	choice := InitDnsconfigChoice{}
 
 	dnsEntryName := ""
 	if dnsProviderType != "NONE" && dnsProviderType != "" {
-		meta, ok := providers.GetCredsMetadata(dnsProviderType)
+		meta, ok := providers.GetDefinition(dnsProviderType)
 		if !ok {
-			meta = providers.CredsMetadata{TypeName: dnsProviderType, DisplayName: dnsProviderType}
+			meta = &providers.Definition{TypeName: dnsProviderType, FriendlyName: dnsProviderType}
 		}
 		fmt.Printf("\n== DNS provider: %s ==\n", displayName(meta.TypeName))
 		fields, name, err := askEntry(asker, meta, defaultEntryName(dnsProviderType))
@@ -678,9 +677,9 @@ func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAcco
 		return entries, choice, availableZones, nil
 	}
 
-	meta, ok := providers.GetCredsMetadata(registrarType)
+	meta, ok := providers.GetDefinition(registrarType)
 	if !ok {
-		meta = providers.CredsMetadata{TypeName: registrarType, DisplayName: registrarType}
+		meta = &providers.Definition{TypeName: registrarType, FriendlyName: registrarType}
 	}
 	fmt.Printf("\n== Registrar: %s ==\n", displayName(meta.TypeName))
 	fields, name, err := askEntry(asker, meta, defaultEntryName(registrarType))
@@ -715,7 +714,7 @@ func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAcco
 
 // askEntry prompts for the creds.json entry key and the credential values
 // for a single provider.
-func askEntry(asker Asker, meta providers.CredsMetadata, defaultName string) (map[string]string, string, error) {
+func askEntry(asker Asker, meta *providers.Definition, defaultName string) (map[string]string, string, error) {
 	fmt.Println()
 	fmt.Println("Each entry in creds.json stores a set of credentials (usually an API key,")
 	fmt.Println("token, or PAT) and other information required to authenticate API calls.")
@@ -739,7 +738,7 @@ func askEntry(asker Asker, meta providers.CredsMetadata, defaultName string) (ma
 	}
 
 	fields := map[string]string{}
-	if len(meta.Fields) > 0 {
+	if len(meta.CredFields) > 0 {
 		fields, err = collectFields(asker, meta)
 		if err != nil {
 			return nil, "", err
@@ -817,7 +816,7 @@ func writeFile(path string, data []byte) error {
 // abort the wizard.
 func runPostWriteHooks(entries []InitCredsEntry) {
 	for _, entry := range entries {
-		meta, ok := providers.GetCredsMetadata(entry.TypeName)
+		meta, ok := providers.GetDefinition(entry.TypeName)
 		if !ok || meta.PostWrite == nil {
 			continue
 		}
@@ -827,24 +826,13 @@ func runPostWriteHooks(entries []InitCredsEntry) {
 	}
 }
 
-// providersWithMetadata keeps only the provider names for which
-// CredsMetadata has been registered, sorted alphabetically.
-func providersWithMetadata(names []string) []string {
-	withMetadata := make([]string, 0, len(names))
-	for _, name := range names {
-		if _, ok := providers.GetCredsMetadata(name); ok {
-			withMetadata = append(withMetadata, name)
+// providerNamesForRole lists canonical provider types for a role, sorted by name.
+func providerNamesForRole(role providers.ProviderKind) []string {
+	var names []string
+	for _, def := range providers.AllDefinitions() {
+		if def.Kind.Has(role) {
+			names = append(names, def.TypeName)
 		}
 	}
-	sort.Strings(withMetadata)
-	return withMetadata
-}
-
-// keysOf returns the keys of any string keyed map.
-func keysOf[V any](source map[string]V) []string {
-	keys := make([]string, 0, len(source))
-	for key := range source {
-		keys = append(keys, key)
-	}
-	return keys
+	return names
 }
