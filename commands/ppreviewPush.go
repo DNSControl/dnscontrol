@@ -303,7 +303,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 
 		out.Printf("SERIALLY checking for %d zone(s)\n", len(zonesSerial))
 		for _, zone := range zonesSerial {
-			out.Printf("Serially checking for zone: %q\n", zone.UniqueName)
+			out.PrintfIf(fullMode, "Serially checking for zone: %q\n", zone.UniqueName)
 			if err := oneZonePopulate(zone, zcache); err != nil {
 				anyErrors = true
 			}
@@ -370,7 +370,7 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 	}
 	out.Printf("SERIALLY gathering records of %d zone(s)\n", len(zonesSerial))
 	for _, zone := range zonesSerial {
-		out.Printf("Serially Gathering: %q\n", zone.UniqueName)
+		out.PrintfIf(fullMode, "Serially gathering: %q\n", zone.UniqueName)
 		if err := oneZone(zone, args, push); err != nil {
 			anyErrors = true
 		}
