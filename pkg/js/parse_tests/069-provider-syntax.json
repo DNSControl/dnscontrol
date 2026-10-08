@@ -1,0 +1,90 @@
+{
+  "registrars": [
+    {
+      "name": "reg",
+      "type": "NONE"
+    }
+  ],
+  "dns_providers": [
+    {
+      "name": "dns",
+      "type": "BIND"
+    }
+  ],
+  "domains": [
+    {
+      "name": "example.com",
+      "tag": "legacy",
+      "uniquename": "example.com!legacy",
+      "registrar": "reg",
+      "dnsProviders": {
+        "dns": 2
+      },
+      "records": [
+        {
+          "typenum": 1,
+          "type": "A",
+          "ttl": 300,
+          "name": "@",
+          "name_unicode": "@",
+          "comparablev3": "192.0.2.1",
+          "filepos": "[line:5:5]",
+          "rdata": {
+            "Addr": "192.0.2.1"
+          }
+        },
+        {
+          "typenum": 16,
+          "type": "TXT",
+          "ttl": 300,
+          "name": "note",
+          "name_unicode": "note",
+          "comparablev3": "\"same configuration\"",
+          "filepos": "[line:6:5]",
+          "rdata": {
+            "Txt": [
+              "same configuration"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "example.com",
+      "tag": "modern",
+      "uniquename": "example.com!modern",
+      "registrar": "reg",
+      "dnsProviders": {
+        "dns": 2
+      },
+      "records": [
+        {
+          "typenum": 1,
+          "type": "A",
+          "ttl": 300,
+          "name": "@",
+          "name_unicode": "@",
+          "comparablev3": "192.0.2.1",
+          "filepos": "[line:10:5]",
+          "rdata": {
+            "Addr": "192.0.2.1"
+          }
+        },
+        {
+          "typenum": 16,
+          "type": "TXT",
+          "ttl": 300,
+          "name": "note",
+          "name_unicode": "note",
+          "comparablev3": "\"same configuration\"",
+          "filepos": "[line:11:5]",
+          "rdata": {
+            "Txt": [
+              "same configuration"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

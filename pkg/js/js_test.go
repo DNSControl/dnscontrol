@@ -149,6 +149,29 @@ func TestParsedFiles(t *testing.T) {
 	}
 }
 
+func TestProviderSyntaxDomainsEquivalent(t *testing.T) {
+	conf, err := ExecuteJavaScript(filepath.Join(testDir, "069-provider-syntax.js"), true, nil)
+	testifyrequire.NoError(t, err)
+	testifyrequire.Empty(t, normalize.ValidateAndNormalizeConfig(conf))
+	testifyrequire.Len(t, conf.Domains, 2)
+
+	// The split-horizon tags and source positions identify the two declarations;
+	// all other fields in their generated JSON must be identical.
+	for _, domain := range conf.Domains {
+		domain.Name = "example.com"
+		domain.Tag = ""
+		domain.UniqueName = "example.com"
+		for _, record := range domain.Records {
+			record.FilePos = ""
+		}
+	}
+	legacyJSON, err := json.Marshal(conf.Domains[0])
+	testifyrequire.NoError(t, err)
+	modernJSON, err := json.Marshal(conf.Domains[1])
+	testifyrequire.NoError(t, err)
+	testifyrequire.JSONEq(t, string(legacyJSON), string(modernJSON))
+}
+
 func TestErrors(t *testing.T) {
 	tests := []struct{ desc, text string }{
 		{"old dsp style", `D("foo.com","reg","dsp")`},
