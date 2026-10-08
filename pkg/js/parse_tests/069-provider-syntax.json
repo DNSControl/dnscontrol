@@ -1,10 +1,4 @@
 {
-  "registrars": [
-    {
-      "name": "reg",
-      "type": "NONE"
-    }
-  ],
   "dns_providers": [
     {
       "name": "dns",
@@ -13,78 +7,84 @@
   ],
   "domains": [
     {
-      "name": "example.com",
-      "tag": "legacy",
-      "uniquename": "example.com!legacy",
-      "registrar": "reg",
       "dnsProviders": {
         "dns": 2
       },
+      "name": "example.com",
       "records": [
         {
-          "typenum": 1,
-          "type": "A",
-          "ttl": 300,
-          "name": "@",
-          "name_unicode": "@",
           "comparablev3": "192.0.2.1",
           "filepos": "[line:5:5]",
+          "name": "@",
+          "name_unicode": "@",
           "rdata": {
             "Addr": "192.0.2.1"
-          }
+          },
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
         },
         {
-          "typenum": 16,
-          "type": "TXT",
-          "ttl": 300,
-          "name": "note",
-          "name_unicode": "note",
           "comparablev3": "\"same configuration\"",
           "filepos": "[line:6:5]",
+          "name": "note",
+          "name_unicode": "note",
           "rdata": {
             "Txt": [
               "same configuration"
             ]
-          }
+          },
+          "ttl": 300,
+          "type": "TXT",
+          "typenum": 16
         }
-      ]
+      ],
+      "registrar": "reg",
+      "tag": "legacy",
+      "uniquename": "example.com!legacy"
     },
     {
-      "name": "example.com",
-      "tag": "modern",
-      "uniquename": "example.com!modern",
-      "registrar": "reg",
       "dnsProviders": {
         "dns": 2
       },
+      "name": "example.com",
       "records": [
         {
-          "typenum": 1,
-          "type": "A",
-          "ttl": 300,
-          "name": "@",
-          "name_unicode": "@",
           "comparablev3": "192.0.2.1",
           "filepos": "[line:10:5]",
+          "name": "@",
+          "name_unicode": "@",
           "rdata": {
             "Addr": "192.0.2.1"
-          }
+          },
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
         },
         {
-          "typenum": 16,
-          "type": "TXT",
-          "ttl": 300,
-          "name": "note",
-          "name_unicode": "note",
           "comparablev3": "\"same configuration\"",
           "filepos": "[line:11:5]",
+          "name": "note",
+          "name_unicode": "note",
           "rdata": {
             "Txt": [
               "same configuration"
             ]
-          }
+          },
+          "ttl": 300,
+          "type": "TXT",
+          "typenum": 16
         }
-      ]
+      ],
+      "registrar": "reg",
+      "tag": "modern",
+      "uniquename": "example.com!modern"
+    }
+  ],
+  "registrars": [
+    {
+      "name": "reg",
+      "type": "NONE"
     }
   ]
 }
