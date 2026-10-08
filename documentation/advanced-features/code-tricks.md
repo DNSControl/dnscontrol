@@ -60,15 +60,15 @@ var GOOGLE_APPS_DOMAIN_SITES = [
 D("primarydomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    GOOGLE_APPS_DOMAIN_SITES,
-   A("@", "192.0.2.1"),
-   CNAME("www", "@"),
+   ...
+   ...
 );
 
 D("aliasdomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    // FYI: GOOGLE_APPS_DOMAIN_SITES is not used here.
-   A("@", "192.0.2.1"),
-   CNAME("www", "@"),
+   ...
+   ...
 );
 ```
 {% endcode %}
@@ -80,12 +80,14 @@ Problem: We have many domains, each should have the exact same records.
 Solution 1: Use a macro.
 
 ```javascript
+var SPF_NONE = TXT("@", "v=spf1 -all"); // Deters spoofed mail from parked domains.
+
 function PARKED_R53(name) {
     D(name, REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
        A("@", "10.2.3.4"),
        CNAME("www", "@"),
-        TXT("@", "v=spf1 -all"), // Deters spammers from using the domain in From: lines.
-        );
+       SPF_NONE,
+    );
 }
 
 PARKED_R53("example1.tld");

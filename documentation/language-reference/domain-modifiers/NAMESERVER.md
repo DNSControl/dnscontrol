@@ -16,7 +16,6 @@ For more information, refer to [this page](../../advanced-features/nameservers.m
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var route53 = NewDnsProvider("route53", "ROUTE53");
 D("example.com", REG_MY_PROVIDER,
   DnsProvider(DSP_MY_PROVIDER),
   DnsProvider(route53, 0),
@@ -61,7 +60,7 @@ It looks like this:
 ```javascript
 var REG_NONE = NewRegistrar("none");
 D("example.com", REG_NONE,
-  // Add other domain modifiers here if needed.
+  ...
 );
 ```
 {% endcode %}

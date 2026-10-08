@@ -13,7 +13,9 @@ See [`IGNORE`](../domain-modifiers/IGNORE.md) for more information.
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
     DISABLE_IGNORE_SAFETY_CHECK,
+    ...
     TXT("myhost", "mytext"),
     IGNORE("myhost", "*", "*"),
+    ...
 );
 ```

@@ -30,11 +30,9 @@ require("domains/otherstuff.json");
 ### Example 2: Complex
 
 Here's a more complex example:
-The referenced `kubernetes/` files must be created alongside `dnsconfig.js`.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-// FIXME(tlim): Run this only after creating the supporting files shown below.
 require("kubernetes/clusters.js");
 
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
@@ -80,7 +78,6 @@ Requiring JSON files initializes variables:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-// FIXME(tlim): Create domain-ip-map.json beside dnsconfig.js before running.
 var domains = require("./domain-ip-map.json")
 
 var REG_MY_PROVIDER = NewRegistrar("none");

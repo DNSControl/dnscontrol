@@ -67,7 +67,9 @@ To add this, add the meta data to the zone immediately following the registrar.
 
 ```javascript
 D("example.com", REG_MY_PROVIDER, {no_ns: "true"},
-  A("@", "192.0.2.1"),
+  ...
+  ...
+  ...
 );
 ```
 

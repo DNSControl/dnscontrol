@@ -216,11 +216,8 @@ var FASTMAIL_DKIM = function(the_domain){
 {% endcode %}
 
 We can then use the macros as such:
-The definitions of `FASTMAIL_MX` and `FASTMAIL_DKIM` above must be in the same
-`dnsconfig.js` file as this example.
 {% code title="dnsconfig.js" %}
 ```javascript
-// FIXME(tlim): Include the FASTMAIL_MX and FASTMAIL_DKIM definitions above.
 var REG_NONE = NewRegistrar("none");
 var DSP_R53_MAIN = NewDnsProvider("r53_main");
 

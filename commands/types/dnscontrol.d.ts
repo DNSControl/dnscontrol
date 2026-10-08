@@ -761,7 +761,9 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, {no_ns: "true"},
- *   A("@", "192.0.2.1"),
+ *   ...
+ *   ...
+ *   ...
  * );
  * ```
  *
@@ -871,8 +873,10 @@ declare function DHCID(name: string, digest: string, ...modifiers: RecordModifie
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
  *     DISABLE_IGNORE_SAFETY_CHECK,
+ *     ...
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),
+ *     ...
  * );
  * ```
  *
@@ -1159,7 +1163,7 @@ declare function DOMAIN_ELSEWHERE_AUTO(name: string, domain: string, registrar: 
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   DS("child", 2371, 13, 2, "ABCDEF"),
+ *   DS("@", 2371, 13, 2, "ABCDEF"),
  * );
  * ```
  *
@@ -1401,9 +1405,9 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   IGNORE("external", "A", "192.0.2.*"),
- *   IGNORE("mail", "MX"),
- *   IGNORE("delegated"),
+ *   IGNORE(labelSpec, typeSpec, targetSpec),
+ *   IGNORE(labelSpec, typeSpec),
+ *   IGNORE(labelSpec),
  * );
  * ```
  *
@@ -1634,9 +1638,10 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *     // FIXME(tlim): This example deliberately triggers an IGNORE safety error.
+ *     ...
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),  // Error!  Ignoring an item we inserted
+ *     ...
  * );
  * ```
  *
@@ -1645,8 +1650,10 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
  *     DISABLE_IGNORE_SAFETY_CHECK,
+ *     ...
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),
+ *     ...
  * );
  * ```
  *
@@ -1657,7 +1664,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *     // FIXME(tlim): This deprecated example intentionally fails validation.
+ *     // This deprecated example intentionally fails validation.
  *     // Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
  *     TXT("myhost", "mytext", IGNORE_NAME_DISABLE_SAFETY_CHECK),
  * );
@@ -2711,7 +2718,6 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  * For more information, refer to [this page](../../advanced-features/nameservers.md).
  *
  * ```javascript
- * var route53 = NewDnsProvider("route53", "ROUTE53");
  * D("example.com", REG_MY_PROVIDER,
  *   DnsProvider(DSP_MY_PROVIDER),
  *   DnsProvider(route53, 0),
@@ -2754,7 +2760,7 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  * ```javascript
  * var REG_NONE = NewRegistrar("none");
  * D("example.com", REG_NONE,
- *   // Add other domain modifiers here if needed.
+ *   ...
  * );
  * ```
  *
@@ -3259,7 +3265,7 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  * All magic is RFC2317-aware. We use the first format listed in the RFC for both [`REV()`](../top-level-functions/REV.md) and `PTR()`. The format is `FIRST/MASK.C.B.A.in-addr.arpa` where `FIRST` is the first IP address of the zone, `MASK` is the netmask of the zone (25-31 inclusive), and A, B, C are the first 3 octets of the IP address. For example `172.20.18.130/27` is located in a zone named `128/27.18.20.172.in-addr.arpa`
  *
  * ```javascript
- * D(REV("1.2.3.0/24"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
+ * D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
  *   PTR("1", "foo.example.com."),
  *   PTR("2", "bar.example.com."),
  *   PTR("3", "baz.example.com."),
@@ -3269,13 +3275,13 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  * ```
  *
  * ```javascript
- * D(REV("9.9.9.128/25"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
+ * D(REV("9.9.9.128/25"), REGISTRAR, DnsProvider(BIND),
  *   PTR("9.9.9.129", "first.example.com."),
  * );
  * ```
  *
  * ```javascript
- * D(REV("2001:db8:302::/48"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
+ * D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
  *   PTR("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0", "foo.example.com."),  // 2001:db8:302::1
  *   // If the first parameter is a valid IP address, DNSControl will generate the correct name:
  *   PTR("2001:db8:302::2", "two.example.com."),                          // "2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0"
@@ -3288,8 +3294,6 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  * DNSControl does not automatically generate forward and reverse lookups. However it is possible to write a macro that does this by using the [`D_EXTEND()`](../top-level-functions/D_EXTEND.md) function to insert `A` and `PTR` records into previously-defined domains.
  *
  * ```javascript
- * // FIXME(tlim): This macro uses an undefined `dom`, and the reverse zone passed
- * // to D_EXTEND() is a host address rather than the declared /24 zone below.
  * function FORWARD_AND_REVERSE(ipaddr, fqdn) {
  *     D_EXTEND(dom,
  *         A(fqdn, ipaddr)
@@ -3696,7 +3700,9 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   // Other records can go here.
+ *   ...
+ *   ...
+ *   ...
  *   SPF_BUILDER({
  *     label: "@",
  *     overflow: "_spf%d",  // Delete this line if you don't want big strings split.
@@ -3711,6 +3717,8 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *       // fill in any domains to inline.
  *     ]
  *   }),
+ *   ...
+ *   ...
  * );
  * ```
  *
@@ -3832,10 +3840,12 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *   raw: "_rawspf",
  *   parts: [
  *     "v=spf1",
- *     "ip4:192.0.2.0/24",
+ *     ...
  *     "~all"
  *   ],
- *   flatten: []
+ *   flatten: [
+ *     ...
+ *   ]
  * });
  *
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),

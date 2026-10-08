@@ -97,7 +97,9 @@ When you want to specify SPF settings for a domain, use the `SPF_BUILDER()` func
 {% code title="dnsconfig.js" %}
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-  // Other records can go here.
+  ...
+  ...
+  ...
   SPF_BUILDER({
     label: "@",
     overflow: "_spf%d",  // Delete this line if you don't want big strings split.
@@ -112,6 +114,8 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
       // fill in any domains to inline.
     ]
   }),
+  ...
+  ...
 );
 ```
 {% endcode %}
@@ -235,10 +239,12 @@ var SPF_MYSETTINGS = SPF_BUILDER({
   raw: "_rawspf",
   parts: [
     "v=spf1",
-    "ip4:192.0.2.0/24",
+    ...
     "~all"
   ],
-  flatten: []
+  flatten: [
+    ...
+  ]
 });
 
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
