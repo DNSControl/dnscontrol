@@ -120,7 +120,7 @@ Jump to a table:
 | [`DNSCALE`](dnscale.md) | ❌ | ❔ | ✅ | ❌ |
 | [`DNSIMPLE`](dnsimple.md) | ✅ | ❌ | ❌ | ✅ |
 | [`DNSMADEEASY`](dnsmadeeasy.md) | ❔ | ✅ | ✅ | ✅ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ❔ | ❔ | ❌ | ❌ |
+| [`DNSOVERHTTPS`](dnsoverhttps.md) | ✅ | ❔ | ❌ | ❌ |
 | [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❔ | ❌ | ❌ |
 | [`DYNADOT`](dynadot.md) | ❔ | ❔ | ❌ | ❌ |
 | [`DYNU`](dynu.md) | ❌ | ❔ | ❌ | ❌ |
