@@ -181,10 +181,7 @@ The following example shows how to set meta variables with and without aliases:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
-
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     A("www1","1.2.3.11", CF_PROXY_ON),        // turn proxy ON.
     A("www2","1.2.3.12", CF_PROXY_OFF),       // default is OFF, this is a no-op.
     A("www3","1.2.3.13", {"cloudflare_proxy": "on"}), // Old format.
@@ -197,11 +194,8 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
-
 // Example domain where the CF proxy abides by the default (off).
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     A("proxied", "1.2.3.4", CF_PROXY_ON),
     A("notproxied", "1.2.3.5"),
     A("another", "1.2.3.6", CF_PROXY_ON),
@@ -210,7 +204,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
 );
 
 // Example domain where the CF proxy default is set to "on":
-D("example2.tld", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example2.tld", REGISTRAR("none"), SERVICE("cloudflare"),
     CF_PROXY_DEFAULT_ON, // Enable CF proxy for all items unless otherwise noted.
     A("proxied", "1.2.3.4"),
     A("notproxied", "1.2.3.5", CF_PROXY_OFF),
@@ -232,10 +226,7 @@ DNSControl supports per-record CNAME flattening using the `CF_CNAME_FLATTEN_ON` 
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
-
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     // Enable CNAME flattening for this record
     CNAME("cdn", "cdn.provider.com.", CF_CNAME_FLATTEN_ON),
 
@@ -271,10 +262,7 @@ To enable management, add the appropriate domain modifier:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
-
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     CF_MANAGE_COMMENTS,  // Enable comment management for this domain
     CF_MANAGE_TAGS,      // Enable tag management for this domain (paid plans only)
 
@@ -290,7 +278,7 @@ Comments work on all Cloudflare plans (including free). Use `CF_COMMENT()` to ad
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     CF_MANAGE_COMMENTS,
 
     A("www", "1.2.3.4", CF_COMMENT("Main website - hosted on AWS")),
@@ -316,7 +304,7 @@ In the Cloudflare Dashboard, you can filter DNS records by the presence of a tag
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     CF_MANAGE_TAGS,
 
     // Simple tags
@@ -349,7 +337,7 @@ You can use both comments and tags on the same record:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare"),
     CF_MANAGE_COMMENTS,
     CF_MANAGE_TAGS,
 
@@ -392,10 +380,10 @@ Old-style redirects uses the [Page Rules](https://developers.cloudflare.com/rule
 Enable it using:
 
 ```javascript
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare", ALL_NS, {
     "manage_redirects": true,
     "transcode_log": "transcode.log",
-});
+}));
 ```
 
 New redirects uses the [Single Redirects](https://developers.cloudflare.com/rules/url-forwarding/) product feature.  In this mode, `CF_REDIRECT` and `CF_TEMP_REDIRECT` functions generates Single Redirects.
@@ -403,9 +391,9 @@ New redirects uses the [Single Redirects](https://developers.cloudflare.com/rule
 Enable it using:
 
 ```javascript
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare", ALL_NS, {
     "manage_single_redirects": true
-});
+}));
 ```
 
 {% hint style="warning" %}
@@ -453,10 +441,10 @@ DNSControl will help convert `CF_REDIRECT`/`CF_TEMP_REDIRECT` statements into `C
 DNSControl will generate a file of the translated statements if you specify a filename using the `transcode_log` meta option.
 
 ```javascript
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {
+D("example.com", REGISTRAR("none"), SERVICE("cloudflare", ALL_NS, {
     "manage_single_redirects": true,
     "transcode_log": "transcode.log",
-});
+}));
 ```
 
 After running `dnscontrol preview` the contents will look something like this:
@@ -497,10 +485,8 @@ The Cloudflare provider can manage "Forwarding URL" Page Rules (redirects) for y
 ```javascript
 // chiphacker.com should redirect to electronics.stackexchange.com
 
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {"manage_redirects": true}); // enable manage_redirects
 
-D("chiphacker.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("chiphacker.com", REGISTRAR("none"), SERVICE("cloudflare", ALL_NS, {"manage_redirects": true}),
     // ...
 
     // 302 for meta subdomain
@@ -529,10 +515,7 @@ The Cloudflare provider can manage Worker Routes for your domains. Simply use th
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {"manage_workers": true}); // enable managing worker routes
-
-D("foo.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("foo.com", REGISTRAR("none"), SERVICE("cloudflare", ALL_NS, {"manage_workers": true}),
     // Assign the patterns `api.foo.com/*` and `foo.com/api/*` to `my-worker` script.
     CF_WORKER_ROUTE("api.foo.com/*", "my-worker"),
     CF_WORKER_ROUTE("foo.com/api/*", "my-worker"),
@@ -550,7 +533,7 @@ A [Workers Custom Domain](https://developers.cloudflare.com/workers/configuratio
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("foo.com", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+D("foo.com", REGISTRAR("none"), SERVICE("cloudflare"),
     // Keep the DNS record that Cloudflare created for the Workers Custom Domain `worker.foo.com`.
     AAAA("worker", "100::"),
 );

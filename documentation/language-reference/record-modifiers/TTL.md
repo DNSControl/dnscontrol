@@ -26,7 +26,7 @@ The value can be:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   DefaultTTL(2000),
   A("@","1.2.3.4"), // uses default
   A("foo", "2.3.4.5", TTL(500)), // overrides default

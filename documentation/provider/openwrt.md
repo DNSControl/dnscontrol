@@ -42,10 +42,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_OPENWRT = NewDnsProvider("openwrt");
-
-D("example.com", REG_NONE, DnsProvider(DSP_OPENWRT),
+D("example.com", REGISTRAR("none"), SERVICE("openwrt"),
     A("foo", "1.2.3.4"),
     AAAA("another", "2003::1"),
     CNAME("myalias", "www.example.com."),

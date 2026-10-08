@@ -34,10 +34,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_ORACLE = NewDnsProvider("oracle");
-
-D("example.com", REG_NONE, DnsProvider(DSP_ORACLE),
+D("example.com", REGISTRAR("none"), SERVICE("oracle"),
     NAMESERVER_TTL(86400),
 
     A("test", "1.2.3.4"),

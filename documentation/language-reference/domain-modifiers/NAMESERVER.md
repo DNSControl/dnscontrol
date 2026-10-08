@@ -16,15 +16,15 @@ For more information, refer to [this page](../../advanced-features/nameservers.m
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER,
-  DnsProvider(DSP_MY_PROVIDER),
-  DnsProvider(route53, 0),
+D("example.com", REGISTRAR("my_registrar"),
+  SERVICE("my_dns_provider"),
+  SERVICE("route53", 0),
   // Replace the nameservers:
   NAMESERVER("ns1.myserver.com."),
   NAMESERVER("ns2.myserver.com."),
 );
 
-D("example2.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example2.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   // Add these two additional nameservers to the existing list of nameservers.
   NAMESERVER("ns1.myserver.com."),
   NAMESERVER("ns2.myserver.com."),
@@ -58,8 +58,7 @@ It looks like this:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-D("example.com", REG_NONE,
+D("example.com", REGISTRAR("none"),
   ...
 );
 ```

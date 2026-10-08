@@ -26,9 +26,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var DSP_VULTR = NewDnsProvider("vultr");
-
-D("example.com", REG_DNSIMPLE, DnsProvider(DSP_VULTR),
+D("example.com", REGISTRAR("dnsimple"), SERVICE("vultr"),
     A("test", "1.2.3.4"),
 );
 ```

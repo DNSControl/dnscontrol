@@ -41,10 +41,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_JOKER = NewDnsProvider("joker");
-
-D("example.tld", REG_NONE, DnsProvider(DSP_JOKER),
+D("example.tld", REGISTRAR("none"), SERVICE("joker"),
     A("test", "1.2.3.4"),
     CNAME("www", "test"),
     MX("@", 10, "mail.example.tld."),

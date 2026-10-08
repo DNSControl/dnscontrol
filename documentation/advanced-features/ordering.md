@@ -13,7 +13,7 @@ Some providers explicitly require the targets of certain records like CNAMEs to 
 ## Practical example
 
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DNS_BIND),
+D("example.com", REGISTRAR("none"), SERVICE("bind"),
     CNAME("foo", "bar"),
     A("bar", "1.2.3.4"),
 );
@@ -30,7 +30,7 @@ Such updates will be done after all other updates to that domain.
 In this (contrived) example, it is impossible to know which CNAME should be created first. Therefore they will be done in a non-deterministic order after all other updates to that domain:
 
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DNS_BIND),
+D("example.com", REGISTRAR("none"), SERVICE("bind"),
     CNAME("foo", "bar"),
     CNAME("bar", "foo"),
 );

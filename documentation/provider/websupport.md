@@ -43,10 +43,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_WEBSUPPORT = NewDnsProvider("websupport");
-
-D("example.com", REG_NONE, DnsProvider(DSP_WEBSUPPORT),
+D("example.com", REGISTRAR("none"), SERVICE("websupport"),
     A("@", "1.2.3.4"),
     CNAME("www", "@"),
     MX("@", 10, "mail.example.com."),

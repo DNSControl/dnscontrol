@@ -34,7 +34,7 @@ This example redirects the bare (aka apex, or naked) domain to www:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CF_TEMP_REDIRECT("example.com/*", "https://www.example.com/$1"),
 
 );

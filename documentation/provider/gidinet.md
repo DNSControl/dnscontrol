@@ -31,10 +31,7 @@ If you manage your domain registration elsewhere but want to use Gidinet for DNS
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_GIDINET = NewDnsProvider("gidinet");
-
-D("example.com", REG_NONE, DnsProvider(DSP_GIDINET),
+D("example.com", REGISTRAR("none"), SERVICE("gidinet"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -46,10 +43,7 @@ If your domain is registered with Gidinet and you want to manage both nameserver
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_GIDINET = NewRegistrar("gidinet");
-var DSP_GIDINET = NewDnsProvider("gidinet");
-
-D("example.com", REG_GIDINET, DnsProvider(DSP_GIDINET),
+D("example.com", REGISTRAR("gidinet"), SERVICE("gidinet"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -61,10 +55,7 @@ If your domain is registered with Gidinet but you want to use a different DNS pr
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_GIDINET = NewRegistrar("gidinet");
-var DSP_OTHER = NewDnsProvider("cloudflare");
-
-D("example.com", REG_GIDINET, DnsProvider(DSP_OTHER),
+D("example.com", REGISTRAR("gidinet"), SERVICE("cloudflare"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -141,35 +132,29 @@ The DNS provider returns the free-tier nameservers via `GetNameservers`, so free
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_GIDINET = NewRegistrar("gidinet");
-var DSP_GIDINET = NewDnsProvider("gidinet");
-
-D("example.com", REG_GIDINET, DnsProvider(DSP_GIDINET),
+D("example.com", REGISTRAR("gidinet"), SERVICE("gidinet"),
     A("test", "1.2.3.4"),
 );
 ```
 {% endcode %}
 
-For zones on the **premium DNS** tier, opt out of the free-tier defaults with `DnsProvider(DSP_GIDINET, 0)` and use the `GIDINET_PREMIUM_NS()` helper to emit the five premium `NAMESERVER()` records:
+For zones on the **premium DNS** tier, opt out of the free-tier defaults with `SERVICE("gidinet", 0)` and use the `GIDINET_PREMIUM_NS()` helper to emit the five premium `NAMESERVER()` records:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_GIDINET = NewRegistrar("gidinet");
-var DSP_GIDINET = NewDnsProvider("gidinet");
-
-D("premium.example", REG_GIDINET,
-    DnsProvider(DSP_GIDINET, 0),
+D("premium.example", REGISTRAR("gidinet"),
+    SERVICE("gidinet", 0),
     GIDINET_PREMIUM_NS(),
     A("test", "1.2.3.4"),
 );
 ```
 {% endcode %}
 
-The `0` passed to `DnsProvider()` tells DNSControl to skip the provider's auto-injected nameservers for that zone, so only the explicit `NAMESERVER()` records drive the delegation.
+The `0` passed to `SERVICE()` tells DNSControl to skip the provider's auto-injected nameservers for that zone, so only the explicit `NAMESERVER()` records drive the delegation.
 
 When used as a registrar, Gidinet updates the nameservers at the registry level via the Core API's `domainNameServersChange` method.
 
-**Apex NS records are automatically filtered** by the DNS provider with a warning message. Gidinet does not support modifying NS records at the zone apex via the DNS API — they are managed by the registrar. If you use a DNS provider other than Gidinet, declare `NAMESERVER(...)` records (or rely on the other provider's `GetNameservers`) so `REG_GIDINET` can drive the delegation.
+**Apex NS records are automatically filtered** by the DNS provider with a warning message. Gidinet does not support modifying NS records at the zone apex via the DNS API — they are managed by the registrar. If you use a DNS provider other than Gidinet, declare `NAMESERVER(...)` records (or rely on the other provider's `GetNameservers`) so `REGISTRAR("gidinet")` can drive the delegation.
 
 ### Zone creation
 

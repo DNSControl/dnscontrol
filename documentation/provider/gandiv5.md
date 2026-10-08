@@ -60,10 +60,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_GANDI = NewRegistrar("gandi");
-var DSP_GANDI = NewDnsProvider("gandi");
-
-D("example.com", REG_GANDI, DnsProvider(DSP_GANDI),
+D("example.com", REGISTRAR("gandi"), SERVICE("gandi"),
     A("test", "1.2.3.4"),
 );
 ```

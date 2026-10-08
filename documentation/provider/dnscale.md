@@ -26,10 +26,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_DNSCALE = NewDnsProvider("dnscale");
-
-D("example.com", REG_NONE, DnsProvider(DSP_DNSCALE),
+D("example.com", REGISTRAR("none"), SERVICE("dnscale"),
     A("@", "192.0.2.1"),
     A("www", "192.0.2.1"),
     AAAA("@", "2001:db8::1"),
@@ -76,13 +73,9 @@ Because DNScale assigns nameservers server-side, `GetNameservers` returns an emp
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECHEAP = NewRegistrar("namecheap");
-var DSP_DNSCALE = NewDnsProvider("dnscale");
-var DSP_CLOUDFLARE = NewDnsProvider("cloudflare");
-
-D("example.com", REG_NAMECHEAP,
-    DnsProvider(DSP_DNSCALE),
-    DnsProvider(DSP_CLOUDFLARE),
+D("example.com", REGISTRAR("namecheap"),
+    SERVICE("dnscale"),
+    SERVICE("cloudflare"),
     NAMESERVER("ns1.dnscale.eu"),
     NAMESERVER("ns2.dnscale.eu"),
     A("@", "192.0.2.1"),

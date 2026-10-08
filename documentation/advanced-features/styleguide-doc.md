@@ -137,10 +137,7 @@ Long example: (with filename)
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DNS_BIND = NewDnsProvider("bind");
-
-D("example.com", REG_NONE, DnsProvider(DNS_BIND),
+D("example.com", REGISTRAR("none"), SERVICE("bind"),
     A("@", "1.2.3.4"),
 );
 ```
@@ -152,10 +149,7 @@ Long example: (without filename)
 
 {% code %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DNS_BIND = NewDnsProvider("bind");
-
-D("example.com", REG_NONE, DnsProvider(DNS_BIND),
+D("example.com", REGISTRAR("none"), SERVICE("bind"),
     A("@", "1.2.3.4")
 );
 ```

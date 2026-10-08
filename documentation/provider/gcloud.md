@@ -61,10 +61,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECOM = NewRegistrar("name.com");
-var DSP_GCLOUD = NewDnsProvider("gcloud");
-
-D("example.com", REG_NAMECOM, DnsProvider(DSP_GCLOUD),
+D("example.com", REGISTRAR("name.com"), SERVICE("gcloud"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -98,16 +95,13 @@ Example:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECOM = NewRegistrar("name.com");
-var DSP_GCLOUD = NewDnsProvider("gcloud", {
+D("example.tld", REGISTRAR("name.com"), SERVICE("gcloud", ALL_NS, {
     "visibility": "private",
     "networks": [
         "https://www.googleapis.com/compute/v1/projects/mydnsproject/global/networks/myvpcnetwork",
         "my2ndvpcnetwork"
     ]
-});
-
-D("example.tld", REG_NAMECOM, DnsProvider(DSP_GCLOUD),
+}),
     A("test", "1.2.3.4"),
 );
 ```
@@ -129,7 +123,7 @@ Example:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(GCLOUD),
+D("example.com", REGISTRAR("none"), SERVICE("gcloud"),
   {
     DnssecConfig: JSON.stringify(
     {
@@ -149,6 +143,7 @@ D("example.com", REG_NONE, DnsProvider(GCLOUD),
       ]
     }),
   },
+);
 ```
 {% endcode %}
 

@@ -26,7 +26,7 @@ The `IGNORE()` function can be used with up to 3 parameters:
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE(labelSpec, typeSpec, targetSpec),
   IGNORE(labelSpec, typeSpec),
   IGNORE(labelSpec),
@@ -58,7 +58,7 @@ General examples:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE("foo"), // matches any records on foo.example.com
   IGNORE("baz", "A"), // matches any A records on label baz.example.com
   IGNORE("*", "MX", "*"), // matches all MX records
@@ -74,7 +74,7 @@ Ignore Let's Encrypt (ACME) validation records:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE("_acme-challenge", "TXT"),
   IGNORE("_acme-challenge.**", "TXT"),
 );
@@ -85,7 +85,7 @@ Ignore DNS records typically inserted by Microsoft ActiveDirectory:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE("_gc", "SRV"), // General Catalog
   IGNORE("_gc.**", "SRV"), // General Catalog
   IGNORE("_kerberos", "SRV"), // Kerb5 server
@@ -114,7 +114,7 @@ All the examples assume the following DNS records are the "existing" records tha
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     A("@", "151.101.1.69"),
     A("www", "151.101.1.69"),
     A("foo", "1.1.1.1"),
@@ -138,7 +138,7 @@ D_EXTEND("more.example.com",
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("@", "", ""),
 );
 ```
@@ -151,7 +151,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("example.com.", "", ""),
 );
 ```
@@ -163,7 +163,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("foo", "", ""),
 );
 ```
@@ -175,7 +175,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("foo.**", "", ""),
 );
 ```
@@ -187,7 +187,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("www", "", ""),
 );
     //    www.example.com. A 174.136.107.196
@@ -196,7 +196,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("www.*", "", ""),
 );
     //    nothing
@@ -209,7 +209,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("www.example.com", "", ""),
 );
     //    nothing
@@ -222,7 +222,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("www.example.com.", "", ""),
 );
 ```
@@ -234,7 +234,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     //IGNORE("", "", "1.1.1.*"),
 );
 ```
@@ -247,7 +247,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     //IGNORE("", "", "www"),
 );
 ```
@@ -259,7 +259,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("", "", "*bar*"),
 );
 ```
@@ -274,7 +274,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     IGNORE("", "", "bar.**"),
 );
 ```
@@ -293,7 +293,7 @@ This will generate an error:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     ...
     TXT("myhost", "mytext"),
     IGNORE("myhost", "*", "*"),  // Error!  Ignoring an item we inserted
@@ -305,7 +305,7 @@ To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement to
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     DISABLE_IGNORE_SAFETY_CHECK,
     ...
     TXT("myhost", "mytext"),
@@ -323,7 +323,7 @@ The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2 world
 
 {% code %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     // THIS NO LONGER WORKS! Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
     TXT("myhost", "mytext", IGNORE_NAME_DISABLE_SAFETY_CHECK),
 );

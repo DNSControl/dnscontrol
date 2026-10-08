@@ -44,10 +44,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_SCALEWAY = NewDnsProvider("scaleway");
-
-D("example.com", REG_NONE, DnsProvider(DSP_SCALEWAY),
+D("example.com", REGISTRAR("none"), SERVICE("scaleway"),
     A("test", "1.2.3.4"),
     MX("@", 10, "mail.example.com."),
 );

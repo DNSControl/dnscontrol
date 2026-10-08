@@ -37,10 +37,7 @@ This provider does not recognize any provider-specific record metadata.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_OPENPROVIDER = NewDnsProvider("openprovider");
-
-D("example.com", REG_NONE, DnsProvider(DSP_OPENPROVIDER),
+D("example.com", REGISTRAR("none"), SERVICE("openprovider"),
     A("@", "192.0.2.1"),
     AAAA("www", "2001:db8::1"),
     CNAME("blog", "www.example.com."),

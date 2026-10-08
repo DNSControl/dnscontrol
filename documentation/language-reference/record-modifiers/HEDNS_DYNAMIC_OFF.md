@@ -11,7 +11,7 @@ Use this modifier when you want to ensure a record that was previously dynamic i
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+D("example.com", REGISTRAR("none"), SERVICE("hedns"),
     A("static", "5.6.7.8", HEDNS_DYNAMIC_OFF),
 );
 ```

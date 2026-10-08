@@ -47,7 +47,7 @@ Here's an example reverse lookup domain:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
+D(REV("1.2.3.0/24"), REGISTRAR("none"), SERVICE("bind"),
   PTR("1", "foo.example.com."),
   PTR("2", "bar.example.com."),
   PTR("3", "baz.example.com."),
@@ -55,7 +55,7 @@ D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
   PTR("1.2.3.10", "ten.example.com."),
 );
 
-D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
+D(REV("2001:db8:302::/48"), REGISTRAR("none"), SERVICE("bind"),
   PTR("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0", "foo.example.com."),  // 2001:db8:302::1
   // If the first parameter is an IP address, DNSControl automatically calls REV() for you.
   PTR("2001:db8:302::2", "two.example.com."),                          // 2.0.0...

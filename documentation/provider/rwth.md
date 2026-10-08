@@ -26,10 +26,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_RWTH = NewDnsProvider("rwth");
-
-D("example.rwth-aachen.de", REG_NONE, DnsProvider(DSP_RWTH),
+D("example.rwth-aachen.de", REGISTRAR("none"), SERVICE("rwth"),
     A("test", "1.2.3.4"),
 );
 ```

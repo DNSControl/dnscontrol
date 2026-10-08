@@ -12,6 +12,8 @@ return: string
 ---
 
 NewRegistrar activates a Registrar Provider specified in `creds.json`.
+For new configurations, use [REGISTRAR](../domain-modifiers/REGISTRAR.md)
+directly in `D()`. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
 A registrar maintains the domain's registration and delegation (i.e. the
 nameservers for the domain).  DNSControl only manages the delegation.
 

@@ -7,12 +7,21 @@ interface Domain {
     meta: Record<string, unknown>;
     records: DNSRecord[];
     dnsProviders: Record<string, unknown>;
+    dnsProviderMetadata?: Record<string, ProviderConfigMetadata>;
     defaultTTL: number;
     nameservers: unknown[];
     ignored_names: unknown[];
     ignored_targets: unknown[];
     [key: string]: unknown;
 }
+
+type ProviderConfigMetadata =
+    | null
+    | boolean
+    | number
+    | string
+    | ProviderConfigMetadata[]
+    | { [key: string]: ProviderConfigMetadata };
 
 interface DNSRecord {
     type: string;
@@ -50,7 +59,7 @@ type Duration =
  * > 2. Make sure DNSControl only uses verified configuration if you want to use `FETCH`. For example, an attacker can send Pull Requests to your config repo, and have your CI test malicious configurations and make arbitrary HTTP requests. Therefore, `FETCH` must be explicitly enabled with flag `--allow-fetch` on DNSControl invocation.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@", "1.2.3.4"),
  * );
  *
@@ -199,7 +208,7 @@ declare const DISABLE_REPEATED_DOMAIN_CHECK: RecordModifier;
  * Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/language-reference/record-modifiers) or JSON objects, which will be merged into the record's metadata.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@", "1.2.3.4"),
  *   A("foo", "2.3.4.5"),
  *   A("test.foo", IP("1.2.3.4"), TTL(5000)),
@@ -221,7 +230,7 @@ declare function A(name: string, address: string | number, ...modifiers: RecordM
  * ```javascript
  * var addrV6 = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
  *
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   AAAA("@", addrV6),
  *   AAAA("foo", addrV6),
  *   AAAA("test.foo", addrV6, TTL(5000)),
@@ -243,7 +252,7 @@ declare function AAAA(name: string, address: string, ...modifiers: RecordModifie
  * more information.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   ADGUARDHOME_AAAA_PASSTHROUGH("foo", ""),
  * );
  * ```
@@ -262,7 +271,7 @@ declare function ADGUARDHOME_AAAA_PASSTHROUGH(source: string, destination: strin
  * more information.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   ADGUARDHOME_A_PASSTHROUGH("foo", ""),
  * );
  * ```
@@ -301,7 +310,7 @@ declare function AKAMAICDN(name: string, target: string, ...modifiers: RecordMod
  *
  * ## Example
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     // Redirect example.com to google.com, returning both A and AAAA records
  *     AKAMAITLC("@", "DUAL", "google.com."),
  * );
@@ -321,7 +330,7 @@ declare function AKAMAITLC(name: string, answer_type: "DUAL" | "A" | "AAAA", tar
  * Target should be a string representing the target. If it is a single label we will assume it is a relative name on the current domain. If it contains *any* dots, it should be a fully qualified domain name, ending with a `.`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   ALIAS("@", "google.com."), // example.com -> google.com
  * );
  * ```
@@ -329,6 +338,25 @@ declare function AKAMAITLC(name: string, answer_type: "DUAL" | "A" | "AAAA", tar
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/alias
  */
 declare function ALIAS(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
+
+/**
+ * `ALL_NS` equals `-1` and selects all nameservers from a DNS service. This is also
+ * the default when maxNS is omitted from [SERVICE](SERVICE.md).
+ *
+ * Use it to supply configuration metadata without limiting nameservers:
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("none"),
+ *     SERVICE("bind", ALL_NS, {default_ns: ["ns1.example.net.", "ns2.example.net."]}),
+ *     A("@", "192.0.2.1"),
+ * );
+ * ```
+ *
+ * `0` means use no nameservers; a positive integer limits the number used.
+ *
+ * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/all_ns
+ */
+declare const ALL_NS: -1;
 
 /**
  * `AUTODNSSEC_OFF` tells the provider to disable AutoDNSSEC. It takes no
@@ -353,12 +381,12 @@ declare const AUTODNSSEC_OFF: DomainModifier;
  * correct syntax is `AUTODNSSEC_ON` not `AUTODNSSEC_ON()`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   AUTODNSSEC_ON,  // Enable AutoDNSSEC.
  *   A("@", "10.1.1.1"),
  * );
  *
- * D("insecure.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("insecure.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   AUTODNSSEC_OFF,  // Disable AutoDNSSEC.
  *   A("@", "10.2.2.2"),
  * );
@@ -407,7 +435,7 @@ declare const AUTODNSSEC_ON: DomainModifier;
  * This arrangement is useful if you want some record sets to be aliases and some non-aliases.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider("AZURE_DNS"),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("AZURE_DNS"),
  *   AZURE_ALIAS("foo", "A", "/subscriptions/726f8cd6-6459-4db4-8e6d-2cd2716904e2/resourceGroups/test/providers/Microsoft.Network/trafficManagerProfiles/testpp2"), // record for traffic manager
  *   AZURE_ALIAS("foo", "CNAME", "/subscriptions/726f8cd6-6459-4db4-8e6d-2cd2716904e2/resourceGroups/test/providers/Microsoft.Network/dnszones/example.com/A/quux."), // record in the same zone
  * );
@@ -435,7 +463,7 @@ declare function AZURE_ALIAS(name: string, type: "A" | "AAAA" | "CNAME", target:
  * - `CAA_CRITICAL`: Issuer critical flag. CA that does not understand this tag will refuse to issue certificate for this domain.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // Allow letsencrypt to issue certificate for this domain
  *   CAA("@", "issue", "letsencrypt.org"),
  *   // Allow no CA to issue wildcard certificate for this domain
@@ -464,7 +492,7 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * ### Simple example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CAA_BUILDER({
  *     label: "@",
  *     iodef: "mailto:test@example.com",
@@ -481,7 +509,7 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * `CAA_BUILDER` builds multiple records:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CAA("@", "iodef", "mailto:test@example.com", CAA_CRITICAL),
  *   CAA("@", "issue", "letsencrypt.org"),
  *   CAA("@", "issue", "comodoca.com"),
@@ -503,7 +531,7 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * The same example can be enriched with CAA_CRITICAL on all records:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CAA_BUILDER({
  *     label: "@",
  *     iodef: "mailto:test@example.com",
@@ -522,7 +550,7 @@ declare function CAA(name: string, tag: "issue" | "issuewild" | "iodef" | "conta
  * `CAA_BUILDER` then builds (the same) multiple records - all with CAA_CRITICAL flag set:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CAA("@", "iodef", "mailto:test@example.com", CAA_CRITICAL),
  *   CAA("@", "issue", "letsencrypt.org", CAA_CRITICAL),
  *   CAA("@", "issue", "comodoca.com", CAA_CRITICAL),
@@ -579,7 +607,7 @@ declare function CAA_BUILDER(opts: { label?: string; iodef?: string; iodef_criti
  * This example redirects the bare (aka apex, or naked) domain to www:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CF_REDIRECT("example.com/*", "https://www.example.com/$1"),
  * );
  * ```
@@ -598,7 +626,7 @@ declare function CF_REDIRECT(source: string, destination: string, ...modifiers: 
  * Cloudflare documentation: <https://developers.cloudflare.com/rules/url-forwarding/single-redirects/>
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CF_SINGLE_REDIRECT('redirect www.example.com', 302, 'http.host eq "www.example.com"', 'concat("https://otherplace.com", http.request.uri.path)'),
  *   CF_SINGLE_REDIRECT('redirect yyy.example.com', 302, 'http.host eq "yyy.example.com"', 'concat("https://survey.stackoverflow.co", "")'),
  *   CF_TEMP_REDIRECT("*example.com/*", "https://contests.otherexample.com/$2"),
@@ -649,7 +677,7 @@ declare function CF_SINGLE_REDIRECT(name: string, code: number, when: string, th
  * This example redirects the bare (aka apex, or naked) domain to www:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CF_TEMP_REDIRECT("example.com/*", "https://www.example.com/$1"),
  *
  * );
@@ -671,7 +699,7 @@ declare function CF_TEMP_REDIRECT(source: string, destination: string, ...modifi
  * This example assigns the patterns `api.example.com/*` and `example.com/api/*` to a `my-worker` script:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     CF_WORKER_ROUTE("api.example.com/*", "my-worker"),
  *     CF_WORKER_ROUTE("example.com/api/*", "my-worker"),
  * );
@@ -695,7 +723,7 @@ declare function CLOUDNS_WR(name: string, target: string, ...modifiers: RecordMo
  * Target should be a string representing the CNAME target. If it is a single label we will assume it is a relative name on the current domain. If it contains *any* dots, it should be a fully qualified domain name, ending with a `.`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   CNAME("foo", "google.com."), // foo.example.com -> google.com
  *   CNAME("abc", "@"), // abc.example.com -> example.com
  *   CNAME("def", "test"), // def.example.com -> test.example.com
@@ -707,7 +735,17 @@ declare function CLOUDNS_WR(name: string, target: string, ...modifiers: RecordMo
 declare function CNAME(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `D` adds a new Domain for DNSControl to manage. The first two arguments are required: the domain name (fully qualified `example.com` without a trailing dot), and the name of the registrar (as previously declared with [NewRegistrar](NewRegistrar.md)). Any number of additional arguments may be included to add DNS Providers with [DNSProvider](NewDnsProvider.md), add records with [A](../domain-modifiers/A.md), [CNAME](../domain-modifiers/CNAME.md), and so forth, or add metadata.
+ * `D` adds a domain for DNSControl to manage. The first argument is the domain name
+ * (fully qualified `example.com` without a trailing dot). Follow it with
+ * [REGISTRAR](../domain-modifiers/REGISTRAR.md) unless a registrar is supplied by
+ * [DEFAULTS](DEFAULTS.md). An explicit registrar must immediately follow the name.
+ * Additional modifiers select DNS services with [SERVICE](../domain-modifiers/SERVICE.md),
+ * add records with [A](../domain-modifiers/A.md) and [CNAME](../domain-modifiers/CNAME.md),
+ * or add domain metadata.
+ *
+ * The legacy `D(name, registrarName, ...)` form remains supported with
+ * [NewRegistrar](NewRegistrar.md). See the
+ * [conversion guide](../../getting-started/converting-dnsconfig.md).
  *
  * Modifier arguments are processed according to type as follows:
  *
@@ -717,8 +755,8 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * ```javascript
  * // simple domain
- * D("example.com", REG_MY_PROVIDER,
- *   DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"),
+ *   SERVICE("my_dns_provider"),
  *   A("@","1.2.3.4"),           // "@" means the apex domain. In this case, "example.com" itself.
  *   CNAME("test", "foo.example2.com."),
  * );
@@ -732,7 +770,7 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *     MX("@", 10, "alt4.aspmx.l.google.com."),
  * ]
  *
- * D("other-example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("other-example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@","1.2.3.4"),
  *   CNAME("test", "foo.example2.com."),
  *   GOOGLE_APPS_DOMAIN_MX,
@@ -759,7 +797,7 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  * To add this, add the meta data to the zone immediately following the registrar.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, {no_ns: "true"},
+ * D("example.com", REGISTRAR("my_registrar"), {no_ns: "true"},
  *   ...
  *   ...
  *   ...
@@ -775,15 +813,11 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  * To differentiate the different domains, specify the domains as `domain.tld!tag`, such as `example.com!inside` and `example.com!outside`.
  *
  * ```javascript
- * var REG_NONE = NewRegistrar("none");
- * var DNS_INSIDE = NewDnsProvider("Cloudflare");
- * var DNS_OUTSIDE = NewDnsProvider("bind");
- *
- * D("example.com!inside", REG_NONE, DnsProvider(DNS_INSIDE),
+ * D("example.com!inside", REGISTRAR("none"), SERVICE("Cloudflare"),
  *   A("www", "10.10.10.10"),
  * );
  *
- * D("example.com!outside", REG_NONE, DnsProvider(DNS_OUTSIDE),
+ * D("example.com!outside", REGISTRAR("none"), SERVICE("bind"),
  *   A("www", "20.20.20.20"),
  * );
  *
@@ -807,11 +841,17 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  *
  * @see https://docs.dnscontrol.org/language-reference/top-level-functions/d
  */
-declare function D(name: string, registrar: string, ...modifiers: DomainModifier[]): void;
+declare function D(name: string, registrarOrModifier?: (string | DomainModifier), ...modifiers: DomainModifier[]): void;
 
 /**
  * `DEFAULTS` allows you to declare a set of default arguments to apply to all subsequent domains. Subsequent calls to [`D`](D.md) will have these
  * arguments passed as if they were the first modifiers in the argument list.
+ *
+ * A [REGISTRAR](../domain-modifiers/REGISTRAR.md) default supplies the registrar
+ * when a domain has no explicit selection. An explicit registrar overrides it.
+ * [SERVICE](../domain-modifiers/SERVICE.md) defaults supply DNS services and may
+ * include configuration metadata. Repeating metadata for the same domain and
+ * entry in `D()` or `D_EXTEND()` is an error, even when the values match.
  *
  * ## Example
  *
@@ -819,13 +859,12 @@ declare function D(name: string, registrar: string, ...modifiers: DomainModifier
  * The domain `example.com` will have the defaults set.
  *
  * ```javascript
- * var COMMON = NewDnsProvider("foo");
  * DEFAULTS(
- *   DnsProvider(COMMON, 0),
+ *   SERVICE("foo", 0),
  *   DefaultTTL("1d"),
  * );
  *
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@","1.2.3.4"),
  * );
  * ```
@@ -836,7 +875,7 @@ declare function D(name: string, registrar: string, ...modifiers: DomainModifier
  * ```javascript
  * DEFAULTS();
  *
- * D("example2.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example2.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@","1.2.3.4"),
  * );
  * ```
@@ -851,7 +890,7 @@ declare function DEFAULTS(...modifiers: DomainModifier[]): void;
  * Digest should be a string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DHCID("example.com", "ABCDEFG"),
  * );
  * ```
@@ -870,7 +909,7 @@ declare function DHCID(name: string, digest: string, ...modifiers: RecordModifie
  * ## Syntax
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     DISABLE_IGNORE_SAFETY_CHECK,
  *     ...
  *     TXT("myhost", "mytext"),
@@ -890,7 +929,7 @@ declare const DISABLE_IGNORE_SAFETY_CHECK: DomainModifier;
  * ### Simple example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DKIM_BUILDER({
  *     selector: "s1",
  *     pubkey: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDC5/z4L"
@@ -907,7 +946,7 @@ declare const DISABLE_IGNORE_SAFETY_CHECK: DomainModifier;
  * ### Advanced example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DKIM_BUILDER({
  *     selector: "k2",
  *     pubkey: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDC5/z4L",
@@ -972,7 +1011,7 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  * ### Simple example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DMARC_BUILDER({
  *     policy: "reject",
  *     ruf: [
@@ -991,7 +1030,7 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  * ### Advanced example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DMARC_BUILDER({
  *     policy: "reject",
  *     subdomainPolicy: "quarantine",
@@ -1010,7 +1049,7 @@ declare function DKIM_BUILDER(opts: { selector: string; pubkey?: string; label?:
  * ```
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DMARC_BUILDER({
  *     label: "insecure",
  *     policy: "none",
@@ -1066,7 +1105,7 @@ declare function DMARC_BUILDER(opts: { label?: string; version?: string; policy:
  * Target should be a string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DNAME("sub", "example.net."),
  * );
  * ```
@@ -1087,7 +1126,7 @@ declare function DNAME(name: string, target: string, ...modifiers: RecordModifie
  * Public key must be a string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DNSKEY("@", 257, 3, 13, "AABBCCDD"),
  * );
  * ```
@@ -1104,26 +1143,26 @@ declare function DNSKEY(name: string, flags: number, protocol: number, algorithm
  * For example these two statements are equivalent:
  *
  * ```javascript
- * DOMAIN_ELSEWHERE("example.com", REG_MY_PROVIDER, ["ns1.foo.com", "ns2.foo.com"]);
+ * DOMAIN_ELSEWHERE("example.com", REGISTRAR("my_provider"), ["ns1.foo.com.", "ns2.foo.com."]);
  * ```
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_provider"),
  *     NO_PURGE,
- *     NAMESERVER("ns1.foo.com"),
- *     NAMESERVER("ns2.foo.com"),
+ *     NAMESERVER("ns1.foo.com."),
+ *     NAMESERVER("ns2.foo.com."),
  * );
  * ```
  *
  * NOTE: The [`NO_PURGE`](../domain-modifiers/NO_PURGE.md) is used out of abundance of caution but since no
- * `DnsProvider()` statements exist, no updates would be performed.
+ * `SERVICE()` statements exist, no updates would be performed.
  *
  * @see https://docs.dnscontrol.org/language-reference/top-level-functions/domain_elsewhere
  */
-declare function DOMAIN_ELSEWHERE(name: string, registrar: string, nameserver_names: string[]): void;
+declare function DOMAIN_ELSEWHERE(name: string, registrar: string | DomainModifier, nameserver_names: string[]): void;
 
 /**
- * `DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of a hardcoded list of nameservers, a DnsProvider() is queried.
+ * `DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of a hardcoded list of nameservers, a DNS service is queried.
  *
  * `DOMAIN_ELSEWHERE_AUTO` is useful when you control a domain's registrar but the DNS zones are managed by another system. Luckily you have enough access to that other system that you can query it to determine the zone's nameservers.
  *
@@ -1132,13 +1171,13 @@ declare function DOMAIN_ELSEWHERE(name: string, registrar: string, nameserver_na
  * For example these two statements are equivalent:
  *
  * ```javascript
- * DOMAIN_ELSEWHERE_AUTO("example.com", REG_NAMEDOTCOM, DSP_AZURE);
+ * DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR("namedotcom"), SERVICE("azure"));
  * ```
  *
  * ```javascript
- * D("example.com", REG_NAMEDOTCOM,
+ * D("example.com", REGISTRAR("namedotcom"),
  *     NO_PURGE,
- *     DnsProvider(DSP_AZURE),
+ *     SERVICE("azure"),
  * );
  * ```
  *
@@ -1146,7 +1185,7 @@ declare function DOMAIN_ELSEWHERE(name: string, registrar: string, nameserver_na
  *
  * @see https://docs.dnscontrol.org/language-reference/top-level-functions/domain_elsewhere_auto
  */
-declare function DOMAIN_ELSEWHERE_AUTO(name: string, domain: string, registrar: string, dnsProvider: string): void;
+declare function DOMAIN_ELSEWHERE_AUTO(domain: string, registrar: string | DomainModifier, ...dnsProviders: (string | DomainModifier)[]): void;
 
 /**
  * `DS` adds a [Delegation signer record](https://www.rfc-editor.org/rfc/rfc4034) to the domain.
@@ -1160,7 +1199,7 @@ declare function DOMAIN_ELSEWHERE_AUTO(name: string, domain: string, registrar: 
  * Digest must be a string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DS("example.com", 2371, 13, 2, "ABCDEF"),
  * );
  * ```
@@ -1172,6 +1211,12 @@ declare function DS(name: string, keytag: number, algorithm: number, digesttype:
 /**
  * `D_EXTEND` adds records (and metadata) to a domain previously defined by [`D()`](D.md). It can also be used to add subdomain records (and metadata) to a previously defined domain.
  *
+ * [SERVICE](../domain-modifiers/SERVICE.md) can add a DNS service or its metadata.
+ * Metadata may be supplied only once per domain and credential entry, including
+ * across defaults, `D()`, and extensions. An explicit
+ * [REGISTRAR](../domain-modifiers/REGISTRAR.md) must immediately follow the name;
+ * it may override a default registrar but cannot conflict with an explicit one.
+ *
  * The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md), simply adding records as if they had been specified in the original [`D()`](D.md).
  *
  * If the domain name does not match an existing domain, but could be a (non-delegated) subdomain of an existing domain, the new records (and metadata) are added with the subdomain part appended to all record names (labels), and targets (as appropriate). See the examples below.
@@ -1181,7 +1226,7 @@ declare function DS(name: string, keytag: number, algorithm: number, digesttype:
  * Some operators only act on an apex domain (e.g. [`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md), [`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them in a `D_EXTEND` subdomain may not be what you expect.
  *
  * ```javascript
- * D("domain.tld", REG_MY_PROVIDER, DnsProvider(DNS),
+ * D("domain.tld", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@", "127.0.0.1"), // domain.tld
  *   A("www", "127.0.0.2"), // www.domain.tld
  *   CNAME("a", "b"), // a.domain.tld -> b.domain.tld
@@ -1238,7 +1283,7 @@ declare function D_EXTEND(name: string, ...modifiers: DomainModifier[]): void;
  * NS records are currently a special case, and do not inherit from `DefaultTTL`. See [`NAMESERVER_TTL`](../domain-modifiers/NAMESERVER_TTL.md) to set a default TTL for all NS records.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DefaultTTL("4h"),
  *   A("@","1.2.3.4"), // uses default
  *   A("foo", "2.3.4.5", TTL(600)), // overrides default
@@ -1254,6 +1299,8 @@ declare function DefaultTTL(ttl: Duration): DomainModifier;
 
 /**
  * DnsProvider indicates that the specified provider should be used to manage records for this domain. The name must match the name used with [NewDnsProvider](../top-level-functions/NewDnsProvider.md).
+ * For new configurations, use [SERVICE](SERVICE.md) instead. See the
+ * [conversion guide](../../getting-started/converting-dnsconfig.md).
  *
  * The nsCount parameter determines how the nameservers will be managed from this provider.
  *
@@ -1321,7 +1368,7 @@ declare function HASH(algorithm: "SHA1" | "SHA256" | "SHA512", value: string): s
  * **Note:** DDNS keys are **write-only**. dnscontrol sets the key on the provider but cannot read back the current key. This means a key-only change (same record data, new key) will not be detected as a difference. To force an update, also change another field such as the TTL.
  *
  * ```javascript
- * D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+ * D("example.com", REGISTRAR("none"), SERVICE("hedns"),
  *     A("dyn", "0.0.0.0", HEDNS_DDNS_KEY("my-secret-token")),
  *     AAAA("dyn6", "::1", HEDNS_DDNS_KEY("another-token")),
  * );
@@ -1337,7 +1384,7 @@ declare function HEDNS_DDNS_KEY(key: string): RecordModifier;
  * Use this modifier when you want to ensure a record that was previously dynamic is returned to a static state.
  *
  * ```javascript
- * D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+ * D("example.com", REGISTRAR("none"), SERVICE("hedns"),
  *     A("static", "5.6.7.8", HEDNS_DYNAMIC_OFF),
  * );
  * ```
@@ -1354,7 +1401,7 @@ declare const HEDNS_DYNAMIC_OFF: RecordModifier;
  * To set a specific DDNS key, use [`HEDNS_DDNS_KEY()`](HEDNS_DDNS_KEY.md) instead.
  *
  * ```javascript
- * D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+ * D("example.com", REGISTRAR("none"), SERVICE("hedns"),
  *     A("dyn", "0.0.0.0", HEDNS_DYNAMIC_ON),
  *     AAAA("dyn6", "::1", HEDNS_DYNAMIC_ON),
  * );
@@ -1376,7 +1423,7 @@ declare const HEDNS_DYNAMIC_ON: RecordModifier;
  * If you set the parameter `ech` to the special value `IGNORE`, DNSControl will ignore the contents of that parameter when updating a zone.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   HTTPS("@", 1, ".", "ipv4hint=123.123.123.123 alpn=h3,h2 port=443"),
  *   HTTPS("@", 1, "test.com", ""),
  * );
@@ -1402,7 +1449,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * The `IGNORE()` function can be used with up to 3 parameters:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE(labelSpec, typeSpec, targetSpec),
  *   IGNORE(labelSpec, typeSpec),
  *   IGNORE(labelSpec),
@@ -1432,7 +1479,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * General examples:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE("foo"), // matches any records on foo.example.com
  *   IGNORE("baz", "A"), // matches any A records on label baz.example.com
  *   IGNORE("*", "MX", "*"), // matches all MX records
@@ -1446,7 +1493,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * Ignore Let's Encrypt (ACME) validation records:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE("_acme-challenge", "TXT"),
  *   IGNORE("_acme-challenge.**", "TXT"),
  * );
@@ -1455,7 +1502,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * Ignore DNS records typically inserted by Microsoft ActiveDirectory:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE("_gc", "SRV"), // General Catalog
  *   IGNORE("_gc.**", "SRV"), // General Catalog
  *   IGNORE("_kerberos", "SRV"), // Kerb5 server
@@ -1482,7 +1529,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * All the examples assume the following DNS records are the "existing" records that a third-party is maintaining. (Don't be confused by the fact that we're using DNSControl notation for the records. Pretend some other system inserted them.)
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     A("@", "151.101.1.69"),
  *     A("www", "151.101.1.69"),
  *     A("foo", "1.1.1.1"),
@@ -1504,7 +1551,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * ```
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("@", "", ""),
  * );
  * ```
@@ -1515,7 +1562,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * `foo.more.example.com. A 1.1.1.1`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("example.com.", "", ""),
  * );
  * ```
@@ -1525,7 +1572,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * nothing
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("foo", "", ""),
  * );
  * ```
@@ -1535,7 +1582,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * `foo.example.com. A 1.1.1.1`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("foo.**", "", ""),
  * );
  * ```
@@ -1545,14 +1592,14 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * `foo.more.example.com. A 1.1.1.1`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("www", "", ""),
  * );
  *     //    www.example.com. A 174.136.107.196
  * ```
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("www.*", "", ""),
  * );
  *     //    nothing
@@ -1563,7 +1610,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * nothing
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("www.example.com", "", ""),
  * );
  *     //    nothing
@@ -1574,7 +1621,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * nothing
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("www.example.com.", "", ""),
  * );
  * ```
@@ -1584,7 +1631,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * none
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     //IGNORE("", "", "1.1.1.*"),
  * );
  * ```
@@ -1595,7 +1642,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * `foo.more.example.com. A 1.1.1.1`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     //IGNORE("", "", "www"),
  * );
  * ```
@@ -1605,7 +1652,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * none
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("", "", "*bar*"),
  * );
  * ```
@@ -1618,7 +1665,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * * `mfull3.more.example.com. CNAME bar.www.plts.org.`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     IGNORE("", "", "bar.**"),
  * );
  * ```
@@ -1635,7 +1682,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * This will generate an error:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     ...
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),  // Error!  Ignoring an item we inserted
@@ -1645,7 +1692,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement to the `D()`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     DISABLE_IGNORE_SAFETY_CHECK,
  *     ...
  *     TXT("myhost", "mytext"),
@@ -1659,7 +1706,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  * The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2 world and its use will result in a validation error. Use the above example instead.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     // THIS NO LONGER WORKS! Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
  *     TXT("myhost", "mytext", IGNORE_NAME_DISABLE_SAFETY_CHECK),
  * );
@@ -1717,7 +1764,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * ```javascript
  * // Default: detect standard external-dns prefixes (a-, cname-, etc.)
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE_EXTERNAL_DNS(),
  *   // Your static DNS records managed by DNSControl
  *   A("www", "1.2.3.4"),
@@ -1734,7 +1781,7 @@ declare function IGNORE(labelSpec: string, typeSpec?: string, targetSpec?: strin
  *
  * ```javascript
  * // If external-dns is configured with --txt-prefix="extdns-"
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   IGNORE_EXTERNAL_DNS("extdns-"),
  *   A("www", "1.2.3.4"),
  * );
@@ -1870,11 +1917,11 @@ declare function IGNORE_TARGET(pattern: string, rType: string): DomainModifier;
  * Includes all records from a given domain
  *
  * ```javascript
- * D("example.com!external", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com!external", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("test", "8.8.8.8"),
  * );
  *
- * D("example.com!internal", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com!internal", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   INCLUDE("example.com!external"),
  *   A("home", "127.0.0.1"),
  * );
@@ -1979,7 +2026,7 @@ declare function IP(ip: string): number;
  * ## Examples ##
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // LOC "subdomain", d1, m1, s1, "[NnSs]", d2, m2, s2, "[EeWw]", alt, siz, hp, vp)
  *   //42 21 54     N  71 06  18     W -24m 30m
  *   LOC("@", 42, 21, 54,     "N", 71,  6, 18,     "W", -24.01,   30,    0,  0),
@@ -2022,7 +2069,7 @@ declare function LOC(name: string, deg1: number, min1: number, sec1: number, ns:
  * `38.89775977858357, -77.03655125982903`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   LOC_BUILDER_DD({
  *     label: "big-ben",
  *     x: 51.50084265331501,
@@ -2077,7 +2124,7 @@ declare function LOC_BUILDER_DD(opts: { label?: string; x: number; y: number; al
  * * `25.24S 153.15E`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   LOC_BUILDER_STR({
  *     label: "tasmania",
  *     str: "42°S 147°E",
@@ -2118,7 +2165,7 @@ declare function LOC_BUILDER_DMM_STR(opts: { label?: string; str: string; alt?: 
  * * `33d51m31s S 151d12m51s E`
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   LOC_BUILDER_DMS_STR({
  *     label: "sydney-opera-house",
  *     str: "33°51′31″S 151°12′51″E",
@@ -2156,7 +2203,7 @@ declare function LOC_BUILDER_DMS_STR(opts: { label?: string; str: string; alt?: 
  *  * [`LOC_BUILDER_DMM_STR({})`](LOC_BUILDER_DMM_STR.md) - accepts DMM 25.24°S 153.15°E
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   LOC_BUILDER_STR({
  *     label: "old-faithful",
  *     str: "44.46046°N 110.82815°W",
@@ -2309,7 +2356,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * ## Simple example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       initialDomain: "contoso.onmicrosoft.com",
  *   }, TTL("1h")),
@@ -2383,7 +2430,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * then not needed.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       dkimSelector1Target: "selector1-example-com._domainkey.contoso.n-v1.dkim.mail.microsoft",
  *       dkimSelector2Target: "selector2-example-com._domainkey.contoso.n-v1.dkim.mail.microsoft",
@@ -2398,7 +2445,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * token is derived from it.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("test.example.com", {
  *       label: "test",
  *       initialDomain: "contoso.onmicrosoft.com",
@@ -2441,7 +2488,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * DKIM target in the new format. All three are set explicitly:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       mxTarget: "example-com.o-v1.mx.microsoft",
  *       dkimSelector1Target: "selector1-example-com._domainkey.contoso.o-v1.dkim.mail.microsoft",
@@ -2491,7 +2538,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * license.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       mxTarget: "contoso.mail.protection.office365.us",
  *       autodiscoverTarget: "autodiscover.office365.us",
@@ -2511,7 +2558,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * record modifier the call takes.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       initialDomain: "contoso.onmicrosoft.com",
  *   }, TTL("1h")),
@@ -2527,7 +2574,7 @@ declare function LUA(name: string, rtype: string, contents: string | string[], .
  * ## Complete example
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   M365_BUILDER("example.com", {
  *       // Both values come from the Microsoft 365 admin center; see the DKIM
  *       // section for the older format that `initialDomain` derives.
@@ -2609,7 +2656,7 @@ declare function M365_BUILDER(name: string, opts: { label?: string; mx?: boolean
  * | `comment`          | Comment stored on the RouterOS forwarder entry.    |
  *
  * ```javascript
- * D("_forwarders.mikrotik", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("_forwarders.mikrotik", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     // Domain-based forwarder: forward corp.example.com to internal DNS servers.
  *     MIKROTIK_FORWARDER("corp.example.com", "10.0.0.53,10.0.0.54"),
  *
@@ -2618,7 +2665,7 @@ declare function M365_BUILDER(name: string, opts: { label?: string; mx?: boolean
  * );
  *
  * // Then reference the alias in a FWD record:
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     MIKROTIK_FWD("@", "doh-upstream", {match_subdomain: "true"}),
  * );
  * ```
@@ -2644,7 +2691,7 @@ declare function MIKROTIK_FORWARDER(name: string, dns_servers: string, ...modifi
  * | `comment`         | Comment stored on the RouterOS record.                             |
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     // Forward all queries for example.com and subdomains to 8.8.8.8,
  *     // add resolved addresses to the "vpn-list" address list.
  *     MIKROTIK_FWD("@", "8.8.8.8", {match_subdomain: "true", address_list: "vpn-list"}),
@@ -2672,7 +2719,7 @@ declare function MIKROTIK_FWD(name: string, target: string, ...modifiers: Record
  * | `comment`         | Comment stored on the RouterOS record.                             |
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     // Block ads.example.com with NXDOMAIN.
  *     MIKROTIK_NXDOMAIN("ads"),
  *
@@ -2693,7 +2740,7 @@ declare function MIKROTIK_NXDOMAIN(name: string, ...modifiers: RecordModifier[])
  * Target should be a string representing the MX target. If it is a single label we will assume it is a relative name on the current domain. If it contains *any* dots, it should be a fully qualified domain name, ending with a `.`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   MX("@", 5, "mail"), // mx example.com -> mail.example.com
  *   MX("sub", 10, "mail.foo.com."),
  * );
@@ -2713,15 +2760,15 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  * For more information, refer to [this page](../../advanced-features/nameservers.md).
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER,
- *   DnsProvider(DSP_MY_PROVIDER),
- *   DnsProvider(route53, 0),
+ * D("example.com", REGISTRAR("my_registrar"),
+ *   SERVICE("my_dns_provider"),
+ *   SERVICE("route53", 0),
  *   // Replace the nameservers:
  *   NAMESERVER("ns1.myserver.com."),
  *   NAMESERVER("ns2.myserver.com."),
  * );
  *
- * D("example2.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example2.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // Add these two additional nameservers to the existing list of nameservers.
  *   NAMESERVER("ns1.myserver.com."),
  *   NAMESERVER("ns2.myserver.com."),
@@ -2753,8 +2800,7 @@ declare function MX(name: string, priority: number, target: string, ...modifiers
  * It looks like this:
  *
  * ```javascript
- * var REG_NONE = NewRegistrar("none");
- * D("example.com", REG_NONE,
+ * D("example.com", REGISTRAR("none"),
  *   ...
  * );
  * ```
@@ -2769,7 +2815,7 @@ declare function NAMESERVER(name: string): DomainModifier;
  * The value can be an integer or a string. See [`TTL`](../record-modifiers/TTL.md) for examples.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   NAMESERVER_TTL("2d"),
  *   NAMESERVER("ns"),
  * );
@@ -2778,7 +2824,7 @@ declare function NAMESERVER(name: string): DomainModifier;
  * Use `NAMESERVER_TTL("3600"),` or `NAMESERVER_TTL("1h"),` for a 1h default TTL for all subsequent `NS` entries:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DefaultTTL("4h"),
  *   NAMESERVER_TTL("3600"),
  *   NAMESERVER("ns1.provider.com."), //inherits NAMESERVER_TTL
@@ -2927,7 +2973,7 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
  * Individual e164 records
  *
  * ```javascript
- * D("3.2.1.5.5.5.0.0.8.1.e164.arpa.", REG_MY_PROVIDER, DnsProvider(R53),
+ * D("3.2.1.5.5.5.0.0.8.1.e164.arpa.", REGISTRAR("my_registrar"), SERVICE("route53"),
  *   NAPTR("1",  10, 10, "u", "E2U+SIP", "!^.*$!sip:bob@example.com!", "."),
  *   NAPTR("2",  10, 10, "u", "E2U+SIP", "!^.*$!sip:alice@example.com!", "."),
  *   NAPTR("4",  10, 10, "u", "E2U+SIP", "!^.*$!sip:kate@example.com!", "."),
@@ -2942,7 +2988,7 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
  *
  * Single e164 zone
  * ```javascript
- * D("4.3.2.1.5.5.5.0.0.8.1.e164.arpa.", REG_MY_PROVIDER, DnsProvider(R53),
+ * D("4.3.2.1.5.5.5.0.0.8.1.e164.arpa.", REGISTRAR("my_registrar"), SERVICE("route53"),
  *   NAPTR("@", 100, 50, "u", "E2U+SIP", "!^.*$!sip:customer-service@example.com!", "."),
  *   NAPTR("@", 101, 50, "u", "E2U+email", "!^.*$!mailto:information@example.com!", "."),
  *   NAPTR("@", 101, 50, "u", "smtp+E2U", "!^.*$!mailto:information@example.com!", "."),
@@ -2952,7 +2998,7 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
  * ### Examples for SIP:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   NAPTR("@", 20, 50, "s", "SIPS+D2T", "", "_sips._tcp.example.com."),
  *   NAPTR("@", 20, 50, "s", "SIP+D2T", "", "_sip._tcp.example.com."),
  *   NAPTR("@", 30, 50, "s", "SIP+D2U", "", "_sip._udp.example.com."),
@@ -2970,7 +3016,7 @@ declare function NAMESERVER_TTL(ttl: Duration): DomainModifier;
  * ### Other RFC based examples:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   NAPTR("@",100, 50, "a", "z3950+N2L+N2C", "", "cidserver.example.com."),
  *   NAPTR("@", 50, 50, "a", "rcds+N2C", "", "cidserver.example.com."),
  *   NAPTR("@", 30, 50, "s", "http+N2L+N2C+N2R", "", "www.example.com."),
@@ -3000,7 +3046,7 @@ declare function NAPTR(subdomain: string, order: number, preference: number, ter
  * In this example DNSControl will insert "foo.example.com" into the zone, but otherwise leave the zone alone. Changes to "foo"'s IP address will update the record. Removing the A("foo", ...) record from DNSControl will leave the record in place.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER), NO_PURGE,
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"), NO_PURGE,
  *   A("foo","1.2.3.4"),
  * );
  * ```
@@ -3031,7 +3077,7 @@ declare const NO_PURGE: DomainModifier;
  * Target should be a string representing the NS target. If it is a single label we will assume it is a relative name on the current domain. If it contains *any* dots, it should be a fully qualified domain name, ending with a `.`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   NS("foo", "ns1.example2.com."), // Delegate ".foo.example.com" zone to another server.
  *   NS("foo", "ns2.example2.com."), // Delegate ".foo.example.com" zone to another server.
  *   A("ns1.example2.com", "10.10.10.10"), // Glue records
@@ -3045,6 +3091,8 @@ declare function NS(name: string, target: string, ...modifiers: RecordModifier[]
 
 /**
  * NewDnsProvider activates a DNS Service Provider (DSP) specified in `creds.json`.
+ * For new configurations, use [SERVICE](../domain-modifiers/SERVICE.md)
+ * directly in `D()`. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
  * A DSP stores a DNS zone's records and provides DNS service for the zone (i.e.
  * answers on port 53 to queries related to the zone).
  *
@@ -3069,6 +3117,8 @@ declare function NewDnsProvider(name: string, meta?: object): string;
 
 /**
  * NewRegistrar activates a Registrar Provider specified in `creds.json`.
+ * For new configurations, use [REGISTRAR](../domain-modifiers/REGISTRAR.md)
+ * directly in `D()`. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
  * A registrar maintains the domain's registration and delegation (i.e. the
  * nameservers for the domain).  DNSControl only manages the delegation.
  *
@@ -3120,7 +3170,7 @@ declare function NewRegistrar(name: string, type?: string, meta?: object): strin
  *
  *     {% code title="dnsconfig.js" %}
  *     ```javascript
- *     D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ *     D("dnscontrol.org", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *       OPENPGPKEY(
  *         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
  *         "9833040000000116092b06010401da470f010107401471ec1d5cc4d6bbd87029" +
@@ -3157,7 +3207,7 @@ declare function NewRegistrar(name: string, type?: string, meta?: object): strin
  *
  *     {% code title="dnsconfig.js" %}
  *     ```javascript
- *     D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ *     D("dnscontrol.org", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *       OPENPGPKEY(
  *         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
  *         "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/I" +
@@ -3186,7 +3236,7 @@ declare function NewRegistrar(name: string, type?: string, meta?: object): strin
  *
  *     {% code title="dnsconfig.js" %}
  *     ```javascript
- *     D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ *     D("dnscontrol.org", REGISTRAR("my_provider"), SERVICE("my_provider"),
  *       OPENPGPKEY(
  *         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
  *         "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K",
@@ -3219,7 +3269,7 @@ declare function PANIC(message: string): never;
  * `PORKBUN_URLFWD` is a [Porkbun](../../provider/porkbun.md)-specific feature that maps to Porkbun's URL forwarding feature, which creates HTTP 301 (permanent) or 302 (temporary) redirects.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     PORKBUN_URLFWD("urlfwd1", "http://example.com"),
  *     PORKBUN_URLFWD("urlfwd2", "http://example.org", {type: "permanent", includePath: "yes", wildcard: "no"})
  * );
@@ -3260,7 +3310,7 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  * All magic is RFC2317-aware. We use the first format listed in the RFC for both [`REV()`](../top-level-functions/REV.md) and `PTR()`. The format is `FIRST/MASK.C.B.A.in-addr.arpa` where `FIRST` is the first IP address of the zone, `MASK` is the netmask of the zone (25-31 inclusive), and A, B, C are the first 3 octets of the IP address. For example `172.20.18.130/27` is located in a zone named `128/27.18.20.172.in-addr.arpa`
  *
  * ```javascript
- * D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
+ * D(REV("1.2.3.0/24"), REGISTRAR("none"), SERVICE("bind"),
  *   PTR("1", "foo.example.com."),
  *   PTR("2", "bar.example.com."),
  *   PTR("3", "baz.example.com."),
@@ -3270,13 +3320,13 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  * ```
  *
  * ```javascript
- * D(REV("9.9.9.128/25"), REGISTRAR, DnsProvider(BIND),
+ * D(REV("9.9.9.128/25"), REGISTRAR("none"), SERVICE("bind"),
  *   PTR("9.9.9.129", "first.example.com."),
  * );
  * ```
  *
  * ```javascript
- * D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
+ * D(REV("2001:db8:302::/48"), REGISTRAR("none"), SERVICE("bind"),
  *   PTR("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0", "foo.example.com."),  // 2001:db8:302::1
  *   // If the first parameter is a valid IP address, DNSControl will generate the correct name:
  *   PTR("2001:db8:302::2", "two.example.com."),                          // "2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0"
@@ -3298,10 +3348,10 @@ declare function PORKBUN_URLFWD(name: string, target: string, ...modifiers: Reco
  *     );
  * }
  *
- * D("example.com", REGISTRAR, DnsProvider(DSP_NONE),
+ * D("example.com", REGISTRAR("none"), SERVICE("bind"),
  *     ...,
  * );
- * D(REV("10.20.30.0/24"), REGISTRAR, DnsProvider(DSP_NONE),
+ * D(REV("10.20.30.0/24"), REGISTRAR("none"), SERVICE("bind"),
  *     ...,
  * );
  *
@@ -3323,14 +3373,14 @@ declare function PTR(name: string, target: string, ...modifiers: RecordModifier[
  * `PURGE` is the default:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  * );
  * ```
  *
  * Purge is the default, but we set it anyway:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   PURGE,
  * );
  * ```
@@ -3338,7 +3388,7 @@ declare function PTR(name: string, target: string, ...modifiers: RecordModifier[
  * Since the "last command wins", this is the same as `PURGE`:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   PURGE,
  *   NO_PURGE,
  *   PURGE,
@@ -3381,7 +3431,7 @@ declare const PURGE: DomainModifier;
  * Target health evaluation can be enabled with the [`R53_EVALUATE_TARGET_HEALTH`](../record-modifiers/R53_EVALUATE_TARGET_HEALTH.md) record modifier.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
  *   R53_ALIAS("foo", "A", "bar"),                              // record in same zone
  *   R53_ALIAS("foo", "A", "bar", R53_ZONE("Z35SXDOTRQ7X7K")),  // record in same zone, zone specified
  *   R53_ALIAS("foo", "A", "blahblah.elasticloadbalancing.us-west-1.amazonaws.com.", R53_ZONE("Z368ELLRRE2KJ0"), R53_EVALUATE_TARGET_HEALTH(true)),     // a classic ELB in us-west-1 with target health evaluation enabled
@@ -3407,7 +3457,7 @@ declare function R53_EVALUATE_TARGET_HEALTH(enabled: boolean): RecordModifier;
  * The `health_check_id` is the ID of a Route 53 health check that you create separately (e.g. via the AWS Console, CLI, or Terraform). DNSControl does not manage the health checks themselves, only their association with DNS records.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
  *   A("www", "1.2.3.4", R53_WEIGHT(70, "primary"), R53_HEALTH_CHECK_ID("12345678-1234-1234-1234-123456789012")),
  *   A("www", "5.6.7.8", R53_WEIGHT(30, "secondary"), R53_HEALTH_CHECK_ID("87654321-4321-4321-4321-210987654321")),
  * );
@@ -3427,7 +3477,7 @@ declare function R53_HEALTH_CHECK_ID(health_check_id: string): RecordModifier;
  * You can optionally associate a health check using [`R53_HEALTH_CHECK_ID()`](R53_HEALTH_CHECK_ID.md) to remove unhealthy endpoints from the rotation.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
  *   // 70% of traffic to east, 30% to west
  *   A("www", "1.2.3.4", R53_WEIGHT(70, "web-east")),
  *   A("www", "5.6.7.8", R53_WEIGHT(30, "web-west")),
@@ -3460,6 +3510,37 @@ declare function R53_WEIGHT(weight: number, set_identifier: string): RecordModif
  * @see https://docs.dnscontrol.org/language-reference/record-modifiers/service-provider-specific/amazon-route-53/r53_zone
  */
 declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
+
+/**
+ * `REGISTRAR(credEntry)` selects the registrar using an entry name from creds.json.
+ * The entry's `TYPE` determines the provider. No `REGISTRAR()` declaration is
+ * needed. Use `REGISTRAR("none")` when DNSControl should not manage registration.
+ *
+ * An explicit `REGISTRAR()` must immediately follow the domain name in `D()` or
+ * `D_EXTEND()`. It accepts no configuration metadata.
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("gandi_main"), SERVICE("gandi_main"),
+ *     A("@", "192.0.2.1"),
+ * );
+ * ```
+ *
+ * It may also appear in `DEFAULTS()`. A domain's explicit registrar overrides the
+ * default; conflicting explicit selections are errors. A domain needs an explicit
+ * registrar or a default, even when the DNS service uses the same credential entry.
+ *
+ * ```javascript
+ * DEFAULTS(REGISTRAR("none"), SERVICE("bind", 0));
+ * D("example.com", A("@", "192.0.2.1"));
+ * D("example.net", REGISTRAR("gandi_main"), A("@", "192.0.2.2"));
+ * ```
+ *
+ * The legacy [NewRegistrar](../top-level-functions/NewRegistrar.md) helper remains
+ * supported. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
+ *
+ * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/registrar
+ */
+declare function REGISTRAR(credEntry: string): DomainModifier;
 
 /**
  * `REV` returns the reverse lookup domain for an IP network. For example `REV("1.2.3.0/24")` returns `3.2.1.in-addr.arpa.` and `REV("2001:db8:302::/48")` returns `2.0.3.0.8.b.d.0.1.0.0.2.ip6.arpa.`.
@@ -3497,7 +3578,7 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
  * Here's an example reverse lookup domain:
  *
  * ```javascript
- * D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
+ * D(REV("1.2.3.0/24"), REGISTRAR("none"), SERVICE("bind"),
  *   PTR("1", "foo.example.com."),
  *   PTR("2", "bar.example.com."),
  *   PTR("3", "baz.example.com."),
@@ -3505,7 +3586,7 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
  *   PTR("1.2.3.10", "ten.example.com."),
  * );
  *
- * D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
+ * D(REV("2001:db8:302::/48"), REGISTRAR("none"), SERVICE("bind"),
  *   PTR("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0", "foo.example.com."),  // 2001:db8:302::1
  *   // If the first parameter is an IP address, DNSControl automatically calls REV() for you.
  *   PTR("2001:db8:302::2", "two.example.com."),                          // 2.0.0...
@@ -3566,7 +3647,7 @@ declare function REVCOMPAT(rfc: string): string;
  * The RP implementation in DNSControl is still experimental and may change.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   RP("@", "user.example.com.", "example.com."),
  * );
  * ```
@@ -3574,6 +3655,55 @@ declare function REVCOMPAT(rfc: string): string;
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/rp
  */
 declare function RP(name: string, mbox: string, txt: string, ...modifiers: RecordModifier[]): DomainModifier;
+
+/**
+ * `SERVICE(credEntry, maxNS, configMetadata)` selects a DNS service using an entry
+ * name from creds.json. Its `TYPE` determines the provider. No `SERVICE()`
+ * declaration is needed.
+ *
+ * - Omit maxNS, or use [ALL_NS](ALL_NS.md), to fetch and use all nameservers.
+ * - Use `0` to manage records without fetching or delegating to those nameservers.
+ * - Use a positive integer to fetch all nameservers but limit how many are used.
+ *
+ * See [nameserver management](../../advanced-features/nameservers.md) for how the
+ * DNS services' nameservers are combined and sent to the registrar.
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("none"),
+ *     SERVICE("cloudflare_main"),
+ *     SERVICE("bind", 0),
+ *     A("@", "192.0.2.1"),
+ * );
+ * ```
+ *
+ * Configuration metadata is optional and may be any JSON value supported by the
+ * provider. It must follow maxNS: use `ALL_NS` when metadata is needed without a
+ * nameserver limit. Metadata is specific to the domain and credential entry;
+ * different domains may supply different values for the same entry.
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("none"),
+ *     SERVICE("bind", ALL_NS, {default_ns: ["ns1.example.net.", "ns2.example.net."]}),
+ *     A("@", "192.0.2.1"),
+ * );
+ * ```
+ *
+ * Metadata may be declared only once per domain and entry. Multiple metadata-bearing
+ * `SERVICE()` calls, including inherited defaults or extensions, are errors even
+ * when equal. Supplying metadata in both `NewDnsProvider()` and `SERVICE()` is also
+ * an error, including when the legacy declaration's variable is unused. Without
+ * metadata in `SERVICE()`, a legacy declaration's metadata remains the fallback.
+ *
+ * `SERVICE` works in `DEFAULTS()` and `D_EXTEND()` as well as `D()`. A domain without
+ * any DNS services has no DNS records managed, which is useful for registrar-only
+ * configuration.
+ *
+ * The legacy [DnsProvider](DnsProvider.md) helper remains supported. See the
+ * [conversion guide](../../getting-started/converting-dnsconfig.md).
+ *
+ * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service
+ */
+declare function SERVICE(credEntry: string, maxNS?: number, configMetadata?: ProviderConfigMetadata): DomainModifier;
 
 /**
  * `SMIMEA` adds an [S/MIME cert association record](https://www.rfc-editor.org/rfc/rfc8162) to a domain. The name should be the hashed and stripped local part of the e-mail.
@@ -3597,7 +3727,7 @@ declare function RP(name: string, mbox: string, txt: string, ...modifiers: Recor
  * ```
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // Create SMIMEA record for certificate for the name bosun
  *   SMIMEA("f10e7de079689f55c0cdd6782e4dd1448c84006962a4bd832e8eff73", 3, 0, 0, "30820353308202f8a003020102..."),
  * );
@@ -3611,7 +3741,7 @@ declare function SMIMEA(name: string, usage: number, selector: number, type: num
  * `SOA` adds a [Start of Authority record](https://www.rfc-editor.org/rfc/rfc1035) to a domain. The name should be `@`.  ns and mbox are strings. The other fields are unsigned 32-bit ints.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   SOA("@", "ns3.example.com.", "hostmaster.example.com.", 3600, 600, 604800, 1440),
  * );
  * ```
@@ -3640,7 +3770,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * Here is an example of how SPF settings are normally done:
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   TXT("v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org include:spf-basic.fogcreek.com include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net include:450622.spf05.hubspotemail.net ~all"),
  * );
  * ```
@@ -3654,7 +3784,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * ## The DNSControl way
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   A("@", "10.2.2.2"),
  *   MX("@", "example.com."),
  *   SPF_BUILDER({
@@ -3694,7 +3824,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * When you want to specify SPF settings for a domain, use the `SPF_BUILDER()` function.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   ...
  *   ...
  *   ...
@@ -3843,11 +3973,11 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *   ]
  * });
  *
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *     SPF_MYSETTINGS,
  * );
  *
- * D("example2.tld", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example2.tld", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *      SPF_MYSETTINGS,
  * );
  * ```
@@ -3862,7 +3992,7 @@ declare function SPF_BUILDER(opts: { label?: string; overflow?: string; overhead
  * Priority, weight, and port are ints.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // Create SRV records for a a SIP service:
  *   //               pr  w   port, target
  *   SRV("_sip._tcp", 10, 60, 5060, "bigbox.example.com."),
@@ -3898,7 +4028,7 @@ declare function SRV(name: string, priority: number, weight: number, port: numbe
  * `value` is the fingerprint as a string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   SSHFP("@", 1, 1, "00yourAmazingFingerprint00"),
  * );
  * ```
@@ -3917,7 +4047,7 @@ declare function SSHFP(name: string, algorithm: 0 | 1 | 2 | 3 | 4, type: 0 | 1 |
  * Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/language-reference/record-modifiers) or JSON objects, which will be merged into the record's metadata.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   SVCB("@", 1, ".", "ipv4hint=123.123.123.123 alpn=h3,h2 port=443"),
  * );
  * ```
@@ -3934,7 +4064,7 @@ declare function SVCB(name: string, priority: number, target: string, params: st
  * Certificate is a hex string.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   // Create TLSA record for certificate used on TCP port 443
  *   TLSA("_443._tcp", 3, 1, 1, "abcdef0"),
  * );
@@ -3964,7 +4094,7 @@ declare function TLSA(name: string, usage: number, selector: number, type: numbe
  *   * We highly recommend using units instead of the number of seconds. Would your coworkers understand your intention better if you wrote `14400` or `'4h'`?
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *   DefaultTTL(2000),
  *   A("@","1.2.3.4"), // uses default
  *   A("foo", "2.3.4.5", TTL(500)), // overrides default
@@ -3987,7 +4117,7 @@ declare function TTL(ttl: Duration): RecordModifier;
  * Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/language-reference/record-modifiers) or JSON objects, which will be merged into the record's metadata.
  *
  * ```javascript
- *     D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ *     D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
  *       TXT("@", "598611146-3338560"),
  *       TXT("listserve", "google-site-verification=12345"),
  *       TXT("multiple", ["one", "two", "three"]),  // Multiple strings
@@ -4024,7 +4154,7 @@ declare function TTL(ttl: Duration): RecordModifier;
  *
  * #### How can you tell if a provider will support a particular `TXT()` record?
  *
- * Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along with the `DnsProvider()` for that provider. Run `dnscontrol check` to see if any errors are produced. The check command does not talk to the provider's API, thus permitting you to do this without having an account at that provider.
+ * Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along with the `SERVICE()` for that provider. Run `dnscontrol check` to see if any errors are produced. The check command does not talk to the provider's API, thus permitting you to do this without having an account at that provider.
  *
  * #### What if the provider rejects a string that is supported?
  *
@@ -4054,7 +4184,7 @@ declare function TXT(name: string, contents: string | string[], ...modifiers: Re
  * Example:
  *
  * ```javascript
- * D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
+ * D("example.com", REGISTRAR("porkbun"), SERVICE("porkbun"),
  *     URL("redirect", "https://example.org"),
  * );
  * ```
@@ -4079,7 +4209,7 @@ declare function URL(name: string, target: string, ...modifiers: RecordModifier[
  * Example:
  *
  * ```javascript
- * D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
+ * D("example.com", REGISTRAR("porkbun"), SERVICE("porkbun"),
  *     URL301("redirect", "https://example.org"),
  * );
  * ```

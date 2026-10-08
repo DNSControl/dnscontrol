@@ -28,10 +28,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_DIGITALOCEAN = NewDnsProvider("mydigitalocean");
-
-D("example.com", REG_NONE, DnsProvider(DSP_DIGITALOCEAN),
+D("example.com", REGISTRAR("none"), SERVICE("mydigitalocean"),
     A("test", "1.2.3.4"),
 );
 ```

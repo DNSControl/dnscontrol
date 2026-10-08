@@ -33,7 +33,7 @@ mail senders. See [`SPF_BUILDER`](SPF_BUILDER.md) and
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       initialDomain: "contoso.onmicrosoft.com",
   }, TTL("1h")),
@@ -109,7 +109,7 @@ then not needed.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       dkimSelector1Target: "selector1-example-com._domainkey.contoso.n-v1.dkim.mail.microsoft",
       dkimSelector2Target: "selector2-example-com._domainkey.contoso.n-v1.dkim.mail.microsoft",
@@ -126,7 +126,7 @@ token is derived from it.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("test.example.com", {
       label: "test",
       initialDomain: "contoso.onmicrosoft.com",
@@ -173,7 +173,7 @@ DKIM target in the new format. All three are set explicitly:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       mxTarget: "example-com.o-v1.mx.microsoft",
       dkimSelector1Target: "selector1-example-com._domainkey.contoso.o-v1.dkim.mail.microsoft",
@@ -225,7 +225,7 @@ license.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       mxTarget: "contoso.mail.protection.office365.us",
       autodiscoverTarget: "autodiscover.office365.us",
@@ -247,7 +247,7 @@ record modifier the call takes.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       initialDomain: "contoso.onmicrosoft.com",
   }, TTL("1h")),
@@ -265,7 +265,7 @@ seconds for the two DKIM `CNAME` records, where a shorter TTL causes
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   M365_BUILDER("example.com", {
       // Both values come from the Microsoft 365 admin center; see the DKIM
       // section for the older format that `initialDomain` derives.

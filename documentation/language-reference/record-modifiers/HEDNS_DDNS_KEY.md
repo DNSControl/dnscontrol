@@ -16,7 +16,7 @@ The DDNS key can then be used with the HE DDNS update API (`https://dyn.dns.he.n
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+D("example.com", REGISTRAR("none"), SERVICE("hedns"),
     A("dyn", "0.0.0.0", HEDNS_DDNS_KEY("my-secret-token")),
     AAAA("dyn6", "::1", HEDNS_DDNS_KEY("another-token")),
 );

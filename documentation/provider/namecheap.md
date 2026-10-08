@@ -43,10 +43,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECHEAP = NewRegistrar("namecheap");
-var DSP_BIND = NewDnsProvider("bind");
-
-D("example.com", REG_NAMECHEAP, DnsProvider(DSP_BIND),
+D("example.com", REGISTRAR("namecheap"), SERVICE("bind"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -56,10 +53,7 @@ Namecheap provides custom redirect records URL, URL301, and FRAME.  These record
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECHEAP = NewRegistrar("namecheap");
-var DSP_NAMECHEAP = NewDnsProvider("namecheap");
-
-D("example.com", REG_NAMECHEAP, DnsProvider(DSP_NAMECHEAP),
+D("example.com", REGISTRAR("namecheap"), SERVICE("namecheap"),
   URL("@", "http://example.com/"),
   URL("www", "http://example.com/"),
   URL301("backup", "http://backup.example.com/"),

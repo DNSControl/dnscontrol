@@ -44,8 +44,7 @@ If distinct zones require distinct keys, you will need to instantiate the provid
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var DSP_AXFRDDNS_A = NewDnsProvider("axfrddns-a");
-var DSP_AXFRDDNS_B = NewDnsProvider("axfrddns-b");
+
 ```
 {% endcode %}
 
@@ -76,15 +75,14 @@ This list can be provided either as metadata or in `creds.json`. Only the later 
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var DSP_AXFRDDNS = NewDnsProvider("axfrddns", {
+D("example.com", REGISTRAR("none"), SERVICE("axfrddns", ALL_NS, {
         "default_ns": [
             "ns1.example.com.",
             "ns2.example.com.",
             "ns3.example.com.",
             "ns4.example.com."
         ]
-    }
-)
+    }));
 ```
 {% endcode %}
 
@@ -153,14 +151,11 @@ When testing `dnscontrol` against a local nameserver, you might use the followin
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DNS = NewDnsProvider("axfrddns", {
+D("example.com", REGISTRAR("none"), SERVICE("axfrddns", ALL_NS, {
     default_ns: [
         "ns.example.com.",
     ],
-});
-
-D("example.com", REG_NONE, DnsProvider(DNS),
+}),
     A("ns", "127.0.0.1")
 )
 ```

@@ -102,6 +102,11 @@ func TestProviderSyntaxCompatibility(t *testing.T) {
 				DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR, SERVICE);`,
 		},
 		{
+			name:   "elsewhere auto accepts service modifier",
+			legacy: `NewRegistrar("reg"); NewDnsProvider("dns"); DOMAIN_ELSEWHERE_AUTO("example.com", "reg", "dns");`,
+			modern: `DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR("reg"), SERVICE("dns"));`,
+		},
+		{
 			name:   "custom modifier can clear DNS services",
 			legacy: `NewRegistrar("reg"); D("example.com", "reg", function(d) { d.dnsProviders = null; });`,
 			modern: `D("example.com", REGISTRAR("reg"), SERVICE("unused"), function(d) { d.dnsProviders = null; });`,

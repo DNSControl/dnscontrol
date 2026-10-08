@@ -2104,7 +2104,7 @@ function DOMAIN_ELSEWHERE_AUTO(domain, registrar, dsplist) {
     // is maintaining the DNS records in that zone, and we have access
     // to updating it (but we don't want to use it.)
     for (var i = 2; i < arguments.length; i++) {
-        D_EXTEND(domain, DnsProvider(arguments[i]));
+        D_EXTEND(domain, typeof arguments[i] === "function" ? arguments[i] : DnsProvider(arguments[i]));
     }
 }
 

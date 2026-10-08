@@ -37,10 +37,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_INFOBLOX = NewDnsProvider("infoblox");
-
-D("example.com", REG_NONE, DnsProvider(DSP_INFOBLOX),
+D("example.com", REGISTRAR("none"), SERVICE("infoblox"),
     A("test", "1.2.3.4"),
     AAAA("test6", "2001:db8::1"),
     CNAME("www", "test.example.com."),
