@@ -41,8 +41,8 @@ D("example.com", REG_MY_PROVIDER,
     NAMESERVER_TTL("10m"), // On domain apex NS RRs
     DefaultTTL("5m"), // Default for a domain
 
-    MX("@", 5, "1.2.3.4", mailTTL), // use variable to
-    MX("@", 10, "4.3.2.1", mailTTL), // set TTL
+    MX("@", 5, "mail1.example.com.", mailTTL), // use variable to
+    MX("@", 10, "mail2.example.com.", mailTTL), // set TTL
 
     A("@", "1.2.3.4", TTL("10m")), // individual record
     CNAME("mail", "mx01"), // TTL of 5m, as defined per DefaultTTL()
@@ -127,7 +127,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_R53),
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
   A("@", "10.2.2.2"),
-  MX("@", "example.com."),
+  MX("@", 10, "example.com."),
   SPF_BUILDER({
     label: "@",
     overflow: "_spf%d",
@@ -216,8 +216,11 @@ var FASTMAIL_DKIM = function(the_domain){
 {% endcode %}
 
 We can then use the macros as such:
+The definitions of `FASTMAIL_MX` and `FASTMAIL_DKIM` above must be in the same
+`dnsconfig.js` file as this example.
 {% code title="dnsconfig.js" %}
 ```javascript
+// FIXME(tlim): Include the FASTMAIL_MX and FASTMAIL_DKIM definitions above.
 var REG_NONE = NewRegistrar("none");
 var DSP_R53_MAIN = NewDnsProvider("r53_main");
 

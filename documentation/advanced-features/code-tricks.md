@@ -22,7 +22,7 @@ You might encounter `D()` statements in code examples that include `END` at the 
 {% code title="dnsconfig.js" %}
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-  A("test", "1.2.3.4")
+  A("test", "1.2.3.4"),
 END);
 ```
 {% endcode %}
@@ -60,16 +60,16 @@ var GOOGLE_APPS_DOMAIN_SITES = [
 D("primarydomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    GOOGLE_APPS_DOMAIN_SITES,
-   A(...),
-   CNAME(...)
-}
+   A("@", "192.0.2.1"),
+   CNAME("www", "@"),
+);
 
 D("aliasdomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    // FYI: GOOGLE_APPS_DOMAIN_SITES is not used here.
-   A(...),
-   CNAME(...)
-}
+   A("@", "192.0.2.1"),
+   CNAME("www", "@"),
+);
 ```
 {% endcode %}
 
@@ -84,7 +84,7 @@ function PARKED_R53(name) {
     D(name, REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
        A("@", "10.2.3.4"),
        CNAME("www", "@"),
-        SPF_NONE, //deters spammers from using the domain in From: lines.
+        TXT("@", "v=spf1 -all"), // Deters spammers from using the domain in From: lines.
         );
 }
 

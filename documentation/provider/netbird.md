@@ -54,7 +54,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_NETBIRD),
     { no_ns: "true" }, // NetBird does not expose nameservers
     A("test", "1.2.3.4"),
     AAAA("ipv6test", "2001:db8::1"),
-    CNAME("www", "example.com"),
+    CNAME("www", "example.com."),
 );
 ```
 {% endcode %}

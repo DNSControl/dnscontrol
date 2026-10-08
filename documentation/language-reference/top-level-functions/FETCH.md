@@ -22,6 +22,7 @@ Otherwise the syntax of `FETCH` is the same as `fetch`.
 
 {% code title="dnsconfig.js" %}
 ```javascript
+// FIXME(tlim): This example needs --allow-fetch and a reachable endpoint.
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
   A("@", "1.2.3.4"),
 );

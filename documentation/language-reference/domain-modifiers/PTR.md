@@ -34,7 +34,7 @@ All magic is RFC2317-aware. We use the first format listed in the RFC for both [
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
+D(REV("1.2.3.0/24"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
   PTR("1", "foo.example.com."),
   PTR("2", "bar.example.com."),
   PTR("3", "baz.example.com."),
@@ -46,7 +46,7 @@ D(REV("1.2.3.0/24"), REGISTRAR, DnsProvider(BIND),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D(REV("9.9.9.128/25"), REGISTRAR, DnsProvider(BIND),
+D(REV("9.9.9.128/25"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
   PTR("9.9.9.129", "first.example.com."),
 );
 ```
@@ -54,7 +54,7 @@ D(REV("9.9.9.128/25"), REGISTRAR, DnsProvider(BIND),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D(REV("2001:db8:302::/48"), REGISTRAR, DnsProvider(BIND),
+D(REV("2001:db8:302::/48"), NewRegistrar("none"), DnsProvider(NewDnsProvider("bind", "BIND")),
   PTR("1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0", "foo.example.com."),  // 2001:db8:302::1
   // If the first parameter is a valid IP address, DNSControl will generate the correct name:
   PTR("2001:db8:302::2", "two.example.com."),                          // "2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0"
@@ -69,6 +69,8 @@ DNSControl does not automatically generate forward and reverse lookups. However 
 
 {% code title="dnsconfig.js" %}
 ```javascript
+// FIXME(tlim): This macro uses an undefined `dom`, and the reverse zone passed
+// to D_EXTEND() is a host address rather than the declared /24 zone below.
 function FORWARD_AND_REVERSE(ipaddr, fqdn) {
     D_EXTEND(dom,
         A(fqdn, ipaddr)
