@@ -3,13 +3,16 @@ package bunnydns
 import (
 	"encoding/json"
 	"errors"
+	"sync"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 type bunnydnsProvider struct {
-	apiKey   string
+	apiKey string
+	// zonesMu guards zones, which is filled on first use and shared by every zone being processed.
+	zonesMu  sync.Mutex
 	zones    map[string]*zone
 	observer providers.ConversionObserver
 }
@@ -44,7 +47,7 @@ func init() {
 			"TLSA",
 		},
 		CanAutoDNSSEC:          providers.Can(),
-		CanConcur:              providers.Unimplemented(),
+		CanConcur:              providers.Can(),
 		CanUseDSForChildren:    providers.Cannot(),
 		DocDualHost:            providers.Cannot(),
 		DocOfficiallySupported: providers.Cannot(),
