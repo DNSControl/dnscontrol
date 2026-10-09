@@ -19,7 +19,7 @@
       "records": [
         {
           "comparablev3": "192.0.2.1",
-          "filepos": "[line:2:5]",
+          "filepos": "[line:4:5]",
           "name": "@",
           "name_unicode": "@",
           "rdata": {
