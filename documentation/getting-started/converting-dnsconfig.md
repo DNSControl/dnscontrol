@@ -26,8 +26,9 @@ D("example.com",
 ```
 
 `REGISTRAR()` must immediately follow the domain name. It may also appear in
-`DEFAULTS()`; an explicit registrar overrides that default. It accepts only the
-credential entry name, with no metadata.
+`DEFAULTS()`; an explicit registrar overrides that default. Its only optional
+argument is the credential entry name, with no metadata. With no argument,
+`REGISTRAR()` selects `"none"`.
 
 `SERVICE(name, maxNS, configMetadata)` takes an optional nameserver limit and
 optional metadata. Omit maxNS to use all nameservers, use `0` to use none, or

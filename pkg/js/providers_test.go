@@ -42,6 +42,16 @@ func TestProviderSyntaxCompatibility(t *testing.T) {
 				D("example.com", REGISTRAR(p), SERVICE(p), A("@", "192.0.2.1"));`,
 		},
 		{
+			name:   "omitted registrar name selects none",
+			legacy: `NewRegistrar("none"); NewDnsProvider("bind"); D("example.com", "none", DnsProvider("bind", 0));`,
+			modern: `D("example.com", REGISTRAR(), SERVICE("bind", 0));`,
+		},
+		{
+			name:   "omitted registrar name in defaults",
+			legacy: `NewRegistrar("none"); NewDnsProvider("bind"); D("example.com", "none", DnsProvider("bind", 0));`,
+			modern: `DEFAULTS(REGISTRAR(), SERVICE("bind", 0)); D("example.com");`,
+		},
+		{
 			name:   "new modifiers with legacy declarations",
 			legacy: `NewRegistrar("r", "NONE"); NewDnsProvider("d", "BIND"); D("example.com", "r", DnsProvider("d"));`,
 			modern: `NewRegistrar("r", "NONE"); NewDnsProvider("d", "BIND"); D("example.com", REGISTRAR("r"), SERVICE("d"));`,

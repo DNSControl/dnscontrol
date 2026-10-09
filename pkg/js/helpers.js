@@ -121,8 +121,11 @@ function _copyProviderMetadata(meta) {
 
 // REGISTRAR explicitly selects the registrar for a domain.
 function REGISTRAR(name) {
+    if (arguments.length === 0) {
+        name = "none";
+    }
     _checkProviderName(name, "REGISTRAR");
-    if (arguments.length !== 1) {
+    if (arguments.length > 1) {
         throw "REGISTRAR accepts only a credential entry name; configMetadata is not supported.";
     }
     var modifier = function (d) {
