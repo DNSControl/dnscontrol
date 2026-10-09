@@ -124,20 +124,21 @@ func beCompatible(n string, config map[string]string) (string, error) {
 
 // AuditRecords calls the RecordAudit function for a provider.
 func AuditRecords(dType string, rcs models.Records) []error {
-	if def, ok := definitions[dType]; ok {
-		if !def.Kind.Has(KindDNS) {
-			return []error{fmt.Errorf("provider %q does not support the DNS role", dType)}
-		}
-		return def.RecordAuditor(rcs)
+	def, ok := definitions[dType]
+	if !ok {
+		return []error{fmt.Errorf("unknown DNS service provider type: %q", dType)}
 	}
-	// Records tagged with skip_audit (the SKIP_AUDIT modifier) are not audited.
+	if !def.Kind.Has(KindDNS) {
+		return []error{fmt.Errorf("provider %q does not support the DNS role", dType)}
+	}
+	// Gather the records to be audited.
 	auditable := make(models.Records, 0, len(rcs))
 	for _, rc := range rcs {
 		if rc.Metadata["skip_audit"] != "true" {
 			auditable = append(auditable, rc)
 		}
 	}
-	return p.RecordAuditor(auditable)
+	return def.RecordAuditor(auditable)
 }
 
 // None is a basic provider type that does absolutely nothing. Can be useful as a placeholder for third parties or unimplemented providers.
