@@ -27,9 +27,6 @@ var conf = {
 };
 
 var defaultArgs = [];
-// Neutral declarations stay outside conf so unused providers never reach the IR.
-var _neutralProviders = Object.create(null);
-var _neutralProviderOrder = [];
 
 function initialize() {
     conf = {
@@ -39,8 +36,6 @@ function initialize() {
         domain_names: [],
     };
     defaultArgs = [];
-    _neutralProviders = Object.create(null);
-    _neutralProviderOrder = [];
 }
 
 function _isDomain(d) {
@@ -104,7 +99,7 @@ function NewDnsProvider(name, type, meta) {
     return oldNewDnsProvider.apply(null, arguments);
 }
 function oldNewDnsProvider(name, type, meta) {
-    if (typeof meta === "object" && "ip_conversions" in meta) {
+    if (meta && typeof meta === "object" && "ip_conversions" in meta) {
         meta.ip_conversions = format_tt(meta.ip_conversions);
     }
     var dsp = { name: name, type: type, meta: meta };
@@ -118,28 +113,6 @@ function _checkProviderName(name, caller) {
     }
 }
 
-// PROVIDER declares a credential entry without selecting a role or reading credentials.
-function PROVIDER(name, meta) {
-    _checkProviderName(name, "PROVIDER");
-    if (
-        arguments.length > 2 ||
-        (typeof meta !== "undefined" &&
-            (meta === null || typeof meta !== "object" || _.isArray(meta)))
-    ) {
-        throw "PROVIDER accepts (name) or (name, metadata). Put the provider TYPE in creds.json.";
-    }
-    var declaration = { name: name, meta: _copyProviderMetadata(meta) };
-    if (Object.prototype.hasOwnProperty.call(_neutralProviders, name)) {
-        if (!_.isEqual(_neutralProviders[name], declaration)) {
-            throw 'Conflicting PROVIDER declarations for "' + name + '".';
-        }
-    } else {
-        _neutralProviders[name] = declaration;
-        _neutralProviderOrder.push(name);
-    }
-    return name;
-}
-
 function _copyProviderMetadata(meta) {
     return typeof meta === "undefined"
         ? undefined
@@ -149,8 +122,14 @@ function _copyProviderMetadata(meta) {
 // REGISTRAR explicitly selects the registrar for a domain.
 function REGISTRAR(name) {
     _checkProviderName(name, "REGISTRAR");
-    return function (d) {
+    if (arguments.length !== 1) {
+        throw "REGISTRAR accepts only a credential entry name; configMetadata is not supported.";
+    }
+    var modifier = function (d) {
         var state = d._registrarState;
+        if (!state.applyingDefaults && !state.allowRegistrar) {
+            throw "REGISTRAR must immediately follow the domain name in D() or D_EXTEND().";
+        }
         var key = state.applyingDefaults ? "defaultName" : "explicitName";
         if (typeof state[key] !== "undefined" && state[key] !== name) {
             throw (
@@ -164,18 +143,26 @@ function REGISTRAR(name) {
             );
         }
         state[key] = name;
+        state[key + "IsModifier"] = true;
         state.requireRegistrar = true;
         d.registrar =
             typeof state.explicitName !== "undefined"
                 ? state.explicitName
                 : state.defaultName;
     };
+    modifier._isRegistrar = true;
+    return modifier;
 }
 
 // Resolve roles only after all domains, defaults, extensions and async work exist.
 function _finalizeProviders() {
-    var registrarNames = Object.create(null);
-    var dnsNames = Object.create(null);
+    var legacyMetadataNames = Object.create(null);
+    for (var i = 0; i < conf.dns_providers.length; i++) {
+        var provider = conf.dns_providers[i];
+        if (typeof provider.meta !== "undefined") {
+            legacyMetadataNames[provider.name] = true;
+        }
+    }
     for (var i = 0; i < conf.domains.length; i++) {
         var d = conf.domains[i];
         if (
@@ -186,55 +173,62 @@ function _finalizeProviders() {
             throw (
                 'Domain "' +
                 d.name +
-                '" requires a registrar. Use REGISTRAR(PROVIDER("none")) for no registrar management.'
+                '" requires a registrar. Use REGISTRAR("none") for no registrar management.'
             );
         }
-        registrarNames[d.registrar] = true;
+        var state = d._registrarState;
+        var selected =
+            typeof state.explicitName !== "undefined"
+                ? "explicitName"
+                : "defaultName";
+        if (state[selected + "IsModifier"]) {
+            _materializeProvider(d.registrar, conf.registrars);
+        }
         var names = Object.keys(d.dnsProviders || {});
         for (var j = 0; j < names.length; j++) {
-            dnsNames[names[j]] = true;
-        }
-    }
-    // Declaration order keeps the output deterministic, independent of async usage.
-    for (var i = 0; i < _neutralProviderOrder.length; i++) {
-        var name = _neutralProviderOrder[i];
-        var declaration = _neutralProviders[name];
-        if (registrarNames[name]) {
-            _materializeProvider(declaration, conf.registrars, false);
-        }
-        if (dnsNames[name]) {
-            _materializeProvider(declaration, conf.dns_providers, true);
+            var name = names[j];
+            if (d._serviceNames && d._serviceNames[name]) {
+                _materializeProvider(name, conf.dns_providers);
+            }
+            if (
+                d.dnsProviderMetadata &&
+                legacyMetadataNames[name] &&
+                Object.prototype.hasOwnProperty.call(
+                    d.dnsProviderMetadata,
+                    name
+                )
+            ) {
+                throw _duplicateProviderMetadata(
+                    d.name,
+                    name,
+                    "NewDnsProvider() and SERVICE()"
+                );
+            }
         }
     }
 }
 
-function _materializeProvider(declaration, entries, isDNS) {
-    var meta = _copyProviderMetadata(declaration.meta);
-    // A legacy declaration may already have formatted a shared metadata object.
-    if (isDNS && meta && _.isArray(meta.ip_conversions)) {
-        meta.ip_conversions = format_tt(meta.ip_conversions);
-    }
+function _materializeProvider(name, entries) {
     // Legacy duplicate declarations retain their last-entry-wins behavior.
     for (var i = entries.length - 1; i >= 0; i--) {
-        if (entries[i].name === declaration.name) {
-            if (
-                typeof meta !== "undefined" &&
-                !_.isEqual(entries[i].meta, meta)
-            ) {
-                throw (
-                    'PROVIDER metadata for "' +
-                    declaration.name +
-                    '" conflicts with its legacy ' +
-                    (isDNS ? "DNS provider" : "registrar") +
-                    " declaration."
-                );
-            }
+        if (entries[i].name === name) {
             // Keep the legacy explicit type and role-specific metadata. The
             // existing credential resolver will check TYPE and its fallbacks.
             return;
         }
     }
-    entries.push({ name: declaration.name, type: "-", meta: meta });
+    entries.push({ name: name, type: "-" });
+}
+
+function _duplicateProviderMetadata(domain, name, sources) {
+    return (
+        'duplicate configMetadata error: domain "' +
+        domain +
+        '" defines configMetadata for "' +
+        name +
+        '" in both ' +
+        sources
+    );
 }
 
 function newDomain(name, registrar) {
@@ -293,8 +287,11 @@ function D(name, registrar) {
     domain._registrarState.applyingDefaults = false;
     for (var i = positionalRegistrar ? 2 : 1; i < arguments.length; i++) {
         var m = arguments[i];
+        domain._registrarState.allowRegistrar =
+            i === 1 && m && m._isRegistrar === true;
         processDargs(m, domain);
     }
+    domain._registrarState.allowRegistrar = false;
 
     // handle the empty tag ("example.com!" -> "example.com")
     // replace name with result of removing the empty tag if it exists
@@ -352,8 +349,11 @@ function D_EXTEND(name) {
 
     for (var i = 1; i < arguments.length; i++) {
         var m = arguments[i];
+        domain.obj._registrarState.allowRegistrar =
+            i === 1 && m && m._isRegistrar === true;
         processDargs(m, domain.obj);
     }
+    domain.obj._registrarState.allowRegistrar = false;
     conf.domains[domain.id] = domain.obj; // let's overwrite the object.
 }
 
@@ -473,10 +473,62 @@ function DnsProvider(name, nsCount) {
     return _dnsProviderModifier(name, nsCount);
 }
 
-// DNS_SERVICE selects a DNS service using the same nameserver-count rules as DnsProvider.
-function DNS_SERVICE(name, nsCount) {
-    _checkProviderName(name, "DNS_SERVICE");
-    return _dnsProviderModifier(name, nsCount);
+// ALL_NS selects all of a provider's nameservers.
+var ALL_NS = -1;
+
+// SERVICE selects a DNS service, optionally with domain-specific configMetadata.
+function SERVICE(name, nsCount, meta) {
+    _checkProviderName(name, "SERVICE");
+    if (arguments.length > 3) {
+        throw "SERVICE accepts (name), (name, maxNS), or (name, maxNS, configMetadata).";
+    }
+    if (
+        (arguments.length >= 3 || typeof nsCount !== "undefined") &&
+        (typeof nsCount !== "number" ||
+            !isFinite(nsCount) ||
+            Math.floor(nsCount) !== nsCount ||
+            nsCount < -1)
+    ) {
+        throw "SERVICE maxNS must be a nonnegative integer or ALL_NS; configMetadata must follow maxNS.";
+    }
+    var hasMetadata = typeof meta !== "undefined";
+    if (hasMetadata) {
+        if (typeof JSON.stringify(meta) === "undefined") {
+            throw "SERVICE configMetadata must be a JSON value.";
+        }
+        meta = _copyProviderMetadata(meta);
+        if (meta && _.isArray(meta.ip_conversions)) {
+            meta.ip_conversions = format_tt(meta.ip_conversions);
+        }
+    }
+    var modifier = _dnsProviderModifier(name, nsCount);
+    return function (d) {
+        if (!d._serviceNames) {
+            Object.defineProperty(d, "_serviceNames", {
+                value: Object.create(null),
+            });
+        }
+        d._serviceNames[name] = true;
+        if (hasMetadata) {
+            if (!d.dnsProviderMetadata) {
+                d.dnsProviderMetadata = Object.create(null);
+            }
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    d.dnsProviderMetadata,
+                    name
+                )
+            ) {
+                throw _duplicateProviderMetadata(
+                    d.name,
+                    name,
+                    "SERVICE() and SERVICE()"
+                );
+            }
+            d.dnsProviderMetadata[name] = _copyProviderMetadata(meta);
+        }
+        modifier(d);
+    };
 }
 
 // Legacy helpers must not call new public globals: configurations may shadow them.

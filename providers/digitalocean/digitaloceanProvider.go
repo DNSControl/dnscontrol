@@ -46,10 +46,10 @@ var defaultNameServerNames = []string{
 
 const perPageSize = 100
 
-// NewDo creates a DO-specific DNS provider.
-func NewDo(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *digitaloceanProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	if m["token"] == "" {
-		return nil, errors.New("no DigitalOcean token provided")
+		return errors.New("no DigitalOcean token provided")
 	}
 
 	ctx := context.Background()
@@ -59,7 +59,7 @@ func NewDo(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider
 	)
 	client := godo.NewClient(oauthClient)
 
-	api := &digitaloceanProvider{client: client}
+	*api = digitaloceanProvider{client: client}
 
 	// Get a domain to validate the token
 retry:
@@ -68,57 +68,21 @@ retry:
 		if pauseAndRetry(resp) {
 			goto retry
 		}
-		return nil, err
+		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("token for digitalocean is not valid")
+		return errors.New("token for digitalocean is not valid")
 	}
 
-	return api, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseDNAME:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseDNSKEY:           providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseDS:               providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseHTTPS:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUsePTR:              providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseSOA:              providers.Cannot("Technically SOA is supported but in reality the API only permits updates to the TTL. That is insufficient for DNSControl to claim 'support'"),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseSMIMEA:           providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseSVCB:             providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.CanUseTLSA:             providers.Cannot("Digital Ocean documents that this is not supported."),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	api.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "DIGITALOCEAN"
-	const providerMaintainer = "@chicks-net"
-	fns := providers.DspFuncs{
-		Initializer:   NewDo,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "DigitalOcean",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/digitalocean",
-		PortalURL:   "https://cloud.digitalocean.com/account/api/tokens",
-		Fields: []providers.CredsField{
+	providers.Register[*digitaloceanProvider]("DIGITALOCEAN", providers.Definition{
+		FriendlyName: "DigitalOcean",
+		PortalURL:    "https://cloud.digitalocean.com/account/api/tokens",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "token",
 				Label:    "API token",
@@ -126,6 +90,30 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@chicks-net",
+		SupportedTypes: []string{
+			"Basic8",
+		},
+		CanAutoDNSSEC:          providers.Cannot("Digital Ocean documents that this is not supported."),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseAlias:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseDHCID:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseDNAME:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseDNSKEY: providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseDS:     providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseHTTPS:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseNAPTR:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUsePTR:    providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseSOA:    providers.Cannot("Technically SOA is supported but in reality the API only permits updates to the TTL. That is insufficient for DNSControl to claim 'support'"),
+			providers.CanUseSSHFP:  providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseSMIMEA: providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseSVCB:   providers.Cannot("Digital Ocean documents that this is not supported."),
+			providers.CanUseTLSA:   providers.Cannot("Digital Ocean documents that this is not supported."),
 		},
 	})
 }

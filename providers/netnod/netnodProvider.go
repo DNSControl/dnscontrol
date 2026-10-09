@@ -9,50 +9,12 @@ import (
 	netnodPrimaryDNS "github.com/netnod/netnod-primary-dns-client"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "NETNOD"
-	const providerMaintainer = "@Netnod @vilhelmprytz"
-	fns := providers.DspFuncs{
-		Initializer:   newDSP,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Netnod",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/netnod",
-		PortalURL:   "https://www.netnod.se/dns/dns-enterprise-services",
-		Notes:       "An API key is required. The API URL defaults to https://primarydnsapi.netnod.se and can be omitted.",
-		Fields: []providers.CredsField{
+	providers.Register[*netnodProvider]("NETNOD", providers.Definition{
+		FriendlyName: "Netnod",
+		PortalURL:    "https://www.netnod.se/dns/dns-enterprise-services",
+		Notes:        "An API key is required. The API URL defaults to https://primarydnsapi.netnod.se and can be omitted.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "apiKey",
 				Label:    "API key",
@@ -67,6 +29,22 @@ func init() {
 				Default: "https://primarydnsapi.netnod.se",
 			},
 		},
+		Maintainer: "@Netnod @vilhelmprytz",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 
@@ -82,13 +60,11 @@ type netnodProvider struct {
 	nameservers []*models.Nameserver
 }
 
-// newDSP initializes a Netnod DNSServiceProvider.
-func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	dsp := &netnodProvider{}
-
+// Initialize initializes a fresh provider instance.
+func (dsp *netnodProvider) Initialize(m map[string]string, metadata json.RawMessage, _ *providers.CreateOptions) error {
 	dsp.APIKey = m["apiKey"]
 	if dsp.APIKey == "" {
-		return nil, errors.New("netnod API key is required")
+		return errors.New("netnod API key is required")
 	}
 
 	dsp.APIUrl = m["apiUrl"]
@@ -97,7 +73,7 @@ func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSService
 	if len(metadata) != 0 {
 		err := json.Unmarshal(metadata, dsp)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	var nss []string
@@ -107,9 +83,9 @@ func newDSP(m map[string]string, metadata json.RawMessage) (providers.DNSService
 	var err error
 	dsp.nameservers, err = models.ToNameservers(nss)
 	if err != nil {
-		return dsp, err
+		return err
 	}
 
 	dsp.client = netnodPrimaryDNS.NewClient(dsp.APIUrl, dsp.APIKey)
-	return dsp, nil
+	return nil
 }

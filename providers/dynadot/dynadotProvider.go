@@ -1,6 +1,7 @@
 package dynadot
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sort"
@@ -19,28 +20,23 @@ Info required in `creds.json`:
 
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur: providers.Unimplemented(),
-}
-
 func init() {
-	const providerName = "DYNADOT"
-	const providerMaintainer = "@e-im"
-	providers.RegisterRegistrarType(providerName, newDynadot, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*dynadotProvider]("DYNADOT", providers.Definition{
+		FriendlyName:   "Dynadot",
+		Maintainer:     "@e-im",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Unimplemented(),
+	})
 }
 
-func newDynadot(m map[string]string) (providers.Registrar, error) {
-	d := &dynadotProvider{}
-
-	d.key = m["key"]
-	if d.key == "" {
-		return nil, errors.New("missing Dynadot key")
+// Initialize initializes a fresh provider instance.
+func (c *dynadotProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	c.key = m["key"]
+	if c.key == "" {
+		return errors.New("missing Dynadot key")
 	}
 
-	return d, nil
+	return nil
 }
 
 func (c *dynadotProvider) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correction, error) {

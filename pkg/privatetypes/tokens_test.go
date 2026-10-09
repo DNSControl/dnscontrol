@@ -42,6 +42,31 @@ func TestTokensToArgs(t *testing.T) {
 			expected: []string{"one", "two"},
 		},
 		{
+			name:     "empty quoted string",
+			input:    []string{`"`, `"`},
+			expected: []string{""},
+		},
+		{
+			name:     "empty quoted string before token",
+			input:    []string{`"`, `"`, "one"},
+			expected: []string{"", "one"},
+		},
+		{
+			name:     "empty quoted string between tokens",
+			input:    []string{"one", `"`, `"`, "two"},
+			expected: []string{"one", "", "two"},
+		},
+		{
+			name:     "empty quoted string after token",
+			input:    []string{"one", `"`, `"`},
+			expected: []string{"one", ""},
+		},
+		{
+			name:     "consecutive empty quoted strings",
+			input:    []string{"one", `"`, `"`, `"`, `"`},
+			expected: []string{"one", "", ""},
+		},
+		{
 			name:     "incomplete quoted string at end",
 			input:    []string{"one", "\"", "two"},
 			expected: []string{"one", "\"", "two"},

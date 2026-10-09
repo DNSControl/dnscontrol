@@ -13,6 +13,8 @@ type observerProvider struct {
 	observer ConversionObserver
 }
 
+func (*observerProvider) AuditRecords(models.Records) []error { return nil }
+
 func (*observerProvider) GetNameservers(string) ([]*models.Nameserver, error) { return nil, nil }
 func (*observerProvider) GetZoneRecords(*models.DomainConfig) (models.Records, error) {
 	return nil, nil
@@ -24,21 +26,15 @@ func (p *observerProvider) SetConversionObserver(observer ConversionObserver) {
 	p.observer = observer
 }
 
+func (p *observerProvider) Initialize(_ map[string]string, _ json.RawMessage, options *CreateOptions) error {
+	p.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
+}
+
 func TestCreateDNSProviderInjectsConversionObserver(t *testing.T) {
+	isolateDefinitions(t)
 	const name = "PROVIDERGOLDEN_OBSERVER_TEST"
-	old, existed := DNSProviderTypes[name]
-	t.Cleanup(func() {
-		if existed {
-			DNSProviderTypes[name] = old
-		} else {
-			delete(DNSProviderTypes, name)
-		}
-	})
-	DNSProviderTypes[name] = DspFuncs{
-		Initializer: func(map[string]string, json.RawMessage) (DNSServiceProvider, error) {
-			return &observerProvider{}, nil
-		},
-	}
+	Register[*observerProvider](name, Definition{FriendlyName: "Observer test"})
 
 	want := &testObserver{}
 	provider, err := CreateDNSProvider(name, nil, nil, WithConversionObserver(want))

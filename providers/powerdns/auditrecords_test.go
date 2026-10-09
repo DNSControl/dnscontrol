@@ -34,7 +34,7 @@ package powerdns
 // 			// params = strings.ReplaceAll(params, "ipv4hint=auto", "ipv4hint=192.0.2.1")
 // 			// params = strings.ReplaceAll(params, "ipv6hint=auto", "ipv6hint=1::1")
 // 			record := powerDNSSVCBRecord("HTTPS", params)
-// 			errs := AuditRecords(models.Records{record})
+// 			errs := new(powerdnsProvider).AuditRecords(models.Records{record})
 
 // 			if tt.wantErr && len(errs) != 0 {
 // 				assert.Len(t, errs, 1)

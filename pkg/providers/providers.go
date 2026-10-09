@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
@@ -32,19 +31,6 @@ type ZoneLister interface {
 	ListZones() ([]string, error)
 }
 
-// RegistrarInitializer is a function to create a registrar. Function will be passed the unprocessed json payload from the configuration file for the given provider.
-type RegistrarInitializer func(map[string]string) (Registrar, error)
-
-// RegistrarTypes stores initializer for each registrar.
-var RegistrarTypes = map[string]RegistrarInitializer{}
-
-// DspInitializer is a function to create a DNS service provider. Function will be passed the unprocessed json payload from the configuration file for the given provider.
-type DspInitializer func(map[string]string, json.RawMessage) (DNSServiceProvider, error)
-
-// DspInitializerWithOptions creates a DNS service provider with optional
-// constructor dependencies such as a conversion observer.
-type DspInitializerWithOptions func(map[string]string, json.RawMessage, CreateOptions) (DNSServiceProvider, error)
-
 // RecordAuditor is a function that verifies that all the records
 // are supportable by this provider. It returns a list of errors
 // detailing records that this provider can not support.
@@ -58,84 +44,41 @@ type RecordAuditor func(models.Records) []error
 // the record it is given.
 type RecordIdentityFunc func(*models.RecordConfig) string
 
-// DspFuncs lists functions registered with a provider.
-type DspFuncs struct {
-	Initializer            DspInitializer
-	InitializerWithOptions DspInitializerWithOptions
-	RecordAuditor          RecordAuditor
-	RecordIdentity         RecordIdentityFunc
-}
-
 // GetRecordIdentity returns the provider's RecordIdentity function, or nil if
 // the provider does not declare one.
 func GetRecordIdentity(dType string) RecordIdentityFunc {
-	p, ok := DNSProviderTypes[dType]
-	if !ok {
-		return nil
+	if def, ok := definitions[dType]; ok {
+		return def.RecordIdentity
 	}
-	return p.RecordIdentity
+	return nil
 }
 
-// DNSProviderTypes stores initializer for each DSP.
-var DNSProviderTypes = map[string]DspFuncs{}
-
-// RegisterRegistrarType adds a registrar type to the registry by providing a suitable initialization function.
-func RegisterRegistrarType(name string, init RegistrarInitializer, pm ...ProviderMetadata) {
-	if _, ok := RegistrarTypes[name]; ok {
-		log.Fatalf("Cannot register registrar type %q multiple times", name)
-	}
-	RegistrarTypes[name] = init
-	unwrapProviderCapabilities(name, pm)
-}
-
-// RegisterDomainServiceProviderType adds a dsp to the registry with the given initialization function.
-func RegisterDomainServiceProviderType(name string, fns DspFuncs, pm ...ProviderMetadata) {
-	if _, ok := DNSProviderTypes[name]; ok {
-		log.Fatalf("Cannot register registrar type %q multiple times", name)
-	}
-	DNSProviderTypes[name] = fns
-
-	unwrapProviderCapabilities(name, pm)
-}
-
-// ProviderMaintainers stores the GitHub usernames of maintainers for each provider.
-var ProviderMaintainers = map[string]string{}
-
-// RegisterMaintainer registers the GitHub username of the maintainer for a provider.
-func RegisterMaintainer(
-	providerName string,
-	gitHubUsername string,
-) {
-	ProviderMaintainers[providerName] = gitHubUsername
-}
-
-// ProviderDefaultTTLs stores the default TTL for each provider.
-var ProviderDefaultTTLs = map[string]uint32{}
-
-// RegisterDefaultTTL registers a default TTL for a provider.
-// This is used by get-zones to determine the DefaultTTL when generating output.
-func RegisterDefaultTTL(providerName string, defaultTTL uint32) {
-	ProviderDefaultTTLs[providerName] = defaultTTL
-}
-
-// GetDefaultTTL returns the default TTL for a provider, or 0 if not registered.
+// GetDefaultTTL returns the provider's default TTL, or 0 if not registered.
 func GetDefaultTTL(providerName string) uint32 {
-	return ProviderDefaultTTLs[providerName]
+	if def, ok := GetDefinition(providerName); ok {
+		return def.DefaultTTL
+	}
+	return 0
 }
 
 // CreateRegistrar initializes a registrar instance from given credentials.
-func CreateRegistrar(rType string, config map[string]string) (Registrar, error) {
+func CreateRegistrar(rType string, config map[string]string, opts ...CreateOption) (Registrar, error) {
 	var err error
 	rType, err = beCompatible(rType, config)
 	if err != nil {
 		return nil, err
 	}
-
-	initer, ok := RegistrarTypes[rType]
-	if !ok {
+	def, ok := GetDefinition(rType)
+	if !ok || !def.Kind.Has(KindRegistrar) {
 		return nil, fmt.Errorf("no such registrar type: %q", rType)
 	}
-	return initer(config)
+	options := newCreateOptions(opts)
+	options.RequestedRole = KindRegistrar
+	instance, err := def.Initializer(config, nil, &options)
+	if err != nil {
+		return nil, err
+	}
+	return instance.(Registrar), nil
 }
 
 // CreateDNSProvider initializes a dns provider instance from given credentials.
@@ -145,30 +88,22 @@ func CreateDNSProvider(providerTypeName string, config map[string]string, meta j
 	if err != nil {
 		return nil, err
 	}
-
-	p, ok := DNSProviderTypes[providerTypeName]
-	if !ok {
+	options := newCreateOptions(opts)
+	options.RequestedRole = KindDNS
+	def, ok := GetDefinition(providerTypeName)
+	if !ok || !def.Kind.Has(KindDNS) {
 		return nil, fmt.Errorf("no such DNS service provider: %q", providerTypeName)
 	}
-	options := newCreateOptions(opts)
-	if p.InitializerWithOptions != nil {
-		return p.InitializerWithOptions(config, meta, options)
-	}
-	provider, err := p.Initializer(config, meta)
+	instance, err := def.Initializer(config, meta, &options)
 	if err != nil {
 		return nil, err
 	}
-	if setter, ok := provider.(ConversionObserverSetter); ok {
-		setter.SetConversionObserver(options.ConversionObserver)
-	}
-	return provider, nil
+	return instance.(DNSServiceProvider), nil
 }
 
-// beCompatible looks up.
+// beCompatible resolves explicit or credential-supplied types, accepting aliases
+// while preserving the legacy explicit-type fallback when TYPE is absent.
 func beCompatible(n string, config map[string]string) (string, error) {
-	// Pre 4.0: If n is a placeholder, substitute the TYPE from creds.json.
-	// 4.0: Require TYPE from creds.json.
-
 	ct := config["TYPE"]
 	// If a placeholder value was specified...
 	if n == "" || n == "-" {
@@ -177,30 +112,23 @@ func beCompatible(n string, config map[string]string) (string, error) {
 			return "-", errors.New("creds.json entry missing TYPE field")
 		}
 		// Otherwise, use the value from creds.json.
-		return ct, nil
+		return CanonicalName(ct), nil
 	}
 
-	// Pre 4.0: The user specified the name manually.
-	// Cross check to detect user-error.
-	if ct != "" && n != ct {
+	// Cross-check an explicit type against credentials when both are present.
+	if ct != "" && CanonicalName(n) != CanonicalName(ct) {
 		return "", fmt.Errorf("creds.json entry mismatch: specified=%q TYPE=%q", n, ct)
 	}
-	// Seems like the user did it the right way. Return the original value.
-	return n, nil
-
-	// NB(tlim): My hope is that in 4.0 this entire function will simply be the
-	// following, but I may be wrong:
-	// return config["TYPE"], nil
+	return CanonicalName(n), nil
 }
 
 // AuditRecords calls the RecordAudit function for a provider.
 func AuditRecords(dType string, rcs models.Records) []error {
-	p, ok := DNSProviderTypes[dType]
-	if !ok {
-		return []error{fmt.Errorf("unknown DNS service provider type: %q", dType)}
-	}
-	if p.RecordAuditor == nil {
-		return []error{fmt.Errorf("DNS service provider type %q has no RecordAuditor", dType)}
+	if def, ok := definitions[dType]; ok {
+		if !def.Kind.Has(KindDNS) {
+			return []error{fmt.Errorf("provider %q does not support the DNS role", dType)}
+		}
+		return def.RecordAuditor(rcs)
 	}
 	// Records tagged with skip_audit (the SKIP_AUDIT modifier) are not audited.
 	auditable := make(models.Records, 0, len(rcs))
@@ -220,56 +148,16 @@ func (n None) GetRegistrarCorrections(dc *models.DomainConfig) ([]*models.Correc
 	return nil, nil
 }
 
-// GetNameservers returns the current nameservers for a domain.
-func (n None) GetNameservers(string) ([]*models.Nameserver, error) {
-	return nil, nil
-}
-
-// GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
-func (n None) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	return nil, nil
-}
-
-// GetZoneRecordsCorrections gets the records of a zone and returns them in RecordConfig format.
-func (n None) GetZoneRecordsCorrections(dc *models.DomainConfig, records models.Records) ([]*models.Correction, int, error) {
-	return nil, 0, nil
-}
-
-var featuresNone = DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	CanConcur: Can(),
+// Initialize needs no credentials or setup for the placeholder registrar.
+func (*None) Initialize(map[string]string, json.RawMessage, *CreateOptions) error {
+	return nil
 }
 
 func init() {
-	RegisterRegistrarType("NONE", func(map[string]string) (Registrar, error) {
-		return None{}, nil
-	}, featuresNone)
-	RegisterCredsMetadata("NONE", CredsMetadata{
-		DisplayName: "No registrar",
-		Kind:        KindRegistrar,
-		Notes:       "Use NONE when you do not want DNSControl to manage nameserver delegation (that is, the nameservers for this domain will be managed manually).",
+	Register[*None]("NONE", Definition{
+		FriendlyName:   "No registrar",
+		SupportedTypes: []string{},
+		CanConcur:      Can(),
+		Notes:          "Use NONE when you do not want DNSControl to manage nameserver delegation (that is, the nameservers for this domain will be managed manually).",
 	})
 }
-
-// CustomRType stores an rtype that is only valid for this DSP.
-type CustomRType struct {
-	Name     string
-	Provider string
-	RealType string
-}
-
-// RegisterCustomRecordType registers a record type that is only valid for one provider.
-// provider is the registered type of provider this is valid with
-// name is the record type as it will appear in the js. (should be something like $PROVIDER_FOO)
-// realType is the record type it will be replaced with after validation.
-func RegisterCustomRecordType(name, provider, realType string) {
-	customRecordTypes[name] = &CustomRType{Name: name, Provider: provider, RealType: realType}
-}
-
-// GetCustomRecordType returns a registered custom record type, or nil if none.
-func GetCustomRecordType(rType string) *CustomRType {
-	return customRecordTypes[rType]
-}
-
-var customRecordTypes = map[string]*CustomRType{}

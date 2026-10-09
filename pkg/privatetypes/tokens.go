@@ -1,15 +1,14 @@
 package privatetypes
 
-// TokensToArgs copies tokens. If a token is a quote ("\""), it is followed by the string to be copied followed by another quote. The quote is skipped.
+// TokensToArgs copies tokens, removing surrounding quotes from quoted strings.
+// Two consecutive quote tokens represent an empty string.
 func TokensToArgs(tokens []string) []string {
-	// Null string
-	if len(tokens) == 2 && tokens[0] == `"` && tokens[1] == `"` {
-		return []string{""}
-	}
-
 	var args []string
 	for i := 0; i < len(tokens); i++ {
-		if ((i + 2) < len(tokens)) && tokens[i] == "\"" && tokens[i+2] == "\"" {
+		if i+1 < len(tokens) && tokens[i] == `"` && tokens[i+1] == `"` {
+			args = append(args, "")
+			i++
+		} else if ((i + 2) < len(tokens)) && tokens[i] == "\"" && tokens[i+2] == "\"" {
 			args = append(args, tokens[i+1])
 			i += 2
 		} else {

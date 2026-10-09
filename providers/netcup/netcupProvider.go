@@ -11,45 +11,32 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Cannot(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "NETCUP"
-	const providerMaintainer = "@kordianbruck"
-	fns := providers.DspFuncs{
-		Initializer:   New,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*netcupProvider]("NETCUP", providers.Definition{
+		FriendlyName: "netcup",
+		Maintainer:   "@kordianbruck",
+		SupportedTypes: []string{
+			"Basic8",
+			"TLSA",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+	})
 }
 
-// New creates a new API handle.
-func New(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (api *netcupProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if settings["api-key"] == "" || settings["api-password"] == "" || settings["customer-number"] == "" {
-		return nil, errors.New("missing netcup login parameters")
+		return errors.New("missing netcup login parameters")
 	}
 
-	api := &netcupProvider{}
 	err := api.login(settings["api-key"], settings["api-password"], settings["customer-number"])
 	if err != nil {
-		return nil, fmt.Errorf("login to netcup DNS failed, please check your credentials: %w", err)
+		return fmt.Errorf("login to netcup DNS failed, please check your credentials: %w", err)
 	}
-	return api, nil
+	return nil
 }
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.

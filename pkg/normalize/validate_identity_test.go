@@ -18,7 +18,7 @@ const lineZone = "example.com"
 const plainProviderType = "TEST_NO_IDENTITY"
 
 func init() {
-	providers.RegisterDomainServiceProviderType(plainProviderType, providers.DspFuncs{}, providers.DocumentationNotes{})
+	providers.Register[*validationProvider](plainProviderType, providers.Definition{FriendlyName: "Identity test", Features: providers.DocumentationNotes{}})
 }
 
 // Four lines answer one name: two share a target, two point elsewhere.
@@ -81,7 +81,7 @@ func TestPerLineAddressesMayShareOneTarget(t *testing.T) {
 }
 
 func TestPerLineRecordsStillFailWithoutProviderIdentity(t *testing.T) {
-	if _, ok := providers.DNSProviderTypes[plainProviderType]; !ok {
+	if _, ok := providers.GetDefinition(plainProviderType); !ok {
 		t.Fatalf("test setup: %s is not registered", plainProviderType)
 	}
 	if providers.GetRecordIdentity(plainProviderType) != nil {

@@ -34,7 +34,7 @@ var _ = cmd(catUtils, func() *cli.Command {
 				}
 			} else {
 				arg1 := c.Args().Get(1)
-				if _, ok := providers.DNSProviderTypes[arg1]; ok {
+				if def, ok := providers.GetDefinition(arg1); ok && def.Kind.Has(providers.KindDNS) {
 					// Deprecated form: credkey provider zone [...]
 					args.ProviderName = arg1
 					args.ZoneNames = c.Args().Slice()[2:]
@@ -169,8 +169,9 @@ func GetZone(args GetZoneArgs) error {
 	// Get the actual provider type name from creds.json or args
 	providerType := args.ProviderName
 	if providerType == "" || providerType == "-" {
-		providerType = providerConfigs[args.CredName][pproviderTypeFieldName]
+		providerType = providerConfigs[args.CredName][providerTypeFieldName]
 	}
+	providerType = providers.CanonicalName(providerType)
 
 	// decide which zones we need to convert
 	zones := args.ZoneNames

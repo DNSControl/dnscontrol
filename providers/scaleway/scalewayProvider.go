@@ -26,48 +26,38 @@ type scalewayProvider struct {
 	client *domain.API
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("Zones must already exist in the Scaleway console."),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "SCALEWAY"
-	const providerMaintainer = "@alessiopcc"
-	fns := providers.DspFuncs{
-		Initializer:   newScaleway,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*scalewayProvider]("SCALEWAY", providers.Definition{
+		FriendlyName: "Scaleway",
+		Maintainer:   "@alessiopcc",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"DNAME",
+			"HTTPS",
+			"NAPTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.DocCreateDomains: providers.Cannot("Zones must already exist in the Scaleway console."),
+		},
+	})
 }
 
-func newScaleway(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (s *scalewayProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	accessKey := settings["access_key"]
 	secretKey := settings["secret_key"]
 	if accessKey == "" || secretKey == "" {
-		return nil, errors.New("SCALEWAY: access_key and secret_key are required in creds.json")
+		return errors.New("SCALEWAY: access_key and secret_key are required in creds.json")
 	}
 
 	opts := []scw.ClientOption{
@@ -80,10 +70,11 @@ func newScaleway(settings map[string]string, _ json.RawMessage) (providers.DNSSe
 
 	scwClient, err := scw.NewClient(opts...)
 	if err != nil {
-		return nil, fmt.Errorf("SCALEWAY: could not create client: %w", err)
+		return fmt.Errorf("SCALEWAY: could not create client: %w", err)
 	}
 
-	return &scalewayProvider{client: domain.NewAPI(scwClient)}, nil
+	*s = scalewayProvider{client: domain.NewAPI(scwClient)}
+	return nil
 }
 
 // GetNameservers returns the nameservers for a domain.

@@ -1,10 +1,41 @@
 package commands
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
+
+func TestInitDocumentationLinks(t *testing.T) {
+	for _, vendorURL := range []string{"", "https://api.example.test/docs"} {
+		t.Run("vendor="+vendorURL, func(t *testing.T) {
+			output := captureInitOutput(t)
+			registered, _ := providers.GetDefinition(providerSyntaxTestType)
+			def := *registered
+			def.VendorAPIDocURL = vendorURL
+			if _, _, err := askEntry(&stubAsker{t: t}, &def, "account"); err != nil {
+				t.Fatal(err)
+			}
+			data, err := os.ReadFile(output)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got := string(data)
+			if !strings.Contains(got, "DNSControl documentation: https://docs.dnscontrol.org/provider/test_provider_syntax\n") {
+				t.Fatal("init did not display the derived documentation URL")
+			}
+			if vendorURL == "" {
+				if strings.Contains(got, "Vendor API documentation:") {
+					t.Fatal("init displayed an empty vendor documentation link")
+				}
+			} else if !strings.Contains(got, "Vendor API documentation: "+vendorURL+"\n") {
+				t.Fatal("init did not display the vendor API documentation link")
+			}
+		})
+	}
+}
 
 func TestFieldLabel(t *testing.T) {
 	tests := []struct {
@@ -78,8 +109,8 @@ func TestAskFieldConfirmValue(t *testing.T) {
 
 func TestCollectFieldsConfirmValueNo(t *testing.T) {
 	asker := &stubAsker{t: t, confirm: []bool{false}}
-	meta := providers.CredsMetadata{
-		Fields: []providers.CredsField{
+	meta := &providers.Definition{
+		CredFields: []providers.CredsField{
 			{Key: "sandbox", Label: "Use the sandbox API?", ConfirmValue: "1"},
 		},
 	}

@@ -8,9 +8,6 @@
         {
           "comparablev3": "TXT \"; return 'ok'\"",
           "filepos": "[line:5:5]",
-          "meta": {
-            "orig_custom_type": "LUA"
-          },
           "name": "_diag",
           "name_unicode": "_diag",
           "rdata": {
@@ -24,9 +21,6 @@
         {
           "comparablev3": "A \"return_127_0_0_1\"",
           "filepos": "[line:4:5]",
-          "meta": {
-            "orig_custom_type": "LUA"
-          },
           "name": "app",
           "name_unicode": "app",
           "rdata": {

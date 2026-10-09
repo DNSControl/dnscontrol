@@ -39,85 +39,43 @@ var defaultNS = []string{
 	"salvador.ns.porkbun.com",
 }
 
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newPorkbun(conf, nil)
-}
-
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newPorkbun(conf, metadata)
-}
-
-// newPorkbun creates the provider.
-func newPorkbun(m map[string]string, _ json.RawMessage) (*porkbunProvider, error) {
-	c := &porkbunProvider{
+// Initialize initializes a fresh provider instance.
+func (c *porkbunProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
+	*c = porkbunProvider{
 		maxAttempts: defaultMaxAttempts,
 	}
 
 	c.apiKey, c.secretKey = m["api_key"], m["secret_key"]
 
 	if c.apiKey == "" || c.secretKey == "" {
-		return nil, errors.New("missing porkbun api_key or secret_key")
+		return errors.New("missing porkbun api_key or secret_key")
 	}
 
 	if maxAttempts, ok := m["max_attempts"]; ok && maxAttempts != "" {
 		i, err := strconv.Atoi(maxAttempts)
 		if err != nil {
-			return nil, fmt.Errorf("porkbun: invalid max_attempts %q: must be a whole number", maxAttempts)
+			return fmt.Errorf("porkbun: invalid max_attempts %q: must be a whole number", maxAttempts)
 		}
 		c.maxAttempts = i
 	}
 	if maxDuration, ok := m["max_duration"]; ok && maxDuration != "" {
 		d, err := time.ParseDuration(maxDuration)
 		if err != nil {
-			return nil, fmt.Errorf("porkbun: invalid max_duration %q: valid units are ns, us, ms, s, m, h", maxDuration)
+			return fmt.Errorf("porkbun: invalid max_duration %q: valid units are ns, us, ms, s, m, h", maxDuration)
 		}
 		c.maxDuration = d
 	}
 
-	return c, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "PORKBUN"
-	const providerMaintainer = "@imlonghao"
-	providers.RegisterRegistrarType(providerName, newReg)
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Porkbun",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/porkbun",
-		PortalURL:   "https://porkbun.com/account/api",
-		Notes:       "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
-		Fields: []providers.CredsField{
+	providers.Register[*porkbunProvider]("PORKBUN", providers.Definition{
+		FriendlyName: "Porkbun",
+		PortalURL:    "https://porkbun.com/account/api",
+		Notes:        "Porkbun requires API access to be enabled for each domain before DNSControl can manage it.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
 				Label:    "API key",
@@ -143,10 +101,24 @@ func init() {
 				Help:  "Retry duration limit, such as 5m. Leave blank for no limit.",
 			},
 		},
+		Maintainer: "@imlonghao",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"PORKBUN_URLFWD",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+			"URL",
+			"URL301",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
-	providers.RegisterCustomRecordType("PORKBUN_URLFWD", providerName, "")
-	providers.RegisterCustomRecordType("URL", providerName, "")
-	providers.RegisterCustomRecordType("URL301", providerName, "")
 }
 
 // GetNameservers returns the nameservers for a domain.

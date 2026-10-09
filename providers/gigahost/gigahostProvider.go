@@ -15,33 +15,10 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
-// features describes the capabilities of the Gigahost provider.
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones: providers.Can(),
-	providers.CanConcur:   providers.Unimplemented(),
-	providers.CanUseAlias: providers.Can(),
-	providers.CanUseCAA:   providers.Can(),
-	providers.CanUseDNAME: providers.Can(),
-	providers.CanUseNAPTR: providers.Can(),
-	providers.CanUsePTR:   providers.Can(),
-	providers.CanUseSRV:   providers.Can(),
-}
-
 func init() {
-	const providerName = "GIGAHOST"
-	const providerMaintainer = "@jochristian"
-	fns := providers.DspFuncs{
-		Initializer:   newGigahost,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Gigahost",
-		Kind:        providers.KindDNS,
-		Fields: []providers.CredsField{
+	providers.Register[*gigahostProvider]("GIGAHOST", providers.Definition{
+		FriendlyName: "Gigahost",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "apikey",
 				Label:    "API key",
@@ -50,6 +27,15 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@jochristian",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"DNAME",
+			"NAPTR",
+			"PTR",
+		},
+		CanConcur: providers.Unimplemented(),
 	})
 }
 
@@ -58,17 +44,19 @@ type gigahostProvider struct {
 	zones  map[string]zone // zone_name -> zone
 }
 
-func newGigahost(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *gigahostProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	apiKey := settings["apikey"]
 	if apiKey == "" {
-		return nil, errors.New("gigahost: missing 'apikey' in creds.json")
+		return errors.New("gigahost: missing 'apikey' in creds.json")
 	}
-	return &gigahostProvider{apiKey: apiKey}, nil
+	*c = gigahostProvider{apiKey: apiKey}
+	return nil
 }
 
 // AuditRecords returns a list of errors corresponding to the records that
 // aren't supported by this provider.
-func AuditRecords(records models.Records) []error {
+func (*gigahostProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 	a.Add("MX", rejectif.MxNull) // The API rejects a "." target ("MX record value must be a valid mail server hostname").
 	a.Add("TXT", rejectif.TxtIsEmpty)

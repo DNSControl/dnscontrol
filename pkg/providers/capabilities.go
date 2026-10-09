@@ -2,10 +2,6 @@
 
 package providers
 
-import (
-	"log"
-)
-
 // Capability is a bitmasked set of "features" that a provider supports. Only use constants from this package.
 type Capability int
 
@@ -25,18 +21,9 @@ const (
 	// work when used concurrently.  The default is Cannot().
 	CanConcur
 
-	// CanGetZones indicates the provider supports the get-zones subcommand.
+	// CanGetZones indicates the provider can enumerate zones (get-zones ... all).
+	// Reading explicitly named zones does not require this capability.
 	CanGetZones
-
-	// CanOnlyDiff1Features indicates the provider has not yet been upgraded to
-	// use the "diff2" differencing engine.  Instead, it uses the the backwards
-	// compatibility mode.  The diff2 engine is required to repliably provide
-	// IGNORE(), NO_PURGE, and other features.
-	// This capability is set automatically for the provider during the call to
-	// RegisterDomainServiceProviderType.  It is set to Can() if we detect
-	// compatibility mode is in use. All other values (Unimplemented and Cannot)
-	// are equivalent.
-	CanOnlyDiff1Features
 
 	// CanUseAKAMAICDN indicates the provider support the specific AKAMAICDN records that only the Akamai EdgeDns provider supports.
 	CanUseAKAMAICDN
@@ -119,14 +106,13 @@ const (
 	CanUseAKAMAITLC
 )
 
-var providerCapabilities = map[string]map[Capability]bool{}
-
 // ProviderHasCapability returns true if provider has capability.
 func ProviderHasCapability(pType string, capa Capability) bool {
-	if providerCapabilities[pType] == nil {
-		return false
+	if def, ok := GetDefinition(pType); ok {
+		note := def.DerivedFeatures[capa]
+		return note != nil && note.HasFeature
 	}
-	return providerCapabilities[pType][capa]
+	return false
 }
 
 // DocumentationNote is a way for providers to give more detail about what features they support.
@@ -139,34 +125,6 @@ type DocumentationNote struct {
 
 // DocumentationNotes is a full list of notes for a single provider.
 type DocumentationNotes map[Capability]*DocumentationNote
-
-// ProviderMetadata is a common interface for DocumentationNotes and Capability to be used interchangeably.
-type ProviderMetadata any
-
-// Notes is a collection of all documentation notes, keyed by provider type.
-var Notes = map[string]DocumentationNotes{}
-
-func unwrapProviderCapabilities(pName string, meta []ProviderMetadata) {
-	if providerCapabilities[pName] == nil {
-		providerCapabilities[pName] = map[Capability]bool{}
-	}
-	for _, pm := range meta {
-		switch x := pm.(type) {
-		case Capability:
-			providerCapabilities[pName][x] = true
-		case DocumentationNotes:
-			if Notes[pName] == nil {
-				Notes[pName] = DocumentationNotes{}
-			}
-			for k, v := range x {
-				Notes[pName][k] = v
-				providerCapabilities[pName][k] = v.HasFeature
-			}
-		default:
-			log.Fatalf("Unrecognized ProviderMetadata type: %T", pm)
-		}
-	}
-}
 
 // Can is a small helper for concisely creating Documentation Notes
 // comments are variadic for easy omission. First is comment, second is link, the rest are ignored.

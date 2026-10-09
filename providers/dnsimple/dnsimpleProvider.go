@@ -21,45 +21,27 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot("DNSimple does not allow sufficient control over the apex NS records"),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "DNSIMPLE"
-	const providerMaintainer = "@onlyhavecans"
-	providers.RegisterRegistrarType(providerName, newReg)
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "DNSimple",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/dnsimple",
-		PortalURL:   "https://dnsimple.com/user",
-		Fields: []providers.CredsField{
+	providers.Register[*dnsimpleProvider]("DNSIMPLE", providers.Definition{
+		FriendlyName: "DNSimple",
+		Maintainer:   "@onlyhavecans",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"SVCB",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot("DNSimple does not allow sufficient control over the apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+		PortalURL:              "https://dnsimple.com/user",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "token",
 				Label:    "Account access token",
@@ -587,26 +569,17 @@ func (c *dnsimpleProvider) ListZones() ([]string, error) {
 
 // constructors
 
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newProvider(conf, nil)
-}
-
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newProvider(conf, metadata)
-}
-
-func newProvider(m map[string]string, _ json.RawMessage) (*dnsimpleProvider, error) {
-	api := &dnsimpleProvider{}
-	api.AccountToken = m["token"]
-	if api.AccountToken == "" {
-		return nil, errors.New("missing DNSimple token")
+func (c *dnsimpleProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	c.AccountToken = m["token"]
+	if c.AccountToken == "" {
+		return errors.New("missing DNSimple token")
 	}
 
 	if m["baseurl"] != "" {
-		api.BaseURL = m["baseurl"]
+		c.BaseURL = m["baseurl"]
 	}
 
-	return api, nil
+	return nil
 }
 
 // utilities

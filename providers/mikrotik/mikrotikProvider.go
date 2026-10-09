@@ -33,46 +33,11 @@ Custom record types: MIKROTIK_FWD (RouterOS FWD entries for conditional
 forwarding), MIKROTIK_NXDOMAIN, and MIKROTIK_FORWARDER.
 */
 
-var features = providers.DocumentationNotes{
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Cannot(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "MIKROTIK"
-	const providerMaintainer = "@hedger"
-	fns := providers.DspFuncs{
-		Initializer:   newMikrotikProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterCustomRecordType("MIKROTIK_FWD", providerName, "")
-	providers.RegisterCustomRecordType("MIKROTIK_NXDOMAIN", providerName, "")
-	providers.RegisterCustomRecordType("MIKROTIK_FORWARDER", providerName, "")
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "MikroTik RouterOS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/mikrotik",
-		PortalURL:   "", // No portal; managed on-device
-		Fields: []providers.CredsField{
+	providers.Register[*mikrotikProvider]("MIKROTIK", providers.Definition{
+		FriendlyName: "MikroTik RouterOS",
+		PortalURL:    "", // No portal; managed on-device
+		CredFields: []providers.CredsField{
 			{
 				Key:      "host",
 				Label:    "Host URL",
@@ -93,27 +58,41 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@hedger",
+		SupportedTypes: []string{
+			"Basic8",
+			"MIKROTIK_FORWARDER",
+			"MIKROTIK_FWD",
+			"MIKROTIK_NXDOMAIN",
+			"CAA:Cannot",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Cannot(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
 	})
 }
 
-func newMikrotikProvider(cfg map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *mikrotikProvider) Initialize(cfg map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	host := cfg["host"]
 	username := cfg["username"]
 	password := cfg["password"]
 
 	if host == "" {
-		return nil, errors.New("mikrotik: 'host' is required")
+		return errors.New("mikrotik: 'host' is required")
 	}
 	if username == "" {
-		return nil, errors.New("mikrotik: 'username' is required")
+		return errors.New("mikrotik: 'username' is required")
 	}
 	if password == "" {
-		return nil, errors.New("mikrotik: 'password' is required")
+		return errors.New("mikrotik: 'password' is required")
 	}
 
 	host = strings.TrimRight(host, "/")
 
-	p := &mikrotikProvider{
+	*p = mikrotikProvider{
 		host:     host,
 		username: username,
 		password: password,
@@ -134,7 +113,7 @@ func newMikrotikProvider(cfg map[string]string, _ json.RawMessage) (providers.DN
 		})
 	}
 
-	return p, nil
+	return nil
 }
 
 // ListZones enumerates zones by fetching all static DNS records and grouping
@@ -187,12 +166,6 @@ func (p *mikrotikProvider) ListZones() ([]string, error) {
 // GetNameservers returns an empty list since RouterOS static DNS does not expose nameservers.
 func (p *mikrotikProvider) GetNameservers(_ string) ([]*models.Nameserver, error) {
 	return []*models.Nameserver{}, nil
-}
-
-// EnsureZoneExists is a no-op for RouterOS. Zones are virtual constructs
-// derived from record names — the zone will "exist" once records are pushed.
-func (p *mikrotikProvider) EnsureZoneExists(_ *models.DomainConfig) error {
-	return nil
 }
 
 // GetZoneRecords fetches all static DNS records from RouterOS and filters by domain.

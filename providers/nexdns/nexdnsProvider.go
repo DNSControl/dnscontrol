@@ -28,59 +28,17 @@ and are rejected by the API, so they are left out of both the zone contents and
 the desired state. See records.go.
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Unimplemented("DNSSEC is switched on per zone outside of DNSControl"),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot("DS at the zone apex belongs in the parent zone"),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUseOPENPGPKEY:       providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRP:               providers.Cannot(),
-	providers.CanUseSMIMEA:           providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot("The SOA record is maintained by the platform"),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Cannot("The NS records at the zone apex cannot be changed through the API"),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 type nexdnsProvider struct {
 	client *apiClient
 	zones  map[string]*apiZone
 }
 
 func init() {
-	const providerName = "NEXDNS"
-	const providerMaintainer = "@nexdns"
-	fns := providers.DspFuncs{
-		Initializer:   newNexdns,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterDefaultTTL(providerName, defaultTTL)
-
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "NexDNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/nexdns",
-		PortalURL:   "https://nexdns.tech/settings/api-keys",
-		Notes:       "The API is available on a plan that includes API access. See https://nexdns.tech/pricing.",
-		Fields: []providers.CredsField{
+	providers.Register[*nexdnsProvider]("NEXDNS", providers.Definition{
+		FriendlyName: "NexDNS",
+		PortalURL:    "https://nexdns.tech/settings/api-keys",
+		Notes:        "The API is available on a plan that includes API access. See https://nexdns.tech/pricing.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api_token",
 				Label:    "API token",
@@ -95,14 +53,33 @@ func init() {
 				Default: defaultAPIURL,
 			},
 		},
+		Maintainer: "@nexdns",
+		DefaultTTL: defaultTTL,
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"DNAME",
+			"PTR",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Unimplemented("DNSSEC is switched on per zone outside of DNSControl"),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Cannot("The NS records at the zone apex cannot be changed through the API"),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseDS:  providers.Cannot("DS at the zone apex belongs in the parent zone"),
+			providers.CanUseSOA: providers.Cannot("The SOA record is maintained by the platform"),
+		},
 	})
 }
 
-// newNexdns builds a provider from the entry in creds.json.
-func newNexdns(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (n *nexdnsProvider) Initialize(settings map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	token := settings["api_token"]
 	if token == "" {
-		return nil, errors.New("missing NEXDNS api_token")
+		return errors.New("missing NEXDNS api_token")
 	}
 
 	apiURL := settings["api_url"]
@@ -110,10 +87,11 @@ func newNexdns(settings map[string]string, _ json.RawMessage) (providers.DNSServ
 		apiURL = defaultAPIURL
 	}
 
-	return &nexdnsProvider{
+	*n = nexdnsProvider{
 		client: newAPIClient(apiURL, token),
 		zones:  map[string]*apiZone{},
-	}, nil
+	}
+	return nil
 }
 
 // GetNameservers returns the nameservers the zone is served from.

@@ -36,13 +36,8 @@ func (a *azurednsProvider) SetConversionObserver(observer providers.ConversionOb
 	a.observer = observer
 }
 
-// Modified `newAzureDNSDsp` to maintain backward compatibility with the new OIDC support.
-func newAzureDNSDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newAzureDNS(conf, metadata)
-}
-
-// Updated function to prioritize DefaultAzureCredential and fallback to OIDC or client-secret-based methods.
-func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (a *azurednsProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	subID, rg := m["SubscriptionID"], m["ResourceGroup"]
 	rg = strings.ToLower(rg)
 	clientID, clientSecret, tenantID := m["ClientID"], m["ClientSecret"], m["TenantID"]
@@ -59,34 +54,34 @@ func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, err
 		}
 		credential, authErr = aauth.NewInteractiveBrowserCredential(&oidcCredentialOpts)
 		if authErr != nil {
-			return nil, fmt.Errorf("failed to create OIDC credential: %w", authErr)
+			return fmt.Errorf("failed to create OIDC credential: %w", authErr)
 		}
 	} else if clientID != "" && clientSecret != "" {
 		// Client ID and Secret-based Authentication
 		credential, authErr = aauth.NewClientSecretCredential(tenantID, clientID, clientSecret, nil)
 		if authErr != nil {
-			return nil, fmt.Errorf("failed to create Client Secret credential: %w", authErr)
+			return fmt.Errorf("failed to create Client Secret credential: %w", authErr)
 		}
 	} else {
 		// Default Azure Credential as the default mechanism
 		credential, authErr = aauth.NewDefaultAzureCredential(nil)
 		if authErr != nil {
-			return nil, fmt.Errorf("failed to create Default Azure credential: %w", authErr)
+			return fmt.Errorf("failed to create Default Azure credential: %w", authErr)
 		}
 	}
 
 	// Create DNS clients using the selected credential
 	zonesClient, err := adns.NewZonesClient(subID, credential, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create zones client: %w", err)
+		return fmt.Errorf("failed to create zones client: %w", err)
 	}
 
 	recordsClient, err := adns.NewRecordSetsClient(subID, credential, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create records client: %w", err)
+		return fmt.Errorf("failed to create records client: %w", err)
 	}
 
-	api := &azurednsProvider{
+	*a = azurednsProvider{
 		zonesClient:    zonesClient,
 		recordsClient:  recordsClient,
 		resourceGroup:  new(rg),
@@ -94,48 +89,20 @@ func newAzureDNS(m map[string]string, _ json.RawMessage) (*azurednsProvider, err
 	}
 
 	// Initialize zones
-	if err := api.getZones(); err != nil {
-		return nil, err
+	if err := a.getZones(); err != nil {
+		return err
 	}
 
-	return api, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
-	providers.CanUseAzureAlias:       providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can("Azure does not permit modifying the existing NS records, only adding/removing additional records."),
-	providers.DocOfficiallySupported: providers.Can(),
+	a.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "AZURE_DNS"
-	const providerMaintainer = "@vatsalyagoel"
-	fns := providers.DspFuncs{
-		Initializer:   newAzureDNSDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType("AZURE_ALIAS", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Azure DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/azuredns",
-		PortalURL:   "https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps",
-		Fields: []providers.CredsField{
+	providers.Register[*azurednsProvider]("AZURE_DNS", providers.Definition{
+		FriendlyName: "Azure DNS",
+		DocsURL:      "https://docs.dnscontrol.org/provider/azuredns",
+		PortalURL:    "https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "SubscriptionID",
 				Label:    "Subscription ID",
@@ -167,6 +134,19 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@vatsalyagoel",
+		SupportedTypes: []string{
+			"Basic8",
+			"AZURE_ALIAS",
+			"PTR",
+		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can("Azure does not permit modifying the existing NS records, only adding/removing additional records."),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseAlias: providers.Cannot("Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead."),
 		},
 	})
 }

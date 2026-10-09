@@ -57,42 +57,11 @@ func (e domainsGetListResponseError) Error() string {
 	return fmt.Sprintf("Error %d: %s", e.Number, e.Message)
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(), // If you remove this, also update not() statements in integrationTest/integration_test.go
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot("Requires domain registered through their service"),
-	providers.DocDualHost:            providers.Cannot("Doesn't allow control of apex NS records"),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "NAMECHEAP"
-	const providerMaintainer = "@willpower232"
-	providers.RegisterRegistrarType(providerName, newReg)
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType("URL", providerName, "")
-	providers.RegisterCustomRecordType("URL301", providerName, "")
-	providers.RegisterCustomRecordType("FRAME", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Namecheap",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/namecheap",
-		PortalURL:   "https://ap.www.namecheap.com/settings/tools/apiaccess/",
-		Fields: []providers.CredsField{
+	providers.Register[*namecheapProvider]("NAMECHEAP", providers.Definition{
+		FriendlyName: "Namecheap",
+		PortalURL:    "https://ap.www.namecheap.com/settings/tools/apiaccess/",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "apiuser",
 				Label:    "API user",
@@ -112,30 +81,37 @@ func init() {
 				Help:  "Override the API base URL (for example to use the sandbox). Leave blank to use the production URL.",
 			},
 		},
+		Maintainer: "@willpower232",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"FRAME",
+			"URL",
+			"URL301",
+		},
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Cannot("Doesn't allow control of apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.DocCreateDomains: providers.Cannot("Requires domain registered through their service"),
+		},
 	})
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newProvider(conf, metadata)
-}
-
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newProvider(conf, nil)
-}
-
-func newProvider(m map[string]string, _ json.RawMessage) (*namecheapProvider, error) {
-	api := &namecheapProvider{}
-	api.APIUser, api.APIKEY = m["apiuser"], m["apikey"]
-	if api.APIKEY == "" || api.APIUser == "" {
-		return nil, errors.New("missing Namecheap apikey and apiuser")
+// Initialize initializes a fresh provider instance.
+func (n *namecheapProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	n.APIUser, n.APIKEY = m["apiuser"], m["apikey"]
+	if n.APIKEY == "" || n.APIUser == "" {
+		return errors.New("missing Namecheap apikey and apiuser")
 	}
-	api.client = nc.NewClient(api.APIUser, api.APIKEY, api.APIUser)
+	n.client = nc.NewClient(n.APIUser, n.APIKEY, n.APIUser)
 	// if BaseURL is specified in creds, use that url
 	BaseURL, ok := m["BaseURL"]
 	if ok {
-		api.client.BaseURL = BaseURL
+		n.client.BaseURL = BaseURL
 	}
-	return api, nil
+	return nil
 }
 
 func splitDomain(domain string) (sld string, tld string) {

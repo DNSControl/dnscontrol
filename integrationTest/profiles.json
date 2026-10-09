@@ -99,6 +99,13 @@
     "domain": "$CLOUDNS_DOMAIN",
     "sub-auth-id": "$CLOUDNS_SUB_AUTH_ID"
   },
+  "CLOUDPRESS": {
+    "TYPE": "CLOUDPRESS",
+    "account_id": "$CLOUDPRESS_ACCOUNT_ID",
+    "api_token": "$CLOUDPRESS_API_TOKEN",
+    "base_url": "$CLOUDPRESS_BASE_URL",
+    "domain": "$CLOUDPRESS_DOMAIN"
+  },
   "CNR": {
     "TYPE": "CNR",
     "apientity": "$CNR_ENTITY",

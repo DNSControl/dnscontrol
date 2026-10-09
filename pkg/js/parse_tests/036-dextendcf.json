@@ -15,9 +15,6 @@
         {
           "comparablev3": "test3.foo.com \"test-worker\"",
           "filepos": "[line:11:5]",
-          "meta": {
-            "orig_custom_type": "CF_WORKER_ROUTE"
-          },
           "name": "@",
           "name_unicode": "@",
           "rdata": {

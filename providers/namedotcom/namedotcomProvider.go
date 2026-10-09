@@ -25,59 +25,47 @@ func (n *namedotcomProvider) SetConversionObserver(observer providers.Conversion
 	n.observer = observer
 }
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot("PTR records are not supported (See Link)", "https://www.name.com/support/articles/205188508-Reverse-DNS-records"),
-	providers.CanUseSRV:              providers.Can("SRV records with empty targets are not supported"),
-	providers.DocCreateDomains:       providers.Cannot("New domains require registration"),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newProvider(conf)
-}
-
-func newDsp(conf map[string]string, meta json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newProvider(conf)
-}
-
-func newProvider(conf map[string]string) (*namedotcomProvider, error) {
-	api := &namedotcomProvider{
+// Initialize initializes a fresh provider instance.
+func (n *namedotcomProvider) Initialize(conf map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
+	*n = namedotcomProvider{
 		client: namecom.New(conf["apiuser"], conf["apikey"]),
 	}
-	api.client.Server = conf["apiurl"]
-	api.APIUser, api.APIKey, api.APIUrl = conf["apiuser"], conf["apikey"], conf["apiurl"]
-	if api.APIKey == "" || api.APIUser == "" {
-		return nil, errors.New("missing Name.com apikey or apiuser")
+	n.client.Server = conf["apiurl"]
+	n.APIUser, n.APIKey, n.APIUrl = conf["apiuser"], conf["apikey"], conf["apiurl"]
+	if n.APIKey == "" || n.APIUser == "" {
+		return errors.New("missing Name.com apikey or apiuser")
 	}
-	if api.APIUrl == "" {
-		api.APIUrl = defaultAPIBase
+	if n.APIUrl == "" {
+		n.APIUrl = defaultAPIBase
 	}
 
 	// Set the timeout to a high value.  Currently we get timeouts and
 	// the namecom library doesn't make it easy to do a clean
 	// retry-on-timeout or retry-on-429.  As a work-around we just give
 	// it more time to finish.
-	api.client.Client.Timeout = 60 * time.Second
+	n.client.Client.Timeout = 60 * time.Second
 
-	return api, nil
+	n.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "NAMEDOTCOM"
-	const providerMaintainer = "NEEDS VOLUNTEER"
-	providers.RegisterRegistrarType(providerName, newReg)
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType("NAMEDOTCOM", fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*namedotcomProvider]("NAMEDOTCOM", providers.Definition{
+		FriendlyName: "Name.com",
+		Maintainer:   "NEEDS VOLUNTEER",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"CAA:Cannot",
+		},
+		CanConcur:              providers.Unimplemented(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUsePTR:        providers.Cannot("PTR records are not supported (See Link)", "https://www.name.com/support/articles/205188508-Reverse-DNS-records"),
+			providers.CanUseSRV:        providers.Can("SRV records with empty targets are not supported"),
+			providers.DocCreateDomains: providers.Cannot("New domains require registration"),
+		},
+	})
 }

@@ -190,7 +190,7 @@ func TestAuditRecords(t *testing.T) {
 		{"TXT with one double quote", mustRecord(t, dc, "t", 300, dnsv2.TypeTXT, `"left`), true},
 		{"NS", mustRecord(t, dc, "sub", 300, dnsv2.TypeNS, "ns.example.net."), false},
 	} {
-		if got := len(AuditRecords(models.Records{tc.rc})) == 0; got != tc.ok {
+		if got := len(new(mittwaldProvider).AuditRecords(models.Records{tc.rc})) == 0; got != tc.ok {
 			t.Errorf("%s: accepted=%v, want %v", tc.name, got, tc.ok)
 		}
 	}
@@ -199,7 +199,7 @@ func TestAuditRecords(t *testing.T) {
 	for i := range 11 {
 		many = append(many, mustRecord(t, dc, "www", 300, dnsv2.TypeA, fmt.Sprintf("192.0.2.%d", i+1)))
 	}
-	if errs := AuditRecords(many); len(errs) != 1 {
+	if errs := new(mittwaldProvider).AuditRecords(many); len(errs) != 1 {
 		t.Errorf("11 A records at one name: want one error, got %v", errs)
 	}
 }

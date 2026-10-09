@@ -8,9 +8,6 @@
         {
           "comparablev3": "\"\"",
           "filepos": "[line:2:5]",
-          "meta": {
-            "orig_custom_type": "ADGUARDHOME_A_PASSTHROUGH"
-          },
           "name": "a",
           "name_unicode": "a",
           "rdata": {
@@ -23,9 +20,6 @@
         {
           "comparablev3": "\"\"",
           "filepos": "[line:3:5]",
-          "meta": {
-            "orig_custom_type": "ADGUARDHOME_AAAA_PASSTHROUGH"
-          },
           "name": "aaaa",
           "name_unicode": "aaaa",
           "rdata": {

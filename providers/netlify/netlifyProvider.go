@@ -13,39 +13,22 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot(),
-	providers.DocDualHost:            providers.Cannot("Netlify does not allow sufficient control over the apex NS records"),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "NETLIFY"
-	const providerMaintainer = "@SphericalKat"
-	fns := providers.DspFuncs{
-		Initializer:   newNetlify,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType(providerName, providerName, "")
-	providers.RegisterCustomRecordType("NETLIFYv6", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*netlifyProvider]("NETLIFY", providers.Definition{
+		FriendlyName: "Netlify",
+		Maintainer:   "@SphericalKat",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"NETLIFY",
+			"NETLIFYV6",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Cannot("Netlify does not allow sufficient control over the apex NS records"),
+		DocOfficiallySupported: providers.Cannot(),
+	})
 }
 
 type netlifyProvider struct {
@@ -58,16 +41,17 @@ func (n *netlifyProvider) SetConversionObserver(observer providers.ConversionObs
 	n.observer = observer
 }
 
-func newNetlify(m map[string]string, message json.RawMessage) (providers.DNSServiceProvider, error) {
-	api := &netlifyProvider{}
-	api.apiToken = m["token"]
-	if api.apiToken == "" {
-		return nil, errors.New("missing Netlify personal access token")
+// Initialize initializes a fresh provider instance.
+func (n *netlifyProvider) Initialize(m map[string]string, message json.RawMessage, options *providers.CreateOptions) error {
+	n.apiToken = m["token"]
+	if n.apiToken == "" {
+		return errors.New("missing Netlify personal access token")
 	}
 
-	api.accountSlug = m["slug"]
+	n.accountSlug = m["slug"]
 
-	return api, nil
+	n.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func (n *netlifyProvider) GetNameservers(domain string) ([]*models.Nameserver, error) {

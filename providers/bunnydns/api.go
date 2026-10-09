@@ -26,6 +26,10 @@ type zone struct {
 	HasDNSSEC   bool   `json:"DnsSecEnabled"`
 }
 
+func (zone *zone) Nameservers() []string {
+	return []string{zone.Nameserver1, zone.Nameserver2}
+}
+
 type record struct {
 	ID         int64      `json:"Id,omitempty"`
 	Type       recordType `json:"Type"`
@@ -79,6 +83,9 @@ type getZoneResponse struct {
 type queryParams map[string]string
 
 func (b *bunnydnsProvider) findZoneByDomain(domain string) (*zone, error) {
+	b.zonesMu.Lock()
+	defer b.zonesMu.Unlock()
+
 	if b.zones == nil {
 		zones, err := b.getAllZones()
 		if err != nil {
@@ -134,7 +141,9 @@ func (b *bunnydnsProvider) createZone(domain string) (*zone, error) {
 		return nil, err
 	}
 
+	b.zonesMu.Lock()
 	b.zones[domain] = zone
+	b.zonesMu.Unlock()
 	return zone, nil
 }
 

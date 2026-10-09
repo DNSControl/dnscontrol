@@ -31,41 +31,20 @@ func (c *gcoreProvider) SetConversionObserver(observer providers.ConversionObser
 	c.observer = observer
 }
 
-// NewGCore creates the provider.
-func NewGCore(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (c *gcoreProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	if m["api-key"] == "" {
-		return nil, errors.New("missing G-Core API key")
+		return errors.New("missing G-Core API key")
 	}
 
-	c := &gcoreProvider{
+	*c = gcoreProvider{
 		provider: dnssdk.NewClient(dnssdk.PermanentAPIKeyAuth(m["api-key"])),
 		ctx:      context.TODO(),
 		apiKey:   m["api-key"],
 	}
 
-	return c, nil
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Can("G-Core supports PTR records only in rDNS zones"),
-	providers.CanUseSRV:              providers.Can("G-Core doesn't support SRV records with empty targets"),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 var defaultNameServerNames = []string{
@@ -74,20 +53,10 @@ var defaultNameServerNames = []string{
 }
 
 func init() {
-	const providerName = "GCORE"
-	const providerMaintainer = "@xddxdd"
-	fns := providers.DspFuncs{
-		Initializer:   NewGCore,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "G-Core Labs",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/gcore",
-		PortalURL:   "https://accounts.gcore.com/profile/api-tokens", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*gcoreProvider]("GCORE", providers.Definition{
+		FriendlyName: "G-Core Labs",
+		PortalURL:    "https://accounts.gcore.com/profile/api-tokens", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "api-key",
 				Label:    "API key",
@@ -95,6 +64,23 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@xddxdd",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"HTTPS",
+			"PTR",
+			"SVCB",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUsePTR: providers.Can("G-Core supports PTR records only in rDNS zones"),
+			providers.CanUseSRV: providers.Can("G-Core doesn't support SRV records with empty targets"),
 		},
 	})
 }

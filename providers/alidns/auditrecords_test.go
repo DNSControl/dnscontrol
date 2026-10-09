@@ -45,9 +45,9 @@ func TestAuditRecordsRejectsNonChineseIDNLabel(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("xn--ndaaa", 0, dnsv2.TypeA, "1.2.3.4")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(aliDNSDsp).AuditRecords(models.Records{rc})
 	if len(errs) != 1 {
-		t.Fatalf("AuditRecords() returned %d errors, want 1", len(errs))
+		t.Fatalf("new(aliDNSDsp).AuditRecords() returned %d errors, want 1", len(errs))
 	}
 }
 
@@ -89,8 +89,8 @@ func TestAuditRecordsRejectsNonChineseIDNCNAMETarget(t *testing.T) {
 	dc := models.MustNewDomainConfig("example.com")
 	rc := dc.MustNewRecordConfig("a", 0, dnsv2.TypeCNAME, "xn--ndaaa.com.")
 
-	errs := AuditRecords(models.Records{rc})
+	errs := new(aliDNSDsp).AuditRecords(models.Records{rc})
 	if len(errs) != 1 {
-		t.Fatalf("AuditRecords() returned %d errors, want 1", len(errs))
+		t.Fatalf("new(aliDNSDsp).AuditRecords() returned %d errors, want 1", len(errs))
 	}
 }

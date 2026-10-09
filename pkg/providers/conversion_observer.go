@@ -16,13 +16,6 @@ type ConversionObserver interface {
 	EndToNative(function string, before ConversionSnapshot, recordsAfter models.Records, result any, err error)
 }
 
-// ConversionObserverSetter is implemented by providers that expose conversion
-// boundaries. CreateDNSProvider calls it before returning the constructed
-// provider.
-type ConversionObserverSetter interface {
-	SetConversionObserver(ConversionObserver)
-}
-
 type noopConversionObserver struct{}
 
 func (noopConversionObserver) BeginToRC(string, any) ConversionSnapshot { return nil }
@@ -32,13 +25,29 @@ func (noopConversionObserver) BeginToNative(string, models.Records) ConversionSn
 func (noopConversionObserver) EndToNative(string, ConversionSnapshot, models.Records, any, error) {
 }
 
-// CreateOptions holds optional dependencies supplied while constructing a DNS
-// provider.
+// CreateOptions holds dependencies supplied while constructing a provider.
 type CreateOptions struct {
 	ConversionObserver ConversionObserver
+	// RequestedRole is set by the typed factory after caller options are applied.
+	// It is exactly KindDNS or KindRegistrar for runtime instances.
+	RequestedRole ProviderKind
 }
 
-// CreateOption customizes DNS provider construction.
+// WithDefaults returns a copy with shared defaults applied. A nil receiver and
+// zero-valued options are equivalent. The requested role remains unspecified
+// unless set by a typed factory.
+func (options *CreateOptions) WithDefaults() CreateOptions {
+	var result CreateOptions
+	if options != nil {
+		result = *options
+	}
+	if result.ConversionObserver == nil {
+		result.ConversionObserver = noopConversionObserver{}
+	}
+	return result
+}
+
+// CreateOption customizes provider construction.
 type CreateOption func(*CreateOptions)
 
 // WithConversionObserver supplies an observer for provider record conversions.
@@ -49,14 +58,11 @@ func WithConversionObserver(observer ConversionObserver) CreateOption {
 }
 
 func newCreateOptions(opts []CreateOption) CreateOptions {
-	options := CreateOptions{ConversionObserver: noopConversionObserver{}}
+	var options CreateOptions
 	for _, opt := range opts {
 		opt(&options)
 	}
-	if options.ConversionObserver == nil {
-		options.ConversionObserver = noopConversionObserver{}
-	}
-	return options
+	return options.WithDefaults()
 }
 
 // BeginToRC safely begins an observation when observer may be nil.

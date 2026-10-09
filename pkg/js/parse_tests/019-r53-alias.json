@@ -8,9 +8,6 @@
         {
           "comparablev3": "AAAA foo.com. \"\" \"\"",
           "filepos": "[line:7:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "aaaatest",
           "name_unicode": "aaaatest",
           "rdata": {
@@ -26,9 +23,6 @@
         {
           "comparablev3": "AAAA foo.com. false ERERTFGFGF",
           "filepos": "[line:8:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "aaaatest",
           "name_unicode": "aaaatest",
           "rdata": {
@@ -44,9 +38,6 @@
         {
           "comparablev3": "A foo.com. true \"\"",
           "filepos": "[line:5:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "aevaltargethealthtest",
           "name_unicode": "aevaltargethealthtest",
           "rdata": {
@@ -62,9 +53,6 @@
         {
           "comparablev3": "A foo.com. false \"\"",
           "filepos": "[line:6:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "aevaltargethealthtest2",
           "name_unicode": "aevaltargethealthtest2",
           "rdata": {
@@ -80,9 +68,6 @@
         {
           "comparablev3": "A foo.com. \"\" \"\"",
           "filepos": "[line:3:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "atest",
           "name_unicode": "atest",
           "rdata": {
@@ -98,9 +83,6 @@
         {
           "comparablev3": "A foo.com. false Z2FTEDLFRTF",
           "filepos": "[line:4:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "atest",
           "name_unicode": "atest",
           "rdata": {
@@ -116,9 +98,6 @@
         {
           "comparablev3": "CAA foo.com. \"\" \"\"",
           "filepos": "[line:14:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "caatest",
           "name_unicode": "caatest",
           "rdata": {
@@ -134,9 +113,6 @@
         {
           "comparablev3": "A d111111abcdef8.cloudfront.net. \"\" \"\"",
           "filepos": "[line:23:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "cftest",
           "name_unicode": "cftest",
           "rdata": {
@@ -152,9 +128,6 @@
         {
           "comparablev3": "A d222222abcdef8.cloudfront.net. false Z2FDTNDATAQYW2",
           "filepos": "[line:24:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "cfzonetest",
           "name_unicode": "cfzonetest",
           "rdata": {
@@ -170,9 +143,6 @@
         {
           "comparablev3": "CNAME foo.com. \"\" \"\"",
           "filepos": "[line:9:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "cnametest",
           "name_unicode": "cnametest",
           "rdata": {
@@ -188,9 +158,6 @@
         {
           "comparablev3": "DS foo.com. \"\" \"\"",
           "filepos": "[line:17:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "dstest",
           "name_unicode": "dstest",
           "rdata": {
@@ -206,9 +173,6 @@
         {
           "comparablev3": "HTTPS foo.com. \"\" \"\"",
           "filepos": "[line:21:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "httpstest",
           "name_unicode": "httpstest",
           "rdata": {
@@ -224,9 +188,6 @@
         {
           "comparablev3": "MX foo.com. \"\" \"\"",
           "filepos": "[line:2:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "mxtest",
           "name_unicode": "mxtest",
           "rdata": {
@@ -242,9 +203,6 @@
         {
           "comparablev3": "NAPTR foo.com. \"\" \"\"",
           "filepos": "[line:15:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "naptrtest",
           "name_unicode": "naptrtest",
           "rdata": {
@@ -260,9 +218,6 @@
         {
           "comparablev3": "PTR foo.com. \"\" \"\"",
           "filepos": "[line:10:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "ptrtest",
           "name_unicode": "ptrtest",
           "rdata": {
@@ -278,9 +233,6 @@
         {
           "comparablev3": "SOA foo.com. \"\" \"\"",
           "filepos": "[line:16:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "soatest",
           "name_unicode": "soatest",
           "rdata": {
@@ -296,9 +248,6 @@
         {
           "comparablev3": "SPF foo.com. \"\" \"\"",
           "filepos": "[line:13:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "spftest",
           "name_unicode": "spftest",
           "rdata": {
@@ -314,9 +263,6 @@
         {
           "comparablev3": "SRV foo.com. \"\" \"\"",
           "filepos": "[line:12:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "srvtest",
           "name_unicode": "srvtest",
           "rdata": {
@@ -332,9 +278,6 @@
         {
           "comparablev3": "SSHFP foo.com. \"\" \"\"",
           "filepos": "[line:19:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "sshfptest",
           "name_unicode": "sshfptest",
           "rdata": {
@@ -350,9 +293,6 @@
         {
           "comparablev3": "SVCB foo.com. \"\" \"\"",
           "filepos": "[line:20:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "svcbtest",
           "name_unicode": "svcbtest",
           "rdata": {
@@ -368,9 +308,6 @@
         {
           "comparablev3": "TLSA foo.com. \"\" \"\"",
           "filepos": "[line:18:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "tlsatest",
           "name_unicode": "tlsatest",
           "rdata": {
@@ -386,9 +323,6 @@
         {
           "comparablev3": "TXT foo.com. \"\" \"\"",
           "filepos": "[line:11:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "txttest",
           "name_unicode": "txttest",
           "rdata": {

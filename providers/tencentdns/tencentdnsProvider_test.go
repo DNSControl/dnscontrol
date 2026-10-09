@@ -376,29 +376,29 @@ func TestMinTTLForGradeIgnoresGradeCase(t *testing.T) {
 }
 
 func TestCredsMetadata(t *testing.T) {
-	meta, ok := providers.GetCredsMetadata("TENCENTDNS")
+	meta, ok := providers.GetDefinition("TENCENTDNS")
 	assert.True(t, ok)
-	assert.Equal(t, "Tencent Cloud DNS", meta.DisplayName)
+	assert.Equal(t, "Tencent Cloud DNS", meta.FriendlyName)
 	assert.True(t, meta.Kind.Has(providers.KindDNS))
 	assert.True(t, meta.Kind.Has(providers.KindRegistrar))
 	assert.Equal(t, "https://docs.dnscontrol.org/provider/tencentdns", meta.DocsURL)
 	assert.Equal(t, "https://console.intl.cloud.tencent.com/cam/capi", meta.PortalURL)
 
-	if assert.Len(t, meta.Fields, 4) {
-		assert.Equal(t, "secret_id", meta.Fields[0].Key)
-		assert.True(t, meta.Fields[0].Required)
-		assert.True(t, meta.Fields[0].Secret)
+	if assert.Len(t, meta.CredFields, 4) {
+		assert.Equal(t, "secret_id", meta.CredFields[0].Key)
+		assert.True(t, meta.CredFields[0].Required)
+		assert.True(t, meta.CredFields[0].Secret)
 
-		assert.Equal(t, "secret_key", meta.Fields[1].Key)
-		assert.True(t, meta.Fields[1].Required)
-		assert.True(t, meta.Fields[1].Secret)
+		assert.Equal(t, "secret_key", meta.CredFields[1].Key)
+		assert.True(t, meta.CredFields[1].Required)
+		assert.True(t, meta.CredFields[1].Secret)
 
-		assert.Equal(t, "region", meta.Fields[2].Key)
-		assert.Equal(t, "ap-guangzhou", meta.Fields[2].Default)
+		assert.Equal(t, "region", meta.CredFields[2].Key)
+		assert.Equal(t, "ap-guangzhou", meta.CredFields[2].Default)
 
-		assert.Equal(t, "site", meta.Fields[3].Key)
-		assert.Equal(t, "cn", meta.Fields[3].Default)
-		assert.Contains(t, meta.Fields[3].Help, "international APIs")
+		assert.Equal(t, "site", meta.CredFields[3].Key)
+		assert.Equal(t, "cn", meta.CredFields[3].Default)
+		assert.Contains(t, meta.CredFields[3].Help, "international APIs")
 	}
 }
 

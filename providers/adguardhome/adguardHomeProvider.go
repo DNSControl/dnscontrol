@@ -14,47 +14,38 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newAdguardHome(conf, metadata)
-}
-
-// newAdguardHome creates the provider.
-func newAdguardHome(m map[string]string, _ json.RawMessage) (*adguardHomeProvider, error) {
-	c := &adguardHomeProvider{}
-
+// Initialize initializes a fresh provider instance.
+func (c *adguardHomeProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	c.username, c.password, c.host = m["username"], m["password"], m["host"]
 
 	if c.username == "" {
-		return nil, errors.New("missing adguard home username")
+		return errors.New("missing adguard home username")
 	}
 	if c.password == "" {
-		return nil, errors.New("missing adguard home password")
+		return errors.New("missing adguard home password")
 	}
 	if c.host == "" {
-		return nil, errors.New("missing adguard home endpoint")
+		return errors.New("missing adguard home endpoint")
 	}
 
-	return c, nil
-}
-
-var features = providers.DocumentationNotes{
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanGetZones:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	return nil
 }
 
 func init() {
-	const providerName = "ADGUARDHOME"
-	const providerMaintainer = "@ishanjain28"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterCustomRecordType("ADGUARDHOME_A_PASSTHROUGH", providerName, "")
-	providers.RegisterCustomRecordType("ADGUARDHOME_AAAA_PASSTHROUGH", providerName, "")
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*adguardHomeProvider]("ADGUARDHOME", providers.Definition{
+		FriendlyName: "AdGuard Home",
+		Maintainer:   "@ishanjain28",
+		SupportedTypes: []string{
+			"A",
+			"AAAA",
+			"ADGUARDHOME_AAAA_PASSTHROUGH",
+			"ADGUARDHOME_A_PASSTHROUGH",
+			"ALIAS",
+			"CNAME",
+		},
+		CanConcur:              providers.Unimplemented(),
+		DocOfficiallySupported: providers.Cannot(),
+	})
 }
 
 // GetNameservers returns the nameservers for a domain.

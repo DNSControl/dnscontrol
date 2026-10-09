@@ -301,9 +301,9 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 			}
 		}
 
-		out.Printf("SERIALLY checking for %d zone(s)\n", len(zonesSerial))
+		out.PrintfIf(fullMode || len(zonesSerial) != 0, "SERIALLY checking for %d zone(s)\n", len(zonesSerial))
 		for _, zone := range zonesSerial {
-			out.Printf("Serially checking for zone: %q\n", zone.UniqueName)
+			out.PrintfIf(fullMode, "Serially checking for zone: %q\n", zone.UniqueName)
 			if err := oneZonePopulate(zone, zcache); err != nil {
 				anyErrors = true
 			}
@@ -368,9 +368,9 @@ func prun(args PPreviewArgs, push bool, interactive bool, out printer.CLI, repor
 			}
 		}
 	}
-	out.Printf("SERIALLY gathering records of %d zone(s)\n", len(zonesSerial))
+	out.PrintfIf(fullMode || len(zonesSerial) != 0, "SERIALLY gathering records of %d zone(s)\n", len(zonesSerial))
 	for _, zone := range zonesSerial {
-		out.Printf("Serially Gathering: %q\n", zone.UniqueName)
+		out.PrintfIf(fullMode, "Serially gathering: %q\n", zone.UniqueName)
 		if err := oneZone(zone, args, push); err != nil {
 			anyErrors = true
 		}
@@ -861,251 +861,7 @@ func msg(s string) []*models.Correction {
 	return []*models.Correction{{Msg: s}}
 }
 
-// PInitializeProviders takes (fully processed) configuration and instantiates all providers and returns them.
-func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[string]string, notifyFlag bool) (notify notifications.Notifier, err error) {
-	var notificationCfg map[string]string
-	defer func() {
-		notify = notifications.Init(notificationCfg)
-	}()
-	if notifyFlag {
-		notificationCfg = providerConfigs["notifications"]
-	}
-	isNonDefault := map[string]bool{}
-	for name, vals := range providerConfigs {
-		// add "_exclude_from_defaults":"true" to a provider to exclude it from being run unless
-		// -providers=all or -providers=name
-		if vals["_exclude_from_defaults"] == "true" {
-			isNonDefault[name] = true
-		}
-	}
-
-	// Populate provider type ids based on values from creds.json:
-	msgs, err := ppopulateProviderTypes(cfg, providerConfigs)
-	if len(msgs) != 0 {
-		fmt.Fprintln(os.Stderr, strings.Join(msgs, "\n"))
-	}
-	if err != nil {
-		return notify, err
-	}
-
-	registrars := map[string]providers.Registrar{}
-	dnsProviders := map[string]providers.DNSServiceProvider{}
-	for _, d := range cfg.Domains {
-		if registrars[d.RegistrarName] == nil {
-			rCfg := cfg.RegistrarsByName[d.RegistrarName]
-			r, err := providers.CreateRegistrar(rCfg.Type, providerConfigs[d.RegistrarName])
-			if err != nil {
-				return nil, fmt.Errorf("failed to initialize registrar %q: %w", rCfg.Name, err)
-			}
-			registrars[d.RegistrarName] = r
-		}
-		d.RegistrarInstance.Driver = registrars[d.RegistrarName]
-		d.RegistrarInstance.IsDefault = !isNonDefault[d.RegistrarName]
-		for _, pInst := range d.DNSProviderInstances {
-			if dnsProviders[pInst.Name] == nil {
-				dCfg := cfg.DNSProvidersByName[pInst.Name]
-				prov, err := providers.CreateDNSProvider(dCfg.Type, providerConfigs[dCfg.Name], dCfg.Metadata)
-				if err != nil {
-					return nil, fmt.Errorf("failed to initialize DNS provider %q: %w", dCfg.Name, err)
-				}
-				dnsProviders[pInst.Name] = prov
-			}
-			pInst.Driver = dnsProviders[pInst.Name]
-			pInst.IsDefault = !isNonDefault[pInst.Name]
-		}
-	}
-	return notify, err
-}
-
-// pproviderTypeFieldName is the name of the field in creds.json that specifies the provider type id.
-const pproviderTypeFieldName = "TYPE"
-
-// ppurl is the documentation URL to list in the warnings related to missing provider type ids.
-const purl = "https://docs.dnscontrol.org/commands/creds-json"
-
-// ppopulateProviderTypes scans a DNSConfig for blank provider types and fills them in based on providerConfigs.
-// That is, if the provider type is "-" or "", we take that as an flag
-// that means this value should be replaced by the type found in creds.json.
-func ppopulateProviderTypes(cfg *models.DNSConfig, providerConfigs map[string]map[string]string) ([]string, error) {
-	var msgs []string
-
-	for i := range cfg.Registrars {
-		pType := cfg.Registrars[i].Type
-		pName := cfg.Registrars[i].Name
-		nt, warnMsg, err := prefineProviderType(pName, pType, providerConfigs[pName], "NewRegistrar")
-		cfg.Registrars[i].Type = nt
-		if warnMsg != "" {
-			msgs = append(msgs, warnMsg)
-		}
-		if err != nil {
-			return msgs, err
-		}
-	}
-
-	for i := range cfg.DNSProviders {
-		pName := cfg.DNSProviders[i].Name
-		pType := cfg.DNSProviders[i].Type
-		nt, warnMsg, err := prefineProviderType(pName, pType, providerConfigs[pName], "NewDnsProvider")
-		cfg.DNSProviders[i].Type = nt
-		if warnMsg != "" {
-			msgs = append(msgs, warnMsg)
-		}
-		if err != nil {
-			return msgs, err
-		}
-	}
-
-	// Update these fields set by
-	// commands/commands.go:preloadProviders().
-	// This is probably a layering violation.  That said, the
-	// fundamental problem here is that we're storing the provider
-	// instances by string name, not by a pointer to a struct.  We
-	// should clean that up someday.
-	for _, domain := range cfg.Domains { // For each domain..
-		for _, provider := range domain.DNSProviderInstances { // For each provider...
-			pName := provider.Name
-			pType := provider.ProviderType
-			nt, warnMsg, err := prefineProviderType(pName, pType, providerConfigs[pName], "NewDnsProvider")
-			provider.ProviderType = nt
-			if warnMsg != "" {
-				msgs = append(msgs, warnMsg)
-			}
-			if err != nil {
-				return msgs, err
-			}
-		}
-		p := domain.RegistrarInstance
-		pName := p.Name
-		pType := p.ProviderType
-		nt, warnMsg, err := prefineProviderType(pName, pType, providerConfigs[pName], "NewRegistrar")
-		p.ProviderType = nt
-		if warnMsg != "" {
-			msgs = append(msgs, warnMsg)
-		}
-		if err != nil {
-			return msgs, err
-		}
-	}
-
-	return puniqueStrings(msgs), nil
-}
-
-// puniqueStrings takes an unsorted slice of strings and returns the
-// unique strings, in the order they first appeared in the list.
-func puniqueStrings(stringSlice []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-	for _, entry := range stringSlice {
-		if _, ok := keys[entry]; !ok {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
-}
-
-func prefineProviderType(credEntryName string, t string, credFields map[string]string, source string) (replacementType string, warnMsg string, err error) {
-	// t="" and t="-" are processed the same. Standardize on "-" to reduce the number of cases to check.
-	if t == "" {
-		t = "-"
-	}
-
-	// Use cases:
-	//
-	// type     credsType
-	// ----     ---------
-	// - or ""  GANDI        lookup worked. Nothing to say.
-	// - or ""  - or ""      ERROR "creds.json has invalid or missing data"
-	// GANDI    ""           WARNING "Working but.... Please fix as follows..."
-	// GANDI    INFO "working but unneeded: clean up as follows..."
-	// GANDI    NAMEDOT      ERROR "error mismatched: please fix as follows..."
-
-	// ERROR: Invalid.
-	// WARNING: Required change to remain compatible with 4.0
-	// INFO: Post-4.0 cleanups or other non-required changes.
-
-	if t != "-" {
-		// Old-style, dnsconfig.js specifies the type explicitly.
-		// This is supported but we suggest updates for future compatibility.
-
-		// If credFields is nil, that means there was no entry in creds.json:
-		if credFields == nil {
-			// Warn the user to update creds.json in preparation for 4.0:
-			// In 4.0 this should be an error.  We could default to a
-			// provider such as "NONE" but I suspect it would be confusing
-			// to users to see references to a provider name that they did
-			// not specify.
-			return t, fmt.Sprintf(`WARNING: For future compatibility, add this entry creds.json: %q: { %q: %q }, (See %s#missing)`,
-				credEntryName, pproviderTypeFieldName, t,
-				purl,
-			), nil
-		}
-
-		switch ct := credFields[pproviderTypeFieldName]; ct {
-		case "":
-			// Warn the user to update creds.json in preparation for 4.0:
-			// In 4.0 this should be an error.
-			return t, fmt.Sprintf(`WARNING: For future compatibility, update the %q entry in creds.json by adding: %q: %q, (See %s#missing)`,
-				credEntryName,
-				pproviderTypeFieldName, t,
-				purl,
-			), nil
-		case "-":
-			// This should never happen. The user is specifying "-" in a place that it shouldn't be used.
-			return "-", "", fmt.Errorf(`ERROR: creds.json entry %q has invalid %q value %q (See %s#hyphen)`,
-				credEntryName, pproviderTypeFieldName, ct,
-				purl,
-			)
-		case t:
-			// creds.json file is compatible with and dnsconfig.js can be updated.
-			return ct, fmt.Sprintf(`INFO: In dnsconfig.js %s(%q, %q) can be simplified to %s(%q) (See %s#cleanup)`,
-				source, credEntryName, t,
-				source, credEntryName,
-				purl,
-			), nil
-		default:
-			// creds.json lists a TYPE but it doesn't match what's in dnsconfig.js!
-			return t, "", fmt.Errorf(`ERROR: Mismatch found! creds.json entry %q has %q set to %q but dnsconfig.js specifies %s(%q, %q) (See %s#mismatch)`,
-				credEntryName,
-				pproviderTypeFieldName, ct,
-				source, credEntryName, t,
-				purl,
-			)
-		}
-	}
-
-	// t == "-"
-	// New-style, dnsconfig.js does not specify the type (t == "") or a
-	// command line tool accepted "-" as a positional argument for
-	// backwards compatibility.
-
-	// If credFields is nil, that means there was no entry in creds.json:
-	if credFields == nil {
-		return "", "", fmt.Errorf(`ERROR: creds.json is missing an entry called %q. Suggestion: %q: { %q: %q }, (See %s#missing)`,
-			credEntryName,
-			credEntryName, pproviderTypeFieldName, "FILL_IN_PROVIDER_TYPE",
-			purl,
-		)
-	}
-
-	// New-style, dnsconfig.js doesn't specifies the type. It will be
-	// looked up in creds.json.
-	switch ct := credFields[pproviderTypeFieldName]; ct {
-	case "":
-		return ct, "", fmt.Errorf(`ERROR: creds.json entry %q is missing: %q: %q, (See %s#fixcreds)`,
-			credEntryName,
-			pproviderTypeFieldName, "FILL_IN_PROVIDER_TYPE",
-			purl,
-		)
-	case "-":
-		// This should never happen. The user is confused and specified "-" in the wrong place!
-		return "-", "", fmt.Errorf(`ERROR: creds.json entry %q has invalid %q value %q (See %s#hyphen)`,
-			credEntryName,
-			pproviderTypeFieldName, ct,
-			purl,
-		)
-	default:
-		// use the value in creds.json (this should be the normal case)
-		return ct, "", nil
-	}
+// PInitializeProviders uses the same provider setup as InitializeProviders.
+func PInitializeProviders(cfg *models.DNSConfig, providerConfigs map[string]map[string]string, notifyFlag bool) (notifications.Notifier, error) {
+	return InitializeProviders(cfg, providerConfigs, notifyFlag)
 }

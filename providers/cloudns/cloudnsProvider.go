@@ -24,72 +24,26 @@ Info required in `creds.json`:
    - auth-password
 */
 
-func newCloudns(m map[string]string) (*cloudnsProvider, error) {
-	c := &cloudnsProvider{}
+// Initialize initializes a fresh provider instance.
+func (c *cloudnsProvider) Initialize(m map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	c.requestLimit = NewAdaptiveLimiter(10, 10)
 
 	c.creds.id, c.creds.password, c.creds.subid = m["auth-id"], m["auth-password"], m["sub-auth-id"]
 
 	if (c.creds.id == "" && c.creds.subid == "") || c.creds.password == "" {
-		return nil, errors.New("missing ClouDNS auth-id or sub-auth-id and auth-password")
+		return errors.New("missing ClouDNS auth-id or sub-auth-id and auth-password")
 	}
 
-	return c, nil
-}
-
-func newDsp(conf map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newCloudns(conf)
-}
-
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newCloudns(conf)
-}
-
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseSOA:              providers.Unimplemented("Supported by cloudns at a separate API endpoint (/dns/modify-soa.json), not implemented yet"),
-	providers.CanUseDS:               providers.Cannot("Not supported for root, only for children"),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
+	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 func init() {
-	const providerName = "CLOUDNS"
-	const providerMaintainer = "@pragmaton"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newReg)
-	providers.RegisterCustomRecordType("CLOUDNS_WR", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "ClouDNS",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/cloudns",
-		PortalURL:   "https://www.cloudns.net/api-settings/",
-		Notes:       "ClouDNS supports two auth methods: a main API user (auth-id) or a sub-user API account (sub-auth-id). Both use the same auth-password.",
-		Fields: []providers.CredsField{
+	providers.Register[*cloudnsProvider]("CLOUDNS", providers.Definition{
+		FriendlyName: "ClouDNS",
+		PortalURL:    "https://www.cloudns.net/api-settings/",
+		Notes:        "ClouDNS supports two auth methods: a main API user (auth-id) or a sub-user API account (sub-auth-id). Both use the same auth-password.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "_authMethod",
 				Label:    "Which authentication method do you want to use?",
@@ -119,6 +73,29 @@ func init() {
 				Secret:   true,
 				Required: true,
 			},
+		},
+		Maintainer: "@pragmaton",
+		SupportedTypes: []string{
+			"Basic8",
+			"ALIAS",
+			"CLOUDNS_WR",
+			"DNAME",
+			"LOC",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"TLSA",
+			"SOA:Unimplemented",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Can(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseSOA: providers.Unimplemented("Supported by cloudns at a separate API endpoint (/dns/modify-soa.json), not implemented yet"),
+			providers.CanUseDS:  providers.Cannot("Not supported for root, only for children"),
 		},
 	})
 }

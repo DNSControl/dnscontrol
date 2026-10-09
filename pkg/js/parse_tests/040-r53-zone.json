@@ -21,9 +21,6 @@
         {
           "comparablev3": "A foo.com. false Z2FTEDLFRTZ",
           "filepos": "[line:6:5]",
-          "meta": {
-            "orig_custom_type": "R53_ALIAS"
-          },
           "name": "atest",
           "name_unicode": "atest",
           "rdata": {

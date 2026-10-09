@@ -12,48 +12,32 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-// Provider metadata.
-const (
-	providerName       = "UNIFI"
-	providerMaintainer = "@zupolgec"
-)
-
-// Provider capabilities.
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	providers.CanGetZones:            providers.Cannot("UniFi stores records flat, not by zone"),
-	providers.CanConcur:              providers.Cannot(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot("UniFi does not have zone concept"),
-}
-
 // unifiProvider implements the DNSServiceProvider interface for UniFi Network.
 type unifiProvider struct {
 	client *unifiClient
 }
 
 func init() {
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*unifiProvider]("UNIFI", providers.Definition{
+		FriendlyName: "UniFi",
+		Maintainer:   "@zupolgec",
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
+			"NS:Cannot",
+		},
+		CanConcur:              providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanGetZones:      providers.Cannot("UniFi stores records flat, not by zone"),
+			providers.DocCreateDomains: providers.Cannot("UniFi does not have zone concept"),
+		},
+	})
 }
 
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newUnifi(conf, metadata)
-}
-
-// newUnifi creates a new UniFi provider from configuration.
-func newUnifi(m map[string]string, _ json.RawMessage) (*unifiProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *unifiProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	host := m["host"]
 	consoleID := m["console_id"]
 	apiKey := m["api_key"]
@@ -67,12 +51,12 @@ func newUnifi(m map[string]string, _ json.RawMessage) (*unifiProvider, error) {
 		apiVersion = "auto"
 	}
 	if apiVersion != "auto" && apiVersion != "new" && apiVersion != "legacy" {
-		return nil, fmt.Errorf("invalid api_version '%s': must be 'auto', 'new', or 'legacy'", apiVersion)
+		return fmt.Errorf("invalid api_version '%s': must be 'auto', 'new', or 'legacy'", apiVersion)
 	}
 
 	// Validate required fields
 	if apiKey == "" {
-		return nil, errors.New("missing UniFi api_key")
+		return errors.New("missing UniFi api_key")
 	}
 	if site == "" {
 		site = "default"
@@ -80,14 +64,15 @@ func newUnifi(m map[string]string, _ json.RawMessage) (*unifiProvider, error) {
 
 	// Must have either host (local) or console_id (cloud)
 	if host == "" && consoleID == "" {
-		return nil, errors.New("missing UniFi host or console_id")
+		return errors.New("missing UniFi host or console_id")
 	}
 
 	client := newClient(host, consoleID, apiKey, site, apiVersion, skipTLS, debug)
 
-	return &unifiProvider{
+	*p = unifiProvider{
 		client: client,
-	}, nil
+	}
+	return nil
 }
 
 // GetNameservers returns the nameservers for a domain.

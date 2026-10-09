@@ -36,89 +36,61 @@ import (
 // directory.
 const defaultZonesDir = "zones"
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Can(),
-	providers.CanUseDNAME:            providers.Can(),
-	providers.CanUseDNSKEY:           providers.Can(),
-	providers.CanUseDS:               providers.Can(),
-	providers.CanUseHTTPS:            providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUseOPENPGPKEY:       providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseRP:               providers.Can(),
-	providers.CanUseSMIMEA:           providers.Can(),
-	providers.CanUseSOA:              providers.Can(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Can(),
-}
-
-func initBind(config map[string]string, providermeta json.RawMessage) (providers.DNSServiceProvider, error) {
+func (c *bindProvider) Initialize(config map[string]string, providermeta json.RawMessage, _ *providers.CreateOptions) error {
 	// config -- the key/values from creds.json
 	// meta -- the json blob from NewReq('name', 'TYPE', meta)
-	api := &bindProvider{
-		directory:      config["directory"],
-		filenameformat: config["filenameformat"],
+	c.directory = config["directory"]
+	c.filenameformat = config["filenameformat"]
+	if c.directory == "" {
+		c.directory = "zones"
 	}
-	if api.directory == "" {
-		api.directory = "zones"
+	if c.filenameformat == "" {
+		c.filenameformat = "%c.zone"
 	}
-	if api.filenameformat == "" {
-		api.filenameformat = "%c.zone"
-	}
-	if err := validateDirName(api.directory, api.filenameformat); err != nil {
-		return nil, err
+	if err := validateDirName(c.directory, c.filenameformat); err != nil {
+		return err
 	}
 	if len(providermeta) != 0 {
-		err := json.Unmarshal(providermeta, api)
+		err := json.Unmarshal(providermeta, c)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	var nss []string
-	for i, ns := range api.DefaultNS {
+	for i, ns := range c.DefaultNS {
 		if ns == "" {
-			return nil, fmt.Errorf("empty string in default_ns[%d]", i)
+			return fmt.Errorf("empty string in default_ns[%d]", i)
 		}
 		// If it contains a ".", it must end in a ".".
 		if strings.ContainsRune(ns, '.') && ns[len(ns)-1] != '.' {
-			return nil, fmt.Errorf("default_ns (%v) must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", ns)
+			return fmt.Errorf("default_ns (%v) must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", ns)
 		}
 		// This is one of the (increasingly rare) cases where we store a
 		// name without the trailing dot to indicate a FQDN.
 		nss = append(nss, strings.TrimSuffix(ns, "."))
 	}
 	var err error
-	api.nameservers, err = models.ToNameservers(nss)
-	return api, err
+	c.nameservers, err = models.ToNameservers(nss)
+	return err
 }
 
 func init() {
-	const providerName = "BIND"
-	const providerMaintainer = "@TomOnTime"
-	fns := providers.DspFuncs{
-		Initializer:   initBind,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "ISC BIND",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/bind",
-		Notes:       "BIND writes zone files to a local directory; no API credentials are needed.",
-		Fields: []providers.CredsField{
+	providers.Register[*bindProvider]("BIND", providers.Definition{
+		FriendlyName: "ISC BIND",
+		Maintainer:   "@TomOnTime",
+		SupportedTypes: []string{
+			"*",
+		},
+		CanAutoDNSSEC:          providers.Can("Just writes out a comment indicating DNSSEC was requested"),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Can(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.DocCreateDomains: providers.Can("Driver just maintains list of zone files. It should automatically add missing ones."),
+		},
+		Notes: "BIND writes zone files to a local directory; no API credentials are needed.",
+		CredFields: []providers.CredsField{
 			{
 				Key:     "directory",
 				Label:   "Zone files directory",
@@ -364,9 +336,7 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 				if err != nil {
 					return fmt.Errorf("could not create zonefile: %w", err)
 				}
-				// Beware that if there are any fake types, then they will
-				// be commented out on write, but we don't reverse that when
-				// reading, so there will be a diff on every invocation.
+				// Preserve DNSControl pseudo-types along with ordinary records.
 				err = prettyzone.WriteZoneFileRC(zf, result.DesiredPlus, dc.Name, 0, comments)
 				if err != nil {
 					return fmt.Errorf("failed WriteZoneFile: %w", err)

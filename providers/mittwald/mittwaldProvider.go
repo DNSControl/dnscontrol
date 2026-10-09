@@ -24,50 +24,25 @@ of an ingress, the mail exchangers of mittwald's mail service) are neither
 returned nor changed.
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	// The API knows A, AAAA, CNAME, MX, TXT, SRV and CAA only.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Cannot(),
-	providers.CanGetZones:            providers.Cannot(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSMIMEA:           providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot("A domain's zone exists once the domain is in an mStudio project"),
-	providers.DocDualHost:            providers.Cannot(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "MITTWALD"
-	const providerMaintainer = "@twiesing"
-	fns := providers.DspFuncs{
-		Initializer:   newProvider,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "mittwald mStudio",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/mittwald",
-		PortalURL:   "https://studio.mittwald.de",
-		Fields: []providers.CredsField{
+	providers.Register[*mittwaldProvider]("MITTWALD", providers.Definition{
+		FriendlyName: "mittwald mStudio",
+		PortalURL:    "https://studio.mittwald.de",
+		CredFields: []providers.CredsField{
 			{Key: "api_token", Label: "API token", Help: "An mStudio API token of a user with access to the projects of the domains.", Required: true, Secret: true},
+		},
+		Maintainer: "@twiesing",
+		SupportedTypes: []string{
+			"Basic8",
+			"NS:Cannot",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Cannot(),
+		DocDualHost:            providers.Cannot(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.DocCreateDomains: providers.Cannot("A domain's zone exists once the domain is in an mStudio project"),
 		},
 	})
 }
@@ -80,16 +55,19 @@ type mittwaldProvider struct {
 	zones map[string]map[string]mwdns.Zone // domain -> name -> zone, as last read by GetZoneRecords
 }
 
-func newProvider(settings map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (p *mittwaldProvider) Initialize(settings map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	token := settings["api_token"]
 	if token == "" {
-		return nil, errors.New("missing MITTWALD api_token")
+		return errors.New("missing MITTWALD api_token")
 	}
 	a, err := newAPI(token)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &mittwaldProvider{api: a, zones: map[string]map[string]mwdns.Zone{}}, nil
+	*p = mittwaldProvider{api: a, zones: map[string]map[string]mwdns.Zone{}}
+	p.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // SetConversionObserver lets the integration tests record conversions for the golden files.

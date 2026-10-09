@@ -30,54 +30,12 @@ Note on Registrar functionality:
    returned when attempting to set NS records, and provide a clearer message.
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Can(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseCAA:              providers.Cannot("Only premium service"),
-	providers.CanUseDHCID:            providers.Cannot(),
-	providers.CanUseDNAME:            providers.Cannot(),
-	providers.CanUseDNSKEY:           providers.Cannot(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(),
-	providers.CanUseLOC:              providers.Cannot(),
-	providers.CanUseNAPTR:            providers.Cannot(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Cannot(),
-	providers.CanUseSVCB:             providers.Cannot(),
-	providers.CanUseTLSA:             providers.Cannot(),
-	providers.DocCreateDomains:       providers.Cannot("Must be created via web UI"),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 func init() {
-	const providerName = "GIDINET"
-	const providerMaintainer = "@zupolgec"
-
-	// Register as DNS provider
-	fns := providers.DspFuncs{
-		Initializer:   NewGidinet,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-
-	// Register as Registrar
-	providers.RegisterRegistrarType(providerName, newRegistrar)
-
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Gidinet",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/gidinet",
-		PortalURL:   "https://www.gidinet.com/modules/private/account_password/",
-		Notes:       "The username is your usual Gidinet account username, but the password must be the dedicated \"API password\" generated in the Gidinet control panel — not your normal login password.",
-		Fields: []providers.CredsField{
+	providers.Register[*gidinetProvider]("GIDINET", providers.Definition{
+		FriendlyName: "Gidinet",
+		PortalURL:    "https://www.gidinet.com/modules/private/account_password/",
+		Notes:        "The username is your usual Gidinet account username, but the password must be the dedicated \"API password\" generated in the Gidinet control panel — not your normal login password.",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "username",
 				Label:    "Username",
@@ -92,31 +50,34 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@zupolgec",
+		SupportedTypes: []string{
+			"Basic8",
+			"CAA:Cannot",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseCAA:        providers.Cannot("Only premium service"),
+			providers.DocCreateDomains: providers.Cannot("Must be created via web UI"),
+		},
 	})
 }
 
-// newRegistrar creates a new Gidinet registrar instance.
-func newRegistrar(m map[string]string) (providers.Registrar, error) {
+// Initialize initializes a fresh provider instance.
+func (c *gidinetProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if m["username"] == "" {
-		return nil, errors.New("missing Gidinet username")
+		return errors.New("missing Gidinet username")
 	}
 	if m["password"] == "" {
-		return nil, errors.New("missing Gidinet password")
-	}
-	return newClient(m["username"], m["password"]), nil
-}
-
-// NewGidinet creates a new Gidinet DNS provider.
-func NewGidinet(m map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
-	if m["username"] == "" {
-		return nil, errors.New("missing Gidinet username")
-	}
-	if m["password"] == "" {
-		return nil, errors.New("missing Gidinet password")
+		return errors.New("missing Gidinet password")
 	}
 
-	api := newClient(m["username"], m["password"])
-	return api, nil
+	c.initializeClient(m["username"], m["password"])
+	return nil
 }
 
 // GetNameservers returns the static Gidinet DNS nameservers used by every

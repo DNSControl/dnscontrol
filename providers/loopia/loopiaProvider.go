@@ -31,23 +31,11 @@ import (
 
 // Section 1: Register this provider in the system.
 
-// init registers the provider to dnscontrol.
 func init() {
-	const providerName = "LOOPIA"
-	const providerMaintainer = "@systemcrash"
-	fns := providers.DspFuncs{
-		Initializer:   newDsp,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterRegistrarType(providerName, newReg)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Loopia",
-		Kind:        providers.KindDNS | providers.KindRegistrar,
-		DocsURL:     "https://docs.dnscontrol.org/provider/loopia",
-		PortalURL:   "https://support.loopia.com/wiki/loopiaapi/",
-		Fields: []providers.CredsField{
+	providers.Register[*APIClient]("LOOPIA", providers.Definition{
+		FriendlyName: "Loopia",
+		PortalURL:    "https://support.loopia.com/wiki/loopiaapi/",
+		CredFields: []providers.CredsField{
 			{
 				Key:      "username",
 				Label:    "API username",
@@ -62,60 +50,39 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@systemcrash",
+		SupportedTypes: []string{
+			"Basic8",
+			"LOC",
+			"NAPTR",
+			"SSHFP",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Cannot(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Cannot(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseDS:         providers.Cannot("Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end."),
+			providers.CanUseSOA:        providers.Cannot("💩"),
+			providers.DocCreateDomains: providers.Cannot("Can only manage domains registered through their service"),
+		},
 	})
-}
-
-// features declares which features and options are available.
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Cannot(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanOnlyDiff1Features:   providers.Can(),
-	providers.CanUseAKAMAICDN:        providers.Cannot(),
-	providers.CanUseAlias:            providers.Cannot(),
-	providers.CanUseAzureAlias:       providers.Cannot(),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDHCID:            providers.Cannot(), // Verified 2025-07-24
-	providers.CanUseDNSKEY:           providers.Cannot(), // Verified 2025-07-24
-	providers.CanUseDS:               providers.Cannot("Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end."),
-	providers.CanUseDSForChildren:    providers.Cannot(),
-	providers.CanUseHTTPS:            providers.Cannot(), // Verified 2025-07-24
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Cannot(),
-	providers.CanUseSOA:              providers.Cannot("💩"),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseSVCB:             providers.Cannot(), // Verified 2025-07-24
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Cannot("Can only manage domains registered through their service"),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
 }
 
 // Section 2: Define the API client.
 
 // See client.go
 
-// newDsp generates a DNS Service Provider client handle.
-func newDsp(conf map[string]string, metadata json.RawMessage) (providers.DNSServiceProvider, error) {
-	return newHelper(conf, metadata)
-}
-
-// newReg generates a Registrar Provider client handle.
-func newReg(conf map[string]string) (providers.Registrar, error) {
-	return newHelper(conf, nil)
-}
-
-// newHelper generates a handle.
-func newHelper(m map[string]string, _ json.RawMessage) (*APIClient, error) {
+// Initialize initializes a fresh provider instance.
+func (c *APIClient) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
 	if m["username"] == "" {
-		return nil, errors.New("missing Loopia API username")
+		return errors.New("missing Loopia API username")
 	}
 	if m["password"] == "" {
-		return nil, errors.New("missing Loopia API password")
+		return errors.New("missing Loopia API password")
 	}
 
 	const booleanStringWarn = " setting as a 'string': 't', 'true', 'True' etc"
@@ -125,7 +92,7 @@ func newHelper(m map[string]string, _ json.RawMessage) (*APIClient, error) {
 	if m["modify_name_servers"] != "" { // optional
 		modifyNameServers, err = strconv.ParseBool(m["modify_name_servers"])
 		if err != nil {
-			return nil, errors.New("creds.json requires the modify_name_servers" + booleanStringWarn)
+			return errors.New("creds.json requires the modify_name_servers" + booleanStringWarn)
 		}
 	}
 
@@ -133,7 +100,7 @@ func newHelper(m map[string]string, _ json.RawMessage) (*APIClient, error) {
 	if m["fetch_apex_ns_entries"] != "" { // optional
 		fetchApexNSEntries, err = strconv.ParseBool(m["fetch_apex_ns_entries"])
 		if err != nil {
-			return nil, errors.New("creds.json requires the fetch_apex_ns_entries" + booleanStringWarn)
+			return errors.New("creds.json requires the fetch_apex_ns_entries" + booleanStringWarn)
 		}
 	}
 
@@ -141,18 +108,18 @@ func newHelper(m map[string]string, _ json.RawMessage) (*APIClient, error) {
 	if m["debug"] != "" { // debug is optional
 		dbg, err = strconv.ParseBool(m["debug"])
 		if err != nil {
-			return nil, errors.New("creds.json requires the debug" + booleanStringWarn)
+			return errors.New("creds.json requires the debug" + booleanStringWarn)
 		}
 	}
 
-	api := NewClient(m["username"], m["password"], strings.ToLower(m["region"]), modifyNameServers, fetchApexNSEntries, dbg)
+	c.initializeClient(m["username"], m["password"], strings.ToLower(m["region"]), modifyNameServers, fetchApexNSEntries, dbg)
 
 	quota := m["rate_limit_per"]
-	err = api.requestRateLimiter.setRateLimitPer(quota)
+	err = c.requestRateLimiter.setRateLimitPer(quota)
 	if err != nil {
-		return nil, fmt.Errorf("unexpected value for rate_limit_per: %w", err)
+		return fmt.Errorf("unexpected value for rate_limit_per: %w", err)
 	}
-	return api, nil
+	return nil
 }
 
 // Section 3: Domain Service Provider (DSP) related functions

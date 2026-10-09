@@ -3,13 +3,27 @@
 Useful refactoring projects. Please feel free to pick up any of these.
 
 
-## Code that can probably be deleted
+## Documentation updates
 
-* RegisterCustomRecordType()/GetCustomRecordType() is no longer needed. Remove.
-
-* I don't think the metadata "orig_custom_type" is used any more. We store to it but don't use it.
+* Improved "how to write a provider" docs. The process for creating a DNS or Registrar provider could be improved. We should provide templates to copy instead of asking people to find a similar provider.  The doc should start by creating a generic provider, then add features and options over time.  The first thing should test credentials and nothing else.  Then add a registrar (if needed) and then the "preview" functionality, then "push".
 
 ## Rewrites needed
+
+* Rework how metadata is passed to providers and how provider state is owned.
+  Consider an explicit split between state specific to a `credEntry` (such as
+  account-wide caches and rate limiters) and state specific to a
+  `(domain, credEntry)` (such as domain-specific configuration). Revisit client
+  initialization and reuse as part of that design. Also consider a tiered
+  metadata system with explicit inheritance and precedence rules, or providers
+  implemented as external binaries that maintain their own state. Keep this as
+  a separate future project with appropriate provider testing, rather than
+  expanding the current configuration-syntax rollout.
+
+* Future provider concurrency change: default to allowing concurrency and replace
+  authored `CanConcur` declarations with `ConcurBroken: true` only for providers
+  that cannot run concurrently. Derive the compatibility `CanConcur` capability
+  as `!ConcurBroken`, and audit existing `Cannot`/`Unimplemented` notes to
+  distinguish known limitations from untested providers. Implement in a separate PR.
 
 * PTR() "magic" should be reworked as a builder called PTR(). It will be much more
 cleaner and more testable. Plus it will consolidate the code into one place instead
@@ -31,6 +45,8 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
 something that is both a Reg and a DSP.
+
+* External providers: It should be possible to add a provider without updating the source code to "dnscontrol". Teraform does it, why can't we?
 
 * mustbe.TargetHost() accepts "." as a special flag. This can probably be replaced by nrc.Flags{}
 

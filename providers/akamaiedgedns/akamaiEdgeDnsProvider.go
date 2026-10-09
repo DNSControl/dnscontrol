@@ -24,30 +24,6 @@ import (
 	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/dns"
 )
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanAutoDNSSEC:          providers.Can(),
-	providers.CanConcur:              providers.Unimplemented(),
-	providers.CanGetZones:            providers.Can(),
-	providers.CanUseAKAMAICDN:        providers.Can(),
-	providers.CanUseAKAMAITLC:        providers.Can(),
-	providers.CanUseAlias:            providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
-	providers.CanUseCAA:              providers.Can(),
-	providers.CanUseDS:               providers.Cannot(),
-	providers.CanUseDSForChildren:    providers.Can(),
-	providers.CanUseLOC:              providers.Can(),
-	providers.CanUseNAPTR:            providers.Can(),
-	providers.CanUsePTR:              providers.Can(),
-	providers.CanUseSOA:              providers.Cannot(),
-	providers.CanUseSRV:              providers.Can(),
-	providers.CanUseSSHFP:            providers.Can(),
-	providers.CanUseTLSA:             providers.Can(),
-	providers.DocCreateDomains:       providers.Can(),
-	providers.DocDualHost:            providers.Can(),
-	providers.DocOfficiallySupported: providers.Cannot(),
-}
-
 type edgeDNSProvider struct {
 	observer   providers.ConversionObserver
 	contractID string
@@ -60,22 +36,10 @@ func (a *edgeDNSProvider) SetConversionObserver(observer providers.ConversionObs
 }
 
 func init() {
-	const providerName = "AKAMAIEDGEDNS"
-	const providerMaintainer = "@meghanakudua02"
-	fns := providers.DspFuncs{
-		Initializer:   newEdgeDNSDSP,
-		RecordAuditor: AuditRecords,
-	}
-	providers.RegisterDomainServiceProviderType(providerName, fns, features)
-	providers.RegisterCustomRecordType("AKAMAICDN", providerName, "")
-	providers.RegisterCustomRecordType("AKAMAITLC", providerName, "")
-	providers.RegisterMaintainer(providerName, providerMaintainer)
-	providers.RegisterCredsMetadata(providerName, providers.CredsMetadata{
-		DisplayName: "Akamai Edge DNS",
-		Kind:        providers.KindDNS,
-		DocsURL:     "https://docs.dnscontrol.org/provider/akamaiedgedns",
-		PortalURL:   "https://control.akamai.com/apps/identity-management/", // TODO: Verify
-		Fields: []providers.CredsField{
+	providers.Register[*edgeDNSProvider]("AKAMAIEDGEDNS", providers.Definition{
+		FriendlyName: "Akamai Edge DNS",
+		PortalURL:    "https://control.akamai.com/apps/identity-management/", // TODO: Verify
+		CredFields: []providers.CredsField{
 			{
 				Key:      "host",
 				Label:    "EdgeGrid host",
@@ -115,11 +79,32 @@ func init() {
 				Required: true,
 			},
 		},
+		Maintainer: "@meghanakudua02",
+		SupportedTypes: []string{
+			"Basic8",
+			"AKAMAICDN",
+			"AKAMAITLC",
+			"ALIAS",
+			"LOC",
+			"NAPTR",
+			"PTR",
+			"SSHFP",
+			"TLSA",
+		},
+		CanAutoDNSSEC:          providers.Can(),
+		CanConcur:              providers.Unimplemented(),
+		CanUseDSForChildren:    providers.Can(),
+		DocDualHost:            providers.Can(),
+		DocOfficiallySupported: providers.Cannot(),
+		// Features retains annotations for record types and interface-derived facts.
+		Features: providers.DocumentationNotes{
+			providers.CanUseAlias: providers.Can("Akamai Edge DNS does not directly support ALIAS. Apex record will be converted to AKAMAITLC, any others to CNAME."),
+		},
 	})
 }
 
-// DnsServiceProvider.
-func newEdgeDNSDSP(config map[string]string, _ json.RawMessage) (providers.DNSServiceProvider, error) {
+// Initialize initializes a fresh provider instance.
+func (a *edgeDNSProvider) Initialize(config map[string]string, _ json.RawMessage, options *providers.CreateOptions) error {
 	clientSecret := config["client_secret"]
 	host := config["host"]
 	accessToken := config["access_token"]
@@ -128,35 +113,36 @@ func newEdgeDNSDSP(config map[string]string, _ json.RawMessage) (providers.DNSSe
 	groupID := config["group_id"]
 
 	if clientSecret == "" {
-		return nil, errors.New("creds.json: client_secret must not be empty")
+		return errors.New("creds.json: client_secret must not be empty")
 	}
 	if host == "" {
-		return nil, errors.New("creds.json: host must not be empty")
+		return errors.New("creds.json: host must not be empty")
 	}
 	if accessToken == "" {
-		return nil, errors.New("creds.json: accessToken must not be empty")
+		return errors.New("creds.json: accessToken must not be empty")
 	}
 	if clientToken == "" {
-		return nil, errors.New("creds.json: clientToken must not be empty")
+		return errors.New("creds.json: clientToken must not be empty")
 	}
 	if contractID == "" {
-		return nil, errors.New("creds.json: contractID must not be empty")
+		return errors.New("creds.json: contractID must not be empty")
 	}
 	if groupID == "" {
-		return nil, errors.New("creds.json: groupID must not be empty")
+		return errors.New("creds.json: groupID must not be empty")
 	}
 
 	dnsClient, err := initialize(clientSecret, host, accessToken, clientToken)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	api := &edgeDNSProvider{
+	*a = edgeDNSProvider{
 		contractID: contractID,
 		groupID:    groupID,
 		client:     dnsClient,
 	}
-	return api, nil
+	a.SetConversionObserver(options.WithDefaults().ConversionObserver)
+	return nil
 }
 
 // EnsureZoneExists creates a zone if it does not exist.

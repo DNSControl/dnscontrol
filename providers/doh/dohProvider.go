@@ -1,6 +1,7 @@
 package doh
 
 import (
+	"encoding/json"
 	"fmt"
 	"slices"
 	"strings"
@@ -17,27 +18,24 @@ Info required in `creds.json`:
    - host                DNS over HTTPS host (eg 9.9.9.9)
 */
 
-var features = providers.DocumentationNotes{
-	// The default for unlisted capabilities is 'Cannot'.
-	// See providers/capabilities.go for the entire list of capabilities.
-	providers.CanConcur: providers.Unimplemented(),
-}
-
 func init() {
-	const providerName = "DNSOVERHTTPS"
-	const providerMaintainer = "@mikenz"
-	providers.RegisterRegistrarType(providerName, newDNSOverHTTPS, features)
-	providers.RegisterMaintainer(providerName, providerMaintainer)
+	providers.Register[*dohProvider]("DNSOVERHTTPS", providers.Definition{
+		FriendlyName:   "DNS over HTTPS",
+		Maintainer:     "@mikenz",
+		SupportedTypes: []string{},
+		CanConcur:      providers.Can(),
+	})
 }
 
-func newDNSOverHTTPS(m map[string]string) (providers.Registrar, error) {
-	api := &dohProvider{
+// Initialize initializes a fresh provider instance.
+func (c *dohProvider) Initialize(m map[string]string, _ json.RawMessage, _ *providers.CreateOptions) error {
+	*c = dohProvider{
 		host: m["host"],
 	}
-	if api.host == "" {
-		api.host = "dns.google"
+	if c.host == "" {
+		c.host = "dns.google"
 	}
-	return api, nil
+	return nil
 }
 
 // GetRegistrarCorrections gathers corrections that would bring n to match dc.
