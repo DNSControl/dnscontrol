@@ -83,6 +83,8 @@ ClouDNS does not allow all TTLs, only a specific subset of TTLs. By default, the
 The provider will automatically round up your TTL to one of these values. For example, 350 seconds would become 900
 seconds, but 300 seconds would stay 300 seconds.
 
+This provider may not work propoerly with SKIP_AUDIT. If you need to use SKIP_AUDIT with this provider, please [file a bug report](https://github.com/DNSControl/dnscontrol/issues/new/choose).
+
 ## Feature Summary
 
 <!-- provider-features-start -->

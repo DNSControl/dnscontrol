@@ -155,6 +155,9 @@ DNSControl depends on a Gcore account API token.
 
 You can obtain your API token on this page: <https://accounts.gcore.com/profile/api-tokens>
 
+## Caveats
+This provider may not work propoerly with SKIP_AUDIT. If you need to use SKIP_AUDIT with this provider, please [file a bug report](https://github.com/DNSControl/dnscontrol/issues/new/choose).
+
 ## Feature Summary
 
 <!-- provider-features-start -->
