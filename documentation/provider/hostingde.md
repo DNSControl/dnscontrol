@@ -22,10 +22,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_HOSTINGDE = NewRegistrar("hosting.de");
-var DSP_HOSTINGDE = NewDnsProvider("hosting.de");
-
-D("example.com", REG_HOSTINGDE, DnsProvider(DSP_HOSTINGDE),
+D("example.com", REGISTRAR("hosting.de"), SERVICE("hosting.de"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -56,15 +53,13 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_HTTPNET = NewRegistrar("http.net");
-
-var DSP_HTTPNET = NewDnsProvider("http.net", {
+D("example.com", REGISTRAR("none"), SERVICE("http.net", ALL_NS, {
   "default_ns": [
     "ns1.routing.net.",
     "ns2.routing.net.",
     "ns3.routing.net.",
   ],
-});
+}));
 ```
 {% endcode %}
 

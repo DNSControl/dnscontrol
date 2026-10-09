@@ -121,8 +121,11 @@ function _copyProviderMetadata(meta) {
 
 // REGISTRAR explicitly selects the registrar for a domain.
 function REGISTRAR(name) {
+    if (arguments.length === 0) {
+        name = "none";
+    }
     _checkProviderName(name, "REGISTRAR");
-    if (arguments.length !== 1) {
+    if (arguments.length > 1) {
         throw "REGISTRAR accepts only a credential entry name; configMetadata is not supported.";
     }
     var modifier = function (d) {
@@ -2104,7 +2107,7 @@ function DOMAIN_ELSEWHERE_AUTO(domain, registrar, dsplist) {
     // is maintaining the DNS records in that zone, and we have access
     // to updating it (but we don't want to use it.)
     for (var i = 2; i < arguments.length; i++) {
-        D_EXTEND(domain, DnsProvider(arguments[i]));
+        D_EXTEND(domain, typeof arguments[i] === "function" ? arguments[i] : DnsProvider(arguments[i]));
     }
 }
 

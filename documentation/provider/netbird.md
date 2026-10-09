@@ -50,7 +50,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_NETBIRD),
+D("example.com", REGISTRAR("none"), SERVICE("netbird"),
     { no_ns: "true" }, // NetBird does not expose nameservers
     A("test", "1.2.3.4"),
     AAAA("ipv6test", "2001:db8::1"),
@@ -67,13 +67,13 @@ To configure zone options, use metadata:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE,
+D("example.com", REGISTRAR("none"),
     {
         no_ns: "true",
         netbird_enabled: "true",
         netbird_enable_search_domain: "true",
     },
-    DnsProvider(DSP_NETBIRD),
+    SERVICE("netbird"),
     A("test", "1.2.3.4"),
 );
 ```

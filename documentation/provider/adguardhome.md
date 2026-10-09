@@ -41,10 +41,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_ADGUARDHOME = NewDnsProvider("adguard_home");
-
-D("example.com", REG_NONE, DnsProvider(DSP_ADGUARDHOME),
+D("example.com", REGISTRAR("none"), SERVICE("adguard_home"),
     A("foo", "1.2.3.4"),
     AAAA("another", "2003::1"),
     ALIAS("@", "www.example.com."),

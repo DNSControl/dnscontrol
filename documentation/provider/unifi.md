@@ -110,10 +110,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_UNIFI = NewDnsProvider("unifi");
-
-D("example.lan", REG_NONE, DnsProvider(DSP_UNIFI),
+D("example.lan", REGISTRAR("none"), SERVICE("unifi"),
     A("server", "192.168.1.10"),
     AAAA("server", "fd00::10"),
     CNAME("www", "server.example.lan."),

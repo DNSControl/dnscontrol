@@ -24,7 +24,7 @@ Certificate is a hex string.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   // Create TLSA record for certificate used on TCP port 443
   TLSA("_443._tcp", 3, 1, 1, "abcdef0"),
 );

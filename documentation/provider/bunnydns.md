@@ -89,7 +89,7 @@ For more information, see the [Bunny DNS Monitoring documentation](https://docs.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+D("example.com", REGISTRAR("none"), SERVICE("bunny_dns"),
     A("www", "1.2.3.4", {
         bunny_smart_routing_type: "geographic",
         bunny_geolocation_latitude: "40.7128",
@@ -108,7 +108,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+D("example.com", REGISTRAR("none"), SERVICE("bunny_dns"),
     A("www", "1.2.3.4", {
         bunny_smart_routing_type: "latency",
         bunny_latency_zone: "NY",
@@ -125,7 +125,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+D("example.com", REGISTRAR("none"), SERVICE("bunny_dns"),
     A("www", "1.2.3.4", {
         bunny_monitor_type: "ping",
     }),
@@ -142,10 +142,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_BUNNY_DNS = NewDnsProvider("bunny_dns");
-
-D("example.com", REG_NONE, DnsProvider(DSP_BUNNY_DNS),
+D("example.com", REGISTRAR("none"), SERVICE("bunny_dns"),
     A("test", "1.2.3.4"),
 );
 ```

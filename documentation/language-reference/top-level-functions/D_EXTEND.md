@@ -10,6 +10,12 @@ parameter_types:
 
 `D_EXTEND` adds records (and metadata) to a domain previously defined by [`D()`](D.md). It can also be used to add subdomain records (and metadata) to a previously defined domain.
 
+[SERVICE](../domain-modifiers/SERVICE.md) can add a DNS service or its metadata.
+Metadata may be supplied only once per domain and credential entry, including
+across defaults, `D()`, and extensions. An explicit
+[REGISTRAR](../domain-modifiers/REGISTRAR.md) must immediately follow the name;
+it may override a default registrar but cannot conflict with an explicit one.
+
 The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md), simply adding records as if they had been specified in the original [`D()`](D.md).
 
 If the domain name does not match an existing domain, but could be a (non-delegated) subdomain of an existing domain, the new records (and metadata) are added with the subdomain part appended to all record names (labels), and targets (as appropriate). See the examples below.
@@ -20,7 +26,7 @@ Some operators only act on an apex domain (e.g. [`CF_SINGLE_REDIRECT`](../domain
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("domain.tld", REG_MY_PROVIDER, DnsProvider(DNS),
+D("domain.tld", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("@", "127.0.0.1"), // domain.tld
   A("www", "127.0.0.2"), // www.domain.tld
   CNAME("a", "b"), // a.domain.tld -> b.domain.tld

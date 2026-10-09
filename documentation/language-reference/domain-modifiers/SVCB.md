@@ -24,7 +24,7 @@ Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/la
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   SVCB("@", 1, ".", "ipv4hint=123.123.123.123 alpn=h3,h2 port=443"),
 );
 ```

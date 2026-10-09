@@ -13,7 +13,7 @@ To set a specific DDNS key, use [`HEDNS_DDNS_KEY()`](HEDNS_DDNS_KEY.md) instead.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_HEDNS),
+D("example.com", REGISTRAR("none"), SERVICE("hedns"),
     A("dyn", "0.0.0.0", HEDNS_DYNAMIC_ON),
     AAAA("dyn6", "::1", HEDNS_DYNAMIC_ON),
 );

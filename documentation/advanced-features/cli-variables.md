@@ -61,7 +61,7 @@ if (view == "external") {
 
 /// ...much later...
 
-D("example.com", REG_NAMECOM, DnsProvider(DNS_NAMECOM), DnsProvider(DNS_BIND),
+D("example.com", REGISTRAR("namecom"), SERVICE("namecom"), SERVICE("bind"),
     A("sitea", host01, TTL(1800)),
     A("siteb", host01, TTL(1800)),
     A("sitec", host02, TTL(1800)),
@@ -88,7 +88,7 @@ CLI_DEFAULTS({
 
 // ...much later...
 
-D("example.com", REG_EXAMPLE, DnsProvider(DNS_EXAMPLE),
+D("example.com", REGISTRAR("example"), SERVICE("example"),
     A("www", "10.10.10.10"),
 );
 

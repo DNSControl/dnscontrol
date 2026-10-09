@@ -31,10 +31,7 @@ This provider does not recognize any special metadata fields unique to Spaceship
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_SPACESHIP = NewDnsProvider("spaceship");
-
-D("example.com", REG_NONE, DnsProvider(DSP_SPACESHIP),
+D("example.com", REGISTRAR("none"), SERVICE("spaceship"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -44,10 +41,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_SPACESHIP),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_SPACESHIP = NewRegistrar("spaceship");
-var DSP_SPACESHIP = NewDnsProvider("spaceship");
-
-D("example.com", REG_SPACESHIP, DnsProvider(DSP_SPACESHIP),
+D("example.com", REGISTRAR("spaceship"), SERVICE("spaceship"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -57,10 +51,7 @@ D("example.com", REG_SPACESHIP, DnsProvider(DSP_SPACESHIP),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_SPACESHIP = NewRegistrar("spaceship");
-var DSP_OTHER = NewDnsProvider("cloudflare");
-
-D("example.com", REG_SPACESHIP, DnsProvider(DSP_OTHER),
+D("example.com", REGISTRAR("spaceship"), SERVICE("cloudflare"),
     A("test", "1.2.3.4"),
 );
 ```

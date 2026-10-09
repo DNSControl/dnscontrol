@@ -58,10 +58,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_VERCEL = NewDnsProvider("vercel");
-
-D("example.com", REG_NONE, DnsProvider(DSP_VERCEL),
+D("example.com", REGISTRAR("none"), SERVICE("vercel"),
     A("test", "1.2.3.4"),
 );
 ```

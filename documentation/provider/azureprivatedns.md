@@ -145,10 +145,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_AZURE_PRIVATE_MAIN = NewDnsProvider("azure_private_dns_main");
-
-D("example.com", REG_NONE, DnsProvider(DSP_AZURE_PRIVATE_MAIN),
+D("example.com", REGISTRAR("none"), SERVICE("azure_private_dns_main"),
     A("test", "1.2.3.4"),
 );
 ```

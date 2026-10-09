@@ -23,10 +23,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_NETCUP = NewDnsProvider("netcup");
-
-D("example.com", REG_NONE, DnsProvider(DSP_NETCUP),
+D("example.com", REGISTRAR("none"), SERVICE("netcup"),
     A("test", "1.2.3.4"),
 );
 ```

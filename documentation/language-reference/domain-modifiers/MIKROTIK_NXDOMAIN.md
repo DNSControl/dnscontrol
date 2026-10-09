@@ -23,7 +23,7 @@ Metadata keys supported:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     // Block ads.example.com with NXDOMAIN.
     MIKROTIK_NXDOMAIN("ads"),
 

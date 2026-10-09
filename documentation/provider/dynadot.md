@@ -26,9 +26,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_DYNADOT = NewRegistrar("dynadot");
-
-DOMAIN_ELSEWHERE("example.com", REG_DYNADOT, [
+DOMAIN_ELSEWHERE("example.com", REGISTRAR("dynadot"), [
     "ns1.example.net.",
     "ns2.example.net.",
     "ns3.example.net.",

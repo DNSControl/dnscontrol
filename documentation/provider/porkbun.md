@@ -47,10 +47,7 @@ An example configuration: (DNS hosted with Porkbun):
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_PORKBUN = NewRegistrar("porkbun");
-var DSP_PORKBUN = NewDnsProvider("porkbun");
-
-D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
+D("example.com", REGISTRAR("porkbun"), SERVICE("porkbun"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -60,10 +57,7 @@ An example configuration: (Registrar only. DNS hosted elsewhere)
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_PORKBUN = NewRegistrar("porkbun");
-var DSP_R53 = NewDnsProvider("r53");
-
-D("example.com", REG_PORKBUN, DnsProvider(DSP_R53),
+D("example.com", REGISTRAR("porkbun"), SERVICE("r53"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -75,10 +69,7 @@ Porkbun supports URL forwarding (redirects) using the `URL` and `URL301` record 
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_PORKBUN = NewRegistrar("porkbun");
-var DSP_PORKBUN = NewDnsProvider("porkbun");
-
-D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
+D("example.com", REGISTRAR("porkbun"), SERVICE("porkbun"),
     // Temporary redirect (HTTP 302)
     URL("redirect", "https://example.org"),
     // Permanent redirect (HTTP 301)
@@ -91,7 +82,7 @@ By default, URL forwarding includes wildcard subdomains but does not include the
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_PORKBUN, DnsProvider(DSP_PORKBUN),
+D("example.com", REGISTRAR("porkbun"), SERVICE("porkbun"),
     // Include path and disable wildcard
     URL("redirect", "https://example.org", {includePath: "yes", wildcard: "no"}),
 );

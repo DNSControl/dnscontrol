@@ -90,7 +90,7 @@ Below is an example where we add [the A record](../language-reference/domain-mod
 
 {% code title="dnsconfig.js" %}
 ```diff
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
 + A("foo", "1.2.3.4"),
 );
 ```

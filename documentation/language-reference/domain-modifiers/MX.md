@@ -20,7 +20,7 @@ Target should be a string representing the MX target. If it is a single label we
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   MX("@", 5, "mail"), // mx example.com -> mail.example.com
   MX("sub", 10, "mail.foo.com."),
 );

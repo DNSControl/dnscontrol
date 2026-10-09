@@ -1,6 +1,6 @@
 # Nameservers and Delegations
 
-- [Constants](#constants)
+- [Credential entries](#credential-entries)
 - [Typical Delegations](#typical-delegations)
   - [Same provider for REG and DNS](#same-provider-for-reg-and-dns)
   - [Different provider for REG and DNS](#different-provider-for-reg-and-dns)
@@ -22,31 +22,11 @@
 
 DNSControl can handle a variety of provider scenarios. The registrar and DNS provider can be the same company, different company, they can even be unknown! The document shows examples of many common and uncommon configurations.
 
-## Constants
+## Credential entries
 
-All the examples use the variables.  Substitute your own.
-
-{% code title="dnsconfig.js" %}
-```javascript
-// ========== Registrars:
-
-// A typical registrar.
-var REG_NAMECOM = NewRegistrar("namedotcom_main");
-
-// The "NONE" registrar is a "fake" registrar.
-// This is useful if the registrar is not supported by DNSControl,
-// or if you don't want to control the domain's delegation.
-var REG_NONE = NewRegistrar("none");
-
-// ========== DNS Providers:
-
-var DNS_NAMECOM = NewDnsProvider("namedotcom_main");
-var DNS_AWS = NewDnsProvider("aws_main");
-var DNS_GOOGLE = NewDnsProvider("gcp_main");
-var DNS_CLOUDFLARE = NewDnsProvider("cloudflare_main");
-var DNS_BIND = NewDnsProvider("bind");
-```
-{% endcode %}
+The names in `REGISTRAR()` and `SERVICE()` are example keys in `creds.json`.
+Replace them with your own entries. The special registrar entry `none` leaves
+delegation unmanaged.
 
 ## Typical Delegations
 
@@ -58,8 +38,8 @@ Why? Simplicity.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_NAMECOM),
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("namedotcom_main"),
   A("@", "10.2.3.4"),
 );
 ```
@@ -73,8 +53,8 @@ Why? Some registrars do not provide DNS server, or their service is sub-standard
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_AWS),
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("aws_main"),
   A("@", "10.2.3.4"),
 );
 ```
@@ -88,9 +68,8 @@ Why? You don't have access to the registrar, or the registrar is not supported b
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-D("example.com", REG_NONE,
-  DnsProvider(DNS_NAMECOM),
+D("example.com", REGISTRAR("none"),
+  SERVICE("namedotcom_main"),
   A("@", "10.2.3.4"),
 );
 ```
@@ -101,15 +80,13 @@ D("example.com", REG_NONE,
 Suppose you don't want to manage a domain, but you want to list the zone in your `dnsconfig.js` file for inventory purposes. For example, suppose there are domains that some other part of your company maintains, but you want to list it in your `dnsconfig.js` because it is authoritative for the company.
 
 ```javascript
-var REG_NONE = NewRegistrar("none");
-
 function INVENTORY_ONLY(name) {
-    D(name, REG_NONE, { no_ns: "true" });
+    D(name, REGISTRAR("none"), { no_ns: "true" });
 }
 
-INVENTORY_ONLY('example.com");
-INVENTORY_ONLY('example2.com");
-INVENTORY_ONLY('example.net");
+INVENTORY_ONLY("example.com");
+INVENTORY_ONLY("example2.com");
+INVENTORY_ONLY("example.net");
 ```
 
 Now you can produce a list of your zones like this:
@@ -126,7 +103,7 @@ Why? We are delegating the domain to someone else. In this example we're pointin
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
+D("example.com", REGISTRAR("namedotcom_main"),
   NAMESERVER("dns1.p03.nsone.net."),
   NAMESERVER("dns2.p03.nsone.net."),
   NAMESERVER("dns3.p03.nsone.net."),
@@ -143,8 +120,8 @@ Why? Rarely used unless the DNS provider's API does not support querying what th
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_CLOUDFLARE, 0),  // Set the DNS provider but ignore the nameservers it suggests (0 == take none of the names it reports)
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("cloudflare_main", 0),  // Set the DNS provider but ignore the nameservers it suggests (0 == take none of the names it reports)
   NAMESERVER("kim.ns.cloudflare.com."),
   NAMESERVER("walt.ns.cloudflare.com."),
   A("@", "10.2.3.4"),
@@ -160,8 +137,8 @@ Why? Usually only to correct a bug or misconfiguration elsewhere.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_NAMECOM),
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("namedotcom_main"),
   NAMESERVER("ns1.myexample.com"),
   A("@", "10.2.3.4"),
 );
@@ -180,10 +157,10 @@ Why? There are many reasons to do this:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_NAMECOM), // Our real DNS server
-  DnsProvider(DNS_CLOUDFLARE, 0), // Quietly send a copy of the zone here.
-  DnsProvider(DNS_BIND, 0), // And here too!
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("namedotcom_main"), // Our real DNS server
+  SERVICE("cloudflare_main", 0), // Quietly send a copy of the zone here.
+  SERVICE("bind", 0), // And here too!
   A("@", "10.2.3.4"),
 );
 ```
@@ -203,9 +180,9 @@ Little known fact: Most DNS recursive resolvers monitor which DNS servers are pe
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_AWS, 2),  // Take 2 nameservers from AWS
-  DnsProvider(DNS_GOOGLE, 2),  // Take 2 nameservers from GCP
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("aws_main", 2),  // Take 2 nameservers from AWS
+  SERVICE("gcp_main", 2),  // Take 2 nameservers from GCP
   A("@", "10.2.3.4"),
 );
 ```
@@ -225,9 +202,9 @@ Why? You want to write out a BIND-style zonefile for debugging, historical, or a
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECOM,
-  DnsProvider(DNS_NAMECOM),
-  DnsProvider(DNS_BIND, 0), // Don't activate any nameservers related to BIND.
+D("example.com", REGISTRAR("namedotcom_main"),
+  SERVICE("namedotcom_main"),
+  SERVICE("bind", 0), // Don't activate any nameservers related to BIND.
   A("@", "10.2.3.4"),
 );
 ```
@@ -243,9 +220,7 @@ See the [DNS-over-HTTPS Provider](../provider/dnsoverhttps.md) documentation for
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_MONITOR = NewRegistrar("DNS-over-HTTPS");
-
-D("example.com", REG_MONITOR,
+D("example.com", REGISTRAR("DNS-over-HTTPS"),
   NAMESERVER("ns1.example.com."),
   NAMESERVER("ns2.example.com."),
 );
@@ -269,7 +244,7 @@ Easily delegate a domain to a specific list of nameservers.
 {% code title="dnsconfig.js" %}
 
 ```javascript
-DOMAIN_ELSEWHERE("example.com", REG_NAMECOM, [
+DOMAIN_ELSEWHERE("example.com", REGISTRAR("namedotcom_main"), [
     "dns1.example.net.",
     "dns2.example.net.",
     "dns3.example.net.",
@@ -286,8 +261,8 @@ This is similar to `DOMAIN_ELSEWHERE` but the list of nameservers is queried fro
 
 {% code title="dnsconfig.js" %}
 ```javascript
-DOMAIN_ELSEWHERE_AUTO("example.com", REG_NAMECOM, DNS_AWS);
-DOMAIN_ELSEWHERE_AUTO("example2.com", REG_NAMECOM, DNS_GOOGLE);
+DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR("namedotcom_main"), SERVICE("aws_main"));
+DOMAIN_ELSEWHERE_AUTO("example2.com", REGISTRAR("namedotcom_main"), SERVICE("gcp_main"));
 ```
 {% endcode %}
 

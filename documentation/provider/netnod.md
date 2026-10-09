@@ -25,11 +25,11 @@ The following provider metadata is available:
 {% code title="dnsconfig.js" %}
 
 ```javascript
-var DSP_NETNOD = NewDnsProvider('netnod', {
+D("example.com", REGISTRAR("none"), SERVICE('netnod', ALL_NS, {
     default_ns: ['a.example.com.', 'b.example.com.'],
     also_notify: ['192.36.148.17', '2001:7fe::53'],
     allow_transfer_keys: ['netnod-key1.'],
-});
+}));
 ```
 
 {% endcode %}
@@ -46,10 +46,7 @@ An example configuration:
 {% code title="dnsconfig.js" %}
 
 ```javascript
-var REG_NONE = NewRegistrar('none');
-var DSP_NETNOD = NewDnsProvider('netnod');
-
-D('example.com', REG_NONE, DnsProvider(DSP_NETNOD), A('test', '1.2.3.4'));
+D('example.com', REGISTRAR('none'), SERVICE('netnod'), A('test', '1.2.3.4'));
 ```
 
 {% endcode %}

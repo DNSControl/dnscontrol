@@ -17,7 +17,7 @@ Target should be a string representing the CNAME target. If it is a single label
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CNAME("foo", "google.com."), // foo.example.com -> google.com
   CNAME("abc", "@"), // abc.example.com -> example.com
   CNAME("def", "test"), // def.example.com -> test.example.com

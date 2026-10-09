@@ -193,10 +193,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_AZURE_MAIN = NewDnsProvider("azuredns_main");
-
-D("example.com", REG_NONE, DnsProvider(DSP_AZURE_MAIN),
+D("example.com", REGISTRAR("none"), SERVICE("azuredns_main"),
     A("test", "1.2.3.4"),
 );
 ```

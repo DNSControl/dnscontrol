@@ -73,9 +73,6 @@ Here's an example DNS Configuration `dnsconfig.js` using our provider module. Ev
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_CNR = NewRegistrar("CNR");
-var DSP_CNR = NewDnsProvider("CNR");
-
 // Set Default TTL for all RR to reflect our Backend API Default
 // If you use additional DNS Providers, configure a default TTL
 // per domain using the domain modifier DefaultTTL instead.
@@ -85,7 +82,7 @@ DEFAULTS(
     DefaultTTL(3600)
 );
 
-D("example.com", REG_CNR, DnsProvider(DSP_CNR),
+D("example.com", REGISTRAR("CNR"), SERVICE("CNR"),
     NAMESERVER("ns1.rrpproxy.net."),
     NAMESERVER("ns2.rrpproxy.net."),
     NAMESERVER("ns3.rrpproxy.net."),

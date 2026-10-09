@@ -9,10 +9,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_OPENSRS = NewDnsProvider("opensrs");
-
-D("example.com", REG_NONE, DnsProvider(DSP_OPENSRS),
+D("example.com", REGISTRAR("none"), SERVICE("opensrs"),
     A("test", "1.2.3.4"),
 );
 ```

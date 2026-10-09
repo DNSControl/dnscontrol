@@ -46,10 +46,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_NEXDNS = NewDnsProvider("nexdns");
-
-D("example.com", REG_NONE, DnsProvider(DSP_NEXDNS),
+D("example.com", REGISTRAR("none"), SERVICE("nexdns"),
     A("@", "203.0.113.10"),
     A("www", "203.0.113.10"),
     AAAA("@", "2001:db8::1"),

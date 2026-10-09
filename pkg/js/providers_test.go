@@ -42,6 +42,16 @@ func TestProviderSyntaxCompatibility(t *testing.T) {
 				D("example.com", REGISTRAR(p), SERVICE(p), A("@", "192.0.2.1"));`,
 		},
 		{
+			name:   "omitted registrar name selects none",
+			legacy: `NewRegistrar("none"); NewDnsProvider("bind"); D("example.com", "none", DnsProvider("bind", 0));`,
+			modern: `D("example.com", REGISTRAR(), SERVICE("bind", 0));`,
+		},
+		{
+			name:   "omitted registrar name in defaults",
+			legacy: `NewRegistrar("none"); NewDnsProvider("bind"); D("example.com", "none", DnsProvider("bind", 0));`,
+			modern: `DEFAULTS(REGISTRAR(), SERVICE("bind", 0)); D("example.com");`,
+		},
+		{
 			name:   "new modifiers with legacy declarations",
 			legacy: `NewRegistrar("r", "NONE"); NewDnsProvider("d", "BIND"); D("example.com", "r", DnsProvider("d"));`,
 			modern: `NewRegistrar("r", "NONE"); NewDnsProvider("d", "BIND"); D("example.com", REGISTRAR("r"), SERVICE("d"));`,
@@ -100,6 +110,11 @@ func TestProviderSyntaxCompatibility(t *testing.T) {
 			legacy: `NewRegistrar("reg"); NewDnsProvider("dns"); DOMAIN_ELSEWHERE_AUTO("example.com", "reg", "dns");`,
 			modern: `var REGISTRAR = NewRegistrar("reg"); var SERVICE = NewDnsProvider("dns");
 				DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR, SERVICE);`,
+		},
+		{
+			name:   "elsewhere auto accepts service modifier",
+			legacy: `NewRegistrar("reg"); NewDnsProvider("dns"); DOMAIN_ELSEWHERE_AUTO("example.com", "reg", "dns");`,
+			modern: `DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR("reg"), SERVICE("dns"));`,
 		},
 		{
 			name:   "custom modifier can clear DNS services",

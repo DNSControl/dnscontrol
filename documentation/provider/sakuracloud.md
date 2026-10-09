@@ -55,10 +55,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_SAKURACLOUD = NewDnsProvider("sakuracloud");
-
-D("example.com", REG_NONE, DnsProvider(DSP_SAKURACLOUD),
+D("example.com", REGISTRAR("none"), SERVICE("sakuracloud"),
   A("test", "192.0.2.1"),
 );
 ```

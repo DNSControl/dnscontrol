@@ -25,10 +25,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_DOMAINNAMESHOP = NewDnsProvider("mydomainnameshop");
-
-D("example.com", REG_NONE, DnsProvider(DSP_DOMAINNAMESHOP),
+D("example.com", REGISTRAR("none"), SERVICE("mydomainnameshop"),
     A("test", "1.2.3.4"),
 );
 ```

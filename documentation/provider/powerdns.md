@@ -24,7 +24,7 @@ Following provider metadata are available:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var DSP_POWERDNS = NewDnsProvider("pdns", {
+D("example.com", REGISTRAR("none"), SERVICE("pdns", ALL_NS, {
     "default_ns": [
         "a.example.com.",
         "b.example.com."
@@ -32,7 +32,7 @@ var DSP_POWERDNS = NewDnsProvider("pdns", {
     "dnssec_on_create": false,
     "zone_kind": "Native",
     "use_views": true
-});
+}));
 ```
 {% endcode %}
 
@@ -54,10 +54,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_POWERDNS = NewDnsProvider("powerdns");
-
-D("example.com", REG_NONE, DnsProvider(DSP_POWERDNS),
+D("example.com", REGISTRAR("none"), SERVICE("powerdns"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -101,7 +98,6 @@ If you have a large number of zones it might be useful to handle this via built-
 
 {% code title="dnsconfig.js" %}
 ```javascript
-
 // Default SOA
 var SOA_DEFAULT = [
   SOA(

@@ -65,10 +65,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_TENCENT = NewRegistrar("tencentdns", "TENCENTDNS");
-var DSP_TENCENT = NewDnsProvider("tencentdns", "TENCENTDNS");
-
-D("example.com", REG_TENCENT, DnsProvider(DSP_TENCENT),
+D("example.com", REGISTRAR("tencentdns"), SERVICE("tencentdns"),
     A("@", "1.2.3.4"),
     CNAME("www", "example.com."),
     MX("@", 10, "mail.example.com."),
@@ -89,7 +86,7 @@ Example:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_TENCENT, DnsProvider(DSP_TENCENT),
+D("example.com", REGISTRAR("tencentdns"), SERVICE("tencentdns"),
     A("www", "1.2.3.4"), // Default line ("默认"), no weight
     A("weighted", "2.3.4.5", {tencentdns_line: "电信", tencentdns_weight: "80"}),
     A("weighted", "3.4.5.6", {tencentdns_line: "电信", tencentdns_weight: "20"}),
@@ -106,7 +103,7 @@ Each line stores its own record, so one name and type may appear once per line. 
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_TENCENT, DnsProvider(DSP_TENCENT),
+D("example.com", REGISTRAR("tencentdns"), SERVICE("tencentdns"),
     CNAME("www", "origin.example.net.", {tencentdns_line_id: "10=1"}),
     CNAME("www", "origin.example.net.", {tencentdns_line_id: "10=3"}),
     CNAME("www", "origin.example.net.", {tencentdns_line_id: "10=2"})
@@ -137,7 +134,7 @@ For DNSPod, the provider maps `ALIAS("@")` to a CNAME record on `@` under the ho
 Use `ALIAS("@")` for apex CNAME flattening:
 
 ```js
-D("example.com", REG_NONE, DnsProvider(DNSPOD),
+D("example.com", REGISTRAR("none"), SERVICE("tencentdns"),
   ALIAS("@", "target.example.net.")
 );
 ```
@@ -146,7 +143,7 @@ D("example.com", REG_NONE, DnsProvider(DNSPOD),
 Avoid writing CNAME("@") directly:
 
 ```js
-D("example.com", REG_NONE, DnsProvider(DNSPOD),
+D("example.com", REGISTRAR("none"), SERVICE("tencentdns"),
   CNAME("@", "target.example.net.")
 );
 ```

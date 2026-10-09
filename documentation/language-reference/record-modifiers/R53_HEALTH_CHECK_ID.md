@@ -14,7 +14,7 @@ The `health_check_id` is the ID of a Route 53 health check that you create separ
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
   A("www", "1.2.3.4", R53_WEIGHT(70, "primary"), R53_HEALTH_CHECK_ID("12345678-1234-1234-1234-123456789012")),
   A("www", "5.6.7.8", R53_WEIGHT(30, "secondary"), R53_HEALTH_CHECK_ID("87654321-4321-4321-4321-210987654321")),
 );

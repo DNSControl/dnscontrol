@@ -16,11 +16,7 @@ extensible, so more providers can be added.
 `dnsconfig.js`:
 
 ```js
-// define our registrar and providers
-var REG_NAMECOM = NewRegistrar("ndc_main");
-var DSP_ROUTE53 = NewDnsProvider("r53_main");
-
-D("example.com", REG_NAMECOM, DnsProvider(DSP_ROUTE53),
+D("example.com", REGISTRAR("ndc_main"), SERVICE("r53_main"),
   A("@", "1.2.3.4"),
   CNAME("www","@"),
   MX("@",5,"mail.myserver.com."),

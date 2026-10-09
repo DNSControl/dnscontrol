@@ -46,7 +46,7 @@ The following domain-level metadata keys are supported. These affect zone-level 
 #### Example:
 
 ```javascript
-D("example.com", REG_NONE, DnsProvider("FORTIGATE"),
+D("example.com", REGISTRAR("none"), SERVICE("FORTIGATE"),
   A("@", "192.0.2.1"),
   {
     metadata: {
@@ -76,7 +76,7 @@ A("test", "192.0.2.123", { metadata: { fortigate_status: "disable" } })
 To use this provider in a `dnsconfig.js`:
 
 ```javascript
-D("example.com", REG_NONE, DnsProvider("FORTIGATE"),
+D("example.com", REGISTRAR("none"), SERVICE("FORTIGATE"),
   A("www", "192.0.2.1"),
   CNAME("blog", "external.example.net."),
   MX("@", 10, "mail.example.com."),
