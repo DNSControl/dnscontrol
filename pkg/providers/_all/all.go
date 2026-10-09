@@ -17,6 +17,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cloudflare"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/rtypes/cfsingleredirect"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cloudns"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/cloudpress"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cnr"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cscglobal"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/desec"

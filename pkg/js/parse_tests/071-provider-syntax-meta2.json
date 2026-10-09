@@ -1,0 +1,43 @@
+{
+  "dns_providers": [
+    {
+      "name": "dns",
+      "type": "CLOUDFLAREAPI"
+    }
+  ],
+  "domains": [
+    {
+      "dnsProviderMetadata": {
+        "dns": {
+          "settings": "value"
+        }
+      },
+      "dnsProviders": {
+        "dns": 2
+      },
+      "name": "example.com",
+      "records": [
+        {
+          "comparablev3": "192.0.2.1",
+          "filepos": "[line:2:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Addr": "192.0.2.1"
+          },
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "example.com"
+    }
+  ],
+  "registrars": [
+    {
+      "name": "reg",
+      "type": "-"
+    }
+  ]
+}
