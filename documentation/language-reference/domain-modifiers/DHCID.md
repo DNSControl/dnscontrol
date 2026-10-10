@@ -17,7 +17,7 @@ Digest should be a string.
 {% code title="dnsconfig.js" %}
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-  DHCID("example.com", "ABCDEFG"),
+  DHCID("host", "ABCDEFG"),
 );
 ```
 {% endcode %}

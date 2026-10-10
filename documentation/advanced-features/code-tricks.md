@@ -15,20 +15,6 @@ Solution: Use a "builder" to construct it for you.
 - [M365_BUILDER](../language-reference/domain-modifiers/M365_BUILDER.md)
 - [SPF_BUILDER](../language-reference/domain-modifiers/SPF_BUILDER.md)
 
-## Trailing commas
-
-You might encounter `D()` statements in code examples that include `END` at the end, such as:
-
-{% code title="dnsconfig.js" %}
-```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-  A("test", "1.2.3.4")
-END);
-```
-{% endcode %}
-
-As of [DNSControl v4.15.0](https://github.com/DNSControl/dnscontrol/releases/tag/v4.15.0), the `END` statements are no longer necessary. These were originally included for historical reasons that are now irrelevant. You can safely remove them from your configurations.
-
 ## Repeat records in many domains (macros)
 
 Problem: I have a set of records I'd like to include in many domains.
@@ -60,16 +46,16 @@ var GOOGLE_APPS_DOMAIN_SITES = [
 D("primarydomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    GOOGLE_APPS_DOMAIN_SITES,
-   A(...),
-   CNAME(...)
-}
+   ...
+   ...
+);
 
 D("aliasdomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
    GOOGLE_APPS_DOMAIN_MX,
    // FYI: GOOGLE_APPS_DOMAIN_SITES is not used here.
-   A(...),
-   CNAME(...)
-}
+   ...
+   ...
+);
 ```
 {% endcode %}
 
@@ -80,12 +66,14 @@ Problem: We have many domains, each should have the exact same records.
 Solution 1: Use a macro.
 
 ```javascript
+var SPF_NONE = TXT("@", "v=spf1 -all"); // Deters spoofed mail from parked domains.
+
 function PARKED_R53(name) {
     D(name, REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
        A("@", "10.2.3.4"),
        CNAME("www", "@"),
-        SPF_NONE, //deters spammers from using the domain in From: lines.
-        );
+       SPF_NONE,
+    );
 }
 
 PARKED_R53("example1.tld");

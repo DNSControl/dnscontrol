@@ -298,6 +298,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
     TXT("myhost", "mytext"),
     IGNORE("myhost", "*", "*"),  // Error!  Ignoring an item we inserted
     ...
+);
 ```
 {% endcode %}
 
@@ -311,6 +312,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
     TXT("myhost", "mytext"),
     IGNORE("myhost", "*", "*"),
     ...
+);
 ```
 {% endcode %}
 
@@ -324,7 +326,8 @@ The `IGNORE_NAME_DISABLE_SAFETY_CHECK` feature does not exist in the diff2 world
 {% code %}
 ```javascript
 D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
-    // THIS NO LONGER WORKS! Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
+    // This deprecated example intentionally fails validation.
+    // Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
     TXT("myhost", "mytext", IGNORE_NAME_DISABLE_SAFETY_CHECK),
 );
 ```

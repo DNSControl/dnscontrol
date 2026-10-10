@@ -49,10 +49,8 @@ The following domain-level metadata keys are supported. These affect zone-level 
 D("example.com", REG_NONE, DnsProvider("FORTIGATE"),
   A("@", "192.0.2.1"),
   {
-    metadata: {
-      authoritative: "false",
-      forwarder: "8.8.8.8"
-    }
+    authoritative: "false",
+    forwarder: "8.8.8.8"
   }
 )
 ```

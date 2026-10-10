@@ -81,10 +81,10 @@ Requiring JSON files initializes variables:
 var domains = require("./domain-ip-map.json")
 
 var REG_MY_PROVIDER = NewRegistrar("none");
-var DSP_MY_DNSSERVER = NewDnsProvider("none");
+var DSP_MY_DNSSERVER = NewDnsProvider("bind");
 
 for (var domain in domains) {
-    D(domain, REG_MY_PROVIDER, DSP_MY_DNSSERVER,
+    D(domain, REG_MY_PROVIDER, DnsProvider(DSP_MY_DNSSERVER),
         A("@", domains[domain])
     );
 }

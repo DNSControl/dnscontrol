@@ -50,6 +50,7 @@ type Duration =
  * > 2. Make sure DNSControl only uses verified configuration if you want to use `FETCH`. For example, an attacker can send Pull Requests to your config repo, and have your CI test malicious configurations and make arbitrary HTTP requests. Therefore, `FETCH` must be explicitly enabled with flag `--allow-fetch` on DNSControl invocation.
  *
  * ```javascript
+ * // FIXME(tlim): This example needs --allow-fetch and a reachable endpoint.
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
  *   A("@", "1.2.3.4"),
  * );
@@ -852,7 +853,7 @@ declare function DEFAULTS(...modifiers: DomainModifier[]): void;
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   DHCID("example.com", "ABCDEFG"),
+ *   DHCID("host", "ABCDEFG"),
  * );
  * ```
  *
@@ -876,6 +877,7 @@ declare function DHCID(name: string, digest: string, ...modifiers: RecordModifie
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),
  *     ...
+ * );
  * ```
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/disable_ignore_safety_check
@@ -1161,7 +1163,7 @@ declare function DOMAIN_ELSEWHERE_AUTO(name: string, domain: string, registrar: 
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   DS("example.com", 2371, 13, 2, "ABCDEF"),
+ *   DS("@", 2371, 13, 2, "ABCDEF"),
  * );
  * ```
  *
@@ -1378,7 +1380,7 @@ declare const HEDNS_DYNAMIC_ON: RecordModifier;
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
  *   HTTPS("@", 1, ".", "ipv4hint=123.123.123.123 alpn=h3,h2 port=443"),
- *   HTTPS("@", 1, "test.com", ""),
+ *   HTTPS("@", 1, "test.com.", ""),
  * );
  * ```
  *
@@ -1640,6 +1642,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),  // Error!  Ignoring an item we inserted
  *     ...
+ * );
  * ```
  *
  * To disable this safety check, add the `DISABLE_IGNORE_SAFETY_CHECK` statement to the `D()`.
@@ -1651,6 +1654,7 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *     TXT("myhost", "mytext"),
  *     IGNORE("myhost", "*", "*"),
  *     ...
+ * );
  * ```
  *
  * FYI: Previously DNSControl permitted disabling this check on
@@ -1660,7 +1664,8 @@ declare function HTTPS(name: string, priority: number, target: string, params: s
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *     // THIS NO LONGER WORKS! Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
+ *     // This deprecated example intentionally fails validation.
+ *     // Use DISABLE_IGNORE_SAFETY_CHECK instead. See above.
  *     TXT("myhost", "mytext", IGNORE_NAME_DISABLE_SAFETY_CHECK),
  * );
  * ```
@@ -3641,7 +3646,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  *
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
- *   TXT("v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org include:spf-basic.fogcreek.com include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net include:450622.spf05.hubspotemail.net ~all"),
+ *   TXT("@", "v=spf1 ip4:198.252.206.0/24 ip4:192.111.0.0/24 include:_spf.google.com include:mailgun.org include:spf-basic.fogcreek.com include:mail.zendesk.com include:servers.mcsv.net include:sendgrid.net include:450622.spf05.hubspotemail.net ~all"),
  * );
  * ```
  *
@@ -3656,7 +3661,7 @@ declare function SOA(name: string, ns: string, mbox: string, refresh: number, re
  * ```javascript
  * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
  *   A("@", "10.2.2.2"),
- *   MX("@", "example.com."),
+ *   MX("@", 10, "example.com."),
  *   SPF_BUILDER({
  *     label: "@",
  *     overflow: "_spf%d",
@@ -3993,7 +3998,7 @@ declare function TTL(ttl: Duration): RecordModifier;
  *       TXT("multiple", ["one", "two", "three"]),  // Multiple strings
  *       TXT("quoted", 'any "quotes" and escapes? ugh; no worries!'),
  *       TXT("_domainkey", "t=y; o=-;"), // Escapes are done for you automatically.
- *       TXT("long", "X".repeat(300)), // Long strings are split automatically.
+ *       TXT("long", new Array(301).join("X")), // Long strings are split automatically.
  *     );
  * ```
  *
