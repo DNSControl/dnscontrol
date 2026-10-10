@@ -8,6 +8,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/huaweicloud"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/tencentdns"
 )
 
@@ -63,6 +64,20 @@ func TestPerLineCNAMEsShareOneName(t *testing.T) {
 	for _, route := range lineRoutes {
 		r := dc.MustNewRecordConfig("edge", 60, dnsv2.TypeCNAME, route.target)
 		r.Metadata["tencentdns_line_id"] = route.line
+		dc.AddRecordConfig(r)
+	}
+
+	if errs := validateDomain(t, dc); len(errs) != 0 {
+		t.Fatalf("expected no validation errors, got %v", errs)
+	}
+}
+
+func TestHuaweiCloudLinesShareOneCNAMEName(t *testing.T) {
+	dc := lineDomain("HUAWEICLOUD")
+	dc.AddRecordConfig(dc.MustNewRecordConfig("edge", 60, dnsv2.TypeCNAME, "any.example.net."))
+	for _, line := range []string{"Dianxin", "Yidong", "Liantong", "Abroad"} {
+		r := dc.MustNewRecordConfig("edge", 60, dnsv2.TypeCNAME, "origin.example.net.")
+		r.Metadata["hw_line"] = line
 		dc.AddRecordConfig(r)
 	}
 

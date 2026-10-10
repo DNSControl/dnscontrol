@@ -113,7 +113,8 @@ func init() {
 				Required: true,
 			},
 		},
-		Maintainer: "@huihuimoe",
+		Maintainer:     "@huihuimoe",
+		RecordIdentity: genComparable,
 		SupportedTypes: []string{
 			"Basic8",
 		},
