@@ -2088,6 +2088,23 @@ function forsaleOptions(record, processedArgs, processedMetas) {
     return args;
 }
 
+// The builder itself is models.BuilderMigadu; only the options object is
+// handled here, the same way m365Options() does for M365_BUILDER.
+function migaduOptions(record, processedArgs, processedMetas) {
+    if (processedMetas.length > 1) {
+        throw (
+            "MIGADU_BUILDER takes one options object; record modifiers that are objects, such as CF_PROXY_OFF, are not supported: " +
+            processedArgs[0]
+        );
+    }
+    var args = processedArgs.concat(processedMetas);
+    // The options object is an argument, not metadata.
+    processedMetas.length = 0;
+    return args;
+}
+
+var MIGADU_BUILDER = rawrecordBuilder("MIGADU_BUILDER", false, migaduOptions);
+
 // This is a no-op.  Long TXT records are handled natively now.
 function DKIM(arr) {
     return arr;
