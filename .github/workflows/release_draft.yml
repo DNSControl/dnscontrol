@@ -11,8 +11,11 @@ name: "RELEASE: Make release candidate"
 # 2. Manual escape hatch: push a tag (git push origin vX.Y.Z). That still runs
 #    GoReleaser directly, exactly as before.
 #
-# Either way, GoReleaser produces a DRAFT release; you edit the notes and click
-# publish.
+# Either way, GoReleaser produces a DRAFT release; the release job then
+# cosign-signs checksums.txt (keyless) and uploads the signature/certificate/
+# bundle alongside the artifacts, and the "provenance" job attaches SLSA
+# provenance (multiple.intoto.jsonl) to the same draft. You edit the notes and
+# click publish.
 
 on:
   push:
@@ -112,6 +115,11 @@ jobs:
     permissions:
       packages: write
       contents: write
+      # Keyless cosign signing needs this job's OIDC identity token.
+      id-token: write
+    outputs:
+      # Subject digests (base64 sha256sum) handed to the SLSA provenance job.
+      hashes: ${{ steps.hash.outputs.hashes }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -251,3 +259,85 @@ jobs:
           MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
           MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
           MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
+
+      # Resolve the tag that identifies the draft release GoReleaser just
+      # created. Dispatch runs pass the version as an input (the workflow
+      # itself runs on a branch ref); tag pushes have the tag in GITHUB_REF.
+      - name: Resolve release tag
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -eu
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            tag="$INPUT_VERSION"
+          else
+            tag="$REF_NAME"
+          fi
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+
+      # Subject digests for the SLSA provenance generator: everything that
+      # lands on the release page (archives, rpm/deb packages, checksums.txt).
+      - name: Compute subject hashes for SLSA provenance
+        id: hash
+        run: |
+          set -eu
+          cd dist
+          hashes="$(sha256sum -- *.tar.gz *.zip *.rpm *.deb checksums.txt | base64 -w0)"
+          echo "hashes=$hashes" >> "$GITHUB_OUTPUT"
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      # Keyless (OIDC) signing: the signer identity is this workflow/job, so
+      # there are no signing keys to manage. checksums.txt covers every
+      # release artifact transitively, so signing it alone is sufficient and
+      # keeps the release page tidy.
+      - name: Sign checksums.txt with cosign (keyless)
+        run: |
+          set -eu
+          cd dist
+          cosign sign-blob --yes checksums.txt \
+            --output-signature checksums.txt.sig \
+            --output-certificate checksums.txt.pem \
+            --bundle checksums.txt.bundle
+
+      # gh resolves draft releases by pending tag name (the REST by-tag
+      # endpoint cannot), so this attaches to the DRAFT release; --clobber
+      # makes re-runs idempotent.
+      - name: Upload cosign signature, certificate, and bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          cd dist
+          gh release upload "$RELEASE_TAG" \
+            checksums.txt.sig checksums.txt.pem checksums.txt.bundle \
+            --clobber
+
+  # Generate SLSA Build Level 3 provenance for the release artifacts and
+  # attach it to the (draft) release as multiple.intoto.jsonl. This is what
+  # OpenSSF Scorecard's Signed-Releases check recognizes; see also issue #3468.
+  #
+  # The generator MUST be referenced by tag, not SHA: its internal builder
+  # checkout fails with "Invalid ref" when pinned to a commit, hence the
+  # zizmor suppression.
+  provenance:
+    name: SLSA provenance
+    needs: release
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0 # zizmor: ignore[unpinned-uses]
+    with:
+      base64-subjects: "${{ needs.release.outputs.hashes }}"
+      upload-assets: true
+      # Tag-push runs carry the tag in github.ref; dispatch runs run on the
+      # branch ref instead, so the generator needs the tag passed explicitly.
+      upload-tag-name: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '' }}
+      # GoReleaser leaves the release in DRAFT. "true" is required for the
+      # generator's uploader to find it (GET releases/tags/{tag} cannot see
+      # drafts) and to keep it a draft; publishing remains a human step.
+      draft-release: "true"
