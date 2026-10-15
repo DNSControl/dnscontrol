@@ -37,10 +37,7 @@ An example `dnsconfig.js` configuration with NAMEDOTCOM as the registrar and DNS
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECOM = NewRegistrar("name.com");
-var DSP_NAMECOM = NewDnsProvider("name.com");
-
-D("example.com", REG_NAMECOM, DnsProvider(DSP_NAMECOM),
+D("example.com", REGISTRAR("name.com"), SERVICE("name.com"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -50,10 +47,7 @@ An example `dnsconfig.js` configuration with NAMEDOTCOM as the registrar and DNS
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NAMECOM = NewRegistrar("name.com");
-var DSP_R53 = NewDnsProvider("r53");
-
-D("example.com", REG_NAMECOM, DnsProvider(DSP_R53),
+D("example.com", REGISTRAR("name.com"), SERVICE("r53"),
     A("test","1.2.3.4"),
 );
 ```

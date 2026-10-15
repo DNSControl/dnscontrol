@@ -101,10 +101,7 @@ and delegated to Cloudflare:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_INWX = NewRegistrar("inwx");
-var DSP_CF = NewDnsProvider("cloudflare");
-
-D("example.com", REG_INWX, DnsProvider(DSP_CF),
+D("example.com", REGISTRAR("inwx"), SERVICE("cloudflare"),
     A("test", "1.2.3.4"),
 );
 ```

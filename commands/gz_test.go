@@ -28,6 +28,31 @@ func TestFormatTypes(t *testing.T) {
 	}
 }
 
+func TestGetZonesWithoutCredentialType(t *testing.T) {
+	credsFile := t.TempDir() + "/creds.json"
+	if err := os.WriteFile(credsFile, []byte(`{"bind":{"directory":"test_data"}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	outputFile := t.TempDir() + "/zone.js"
+	if err := GetZone(GetZoneArgs{
+		ZoneNames:    []string{"simple.com"},
+		OutputFormat: "js",
+		OutputFile:   outputFile,
+		CredName:     "bind",
+		ProviderName: "BIND",
+		CredsFile:    credsFile,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(outputFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(got), `NewDnsProvider("bind", "BIND")`) || !strings.Contains(string(got), "DnsProvider(DSP_IMPORTED)") {
+		t.Fatalf("missing legacy fallback for credentials without TYPE:\n%s", got)
+	}
+}
+
 func testFormat(t *testing.T, domain, format string) {
 	t.Helper()
 
@@ -48,7 +73,6 @@ func testFormat(t *testing.T, domain, format string) {
 		OutputFormat: format,
 		OutputFile:   outfile.Name(),
 		CredName:     "bind",
-		ProviderName: "BIND",
 		CredsFile:    "test_data/bind-creds.json",
 	}
 

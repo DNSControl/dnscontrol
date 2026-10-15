@@ -1,6 +1,6 @@
 # The new `D()` syntax
 
-This experimental syntax selects providers directly using their entry names in
+This new syntax selects providers directly using their entry names in
 creds.json. The legacy `NewRegistrar`, `NewDnsProvider`, and `DnsProvider` helpers
 remain supported.
 
@@ -25,15 +25,19 @@ D("example.com",
 );
 ```
 
-`REGISTRAR()` must immediately follow the domain name. It may also appear in
-`DEFAULTS()`; an explicit registrar overrides that default. It accepts only the
-credential entry name, with no metadata.
+`REGISTRAR()`:
+* Must immediately follow the domain name. 
+* Its only argument is the credential entry name (no metadata).
+* `REGISTRAR()` is an alias for `REGISTRAR("none")`.
+* `REGISTRAR()` may appear in `DEFAULTS()`, but setting a `REGISTRAR()` in a `D()` will override it.
 
-`SERVICE(name, maxNS, configMetadata)` takes an optional nameserver limit and
-optional metadata. Omit maxNS to use all nameservers, use `0` to use none, or
-use `ALL_NS` (equal to `-1`) when supplying metadata without a limit.
+`SERVICE(name, maxNS, configMetadata)`:
+* Takes an optional nameserver limit and optional metadata.
+* Omit maxNS to use all nameservers, use `0` to use none, or use `ALL_NS` when supplying metadata without a limit.
 
-## Moving provider metadata
+## Converting provider metadata
+
+Metadata that was previously supplied via `NewDnsProvider()` now is included in `SERVICE()` instead.
 
 Before:
 
@@ -56,11 +60,9 @@ D("example.com",
 );
 ```
 
-Metadata may be any JSON value and must follow maxNS. Declare it only once per
-domain and credential entry. Remove the metadata-bearing `NewDnsProvider()`
-declaration when moving metadata to `SERVICE()`: keeping both is an error even
-if their values match. Different domains may use different metadata for the
-same credential entry.
+Metadata may be any JSON value and must follow maxNS. 
+
+Including metadata in both `NewDnsProvider()` and `SERVICE()` is an error.
 
 ## Substitutions
 
@@ -73,14 +75,11 @@ same credential entry.
 | `NewRegistrar(...)` / `NewDnsProvider(...)` variables | Remove declarations once all their uses are converted. |
 | Experimental `PROVIDER("credEntry")` and `DNS_SERVICE(...)` from v5.3.0 | Remove the declaration; use the entry name directly with `REGISTRAR` / `SERVICE`. Move `PROVIDER` metadata to each `SERVICE`. |
 
-Leave creds.json unchanged, with provider `TYPE` values there. Empty or missing
-credential files still supply the default `none` and `bind` entries. These
-modifiers also work in `DEFAULTS()` and `D_EXTEND()`; an explicit `REGISTRAR` in
-`D_EXTEND()` must likewise follow the domain name.
+Leave creds.json unchanged.
 
-## Feedback needed
+`REGISTRAR()` and `SERVICE()` also work in `DEFAULTS()`. Only `SERVICE()` works
+in `D_EXTEND()`.
 
-The v5.3.0 syntax was experimental; `PROVIDER` and `DNS_SERVICE` have been
-replaced. Please test this revision and [share feedback](https://github.com/orgs/DNSControl/discussions/4949).
+## Advice
 
 Compare `dnscontrol preview` before and after conversion. The output should be the same. [Report problems or confusing conversions](https://github.com/orgs/DNSControl/discussions/4949) with your DNSControl version, provider type, and a minimal example without credentials.

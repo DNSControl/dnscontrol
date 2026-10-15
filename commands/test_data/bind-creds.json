@@ -1,5 +1,6 @@
 {
   "bind": {
+    "TYPE": "BIND",
     "directory": "test_data"
   }
 }

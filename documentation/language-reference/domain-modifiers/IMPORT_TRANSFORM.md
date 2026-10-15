@@ -57,19 +57,19 @@ var TRANSFORM_FSTLY = [
     { low: "2.4.6.20", high: "2.4.6.20", newIP: "123.123.123.200" },  //   .20 is rewritten as 123.123.123.200
 ]
 
-D("foo.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("foo.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("one","1.2.3.1"),
   A("two","1.2.3.2"),
   A("three","1.2.3.13"),
   A("four","1.2.3.14"),
 );
 
-D("bar.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("bar.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("www","123.123.123.123"),
   IMPORT_TRANSFORM(TRANSFORM_CF, "foo.com", 300),
 );
 
-D("baz.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("baz.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("www","123.123.123.123"),
   IMPORT_TRANSFORM(TRANSFORM_FSTLY, "foo.com", 300),
 );

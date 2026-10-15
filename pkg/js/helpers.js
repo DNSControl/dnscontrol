@@ -121,14 +121,20 @@ function _copyProviderMetadata(meta) {
 
 // REGISTRAR explicitly selects the registrar for a domain.
 function REGISTRAR(name) {
+    if (arguments.length === 0) {
+        name = "none";
+    }
     _checkProviderName(name, "REGISTRAR");
-    if (arguments.length !== 1) {
+    if (arguments.length > 1) {
         throw "REGISTRAR accepts only a credential entry name; configMetadata is not supported.";
     }
     var modifier = function (d) {
         var state = d._registrarState;
+        if (state.inExtension) {
+            throw "REGISTRAR cannot be used in D_EXTEND().";
+        }
         if (!state.applyingDefaults && !state.allowRegistrar) {
-            throw "REGISTRAR must immediately follow the domain name in D() or D_EXTEND().";
+            throw "REGISTRAR must immediately follow the domain name in D().";
         }
         var key = state.applyingDefaults ? "defaultName" : "explicitName";
         if (typeof state[key] !== "undefined" && state[key] !== name) {
@@ -173,7 +179,7 @@ function _finalizeProviders() {
             throw (
                 'Domain "' +
                 d.name +
-                '" requires a registrar. Use REGISTRAR("none") for no registrar management.'
+                '" requires a registrar. Use REGISTRAR() for no registrar management.'
             );
         }
         var state = d._registrarState;
@@ -347,13 +353,16 @@ function D_EXTEND(name) {
         name.length - domain.obj.name.length - 1
     );
 
-    for (var i = 1; i < arguments.length; i++) {
-        var m = arguments[i];
-        domain.obj._registrarState.allowRegistrar =
-            i === 1 && m && m._isRegistrar === true;
-        processDargs(m, domain.obj);
+    var state = domain.obj._registrarState;
+    state.inExtension = true;
+    try {
+        for (var i = 1; i < arguments.length; i++) {
+            processDargs(arguments[i], domain.obj);
+        }
+    } finally {
+        state.inExtension = false;
+        state.allowRegistrar = false;
     }
-    domain.obj._registrarState.allowRegistrar = false;
     conf.domains[domain.id] = domain.obj; // let's overwrite the object.
 }
 
@@ -2104,7 +2113,7 @@ function DOMAIN_ELSEWHERE_AUTO(domain, registrar, dsplist) {
     // is maintaining the DNS records in that zone, and we have access
     // to updating it (but we don't want to use it.)
     for (var i = 2; i < arguments.length; i++) {
-        D_EXTEND(domain, DnsProvider(arguments[i]));
+        D_EXTEND(domain, typeof arguments[i] === "function" ? arguments[i] : DnsProvider(arguments[i]));
     }
 }
 

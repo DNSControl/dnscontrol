@@ -43,14 +43,14 @@ var GOOGLE_APPS_DOMAIN_SITES = [
   CNAME("start", "ghs.googlehosted.com."),
 ];
 
-D("primarydomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
+D("primarydomain.tld", REGISTRAR("namecom"), SERVICE("my_dns_provider"),
    GOOGLE_APPS_DOMAIN_MX,
    GOOGLE_APPS_DOMAIN_SITES,
    ...
    ...
 );
 
-D("aliasdomain.tld", REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
+D("aliasdomain.tld", REGISTRAR("namecom"), SERVICE("my_dns_provider"),
    GOOGLE_APPS_DOMAIN_MX,
    // FYI: GOOGLE_APPS_DOMAIN_SITES is not used here.
    ...
@@ -69,7 +69,7 @@ Solution 1: Use a macro.
 var SPF_NONE = TXT("@", "v=spf1 -all"); // Deters spoofed mail from parked domains.
 
 function PARKED_R53(name) {
-    D(name, REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
+    D(name, REGISTRAR("namecom"), SERVICE("my_dns_provider"),
        A("@", "10.2.3.4"),
        CNAME("www", "@"),
        SPF_NONE,
@@ -93,7 +93,7 @@ _.each(
     "example3.tld",
   ],
   function (d) {
-    D(d, REG_NAMECOM, DnsProvider(DSP_MY_PROVIDER),
+    D(d, REGISTRAR("namecom"), SERVICE("my_dns_provider"),
        A("@", "10.2.3.4"),
        CNAME("www", "@"),
     );

@@ -35,7 +35,7 @@ The `answer_type` parameter controls which record types are returned when client
 ## Example
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     // Redirect example.com to google.com, returning both A and AAAA records
     AKAMAITLC("@", "DUAL", "google.com."),
 );

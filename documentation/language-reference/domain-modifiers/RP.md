@@ -22,7 +22,7 @@ The RP implementation in DNSControl is still experimental and may change.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   RP("@", "user.example.com.", "example.com."),
 );
 ```
