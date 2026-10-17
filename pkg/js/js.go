@@ -3,10 +3,13 @@ package js
 import (
 	_ "embed" // Used to embed helpers.js in the binary.
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -33,6 +36,11 @@ var helpersJsFileName = "pkg/js/helpers.js"
 // far as require() is concerned, not the actual os.Getwd().
 var currentDirectory string
 
+// configDirectory is the absolute path of the directory that holds the
+// main configuration file. require() and require_glob() may only read
+// files inside it or inside the working directory.
+var configDirectory string
+
 // EnableFetch sets whether to enable fetch() in JS execution environment.
 var EnableFetch bool = false
 
@@ -45,6 +53,10 @@ func ExecuteJavaScript(file string, devMode bool, variables map[string]string) (
 
 	// Record the directory path leading up to this file.
 	currentDirectory = filepath.Dir(file)
+	configDirectory, err = filepath.Abs(currentDirectory)
+	if err != nil {
+		return nil, err
+	}
 
 	return ExecuteJavascriptString(script, devMode, variables)
 }
@@ -159,6 +171,43 @@ func GetHelpers(devMode bool) string {
 	return helpersJsStatic
 }
 
+// inAllowedDirectory calls fn with an allowed directory (the working
+// directory or the directory of the main configuration file) that contains
+// path, opened as an os.Root, and path relative to it. The os.Root also
+// stops symbolic links and ".." from leading outside that directory.
+func inAllowedDirectory(path string, fn func(root *os.Root, name string) error) error {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+	var dirs []string
+	if wd, err := os.Getwd(); err == nil {
+		dirs = append(dirs, wd)
+	}
+	if configDirectory != "" && !slices.Contains(dirs, configDirectory) {
+		dirs = append(dirs, configDirectory)
+	}
+
+	err = fmt.Errorf("%s is outside the directories that may be read: %s", path, strings.Join(dirs, ", "))
+	for _, dir := range dirs {
+		name, relErr := filepath.Rel(dir, abs)
+		if relErr != nil || !filepath.IsLocal(name) {
+			continue
+		}
+		root, openErr := os.OpenRoot(dir)
+		if openErr != nil {
+			err = openErr
+			continue
+		}
+		err = fn(root, name)
+		root.Close()
+		if err == nil {
+			return nil
+		}
+	}
+	return err
+}
+
 func require(call otto.FunctionCall) otto.Value {
 	if len(call.ArgumentList) != 1 {
 		throw(call.Otto, "require takes exactly one argument")
@@ -180,7 +229,12 @@ func require(call otto.FunctionCall) otto.Value {
 
 	printer.Debugf("requiring: %s (%s)\n", file, relFile)
 	// quick fix, by replacing to linux slashes, to make it work with windows paths too.
-	data, err := os.ReadFile(filepath.ToSlash(relFile))
+	var data []byte
+	err := inAllowedDirectory(filepath.ToSlash(relFile), func(root *os.Root, name string) error {
+		var err error
+		data, err = root.ReadFile(name)
+		return err
+	})
 	if err != nil {
 		throw(call.Otto, err.Error())
 	}
@@ -226,8 +280,14 @@ func listFiles(call otto.FunctionCall) otto.Value {
 	// where glob("customer1/") is being used, we basically search for files in domains/customer1/.
 	dir = filepath.ToSlash(filepath.Join(currentDirectory, dir))
 
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
+	err := inAllowedDirectory(dir, func(root *os.Root, name string) error {
+		_, err := root.Stat(name)
+		return err
+	})
+	if errors.Is(err, fs.ErrNotExist) {
 		throw(call.Otto, "glob: provided path does not exist.")
+	} else if err != nil {
+		throw(call.Otto, "glob: "+err.Error())
 	}
 
 	// Second: Recursive?
@@ -259,7 +319,7 @@ func listFiles(call otto.FunctionCall) otto.Value {
 	// Additionally, when more smart logic required, user can use regex in JS.
 	files := make([]string, 0)      // init files list
 	dirClean := filepath.Clean(dir) // let's clean it here once, instead of over-and-over again within loop
-	err := filepath.Walk(dir, func(path string, fi os.FileInfo, err error) error {
+	err = filepath.Walk(dir, func(path string, fi os.FileInfo, err error) error {
 		// quick fix to get it working on windows, as it returns paths with double-backslash, what usually
 		// require() doesn't seem to handle well. For the sake of compatibility (and because slash looks nicer),
 		// we simply replace "\\" to "/" using filepath.ToSlash()..

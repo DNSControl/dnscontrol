@@ -13,6 +13,8 @@ If the supplied `path` string ends with `.js`, the file is interpreted as JavaSc
 
 If the path string begins with a `./`, it is interpreted relative to the currently-loading file (which may not be the file where the `require()` statement is, if called within a function). Otherwise it is interpreted relative to the program's working directory at the time of the call.
 
+`require()` only reads files inside the working directory or the directory that holds the main configuration file (usually `dnsconfig.js`). Paths outside those directories, including through `..` or symbolic links, are rejected with an error.
+
 ### Example 1: Simple
 
 In this example, we separate our macros in one file, and put groups of domains in 3 other files. The result is a cleaner separation of code vs. domains.

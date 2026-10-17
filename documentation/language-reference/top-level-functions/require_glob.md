@@ -34,7 +34,7 @@ require_glob("./domains/", false);
 # Comparison to require()
 
 `require_glob()` and `require()` both use the same rules for determining which directory path is
-relative to.
+relative to, and for which directories they may read.
 
 This will load files being present underneath `./domains/user1/` and **NOT** at below `./domains/`, as `require_glob()`
 is called in the subfolder `domains/`.
