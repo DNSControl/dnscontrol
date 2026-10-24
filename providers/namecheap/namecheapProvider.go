@@ -306,12 +306,12 @@ func toSRVRecords(result *nc.DomainSRVGetRecordsResult, dc *models.DomainConfig)
 	return records, nil
 }
 
-func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
+func toNative(records models.Records) ([]nc.DomainDNSHost, []nc.DomainSRVRecord) {
 	var recs []nc.DomainDNSHost
 	var srvRecs []nc.DomainSRVRecord
 
 	id := 1
-	for _, rc := range dc.Records {
+	for _, rc := range records {
 
 		if rc.Type == "SRV" {
 			recServiceAndProtocol := strings.SplitAfterN(rc.GetLabel(), ".", 2)
@@ -342,6 +342,8 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 				f := rc.AsMX()
 				rec.MXPref = int(f.Preference)
 				rec.Address = f.Mx
+			case dnsv2.TypeTXT:
+				rec.Address = rc.GetTargetTXTJoined()
 			default:
 				rec.Address = rc.GetRDATA().String()
 			}
@@ -351,6 +353,11 @@ func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
 
 		id++
 	}
+	return recs, srvRecs
+}
+
+func (n *namecheapProvider) generateRecords(dc *models.DomainConfig) error {
+	recs, srvRecs := toNative(dc.Records)
 	sld, tld := splitDomain(dc.Name)
 	var err error
 	doWithRetry(func() error {
