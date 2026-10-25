@@ -401,9 +401,13 @@ x                IN CNAME bosun.org.
 func TestWriteZoneFileSynth(t *testing.T) {
 	dc := models.MustNewDomainConfig("bosun.org")
 
-	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.153")
-	dc.AddTestRC(t, "bosun.org.", 300, dnsv2.TypeA, "192.30.252.154")
-	dc.AddTestRC(t, "www.bosun.org.", 300, dnsv2.TypeCNAME, "bosun.org.")
+	dc.AddTestRC(t, "@", 300, dnsv2.TypeA, "192.30.252.153")
+	dc.AddTestRC(t, "@", 300, dnsv2.TypeA, "192.30.252.154")
+	dc.AddTestRC(t, "www", 300, dnsv2.TypeCNAME, "bosun.org.")
+
+	// Labels that end in the zone name (DISABLE_REPEATED_DOMAIN_CHECK) are kept.
+	dc.AddTestRC(t, "bosun.org", 300, dnsv2.TypeA, "192.30.252.155")
+	dc.AddTestRC(t, "www.bosun.org", 300, dnsv2.TypeA, "192.30.252.156")
 
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo1", "A", "id123", "true")
 	dc.AddTestRC(t, "myalias", 300, privatetypes.TypeR53ALIAS, "foo2", "A", "id123", "true")
@@ -422,6 +426,8 @@ func TestWriteZoneFileSynth(t *testing.T) {
                  IN A     192.30.252.154
 myalias          IN R53_ALIAS foo1 a.bosun.org. id123 true
                  IN R53_ALIAS foo2 a.bosun.org. id123 true
+bosun.org        IN A     192.30.252.155
+www.bosun.org    IN A     192.30.252.156
 www              IN CNAME bosun.org.
 zalias           IN R53_ALIAS foo3 a.bosun.org. id123 true
 `
