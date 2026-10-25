@@ -222,6 +222,29 @@ FOREIGN:
 	`)
 }
 
+func Test_ignore_lab_glob(t *testing.T) {
+	existingZone := `
+bar.foo IN A 1.1.1.1
+x.bar.foo IN A 2.2.2.2
+`
+	for _, tt := range []struct {
+		pattern string
+		ignored string
+	}{
+		{"*.foo", "bar.foo A 1.1.1.1\n"},
+		{"**.foo", "bar.foo A 1.1.1.1\nx.bar.foo A 2.2.2.2\n"},
+	} {
+		t.Run(tt.pattern, func(t *testing.T) {
+			desiredJs := fmt.Sprintf(`
+D("f.com", "none",
+	IGNORE_NAME(%q),
+{})
+`, tt.pattern)
+			handsoffHelper(t, existingZone, desiredJs, false, "IGNORED:\n"+tt.ignored+"FOREIGN:\n")
+		})
+	}
+}
+
 func Test_ignore_target(t *testing.T) {
 	existingZone := `
 foo1 IN A 1.1.1.1
