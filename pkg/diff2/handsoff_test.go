@@ -243,6 +243,24 @@ FOREIGN:
 	`)
 }
 
+func Test_ignore_target_svcb(t *testing.T) {
+	for _, rtype := range []string{"HTTPS", "SVCB"} {
+		t.Run(rtype, func(t *testing.T) {
+			existingZone := fmt.Sprintf("svc IN %s 1 svc.example.net. alpn=h2\n", rtype)
+			desiredJs := fmt.Sprintf(`
+D("f.com", "none",
+	IGNORE_TARGET("svc.example.net.", %q),
+{})
+`, rtype)
+			handsoffHelper(t, existingZone, desiredJs, false, fmt.Sprintf(`
+IGNORED:
+svc %s 1 svc.example.net. alpn="h2"
+FOREIGN:
+`, rtype))
+		})
+	}
+}
+
 // Test_ignore_external_dns tests the IGNORE_EXTERNAL_DNS feature
 // using the full handsoff() function.
 func Test_ignore_external_dns(t *testing.T) {

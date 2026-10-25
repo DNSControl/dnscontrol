@@ -197,6 +197,20 @@ func makeExtractor(format string) (string, error) {
 					// On the second pass, nothing is generated.
 					b.WriteString(`.*`)
 				}
+			case "f":
+				if pass == 0 {
+					b.WriteString(`(.*)_.*`)
+				} else {
+					b.WriteString(`(.*)`)
+				}
+				generateB = true
+			case "F":
+				if pass == 0 {
+					b.WriteString(`.*_(.*)`)
+				} else {
+					b.WriteString(`(.*)`)
+				}
+				generateB = true
 			case "U", "c":
 				if pass == 0 {
 					b.WriteString(`(.*)!.+`)

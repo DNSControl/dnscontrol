@@ -9,7 +9,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/namedotcom/go/namecom"
+	"github.com/namedotcom/go/v4/namecom"
 )
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.

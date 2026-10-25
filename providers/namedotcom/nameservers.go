@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/namedotcom/go/namecom"
+	"github.com/namedotcom/go/v4/namecom"
 )
 
 var nsRegex = regexp.MustCompile(`ns([1-4])[a-z]{3}\.name\.com`)

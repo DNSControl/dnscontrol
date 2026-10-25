@@ -1,6 +1,6 @@
 package namedotcom
 
-import "github.com/namedotcom/go/namecom"
+import "github.com/namedotcom/go/v4/namecom"
 
 // ListZones returns all the zones in an account.
 func (n *namedotcomProvider) ListZones() ([]string, error) {

@@ -167,6 +167,7 @@ jobs:
       CLOUDPRESS_ACCOUNT_ID: ${{ vars.CLOUDPRESS_ACCOUNT_ID }}
       CLOUDNS_DOMAIN: ${{ vars.CLOUDNS_DOMAIN }}
       CNR_DOMAIN: ${{ vars.CNR_DOMAIN }}
+      CONSTELLIX_DOMAIN: ${{ vars.CONSTELLIX_DOMAIN }}
       CSCGLOBAL_DOMAIN: ${{ vars.CSCGLOBAL_DOMAIN }}
       DESEC_DOMAIN: ${{ vars.DESEC_DOMAIN }}
       DIGITALOCEAN_DOMAIN: ${{ vars.DIGITALOCEAN_DOMAIN }}
@@ -281,6 +282,9 @@ jobs:
       CNR_ENTITY: ${{ secrets.CNR_ENTITY }}
       CNR_PW: ${{ secrets.CNR_PW }}
       CNR_UID: ${{ secrets.CNR_UID }}
+      #
+      CONSTELLIX_API_KEY: ${{ secrets.CONSTELLIX_API_KEY }}
+      CONSTELLIX_SECRET_KEY: ${{ secrets.CONSTELLIX_SECRET_KEY }}
       #
       CSCGLOBAL_APIKEY: ${{ secrets.CSCGLOBAL_APIKEY }}
       CSCGLOBAL_NOTIFICATION: ${{ secrets.CSCGLOBAL_NOTIFICATION }}

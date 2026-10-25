@@ -1,6 +1,6 @@
 module github.com/DNSControl/dnscontrol/v5
 
-go 1.27.0
+go 1.27.3
 
 require (
 	codeberg.org/miekg/dns v0.6.118
@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.3
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns v1.2.0
-	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns v1.3.0
+	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns/v2 v2.0.0
 	github.com/DisposaBoy/JsonConfigReader v0.0.0-20201129172854-99cf318d67e7
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
 	github.com/PuerkitoBio/goquery v1.13.0
@@ -19,12 +19,12 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.33.9
 	github.com/aws/aws-sdk-go-v2/credentials v1.20.9
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.70.4
-	github.com/aws/aws-sdk-go-v2/service/route53domains v1.45.0
+	github.com/aws/aws-sdk-go-v2/service/route53domains v1.45.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
-	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.23
-	github.com/cloudflare/cloudflare-go v0.119.0
-	github.com/digitalocean/godo v1.225.0
+	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.24
+	github.com/cloudflare/cloudflare-go/v7 v7.13.1
+	github.com/digitalocean/godo v1.229.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.1
 	github.com/dustin/go-humanize v1.1.0
@@ -42,15 +42,15 @@ require (
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
-	github.com/mittwald/api-client-go v0.2.248
+	github.com/mittwald/api-client-go v0.2.252
 	github.com/mittwald/go-powerdns v0.6.7
 	github.com/namecheap/go-spaceship-sdk v0.2.2
-	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04
+	github.com/namedotcom/go/v4 v4.0.2
 	github.com/netnod/netnod-primary-dns-client v1.1.1
 	github.com/nicholas-fedor/shoutrrr v0.22.0
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/nrdcg/goinwx v0.12.0
-	github.com/oracle/oci-go-sdk/v65 v65.127.0
+	github.com/oracle/oci-go-sdk/v65 v65.128.0
 	github.com/ovh/go-ovh v1.9.0
 	github.com/philhug/opensrs-go v0.0.0-20171126225031-9dfa7433020d
 	github.com/pkg/errors v0.9.1
@@ -60,13 +60,13 @@ require (
 	github.com/scaleway/scaleway-sdk-go v1.39.0
 	github.com/softlayer/softlayer-go v1.2.1
 	github.com/stretchr/testify v1.12.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1503+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.193
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1506+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.196
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.28.0
 	github.com/urfave/cli/v3 v3.14.0
-	github.com/vercel/terraform-provider-vercel v1.14.1
+	github.com/vercel/terraform-provider-vercel/v5 v5.23.0
 	github.com/vultr/govultr/v3 v3.33.2
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419
@@ -74,7 +74,7 @@ require (
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/text v0.43.0
 	golang.org/x/time v0.16.0
-	google.golang.org/api v0.304.0
+	google.golang.org/api v0.306.0
 	gopkg.in/ns1/ns1-go.v2 v2.18.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -114,7 +114,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.2 // indirect
 	github.com/go-playground/validator/v10 v10.30.5 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
-	github.com/goccy/go-json v0.11.2 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/gofrs/flock v0.13.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
@@ -161,6 +160,10 @@ require (
 	github.com/spf13/viper v1.21.0 // indirect
 	github.com/stretchr/objx v0.7.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
+	github.com/tidwall/gjson v1.14.4 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	go.mongodb.org/mongo-driver v1.17.10 // indirect
@@ -178,7 +181,7 @@ require (
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/term v0.47.0 // indirect
 	golang.org/x/tools v0.52.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20261005182115-fad411399dd8 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20261019180522-ce908d29299b // indirect
 	google.golang.org/grpc v1.86.0-dev // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/ini.v1 v1.67.3 // indirect

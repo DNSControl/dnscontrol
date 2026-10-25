@@ -225,10 +225,33 @@ func filterBy(s []targetConfig, m map[string]*targetConfig) []targetConfig {
 	return s
 }
 
+// providerExtra returns the part of t.comparableNoTTL that was added by the
+// provider's ComparableFunc (if any), i.e. everything after the record's
+// ComparableV3.
+func providerExtra(t targetConfig) string {
+	return strings.TrimSpace(strings.TrimPrefix(t.comparableNoTTL, t.rec.ComparableV3))
+}
+
+func joinNonEmpty(s, extra string) string {
+	if extra == "" {
+		return s
+	}
+	return s + " " + extra
+}
+
 // humanDiff returns a human-friendly string showing what changed
 // between a and b.
 func humanDiff(a, b targetConfig) string {
 	if a.comparableNoTTL != b.comparableNoTTL {
+		// The provider's ComparableFunc may add fields that are not part of
+		// the RDATA (such as Cloudflare's proxy setting). If those differ,
+		// the RDATA-based output below would hide the change, so show them.
+		if aExtra, bExtra := providerExtra(a), providerExtra(b); aExtra != bExtra {
+			return fmt.Sprintf("(%s ttl=%d) -> (%s ttl=%d)",
+				joinNonEmpty(a.rec.GetRDATA().String(), aExtra), a.rec.TTL,
+				joinNonEmpty(b.rec.GetRDATA().String(), bExtra), b.rec.TTL)
+		}
+
 		// The recorddata is different. If possible, show just the fields that changed:
 		if fields, ok := fieldDiff(a.rec.GetRDATA(), b.rec.GetRDATA()); ok {
 			if a.rec.TTL != b.rec.TTL {

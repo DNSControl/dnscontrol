@@ -37,6 +37,9 @@ provider-CLOUDPRESS:
 provider-CNR:
   - changed-files:
       - any-glob-to-any-file: providers/cnr/**
+provider-CONSTELLIX:
+  - changed-files:
+      - any-glob-to-any-file: providers/constellix/**
 provider-CSCGLOBAL:
   - changed-files:
       - any-glob-to-any-file: providers/cscglobal/**

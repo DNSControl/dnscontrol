@@ -20,6 +20,8 @@ func (rc *RecordConfig) GetTargetField() string {
 	case "R53_ALIAS":
 		// R53_ALIAS's target (DNSName) is not the last field of the RDATA.
 		return rc.AsR53ALIAS().Target
+	case "HTTPS", "SVCB":
+		return rc.AsSVCB().Target
 	}
 
 	// Return the last field. Not perfect, but good enough until we get rid of this function.

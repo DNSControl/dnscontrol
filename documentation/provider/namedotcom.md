@@ -26,7 +26,7 @@ There is another key name `apiurl` but it is optional and defaults to the correc
 
     "apiurl": "https://api.dev.name.com",
 
-export NAMEDOTCOM_URL='api.name.com'
+For compatibility with existing configurations, `apiurl` also accepts a hostname without `https://`.
 
 ## Metadata
 This provider does not recognize any special metadata fields unique to name.com.
@@ -70,24 +70,9 @@ integration_test.go:140: api returned unexpected response: invalid character '<'
 
 This error means an invalid URL is being used to reach the API endpoint.  It usually means a setting is `api.name.com/api` when `api.name.com` is correct (i.e. remove the `/api`).
 
-In integration tests:
-
- * Wrong: `export NAMEDOTCOM_URL='api.name.com/api'`
- * Right: `export NAMEDOTCOM_URL='api.name.com'`
-
-In production, the `apiurl` setting in `creds.json` is wrong. You can simply leave this option out and use the default, which is correct.
+In `creds.json`, remove the extra `/api` from `apiurl`, or omit `apiurl` to use the default.
 
 TODO(tlim): Improve the error message. (Volunteer needed!)
-
-### dial tcp: lookup https: no such host
-
-```text
-integration_test.go:81: Failed getting nameservers Get https://https//api.name.com/api/v4/domains/stackosphere.com?: dial tcp: lookup https: no such host
-```
-
-When running integration tests, this error means you included the `https://` in the `NAMEDOTCOM_URL` variable. You meant to do something like `export NAMEDOTCOM_URL='api.name.com' instead.
-
-In production, the `apiurl` setting in `creds.json` needs to be adjusted. You can simply leave this option out and use the default, which is correct. If you are using the EO&T system, leave the protocol (`http://`) off the URL.
 
 ## Feature Summary
 

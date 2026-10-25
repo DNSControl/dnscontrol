@@ -198,6 +198,8 @@ func Test_extractZonesFromFilenames(t *testing.T) {
 		{"bk1", args{"db_%U", filelist}, []string{"foo", "dom.tld", "dom.tld", "inside_foo", "outside_dom.tld", "_example.com"}},
 		{"bk2", args{"db_%T_%D", filelist}, []string{"foo", "dom.tld", "example.com"}},
 		{"fan", args{"%T%?_%D.zone", filelist}, []string{"foo!one", "dom.tld!two", "foo", "dom.tld", "dom", "example.com", "example.com", "dom", "dom"}},
+		{"f", args{"db_%f", []string{"db_example.com", "db_example.com_myTag"}}, []string{"example.com", "example.com"}},
+		{"F", args{"db_%F", []string{"db_example.com", "db_myTag_example.com"}}, []string{"example.com", "example.com"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

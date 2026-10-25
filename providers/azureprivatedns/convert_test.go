@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	dnsv2 "codeberg.org/miekg/dns"
-	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns"
+	adns "github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns/v2"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 

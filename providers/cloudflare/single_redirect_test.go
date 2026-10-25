@@ -14,8 +14,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/js"
 	"github.com/DNSControl/dnscontrol/v5/pkg/normalize"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/rtypes/cfsingleredirect"
-	"github.com/cloudflare/cloudflare-go"
 )
 
 const redirectEntrypoint = "/zones/zone-id/rulesets/phases/http_request_dynamic_redirect/entrypoint"
@@ -43,7 +43,7 @@ func (a *redirectAPI) RoundTrip(r *http.Request) (*http.Response, error) {
 				return nil, err
 			}
 		}
-		return &http.Response{StatusCode: status, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(data))), Request: r}, nil
+		return &http.Response{StatusCode: status, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(string(data))), Request: r}, nil
 	}
 	result := func() (*http.Response, error) {
 		return respond(http.StatusOK, struct {
@@ -130,7 +130,7 @@ func redirectFixture(t *testing.T) (*cloudflareProvider, *redirectAPI, *models.D
 		redirectRule("fallback-id", "Fallback", "example.com", "https://main.example.net"),
 	}}
 	a.rules[2].Expression = `http.host eq "example.com" or ends_with(http.host, ".example.com")`
-	client, err := cloudflare.NewWithAPIToken("synthetic-token", cloudflare.BaseURL("https://cloudflare.invalid"), cloudflare.HTTPClient(&http.Client{Transport: a}), cloudflare.UsingRateLimit(100000), cloudflare.UsingRetryPolicy(0, 0, 0))
+	client, err := cloudflare.NewWithAPIToken("synthetic-token", cloudflare.BaseURL("https://cloudflare.invalid"), cloudflare.HTTPClient(&http.Client{Transport: a}), cloudflare.UsingRetryPolicy(0, 0, 0))
 	if err != nil {
 		t.Fatal(err)
 	}

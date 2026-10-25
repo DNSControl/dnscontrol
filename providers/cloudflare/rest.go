@@ -12,7 +12,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 	"golang.org/x/net/idna"
 )
 

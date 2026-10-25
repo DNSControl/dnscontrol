@@ -11,7 +11,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 )
 
 func TestRegisteredDefinition(t *testing.T) {
@@ -69,7 +69,7 @@ func TestInitializeCredentialsAndMetadata(t *testing.T) {
 				default:
 					return nil, fmt.Errorf("unexpected path: %s", r.URL.Path)
 				}
-				return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(body)), Request: r}, nil
+				return &http.Response{StatusCode: http.StatusOK, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(body)), Request: r}, nil
 			})
 			if err := cloudflare.HTTPClient(&http.Client{Transport: transport})(provider.cfClient); err != nil {
 				t.Fatal(err)

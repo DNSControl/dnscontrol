@@ -882,7 +882,8 @@ func makeTests() []*TestGroup {
 		// ClouDNS provider can work with PTR records, but you need to create special type of zone
 		testgroup("PTR",
 			not("CLOUDNS",
-				"FORTIGATE", // FortiGate does not really support ARPA Zones and handles PTR records really weired
+				"CONSTELLIX", // PTR only in reverse zones: "The name is not valid"
+				"FORTIGATE",  // FortiGate does not really support ARPA Zones and handles PTR records really weired
 			),
 			tc("Create PTR record", tr("4", dnsv2.TypePTR, "foo.com.")),
 			tc("Modify PTR record", tr("4", dnsv2.TypePTR, "bar.com.")),

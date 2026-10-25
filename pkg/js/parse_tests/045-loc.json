@@ -24,15 +24,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 43.950 N 71 05 6.340 W -24.01m 1m 200m 10m",
+          "comparablev3": "42 21 43.952 N 71 05 6.344 W -24.01m 1m 200m 10m",
           "filepos": "[line:4:5]",
           "name": "a",
           "name_unicode": "a",
           "rdata": {
             "Altitude": 9997599,
             "HorizPre": 36,
-            "Latitude": 2299987598,
-            "Longitude": 1891577308,
+            "Latitude": 2299987600,
+            "Longitude": 1891577304,
             "Size": 18,
             "Version": 0,
             "VertPre": 19
@@ -60,15 +60,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "51 30 3.030 N 00 07 28.650 W 6m 0.00m 0.00m 0.00m",
+          "comparablev3": "51 30 3.033 N 00 07 28.651 W 6m 0.00m 0.00m 0.00m",
           "filepos": "[line:23:5]",
           "name": "big-ben",
           "name_unicode": "big-ben",
           "rdata": {
             "Altitude": 10000600,
             "HorizPre": 0,
-            "Latitude": 2332886678,
-            "Longitude": 2147034998,
+            "Latitude": 2332886681,
+            "Longitude": 2147034997,
             "Size": 0,
             "Version": 0,
             "VertPre": 0
@@ -96,15 +96,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W -44m 2000m 0.00m 0.00m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W -44m 2000m 0.00m 0.00m",
           "filepos": "[line:7:5]",
           "name": "d",
           "name_unicode": "d",
           "rdata": {
             "Altitude": 9995600,
             "HorizPre": 0,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 37,
             "Version": 0,
             "VertPre": 0
@@ -114,15 +114,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W 42849672.95m 2000m 0.00m 0.00m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W 42849672.95m 2000m 0.00m 0.00m",
           "filepos": "[line:8:5]",
           "name": "d-alt-highest",
           "name_unicode": "d-alt-highest",
           "rdata": {
             "Altitude": 4294967295,
             "HorizPre": 0,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 37,
             "Version": 0,
             "VertPre": 0
@@ -132,15 +132,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W -100000m 2000m 0.00m 0.00m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W -100000m 2000m 0.00m 0.00m",
           "filepos": "[line:9:5]",
           "name": "d-alt-lowest",
           "name_unicode": "d-alt-lowest",
           "rdata": {
             "Altitude": 0,
             "HorizPre": 0,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 37,
             "Version": 0,
             "VertPre": 0
@@ -150,15 +150,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 1m 90000000m 0.00m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W 0m 1m 90000000m 0.00m",
           "filepos": "[line:12:5]",
           "name": "d-horizprecision-hi",
           "name_unicode": "d-horizprecision-hi",
           "rdata": {
             "Altitude": 10000000,
             "HorizPre": 153,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 18,
             "Version": 0,
             "VertPre": 0
@@ -168,15 +168,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 90000000m 0.00m 0.00m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W 0m 90000000m 0.00m 0.00m",
           "filepos": "[line:17:5]",
           "name": "d-size-hi",
           "name_unicode": "d-size-hi",
           "rdata": {
             "Altitude": 10000000,
             "HorizPre": 0,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 153,
             "Version": 0,
             "VertPre": 0
@@ -186,15 +186,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "42 21 28.760 N 71 00 51.620 W 0m 1m 0.00m 90000000m",
+          "comparablev3": "42 21 28.764 N 71 00 51.617 W 0m 1m 0.00m 90000000m",
           "filepos": "[line:18:5]",
           "name": "d-vertprecision-hi",
           "name_unicode": "d-vertprecision-hi",
           "rdata": {
             "Altitude": 10000000,
             "HorizPre": 0,
-            "Latitude": 2299972408,
-            "Longitude": 1891832028,
+            "Latitude": 2299972412,
+            "Longitude": 1891832031,
             "Size": 18,
             "Version": 0,
             "VertPre": 153
@@ -384,15 +384,15 @@
           "typenum": 29
         },
         {
-          "comparablev3": "38 53 51.940 N 77 02 11.580 W 19m 0.00m 0.00m 0.00m",
+          "comparablev3": "38 53 51.935 N 77 02 11.584 W 19m 0.00m 0.00m 0.00m",
           "filepos": "[line:29:5]",
           "name": "white-house",
           "name_unicode": "white-house",
           "rdata": {
             "Altitude": 10001900,
             "HorizPre": 0,
-            "Latitude": 2287515588,
-            "Longitude": 1870152068,
+            "Latitude": 2287515583,
+            "Longitude": 1870152064,
             "Size": 0,
             "Version": 0,
             "VertPre": 0

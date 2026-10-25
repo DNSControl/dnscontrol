@@ -20,7 +20,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 	"github.com/fatih/color"
 	"golang.org/x/net/idna"
 )
@@ -751,7 +751,7 @@ func (c *cloudflareProvider) Initialize(m map[string]string, metadata json.RawMe
 
 	debug, err := strconv.ParseBool(os.Getenv("CLOUDFLAREAPI_DEBUG"))
 	if err == nil {
-		c.cfClient.Debug = debug
+		c.cfClient.SetDebug(debug)
 	}
 
 	if len(metadata) > 0 {

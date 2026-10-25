@@ -114,6 +114,12 @@
     "debugmode": "$CNR_DEBUGMODE",
     "domain": "$CNR_DOMAIN"
   },
+  "CONSTELLIX": {
+    "TYPE": "CONSTELLIX",
+    "api_key": "$CONSTELLIX_API_KEY",
+    "domain": "$CONSTELLIX_DOMAIN",
+    "secret_key": "$CONSTELLIX_SECRET_KEY"
+  },
   "CSCGLOBAL": {
     "TYPE": "CSCGLOBAL",
     "api-key": "$CSCGLOBAL_APIKEY",

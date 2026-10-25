@@ -5,7 +5,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 )
 
 func TestNativeToRecordGolden(t *testing.T) {

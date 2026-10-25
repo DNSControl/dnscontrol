@@ -4,13 +4,12 @@ package namedotcom
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/namedotcom/go/namecom"
+	"github.com/namedotcom/go/v4/namecom"
 )
-
-const defaultAPIBase = "api.name.com"
 
 // namedotcomProvider describes a connection to the NDC API.
 type namedotcomProvider struct {
@@ -30,13 +29,17 @@ func (n *namedotcomProvider) Initialize(conf map[string]string, _ json.RawMessag
 	*n = namedotcomProvider{
 		client: namecom.New(conf["apiuser"], conf["apikey"]),
 	}
-	n.client.Server = conf["apiurl"]
 	n.APIUser, n.APIKey, n.APIUrl = conf["apiuser"], conf["apikey"], conf["apiurl"]
 	if n.APIKey == "" || n.APIUser == "" {
 		return errors.New("missing Name.com apikey or apiuser")
 	}
-	if n.APIUrl == "" {
-		n.APIUrl = defaultAPIBase
+	if n.APIUrl != "" {
+		if !strings.HasPrefix(n.APIUrl, "http://") && !strings.HasPrefix(n.APIUrl, "https://") {
+			n.APIUrl = "https://" + n.APIUrl
+		}
+		n.client.Server = n.APIUrl
+	} else {
+		n.APIUrl = n.client.Server
 	}
 
 	// Set the timeout to a high value.  Currently we get timeouts and

@@ -355,10 +355,10 @@ function D_EXTEND(name) {
         name = name.substring(name.indexOf(".") + 1);
     }
 
-    domain.obj.subdomain = name.substr(
-        0,
-        name.length - domain.obj.name.length - 1
-    );
+    // The empty tag is not part of the name: "example.com!" is "example.com".
+    name = _removeEmptyTag(name)[0];
+    var domainName = _removeEmptyTag(domain.obj.name)[0];
+    domain.obj.subdomain = name.substr(0, name.length - domainName.length - 1);
 
     var state = domain.obj._registrarState;
     var previousExtension = state.extension;
@@ -1296,7 +1296,7 @@ function GIDINET_PREMIUM_NS() {
 // ttl: The time for TTL, integer or string. (default: not defined, using DefaultTTL)
 
 function LOC_BUILDER_DD(value) {
-    if (!value.x && !value.y) {
+    if (value.x === undefined || value.y === undefined) {
         throw "LOC_BUILDER_DD requires x and y elements";
     }
 
@@ -1648,6 +1648,8 @@ function _encodeDKIMQuotedPrintable(str) {
     var hexChars = "0123456789ABCDEF".split("");
     var result = "";
 
+    // Encode the UTF-8 octets, not the UTF-16 code units.
+    str = unescape(encodeURIComponent(str));
     for (var i = 0; i < str.length; i++) {
         var charCode = str.charCodeAt(i);
         if (

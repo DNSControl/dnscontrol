@@ -6,7 +6,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	"github.com/namedotcom/go/namecom"
+	"github.com/namedotcom/go/v4/namecom"
 )
 
 func TestToNativeALIAS(t *testing.T) {

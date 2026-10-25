@@ -5,7 +5,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providergolden"
-	"github.com/namedotcom/go/namecom"
+	"github.com/namedotcom/go/v4/namecom"
 )
 
 func TestToRecordGolden(t *testing.T) {

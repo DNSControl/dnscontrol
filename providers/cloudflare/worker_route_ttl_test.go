@@ -10,7 +10,7 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/zonecache"
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/DNSControl/dnscontrol/v5/providers/cloudflare/cfapi"
 )
 
 // workerRouteAPI serves a fixed list of Worker Routes through the real
@@ -30,7 +30,7 @@ func (a *workerRouteAPI) RoundTrip(r *http.Request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(data))), Request: r}, nil
+	return &http.Response{StatusCode: http.StatusOK, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(string(data))), Request: r}, nil
 }
 
 // A Worker Route has no DNS TTL. Provider read-back constructs TTL 1, so a
@@ -40,7 +40,7 @@ func TestWorkerRouteDefaultTTLNoop(t *testing.T) {
 	for _, ttl := range []uint32{1, 300, 86400} {
 		t.Run(fmt.Sprintf("ttl=%d", ttl), func(t *testing.T) {
 			api := &workerRouteAPI{routes: []cloudflare.WorkerRoute{{ID: "route-id", Pattern: "example.com/*", ScriptName: "my-worker"}}}
-			client, err := cloudflare.NewWithAPIToken("synthetic-token", cloudflare.BaseURL("https://cloudflare.invalid"), cloudflare.HTTPClient(&http.Client{Transport: api}), cloudflare.UsingRateLimit(100000), cloudflare.UsingRetryPolicy(0, 0, 0))
+			client, err := cloudflare.NewWithAPIToken("synthetic-token", cloudflare.BaseURL("https://cloudflare.invalid"), cloudflare.HTTPClient(&http.Client{Transport: api}), cloudflare.UsingRetryPolicy(0, 0, 0))
 			if err != nil {
 				t.Fatal(err)
 			}

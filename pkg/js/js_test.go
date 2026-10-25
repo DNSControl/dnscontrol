@@ -231,3 +231,49 @@ func TestDMARCBuilderValues(t *testing.T) {
 		})
 	}
 }
+
+func TestLOCBuilderDDCoordinates(t *testing.T) {
+	tests := []struct{ desc, opts, want, wantErr string }{
+		{"zero coordinates", `{label:"origin",x:0,y:0,alt:0}`, "00 00 0.000 S 00 00 0.000 W 0m 0.00m 0.00m 0.00m", ""},
+		{"missing x", `{label:"site",y:1,alt:0}`, "", "LOC_BUILDER_DD requires x and y elements"},
+		{"missing y", `{label:"site",x:1,alt:0}`, "", "LOC_BUILDER_DD requires x and y elements"},
+	}
+	for _, tst := range tests {
+		t.Run(tst.desc, func(t *testing.T) {
+			script := `D("example.com","none",LOC_BUILDER_DD(` + tst.opts + `))`
+			conf, err := ExecuteJavascriptString([]byte(script), true, nil)
+			switch {
+			case tst.wantErr == "" && err != nil:
+				t.Fatalf("Expected no error but found: %v", err)
+			case tst.wantErr != "" && (err == nil || !strings.Contains(err.Error(), tst.wantErr)):
+				t.Fatalf("Expected error %q but found: %v", tst.wantErr, err)
+			case tst.wantErr == "":
+				if got := conf.Domains[0].Records[0].ComparableV3; got != tst.want {
+					t.Fatalf("Expected %q but found %q", tst.want, got)
+				}
+			}
+		})
+	}
+}
+
+// TestDKIMBuilderNote checks that a non-ASCII note is written as UTF-8 octets.
+func TestDKIMBuilderNote(t *testing.T) {
+	tests := []struct{ desc, note, want string }{
+		{"ascii", "a note", "v=DKIM1; n=a=20note; p=abc"},
+		{"two-octet character", "café", "v=DKIM1; n=caf=C3=A9; p=abc"},
+		{"three-octet character", "€5", "v=DKIM1; n==E2=82=AC5; p=abc"},
+		{"four-octet character", "\U0001F600", "v=DKIM1; n==F0=9F=98=80; p=abc"},
+	}
+	for _, tst := range tests {
+		t.Run(tst.desc, func(t *testing.T) {
+			script := `D("foo.com","none",DKIM_BUILDER({selector:"s1",pubkey:"abc",note:"` + tst.note + `"}))`
+			conf, err := ExecuteJavascriptString([]byte(script), true, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got := conf.Domains[0].Records[0].GetTargetTXTJoined(); got != tst.want {
+				t.Fatalf("Expected %q but found %q", tst.want, got)
+			}
+		})
+	}
+}
