@@ -160,11 +160,10 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+					return l.call("CreateManyRecords", false, func() error {
+						_, err := l.provider.CreateManyRecords(l.ctx, zone, req)
 						return err
-					}
-					_, err := l.provider.CreateManyRecords(l.ctx, zone, req)
-					return err
+					})
 				},
 				Msg: change.MsgsJoined,
 			})
@@ -174,11 +173,10 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+					return l.call("UpdateManyRecords", true, func() error {
+						_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
 						return err
-					}
-					_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
-					return err
+					})
 				},
 				Msg: change.MsgsJoined,
 			})
@@ -188,11 +186,10 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 			providers.EndToNative(l.observer, "recordsToNative", before, change.Old, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+					return l.call("DeleteManyRecords", true, func() error {
+						_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
 						return err
-					}
-					_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
-					return err
+					})
 				},
 				Msg: change.MsgsJoined,
 			})
@@ -211,10 +208,12 @@ func (l *luadnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 			return err
 		}
 	}
-	if err := l.rateLimiter.Wait(l.ctx); err != nil {
+	var zone *api.Zone
+	err := l.call("CreateZone", false, func() error {
+		var err error
+		zone, err = l.provider.CreateZone(l.ctx, &api.Zone{Name: domain})
 		return err
-	}
-	zone, err := l.provider.CreateZone(l.ctx, &api.Zone{Name: domain})
+	})
 	if err != nil {
 		return err
 	}
@@ -223,10 +222,12 @@ func (l *luadnsProvider) EnsureZoneExists(dc *models.DomainConfig) error {
 }
 
 func (l *luadnsProvider) fetchDomainList() error {
-	if err := l.rateLimiter.Wait(l.ctx); err != nil {
+	var zones []*api.Zone
+	err := l.call("ListZones", true, func() error {
+		var err error
+		zones, err = l.provider.ListZones(l.ctx, &api.ListParams{})
 		return err
-	}
-	zones, err := l.provider.ListZones(l.ctx, &api.ListParams{})
+	})
 	if err != nil {
 		return err
 	}
@@ -249,10 +250,12 @@ func (l *luadnsProvider) getZone(name string) (*api.Zone, error) {
 }
 
 func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
-	if err := l.rateLimiter.Wait(l.ctx); err != nil {
-		return nil, err
-	}
-	records, err := l.provider.ListRecords(l.ctx, zone, &api.ListParams{})
+	var records []*api.Record
+	err := l.call("ListRecords", true, func() error {
+		var err error
+		records, err = l.provider.ListRecords(l.ctx, zone, &api.ListParams{})
+		return err
+	})
 	if err != nil {
 		return nil, err
 	}
