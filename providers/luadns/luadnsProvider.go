@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"slices"
+	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	api "github.com/luadns/luadns-go"
@@ -174,11 +176,13 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+					return retry500(func() error {
+						if err := l.rateLimiter.Wait(l.ctx); err != nil {
+							return err
+						}
+						_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
 						return err
-					}
-					_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
-					return err
+					})
 				},
 				Msg: change.MsgsJoined,
 			})
@@ -188,11 +192,13 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 			providers.EndToNative(l.observer, "recordsToNative", before, change.Old, req, nil)
 			corrections = append(corrections, &models.Correction{
 				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
+					return retry500(func() error {
+						if err := l.rateLimiter.Wait(l.ctx); err != nil {
+							return err
+						}
+						_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
 						return err
-					}
-					_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
-					return err
+					})
 				},
 				Msg: change.MsgsJoined,
 			})
@@ -264,6 +270,19 @@ func (l *luadnsProvider) getRecords(zone *api.Zone) ([]*api.Record, error) {
 		newRecords = append(newRecords, rec)
 	}
 	return newRecords, nil
+}
+
+// retry500 runs fn, repeating it a few times if the API answers with a 500,
+// which it occasionally does for a valid request. Only use it for requests
+// that are safe to repeat (not creates).
+func retry500(fn func() error) error {
+	for attempt := 1; ; attempt++ {
+		err := fn()
+		if e, ok := errors.AsType[*api.ErrBadStatusCode](err); !ok || e.StatusCode != http.StatusInternalServerError || attempt == 3 {
+			return err
+		}
+		time.Sleep(time.Duration(attempt) * 2 * time.Second)
+	}
 }
 
 func (l *luadnsProvider) checkNS(dc *models.DomainConfig) {
