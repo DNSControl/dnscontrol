@@ -3,7 +3,7 @@ module github.com/DNSControl/dnscontrol/v5
 go 1.27.3
 
 require (
-	codeberg.org/miekg/dns v0.6.118
+	codeberg.org/miekg/dns v0.6.125
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.3
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
@@ -15,16 +15,16 @@ require (
 	github.com/TomOnTime/utfutil v1.0.0
 	github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
-	github.com/aws/aws-sdk-go-v2 v1.47.3
-	github.com/aws/aws-sdk-go-v2/config v1.33.9
-	github.com/aws/aws-sdk-go-v2/credentials v1.20.9
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.70.4
-	github.com/aws/aws-sdk-go-v2/service/route53domains v1.45.1
-	github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
+	github.com/aws/aws-sdk-go-v2 v1.47.4
+	github.com/aws/aws-sdk-go-v2/config v1.33.10
+	github.com/aws/aws-sdk-go-v2/credentials v1.20.10
+	github.com/aws/aws-sdk-go-v2/service/route53 v1.70.5
+	github.com/aws/aws-sdk-go-v2/service/route53domains v1.45.2
+	github.com/aws/aws-sdk-go-v2/service/sts v1.51.5
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.24
 	github.com/cloudflare/cloudflare-go/v7 v7.13.1
-	github.com/digitalocean/godo v1.229.0
+	github.com/digitalocean/godo v1.233.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v8 v8.3.1
 	github.com/dustin/go-humanize v1.1.0
@@ -37,17 +37,17 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
-	github.com/hetznercloud/hcloud-go/v2 v2.52.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.219
+	github.com/hetznercloud/hcloud-go/v2 v2.53.0
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.220
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
-	github.com/mittwald/api-client-go v0.2.252
+	github.com/mittwald/api-client-go v0.2.253
 	github.com/mittwald/go-powerdns v0.6.7
 	github.com/namecheap/go-spaceship-sdk v0.2.2
 	github.com/namedotcom/go/v4 v4.0.2
 	github.com/netnod/netnod-primary-dns-client v1.1.1
-	github.com/nicholas-fedor/shoutrrr v0.22.0
+	github.com/nicholas-fedor/shoutrrr v0.22.1
 	github.com/nozzle/throttler v0.0.0-20180817012639-2ea982251481
 	github.com/nrdcg/goinwx v0.12.0
 	github.com/oracle/oci-go-sdk/v65 v65.128.0
@@ -60,13 +60,13 @@ require (
 	github.com/scaleway/scaleway-sdk-go v1.39.0
 	github.com/softlayer/softlayer-go v1.2.1
 	github.com/stretchr/testify v1.12.1
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1506+incompatible
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.196
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1509+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.199
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.3.131
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.28.0
 	github.com/urfave/cli/v3 v3.14.0
-	github.com/vercel/terraform-provider-vercel/v5 v5.23.0
+	github.com/vercel/terraform-provider-vercel/v5 v5.24.1
 	github.com/vultr/govultr/v3 v3.33.2
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419
@@ -74,7 +74,7 @@ require (
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/text v0.43.0
 	golang.org/x/time v0.16.0
-	google.golang.org/api v0.306.0
+	google.golang.org/api v0.308.0
 	gopkg.in/ns1/ns1-go.v2 v2.18.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -86,16 +86,16 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.13.0 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.10.1 // indirect
 	github.com/andybalholm/cascadia v1.3.5 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.10.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.38.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.4 // indirect
-	github.com/aws/smithy-go v1.28.5 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.4 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.22 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.10.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.38.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.5 // indirect
+	github.com/aws/smithy-go v1.28.6 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.26.0 // indirect
@@ -145,7 +145,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect
 	github.com/peterhellberg/link v1.2.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
-	github.com/prometheus/client_golang v1.24.1 // indirect
+	github.com/prometheus/client_golang v1.25.0 // indirect
 	github.com/prometheus/client_model v0.6.3 // indirect
 	github.com/prometheus/common v0.72.0 // indirect
 	github.com/prometheus/procfs v0.22.0 // indirect
@@ -158,7 +158,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spf13/viper v1.21.0 // indirect
-	github.com/stretchr/objx v0.7.0 // indirect
+	github.com/stretchr/objx v0.8.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tidwall/gjson v1.14.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
