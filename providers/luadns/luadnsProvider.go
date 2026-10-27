@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"strings"
 	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
@@ -152,61 +153,105 @@ func (l *luadnsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, reco
 		return nil, 0, err
 	}
 
+	// LuaDNS takes a list of records per request, so collect the changes by
+	// kind and send each kind in as few requests as possible. Deletes go first,
+	// then updates, then creates: diff2 orders a label's old records ahead of
+	// the new ones that would conflict with them (A -> CNAME), and that order
+	// must survive the regrouping.
+	var deletes, updates, creates []pendingChange
+
 	for _, change := range changes {
 		switch change.Type {
 		case diff2.REPORT:
 			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
 		case diff2.CREATE:
-			before := providers.BeginToNative(l.observer, "recordsToNative", change.New)
-			req := recordsToNative(change.New)
-			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
-			corrections = append(corrections, &models.Correction{
-				F: func() error {
-					if err := l.rateLimiter.Wait(l.ctx); err != nil {
-						return err
-					}
-					_, err := l.provider.CreateManyRecords(l.ctx, zone, req)
-					return err
-				},
-				Msg: change.MsgsJoined,
-			})
+			creates = append(creates, l.toPending(change.New, change.MsgsJoined))
 		case diff2.CHANGE:
-			before := providers.BeginToNative(l.observer, "recordsToNative", change.New)
-			req := recordsToNative(change.New)
-			providers.EndToNative(l.observer, "recordsToNative", before, change.New, req, nil)
-			corrections = append(corrections, &models.Correction{
-				F: func() error {
-					return retry500(func() error {
-						if err := l.rateLimiter.Wait(l.ctx); err != nil {
-							return err
-						}
-						_, err := l.provider.UpdateManyRecords(l.ctx, zone, req)
-						return err
-					})
-				},
-				Msg: change.MsgsJoined,
-			})
+			updates = append(updates, l.toPending(change.New, change.MsgsJoined))
 		case diff2.DELETE:
-			before := providers.BeginToNative(l.observer, "recordsToNative", change.Old)
-			req := recordsToNative(change.Old)
-			providers.EndToNative(l.observer, "recordsToNative", before, change.Old, req, nil)
-			corrections = append(corrections, &models.Correction{
-				F: func() error {
-					return retry500(func() error {
-						if err := l.rateLimiter.Wait(l.ctx); err != nil {
-							return err
-						}
-						_, err := l.provider.DeleteManyRecords(l.ctx, zone, req)
-						return err
-					})
-				},
-				Msg: change.MsgsJoined,
-			})
+			deletes = append(deletes, l.toPending(change.Old, change.MsgsJoined))
 		default:
 			panic(fmt.Sprintf("unhandled inst.Type %s", change.Type))
 		}
 	}
+
+	// Updates and deletes are safe to repeat after a 500. Creates are not: the
+	// failed request may have been partly applied.
+	corrections = append(corrections, l.batchCorrections(zone, deletes, l.provider.DeleteManyRecords, true)...)
+	corrections = append(corrections, l.batchCorrections(zone, updates, l.provider.UpdateManyRecords, true)...)
+	corrections = append(corrections, l.batchCorrections(zone, creates, l.provider.CreateManyRecords, false)...)
 	return corrections, actualChangeCount, nil
+}
+
+// maxBatchRRs is the most RRs sent in one bulk request. LuaDNS documents no
+// limit, so this is a conservative guess.
+const maxBatchRRs = 100
+
+// pendingChange is one diff2 change (the records of one recordset) in API form.
+type pendingChange struct {
+	rrs []*api.RR
+	msg string
+}
+
+func (l *luadnsProvider) toPending(records models.Records, msg string) pendingChange {
+	before := providers.BeginToNative(l.observer, "recordsToNative", records)
+	rrs := recordsToNative(records)
+	providers.EndToNative(l.observer, "recordsToNative", before, records, rrs, nil)
+	return pendingChange{rrs: rrs, msg: msg}
+}
+
+// chunkChanges packs changes, in order, into requests of at most limit RRs.
+// A change is never split: UpdateManyRecords replaces everything stored for
+// each (name, type) it receives, so the records of one recordset must travel
+// in the same request. A change larger than limit gets a request of its own.
+func chunkChanges(changes []pendingChange, limit int) [][]pendingChange {
+	var chunks [][]pendingChange
+	var cur []pendingChange
+	curRRs := 0
+	for _, c := range changes {
+		if len(cur) > 0 && curRRs+len(c.rrs) > limit {
+			chunks = append(chunks, cur)
+			cur, curRRs = nil, 0
+		}
+		cur = append(cur, c)
+		curRRs += len(c.rrs)
+	}
+	if len(cur) > 0 {
+		chunks = append(chunks, cur)
+	}
+	return chunks
+}
+
+type bulkFunc func(ctx context.Context, zone *api.Zone, rrs []*api.RR) ([]*api.Record, error)
+
+// batchCorrections turns changes into one correction per bulk request.
+func (l *luadnsProvider) batchCorrections(zone *api.Zone, changes []pendingChange, call bulkFunc, repeatable bool) []*models.Correction {
+	var corrections []*models.Correction
+	for _, chunk := range chunkChanges(changes, maxBatchRRs) {
+		var rrs []*api.RR
+		var msgs []string
+		for _, c := range chunk {
+			rrs = append(rrs, c.rrs...)
+			msgs = append(msgs, c.msg)
+		}
+		send := func() error {
+			if err := l.rateLimiter.Wait(l.ctx); err != nil {
+				return err
+			}
+			_, err := call(l.ctx, zone, rrs)
+			return err
+		}
+		corrections = append(corrections, &models.Correction{
+			F: func() error {
+				if repeatable {
+					return retry500(send)
+				}
+				return send()
+			},
+			Msg: strings.Join(msgs, "\n"),
+		})
+	}
+	return corrections
 }
 
 // EnsureZoneExists creates a zone if it does not exist.
