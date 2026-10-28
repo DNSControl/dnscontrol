@@ -70,6 +70,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/packetframe"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/porkbun"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/powerdns"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/primedns"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/realtimeregister"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/route53"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/rwth"
