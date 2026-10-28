@@ -110,30 +110,34 @@ func runAll(t *testing.T, corrections []*models.Correction) {
 	}
 }
 
-// A mixed diff must collapse into one delete, one update and one create
-// request, sent in that order, with every record of a recordset in the
-// same request.
-func TestGetZoneRecordsCorrectionsBatchesByKind(t *testing.T) {
+func sameCalls(got, want []recordedCall) bool {
+	return slices.EqualFunc(got, want, func(a, b recordedCall) bool {
+		return a.Method == b.Method && a.Path == b.Path && slices.Equal(a.RRs, b.RRs)
+	})
+}
+
+// Only adjacent changes of the same kind share a request. The order diff2
+// chose (here by label, with an A -> CNAME swap at the end) must reach the
+// API unchanged, so the creates around the update and the delete stay apart.
+func TestGetZoneRecordsCorrectionsBatchesAdjacentRuns(t *testing.T) {
 	l, fake := newFakeProvider(t, nil)
 	dc, err := models.NewDomainConfig("example.com")
 	if err != nil {
 		t.Fatal(err)
 	}
 	existing := models.Records{
-		newRC(t, dc, "a", "A", "1.1.1.1"),
-		newRC(t, dc, "b", "A", "2.2.2.2"),
 		newRC(t, dc, "c", "A", "3.3.3.3"),
-		newRC(t, dc, "d", "TXT", "old"),
-		newRC(t, dc, "x", "A", "9.9.9.9"),
+		newRC(t, dc, "m", "A", "9.9.9.9"),
+		newRC(t, dc, "x", "A", "8.8.8.8"),
 	}
 	dc.Records = models.Records{
+		newRC(t, dc, "a", "A", "1.1.1.1"),
+		newRC(t, dc, "b", "A", "2.2.2.2"),
 		newRC(t, dc, "c", "A", "3.3.3.4"),
 		newRC(t, dc, "c", "A", "3.3.3.5"),
-		newRC(t, dc, "d", "TXT", "new"),
+		newRC(t, dc, "n", "A", "4.4.4.4"),
+		newRC(t, dc, "o", "A", "5.5.5.5"),
 		newRC(t, dc, "x", "CNAME", "target.example.com."),
-		newRC(t, dc, "e", "A", "5.5.5.5"),
-		newRC(t, dc, "f", "A", "6.6.6.1"),
-		newRC(t, dc, "f", "A", "6.6.6.2"),
 	}
 
 	corrections, _, err := l.GetZoneRecordsCorrections(dc, existing)
@@ -143,26 +147,29 @@ func TestGetZoneRecordsCorrectionsBatchesByKind(t *testing.T) {
 	runAll(t, corrections)
 
 	want := []recordedCall{
-		{"POST", "/zones/5/records/delete_many", []string{
+		{"POST", "/zones/5/records/create_many", []string{
 			"a.example.com. A 1.1.1.1 300",
 			"b.example.com. A 2.2.2.2 300",
-			"x.example.com. A 9.9.9.9 300",
 		}},
 		{"PATCH", "/zones/5/records", []string{
 			"c.example.com. A 3.3.3.4 300",
 			"c.example.com. A 3.3.3.5 300",
-			"d.example.com. TXT new 300",
+		}},
+		{"POST", "/zones/5/records/delete_many", []string{
+			"m.example.com. A 9.9.9.9 300",
 		}},
 		{"POST", "/zones/5/records/create_many", []string{
-			"e.example.com. A 5.5.5.5 300",
-			"f.example.com. A 6.6.6.1 300",
-			"f.example.com. A 6.6.6.2 300",
+			"n.example.com. A 4.4.4.4 300",
+			"o.example.com. A 5.5.5.5 300",
+		}},
+		{"POST", "/zones/5/records/delete_many", []string{
+			"x.example.com. A 8.8.8.8 300",
+		}},
+		{"POST", "/zones/5/records/create_many", []string{
 			"x.example.com. CNAME target.example.com. 300",
 		}},
 	}
-	if got := fake.recorded(); !slices.EqualFunc(got, want, func(a, b recordedCall) bool {
-		return a.Method == b.Method && a.Path == b.Path && slices.Equal(a.RRs, b.RRs)
-	}) {
+	if got := fake.recorded(); !sameCalls(got, want) {
 		t.Errorf("requests mismatch\n got: %+v\nwant: %+v", got, want)
 	}
 
@@ -180,6 +187,40 @@ func TestGetZoneRecordsCorrectionsBatchesByKind(t *testing.T) {
 	}
 	if gotLines != wantLines {
 		t.Errorf("corrections describe %d lines of changes, diff has %d", gotLines, wantLines)
+	}
+}
+
+// diff2 orders changes by their dependencies, not by kind: repointing a
+// CNAME at a new host must create the host, then change the CNAME, then
+// delete the old host. Grouping all deletes first would reverse that.
+func TestGetZoneRecordsCorrectionsKeepsDependencyOrder(t *testing.T) {
+	l, fake := newFakeProvider(t, nil)
+	dc, err := models.NewDomainConfig("example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+	existing := models.Records{
+		newRC(t, dc, "x", "CNAME", "old.example.com."),
+		newRC(t, dc, "old", "A", "1.1.1.1"),
+	}
+	dc.Records = models.Records{
+		newRC(t, dc, "x", "CNAME", "new.example.com."),
+		newRC(t, dc, "new", "A", "2.2.2.2"),
+	}
+
+	corrections, _, err := l.GetZoneRecordsCorrections(dc, existing)
+	if err != nil {
+		t.Fatal(err)
+	}
+	runAll(t, corrections)
+
+	want := []recordedCall{
+		{"POST", "/zones/5/records/create_many", []string{"new.example.com. A 2.2.2.2 300"}},
+		{"PATCH", "/zones/5/records", []string{"x.example.com. CNAME new.example.com. 300"}},
+		{"POST", "/zones/5/records/delete_many", []string{"old.example.com. A 1.1.1.1 300"}},
+	}
+	if got := fake.recorded(); !sameCalls(got, want) {
+		t.Errorf("requests mismatch\n got: %+v\nwant: %+v", got, want)
 	}
 }
 
