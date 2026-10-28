@@ -189,6 +189,7 @@
 * [Packetframe](provider/packetframe.md)
 * [Porkbun](provider/porkbun.md)
 * [PowerDNS](provider/powerdns.md)
+* [PrimeDNS](provider/primedns.md)
 * [Realtime Register](provider/realtimeregister.md)
 * [RWTH DNS-Admin](provider/rwth.md)
 * [Sakura Cloud](provider/sakuracloud.md)
