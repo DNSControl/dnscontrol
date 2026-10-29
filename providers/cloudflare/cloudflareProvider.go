@@ -411,8 +411,9 @@ func (c *cloudflareProvider) mkChangeCorrection(oldrec, newrec *models.RecordCon
 		}}
 	default:
 		e := oldrec.Original.(cloudflare.DNSRecord)
-		proxy := e.Proxiable && newrec.Metadata[metaProxy] != "off"
-		// fmt.Fprintf(os.Stderr, "DEBUG: proxy := %v && %v != off is... %v\n", e.Proxiable, newrec.Metadata[metaProxy], proxy)
+		// Don't check e.Proxiable: if Cloudflare can't proxy this record,
+		// let the API reject the change instead of silently dropping it.
+		proxy := newrec.Metadata[metaProxy] != "off"
 		return []*models.Correction{{
 			Msg: msg,
 			F:   func() error { return c.modifyRecord(domainID, e.ID, proxy, newrec) },
