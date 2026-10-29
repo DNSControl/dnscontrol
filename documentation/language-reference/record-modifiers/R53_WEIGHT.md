@@ -20,7 +20,7 @@ You can optionally associate a health check using [`R53_HEALTH_CHECK_ID()`](R53_
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
   // 70% of traffic to east, 30% to west
   A("www", "1.2.3.4", R53_WEIGHT(70, "web-east")),
   A("www", "5.6.7.8", R53_WEIGHT(30, "web-west")),

@@ -25,7 +25,7 @@ Cloudflare documentation: <https://developers.cloudflare.com/rules/url-forwardin
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CF_SINGLE_REDIRECT('redirect www.example.com', 302, 'http.host eq "www.example.com"', 'concat("https://otherplace.com", http.request.uri.path)'),
   CF_SINGLE_REDIRECT('redirect yyy.example.com', 302, 'http.host eq "yyy.example.com"', 'concat("https://survey.stackoverflow.co", "")'),
   CF_TEMP_REDIRECT("*example.com/*", "https://contests.otherexample.com/$2"),

@@ -6,7 +6,7 @@ parameters:
   - nameserver_names
 parameter_types:
   name: string
-  registrar: string
+  registrar: string | DomainModifier
   nameserver_names: string[]
 ---
 
@@ -18,21 +18,21 @@ For example these two statements are equivalent:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-DOMAIN_ELSEWHERE("example.com", REG_MY_PROVIDER, ["ns1.foo.com", "ns2.foo.com"]);
+DOMAIN_ELSEWHERE("example.com", REGISTRAR("my_provider"), ["ns1.foo.com.", "ns2.foo.com."]);
 ```
 {% endcode %}
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_provider"),
     NO_PURGE,
-    NAMESERVER("ns1.foo.com"),
-    NAMESERVER("ns2.foo.com"),
+    NAMESERVER("ns1.foo.com."),
+    NAMESERVER("ns2.foo.com."),
 );
 ```
 {% endcode %}
 
 {% hint style="info" %}
 **NOTE**: The [`NO_PURGE`](../domain-modifiers/NO_PURGE.md) is used out of abundance of caution but since no
-`DnsProvider()` statements exist, no updates would be performed.
+`SERVICE()` statements exist, no updates would be performed.
 {% endhint %}

@@ -20,7 +20,7 @@ Modifiers can be any number of [record modifiers](https://docs.dnscontrol.org/la
 
 {% code title="dnsconfig.js" %}
 ```javascript
-    D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+    D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
       TXT("@", "598611146-3338560"),
       TXT("listserve", "google-site-verification=12345"),
       TXT("multiple", ["one", "two", "three"]),  // Multiple strings
@@ -60,7 +60,7 @@ Regardless of the quantity and length of strings, some providers ban double quot
 
 #### How can you tell if a provider will support a particular `TXT()` record?
 
-Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along with the `DnsProvider()` for that provider. Run `dnscontrol check` to see if any errors are produced. The check command does not talk to the provider's API, thus permitting you to do this without having an account at that provider.
+Include the `TXT()` record in a [`D()`](../top-level-functions/D.md) as usual, along with the `SERVICE()` for that provider. Run `dnscontrol check` to see if any errors are produced. The check command does not talk to the provider's API, thus permitting you to do this without having an account at that provider.
 
 #### What if the provider rejects a string that is supported?
 

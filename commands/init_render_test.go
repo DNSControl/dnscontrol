@@ -75,9 +75,7 @@ func TestRenderDnsconfigJS(t *testing.T) {
 		{
 			name: "registrar_and_dns",
 			choice: InitDnsconfigChoice{
-				RegistrarVar:  "REG_CLOUDFLAREAPI",
 				RegistrarName: "cloudflare",
-				DNSVar:        "DNS_CLOUDFLAREAPI",
 				DNSName:       "cloudflare",
 				Domains:       []string{"example.com", "example.org"},
 			},
@@ -86,9 +84,7 @@ func TestRenderDnsconfigJS(t *testing.T) {
 		{
 			name: "none_registrar_bind_dns",
 			choice: InitDnsconfigChoice{
-				RegistrarVar:  "REG_NONE",
 				RegistrarName: "none",
-				DNSVar:        "DNS_BIND",
 				DNSName:       "bind",
 				Domains:       []string{"example.com"},
 			},
@@ -97,7 +93,6 @@ func TestRenderDnsconfigJS(t *testing.T) {
 		{
 			name: "registrar_only",
 			choice: InitDnsconfigChoice{
-				RegistrarVar:  "REG_NONE",
 				RegistrarName: "none",
 				Domains:       []string{"example.com"},
 			},
@@ -106,9 +101,7 @@ func TestRenderDnsconfigJS(t *testing.T) {
 		{
 			name: "imported_records",
 			choice: InitDnsconfigChoice{
-				RegistrarVar:  "REG_CLOUDFLAREAPI",
 				RegistrarName: "cloudflare",
-				DNSVar:        "DNS_CLOUDFLAREAPI",
 				DNSName:       "cloudflare",
 				Domains:       []string{"example.com"},
 				DomainRecords: map[string]DomainImport{
@@ -131,21 +124,6 @@ func TestRenderDnsconfigJS(t *testing.T) {
 			got := renderDnsconfigJS(testCase.choice)
 			assertGolden(t, filepath.Join("testdata", "init", testCase.golden), got)
 		})
-	}
-}
-
-func TestJSVarName(t *testing.T) {
-	cases := []struct {
-		prefix, input, want string
-	}{
-		{"REG", "CLOUDFLAREAPI", "REG_CLOUDFLAREAPI"},
-		{"DNS", "HETZNER_V2", "DNS_HETZNER_V2"},
-		{"DNS", "gandi-v5", "DNS_GANDI_V5"},
-	}
-	for _, testCase := range cases {
-		if got := jsVarName(testCase.prefix, testCase.input); got != testCase.want {
-			t.Errorf("jsVarName(%q,%q)=%q want %q", testCase.prefix, testCase.input, got, testCase.want)
-		}
 	}
 }
 

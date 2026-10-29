@@ -27,9 +27,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_INTERNETBS = NewRegistrar("internetbs");
-
-D("example.com", REG_INTERNETBS,
+D("example.com", REGISTRAR("internetbs"),
   NAMESERVER("ns1.example.com."),
   NAMESERVER("ns2.example.com."),
 );

@@ -103,7 +103,7 @@ values outside of the above ranges are gated to within the ranges.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   // LOC "subdomain", d1, m1, s1, "[NnSs]", d2, m2, s2, "[EeWw]", alt, siz, hp, vp)
   //42 21 54     N  71 06  18     W -24m 30m
   LOC("@", 42, 21, 54,     "N", 71,  6, 18,     "W", -24.01,   30,    0,  0),

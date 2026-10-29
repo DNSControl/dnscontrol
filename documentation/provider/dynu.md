@@ -27,10 +27,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_DYNU = NewDnsProvider("dynu");
-
-D("example.com", REG_NONE, DnsProvider(DSP_DYNU),
+D("example.com", REGISTRAR(), SERVICE("dynu"),
     A("test", "1.2.3.4"),
     MX("@", 10, "mail.example.com."),
     TXT("@", "v=spf1 include:example.com ~all"),

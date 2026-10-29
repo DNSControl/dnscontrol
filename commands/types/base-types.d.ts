@@ -5,12 +5,21 @@ interface Domain {
     meta: Record<string, unknown>;
     records: DNSRecord[];
     dnsProviders: Record<string, unknown>;
+    dnsProviderMetadata?: Record<string, ProviderConfigMetadata>;
     defaultTTL: number;
     nameservers: unknown[];
     ignored_names: unknown[];
     ignored_targets: unknown[];
     [key: string]: unknown;
 }
+
+type ProviderConfigMetadata =
+    | null
+    | boolean
+    | number
+    | string
+    | ProviderConfigMetadata[]
+    | { [key: string]: ProviderConfigMetadata };
 
 interface DNSRecord {
     type: string;

@@ -38,10 +38,7 @@ An example `dnsconfig.js` configuration file
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_RTR = NewRegistrar("realtimeregister");
-var DSP_RTR = NewDnsProvider("realtimeregister");
-
-D("example.com", REG_RTR, DnsProvider(DSP_RTR),
+D("example.com", REGISTRAR("realtimeregister"), SERVICE("realtimeregister"),
     A("test", "1.2.3.4"),
 );
 ```

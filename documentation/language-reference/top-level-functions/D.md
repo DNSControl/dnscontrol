@@ -2,15 +2,29 @@
 name: D
 parameters:
   - name
-  - registrar
+  - registrarOrModifier
   - modifiers...
 parameter_types:
   name: string
-  registrar: string
+  registrarOrModifier: (string | DomainModifier)?
   "modifiers...": DomainModifier[]
 ---
 
-`D` adds a new Domain for DNSControl to manage. The first two arguments are required: the domain name (fully qualified `example.com` without a trailing dot), and the name of the registrar (as previously declared with [NewRegistrar](NewRegistrar.md)). Any number of additional arguments may be included to add DNS Providers with [DNSProvider](NewDnsProvider.md), add records with [A](../domain-modifiers/A.md), [CNAME](../domain-modifiers/CNAME.md), and so forth, or add metadata.
+`D` adds a domain for DNSControl to manage. The first argument is the domain name
+(fully qualified `example.com` without a trailing dot). Follow it with
+[REGISTRAR](../domain-modifiers/REGISTRAR.md) unless a registrar is supplied by
+[DEFAULTS](DEFAULTS.md) or a subsequent [D_EXTEND](D_EXTEND.md).
+In `D()`, an explicit registrar must immediately follow the name.
+Additional modifiers select DNS services with [SERVICE](../domain-modifiers/SERVICE.md),
+add records with [A](../domain-modifiers/A.md) and [CNAME](../domain-modifiers/CNAME.md),
+or add domain metadata.
+
+Registrar selection is finalized after the script and its asynchronous callbacks
+finish. `D_EXTEND()` can set or replace the registrar before that point.
+
+The legacy `D(name, registrarName, ...)` form remains supported with
+[NewRegistrar](NewRegistrar.md). See the
+[conversion guide](../../getting-started/converting-dnsconfig.md).
 
 Modifier arguments are processed according to type as follows:
 
@@ -21,8 +35,8 @@ Modifier arguments are processed according to type as follows:
 {% code title="dnsconfig.js" %}
 ```javascript
 // simple domain
-D("example.com", REG_MY_PROVIDER,
-  DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"),
+  SERVICE("my_dns_provider"),
   A("@","1.2.3.4"),           // "@" means the apex domain. In this case, "example.com" itself.
   CNAME("test", "foo.example2.com."),
 );
@@ -36,7 +50,7 @@ var GOOGLE_APPS_DOMAIN_MX = [
     MX("@", 10, "alt4.aspmx.l.google.com."),
 ]
 
-D("other-example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("other-example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("@","1.2.3.4"),
   CNAME("test", "foo.example2.com."),
   GOOGLE_APPS_DOMAIN_MX,
@@ -66,7 +80,7 @@ Skipping registrar REGISTRAR: No nameservers declared for domain "example.com". 
 To add this, add the meta data to the zone immediately following the registrar.
 
 ```javascript
-D("example.com", REG_MY_PROVIDER, {no_ns: "true"},
+D("example.com", REGISTRAR("my_registrar"), {no_ns: "true"},
   ...
   ...
   ...
@@ -85,15 +99,11 @@ To differentiate the different domains, specify the domains as `domain.tld!tag`,
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DNS_INSIDE = NewDnsProvider("Cloudflare");
-var DNS_OUTSIDE = NewDnsProvider("bind");
-
-D("example.com!inside", REG_NONE, DnsProvider(DNS_INSIDE),
+D("example.com!inside", REGISTRAR(), SERVICE("Cloudflare"),
   A("www", "10.10.10.10"),
 );
 
-D("example.com!outside", REG_NONE, DnsProvider(DNS_OUTSIDE),
+D("example.com!outside", REGISTRAR(), SERVICE("bind"),
   A("www", "20.20.20.20"),
 );
 

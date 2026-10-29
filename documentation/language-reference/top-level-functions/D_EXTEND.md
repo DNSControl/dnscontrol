@@ -10,17 +10,30 @@ parameter_types:
 
 `D_EXTEND` adds records (and metadata) to a domain previously defined by [`D()`](D.md). It can also be used to add subdomain records (and metadata) to a previously defined domain.
 
-The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` behaves the same as [`D()`](D.md), simply adding records as if they had been specified in the original [`D()`](D.md).
+[SERVICE](../domain-modifiers/SERVICE.md) can add a DNS service or its metadata.
+Metadata may be supplied only once per domain and credential entry, including
+across defaults, `D()`, and extensions.
+
+[REGISTRAR](../domain-modifiers/REGISTRAR.md) can set or replace the domain's
+registrar. It may appear anywhere among the modifiers, including in nested arrays.
+It overrides defaults and earlier selections; the last assignment executed wins.
+Different registrar selections within one `D_EXTEND()` call are an error.
+`REGISTRAR()` with no arguments disables registrar management.
+
+The first argument is a domain name. If it exactly matches a previously defined domain, `D_EXTEND()` adds its records and DNS-service modifiers to that domain.
 
 If the domain name does not match an existing domain, but could be a (non-delegated) subdomain of an existing domain, the new records (and metadata) are added with the subdomain part appended to all record names (labels), and targets (as appropriate). See the examples below.
 
 Matching the domain name to previously-defined domains is done using a `longest match` algorithm. If `domain.tld` and `sub.domain.tld` are defined as separate domains via separate [`D()`](D.md) statements, then `D_EXTEND("sub.sub.domain.tld", ...)` would match `sub.domain.tld`, not `domain.tld`.
 
+When extending a subdomain, `REGISTRAR()` changes the registrar for the entire
+matched domain. It does not create a separate domain or registrar for the subdomain.
+
 Some operators only act on an apex domain (e.g. [`CF_SINGLE_REDIRECT`](../domain-modifiers/CF_SINGLE_REDIRECT.md), [`CF_REDIRECT`](../domain-modifiers/CF_REDIRECT.md), and [`CF_TEMP_REDIRECT`](../domain-modifiers/CF_TEMP_REDIRECT.md)). Using them in a `D_EXTEND` subdomain may not be what you expect.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("domain.tld", REG_MY_PROVIDER, DnsProvider(DNS),
+D("domain.tld", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   A("@", "127.0.0.1"), // domain.tld
   A("www", "127.0.0.2"), // www.domain.tld
   CNAME("a", "b"), // a.domain.tld -> b.domain.tld
