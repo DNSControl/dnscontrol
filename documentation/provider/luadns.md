@@ -42,6 +42,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_LUADNS),
 This is not the case if you are using vanity nameservers.
 - This provider does not currently support the "FORWARD" and "REDIRECT" record types.
 - The API is available on the LuaDNS free plan, but due to the limit of 30 records, some tests will fail when doing integration tests.
+- Changes are sent in bulk requests rather than one request per record set. Only consecutive changes of the same kind (creates, updates or deletes) share a request, so the order DNSControl chose is kept; a request holds at most 100 records. If a request fails, all of the changes in it fail together.
 
 ## Feature Summary
 
