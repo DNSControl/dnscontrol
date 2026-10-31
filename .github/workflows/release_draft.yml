@@ -11,8 +11,11 @@ name: "RELEASE: Make release candidate"
 # 2. Manual escape hatch: push a tag (git push origin vX.Y.Z). That still runs
 #    GoReleaser directly, exactly as before.
 #
-# Either way, GoReleaser produces a DRAFT release; you edit the notes and click
-# publish.
+# Either way, GoReleaser produces a DRAFT release; the release job then
+# cosign-signs checksums.txt (keyless, one Sigstore bundle) and uploads the
+# bundle alongside the artifacts, the "provenance" job generates SLSA
+# provenance (multiple.intoto.jsonl), and the "upload-provenance" job
+# attaches it to the same draft. You edit the notes and click publish.
 
 on:
   push:
@@ -112,6 +115,14 @@ jobs:
     permissions:
       packages: write
       contents: write
+      # Keyless cosign signing needs this job's OIDC identity token.
+      id-token: write
+    outputs:
+      # Subject digests (base64 sha256sum) handed to the SLSA provenance job.
+      hashes: ${{ steps.hash.outputs.hashes }}
+      # The tag identifying the draft release; handed to the
+      # upload-provenance job (gh resolves drafts by pending tag name).
+      tag: ${{ steps.resolve-tag.outputs.tag }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -251,3 +262,159 @@ jobs:
           MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
           MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
           MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
+
+      # Resolve the tag that identifies the draft release GoReleaser just
+      # created. Dispatch runs pass the version as an input (the workflow
+      # itself runs on a branch ref); tag pushes have the tag in GITHUB_REF.
+      # Exported as a job output so the upload-provenance job can reuse it.
+      - name: Resolve release tag
+        id: resolve-tag
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -eu
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            tag="$INPUT_VERSION"
+          else
+            tag="$REF_NAME"
+          fi
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      # Subject digests for the SLSA provenance generator: everything that
+      # lands on the release page (archives, rpm/deb packages, checksums.txt).
+      - name: Compute subject hashes for SLSA provenance
+        id: hash
+        run: |
+          set -eu
+          cd dist
+          hashes="$(sha256sum -- *.tar.gz *.zip *.rpm *.deb checksums.txt | base64 -w0)"
+          echo "hashes=$hashes" >> "$GITHUB_OUTPUT"
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      # Keyless (OIDC) signing: the signer identity is this workflow/job, so
+      # there are no signing keys to manage. checksums.txt covers every
+      # release artifact transitively, so signing it alone is sufficient and
+      # keeps the release page tidy.
+      #
+      # cosign v3 (what cosign-installer v4.1.2 installs) writes the new
+      # Sigstore bundle format when --bundle is passed and silently ignores
+      # --output-signature / --output-certificate in that mode, so we pass
+      # --bundle only. See https://goreleaser.com/blog/cosign-v3/
+      - name: Sign checksums.txt with cosign (keyless)
+        run: |
+          set -eu
+          cd dist
+          cosign sign-blob --yes checksums.txt \
+            --bundle checksums.txt.sigstore.json
+
+      # Run the exact verification the release notes document (see the
+      # "Verify downloads" footer in .goreleaser.yml) before anything is
+      # uploaded: a signature that cannot be verified fails the release
+      # instead of shipping. The regexp covers both entry paths (tag pushes
+      # sign with a refs/tags/ identity, dispatches with refs/heads/).
+      - name: Verify checksums.txt signature
+        run: |
+          set -eu
+          cd dist
+          test -f checksums.txt.sigstore.json
+          cosign verify-blob checksums.txt \
+            --bundle checksums.txt.sigstore.json \
+            --certificate-identity-regexp 'https://github\.com/DNSControl/dnscontrol/\.github/workflows/release_draft\.yml@refs/(tags|heads)/' \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+      # gh resolves draft releases by pending tag name (the REST by-tag
+      # endpoint cannot), so this attaches to the DRAFT release; --clobber
+      # makes re-runs idempotent. The verify step above already asserted the
+      # bundle exists, so this cannot fail on a missing file after GoReleaser
+      # has already published anything.
+      - name: Upload cosign bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          cd dist
+          gh release upload "$RELEASE_TAG" \
+            checksums.txt.sigstore.json \
+            --clobber
+
+  # Generate SLSA Build Level 3 provenance for the release artifacts as
+  # multiple.intoto.jsonl. This is what OpenSSF Scorecard's Signed-Releases
+  # check recognizes; see also issue #3468.
+  #
+  # upload-assets MUST be false: the generator's built-in uploader cannot
+  # attach to the GoReleaser draft in this repo. It uploads via
+  # softprops/action-gh-release v2.2.1 (pinned by generator v2.1.0), whose
+  # draft lookup paginates through ALL releases and reassigns its
+  # found-release variable on every page -- only the LAST (oldest) page's
+  # match survives. This repo has more than 100 releases, so the draft
+  # (newest, page 1) is found and then overwritten by the last page, and the
+  # action falls back to CREATING A SECOND DRAFT RELEASE for the same tag
+  # instead of attaching to ours. Confirmed live in the first dry-run (run
+  # 39435368847: two v5.5.99-rc1 drafts); the repo where this pattern was
+  # validated has only 45 releases, so the buggy path never triggered there.
+  # Tracked upstream as slsa-framework/slsa-github-generator#4000 (c-ares
+  # hit the same thing and adopted this same workaround). The
+  # upload-provenance job below attaches the provenance instead, using
+  # "gh release upload", which resolves drafts by pending tag name -- the
+  # same mechanism the cosign bundle upload already uses.
+  #
+  # The generator MUST be referenced by tag, not SHA: its internal builder
+  # checkout fails with "Invalid ref" when pinned to a commit, hence the
+  # zizmor suppression.
+  provenance:
+    name: SLSA provenance
+    needs: release
+    # Run whenever the release job itself succeeded, on every entry path.
+    # Without this, the implicit success() makes GitHub skip this job when
+    # any job in the transitive needs chain was skipped -- which is exactly
+    # what happens on a manual tag push (preflight and verify are skipped)
+    # or a dispatch with skip_longtest=true (verify is skipped), even though
+    # release runs via its always() condition. See
+    # https://github.com/actions/runner/issues/2205
+    if: always() && needs.release.result == 'success'
+    permissions:
+      # What the generator's internal jobs declare, minus the contents:write
+      # its (now-bypassed) uploader needed. upload-provenance grants itself
+      # contents:write instead.
+      actions: read # generator reads the workflow path
+      id-token: write # generator signs the provenance with OIDC
+      contents: read # generator declares this; it no longer uploads anything
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0 # zizmor: ignore[unpinned-uses]
+    with:
+      base64-subjects: "${{ needs.release.outputs.hashes }}"
+      upload-assets: false
+
+  # Attach the signed provenance to the DRAFT release ourselves (see the
+  # provenance job comment for why the generator's uploader can't).
+  # The generator uploads the signed provenance as a run artifact named
+  # after its provenance-name output; download it and attach it with
+  # "gh release upload --clobber", which resolves the draft by pending tag
+  # name and is idempotent across re-runs. "test -f" first so a missing
+  # artifact fails loudly instead of uploading nothing.
+  upload-provenance:
+    name: Attach provenance to draft release
+    needs: [release, provenance]
+    if: always() && needs.release.result == 'success' && needs.provenance.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # attach the provenance asset to the draft release
+    steps:
+      - name: Download the signed provenance
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0, same major as the generator's upload-artifact v4.6.0
+        with:
+          name: ${{ needs.provenance.outputs.provenance-name }}
+
+      - name: Upload provenance to the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROVENANCE_NAME: ${{ needs.provenance.outputs.provenance-name }}
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: |
+          set -eu
+          test -f "$PROVENANCE_NAME"
+          gh release upload "$RELEASE_TAG" "$PROVENANCE_NAME" --clobber
