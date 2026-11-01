@@ -34,6 +34,7 @@ func init() {
 			"SSHFP",
 			"SVCB",
 			"TLSA",
+			"URL",
 		},
 		CanAutoDNSSEC:       providers.Can(),
 		CanDualHost:         providers.Cannot("DNSimple does not allow sufficient control over the apex NS records"),
