@@ -124,8 +124,8 @@ github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c h1:+Zo5Ca9
 github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c/go.mod h1:HJGU9ULdREjOcVGZVPB5s6zYmHi1RxzT71l2wQyLmnE=
 github.com/dlclark/regexp2 v1.12.0 h1:0j4c5qQmnC6XOWNjP3PIXURXN2gWx76rd3KvgdPkCz8=
 github.com/dlclark/regexp2 v1.12.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/dnsimple/dnsimple-go/v8 v8.3.1 h1:Koz1DUqz9gOFcWLz9VqAiXzRdlAryw7umJ8Y0R0el8U=
-github.com/dnsimple/dnsimple-go/v8 v8.3.1/go.mod h1:61MdYHRL+p2TBBUVEkxo1n4iRF6s3R9fZcvQvyt5du8=
+github.com/dnsimple/dnsimple-go/v10 v10.0.0 h1:UBcHO8a2J2CNhJaEagNvJGxMgyb6t2K1fJbO3g2WdtA=
+github.com/dnsimple/dnsimple-go/v10 v10.0.0/go.mod h1:0ahFf8dfmt6ctcTR6VuTOf9Zruzl+dDsOtFBdh4PPk4=
 github.com/dustin/go-humanize v1.1.0 h1:dbKTrvD0klcbBV/h4AWJdMuZogJACoMlvWIWZ5b2xWg=
 github.com/dustin/go-humanize v1.1.0/go.mod h1:hc1CvRkJMsgxqjmjMQF3QNRAZBwY8AXBAzKYoSX9sFI=
 github.com/eclipse/paho.golang v0.23.0 h1:KHgl2wz6EJo7cMBmkuhpt7C576vP+kpPv7jjvSyR6Mk=

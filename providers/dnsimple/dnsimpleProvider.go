@@ -17,7 +17,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
+	dnsimpleapi "github.com/dnsimple/dnsimple-go/v10/dnsimple"
 	"golang.org/x/oauth2"
 )
 

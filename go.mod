@@ -26,7 +26,7 @@ require (
 	github.com/cloudflare/cloudflare-go/v7 v7.13.1
 	github.com/digitalocean/godo v1.233.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
-	github.com/dnsimple/dnsimple-go/v8 v8.3.1
+	github.com/dnsimple/dnsimple-go/v10 v10.0.0
 	github.com/dustin/go-humanize v1.1.0
 	github.com/exoscale/egoscale/v3 v3.1.62
 	github.com/failsafe-go/failsafe-go v0.9.8
