@@ -19,9 +19,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/dns"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/edgegrid"
-	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v13/pkg/session"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v14/pkg/dns"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v14/pkg/edgegrid"
+	"github.com/akamai/AkamaiOPEN-edgegrid-golang/v14/pkg/session"
 )
 
 // initialize initializes the "Akamai OPEN EdgeGrid" library.

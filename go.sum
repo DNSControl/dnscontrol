@@ -48,8 +48,8 @@ github.com/PuerkitoBio/goquery v1.13.0/go.mod h1:Hip5mdBL8K2wEGKJdr27sRaNwIdDajm
 github.com/TomOnTime/utfutil v1.0.0 h1:/0Ivgo2OjXJxo8i7zgvs7ewSFZMLwCRGm3P5Umowb90=
 github.com/TomOnTime/utfutil v1.0.0/go.mod h1:l9lZmOniizVSuIliSkEf87qivMRlSNzbdBFKjuLRg1c=
 github.com/ajstarks/svgo v0.0.0-20180226025133-644b8db467af/go.mod h1:K08gAheRH3/J6wwsYMMT4xOr94bZjxIelGM0+d/wbFw=
-github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0 h1:oLqV1HbQrojeWkpI9aFI1SYJ53x8L12eqwcDHxmWrrE=
-github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0/go.mod h1:l2ajjow2JNoL6HjejeHmkdMEm98uL4MveXwb9Z3FoNk=
+github.com/akamai/AkamaiOPEN-edgegrid-golang/v14 v14.1.0 h1:ez0t9GpRCesQoe2LIGnpWBTnqFfKh4Xy91qePhK44PM=
+github.com/akamai/AkamaiOPEN-edgegrid-golang/v14 v14.1.0/go.mod h1:hqmN8UDGMxixkPDYp9Hnwbf/KOS/5WD/ei5tgUFeSPo=
 github.com/aliyun/alibaba-cloud-sdk-go v1.63.107 h1:qagvUyrgOnBIlVRQWOyCZGVKUIYbMBdGdJ104vBpRFU=
 github.com/aliyun/alibaba-cloud-sdk-go v1.63.107/go.mod h1:SOSDHfe1kX91v3W5QiBsWSLqeLxImobbMX1mxrFHsVQ=
 github.com/andybalholm/cascadia v1.3.5 h1:RLjq12WJy58dN6eCIQrz0bAGZkztHWsEPFxP53Y7Ms8=
@@ -303,8 +303,6 @@ github.com/maxatome/go-testdeep v1.12.0/go.mod h1:lPZc/HAcJMP92l7yI6TRz1aZN5URwU
 github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b/go.mod h1:01TrycV0kFyexm33Z7vhZRXopbI8J3TDReVlkTgMUxE=
 github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d h1:5PJl274Y63IEHC+7izoQE9x6ikvDFZS2mDVS3drnohI=
 github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d/go.mod h1:01TrycV0kFyexm33Z7vhZRXopbI8J3TDReVlkTgMUxE=
-github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
-github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
 github.com/mitchellh/go-testing-interface v1.14.1 h1:jrgshOhYAUVNMAJiKbEu7EqAwgJJ2JqpQmpLJOu07cU=
 github.com/mitchellh/go-testing-interface v1.14.1/go.mod h1:gfgS7OtZj6MA4U1UrDRp04twqAjfvlZyCfX3sDjEym8=
 github.com/mittwald/api-client-go v0.2.253 h1:n6flZuSsbmE+1jrSTYXSyUjJxpJLa0Jxw5/op2p5xzQ=

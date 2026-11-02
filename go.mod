@@ -13,7 +13,7 @@ require (
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
 	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/TomOnTime/utfutil v1.0.0
-	github.com/akamai/AkamaiOPEN-edgegrid-golang/v13 v13.4.0
+	github.com/akamai/AkamaiOPEN-edgegrid-golang/v14 v14.1.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
 	github.com/aws/aws-sdk-go-v2 v1.47.5
 	github.com/aws/aws-sdk-go-v2/config v1.33.13
@@ -137,7 +137,6 @@ require (
 	github.com/leodido/go-urn v1.5.0 // indirect
 	github.com/mattn/go-colorable v0.1.16 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
-	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
