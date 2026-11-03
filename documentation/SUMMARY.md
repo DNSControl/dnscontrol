@@ -165,6 +165,7 @@
 * [Infomaniak](provider/infomaniak.md)
 * [Internet.bs](provider/internetbs.md)
 * [INWX](provider/inwx.md)
+* [IONOS](provider/ionos.md)
 * [Joker](provider/joker.md)
 * [Linode](provider/linode.md)
 * [Loopia](provider/loopia.md)
