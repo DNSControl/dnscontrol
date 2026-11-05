@@ -260,6 +260,11 @@
     "sandbox": "1",
     "username": "$INWX_USER"
   },
+  "IONOS": {
+    "TYPE": "IONOS",
+    "api_key": "$IONOS_API_KEY",
+    "domain": "$IONOS_DOMAIN"
+  },
   "JOKER": {
     "TYPE": "JOKER",
     "domain": "$JOKER_DOMAIN",

@@ -62,6 +62,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ❌ | ✅ | ❌ |
 | [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ✅ |
 | [`INWX`](inwx.md) | ❌ | ✅ | ✅ |
+| [`IONOS`](ionos.md) | ❌ | ✅ | ❌ |
 | [`JOKER`](joker.md) | ❌ | ✅ | ❌ |
 | [`LINODE`](linode.md) | ❌ | ✅ | ❌ |
 | [`LOOPIA`](loopia.md) | ❌ | ✅ | ✅ |
@@ -145,6 +146,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ✅ | ✅ | ❌ | ❌ |
 | [`INTERNETBS`](internetbs.md) | ✅ | ✅ | ❌ | ❌ |
 | [`INWX`](inwx.md) | ✅ | ✅ | ✅ | ✅ |
+| [`IONOS`](ionos.md) | ✅ | ❌ | ❌ | ✅ |
 | [`JOKER`](joker.md) | ❌ | ❌ | ✅ | ✅ |
 | [`LINODE`](linode.md) | ✅ | ❌ | ❌ | ❌ |
 | [`LOOPIA`](loopia.md) | ✅ | ✅ | ❌ | ✅ |
@@ -228,6 +230,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`INWX`](inwx.md) | ✅ | ❌ | ❌ | ❔ | ✅ | ❌ | ❌ |
+| [`IONOS`](ionos.md) | ❌ | ❌ | ❌ | ❔ | ❌ | ❔ | ❌ |
 | [`JOKER`](joker.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`LINODE`](linode.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`LOOPIA`](loopia.md) | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
@@ -311,6 +314,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ | ❌ |
 | [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ |
 | [`INWX`](inwx.md) | ❌ | ✅ | ✅ | ✅ |
+| [`IONOS`](ionos.md) | ❌ | ❌ | ✅ | ❔ |
 | [`JOKER`](joker.md) | ❌ | ✅ | ✅ | ❌ |
 | [`LINODE`](linode.md) | ❌ | ❌ | ✅ | ❌ |
 | [`LOOPIA`](loopia.md) | ❌ | ✅ | ✅ | ❌ |
@@ -394,6 +398,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`INWX`](inwx.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| [`IONOS`](ionos.md) | ✅ | ❔ | ❔ | ❔ | ❔ | ❔ |
 | [`JOKER`](joker.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`LINODE`](linode.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`LOOPIA`](loopia.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
@@ -477,6 +482,7 @@ Jump to a table:
 | [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ |
 | [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ |
 | [`INWX`](inwx.md) | ✅ | ❌ | ❔ |
+| [`IONOS`](ionos.md) | ❌ | ❌ | ❔ |
 | [`JOKER`](joker.md) | ❌ | ❌ | ❌ |
 | [`LINODE`](linode.md) | ❌ | ❌ | ❌ |
 | [`LOOPIA`](loopia.md) | ❌ | ❌ | ❌ |
