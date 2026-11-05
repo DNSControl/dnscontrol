@@ -91,6 +91,12 @@ END);
 The API limits requests per minute (300 to 1000, depending on the plan of the key's owner). When it answers 429 or a temporary
 5xx error, the provider waits (honoring `Retry-After`) and retries.
 
+## RRsets
+
+The provider changes a whole RRset (all records of one type at one name) with one `PUT` request and removes it with one `DELETE`,
+so a change of an RRset is atomic: the zone never serves half of it. The API key needs the scopes `dns:read` and `dns:write`.
+PrimeDNS keeps its own NS records at the apex; the provider leaves them in place when it changes the apex NS RRset.
+
 ## TXT records
 
 PrimeDNS stores TXT content as typed. A value that starts with a double quote is read as zone file notation, so the quotes around the

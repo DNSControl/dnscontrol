@@ -146,41 +146,100 @@ func (p *primednsProvider) GetZoneRecords(dc *models.DomainConfig) (models.Recor
 	return cur, nil
 }
 
-// GetZoneRecordsCorrections returns the changes that turn curRecords into the desired records of dc.
+// GetZoneRecordsCorrections returns the changes that turn curRecords into the desired records of dc. PrimeDNS
+// replaces a whole RRset (all records of one type at one name) in one atomic request, so a change of an RRset is
+// one PUT and its removal one DELETE.
 func (p *primednsProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, curRecords models.Records) ([]*models.Correction, int, error) {
-	changes, actualChangeCount, err := diff2.ByRecord(curRecords, dc, nil)
+	changes, actualChangeCount, err := diff2.ByRecordSet(curRecords, dc, nil)
 	if err != nil {
 		return nil, 0, err
 	}
 
 	var corrections []*models.Correction
 	for _, change := range changes {
+		zone, typ := dc.Name, change.Key.Type
+		var name string // the short label, "@" for the apex
+		switch {
+		case len(change.New) > 0:
+			name = change.New[0].GetLabel()
+		case len(change.Old) > 0:
+			name = change.Old[0].GetLabel()
+		}
 		switch change.Type {
 		case diff2.REPORT:
 			corrections = append(corrections, &models.Correction{Msg: change.MsgsJoined})
-		case diff2.CREATE:
-			in := fromRecordConfig(change.New[0])
-			in.DomainName = dc.Name
+		case diff2.CREATE, diff2.CHANGE:
+			in := toRRsetInput(change.New)
 			corrections = append(corrections, &models.Correction{
-				Msg: change.Msgs[0],
-				F:   func() error { return p.createRecord(in) },
-			})
-		case diff2.CHANGE:
-			old := change.Old[0].Original.(record)
-			in := fromRecordConfig(change.New[0])
-			corrections = append(corrections, &models.Correction{
-				Msg: fmt.Sprintf("%s; PrimeDNS record id %d", change.Msgs[0], old.ID),
-				F:   func() error { return p.updateRecord(old.ID, in) },
+				Msg: change.MsgsJoined,
+				F:   func() error { return p.putApexSafe(zone, name, typ, in) },
 			})
 		case diff2.DELETE:
-			old := change.Old[0].Original.(record)
 			corrections = append(corrections, &models.Correction{
-				Msg: fmt.Sprintf("%s; PrimeDNS record id %d", change.Msgs[0], old.ID),
-				F:   func() error { return p.deleteRecord(old.ID) },
+				Msg: change.MsgsJoined,
+				F:   func() error { return p.deleteApexSafe(zone, name, typ) },
 			})
 		default:
 			panic(fmt.Sprintf("unhandled change.Type %s", change.Type))
 		}
 	}
 	return corrections, actualChangeCount, nil
+}
+
+// toRRsetInput builds the PUT body from the desired records of one RRset.
+func toRRsetInput(rcs models.Records) rrsetInput {
+	in := rrsetInput{TTL: int(rcs[0].TTL)}
+	for _, rc := range rcs {
+		r := fromRecordConfig(rc)
+		in.Records = append(in.Records, rrsetValue{Content: r.Content, Prio: r.Prio})
+	}
+	return in
+}
+
+// ownApexNS returns the apex NS values that PrimeDNS manages itself and DNSControl does not see (skipRecord).
+// A PUT replaces the whole RRset, so they have to be sent along with the NS records of the user.
+func (p *primednsProvider) ownApexNS(zone, name, typ string) ([]rrsetValue, error) {
+	if name != "@" || typ != "NS" {
+		return nil, nil
+	}
+	cur, err := p.getRRset(zone, name, typ)
+	if err != nil {
+		var ae *apiError
+		if errors.As(err, &ae) && ae.Status == 404 {
+			return nil, nil
+		}
+		return nil, err
+	}
+	var own []rrsetValue
+	for _, v := range cur {
+		if skipRecord(zone, record{Name: zone, Type: "NS", Content: v.Content}) {
+			own = append(own, v)
+		}
+	}
+	return own, nil
+}
+
+func (p *primednsProvider) putApexSafe(zone, name, typ string, in rrsetInput) error {
+	own, err := p.ownApexNS(zone, name, typ)
+	if err != nil {
+		return err
+	}
+	in.Records = append(own, in.Records...)
+	return p.putRRset(zone, name, typ, in)
+}
+
+func (p *primednsProvider) deleteApexSafe(zone, name, typ string) error {
+	own, err := p.ownApexNS(zone, name, typ)
+	if err != nil {
+		return err
+	}
+	if len(own) == 0 {
+		return p.deleteRRset(zone, name, typ)
+	}
+	// Only the NS records of PrimeDNS stay; their TTL is kept as the zone has it.
+	cur, err := p.getRRsetTTL(zone, name, typ)
+	if err != nil {
+		return err
+	}
+	return p.putRRset(zone, name, typ, rrsetInput{TTL: cur, Records: own})
 }

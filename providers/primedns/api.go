@@ -217,3 +217,50 @@ func (p *primednsProvider) updateRecord(id int, in recordInput) error {
 func (p *primednsProvider) deleteRecord(id int) error {
 	return p.do(http.MethodDelete, "/dns/records/"+strconv.Itoa(id), nil, nil)
 }
+
+// rrsetValue is one value of an RRset in the body of PUT /zones/{zone}/rrsets/{name}/{type}.
+type rrsetValue struct {
+	Content string `json:"content"`
+	Prio    *int   `json:"prio,omitempty"`
+}
+
+// rrsetInput is the body of PUT /zones/{zone}/rrsets/{name}/{type}: the complete new set of values.
+type rrsetInput struct {
+	TTL     int          `json:"ttl"`
+	Records []rrsetValue `json:"records"`
+}
+
+func rrsetPath(zone, name, typ string) string {
+	return "/zones/" + url.PathEscape(zone) + "/rrsets/" + url.PathEscape(name) + "/" + url.PathEscape(typ)
+}
+
+// putRRset replaces all values of the RRset (name is "@" for the apex) in one atomic request.
+func (p *primednsProvider) putRRset(zone, name, typ string, in rrsetInput) error {
+	return p.do(http.MethodPut, rrsetPath(zone, name, typ), in, nil)
+}
+
+func (p *primednsProvider) deleteRRset(zone, name, typ string) error {
+	return p.do(http.MethodDelete, rrsetPath(zone, name, typ), nil, nil)
+}
+
+// getRRset returns the values of an RRset.
+func (p *primednsProvider) getRRset(zone, name, typ string) ([]rrsetValue, error) {
+	var out struct {
+		Records []rrsetValue `json:"records"`
+	}
+	if err := p.do(http.MethodGet, rrsetPath(zone, name, typ), nil, &out); err != nil {
+		return nil, err
+	}
+	return out.Records, nil
+}
+
+// getRRsetTTL returns the TTL of an RRset.
+func (p *primednsProvider) getRRsetTTL(zone, name, typ string) (int, error) {
+	var out struct {
+		TTL int `json:"ttl"`
+	}
+	if err := p.do(http.MethodGet, rrsetPath(zone, name, typ), nil, &out); err != nil {
+		return 0, err
+	}
+	return out.TTL, nil
+}
