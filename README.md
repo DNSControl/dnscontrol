@@ -51,7 +51,7 @@ Want full "GitOps" control of your DNS data? Clone the [dns-config](https://gith
 
 <!-- provider-table-start -->
 
-DNSControl supports 77 DNS providers and registrars:
+DNSControl supports 78 DNS providers and registrars:
 
 | | | | | |
 | ----- | ----- | ----- | ----- | ----- |
@@ -68,9 +68,9 @@ DNSControl supports 77 DNS providers and registrars:
 | [Namecheap](https://docs.dnscontrol.org/provider/namecheap)¹ | [Netbird](https://docs.dnscontrol.org/provider/netbird) | [netcup](https://docs.dnscontrol.org/provider/netcup) | [Netlify](https://docs.dnscontrol.org/provider/netlify) | [Netnod](https://docs.dnscontrol.org/provider/netnod) |
 | [NexDNS](https://docs.dnscontrol.org/provider/nexdns) | [NS1](https://docs.dnscontrol.org/provider/ns1) | [Openprovider](https://docs.dnscontrol.org/provider/openprovider) | [OpenSRS](https://docs.dnscontrol.org/provider/opensrs)² | [OpenWrt](https://docs.dnscontrol.org/provider/openwrt) |
 | [Oracle Cloud Infrastructure](https://docs.dnscontrol.org/provider/oracle) | [OVHcloud](https://docs.dnscontrol.org/provider/ovh)¹ | [Packetframe](https://docs.dnscontrol.org/provider/packetframe) | [Porkbun](https://docs.dnscontrol.org/provider/porkbun)¹ | [PowerDNS](https://docs.dnscontrol.org/provider/powerdns) |
-| [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH Aachen](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) | [Scaleway](https://docs.dnscontrol.org/provider/scaleway) | [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) |
-| [Spaceship](https://docs.dnscontrol.org/provider/spaceship)¹ | [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ | [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi](https://docs.dnscontrol.org/provider/unifi) | [Vercel](https://docs.dnscontrol.org/provider/vercel) |
-| [Vultr](https://docs.dnscontrol.org/provider/vultr) | [WebSupport](https://docs.dnscontrol.org/provider/websupport) |  |  |  |
+| [PrimeDNS](https://docs.dnscontrol.org/provider/primedns) | [Realtime Register](https://docs.dnscontrol.org/provider/realtimeregister)¹ | [RWTH Aachen](https://docs.dnscontrol.org/provider/rwth) | [Sakura Cloud](https://docs.dnscontrol.org/provider/sakuracloud) | [Scaleway](https://docs.dnscontrol.org/provider/scaleway) |
+| [SoftLayer](https://docs.dnscontrol.org/provider/softlayer) | [Spaceship](https://docs.dnscontrol.org/provider/spaceship)¹ | [Tencent Cloud DNS](https://docs.dnscontrol.org/provider/tencentdns)¹ | [TransIP](https://docs.dnscontrol.org/provider/transip) | [UniFi](https://docs.dnscontrol.org/provider/unifi) |
+| [Vercel](https://docs.dnscontrol.org/provider/vercel) | [Vultr](https://docs.dnscontrol.org/provider/vultr) | [WebSupport](https://docs.dnscontrol.org/provider/websupport) |  |  |
 
 ¹also supports registrar functions
 ²registrar only

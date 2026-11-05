@@ -61,6 +61,7 @@ providers/ovh @masterzen
 # providers/packetframe NEEDS VOLUNTEER
 providers/porkbun @imlonghao
 providers/powerdns @jpbede
+providers/primedns @voyo
 providers/realtimeregister @PJEilers
 providers/route53 @tresni
 providers/rwth @mistererwin
