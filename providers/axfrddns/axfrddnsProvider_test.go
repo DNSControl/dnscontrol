@@ -2,6 +2,7 @@ package axfrddns
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -97,7 +98,18 @@ func newAXFRServer(t *testing.T, messages [][]string, signer dnsv2.TSIGSigner, c
 		var wg sync.WaitGroup
 		wg.Go(func() {
 			if err := client.TransferOut(w, r, env, options); err != nil {
-				t.Errorf("server: TransferOut: %v", err)
+				if !errors.Is(err, dnsv2.ErrSig) {
+					t.Errorf("server: TransferOut: %v", err)
+				} else {
+					// A bad request TSIG is answered with NOTAUTH, as real
+					// servers do (RFC 8945 section 5.2).
+					reply := new(dnsv2.Msg)
+					dnsutil.SetReply(reply, r)
+					reply.Rcode = dnsv2.RcodeNotAuth
+					if _, err := io.Copy(w, reply); err != nil {
+						t.Errorf("server: write NOTAUTH reply: %v", err)
+					}
+				}
 			}
 			if closeConn {
 				w.Close()
@@ -257,7 +269,7 @@ func TestFetchZoneRecords(t *testing.T) {
 			name:       "wrong secret is rejected",
 			serverKey:  "hmac-sha256:key:" + testSecret,
 			clientKey:  "hmac-sha256:key:" + otherKey,
-			wantErrSub: "bad signature",
+			wantErrSub: "NOTAUTH",
 		},
 	}
 
