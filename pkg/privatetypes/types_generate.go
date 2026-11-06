@@ -450,14 +450,15 @@ func generateTestFile(t *TypeDef) error {
 	writeImports(&buf, std, third)
 
 	if len(t.Fields) == 0 {
+		// dnsv2.New rejects records with no rdata, so test String and Parse directly.
 		fmt.Fprintf(&buf, "func Test%s(t *testing.T) {\n", testFuncName)
 		fmt.Fprintf(&buf, "\ty := &%s{Hdr: dnsv2.Header{Name: \"example.org.\", Class: dnsv2.ClassINET}}\n", typeName)
-		buf.WriteString("\trry, err := dnsv2.New(y.String())\n")
-		buf.WriteString("\tif err != nil {\n")
-		buf.WriteString("\t\tt.Fatal(err)\n")
+		fmt.Fprintf(&buf, "\twant := \"example.org.\\t0\\tIN\\t%s\"\n", displayName)
+		buf.WriteString("\tif got := y.String(); got != want {\n")
+		fmt.Fprintf(&buf, "\t\tt.Fatalf(\"%s string presentation:\\ngot  %%q\\nwant %%q\", got, want)\n", displayName)
 		buf.WriteString("\t}\n")
-		buf.WriteString("\tif rry.String() != y.String() {\n")
-		fmt.Fprintf(&buf, "\t\tt.Fatalf(\"%s string presentations should be identical:\\n%%q\\n%%q\", rry.String(), y.String())\n", displayName)
+		fmt.Fprintf(&buf, "\tif err := new(%s).Parse(nil, \"\"); err != nil {\n", typeName)
+		buf.WriteString("\t\tt.Fatal(err)\n")
 		buf.WriteString("\t}\n")
 		buf.WriteString("}\n")
 	} else {

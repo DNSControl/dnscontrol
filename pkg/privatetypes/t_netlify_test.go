@@ -10,12 +10,12 @@ import (
 
 func TestNetlify(t *testing.T) {
 	y := &NETLIFY{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
-	rry, err := dnsv2.New(y.String())
-	if err != nil {
-		t.Fatal(err)
+	want := "example.org.\t0\tIN\tNETLIFY"
+	if got := y.String(); got != want {
+		t.Fatalf("NETLIFY string presentation:\ngot  %q\nwant %q", got, want)
 	}
-	if rry.String() != y.String() {
-		t.Fatalf("NETLIFY string presentations should be identical:\n%q\n%q", rry.String(), y.String())
+	if err := new(NETLIFY).Parse(nil, ""); err != nil {
+		t.Fatal(err)
 	}
 }
 
