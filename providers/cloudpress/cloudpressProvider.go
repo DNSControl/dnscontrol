@@ -3,18 +3,23 @@ package cloudpress
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
+	"time"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
 type cloudpressProvider struct {
-	apiToken  string
-	baseURL   string
-	accountID string
-	zones     map[string]*zone
-	observer  providers.ConversionObserver
+	apiToken       string
+	baseURL        string
+	accountID      string
+	retryBaseDelay time.Duration
+	retryMaxDelay  time.Duration
+	zones          map[string]*zone // by name, from the list endpoint
+	fullZones      map[string]*zone // by ID, with records and nameservers
+	observer       providers.ConversionObserver
 }
 
 // SetConversionObserver lets the integration tests record the conversions
@@ -52,6 +57,16 @@ func init() {
 				Label: "Account ID",
 				Help:  "Account ID sent as the X-Auth-Account header. Required when creating new zones with a user API key.",
 			},
+			{
+				Key:   "retry_base_delay",
+				Label: "Retry base delay",
+				Help:  "Initial wait before retrying a rate-limited (HTTP 429) or failed request, as a Go duration such as 10s. Doubles on each retry. Defaults to 1s.",
+			},
+			{
+				Key:   "retry_max_delay",
+				Label: "Retry max delay",
+				Help:  "Upper bound for a single retry wait, as a Go duration such as 5m. Defaults to 30s.",
+			},
 		},
 		PortalURL: "https://docs.cloudpress.com/API/api-keys/",
 	})
@@ -72,13 +87,38 @@ func (c *cloudpressProvider) Initialize(settings map[string]string, _ json.RawMe
 		return errors.New("missing CLOUDPRESS api_token")
 	}
 
+	retryBaseDelay, err := parseDurationSetting(settings, "retry_base_delay", defaultRetryBaseDelay)
+	if err != nil {
+		return err
+	}
+	retryMaxDelay, err := parseDurationSetting(settings, "retry_max_delay", defaultRetryMaxDelay)
+	if err != nil {
+		return err
+	}
+
 	*c = cloudpressProvider{
-		baseURL:   baseURL,
-		apiToken:  apiToken,
-		accountID: settings["account_id"],
+		baseURL:        baseURL,
+		apiToken:       apiToken,
+		accountID:      settings["account_id"],
+		retryBaseDelay: retryBaseDelay,
+		retryMaxDelay:  retryMaxDelay,
 	}
 	c.SetConversionObserver(options.WithDefaults().ConversionObserver)
 	return nil
+}
+
+// parseDurationSetting reads an optional positive duration (e.g. "10s") from
+// the provider settings, returning def when it is not set.
+func parseDurationSetting(settings map[string]string, key string, def time.Duration) (time.Duration, error) {
+	v := settings[key]
+	if v == "" {
+		return def, nil
+	}
+	d, err := time.ParseDuration(v)
+	if err != nil || d <= 0 {
+		return 0, fmt.Errorf("invalid CLOUDPRESS %s %q: must be a positive duration such as 10s", key, v)
+	}
+	return d, nil
 }
 
 // GetNameservers returns the nameservers for a domain.

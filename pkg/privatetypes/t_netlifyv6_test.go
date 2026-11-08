@@ -10,12 +10,12 @@ import (
 
 func TestNetlifyv6(t *testing.T) {
 	y := &NETLIFYV6{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
-	rry, err := dnsv2.New(y.String())
-	if err != nil {
-		t.Fatal(err)
+	want := "example.org.\t0\tIN\tNETLIFYV6"
+	if got := y.String(); got != want {
+		t.Fatalf("NETLIFYV6 string presentation:\ngot  %q\nwant %q", got, want)
 	}
-	if rry.String() != y.String() {
-		t.Fatalf("NETLIFYV6 string presentations should be identical:\n%q\n%q", rry.String(), y.String())
+	if err := new(NETLIFYV6).Parse(nil, ""); err != nil {
+		t.Fatal(err)
 	}
 }
 

@@ -73,6 +73,29 @@ create zones, set the optional `account_id` field:
 ```
 {% endcode %}
 
+## Rate limiting
+
+CloudPress rate-limits its API. DNSControl retries requests that get HTTP 429
+(and 502/503/504) up to 6 times. It honors a `Retry-After` header given in
+seconds and otherwise uses exponential backoff: the wait starts at 1s and
+doubles on each retry, capped at 30s per wait. For large accounts you can tune
+this with the optional `retry_base_delay` and `retry_max_delay` fields (Go
+durations). The example below waits 10s, 20s, 40s, 80s, 160s and 320s:
+
+{% code title="creds.json" %}
+```json
+{
+  "cloudpress": {
+    "TYPE": "CLOUDPRESS",
+    "base_url": "https://app.cloudpress.com",
+    "api_token": "$CLOUDPRESS_API_TOKEN",
+    "retry_base_delay": "10s",
+    "retry_max_delay": "10m"
+  }
+}
+```
+{% endcode %}
+
 ## Usage
 
 An example configuration:

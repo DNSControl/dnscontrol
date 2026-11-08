@@ -18,9 +18,9 @@ const (
 	pageSize = 100
 
 	// Retry policy for rate limiting (429) and transient server errors.
-	maxRetries     = 6
-	retryBaseDelay = 1 * time.Second
-	maxRetryDelay  = 30 * time.Second
+	maxRetries            = 6
+	defaultRetryBaseDelay = 1 * time.Second
+	defaultRetryMaxDelay  = 30 * time.Second
 )
 
 // zone mirrors a CloudPress dns_zone object. The records and nameservers are
@@ -123,12 +123,23 @@ func (c *cloudpressProvider) getAllZones() ([]*zone, error) {
 }
 
 // getZone fetches a single zone including its nested records and nameservers.
+// The result is cached because both GetNameservers and GetZoneRecords need it;
+// writes to the zone drop the cached copy.
 func (c *cloudpressProvider) getZone(zoneID string) (*zone, error) {
+	if z, ok := c.fullZones[zoneID]; ok {
+		return z, nil
+	}
+
 	var res zoneResponse
 	endpoint := fmt.Sprintf("/api/dns_zones/%s", zoneID)
 	if err := c.request("GET", endpoint, nil, nil, &res, nil); err != nil {
 		return nil, err
 	}
+
+	if c.fullZones == nil {
+		c.fullZones = map[string]*zone{}
+	}
+	c.fullZones[zoneID] = &res.DNSZone
 	return &res.DNSZone, nil
 }
 
@@ -150,12 +161,14 @@ func (c *cloudpressProvider) createZone(domain string) (*zone, error) {
 }
 
 func (c *cloudpressProvider) createRecord(zoneID string, r *record) error {
+	delete(c.fullZones, zoneID)
 	endpoint := fmt.Sprintf("/api/dns_zones/%s/records", zoneID)
 	// CloudPress responds with HTTP 200 (not 201) on record creation.
 	return c.request("POST", endpoint, nil, recordPayload{DNSRecord: r}, nil, []int{http.StatusOK, http.StatusCreated})
 }
 
 func (c *cloudpressProvider) modifyRecord(zoneID, recordID string, r *record) error {
+	delete(c.fullZones, zoneID)
 	endpoint := fmt.Sprintf("/api/dns_zones/%s/records/%s", zoneID, recordID)
 	// PATCH cannot modify name or record_type; CloudPress ignores those fields
 	// and responds with HTTP 202.
@@ -163,11 +176,13 @@ func (c *cloudpressProvider) modifyRecord(zoneID, recordID string, r *record) er
 }
 
 func (c *cloudpressProvider) deleteRecord(zoneID, recordID string) error {
+	delete(c.fullZones, zoneID)
 	endpoint := fmt.Sprintf("/api/dns_zones/%s/records/%s", zoneID, recordID)
 	return c.request("DELETE", endpoint, nil, nil, nil, []int{http.StatusOK, http.StatusAccepted, http.StatusNoContent})
 }
 
 func (c *cloudpressProvider) setDNSSEC(zoneID string, enabled bool) error {
+	delete(c.fullZones, zoneID)
 	endpoint := fmt.Sprintf("/api/dns_zones/%s", zoneID)
 	body := zonePayload{DNSZone: map[string]any{"dnssec": enabled}}
 	return c.request("PATCH", endpoint, nil, body, nil, []int{http.StatusOK, http.StatusAccepted})
@@ -230,7 +245,7 @@ func (c *cloudpressProvider) requestWithHeaders(method, endpoint string, query q
 		// Retry on rate limiting (429) and transient server errors, honoring
 		// the Retry-After header when present.
 		if shouldRetry(resp.StatusCode) && attempt < maxRetries {
-			wait := retryDelay(resp, attempt)
+			wait := c.retryDelay(resp, attempt)
 			_, _ = io.Copy(io.Discard, resp.Body)
 			if err := resp.Body.Close(); err != nil {
 				printer.Printf("CLOUDPRESS: Could not close response body before retry: %q\n", err)
@@ -278,12 +293,15 @@ func shouldRetry(code int) bool {
 
 // retryDelay returns how long to wait before the next attempt. It prefers the
 // Retry-After header (delay-seconds form) and otherwise uses capped exponential
-// backoff.
-func retryDelay(resp *http.Response, attempt int) time.Duration {
+// backoff starting at retry_base_delay and capped at retry_max_delay. The cap is
+// raised to the base delay when that is larger, so a long base delay is never
+// shortened.
+func (c *cloudpressProvider) retryDelay(resp *http.Response, attempt int) time.Duration {
+	limit := max(c.retryMaxDelay, c.retryBaseDelay)
 	if ra := strings.TrimSpace(resp.Header.Get("Retry-After")); ra != "" {
 		if secs, err := strconv.Atoi(ra); err == nil && secs >= 0 {
-			return min(time.Duration(secs)*time.Second, maxRetryDelay)
+			return min(time.Duration(secs)*time.Second, limit)
 		}
 	}
-	return min(retryBaseDelay<<attempt, maxRetryDelay)
+	return min(c.retryBaseDelay<<attempt, limit)
 }

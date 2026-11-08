@@ -253,7 +253,7 @@ func compileUnmanagedConfigs(configs []*models.UnmanagedConfig) error {
 		if c.LabelPattern == "" || c.LabelPattern == "*" {
 			c.LabelGlob = nil // nil indicates "always match"
 		} else {
-			c.LabelGlob, err = glob.Compile(c.LabelPattern)
+			c.LabelGlob, err = glob.Compile(c.LabelPattern, '.')
 			if err != nil {
 				return err
 			}

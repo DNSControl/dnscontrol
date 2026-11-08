@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	"github.com/DNSControl/dnscontrol/v5/pkg/txtutil"
 )
 
 // MostCommonTTL returns the most common TTL in a set of records. If there is
@@ -103,7 +102,7 @@ func (z *ZoneGenData) generateZoneFileHelper(w io.Writer) error {
 	}
 	for i, rr := range z.Records {
 		// label
-		nameShort := txtutil.StripZone(rr.Name, z.Origin)
+		nameShort := rr.Name
 		if i > 0 && nameShort == nameShortPrevious {
 			nameShort = ""
 		} else {
