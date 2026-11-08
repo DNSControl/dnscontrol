@@ -143,7 +143,10 @@ function REGISTRAR(name) {
                 : "explicitName";
         // Extensions replace earlier selections, but must agree within one call.
         var assignments = state.extension || state;
-        if (typeof assignments[key] !== "undefined" && assignments[key] !== name) {
+        if (
+            typeof assignments[key] !== "undefined" &&
+            assignments[key] !== name
+        ) {
             throw (
                 'Conflicting registrars for domain "' +
                 d.name +
@@ -2140,7 +2143,12 @@ function DOMAIN_ELSEWHERE_AUTO(domain, registrar, dsplist) {
     // is maintaining the DNS records in that zone, and we have access
     // to updating it (but we don't want to use it.)
     for (var i = 2; i < arguments.length; i++) {
-        D_EXTEND(domain, typeof arguments[i] === "function" ? arguments[i] : DnsProvider(arguments[i]));
+        D_EXTEND(
+            domain,
+            typeof arguments[i] === "function"
+                ? arguments[i]
+                : DnsProvider(arguments[i])
+        );
     }
 }
 

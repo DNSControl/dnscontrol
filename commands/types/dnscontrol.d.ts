@@ -340,7 +340,7 @@ declare function AKAMAITLC(name: string, answer_type: "DUAL" | "A" | "AAAA", tar
 declare function ALIAS(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
- * `ALL_NS` equals `-1` and selects all nameservers from a DNS service. This is also
+ * `ALL_NS` selects all nameservers from a DNS service. This is also
  * the default when maxNS is omitted from [SERVICE](SERVICE.md).
  *
  * Use it to supply configuration metadata without limiting nameservers:
@@ -352,7 +352,9 @@ declare function ALIAS(name: string, target: string, ...modifiers: RecordModifie
  * );
  * ```
  *
- * `0` means use no nameservers; a positive integer limits the number used.
+ * In addition to `ALL_NS`, `0` means use no nameservers; a positive integer limits the number used.
+ *
+ * FunFact: `ALL_NS` is an alias for `-1` but please don't depend on this. Specifying `-1` to mean "all" may change some day.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/all_ns
  */
@@ -748,7 +750,7 @@ declare function CNAME(name: string, target: string, ...modifiers: RecordModifie
  * Types is a space-separated list of the record types to synchronize, such as `"A NS AAAA"`.
  *
  * ```javascript
- * D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+ * D("example.com", REGISTRAR(), SERVICE('myservice'),
  *   CSYNC("@", 2026101100, 2, "A NS AAAA"),
  * );
  * ```
@@ -3610,25 +3612,27 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
 /**
  * `REGISTRAR(credEntry)` selects the registrar using an entry name from creds.json.
  *
- * No `NewRegistrar()` declaration is needed.
- *
- * `REGISTRAR()` is an alias for `REGISTRAR("none")`, which disables registrar management.
- *
  * In `D()`, `REGISTRAR()` must immediately follow the domain name.
  *
  * ```javascript
- * D("example.com", REGISTRAR("gandi_main"),
+ * D("example.com",
+ *     REGISTRAR("gandi_main"),
  *     SERVICE("gandi_main"),
  *     A("@", "192.0.2.1"),
  * );
  *
- * D("example.net", REGISTRAR(),
+ * D("example.net",
+ *     REGISTRAR(),
  *     SERVICE("gandi_main"),
  *     A("@", "192.0.2.1"),
  * );
  * ```
  *
- * `REGISTRAR()` may appear in `DEFAULTS()`, but setting a `REGISTRAR()` in `D()` or
+ * `REGISTRAR()` is an alias for `REGISTRAR("none")`, which disables registrar management. D() requires
+ * a registrar as the second parameter, therefore `REGISTRAR()` should be used as a placeholder
+ * when a domain's registrar is not managed.
+ *
+ * `REGISTRAR` may appear in `DEFAULTS()`, but setting a `REGISTRAR` in `D()` or
  * `D_EXTEND()` will override it for that domain.
  *
  * ```javascript
@@ -3665,8 +3669,10 @@ declare function R53_ZONE(zone_id: string): DomainModifier & RecordModifier;
  * Registrar changes leave DNS services and their metadata unchanged.
  * `REGISTRAR()` does not accept configuration metadata.
  *
- * The legacy [NewRegistrar](../top-level-functions/NewRegistrar.md) helper remains
- * supported. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
+ * `REGISTRAR` replaces the legacy
+ * [NewRegistrar](../top-level-functions/NewRegistrar.md) function, which is still
+ * supported for now. The [conversion guide](../../getting-started/converting-dnsconfig.md)
+ * gives more details.
  *
  * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/registrar
  */
@@ -3788,8 +3794,7 @@ declare function RP(name: string, mbox: string, txt: string, ...modifiers: Recor
 
 /**
  * `SERVICE(credEntry, maxNS, configMetadata)` selects a DNS service using an entry
- * name from creds.json. Its `TYPE` determines the provider. No `SERVICE()`
- * declaration is needed.
+ * name from creds.json.
  *
  * - Omit maxNS, or use [ALL_NS](ALL_NS.md), to fetch and use all nameservers.
  * - Use `0` to manage records without fetching or delegating to those nameservers.
