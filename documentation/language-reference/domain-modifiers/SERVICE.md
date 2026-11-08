@@ -11,8 +11,7 @@ parameter_types:
 ---
 
 `SERVICE(credEntry, maxNS, configMetadata)` selects a DNS service using an entry
-name from creds.json. Its `TYPE` determines the provider. No `SERVICE()`
-declaration is needed.
+name from creds.json.
 
 - Omit maxNS, or use [ALL_NS](ALL_NS.md), to fetch and use all nameservers.
 - Use `0` to manage records without fetching or delegating to those nameservers.

@@ -75,7 +75,16 @@ Including metadata in both `NewDnsProvider()` and `SERVICE()` is an error.
 | `NewRegistrar(...)` / `NewDnsProvider(...)` variables | Remove declarations once all their uses are converted. |
 | Experimental `PROVIDER("credEntry")` and `DNS_SERVICE(...)` from v5.3.0 | Remove the declaration; use the entry name directly with `REGISTRAR` / `SERVICE`. Move `PROVIDER` metadata to each `SERVICE`. |
 
-Leave creds.json unchanged.
+Verify that creds.json lists a provider `TYPE` for each entry. Without a `TYPE` entry.
+
+```json
+  "bind": {
+    "TYPE": "BIND",                     <<< This is the TYPE entry
+    "filenameformat": "%c.zone",
+    "directory": "zones"
+  },
+```
+
 
 `REGISTRAR()` and `SERVICE()` also work in `DEFAULTS()`. Only `SERVICE()` works
 in `D_EXTEND()`.

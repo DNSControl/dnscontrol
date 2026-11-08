@@ -8,25 +8,27 @@ parameter_types:
 
 `REGISTRAR(credEntry)` selects the registrar using an entry name from creds.json.
 
-No `NewRegistrar()` declaration is needed.
-
-`REGISTRAR()` is an alias for `REGISTRAR("none")`, which disables registrar management.
-
 In `D()`, `REGISTRAR()` must immediately follow the domain name.
 
 ```javascript
-D("example.com", REGISTRAR("gandi_main"),
+D("example.com",
+    REGISTRAR("gandi_main"),
     SERVICE("gandi_main"),
     A("@", "192.0.2.1"),
 );
 
-D("example.net", REGISTRAR(),
+D("example.net",
+    REGISTRAR(),
     SERVICE("gandi_main"),
     A("@", "192.0.2.1"),
 );
 ```
 
-`REGISTRAR()` may appear in `DEFAULTS()`, but setting a `REGISTRAR()` in `D()` or
+`REGISTRAR()` is an alias for `REGISTRAR("none")`, which disables registrar management. D() requires
+a registrar as the second parameter, therefore `REGISTRAR()` should be used as a placeholder
+when a domain's registrar is not managed.
+
+`REGISTRAR` may appear in `DEFAULTS()`, but setting a `REGISTRAR` in `D()` or
 `D_EXTEND()` will override it for that domain.
 
 ```javascript
@@ -63,5 +65,7 @@ finish. A domain still missing a required registrar at that point is an error.
 Registrar changes leave DNS services and their metadata unchanged.
 `REGISTRAR()` does not accept configuration metadata.
 
-The legacy [NewRegistrar](../top-level-functions/NewRegistrar.md) helper remains
-supported. See the [conversion guide](../../getting-started/converting-dnsconfig.md).
+`REGISTRAR` replaces the legacy
+[NewRegistrar](../top-level-functions/NewRegistrar.md) function, which is still
+supported for now. The [conversion guide](../../getting-started/converting-dnsconfig.md)
+gives more details.
