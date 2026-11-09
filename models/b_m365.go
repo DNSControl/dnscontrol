@@ -97,7 +97,7 @@ type m365Opts struct {
 // documentation/language-reference/domain-modifiers/M365_BUILDER.md.
 //
 // args is [name, options]. The options object is moved from the metadata list
-// into the argument list by m365Options() (pkg/js/helpers.js), so its values
+// into the argument list by builderOptions() (pkg/js/helpers.js), so its values
 // arrive as the JSON types dnsconfig.js produces: string, bool, float64 and
 // map[string]any. Anything else is a user error, never a reason to panic.
 //
