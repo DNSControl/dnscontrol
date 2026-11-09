@@ -596,6 +596,37 @@ func mkTargetConfigMap(x ...*models.RecordConfig) map[string]*targetConfig {
 	return m
 }
 
+func Test_humanDiff_providerFields(t *testing.T) {
+	a := makeRec("laba", "CNAME", "target.f.com.")
+	b := makeRec("laba", "CNAME", "target.f.com.")
+	mk := func(r *models.RecordConfig, extra string) targetConfig {
+		ct, cf := mkCompareBlobs(r, func(*models.RecordConfig) string { return extra })
+		return targetConfig{comparableNoTTL: ct, comparableFull: cf, rec: r}
+	}
+	tests := []struct {
+		name   string
+		ae, be string
+		a, b   *models.RecordConfig
+		want   string
+	}{
+		{"only provider field changed", "proxy=false", "proxy=true", a, b,
+			"(target.f.com. proxy=false ttl=300) -> (target.f.com. proxy=true ttl=300)"},
+		{"provider field added", "", "proxy=true", a, b,
+			"(target.f.com. ttl=300) -> (target.f.com. proxy=true ttl=300)"},
+		{"provider field and ttl changed", "proxy=false", "proxy=true", a, makeRecTTL("laba", "CNAME", "target.f.com.", 1),
+			"(target.f.com. proxy=false ttl=300) -> (target.f.com. proxy=true ttl=1)"},
+		{"provider field and rdata changed", "proxy=false", "proxy=true", a, makeRec("laba", "CNAME", "other.f.com."),
+			"(target.f.com. proxy=false ttl=300) -> (other.f.com. proxy=true ttl=300)"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := humanDiff(mk(tt.a, tt.ae), mk(tt.b, tt.be)); got != tt.want {
+				t.Errorf("humanDiff() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_humanDiff(t *testing.T) {
 	tests := []struct {
 		name string

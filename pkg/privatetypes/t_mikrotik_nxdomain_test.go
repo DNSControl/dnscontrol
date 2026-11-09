@@ -10,12 +10,12 @@ import (
 
 func TestMikrotikNxdomain(t *testing.T) {
 	y := &MIKROTIKNXDOMAIN{Hdr: dnsv2.Header{Name: "example.org.", Class: dnsv2.ClassINET}}
-	rry, err := dnsv2.New(y.String())
-	if err != nil {
-		t.Fatal(err)
+	want := "example.org.\t0\tIN\tMIKROTIK_NXDOMAIN"
+	if got := y.String(); got != want {
+		t.Fatalf("MIKROTIK_NXDOMAIN string presentation:\ngot  %q\nwant %q", got, want)
 	}
-	if rry.String() != y.String() {
-		t.Fatalf("MIKROTIK_NXDOMAIN string presentations should be identical:\n%q\n%q", rry.String(), y.String())
+	if err := new(MIKROTIKNXDOMAIN).Parse(nil, ""); err != nil {
+		t.Fatal(err)
 	}
 }
 

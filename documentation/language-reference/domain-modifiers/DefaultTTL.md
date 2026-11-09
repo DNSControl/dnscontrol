@@ -14,7 +14,7 @@ NS records are currently a special case, and do not inherit from `DefaultTTL`. S
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   DefaultTTL("4h"),
   A("@","1.2.3.4"), // uses default
   A("foo", "2.3.4.5", TTL(600)), // overrides default

@@ -1,3 +1,4 @@
 $TTL 300
 main             IN A     203.0.113.12
+main.sub         IN A     203.0.113.12
 www              IN A     203.0.113.1

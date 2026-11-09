@@ -38,7 +38,7 @@ There are multiple ways to generate the appropriately-formatted record values:
 
     {% code title="dnsconfig.js" %}
     ```javascript
-    D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+    D("dnscontrol.org", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
       OPENPGPKEY(
         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
         "9833040000000116092b06010401da470f010107401471ec1d5cc4d6bbd87029" +
@@ -75,7 +75,7 @@ There are multiple ways to generate the appropriately-formatted record values:
 
     {% code title="dnsconfig.js" %}
     ```javascript
-    D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+    D("dnscontrol.org", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
       OPENPGPKEY(
         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
         "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/I" +
@@ -104,7 +104,7 @@ There are multiple ways to generate the appropriately-formatted record values:
 
     {% code title="dnsconfig.js" %}
     ```javascript
-    D("dnscontrol.org", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+    D("dnscontrol.org", REGISTRAR("my_provider"), SERVICE("my_provider"),
       OPENPGPKEY(
         "bb7d0cf1ee44aca0bcc0f739b77b935f13aec2fd537f5c29dedd883d._openpgpkey",
         "mDMEAAAAARYJKwYBBAHaRw8BAQdAFHHsHVzE1rvYcCmX7Sn5X3p71eF5qo02mO/IuULrCPW0JEV4YW1wbGUgMSA8ZXhhbXBsZS0xQGRuc2NvbnRyb2wub3JnPoh+BBMWCgAmFiEEkwXxX/eDCW05Qn5tBI42Nn4+OuIFAgAAAAECGwECHgUCF4AACgkQBI42Nn4+OuL/qgD/S2rZm2Lafp11mr5q4jIBZ4DCS/Xl+Gm4ADvoPGpzkzwBALZqxlCToP4KQ0RI2ZlqtGQSy+fHDVxat0q7pFZsRo0K",

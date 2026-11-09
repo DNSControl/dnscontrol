@@ -20,13 +20,13 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/diff2"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	vercelClient "github.com/vercel/terraform-provider-vercel/client"
+	vercelClient "github.com/vercel/terraform-provider-vercel/v5/client"
 )
 
 // vercelProvider stores login credentials and represents and API connection.
 type vercelProvider struct {
 	observer providers.ConversionObserver
-	client   vercelClient.Client
+	client   *vercelClient.Client
 	apiToken string
 	teamID   string
 
@@ -74,7 +74,7 @@ func (c *vercelProvider) Initialize(creds map[string]string, meta json.RawMessag
 
 	client = client.WithTeam(team)
 	*c = vercelProvider{
-		client:   *client,
+		client:   client,
 		apiToken: creds["api_token"],
 		teamID:   creds["team_id"],
 		// rate limiters

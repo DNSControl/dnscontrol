@@ -56,3 +56,11 @@ D("example-b.net!", REG, DnsProvider(DNS_OUTSIDE),
 D_EXTEND("example-b.net",
     A("main", "203.0.113.12"),
 );
+
+D_EXTEND("sub.example-b.net",
+    A("main", "203.0.113.12"),
+);
+
+D_EXTEND("sub.empty.example.net!",
+    A("main", "203.0.113.22"),
+);

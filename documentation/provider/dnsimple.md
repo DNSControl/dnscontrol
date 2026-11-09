@@ -33,10 +33,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_DNSIMPLE = NewRegistrar("dnsimple");
-var DSP_DNSIMPLE = NewDnsProvider("dnsimple");
-
-D("example.com", REG_DNSIMPLE, DnsProvider(DSP_DNSIMPLE),
+D("example.com", REGISTRAR("dnsimple"), SERVICE("dnsimple"),
     A("test", "1.2.3.4"),
 );
 ```

@@ -215,7 +215,7 @@ func MakeLOC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	// The 12-item version needs to be turned into the 7-item packed version.
 	// The easiest way to do that is to let dnsv2 do it for us.
 	// It is a little extra parsing, but why re-invent the wheel?
-	x := fmt.Sprintf("%d %d %.2f %s %d %d %.2f %s %.2f %.2f %0.2f %0.2f ", a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
+	x := fmt.Sprintf("%d %d %.3f %s %d %d %.3f %s %.2f %.2f %0.2f %0.2f ", a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
 	// y := fmt.Sprintf("0=%d 1=%d 2=%.2f 3=%s 4=%d 5=%d 6=%.2f 7=%s 8=%.2f 9=%.2f 10=%0.2f 11=%0.2f ", a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11)
 	// fmt.Printf("DEBUG: loc y=%q\n", y)
 	rd, err := dnsv2.NewData(dnsv2.TypeLOC, x, origin)

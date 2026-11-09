@@ -25,7 +25,7 @@ This example assigns the patterns `api.example.com/*` and `example.com/api/*` to
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
     CF_WORKER_ROUTE("api.example.com/*", "my-worker"),
     CF_WORKER_ROUTE("example.com/api/*", "my-worker"),
 );

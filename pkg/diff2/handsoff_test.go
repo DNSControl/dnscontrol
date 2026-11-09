@@ -222,6 +222,29 @@ FOREIGN:
 	`)
 }
 
+func Test_ignore_lab_glob(t *testing.T) {
+	existingZone := `
+bar.foo IN A 1.1.1.1
+x.bar.foo IN A 2.2.2.2
+`
+	for _, tt := range []struct {
+		pattern string
+		ignored string
+	}{
+		{"*.foo", "bar.foo A 1.1.1.1\n"},
+		{"**.foo", "bar.foo A 1.1.1.1\nx.bar.foo A 2.2.2.2\n"},
+	} {
+		t.Run(tt.pattern, func(t *testing.T) {
+			desiredJs := fmt.Sprintf(`
+D("f.com", "none",
+	IGNORE_NAME(%q),
+{})
+`, tt.pattern)
+			handsoffHelper(t, existingZone, desiredJs, false, "IGNORED:\n"+tt.ignored+"FOREIGN:\n")
+		})
+	}
+}
+
 func Test_ignore_target(t *testing.T) {
 	existingZone := `
 foo1 IN A 1.1.1.1
@@ -241,6 +264,24 @@ IGNORED:
 _2222222222222222.cr CNAME _333333.nnn.acm-validations.aws.
 FOREIGN:
 	`)
+}
+
+func Test_ignore_target_svcb(t *testing.T) {
+	for _, rtype := range []string{"HTTPS", "SVCB"} {
+		t.Run(rtype, func(t *testing.T) {
+			existingZone := fmt.Sprintf("svc IN %s 1 svc.example.net. alpn=h2\n", rtype)
+			desiredJs := fmt.Sprintf(`
+D("f.com", "none",
+	IGNORE_TARGET("svc.example.net.", %q),
+{})
+`, rtype)
+			handsoffHelper(t, existingZone, desiredJs, false, fmt.Sprintf(`
+IGNORED:
+svc %s 1 svc.example.net. alpn="h2"
+FOREIGN:
+`, rtype))
+		})
+	}
 }
 
 // Test_ignore_external_dns tests the IGNORE_EXTERNAL_DNS feature

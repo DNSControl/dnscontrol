@@ -1,0 +1,5468 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "id": "98506349",
+      "name": "testa",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "id": "98506349",
+      "name": "testa",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "id": "98506356",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "id": "98506356",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "4.4.4.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "id": "98506596",
+      "name": "*",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "id": "98506659",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "5.4.5.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "id": "98506701",
+      "name": "testaaaa",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2607:f8b0:4006:820:0:0:0:2006",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "id": "98506701",
+      "name": "testaaaa",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2607:f8b0:4006:820:0:0:0:2013",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "id": "98506702",
+      "name": "testcname",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "www.google.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "id": "98506702",
+      "name": "testcname",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "www.yahoo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "id": "98506703",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "id": "98506704",
+      "name": "testcname",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo.dnscontrol-constellix-test.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "id": "98506705",
+      "name": "",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "bar.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "id": "98506705",
+      "name": "",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "id": "98506706",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "bar.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "id": "98506706",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "id": "98506707",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "id": "98506707",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 50,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "id": "98506708",
+      "name": "testtxt",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"changed\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "id": "98506708",
+      "name": "testtxt",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"simple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "id": "98506709",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        },
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "id": "98506710",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        },
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "id": "98506710",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "id": "98506710",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 25,
+    "value": {
+      "id": "98506711",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        },
+        {
+          "server": "bar.com.",
+          "priority": 50,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "id": "98506712",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "id": "98506713",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "id": "98506714",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        },
+        {
+          "server": "bar.com.",
+          "priority": 50,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "id": "98506714",
+      "name": "testmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "id": "98506715",
+      "name": "testa",
+      "type": "A",
+      "ttl": 333,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "id": "98506715",
+      "name": "testa",
+      "type": "A",
+      "ttl": 999,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "id": "98506716",
+      "name": "",
+      "type": "A",
+      "ttl": 1000,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "8.8.8.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "id": "98506716",
+      "name": "",
+      "type": "A",
+      "ttl": 500,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "8.8.8.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "id": "98506716",
+      "name": "",
+      "type": "A",
+      "ttl": 666,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "8.8.8.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "id": "98506717",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "5.6.7.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "id": "98506717",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        },
+        {
+          "value": "5.6.7.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "id": "98506717",
+      "name": "www",
+      "type": "A",
+      "ttl": 400,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        },
+        {
+          "value": "5.6.7.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "id": "98506718",
+      "name": "www",
+      "type": "A",
+      "ttl": 400,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "5.6.7.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "id": "98506718",
+      "name": "www",
+      "type": "A",
+      "ttl": 700,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "5.6.7.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "id": "98506719",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "id": "98506722",
+      "name": "foo",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "mx.google.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "id": "98506725",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "4.5.6.7",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "id": "98506726",
+      "name": "foo",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "google.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "id": "98506727",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "id": "98506728",
+      "name": "foo",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "google2.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "id": "98506729",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "id": "98506730",
+      "name": "foo",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "dnscontrol-constellix-test.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "id": "98506731",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 49,
+    "value": {
+      "id": "98506732",
+      "name": "foo",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "dnscontrol-constellix-test.com.",
+          "priority": 8,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "id": "98506733",
+      "name": "nmx",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "id": "98506734",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.9",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 52,
+    "value": {
+      "id": "98506735",
+      "name": "nmx",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "nmx.dnscontrol-constellix-test.com.",
+          "priority": 3,
+          "enabled": true
+        },
+        {
+          "server": "www.dnscontrol-constellix-test.com.",
+          "priority": 9,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "id": "98506736",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "id": "98506737",
+      "name": "www",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "id": "98506738",
+      "name": "",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "dnscontrol-constellix-test.com.",
+          "priority": 2,
+          "enabled": true
+        },
+        {
+          "server": "www.dnscontrol-constellix-test.com.",
+          "priority": 8,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "id": "98506739",
+      "name": "xyz",
+      "type": "NS",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "host": "ns1.foo.com.",
+          "enabled": true
+        },
+        {
+          "host": "ns2.foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "id": "98506739",
+      "name": "xyz",
+      "type": "NS",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "host": "ns2.foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "id": "98506740",
+      "name": "",
+      "type": "NS",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "host": "ns1.foo.com.",
+          "enabled": true
+        },
+        {
+          "host": "ns2.foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "id": "98506740",
+      "name": "",
+      "type": "NS",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "host": "ns1.foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "id": "98506741",
+      "name": "foo254",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "id": "98506748",
+      "name": "foo255",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "id": "98506749",
+      "name": "foo256",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\"\"C\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "id": "98506750",
+      "name": "foo509",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "id": "98506751",
+      "name": "foo510",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "id": "98506856",
+      "name": "foo511",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\"\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\"\"F\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "id": "98507092",
+      "name": "foo764",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "id": "98507093",
+      "name": "foo765",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "id": "98507094",
+      "name": "foo766",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\"\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\"\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\"\"J\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "id": "98507095",
+      "name": "foosq",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"quo'te\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "id": "98507096",
+      "name": "foobt",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"blah`blah\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "id": "98507097",
+      "name": "foodq",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"in\\\"side\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "id": "98507098",
+      "name": "foodqs",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"\\\"left\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "id": "98507098",
+      "name": "foodqs",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"in\\\"ter\\\"ior\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "id": "98507098",
+      "name": "foodqs",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"right\\\"\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 75,
+    "value": {
+      "id": "98507099",
+      "name": "foosc1",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"semi;colon\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "id": "98507100",
+      "name": "foosc2",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"wssemi ; colon\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "id": "98507101",
+      "name": "foosp",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"with spaces\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "id": "98507102",
+      "name": "foows1",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"trailingws \"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 79,
+    "value": {
+      "id": "98507103",
+      "name": "foo",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"v=spf1 ip4:99.99.99.99 -all\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "id": "98507104",
+      "name": "fooosbs1",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"1back\\\\slash\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "id": "98507105",
+      "name": "fooosbs2",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"2back\\\\\\\\slash\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "id": "98507106",
+      "name": "fooosbs3",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"3back\\\\\\\\\\\\slash\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "id": "98507107",
+      "name": "fooosbs4",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"4back\\\\\\\\\\\\\\\\slash\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "id": "98507108",
+      "name": "bar",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "bar.com.",
+          "priority": 5,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "id": "98507109",
+      "name": "decoy",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "id": "98507109",
+      "name": "decoy",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "id": "98507109",
+      "name": "decoy",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "id": "98507110",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "id": "98507110",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "3.4.5.6",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "id": "98507110",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "id": "98507111",
+      "name": "bar",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "id": "98507112",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        },
+        {
+          "value": "3.4.5.6",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "id": "98507112",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        },
+        {
+          "value": "8.8.8.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "id": "98507112",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "id": "98507113",
+      "name": "foo",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "foo.dnscontrol-constellix-test.com.",
+          "priority": 10,
+          "enabled": true
+        },
+        {
+          "server": "bar.dnscontrol-constellix-test.com.",
+          "priority": 20,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "id": "98507114",
+      "name": "xn--ndaaa",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "id": "98507114",
+      "name": "xn--ndaaa",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 98,
+    "value": {
+      "id": "98507115",
+      "name": "xn--fiq228c",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "id": "98507116",
+      "name": "a",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "xn--ndaaa.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "id": "98507117",
+      "name": "xn--o-0gab",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "xn--ndaaa.xn--vhquv.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "id": "98507118",
+      "name": "pager101-rec0000",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "id": "98507119",
+      "name": "pager101-rec0001",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "id": "98507120",
+      "name": "pager101-rec0002",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "id": "98507121",
+      "name": "pager101-rec0003",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "id": "98507122",
+      "name": "pager101-rec0004",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "id": "98507123",
+      "name": "pager101-rec0005",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "id": "98507124",
+      "name": "pager101-rec0006",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "id": "98507125",
+      "name": "pager101-rec0007",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "id": "98507126",
+      "name": "pager101-rec0008",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "id": "98507127",
+      "name": "pager101-rec0009",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "id": "98507128",
+      "name": "pager101-rec0010",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "id": "98507129",
+      "name": "pager101-rec0011",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "id": "98507130",
+      "name": "pager101-rec0012",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "id": "98507131",
+      "name": "pager101-rec0013",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "id": "98507132",
+      "name": "pager101-rec0014",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "id": "98507133",
+      "name": "pager101-rec0015",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "id": "98507134",
+      "name": "pager101-rec0016",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "id": "98507135",
+      "name": "pager101-rec0017",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "id": "98507136",
+      "name": "pager101-rec0018",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "id": "98507137",
+      "name": "pager101-rec0019",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "id": "98507138",
+      "name": "pager101-rec0020",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "id": "98507139",
+      "name": "pager101-rec0021",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "id": "98507140",
+      "name": "pager101-rec0022",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "id": "98507141",
+      "name": "pager101-rec0023",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "id": "98507142",
+      "name": "pager101-rec0024",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "id": "98507143",
+      "name": "pager101-rec0025",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "id": "98507144",
+      "name": "pager101-rec0026",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "id": "98507145",
+      "name": "pager101-rec0027",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "id": "98507146",
+      "name": "pager101-rec0028",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "id": "98507147",
+      "name": "pager101-rec0029",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "id": "98507148",
+      "name": "pager101-rec0030",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "id": "98507149",
+      "name": "pager101-rec0031",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "id": "98507150",
+      "name": "pager101-rec0032",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "id": "98507151",
+      "name": "pager101-rec0033",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "id": "98507152",
+      "name": "pager101-rec0034",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "id": "98507153",
+      "name": "pager101-rec0035",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "id": "98507154",
+      "name": "pager101-rec0036",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "id": "98507155",
+      "name": "pager101-rec0037",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "id": "98507156",
+      "name": "pager101-rec0038",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "id": "98507157",
+      "name": "pager101-rec0039",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "id": "98507158",
+      "name": "pager101-rec0040",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "id": "98507159",
+      "name": "pager101-rec0041",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "id": "98507160",
+      "name": "pager101-rec0042",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "id": "98507161",
+      "name": "pager101-rec0043",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "id": "98507162",
+      "name": "pager101-rec0044",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "id": "98507163",
+      "name": "pager101-rec0045",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "id": "98507164",
+      "name": "pager101-rec0046",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "id": "98507165",
+      "name": "pager101-rec0047",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "id": "98507166",
+      "name": "pager101-rec0048",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "id": "98507168",
+      "name": "pager101-rec0049",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "id": "98507170",
+      "name": "pager101-rec0050",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "id": "98507171",
+      "name": "pager101-rec0051",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "id": "98507172",
+      "name": "pager101-rec0052",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "id": "98507173",
+      "name": "pager101-rec0053",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "id": "98507174",
+      "name": "pager101-rec0054",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "id": "98507175",
+      "name": "pager101-rec0055",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "id": "98507176",
+      "name": "pager101-rec0056",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "id": "98507177",
+      "name": "pager101-rec0057",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "id": "98507178",
+      "name": "pager101-rec0058",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "id": "98507179",
+      "name": "pager101-rec0059",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "id": "98507180",
+      "name": "pager101-rec0060",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "id": "98507181",
+      "name": "pager101-rec0061",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "id": "98507182",
+      "name": "pager101-rec0062",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 164,
+    "value": {
+      "id": "98507183",
+      "name": "pager101-rec0063",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "id": "98507184",
+      "name": "pager101-rec0064",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "id": "98507185",
+      "name": "pager101-rec0065",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "id": "98507186",
+      "name": "pager101-rec0066",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "id": "98507187",
+      "name": "pager101-rec0067",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "id": "98507194",
+      "name": "pager101-rec0068",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "id": "98507195",
+      "name": "pager101-rec0069",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "id": "98507196",
+      "name": "pager101-rec0070",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "id": "98507197",
+      "name": "pager101-rec0071",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "id": "98507198",
+      "name": "pager101-rec0072",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "id": "98507199",
+      "name": "pager101-rec0073",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "id": "98507200",
+      "name": "pager101-rec0074",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "id": "98507201",
+      "name": "pager101-rec0075",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "id": "98507202",
+      "name": "pager101-rec0076",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "id": "98507203",
+      "name": "pager101-rec0077",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 179,
+    "value": {
+      "id": "98507204",
+      "name": "pager101-rec0078",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "id": "98507205",
+      "name": "pager101-rec0079",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "id": "98507219",
+      "name": "pager101-rec0080",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "id": "98507306",
+      "name": "pager101-rec0081",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "id": "98507405",
+      "name": "pager101-rec0082",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "id": "98507505",
+      "name": "pager101-rec0083",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "id": "98507547",
+      "name": "pager101-rec0084",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "id": "98507548",
+      "name": "pager101-rec0085",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "id": "98507549",
+      "name": "pager101-rec0086",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 188,
+    "value": {
+      "id": "98507550",
+      "name": "pager101-rec0087",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "id": "98507551",
+      "name": "pager101-rec0088",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "id": "98507552",
+      "name": "pager101-rec0089",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "id": "98507553",
+      "name": "pager101-rec0090",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "id": "98507554",
+      "name": "pager101-rec0091",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "id": "98507555",
+      "name": "pager101-rec0092",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "id": "98507556",
+      "name": "pager101-rec0093",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "id": "98507557",
+      "name": "pager101-rec0094",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "id": "98507558",
+      "name": "pager101-rec0095",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "id": "98507559",
+      "name": "pager101-rec0096",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "id": "98507560",
+      "name": "pager101-rec0097",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "id": "98507561",
+      "name": "pager101-rec0098",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "id": "98507562",
+      "name": "pager101-rec0099",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "id": "98507563",
+      "name": "pager101-rec0100",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "id": "98507567",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issue",
+          "data": "letsencrypt.org",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "id": "98507567",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issue",
+          "data": "letsencrypt.org; validationmethods=dns-01; accounturi=https:\/\/acme-v02.api.letsencrypt.org\/acme\/acct\/1234",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "id": "98507567",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issuewild",
+          "data": ";",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "id": "98507567",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issuewild",
+          "data": "example.com",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "id": "98507567",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issuewild",
+          "data": "letsencrypt.org",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "id": "98507568",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issue",
+          "data": "letsencrypt.org",
+          "flags": 0,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "id": "98507568",
+      "name": "",
+      "type": "CAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "tag": "issue",
+          "data": "letsencrypt.org",
+          "flags": 128,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo4.com.",
+          "enabled": true
+        },
+        {
+          "priority": 52,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo4.com.",
+          "enabled": true
+        },
+        {
+          "priority": 52,
+          "weight": 62,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo4.com.",
+          "enabled": true
+        },
+        {
+          "priority": 52,
+          "weight": 62,
+          "port": 72,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        },
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo3.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        },
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo4.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        },
+        {
+          "priority": 5,
+          "weight": 60,
+          "port": 70,
+          "host": "foo2.com.",
+          "enabled": true
+        },
+        {
+          "priority": 15,
+          "weight": 65,
+          "port": 75,
+          "host": "foo3.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        },
+        {
+          "priority": 5,
+          "weight": 60,
+          "port": 70,
+          "host": "foo2.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "id": "98507570",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "id": "98507577",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 333,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "id": "98507577",
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "ttl": 4400,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "priority": 5,
+          "weight": 6,
+          "port": 7,
+          "host": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "id": "98507729",
+      "name": "",
+      "type": "ANAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "id": "98507729",
+      "name": "",
+      "type": "ANAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo2.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "id": "98507919",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 222,
+    "value": {
+      "id": "98507920",
+      "name": "",
+      "type": "ANAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo.dnscontrol-constellix-test.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "id": "98507921",
+      "name": "test",
+      "type": "ANAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "id": "98507921",
+      "name": "test",
+      "type": "ANAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "foo2.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "id": "98507922",
+      "name": "bar",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "5.4.5.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "id": "98507923",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "id": "98507924",
+      "name": "foo",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"simple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 228,
+    "value": {
+      "id": "98507925",
+      "name": "mail",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "ghs.googlehosted.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "id": "98507927",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 230,
+    "value": {
+      "id": "98507928",
+      "name": "",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"simple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "id": "98507929",
+      "name": "bar",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "5.4.5.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "id": "98507930",
+      "name": "mail",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "ghs.googlehosted.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "id": "98507932",
+      "name": "",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "id": "98507933",
+      "name": "",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"asimple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "id": "98507934",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "id": "98507935",
+      "name": "foo",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"simple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "id": "98507937",
+      "name": "bar.bat",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "5.4.5.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "id": "98507938",
+      "name": "foo.bat",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.2.3.4",
+          "enabled": true
+        },
+        {
+          "value": "2.3.4.5",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "id": "98507939",
+      "name": "foo.bat",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"simple\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "id": "98507940",
+      "name": "mail.bat",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "ghs.googlehosted.com.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "id": "98507941",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "11.11.11.11",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "id": "98507941",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "12.12.12.12",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "id": "98507941",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "13.13.13.13",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "id": "98507941",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "14.14.14.14",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "id": "98507941",
+      "name": "foo",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "1.1.1.1",
+          "enabled": true
+        },
+        {
+          "value": "9.9.9.9",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "id": "98507942",
+      "name": "foo",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2003:dd:d7ff:0:0:0:fe71:aaaa",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "id": "98507943",
+      "name": "foo",
+      "type": "MX",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "server": "aspmx.l.google.com.",
+          "priority": 10,
+          "enabled": true
+        },
+        {
+          "server": "alt1.aspmx.l.google.com.",
+          "priority": 20,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "id": "98507945",
+      "name": "zzz",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "3.3.3.3",
+          "enabled": true
+        },
+        {
+          "value": "4.4.4.4",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "id": "98507946",
+      "name": "zzz",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2003:dd:d7ff:0:0:0:fe71:cccc",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 250,
+    "value": {
+      "id": "98507947",
+      "name": "bar",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "redact2.acm-validations.aws.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "id": "98507948",
+      "name": "foo",
+      "type": "CNAME",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "redact1.acm-validations.aws.",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "id": "98507949",
+      "name": "dyndns-city1",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "91.42.1.1",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "id": "98507950",
+      "name": "dyndns-city1",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2003:dd:d7ff:0:0:0:fe71:ce77",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "id": "98507951",
+      "name": "dyndns-city2",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "91.42.1.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "id": "98507958",
+      "name": "dyndns-city2",
+      "type": "AAAA",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2003:dd:d7ff:0:0:0:fe71:ce78",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "id": "98507970",
+      "name": "testdefined",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "2.2.2.2",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "id": "98507970",
+      "name": "testdefined",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "9.9.9.9",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "id": "98508062",
+      "name": "testignore",
+      "type": "A",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "8.8.8.8",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "id": "98508299",
+      "name": "final",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"TestDNSProviders was successful!\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "id": "98508300",
+      "name": "final",
+      "type": "TXT",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "value": "\"TestDNSProviders was successful!\"",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "id": "98508301",
+      "name": "",
+      "type": "NS",
+      "ttl": 300,
+      "mode": "standard",
+      "region": "default",
+      "ipfilter": null,
+      "geoproximity": null,
+      "enabled": true,
+      "value": [
+        {
+          "host": "ns1.example.com.",
+          "enabled": true
+        },
+        {
+          "host": "ns2.example.com.",
+          "enabled": true
+        }
+      ]
+    }
+  }
+]

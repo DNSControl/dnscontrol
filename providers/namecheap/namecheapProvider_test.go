@@ -6,8 +6,10 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v5/models"
 	nc "github.com/willpower232/go-namecheap"
 )
 
@@ -91,5 +93,18 @@ func TestListZonesPaginates(t *testing.T) {
 	wantRequests := []string{"1", "2"}
 	if !reflect.DeepEqual(requests, wantRequests) {
 		t.Fatalf("pages requested = %v, want %v", requests, wantRequests)
+	}
+}
+
+func TestToNativeLongTXT(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	rc, err := dc.NewRecordConfig("long", 300, "TXT", strings.Repeat("a", 300))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	recs, _ := toNative(models.Records{rc})
+	if got := recs[0].Address; got != strings.Repeat("a", 300) {
+		t.Errorf("address = %q, want the joined value", got)
 	}
 }

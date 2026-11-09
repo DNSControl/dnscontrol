@@ -253,6 +253,19 @@
           "typenum": 1
         },
         {
+          "comparablev3": "203.0.113.22",
+          "filepos": "[line:65:5]",
+          "name": "main.sub",
+          "name_unicode": "main.sub",
+          "rdata": {
+            "Addr": "203.0.113.22"
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
+        },
+        {
           "comparablev3": "203.0.113.2",
           "filepos": "[line:45:5]",
           "name": "www",
@@ -282,6 +295,19 @@
           "rdata": {
             "Addr": "203.0.113.12"
           },
+          "ttl": 300,
+          "type": "A",
+          "typenum": 1
+        },
+        {
+          "comparablev3": "203.0.113.12",
+          "filepos": "[line:61:5]",
+          "name": "main.sub",
+          "name_unicode": "main.sub",
+          "rdata": {
+            "Addr": "203.0.113.12"
+          },
+          "subdomain": "sub",
           "ttl": 300,
           "type": "A",
           "typenum": 1

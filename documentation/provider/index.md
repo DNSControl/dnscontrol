@@ -35,6 +35,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ❌ | ✅ | ✅ |
 | [`CLOUDPRESS`](cloudpress.md) | ❌ | ✅ | ❌ |
 | [`CNR`](cnr.md) | ❌ | ✅ | ✅ |
+| [`CONSTELLIX`](constellix.md) | ❌ | ✅ | ❌ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ✅ | ✅ |
 | [`DESEC`](desec.md) | ❌ | ✅ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ✅ | ❌ |
@@ -117,6 +118,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ |
 | [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ✅ | ✅ |
 | [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
+| [`CONSTELLIX`](constellix.md) | ✅ | ✅ | ✅ | ✅ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ✅ | ❌ | ✅ |
 | [`DESEC`](desec.md) | ✅ | ❔ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ✅ | ✅ | ✅ | ✅ |
@@ -199,6 +201,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ❔ |
 | [`CLOUDPRESS`](cloudpress.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| [`CONSTELLIX`](constellix.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❔ |
 | [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`DESEC`](desec.md) | ❔ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -281,6 +284,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ❌ | ✅ | ✅ | ❌ |
 | [`CLOUDPRESS`](cloudpress.md) | ❌ | ❌ | ✅ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
+| [`CONSTELLIX`](constellix.md) | ❌ | ❌ | ✅ | ❌ |
 | [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ✅ | ❌ |
 | [`DESEC`](desec.md) | ❌ | ✅ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ✅ | ❌ |
@@ -363,6 +367,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ |
+| [`CONSTELLIX`](constellix.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`CSCGLOBAL`](cscglobal.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`DIGITALOCEAN`](digitalocean.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -445,6 +450,7 @@ Jump to a table:
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
 | [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
+| [`CONSTELLIX`](constellix.md) | ❌ | ❌ | ❌ |
 | [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ❌ |
 | [`DESEC`](desec.md) | ✅ | ✅ | ❌ |
 | [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
@@ -559,6 +565,7 @@ Providers in this category and their maintainers are:
 |[`CLOUDFLAREAPI`](cloudflareapi.md)|@tresni|
 |[`CLOUDNS`](cloudns.md)|@pragmaton|
 |[`CNR`](cnr.md)|@KaiSchwarz-cnic|
+|[`CONSTELLIX`](constellix.md)|@ZeroClover|
 |[`CSCGLOBAL`](cscglobal.md)|@Air-New-Zealand|
 |[`DESEC`](desec.md)|@D3luxee|
 |[`DIGITALOCEAN`](digitalocean.md)|@chicks-net|
@@ -616,7 +623,6 @@ We have received requests for the following providers. If you would like to cont
 
 * [1984 Hosting](https://github.com/DNSControl/dnscontrol/issues/1251) (#1251)
 * [BookMyName](https://github.com/DNSControl/dnscontrol/issues/3451) (#3451)
-* [Constellix (DNSMadeEasy)](https://github.com/DNSControl/dnscontrol/issues/842) (#842)
 * [CoreDNS](https://github.com/DNSControl/dnscontrol/issues/1284) (#1284)
 * [EU.ORG](https://github.com/DNSControl/dnscontrol/issues/1176) (#1176)
 * [EnCirca](https://github.com/DNSControl/dnscontrol/issues/1048) (#1048)

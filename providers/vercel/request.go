@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
-	vercelClient "github.com/vercel/terraform-provider-vercel/client"
+	vercelClient "github.com/vercel/terraform-provider-vercel/v5/client"
 )
 
 type clientRequest struct {

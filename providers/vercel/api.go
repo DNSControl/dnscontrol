@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	vercelClient "github.com/vercel/terraform-provider-vercel/client"
+	vercelClient "github.com/vercel/terraform-provider-vercel/v5/client"
 )
 
 // DNSRecord is a helper struct to unmarshal the JSON response.

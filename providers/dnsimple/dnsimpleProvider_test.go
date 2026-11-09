@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
-	dnsimpleapi "github.com/dnsimple/dnsimple-go/v8/dnsimple"
+	dnsimpleapi "github.com/dnsimple/dnsimple-go/v10/dnsimple"
 )
 
 func TestToRecordConfig(t *testing.T) {

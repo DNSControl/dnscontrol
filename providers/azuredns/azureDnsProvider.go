@@ -578,7 +578,11 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 	//		fmt.Fprintf(os.Stderr, "DEBUG: XXXXXXXXXXXXXXXXXXXXXXX %v\n", recordKeyType)
 	//	}
 
-	recordSet := &adns.RecordSet{Type: new(recordKeyType), Properties: &adns.RecordSetProperties{}}
+	// RecordSet.Type is READ-ONLY in the API. Do not set it: the SDK still
+	// serializes it, and Azure rejects a body whose "type" doesn't match the
+	// URL's resource type (e.g. "NS" vs "Microsoft.Network/dnsZones/NS").
+	nativeType := recordKeyType
+	recordSet := &adns.RecordSet{Properties: &adns.RecordSetProperties{}}
 	for _, rec := range recordConfig {
 		switch recordKeyType {
 		case "A":
@@ -611,7 +615,7 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 			recordSet.Properties.CaaRecords = append(recordSet.Properties.CaaRecords, &adns.CaaRecord{Value: new(f.Value), Tag: new(f.Tag), Flags: new(int32(f.Flag))})
 		case "AZURE_ALIAS_A", "AZURE_ALIAS_AAAA", "AZURE_ALIAS_CNAME":
 			f := rec.AsAZUREALIAS()
-			recordSet.Type = new(f.AliasType)
+			nativeType = f.AliasType
 			recordSet.Properties.TargetResource = new(adns.SubResource{ID: new(f.Target)})
 
 		default:
@@ -619,7 +623,7 @@ func (a *azurednsProvider) recordToNativeDiff2(recordKey models.RecordKey, recor
 		}
 	}
 
-	rt, err := nativeToRecordTypeDiff2(new(*recordSet.Type))
+	rt, err := nativeToRecordTypeDiff2(&nativeType)
 	if err != nil {
 		return nil, adns.RecordTypeA, err // adns.A is a placeholder
 	}

@@ -41,7 +41,7 @@ authorized certificate authorities and the builder cares about the rest.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CAA_BUILDER({
     label: "@",
     iodef: "mailto:test@example.com",
@@ -60,7 +60,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CAA("@", "iodef", "mailto:test@example.com", CAA_CRITICAL),
   CAA("@", "issue", "letsencrypt.org"),
   CAA("@", "issue", "comodoca.com"),
@@ -84,7 +84,7 @@ The same example can be enriched with CAA_CRITICAL on all records:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CAA_BUILDER({
     label: "@",
     iodef: "mailto:test@example.com",
@@ -105,7 +105,7 @@ D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   CAA("@", "iodef", "mailto:test@example.com", CAA_CRITICAL),
   CAA("@", "issue", "letsencrypt.org", CAA_CRITICAL),
   CAA("@", "issue", "comodoca.com", CAA_CRITICAL),

@@ -26,10 +26,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NETLIFY = NewRegistrar("netlify");
-var DSP_NETLIFY = NewDnsProvider("netlify");
-
-D("example.com", REG_NETLIFY, DnsProvider(DSP_NETLIFY),
+D("example.com", REGISTRAR("netlify"), SERVICE("netlify"),
     A("test", "1.2.3.4"),
 );
 ```

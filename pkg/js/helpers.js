@@ -121,27 +121,43 @@ function _copyProviderMetadata(meta) {
 
 // REGISTRAR explicitly selects the registrar for a domain.
 function REGISTRAR(name) {
+    if (arguments.length === 0) {
+        name = "none";
+    }
     _checkProviderName(name, "REGISTRAR");
-    if (arguments.length !== 1) {
+    if (arguments.length > 1) {
         throw "REGISTRAR accepts only a credential entry name; configMetadata is not supported.";
     }
     var modifier = function (d) {
         var state = d._registrarState;
-        if (!state.applyingDefaults && !state.allowRegistrar) {
-            throw "REGISTRAR must immediately follow the domain name in D() or D_EXTEND().";
+        if (
+            !state.extension &&
+            !state.applyingDefaults &&
+            !state.allowRegistrar
+        ) {
+            throw "REGISTRAR must immediately follow the domain name in D().";
         }
-        var key = state.applyingDefaults ? "defaultName" : "explicitName";
-        if (typeof state[key] !== "undefined" && state[key] !== name) {
+        var key =
+            !state.extension && state.applyingDefaults
+                ? "defaultName"
+                : "explicitName";
+        // Extensions replace earlier selections, but must agree within one call.
+        var assignments = state.extension || state;
+        if (
+            typeof assignments[key] !== "undefined" &&
+            assignments[key] !== name
+        ) {
             throw (
                 'Conflicting registrars for domain "' +
                 d.name +
                 '": "' +
-                state[key] +
+                assignments[key] +
                 '" and "' +
                 name +
                 '".'
             );
         }
+        assignments[key] = name;
         state[key] = name;
         state[key + "IsModifier"] = true;
         state.requireRegistrar = true;
@@ -173,7 +189,7 @@ function _finalizeProviders() {
             throw (
                 'Domain "' +
                 d.name +
-                '" requires a registrar. Use REGISTRAR("none") for no registrar management.'
+                '" requires a registrar. Use REGISTRAR() for no registrar management.'
             );
         }
         var state = d._registrarState;
@@ -342,18 +358,21 @@ function D_EXTEND(name) {
         name = name.substring(name.indexOf(".") + 1);
     }
 
-    domain.obj.subdomain = name.substr(
-        0,
-        name.length - domain.obj.name.length - 1
-    );
+    // The empty tag is not part of the name: "example.com!" is "example.com".
+    name = _removeEmptyTag(name)[0];
+    var domainName = _removeEmptyTag(domain.obj.name)[0];
+    domain.obj.subdomain = name.substr(0, name.length - domainName.length - 1);
 
-    for (var i = 1; i < arguments.length; i++) {
-        var m = arguments[i];
-        domain.obj._registrarState.allowRegistrar =
-            i === 1 && m && m._isRegistrar === true;
-        processDargs(m, domain.obj);
+    var state = domain.obj._registrarState;
+    var previousExtension = state.extension;
+    state.extension = {};
+    try {
+        for (var i = 1; i < arguments.length; i++) {
+            processDargs(arguments[i], domain.obj);
+        }
+    } finally {
+        state.extension = previousExtension;
     }
-    domain.obj._registrarState.allowRegistrar = false;
     conf.domains[domain.id] = domain.obj; // let's overwrite the object.
 }
 
@@ -1280,7 +1299,7 @@ function GIDINET_PREMIUM_NS() {
 // ttl: The time for TTL, integer or string. (default: not defined, using DefaultTTL)
 
 function LOC_BUILDER_DD(value) {
-    if (!value.x && !value.y) {
+    if (value.x === undefined || value.y === undefined) {
         throw "LOC_BUILDER_DD requires x and y elements";
     }
 
@@ -2124,7 +2143,12 @@ function DOMAIN_ELSEWHERE_AUTO(domain, registrar, dsplist) {
     // is maintaining the DNS records in that zone, and we have access
     // to updating it (but we don't want to use it.)
     for (var i = 2; i < arguments.length; i++) {
-        D_EXTEND(domain, DnsProvider(arguments[i]));
+        D_EXTEND(
+            domain,
+            typeof arguments[i] === "function"
+                ? arguments[i]
+                : DnsProvider(arguments[i])
+        );
     }
 }
 

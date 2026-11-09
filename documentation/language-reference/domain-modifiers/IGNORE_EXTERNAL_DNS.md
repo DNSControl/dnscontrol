@@ -44,7 +44,7 @@ For example, if external-dns creates an A record at `myapp.example.com`, it will
 {% code title="dnsconfig.js" %}
 ```javascript
 // Default: detect standard external-dns prefixes (a-, cname-, etc.)
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE_EXTERNAL_DNS(),
   // Your static DNS records managed by DNSControl
   A("www", "1.2.3.4"),
@@ -63,7 +63,7 @@ If your external-dns is configured with a custom `--txt-prefix` (as documented i
 {% code title="dnsconfig.js" %}
 ```javascript
 // If external-dns is configured with --txt-prefix="extdns-"
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   IGNORE_EXTERNAL_DNS("extdns-"),
   A("www", "1.2.3.4"),
 );

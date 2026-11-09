@@ -43,7 +43,7 @@ Target health evaluation can be enabled with the [`R53_EVALUATE_TARGET_HEALTH`](
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider("ROUTE53"),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("ROUTE53"),
   R53_ALIAS("foo", "A", "bar"),                              // record in same zone
   R53_ALIAS("foo", "A", "bar", R53_ZONE("Z35SXDOTRQ7X7K")),  // record in same zone, zone specified
   R53_ALIAS("foo", "A", "blahblah.elasticloadbalancing.us-west-1.amazonaws.com.", R53_ZONE("Z368ELLRRE2KJ0"), R53_EVALUATE_TARGET_HEALTH(true)),     // a classic ELB in us-west-1 with target health evaluation enabled

@@ -11,6 +11,7 @@ providers/cloudflare @tresni
 providers/cloudns @pragmaton
 providers/cloudpress @arnoschoon
 providers/cnr @AsifNawaz-cnic
+providers/constellix @ZeroClover
 providers/cscglobal @mikenz
 providers/desec @D3luxee
 providers/digitalocean @chicks-net

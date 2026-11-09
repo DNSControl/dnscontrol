@@ -187,10 +187,20 @@ func TestProviderSyntaxCredentialResolution(t *testing.T) {
 		wantReg      int
 		wantDNS      int
 	}{
-		{"DNS only", `D("example.com", REGISTRAR("none"), SERVICE("account", 0));`,
+		{"DNS only", `D("example.com", REGISTRAR(), SERVICE("account", 0));`,
 			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"TYPE": providerSyntaxTestType}}, "", 0, 1},
 		{"registrar only", `D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 0},
+		{"extension supplies registrar", `D("example.com", SERVICE("account")); D_EXTEND("example.com", REGISTRAR("account"));`,
+			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 1},
+		{"extension initializes only final registrar", `D("example.com", REGISTRAR("unused")); D_EXTEND("example.com", REGISTRAR("also_unused")); D_EXTEND("example.com", REGISTRAR("account"));`,
+			map[string]map[string]string{"account": {"TYPE": providerSyntaxTestType}}, "", 1, 0},
+		{"async extension disables registrar", `D("example.com", REGISTRAR("unused"), SERVICE("account")); setTimeout(function () { D_EXTEND("example.com", REGISTRAR()); }, 1);`,
+			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"TYPE": providerSyntaxTestType}}, "", 0, 1},
+		{"extension final registrar requires credentials", `D("example.com", REGISTRAR()); D_EXTEND("example.com", REGISTRAR("missing"));`,
+			map[string]map[string]string{"none": {"TYPE": "NONE"}}, "missing", 0, 0},
+		{"extension final registrar requires registrar role", `D("example.com", REGISTRAR()); D_EXTEND("example.com", REGISTRAR("account"));`,
+			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"TYPE": "BIND"}}, "no such registrar type", 0, 0},
 		{"unused account without credentials", `DEFAULTS(REGISTRAR("unused"), SERVICE("unused"));`, nil, "", 0, 0},
 		{"missing entry", `D("example.com", REGISTRAR("account"));`, nil, "missing", 0, 0},
 		{"missing TYPE", `D("example.com", REGISTRAR("account"));`,
@@ -199,7 +209,7 @@ func TestProviderSyntaxCredentialResolution(t *testing.T) {
 			map[string]map[string]string{"account": {"TYPE": "BIND"}}, "no such registrar type", 0, 0},
 		{"mixed explicit type without credentials", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("account"));`,
 			nil, "", 1, 0},
-		{"mixed explicit type without TYPE", `NewDnsProvider("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("none"), SERVICE("account"));`,
+		{"mixed explicit type without TYPE", `NewDnsProvider("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR(), SERVICE("account"));`,
 			map[string]map[string]string{"none": {"TYPE": "NONE"}, "account": {"account": "one"}}, "", 0, 1},
 		{"mixed explicit type mismatch", `NewRegistrar("account", "TEST_PROVIDER_SYNTAX"); D("example.com", REGISTRAR("account"));`,
 			map[string]map[string]string{"account": {"TYPE": "NONE"}}, "Mismatch", 0, 0},
@@ -328,7 +338,7 @@ func TestServiceSyntaxDefaultCredentials(t *testing.T) {
 			require.NoError(t, err)
 			for _, initializer := range syntaxInitializers {
 				t.Run(initializer.name, func(t *testing.T) {
-					cfg := loadSyntaxConfig(t, `D("example.com", REGISTRAR("none"), SERVICE("bind", 0));`)
+					cfg := loadSyntaxConfig(t, `D("example.com", REGISTRAR(), SERVICE("bind", 0));`)
 					require.NoError(t, initializer.init(cfg, creds))
 					require.Equal(t, "NONE", cfg.Domains[0].RegistrarInstance.ProviderType)
 					require.Equal(t, "BIND", cfg.Domains[0].DNSProviderInstances[0].ProviderType)

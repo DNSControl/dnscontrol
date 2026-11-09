@@ -146,9 +146,6 @@ Here's an example DNS Configuration `dnsconfig.js` using the provider module. Ev
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_LOOPIA = NewRegistrar("loopia");
-var DSP_LOOPIA = NewDnsProvider("loopia");
-
 // Set Default TTL for all RR to reflect our Backend API Default
 // If you use additional DNS Providers, configure a default TTL
 // per domain using the domain modifier DefaultTTL instead.
@@ -157,7 +154,7 @@ DEFAULTS(
     DefaultTTL(3600)
 );
 
-D("example.com", REG_LOOPIA, DnsProvider(DSP_LOOPIA),
+D("example.com", REGISTRAR("loopia"), SERVICE("loopia"),
     //NAMESERVER("ns1.loopia.se."), //default
     //NAMESERVER("ns2.loopia.se."), //default
     A("elk1", "192.0.2.1"),
