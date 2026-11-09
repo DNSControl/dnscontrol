@@ -137,5 +137,14 @@
       "type": "permanent",
       "wildcard": "yes"
     }
+  },
+  {
+    "index": 16,
+    "value": {
+      "content": "8857 13 2 4b9b6b073edd97feb5bc12dc4e1b32d2c6af7ae23a293936ceb87bb10494ec44",
+      "name": "sub",
+      "ttl": "3600",
+      "type": "DS"
+    }
   }
 ]

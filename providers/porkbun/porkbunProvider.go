@@ -86,7 +86,7 @@ func init() {
 			"URL301",
 		},
 		CanDualHost:         providers.Cannot(),
-		CanUseDSForChildren: providers.Cannot(),
+		CanUseDSForChildren: providers.Can(),
 		CredFields: []providers.CredsField{
 			{
 				Key:      "api_key",
@@ -372,6 +372,9 @@ func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, c[0], c[1], params)
 	case "SSHFP":
 		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeSSHFP, r.Content)
+	case "DS":
+		// 56189 8 2 ddbba7cb...
+		rc, err = dc.NewRecordConfigParse(label, ttl, dnsv2.TypeDS, r.Content)
 	default:
 		rc, err = dc.NewRecordConfig(label, ttl, rtype, r.Content)
 	}
@@ -448,6 +451,10 @@ func toReq(rc *models.RecordConfig) (requestParams, error) {
 			f.Priority, f.Target, models.Svcbv2ValueToString(f.Value))
 	case dnsv2.TypeSSHFP:
 		req["content"] = rc.AsSSHFP().String()
+	case dnsv2.TypeDS:
+		f := rc.AsDS()
+		req["content"] = fmt.Sprintf("%d %d %d %s",
+			f.KeyTag, f.Algorithm, f.DigestType, f.Digest)
 	default:
 		req["content"] = rc.GetRDATA().String()
 		//return nil, fmt.Errorf("porkbun.toReq rtype %q unimplemented", rc.Type)
