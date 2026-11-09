@@ -9,6 +9,8 @@ parameter_types:
 ---
 
 DnsProvider indicates that the specified provider should be used to manage records for this domain. The name must match the name used with [NewDnsProvider](../top-level-functions/NewDnsProvider.md).
+For new configurations, use [SERVICE](SERVICE.md) instead. See the
+[conversion guide](../../getting-started/converting-dnsconfig.md).
 
 The nsCount parameter determines how the nameservers will be managed from this provider.
 

@@ -345,7 +345,7 @@ func TestRunInit_NoneBindFlow(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read config: %v", err)
 	}
-	if !strings.Contains(string(configBytes), `NewDnsProvider("bind_primary")`) {
+	if !strings.Contains(string(configBytes), `SERVICE("bind_primary")`) {
 		t.Errorf("config missing bind_primary provider: %s", configBytes)
 	}
 	if !strings.Contains(string(configBytes), `D("example.com"`) {

@@ -49,7 +49,7 @@ dnscontrol get-zones [command options] credkey zone [...]
 --ttl value     Default TTL (0 picks the zone's most common TTL) (default: 0)
 
 ARGUMENTS:
-credkey:  The name used in creds.json (first parameter to NewDnsProvider() in dnsconfig.js)
+credkey:  The name used in creds.json (first parameter to SERVICE() in dnsconfig.js)
 zone:     One or more zones (domains) to download; or "all".
 ```
 

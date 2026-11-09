@@ -33,10 +33,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_CSCGLOBAL = NewRegistrar("cscglobal");
-var DSP_BIND = NewDnsProvider("bind");
-
-D("example.com", REG_CSCGLOBAL, DnsProvider(DSP_BIND),
+D("example.com", REGISTRAR("cscglobal"), SERVICE("bind"),
   A("test", "1.2.3.4"),
 );
 ```

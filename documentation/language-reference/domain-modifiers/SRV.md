@@ -22,7 +22,7 @@ Priority, weight, and port are ints.
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR("my_registrar"), SERVICE("my_dns_provider"),
   // Create SRV records for a a SIP service:
   //               pr  w   port, target
   SRV("_sip._tcp", 10, 60, 5060, "bigbox.example.com."),

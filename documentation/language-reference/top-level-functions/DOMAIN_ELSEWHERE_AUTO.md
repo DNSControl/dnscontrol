@@ -1,18 +1,16 @@
 ---
 name: DOMAIN_ELSEWHERE_AUTO
 parameters:
-  - name
   - domain
   - registrar
-  - dns provider
+  - dnsProviders...
 parameter_types:
-  name: string
   domain: string
-  registrar: string
-  dns provider: string
+  registrar: string | DomainModifier
+  "dnsProviders...": (string | DomainModifier)[]
 ---
 
-`DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of a hardcoded list of nameservers, a DnsProvider() is queried.
+`DOMAIN_ELSEWHERE_AUTO()` is similar to `DOMAIN_ELSEWHERE()` but instead of a hardcoded list of nameservers, a DNS service is queried.
 
 `DOMAIN_ELSEWHERE_AUTO` is useful when you control a domain's registrar but the DNS zones are managed by another system. Luckily you have enough access to that other system that you can query it to determine the zone's nameservers.
 
@@ -22,15 +20,15 @@ For example these two statements are equivalent:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-DOMAIN_ELSEWHERE_AUTO("example.com", REG_NAMEDOTCOM, DSP_AZURE);
+DOMAIN_ELSEWHERE_AUTO("example.com", REGISTRAR("namedotcom"), SERVICE("azure"));
 ```
 {% endcode %}
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMEDOTCOM,
+D("example.com", REGISTRAR("namedotcom"),
     NO_PURGE,
-    DnsProvider(DSP_AZURE),
+    SERVICE("azure"),
 );
 ```
 {% endcode %}

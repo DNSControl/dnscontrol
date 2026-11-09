@@ -30,9 +30,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_EASYNAME = NewRegistrar("easyname");
-
-D("example.com", REG_EASYNAME,
+D("example.com", REGISTRAR("easyname"),
   NAMESERVER("ns1.example.com."),
   NAMESERVER("ns2.example.com."),
 );
