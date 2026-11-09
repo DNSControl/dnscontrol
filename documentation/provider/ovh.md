@@ -37,10 +37,7 @@ An example configuration: (DNS hosted with OVH):
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_OVH = NewRegistrar("ovh");
-var DSP_OVH = NewDnsProvider("ovh");
-
-D("example.com", REG_OVH, DnsProvider(DSP_OVH),
+D("example.com", REGISTRAR("ovh"), SERVICE("ovh"),
     A("test", "1.2.3.4"),
 );
 ```
@@ -50,10 +47,7 @@ An example configuration: (Registrar only. DNS hosted elsewhere)
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_OVH = NewRegistrar("ovh");
-var DSP_R53 = NewDnsProvider("r53");
-
-D("example.com", REG_OVH, DnsProvider(DSP_R53),
+D("example.com", REGISTRAR("ovh"), SERVICE("r53"),
     A("test", "1.2.3.4"),
 );
 ```

@@ -28,7 +28,7 @@ Types is a space-separated list of the record types to synchronize, such as `"A 
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_MY_PROVIDER, DnsProvider(DSP_MY_PROVIDER),
+D("example.com", REGISTRAR(), SERVICE('myservice'),
   CSYNC("@", 2026101100, 2, "A NS AAAA"),
 );
 ```

@@ -43,9 +43,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_MONITOR = NewRegistrar("dohcloudflare");
-
-D("example.com", REG_MONITOR,
+D("example.com", REGISTRAR("dohcloudflare"),
   NAMESERVER("ns1.example.com."),
   NAMESERVER("ns2.example.com."),
 );

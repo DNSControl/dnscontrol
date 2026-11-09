@@ -9,7 +9,7 @@ import (
 func TestServiceMetadata(t *testing.T) {
 	for _, value := range []string{`{"nested":[1,true,null]}`, `[1,"two"]`, `"text"`, `42`, `false`, `null`} {
 		t.Run(value, func(t *testing.T) {
-			cfg := parseProviderConfig(t, `D("example.com", REGISTRAR("none"), SERVICE("__proto__", ALL_NS, `+value+`));`)
+			cfg := parseProviderConfig(t, `D("example.com", REGISTRAR(), SERVICE("__proto__", ALL_NS, `+value+`));`)
 			testifyrequire.JSONEq(t, value, string(cfg.Domains[0].DNSProviderMetadata["__proto__"]))
 			testifyrequire.Empty(t, cfg.Registrars[0].Metadata)
 			testifyrequire.Empty(t, cfg.DNSProviders[0].Metadata)
@@ -18,7 +18,7 @@ func TestServiceMetadata(t *testing.T) {
 	}
 	cfg := parseProviderConfig(t, `
 		var meta = {setting:"original"};
-		DEFAULTS(REGISTRAR("none"), SERVICE("dns", ALL_NS, meta));
+		DEFAULTS(REGISTRAR(), SERVICE("dns", ALL_NS, meta));
 		meta.setting = "changed";
 		D("example.com");
 		D("example.net", SERVICE("other", 0, {setting:"other"}));
@@ -29,13 +29,13 @@ func TestServiceMetadata(t *testing.T) {
 	testifyrequire.JSONEq(t, `{"setting":"extended"}`, string(cfg.Domains[0].DNSProviderMetadata["extra"]))
 
 	cfg = parseProviderConfig(t, `
-		D("example.com", REGISTRAR("none"), SERVICE("dns", ALL_NS, {setting:"one"}));
-		D("example.net", REGISTRAR("none"), SERVICE("dns", 0, {setting:"two"}));`)
+		D("example.com", REGISTRAR(), SERVICE("dns", ALL_NS, {setting:"one"}));
+		D("example.net", REGISTRAR(), SERVICE("dns", 0, {setting:"two"}));`)
 	testifyrequire.JSONEq(t, `{"setting":"one"}`, string(cfg.Domains[0].DNSProviderMetadata["dns"]))
 	testifyrequire.JSONEq(t, `{"setting":"two"}`, string(cfg.Domains[1].DNSProviderMetadata["dns"]))
 
 	cfg = parseProviderConfig(t, `
-		D("example.com", REGISTRAR("none"), SERVICE("dns", ALL_NS,
+		D("example.com", REGISTRAR(), SERVICE("dns", ALL_NS,
 			{ip_conversions:[{low:IP("192.0.2.0"),high:IP("192.0.2.255"),newBase:IP("198.51.100.0")}]}));`)
 	legacy := parseProviderConfig(t, `NewDnsProvider("dns",
 		{ip_conversions:[{low:IP("192.0.2.0"),high:IP("192.0.2.255"),newBase:IP("198.51.100.0")}]});`)

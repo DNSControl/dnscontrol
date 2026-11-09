@@ -664,7 +664,6 @@ func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAcco
 		})
 		dnsEntryName = name
 		choice.DNSName = name
-		choice.DNSVar = jsVarName("DNS", dnsProviderType)
 	}
 
 	if registrarType == "" {
@@ -673,7 +672,6 @@ func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAcco
 
 	if sameAccount && registrarType == dnsProviderType && dnsEntryName != "" {
 		choice.RegistrarName = dnsEntryName
-		choice.RegistrarVar = jsVarName("REG", registrarType)
 		return entries, choice, availableZones, nil
 	}
 
@@ -708,7 +706,6 @@ func collectEntries(asker Asker, registrarType, dnsProviderType string, sameAcco
 		})
 	}
 	choice.RegistrarName = name
-	choice.RegistrarVar = jsVarName("REG", registrarType)
 	return entries, choice, availableZones, nil
 }
 
