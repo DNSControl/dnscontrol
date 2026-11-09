@@ -2041,19 +2041,19 @@ function DMARC_BUILDER(value) {
     return TXT(label, record.join("; "));
 }
 
-// Documentation of the records: https://learn.microsoft.com/en-us/microsoft-365/enterprise/external-domain-name-system-records?view=o365-worldwide
-// The builder itself is models.BuilderM365; only the options object is handled
-// here.
+// builderOptions is the rawrecordBuilder() optionalsFn for Go builders that
+// take an options object: M365_BUILDER, FORSALE_BUILDER and MIGADU_BUILDER.
 //
-// m365Options moves that object out of the metadata list and into the argument
-// list. Builders receive record.args only (see models.ImportRawRecords), so an
+// It moves that object out of the metadata list and into the argument list.
+// Builders receive record.args only (see models.ImportRawRecords), so an
 // options object left in record.metas would never reach Go, and the metadata
 // path would corrupt booleans and numbers on the way (see models.mergeMetas).
 // The object is passed through unchanged, so Go can check its contents.
-function m365Options(record, processedArgs, processedMetas) {
+function builderOptions(record, processedArgs, processedMetas) {
     if (processedMetas.length > 1) {
         throw (
-            "M365_BUILDER takes one options object; record modifiers that are objects, such as CF_PROXY_OFF, are not supported: " +
+            record.type +
+            " takes one options object; record modifiers that are objects, such as CF_PROXY_OFF, are not supported: " +
             processedArgs[0]
         );
     }
@@ -2063,7 +2063,9 @@ function m365Options(record, processedArgs, processedMetas) {
     return args;
 }
 
-var m365Record = rawrecordBuilder("M365_BUILDER", false, m365Options);
+// Documentation of the records: https://learn.microsoft.com/en-us/microsoft-365/enterprise/external-domain-name-system-records?view=o365-worldwide
+// The builder itself is models.BuilderM365.
+var m365Record = rawrecordBuilder("M365_BUILDER", false, builderOptions);
 
 // M365_BUILDER used to return an array of records, so calls of the form
 // M365_BUILDER(...).concat([...]) exist. processDargs() flattens arrays, so
@@ -2072,38 +2074,8 @@ function M365_BUILDER() {
     return [m365Record.apply(null, arguments)];
 }
 
-// RFC 10023 "_for-sale" records. The builder itself is models.BuilderFORSALE;
-// forsaleOptions moves the options object into the argument list for the same
-// reason as m365Options().
-function forsaleOptions(record, processedArgs, processedMetas) {
-    if (processedMetas.length > 1) {
-        throw (
-            "FORSALE_BUILDER takes one options object; record modifiers that are objects, such as CF_PROXY_OFF, are not supported: " +
-            processedArgs[0]
-        );
-    }
-    var args = processedArgs.concat(processedMetas);
-    // The options object is an argument, not metadata.
-    processedMetas.length = 0;
-    return args;
-}
-
-// The builder itself is models.BuilderMigadu; only the options object is
-// handled here, the same way m365Options() does for M365_BUILDER.
-function migaduOptions(record, processedArgs, processedMetas) {
-    if (processedMetas.length > 1) {
-        throw (
-            "MIGADU_BUILDER takes one options object; record modifiers that are objects, such as CF_PROXY_OFF, are not supported: " +
-            processedArgs[0]
-        );
-    }
-    var args = processedArgs.concat(processedMetas);
-    // The options object is an argument, not metadata.
-    processedMetas.length = 0;
-    return args;
-}
-
-var MIGADU_BUILDER = rawrecordBuilder("MIGADU_BUILDER", false, migaduOptions);
+// The builder itself is models.BuilderMigadu.
+var MIGADU_BUILDER = rawrecordBuilder("MIGADU_BUILDER", false, builderOptions);
 
 // This is a no-op.  Long TXT records are handled natively now.
 function DKIM(arr) {
@@ -2334,10 +2306,11 @@ var DHCID = rawrecordBuilder("DHCID");
 var DNAME = rawrecordBuilder("DNAME");
 var DNSKEY = rawrecordBuilder("DNSKEY");
 var DS = rawrecordBuilder("DS");
+// RFC 10023 "_for-sale" records. The builder itself is models.BuilderFORSALE.
 var FORSALE_BUILDER = rawrecordBuilder(
     "FORSALE_BUILDER",
     false,
-    forsaleOptions
+    builderOptions
 );
 var FRAME = rawrecordBuilder("FRAME");
 var HTTPS = rawrecordBuilder("HTTPS");

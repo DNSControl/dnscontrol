@@ -79,7 +79,7 @@ type migaduOpts struct {
 // the same name is a PermError (RFC 7208 section 4.5), not a merge; DMARC is
 // policy and is left to DMARC_BUILDER.
 //
-// args is [name, options]. migaduOptions() (pkg/js/helpers.js) moves the
+// args is [name, options]. builderOptions() (pkg/js/helpers.js) moves the
 // options object into the argument list, so its values arrive as the JSON
 // types dnsconfig.js produces: string, bool, float64 and map[string]any.
 func BuilderMigadu(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error) {
