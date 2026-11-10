@@ -95,6 +95,59 @@ func TestToRecordConfigLabelsAndTypes(t *testing.T) {
 	}
 }
 
+// The API stores an AAAA value as it was sent ("2001:DB8:0:0:0:0:0:5" stays that way), so a record written by another
+// client can come back in any spelling. DNSControl must read all spellings of one address as the same value, or every
+// run would report a change for a record that is already right. Spellings checked against the live API on 2026-11-09:
+// a push followed by a preview reported 0 corrections.
+func TestIPv6SpellingsReadAsOneValue(t *testing.T) {
+	dc := newDC(t)
+	cases := []struct{ stored, want string }{
+		{"2001:db8::1", "2001:db8::1"},
+		{"2001:DB8::1", "2001:db8::1"},
+		{"2001:db8:0:0:0:0:0:1", "2001:db8::1"},
+		{"2001:0db8:0000:0000:0000:0000:0000:0001", "2001:db8::1"},
+		{"2001:db8:0:0:1::12", "2001:db8::1:0:0:12"},
+		{"::1", "::1"},
+		{"::ffff:192.0.2.1", "::ffff:192.0.2.1"},
+		{"fe80::1", "fe80::1"},
+	}
+	for _, c := range cases {
+		rc, err := toRecordConfig(dc, record{Name: "v6.example.com", Type: "AAAA", Content: c.stored, TTL: 300})
+		if err != nil {
+			t.Fatalf("%s: %v", c.stored, err)
+		}
+		if got := rc.GetRDATA().String(); got != c.want {
+			t.Errorf("stored %q: read as %q, want %q", c.stored, got, c.want)
+		}
+		if got := fromRecordConfig(rc).Content; got != c.want {
+			t.Errorf("stored %q: written back as %q, want %q", c.stored, got, c.want)
+		}
+	}
+}
+
+// One PUT carries all values of an RRset, IPv6 values included, in the order DNSControl lists them.
+func TestToRRsetInputIPv6Values(t *testing.T) {
+	dc := newDC(t)
+	var rcs models.Records
+	for _, v := range []string{"2001:db8::10", "2001:DB8::11", "2001:db8:0:0:1::12"} {
+		rc, err := toRecordConfig(dc, record{Name: "v6.example.com", Type: "AAAA", Content: v, TTL: 300})
+		if err != nil {
+			t.Fatal(err)
+		}
+		rcs = append(rcs, rc)
+	}
+	in := toRRsetInput(rcs)
+	want := []string{"2001:db8::10", "2001:db8::11", "2001:db8::1:0:0:12"}
+	if in.TTL != 300 || len(in.Records) != len(want) {
+		t.Fatalf("got ttl %d with %d values, want ttl 300 with %d", in.TTL, len(in.Records), len(want))
+	}
+	for i, w := range want {
+		if in.Records[i].Content != w {
+			t.Errorf("value %d: %q, want %q", i, in.Records[i].Content, w)
+		}
+	}
+}
+
 func TestFromRecordConfig(t *testing.T) {
 	dc := newDC(t)
 	// read a record from the API, write it back: the request must carry what the API stores
