@@ -256,3 +256,41 @@ func TestSRVNullTargetKeepsItsDot(t *testing.T) {
 		t.Errorf("request = %+v, want content %q and prio 15", in, "65 75 .")
 	}
 }
+
+// What the API stores decides what the audit may refuse. Checked against the live API on 2026-11-09: an empty TXT value
+// (written as "") is accepted and read back; since the API release of the same day a null MX (RFC 7505, MX 0 ".") is
+// accepted too, with priority 0 and content "." (before it was refused with 422).
+func TestAuditRecordsEmptyTXTAndNullMXPass(t *testing.T) {
+	dc := newDC(t)
+	p := &primednsProvider{}
+	empty, err := dc.NewRecordConfigParse("t", 300, "TXT", `""`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if errs := p.AuditRecords(models.Records{empty}); len(errs) != 0 {
+		t.Errorf("empty TXT must pass the audit, got %v", errs)
+	}
+	nullMX, err := dc.NewRecordConfig("m", 300, "MX", uint16(0), ".")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if errs := p.AuditRecords(models.Records{nullMX}); len(errs) != 0 {
+		t.Errorf("null MX must pass the audit, got %v", errs)
+	}
+}
+
+// A null MX is the one MX whose target is the root name: the dot must survive both conversions.
+func TestNullMXConversions(t *testing.T) {
+	dc := newDC(t)
+	rc, err := toRecordConfig(dc, record{Name: "nomail.example.com", Type: "MX", Content: ".", Prio: new(0), TTL: 300})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := rc.GetRDATA().String(); got != "0 ." {
+		t.Errorf("read as %q, want %q", got, "0 .")
+	}
+	in := toRRsetInput(models.Records{rc})
+	if len(in.Records) != 1 || in.Records[0].Content != "." || in.Records[0].Prio == nil || *in.Records[0].Prio != 0 {
+		t.Errorf("PUT body %+v, want one value \".\" with priority 0", in.Records)
+	}
+}

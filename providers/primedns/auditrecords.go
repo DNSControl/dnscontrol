@@ -12,8 +12,6 @@ import (
 func (*primednsProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
-	a.Add("MX", rejectif.MxNull)      // the API refuses a null MX target (INVALID_MX)
-	a.Add("TXT", rejectif.TxtIsEmpty) // the API refuses empty TXT content (422)
 	a.Add("NS", apexNSTTL)
 
 	errs := a.Audit(records)
@@ -29,9 +27,10 @@ func (*primednsProvider) AuditRecords(records models.Records) []error {
 const systemNSTTL = 8000
 
 // apexNSTTL checks the TTL of an NS record at the zone apex. PrimeDNS keeps all records of a name and type on one TTL
-// (RFC 2181 section 5.2) and refuses an NS record whose TTL differs from the TTL of the NS records already there,
-// which are its own. So an extra apex NS record (a second provider) has to use the same TTL.
-// DNSControl would otherwise stop with an HTTP 422 in the middle of a push.
+// (RFC 2181 section 5.2) and the provider replaces the whole apex NS RRset, PrimeDNS's own records included. A different
+// TTL would change the TTL of PrimeDNS's own NS records too (measured against the API on 2026-11-09: a PUT with TTL 300
+// was accepted and moved all apex NS records to 300), so an extra apex NS record (a second provider) has to use the
+// same TTL as the records PrimeDNS created.
 func apexNSTTL(rc *models.RecordConfig) error {
 	if rc.GetLabel() == "@" && rc.TTL != systemNSTTL {
 		return fmt.Errorf("PrimeDNS needs the same TTL for all NS records at the apex, %d seconds like its own; add TTL(%d) to this NS record", systemNSTTL, systemNSTTL)
