@@ -13,12 +13,9 @@ Jump to a table:
 
 - [Provider Type](#provider-type)
 - [Provider API](#provider-api)
-- [DNS extensions](#dns-extensions)
-- [Service discovery](#service-discovery)
-- [Security](#security)
-- [DNSSEC](#dnssec)
+- [Record types](#record-types)
 
-### Provider Type <!--(table 1/6)-->
+### Provider Type <!--(table 1/3)-->
 
 | Provider name | [Official Support](../provider/index.md#providers-with-official-support) | DNS Provider | Registrar |
 | ------------- | ------------------------------------------------------------------------ | ------------ | --------- |
@@ -101,419 +98,170 @@ Jump to a table:
 | [`WEBSUPPORT`](websupport.md) | ❌ | ✅ | ❌ |
 
 
-### Provider API <!--(table 2/6)-->
+### Provider API <!--(table 2/3)-->
 
-| Provider name | [Concurrent fetching](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | [get-zones](../commands/get-zones.md) |
-| ------------- | ------------------------------------------------------------------- | ---------------------------------------------- | -------------- | ------------------------------------- |
-| [`ADGUARDHOME`](adguardhome.md) | ✅ | ✅ | ❌ | ❌ |
-| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`ALIDNS`](alidns.md) | ✅ | ✅ | ❌ | ✅ |
-| [`AUTODNS`](autodns.md) | ✅ | ❌ | ✅ | ✅ |
-| [`AXFRDDNS`](axfrddns.md) | ✅ | ❌ | ❌ | ❌ |
-| [`AZURE_DNS`](azuredns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ✅ | ❌ | ❌ | ✅ |
-| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ |
-| [`BUNNY_DNS`](bunnydns.md) | ✅ | ❌ | ✅ | ✅ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❌ | ✅ | ✅ |
-| [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ✅ | ✅ |
-| [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
-| [`CONSTELLIX`](constellix.md) | ✅ | ✅ | ✅ | ✅ |
-| [`CSCGLOBAL`](cscglobal.md) | ✅ | ✅ | ❌ | ✅ |
-| [`DESEC`](desec.md) | ✅ | ❔ | ✅ | ✅ |
-| [`DIGITALOCEAN`](digitalocean.md) | ✅ | ✅ | ✅ | ✅ |
-| [`DNSCALE`](dnscale.md) | ❌ | ✅ | ✅ | ❌ |
-| [`DNSIMPLE`](dnsimple.md) | ✅ | ❌ | ❌ | ✅ |
-| [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ✅ | ✅ | ✅ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ✅ | ✅ | ❌ | ❌ |
-| [`DOMAINNAMESHOP`](domainnameshop.md) | ✅ | ❔ | ❌ | ❌ |
-| [`DYNADOT`](dynadot.md) | ✅ | ✅ | ❌ | ❌ |
-| [`DYNU`](dynu.md) | ❌ | ✅ | ❌ | ❌ |
-| [`EASYNAME`](easyname.md) | ✅ | ✅ | ❌ | ❌ |
-| [`EXOSCALE`](exoscale.md) | ❌ | ❌ | ✅ | ❌ |
-| [`FORTIGATE`](fortigate.md) | ✅ | ❌ | ✅ | ✅ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ✅ | ❌ | ✅ |
-| [`GCLOUD`](gcloud.md) | ✅ | ✅ | ✅ | ✅ |
-| [`GCORE`](gcore.md) | ✅ | ✅ | ✅ | ✅ |
-| [`GIDINET`](gidinet.md) | ✅ | ✅ | ❌ | ✅ |
-| [`GIGAHOST`](gigahost.md) | ✅ | ✅ | ❌ | ✅ |
-| [`HEDNS`](hedns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ✅ | ✅ |
-| [`HOSTINGDE`](hostingde.md) | ✅ | ✅ | ✅ | ✅ |
-| [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ✅ | ✅ | ✅ |
-| [`INFOBLOX`](infoblox.md) | ✅ | ❌ | ❌ | ❌ |
-| [`INFOMANIAK`](infomaniak.md) | ✅ | ✅ | ❌ | ❌ |
-| [`INTERNETBS`](internetbs.md) | ✅ | ✅ | ❌ | ❌ |
-| [`INWX`](inwx.md) | ✅ | ✅ | ✅ | ✅ |
-| [`JOKER`](joker.md) | ❌ | ❌ | ✅ | ✅ |
-| [`LINODE`](linode.md) | ✅ | ❌ | ❌ | ❌ |
-| [`LOOPIA`](loopia.md) | ✅ | ✅ | ❌ | ✅ |
-| [`LUADNS`](luadns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ | ✅ |
-| [`MISAKA`](misaka.md) | ✅ | ❌ | ✅ | ✅ |
-| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ | ❌ |
-| [`MYTHICBEASTS`](mythicbeasts.md) | ✅ | ✅ | ❌ | ❌ |
-| [`NAMECHEAP`](namecheap.md) | ✅ | ❌ | ❌ | ✅ |
-| [`NAMEDOTCOM`](namedotcom.md) | ✅ | ✅ | ❌ | ✅ |
-| [`NETBIRD`](netbird.md) | ✅ | ❌ | ✅ | ✅ |
-| [`NETCUP`](netcup.md) | ✅ | ❌ | ❌ | ❌ |
-| [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ✅ |
-| [`NETNOD`](netnod.md) | ✅ | ✅ | ✅ | ✅ |
-| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ✅ | ✅ |
-| [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
-| [`OPENPROVIDER`](openprovider.md) | ✅ | ❌ | ✅ | ✅ |
-| [`OPENSRS`](opensrs.md) | ✅ | ✅ | ❌ | ❌ |
-| [`OPENWRT`](openwrt.md) | ✅ | ✅ | ❌ | ❌ |
-| [`ORACLE`](oracle.md) | ✅ | ✅ | ✅ | ✅ |
-| [`OVH`](ovh.md) | ✅ | ✅ | ❌ | ✅ |
-| [`PACKETFRAME`](packetframe.md) | ✅ | ❌ | ❌ | ❌ |
-| [`PORKBUN`](porkbun.md) | ✅ | ❌ | ❌ | ✅ |
-| [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❌ | ✅ | ✅ |
-| [`ROUTE53`](route53.md) | ✅ | ✅ | ✅ | ✅ |
-| [`RWTH`](rwth.md) | ✅ | ❌ | ❌ | ✅ |
-| [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ✅ | ✅ |
-| [`SCALEWAY`](scaleway.md) | ✅ | ❌ | ❌ | ✅ |
-| [`SOFTLAYER`](softlayer.md) | ✅ | ✅ | ❌ | ❌ |
-| [`SPACESHIP`](spaceship.md) | ✅ | ❌ | ❌ | ✅ |
-| [`TENCENTDNS`](tencentdns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ✅ |
-| [`UNIFI`](unifi.md) | ❌ | ✅ | ❌ | ❌ |
-| [`VERCEL`](vercel.md) | ✅ | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ✅ | ✅ | ✅ | ✅ |
-| [`WEBSUPPORT`](websupport.md) | ✅ | ❌ | ❌ | ❌ |
-
-
-### DNS extensions <!--(table 3/6)-->
-
-| Provider name | [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) | [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md) | [`DNAME`](../language-reference/domain-modifiers/DNAME.md) | [`LOC`](../language-reference/domain-modifiers/LOC.md) | [`PTR`](../language-reference/domain-modifiers/PTR.md) | [`RP`](../language-reference/domain-modifiers/RP.md) | [`SOA`](../language-reference/domain-modifiers/SOA.md) |
-| ------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------ |
-| [`ADGUARDHOME`](adguardhome.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| [`ALIDNS`](alidns.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AUTODNS`](autodns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`AXFRDDNS`](axfrddns.md) | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| [`AZURE_DNS`](azuredns.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [`BUNNY_DNS`](bunnydns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ❔ |
-| [`CLOUDPRESS`](cloudpress.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`CNR`](cnr.md) | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| [`CONSTELLIX`](constellix.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❔ |
-| [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DESEC`](desec.md) | ❔ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DNSCALE`](dnscale.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`DNSIMPLE`](dnsimple.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DOMAINNAMESHOP`](domainnameshop.md) | ❔ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DYNADOT`](dynadot.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DYNU`](dynu.md) | ❌ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| [`EASYNAME`](easyname.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`EXOSCALE`](exoscale.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`FORTIGATE`](fortigate.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| [`GCLOUD`](gcloud.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`GCORE`](gcore.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`GIGAHOST`](gigahost.md) | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ |
-| [`HETZNER_V2`](hetznerv2.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`HOSTINGDE`](hostingde.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| [`HUAWEICLOUD`](huaweicloud.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`INFOBLOX`](infoblox.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`INWX`](inwx.md) | ✅ | ❌ | ❌ | ❔ | ✅ | ❌ | ❌ |
-| [`JOKER`](joker.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`LINODE`](linode.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`LOOPIA`](loopia.md) | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| [`LUADNS`](luadns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`MISAKA`](misaka.md) | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ |
-| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`MYTHICBEASTS`](mythicbeasts.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`NAMECHEAP`](namecheap.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NAMEDOTCOM`](namedotcom.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETCUP`](netcup.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETNOD`](netnod.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ |
-| [`NS1`](ns1.md) | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ |
-| [`OPENPROVIDER`](openprovider.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`OPENSRS`](opensrs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`OPENWRT`](openwrt.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`ORACLE`](oracle.md) | ✅ | ❌ | ❌ | ❔ | ✅ | ❌ | ❌ |
-| [`OVH`](ovh.md) | ❌ | ❌ | ❌ | ❔ | ❌ | ❌ | ❌ |
-| [`PACKETFRAME`](packetframe.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`PORKBUN`](porkbun.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`POWERDNS`](powerdns.md) | ✅ | ❌ | ✅ | ❔ | ✅ | ❌ | ✅ |
-| [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| [`ROUTE53`](route53.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| [`RWTH`](rwth.md) | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`SCALEWAY`](scaleway.md) | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| [`SOFTLAYER`](softlayer.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`SPACESHIP`](spaceship.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| [`TENCENTDNS`](tencentdns.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`UNIFI`](unifi.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`VERCEL`](vercel.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`WEBSUPPORT`](websupport.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Provider name | [Concurrent fetching](../advanced-features/concurrency-verified.md) | [dual host](../advanced-features/dual-host.md) | create-domains | [get-zones](../commands/get-zones.md) | [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md) |
+| ------------- | ------------------------------------------------------------------- | ---------------------------------------------- | -------------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| [`ADGUARDHOME`](adguardhome.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`ALIDNS`](alidns.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`AUTODNS`](autodns.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
+| [`AXFRDDNS`](axfrddns.md) | ✅ | ❌ | ❌ | ❌ | ✅ |
+| [`AZURE_DNS`](azuredns.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`BUNNY_DNS`](bunnydns.md) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
+| [`CLOUDNS`](cloudns.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`CONSTELLIX`](constellix.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`CSCGLOBAL`](cscglobal.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`DESEC`](desec.md) | ✅ | ❔ | ✅ | ✅ | ✅ |
+| [`DIGITALOCEAN`](digitalocean.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`DNSCALE`](dnscale.md) | ❌ | ✅ | ✅ | ❌ | ❌ |
+| [`DNSIMPLE`](dnsimple.md) | ✅ | ❌ | ❌ | ✅ | ✅ |
+| [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`DNSOVERHTTPS`](dnsoverhttps.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`DOMAINNAMESHOP`](domainnameshop.md) | ✅ | ❔ | ❌ | ❌ | ❌ |
+| [`DYNADOT`](dynadot.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`DYNU`](dynu.md) | ❌ | ✅ | ❌ | ❌ | ❌ |
+| [`EASYNAME`](easyname.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`EXOSCALE`](exoscale.md) | ❌ | ❌ | ✅ | ❌ | ❌ |
+| [`FORTIGATE`](fortigate.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
+| [`GANDI_V5`](gandiv5.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`GCLOUD`](gcloud.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`GCORE`](gcore.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`GIDINET`](gidinet.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`GIGAHOST`](gigahost.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`HEDNS`](hedns.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`HOSTINGDE`](hostingde.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`INFOBLOX`](infoblox.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| [`INFOMANIAK`](infomaniak.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`INTERNETBS`](internetbs.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`INWX`](inwx.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`JOKER`](joker.md) | ❌ | ❌ | ✅ | ✅ | ❌ |
+| [`LINODE`](linode.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| [`LOOPIA`](loopia.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`LUADNS`](luadns.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ | ✅ | ❌ |
+| [`MISAKA`](misaka.md) | ✅ | ❌ | ✅ | ✅ | ❔ |
+| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ | ❌ | ❌ |
+| [`MYTHICBEASTS`](mythicbeasts.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`NAMECHEAP`](namecheap.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`NAMEDOTCOM`](namedotcom.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`NETBIRD`](netbird.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
+| [`NETCUP`](netcup.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`NETNOD`](netnod.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ✅ | ✅ | ❔ |
+| [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`OPENPROVIDER`](openprovider.md) | ✅ | ❌ | ✅ | ✅ | ❔ |
+| [`OPENSRS`](opensrs.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`OPENWRT`](openwrt.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`ORACLE`](oracle.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`OVH`](ovh.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [`PACKETFRAME`](packetframe.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| [`PORKBUN`](porkbun.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❌ | ✅ | ✅ | ✅ |
+| [`ROUTE53`](route53.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`RWTH`](rwth.md) | ✅ | ❌ | ❌ | ✅ | ❔ |
+| [`SAKURACLOUD`](sakuracloud.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
+| [`SCALEWAY`](scaleway.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`SOFTLAYER`](softlayer.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| [`SPACESHIP`](spaceship.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`TENCENTDNS`](tencentdns.md) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
+| [`UNIFI`](unifi.md) | ❌ | ✅ | ❌ | ❌ | ❌ |
+| [`VERCEL`](vercel.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
+| [`VULTR`](vultr.md) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [`WEBSUPPORT`](websupport.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
 
 
-### Service discovery <!--(table 4/6)-->
+### Record types <!--(table 3/3)-->
 
-| Provider name | [`DHCID`](../language-reference/domain-modifiers/DHCID.md) | [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) | [`SRV`](../language-reference/domain-modifiers/SRV.md) | [`SVCB`](../language-reference/domain-modifiers/SVCB.md) |
-| ------------- | ---------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------- |
-| [`ADGUARDHOME`](adguardhome.md) | ❌ | ❌ | ❌ | ❌ |
-| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ❌ | ✅ | ✅ | ❌ |
-| [`ALIDNS`](alidns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`AUTODNS`](autodns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`AXFRDDNS`](axfrddns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`AZURE_DNS`](azuredns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ |
-| [`BUNNY_DNS`](bunnydns.md) | ❌ | ❌ | ✅ | ✅ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ❌ | ✅ | ✅ | ✅ |
-| [`CLOUDNS`](cloudns.md) | ❌ | ✅ | ✅ | ❌ |
-| [`CLOUDPRESS`](cloudpress.md) | ❌ | ❌ | ✅ | ❌ |
-| [`CNR`](cnr.md) | ✅ | ✅ | ✅ | ✅ |
-| [`CONSTELLIX`](constellix.md) | ❌ | ❌ | ✅ | ❌ |
-| [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ✅ | ❌ |
-| [`DESEC`](desec.md) | ❌ | ✅ | ✅ | ✅ |
-| [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ✅ | ❌ |
-| [`DNSCALE`](dnscale.md) | ❌ | ❌ | ✅ | ✅ |
-| [`DNSIMPLE`](dnsimple.md) | ❌ | ✅ | ✅ | ✅ |
-| [`DNSMADEEASY`](dnsmadeeasy.md) | ❌ | ❌ | ✅ | ❌ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ❌ | ❌ | ❌ | ❌ |
-| [`DOMAINNAMESHOP`](domainnameshop.md) | ❌ | ❌ | ✅ | ❌ |
-| [`DYNADOT`](dynadot.md) | ❌ | ❌ | ❌ | ❌ |
-| [`DYNU`](dynu.md) | ✅ | ✅ | ✅ | ✅ |
-| [`EASYNAME`](easyname.md) | ❌ | ❌ | ❌ | ❌ |
-| [`EXOSCALE`](exoscale.md) | ❌ | ❌ | ✅ | ❌ |
-| [`FORTIGATE`](fortigate.md) | ❌ | ❌ | ❌ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ❌ | ✅ | ✅ | ✅ |
-| [`GCLOUD`](gcloud.md) | ❌ | ❌ | ✅ | ✅ |
-| [`GCORE`](gcore.md) | ❌ | ❌ | ✅ | ✅ |
-| [`GIDINET`](gidinet.md) | ❌ | ❌ | ✅ | ❌ |
-| [`GIGAHOST`](gigahost.md) | ❌ | ✅ | ✅ | ❌ |
-| [`HEDNS`](hedns.md) | ❌ | ✅ | ✅ | ✅ |
-| [`HETZNER_V2`](hetznerv2.md) | ❌ | ❌ | ✅ | ✅ |
-| [`HOSTINGDE`](hostingde.md) | ❌ | ❌ | ✅ | ❌ |
-| [`HUAWEICLOUD`](huaweicloud.md) | ❌ | ❌ | ✅ | ❌ |
-| [`INFOBLOX`](infoblox.md) | ❌ | ❌ | ✅ | ❌ |
-| [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ | ❌ |
-| [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ |
-| [`INWX`](inwx.md) | ❌ | ✅ | ✅ | ✅ |
-| [`JOKER`](joker.md) | ❌ | ✅ | ✅ | ❌ |
-| [`LINODE`](linode.md) | ❌ | ❌ | ✅ | ❌ |
-| [`LOOPIA`](loopia.md) | ❌ | ✅ | ✅ | ❌ |
-| [`LUADNS`](luadns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ✅ | ❌ |
-| [`MISAKA`](misaka.md) | ❌ | ❌ | ✅ | ❌ |
-| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ✅ | ❌ |
-| [`MYTHICBEASTS`](mythicbeasts.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NAMECHEAP`](namecheap.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NAMEDOTCOM`](namedotcom.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ | ❌ |
-| [`NETCUP`](netcup.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NETLIFY`](netlify.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NETNOD`](netnod.md) | ❌ | ✅ | ✅ | ✅ |
-| [`NEXDNS`](nexdns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`NS1`](ns1.md) | ✅ | ✅ | ✅ | ✅ |
-| [`OPENPROVIDER`](openprovider.md) | ❌ | ❌ | ✅ | ❌ |
-| [`OPENSRS`](opensrs.md) | ❌ | ❌ | ❌ | ❌ |
-| [`OPENWRT`](openwrt.md) | ❌ | ❌ | ✅ | ❌ |
-| [`ORACLE`](oracle.md) | ❌ | ✅ | ✅ | ❌ |
-| [`OVH`](ovh.md) | ❌ | ❌ | ✅ | ❌ |
-| [`PACKETFRAME`](packetframe.md) | ❌ | ❌ | ✅ | ❌ |
-| [`PORKBUN`](porkbun.md) | ❌ | ❌ | ✅ | ✅ |
-| [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ | ✅ |
-| [`REALTIMEREGISTER`](realtimeregister.md) | ❌ | ✅ | ✅ | ❌ |
-| [`ROUTE53`](route53.md) | ❌ | ❌ | ✅ | ✅ |
-| [`RWTH`](rwth.md) | ❌ | ❌ | ✅ | ❌ |
-| [`SAKURACLOUD`](sakuracloud.md) | ❌ | ❌ | ✅ | ✅ |
-| [`SCALEWAY`](scaleway.md) | ❌ | ✅ | ✅ | ✅ |
-| [`SOFTLAYER`](softlayer.md) | ❌ | ❌ | ✅ | ❌ |
-| [`SPACESHIP`](spaceship.md) | ❌ | ❌ | ✅ | ✅ |
-| [`TENCENTDNS`](tencentdns.md) | ❌ | ❌ | ✅ | ❌ |
-| [`TRANSIP`](transip.md) | ❌ | ✅ | ✅ | ❌ |
-| [`UNIFI`](unifi.md) | ❌ | ❌ | ✅ | ❌ |
-| [`VERCEL`](vercel.md) | ❌ | ❌ | ✅ | ❌ |
-| [`VULTR`](vultr.md) | ❌ | ❌ | ✅ | ❌ |
-| [`WEBSUPPORT`](websupport.md) | ❌ | ❌ | ✅ | ❌ |
-
-
-### Security <!--(table 5/6)-->
-
-| Provider name | [`CAA`](../language-reference/domain-modifiers/CAA.md) | [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md) | [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md) | [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md) | [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | [`TLSA`](../language-reference/domain-modifiers/TLSA.md) |
-| ------------- | ------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------- |
-| [`ADGUARDHOME`](adguardhome.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`ALIDNS`](alidns.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AUTODNS`](autodns.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AXFRDDNS`](axfrddns.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [`AZURE_DNS`](azuredns.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [`BUNNY_DNS`](bunnydns.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`CNR`](cnr.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ |
-| [`CONSTELLIX`](constellix.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`CSCGLOBAL`](cscglobal.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DESEC`](desec.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [`DIGITALOCEAN`](digitalocean.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DNSCALE`](dnscale.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`DNSIMPLE`](dnsimple.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`DNSMADEEASY`](dnsmadeeasy.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DOMAINNAMESHOP`](domainnameshop.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❔ |
-| [`DYNADOT`](dynadot.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`DYNU`](dynu.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [`EASYNAME`](easyname.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`EXOSCALE`](exoscale.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`FORTIGATE`](fortigate.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| [`GCLOUD`](gcloud.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`GCORE`](gcore.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`GIGAHOST`](gigahost.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ |
-| [`HETZNER_V2`](hetznerv2.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| [`HOSTINGDE`](hostingde.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`INFOBLOX`](infoblox.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`INFOMANIAK`](infomaniak.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`INWX`](inwx.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`JOKER`](joker.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`LINODE`](linode.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`LOOPIA`](loopia.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`LUADNS`](luadns.md) | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`MISAKA`](misaka.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`MITTWALD`](mittwald.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`MYTHICBEASTS`](mythicbeasts.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`NAMECHEAP`](namecheap.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NAMEDOTCOM`](namedotcom.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETCUP`](netcup.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| [`NETLIFY`](netlify.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`NETNOD`](netnod.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`NEXDNS`](nexdns.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| [`NS1`](ns1.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| [`OPENPROVIDER`](openprovider.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| [`OPENSRS`](opensrs.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`OPENWRT`](openwrt.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`ORACLE`](oracle.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`OVH`](ovh.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`PACKETFRAME`](packetframe.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`PORKBUN`](porkbun.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`ROUTE53`](route53.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`RWTH`](rwth.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| [`SAKURACLOUD`](sakuracloud.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| [`SCALEWAY`](scaleway.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
-| [`SOFTLAYER`](softlayer.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`SPACESHIP`](spaceship.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| [`TENCENTDNS`](tencentdns.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`TRANSIP`](transip.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
-| [`UNIFI`](unifi.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| [`VERCEL`](vercel.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
-| [`WEBSUPPORT`](websupport.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-
-
-### DNSSEC <!--(table 6/6)-->
-
-| Provider name | [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md) | [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md) | [`DS`](../language-reference/domain-modifiers/DS.md) |
-| ------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| [`ADGUARDHOME`](adguardhome.md) | ❌ | ❌ | ❌ |
-| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | ✅ | ❌ | ❌ |
-| [`ALIDNS`](alidns.md) | ❌ | ❌ | ❌ |
-| [`AUTODNS`](autodns.md) | ❌ | ❌ | ❌ |
-| [`AXFRDDNS`](axfrddns.md) | ✅ | ❌ | ✅ |
-| [`AZURE_DNS`](azuredns.md) | ❌ | ❌ | ❌ |
-| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ❌ |
-| [`BIND`](bind.md) | ✅ | ✅ | ✅ |
-| [`BUNNY_DNS`](bunnydns.md) | ✅ | ❌ | ❌ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ❌ | ❌ | ✅ |
-| [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ |
-| [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ❌ |
-| [`CNR`](cnr.md) | ✅ | ❔ | ❔ |
-| [`CONSTELLIX`](constellix.md) | ❌ | ❌ | ❌ |
-| [`CSCGLOBAL`](cscglobal.md) | ❌ | ❌ | ❌ |
-| [`DESEC`](desec.md) | ✅ | ✅ | ❌ |
-| [`DIGITALOCEAN`](digitalocean.md) | ❌ | ❌ | ❌ |
-| [`DNSCALE`](dnscale.md) | ❌ | ❌ | ❌ |
-| [`DNSIMPLE`](dnsimple.md) | ✅ | ❌ | ❌ |
-| [`DNSMADEEASY`](dnsmadeeasy.md) | ❌ | ❌ | ❌ |
-| [`DNSOVERHTTPS`](dnsoverhttps.md) | ❌ | ❌ | ❌ |
-| [`DOMAINNAMESHOP`](domainnameshop.md) | ❌ | ❌ | ❔ |
-| [`DYNADOT`](dynadot.md) | ❌ | ❌ | ❌ |
-| [`DYNU`](dynu.md) | ❌ | ❌ | ❌ |
-| [`EASYNAME`](easyname.md) | ❌ | ❌ | ❌ |
-| [`EXOSCALE`](exoscale.md) | ❌ | ❌ | ❌ |
-| [`FORTIGATE`](fortigate.md) | ❌ | ❌ | ❌ |
-| [`GANDI_V5`](gandiv5.md) | ❌ | ❌ | ❌ |
-| [`GCLOUD`](gcloud.md) | ✅ | ❌ | ❌ |
-| [`GCORE`](gcore.md) | ✅ | ❌ | ❌ |
-| [`GIDINET`](gidinet.md) | ❌ | ❌ | ❌ |
-| [`GIGAHOST`](gigahost.md) | ❌ | ❌ | ❌ |
-| [`HEDNS`](hedns.md) | ❌ | ❌ | ❌ |
-| [`HETZNER_V2`](hetznerv2.md) | ❌ | ❌ | ✅ |
-| [`HOSTINGDE`](hostingde.md) | ✅ | ❌ | ✅ |
-| [`HUAWEICLOUD`](huaweicloud.md) | ✅ | ❌ | ❌ |
-| [`INFOBLOX`](infoblox.md) | ❌ | ❌ | ❌ |
-| [`INFOMANIAK`](infomaniak.md) | ❌ | ❌ | ✅ |
-| [`INTERNETBS`](internetbs.md) | ❌ | ❌ | ❌ |
-| [`INWX`](inwx.md) | ✅ | ❌ | ❔ |
-| [`JOKER`](joker.md) | ❌ | ❌ | ❌ |
-| [`LINODE`](linode.md) | ❌ | ❌ | ❌ |
-| [`LOOPIA`](loopia.md) | ❌ | ❌ | ❌ |
-| [`LUADNS`](luadns.md) | ❌ | ❌ | ❌ |
-| [`MIKROTIK`](mikrotik.md) | ❌ | ❌ | ❌ |
-| [`MISAKA`](misaka.md) | ❔ | ❌ | ❌ |
-| [`MITTWALD`](mittwald.md) | ❌ | ❌ | ❌ |
-| [`MYTHICBEASTS`](mythicbeasts.md) | ❌ | ❌ | ❌ |
-| [`NAMECHEAP`](namecheap.md) | ❌ | ❌ | ❌ |
-| [`NAMEDOTCOM`](namedotcom.md) | ❌ | ❌ | ❌ |
-| [`NETBIRD`](netbird.md) | ❌ | ❌ | ❌ |
-| [`NETCUP`](netcup.md) | ❌ | ❌ | ❌ |
-| [`NETLIFY`](netlify.md) | ❌ | ❌ | ❌ |
-| [`NETNOD`](netnod.md) | ❌ | ❌ | ❌ |
-| [`NEXDNS`](nexdns.md) | ❔ | ❌ | ❌ |
-| [`NS1`](ns1.md) | ✅ | ❌ | ✅ |
-| [`OPENPROVIDER`](openprovider.md) | ❔ | ❌ | ❌ |
-| [`OPENSRS`](opensrs.md) | ❌ | ❌ | ❌ |
-| [`OPENWRT`](openwrt.md) | ❌ | ❌ | ❌ |
-| [`ORACLE`](oracle.md) | ❌ | ❌ | ❌ |
-| [`OVH`](ovh.md) | ❌ | ❌ | ❌ |
-| [`PACKETFRAME`](packetframe.md) | ❌ | ❌ | ❌ |
-| [`PORKBUN`](porkbun.md) | ❌ | ❌ | ❌ |
-| [`POWERDNS`](powerdns.md) | ✅ | ✅ | ✅ |
-| [`REALTIMEREGISTER`](realtimeregister.md) | ✅ | ❌ | ❌ |
-| [`ROUTE53`](route53.md) | ❌ | ❌ | ❌ |
-| [`RWTH`](rwth.md) | ❔ | ❌ | ❔ |
-| [`SAKURACLOUD`](sakuracloud.md) | ❌ | ❌ | ❌ |
-| [`SCALEWAY`](scaleway.md) | ❌ | ❌ | ❌ |
-| [`SOFTLAYER`](softlayer.md) | ❌ | ❌ | ❌ |
-| [`SPACESHIP`](spaceship.md) | ❌ | ❌ | ❌ |
-| [`TENCENTDNS`](tencentdns.md) | ❌ | ❌ | ❌ |
-| [`TRANSIP`](transip.md) | ❌ | ❌ | ❌ |
-| [`UNIFI`](unifi.md) | ❌ | ❌ | ❌ |
-| [`VERCEL`](vercel.md) | ❌ | ❌ | ❌ |
-| [`VULTR`](vultr.md) | ✅ | ❌ | ❌ |
-| [`WEBSUPPORT`](websupport.md) | ❌ | ❌ | ❌ |
+| Provider name | Supported | Unsupported | Unknown |
+| ------------- | --------- | ----------- | ------- |
+| [`ADGUARDHOME`](adguardhome.md) | 1: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) | 18: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`AKAMAIEDGEDNS`](akamaiedgedns.md) | 8: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`ALIDNS`](alidns.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`AUTODNS`](autodns.md) | 4: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 15: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`AXFRDDNS`](axfrddns.md) | 14: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 5: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`AZURE_DNS`](azuredns.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | 2: [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`BIND`](bind.md) | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 | 0 |
+| [`BUNNY_DNS`](bunnydns.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 0 |
+| [`CLOUDFLAREAPI`](cloudflareapi.md) | 11: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 8: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`CLOUDNS`](cloudns.md) | 9: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 9: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 1 |
+| [`CLOUDPRESS`](cloudpress.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`CNR`](cnr.md) | 12: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 5: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 2 |
+| [`CONSTELLIX`](constellix.md) | 4: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 14: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 1 |
+| [`CSCGLOBAL`](cscglobal.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`DESEC`](desec.md) | 12: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 6: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 1 |
+| [`DIGITALOCEAN`](digitalocean.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`DNSCALE`](dnscale.md) | 8: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`DNSIMPLE`](dnsimple.md) | 9: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 10: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`DNSMADEEASY`](dnsmadeeasy.md) | 4: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 15: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`DNSOVERHTTPS`](dnsoverhttps.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`DOMAINNAMESHOP`](domainnameshop.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 14: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 3 |
+| [`DYNADOT`](dynadot.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`DYNU`](dynu.md) | 14: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 5: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`EASYNAME`](easyname.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`EXOSCALE`](exoscale.md) | 3: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`FORTIGATE`](fortigate.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`GANDI_V5`](gandiv5.md) | 12: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 7: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`GCLOUD`](gcloud.md) | 8: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`GCORE`](gcore.md) | 6: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 13: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`GIDINET`](gidinet.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`GIGAHOST`](gigahost.md) | 6: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 13: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`HEDNS`](hedns.md) | 10: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 9: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`HETZNER_V2`](hetznerv2.md) | 7: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 0 |
+| [`HOSTINGDE`](hostingde.md) | 8: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`HUAWEICLOUD`](huaweicloud.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`INFOBLOX`](infoblox.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`INFOMANIAK`](infomaniak.md) | 6: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 13: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`INTERNETBS`](internetbs.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`INWX`](inwx.md) | 9: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 8: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 2 |
+| [`JOKER`](joker.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`LINODE`](linode.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`LOOPIA`](loopia.md) | 6: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 13: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`LUADNS`](luadns.md) | 8: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`MIKROTIK`](mikrotik.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`MISAKA`](misaka.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`MITTWALD`](mittwald.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`MYTHICBEASTS`](mythicbeasts.md) | 5: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 14: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`NAMECHEAP`](namecheap.md) | 3: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`NAMEDOTCOM`](namedotcom.md) | 2: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`NETBIRD`](netbird.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`NETCUP`](netcup.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`NETLIFY`](netlify.md) | 3: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 16: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`NETNOD`](netnod.md) | 10: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 9: [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`NEXDNS`](nexdns.md) | 6: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 13: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`NS1`](ns1.md) | 11: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 8: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 0 |
+| [`OPENPROVIDER`](openprovider.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`OPENSRS`](opensrs.md) | 0 | 19: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`OPENWRT`](openwrt.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`ORACLE`](oracle.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 1 |
+| [`OVH`](ovh.md) | 4: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 14: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 1 |
+| [`PACKETFRAME`](packetframe.md) | 2: [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`PORKBUN`](porkbun.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`POWERDNS`](powerdns.md) | 15: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 3: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md) | 1 |
+| [`REALTIMEREGISTER`](realtimeregister.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`ROUTE53`](route53.md) | 8: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 11: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md) | 0 |
+| [`RWTH`](rwth.md) | 4: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 14: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 1 |
+| [`SAKURACLOUD`](sakuracloud.md) | 6: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 13: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`SCALEWAY`](scaleway.md) | 9: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 10: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md) | 0 |
+| [`SOFTLAYER`](softlayer.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`SPACESHIP`](spaceship.md) | 7: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 12: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 0 |
+| [`TENCENTDNS`](tencentdns.md) | 2: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 17: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`TRANSIP`](transip.md) | 6: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 13: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md) | 0 |
+| [`UNIFI`](unifi.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`VERCEL`](vercel.md) | 4: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`SRV`](../language-reference/domain-modifiers/SRV.md) | 15: [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`VULTR`](vultr.md) | 3: [`CAA`](../language-reference/domain-modifiers/CAA.md), [`SRV`](../language-reference/domain-modifiers/SRV.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) | 16: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
+| [`WEBSUPPORT`](websupport.md) | 1: [`SRV`](../language-reference/domain-modifiers/SRV.md) | 18: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md), [`CAA`](../language-reference/domain-modifiers/CAA.md), [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md), [`DHCID`](../language-reference/domain-modifiers/DHCID.md), [`DNAME`](../language-reference/domain-modifiers/DNAME.md), [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md), [`DS`](../language-reference/domain-modifiers/DS.md), [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md), [`LOC`](../language-reference/domain-modifiers/LOC.md), [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md), [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md), [`PTR`](../language-reference/domain-modifiers/PTR.md), [`RP`](../language-reference/domain-modifiers/RP.md), [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md), [`SOA`](../language-reference/domain-modifiers/SOA.md), [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md), [`SVCB`](../language-reference/domain-modifiers/SVCB.md), [`TLSA`](../language-reference/domain-modifiers/TLSA.md) | 0 |
 
 <!-- provider-matrix-end -->
 

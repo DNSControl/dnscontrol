@@ -149,34 +149,48 @@ Add documentation:
 
 ### Step 4: Update the matrix
 
-In this step we make the new type appear in the feature matrics.
+In this step we make the new type appear in the feature matrix.
 
-Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Add it to the variable `matrix` maintaining alphabetical ordering, which should look like this:
+Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Record types are listed in the "Record types" table definition, maintaining alphabetical ordering, and are wired up with a `setRecordType` call. It should look like this:
 
 {% code title="dnscontrol/build/generate/featureMatrix.go" %}
 
 ```diff
-func matrixData() *FeatureMatrix {
-    const (
-        ...
-        DomainModifierCaa    = "[`CAA`](language-reference/domain-modifiers/CAA.md)"
-+       DomainModifierFoo    = "[`FOO`](language-reference/domain-modifiers/FOO.md)"
-        DomainModifierLoc    = "[`LOC`](language-reference/domain-modifiers/LOC.md)"
-        ...
-    )
-    matrix := &FeatureMatrix{
-        Providers: map[string]FeatureMap{},
-        Features: []string{
-            ...
-            DomainModifierCaa,
-+           DomainModifierFoo,
-            DomainModifierLoc,
-            ...
-        },
-    }
+ func matrixData() *FeatureMatrix {
+     const (
+         ...
+         DomainModifierCaa        = "[`CAA`](../language-reference/domain-modifiers/CAA.md)"
++       DomainModifierFoo         = "[`FOO`](../language-reference/domain-modifiers/FOO.md)"
+         DomainModifierCsync      = "[`CSYNC`](../language-reference/domain-modifiers/CSYNC.md)"
+         ...
+     )
+     matrix := &FeatureMatrix{
+         ...
+         { // record types, rendered as one combined list table
+             Title: "Record types",
+             ListStyle: true,
+             Features: []string{
+                 ...
+                 DomainModifierCaa,
++               DomainModifierFoo,
+                 DomainModifierCsync,
+                 ...
+             },
+         },
+     }
+     ...
+     for _, def := range publicDefinitions() {
+         ...
+         setRecordType(DomainModifierCaa, "CAA")
++       setRecordType(DomainModifierFoo, "FOO")
+         setRecordType(DomainModifierCsync, "CSYNC")
+         ...
+     }
 ```
 
 {% endcode %}
+
+The provider pages and the matrix on `documentation/provider/index.md` are generated output. Regenerate them with `go generate ./...` from the repo root and commit the result.
 
 ### Step 5: Add a `parse_tests` test case
 
