@@ -206,18 +206,6 @@ func (p *primednsProvider) listRecords(domain string) ([]record, error) {
 	return out.Records, nil
 }
 
-func (p *primednsProvider) createRecord(in recordInput) error {
-	return p.do(http.MethodPost, "/dns/records", in, nil)
-}
-
-func (p *primednsProvider) updateRecord(id int, in recordInput) error {
-	return p.do(http.MethodPatch, "/dns/records/"+strconv.Itoa(id), in, nil)
-}
-
-func (p *primednsProvider) deleteRecord(id int) error {
-	return p.do(http.MethodDelete, "/dns/records/"+strconv.Itoa(id), nil, nil)
-}
-
 // rrsetValue is one value of an RRset in the body of PUT /zones/{zone}/rrsets/{name}/{type}.
 type rrsetValue struct {
 	Content string `json:"content"`
