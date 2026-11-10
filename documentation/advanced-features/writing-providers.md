@@ -354,8 +354,8 @@ must be nonempty and may contain colons. To include a link, end the reason
 with `: https://...` (or `: http://...`), for example
 `"ALIAS:Can:Needs enabling: https://example.com/docs"`. The separator space
 must be the last space in the string. The preceding text becomes the
-`DocumentationNote.Comment` and the URL becomes its `Link`; generated feature
-tables currently show only status.
+`DocumentationNote.Comment` and the URL becomes its `Link`; the generated
+record types lists render annotated statuses with their comment and link.
 
 Precedence is: exact entries, patterns with status suffixes, then unsuffixed
 patterns/categories. Conflicting statuses at the winning

@@ -199,23 +199,7 @@ As shown in the configuration examples above, this can be activated on demand an
   - [get-zones](../commands/get-zones.md): ✅
   - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
 - Record types
-  - [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md): ❌
-  - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
-  - [`CSYNC`](../language-reference/domain-modifiers/CSYNC.md): ❌
-  - [`DHCID`](../language-reference/domain-modifiers/DHCID.md): ❌
-  - [`DNAME`](../language-reference/domain-modifiers/DNAME.md): ❌
-  - [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md): ❌
-  - [`DS`](../language-reference/domain-modifiers/DS.md): ❌
-  - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ❌
-  - [`LOC`](../language-reference/domain-modifiers/LOC.md): ✅
-  - [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md): ✅
-  - [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md): ❌
-  - [`PTR`](../language-reference/domain-modifiers/PTR.md): ❌
-  - [`RP`](../language-reference/domain-modifiers/RP.md): ❌
-  - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
-  - [`SOA`](../language-reference/domain-modifiers/SOA.md): ❌
-  - [`SRV`](../language-reference/domain-modifiers/SRV.md): ✅
-  - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
-  - [`SVCB`](../language-reference/domain-modifiers/SVCB.md): ❌
-  - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅
+  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`LOC`](../language-reference/domain-modifiers/LOC.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) [`TLSA`](../language-reference/domain-modifiers/TLSA.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
+    - Not supported: [`DS`](../language-reference/domain-modifiers/DS.md) (Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end.)
+    - Not supported: [`SOA`](../language-reference/domain-modifiers/SOA.md) (💩)
 <!-- provider-features-end -->

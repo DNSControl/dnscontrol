@@ -151,7 +151,7 @@ Add documentation:
 
 In this step we make the new type appear in the feature matrix.
 
-Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Record types are listed in the "Record types" table definition, maintaining alphabetical ordering, and are wired up with a `setRecordType` call. It should look like this:
+Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Record types are listed in the "Record types" section definition, maintaining alphabetical order by type name, and are wired up with a `setRecordType` call. Each provider's page then lists the types it supports, with annotated types as sub-bullets. It should look like this:
 
 {% code title="dnscontrol/build/generate/featureMatrix.go" %}
 
@@ -161,19 +161,19 @@ Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatr
          ...
          DomainModifierCaa        = "[`CAA`](../language-reference/domain-modifiers/CAA.md)"
 +       DomainModifierFoo         = "[`FOO`](../language-reference/domain-modifiers/FOO.md)"
-         DomainModifierCsync      = "[`CSYNC`](../language-reference/domain-modifiers/CSYNC.md)"
+         DomainModifierCname      = "[`CNAME`](../language-reference/domain-modifiers/CNAME.md)"
          ...
      )
      matrix := &FeatureMatrix{
          ...
-         { // record types, rendered as one combined list table
+         { // record types, rendered as a per-provider bullet list
              Title: "Record types",
              ListStyle: true,
              Features: []string{
                  ...
                  DomainModifierCaa,
 +               DomainModifierFoo,
-                 DomainModifierCsync,
+                 DomainModifierCname,
                  ...
              },
          },
@@ -183,7 +183,7 @@ Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatr
          ...
          setRecordType(DomainModifierCaa, "CAA")
 +       setRecordType(DomainModifierFoo, "FOO")
-         setRecordType(DomainModifierCsync, "CSYNC")
+         setRecordType(DomainModifierCname, "CNAME")
          ...
      }
 ```
