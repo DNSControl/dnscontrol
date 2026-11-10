@@ -14,6 +14,7 @@ Solution: Use a "builder" to construct it for you.
 - [DMARC_BUILDER](../language-reference/domain-modifiers/DMARC_BUILDER.md)
 - [FORSALE_BUILDER](../language-reference/domain-modifiers/FORSALE_BUILDER.md)
 - [M365_BUILDER](../language-reference/domain-modifiers/M365_BUILDER.md)
+- [MIGADU_BUILDER](../language-reference/domain-modifiers/MIGADU_BUILDER.md)
 - [SPF_BUILDER](../language-reference/domain-modifiers/SPF_BUILDER.md)
 
 ## Repeat records in many domains (macros)

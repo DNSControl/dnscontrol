@@ -1,0 +1,353 @@
+{
+  "dns_providers": [],
+  "domains": [
+    {
+      "dnsProviders": {},
+      "name": "foo.com",
+      "records": [
+        {
+          "comparablev3": "10 aspmx1.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Mx": "aspmx1.migadu.com.",
+            "Preference": 10
+          },
+          "ttl": 300,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "20 aspmx2.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Mx": "aspmx2.migadu.com.",
+            "Preference": 20
+          },
+          "ttl": 300,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "\"hosted-email-verify=wxyz5678\"",
+          "filepos": "[line:8:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Txt": [
+              "hosted-email-verify=wxyz5678"
+            ]
+          },
+          "ttl": 300,
+          "type": "TXT",
+          "typenum": 16
+        },
+        {
+          "comparablev3": "\"v=spf1 include:spf.migadu.com -all\"",
+          "filepos": "[line:8:5]",
+          "name": "@",
+          "name_unicode": "@",
+          "rdata": {
+            "Txt": [
+              "v=spf1 include:spf.migadu.com -all"
+            ]
+          },
+          "ttl": 300,
+          "type": "TXT",
+          "typenum": 16
+        },
+        {
+          "comparablev3": "key1.foo.com._domainkey.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "key1._domainkey",
+          "name_unicode": "key1._domainkey",
+          "rdata": {
+            "Target": "key1.foo.com._domainkey.migadu.com."
+          },
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key2.foo.com._domainkey.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "key2._domainkey",
+          "name_unicode": "key2._domainkey",
+          "rdata": {
+            "Target": "key2.foo.com._domainkey.migadu.com."
+          },
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key3.foo.com._domainkey.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "key3._domainkey",
+          "name_unicode": "key3._domainkey",
+          "rdata": {
+            "Target": "key3.foo.com._domainkey.migadu.com."
+          },
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "0 1 443 autodiscover.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "_autodiscover._tcp",
+          "name_unicode": "_autodiscover._tcp",
+          "rdata": {
+            "Port": 443,
+            "Priority": 0,
+            "Target": "autodiscover.migadu.com.",
+            "Weight": 1
+          },
+          "ttl": 300,
+          "type": "SRV",
+          "typenum": 33
+        },
+        {
+          "comparablev3": "0 1 993 imap.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "_imaps._tcp",
+          "name_unicode": "_imaps._tcp",
+          "rdata": {
+            "Port": 993,
+            "Priority": 0,
+            "Target": "imap.migadu.com.",
+            "Weight": 1
+          },
+          "ttl": 300,
+          "type": "SRV",
+          "typenum": 33
+        },
+        {
+          "comparablev3": "0 1 995 pop.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "_pop3s._tcp",
+          "name_unicode": "_pop3s._tcp",
+          "rdata": {
+            "Port": 995,
+            "Priority": 0,
+            "Target": "pop.migadu.com.",
+            "Weight": 1
+          },
+          "ttl": 300,
+          "type": "SRV",
+          "typenum": 33
+        },
+        {
+          "comparablev3": "0 1 465 smtp.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "_submissions._tcp",
+          "name_unicode": "_submissions._tcp",
+          "rdata": {
+            "Port": 465,
+            "Priority": 0,
+            "Target": "smtp.migadu.com.",
+            "Weight": 1
+          },
+          "ttl": 300,
+          "type": "SRV",
+          "typenum": 33
+        },
+        {
+          "comparablev3": "autoconfig.migadu.com.",
+          "filepos": "[line:8:5]",
+          "name": "autoconfig",
+          "name_unicode": "autoconfig",
+          "rdata": {
+            "Target": "autoconfig.migadu.com."
+          },
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "foo.com"
+    },
+    {
+      "dnsProviders": {},
+      "name": "bar.com",
+      "records": [
+        {
+          "comparablev3": "10 aspmx1.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "mail",
+          "name_unicode": "mail",
+          "rdata": {
+            "Mx": "aspmx1.migadu.com.",
+            "Preference": 10
+          },
+          "ttl": 3600,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "20 aspmx2.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "mail",
+          "name_unicode": "mail",
+          "rdata": {
+            "Mx": "aspmx2.migadu.com.",
+            "Preference": 20
+          },
+          "ttl": 3600,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "\"hosted-email-verify=abcd1234\"",
+          "filepos": "[line:19:5]",
+          "name": "mail",
+          "name_unicode": "mail",
+          "rdata": {
+            "Txt": [
+              "hosted-email-verify=abcd1234"
+            ]
+          },
+          "ttl": 3600,
+          "type": "TXT",
+          "typenum": 16
+        },
+        {
+          "comparablev3": "10 aspmx1.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "*.mail",
+          "name_unicode": "*.mail",
+          "rdata": {
+            "Mx": "aspmx1.migadu.com.",
+            "Preference": 10
+          },
+          "ttl": 3600,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "20 aspmx2.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "*.mail",
+          "name_unicode": "*.mail",
+          "rdata": {
+            "Mx": "aspmx2.migadu.com.",
+            "Preference": 20
+          },
+          "ttl": 3600,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "key1.mail.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "key1._domainkey.mail",
+          "name_unicode": "key1._domainkey.mail",
+          "rdata": {
+            "Target": "key1.mail.bar.com._domainkey.migadu.com."
+          },
+          "ttl": 3600,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key2.mail.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "key2._domainkey.mail",
+          "name_unicode": "key2._domainkey.mail",
+          "rdata": {
+            "Target": "key2.mail.bar.com._domainkey.migadu.com."
+          },
+          "ttl": 3600,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key3.mail.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:19:5]",
+          "name": "key3._domainkey.mail",
+          "name_unicode": "key3._domainkey.mail",
+          "rdata": {
+            "Target": "key3.mail.bar.com._domainkey.migadu.com."
+          },
+          "ttl": 3600,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "10 aspmx1.migadu.com.",
+          "filepos": "[line:35:5]",
+          "name": "sub",
+          "name_unicode": "sub",
+          "rdata": {
+            "Mx": "aspmx1.migadu.com.",
+            "Preference": 10
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "20 aspmx2.migadu.com.",
+          "filepos": "[line:35:5]",
+          "name": "sub",
+          "name_unicode": "sub",
+          "rdata": {
+            "Mx": "aspmx2.migadu.com.",
+            "Preference": 20
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "MX",
+          "typenum": 15
+        },
+        {
+          "comparablev3": "key1.sub.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:35:5]",
+          "name": "key1._domainkey.sub",
+          "name_unicode": "key1._domainkey.sub",
+          "rdata": {
+            "Target": "key1.sub.bar.com._domainkey.migadu.com."
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key2.sub.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:35:5]",
+          "name": "key2._domainkey.sub",
+          "name_unicode": "key2._domainkey.sub",
+          "rdata": {
+            "Target": "key2.sub.bar.com._domainkey.migadu.com."
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        },
+        {
+          "comparablev3": "key3.sub.bar.com._domainkey.migadu.com.",
+          "filepos": "[line:35:5]",
+          "name": "key3._domainkey.sub",
+          "name_unicode": "key3._domainkey.sub",
+          "rdata": {
+            "Target": "key3.sub.bar.com._domainkey.migadu.com."
+          },
+          "subdomain": "sub",
+          "ttl": 300,
+          "type": "CNAME",
+          "typenum": 5
+        }
+      ],
+      "registrar": "reg",
+      "uniquename": "bar.com"
+    }
+  ],
+  "registrars": []
+}
