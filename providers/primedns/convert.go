@@ -2,6 +2,7 @@ package primedns
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -75,6 +76,10 @@ func toRecordConfig(dc *models.DomainConfig, r record) (*models.RecordConfig, er
 		prio, target, perr := splitPrio(r.Prio, content)
 		if perr != nil {
 			return nil, perr
+		}
+		// the priority has 16 bits in a DNS record: a number outside that range is an error, not a wrapped value
+		if prio < 0 || prio > math.MaxUint16 {
+			return nil, fmt.Errorf("MX priority %d is outside 0-%d", prio, math.MaxUint16)
 		}
 		rc, err = dc.NewRecordConfig(label, ttl, r.Type, uint16(prio), withDot(target))
 	case "SRV":

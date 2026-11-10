@@ -347,3 +347,29 @@ func TestNullMXConversions(t *testing.T) {
 		t.Errorf("PUT body %+v, want one value \".\" with priority 0", in.Records)
 	}
 }
+
+// The priority of an MX record comes from the API (a number of any size) or from the start of its content, and is
+// converted to the 16 bits of the DNS record: a value outside 0-65535 must be an error, not a wrapped number.
+func TestMXPriorityMustFitSixteenBits(t *testing.T) {
+	dc := newDC(t)
+	for _, prio := range []int{-1, 65536, 100000, 1 << 40} {
+		_, err := toRecordConfig(dc, record{Name: "example.com", Type: "MX", Content: "mail.example.com", Prio: &prio, TTL: 300})
+		if err == nil {
+			t.Errorf("priority %d was accepted", prio)
+		}
+	}
+	for _, content := range []string{"65536 mail.example.com", "-5 mail.example.com", "99999999999 mail.example.com"} {
+		if _, err := toRecordConfig(dc, record{Name: "example.com", Type: "MX", Content: content, TTL: 300}); err == nil {
+			t.Errorf("content %q was accepted", content)
+		}
+	}
+	for _, prio := range []int{0, 10, 65535} {
+		rc, err := toRecordConfig(dc, record{Name: "example.com", Type: "MX", Content: "mail.example.com", Prio: &prio, TTL: 300})
+		if err != nil {
+			t.Fatalf("priority %d: %v", prio, err)
+		}
+		if got := rc.AsMX().Preference; int(got) != prio {
+			t.Errorf("priority %d came out as %d", prio, got)
+		}
+	}
+}
