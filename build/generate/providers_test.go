@@ -221,7 +221,7 @@ func TestGenerateFeatureMatrixRendersCombinedRecordTable(t *testing.T) {
 
 	// Every record-types row must be a 4-column table row.
 	section := got[strings.Index(got, "### Record types"):strings.Index(got, "<!-- provider-matrix-end -->")]
-	for _, line := range strings.Split(section, "\n") {
+	for line := range strings.SplitSeq(section, "\n") {
 		if !strings.HasPrefix(line, "| [`") {
 			continue
 		}

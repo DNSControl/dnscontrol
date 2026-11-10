@@ -22,7 +22,7 @@ func generateFeatureMatrix() error {
 		var anchor = strings.ToLower(table.Title)
 		anchor = strings.ReplaceAll(anchor, " ", "-")
 
-		replacementContent.WriteString(fmt.Sprintf("- [%s](#%s)\n", table.Title, anchor))
+		fmt.Fprintf(&replacementContent, "- [%s](#%s)\n", table.Title, anchor)
 	}
 
 	for i, table := range matrix.FeatureTables {
