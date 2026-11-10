@@ -32,10 +32,7 @@ An example configuration:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-var REG_NONE = NewRegistrar("none");
-var DSP_PRIMEDNS = NewDnsProvider("primedns");
-
-D("example.com", REG_NONE, DnsProvider(DSP_PRIMEDNS),
+D("example.com", REGISTRAR(), SERVICE("primedns"),
     A("@", "192.0.2.1"),
     A("www", "192.0.2.1"),
     AAAA("@", "2001:db8::1"),
@@ -43,7 +40,7 @@ D("example.com", REG_NONE, DnsProvider(DSP_PRIMEDNS),
     MX("@", 10, "mail.example.com."),
     TXT("@", "v=spf1 include:_spf.google.com ~all"),
     CAA("@", "issue", "letsencrypt.org"),
-END);
+);
 ```
 {% endcode %}
 
@@ -64,25 +61,26 @@ delegation at a registrar, declare them in the domain:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NAMECHEAP, DnsProvider(DSP_PRIMEDNS),
+D("example.com", REGISTRAR("namecheap"), SERVICE("primedns"),
     NAMESERVER("ns1.primedns.net"),
     NAMESERVER("ns2.primedns.net"),
     // ...
-END);
+);
 ```
 {% endcode %}
 
 ## Extra NS records at the apex
 
 PrimeDNS keeps all records of one name and type on one TTL (RFC 2181 section 5.2). Its own NS records at the apex have a TTL of
-8000 seconds, so an NS record you add at the apex (for example a second provider) must use the same TTL, or the API refuses it
-with `TTL_MISMATCH`. DNSControl reports this before it changes anything:
+8000 seconds. The provider replaces the whole apex NS RRset, PrimeDNS's own records included, so an NS record at the apex with a
+different TTL would also change the TTL of PrimeDNS's own NS records. To keep those at 8000 seconds, DNSControl requires the same TTL
+for an NS record you add at the apex (for example a second provider) and reports this before it changes anything:
 
 {% code title="dnsconfig.js" %}
 ```javascript
-D("example.com", REG_NONE, DnsProvider(DSP_PRIMEDNS),
+D("example.com", REGISTRAR(), SERVICE("primedns"),
     NS("@", "ns1.other-provider.example.", TTL(8000)),
-END);
+);
 ```
 {% endcode %}
 
@@ -94,8 +92,13 @@ The API limits requests per minute (300 to 1000, depending on the plan of the ke
 ## RRsets
 
 The provider changes a whole RRset (all records of one type at one name) with one `PUT` request and removes it with one `DELETE`,
-so a change of an RRset is atomic: the zone never serves half of it. The API key needs the scopes `dns:read` and `dns:write`.
+so a change of an RRset is atomic: the zone never serves half of it, and a value the API refuses leaves the whole RRset as it was.
+The API key needs the scopes `dns:read` and `dns:write`.
 PrimeDNS keeps its own NS records at the apex; the provider leaves them in place when it changes the apex NS RRset.
+
+Changes to different RRsets are separate requests, so a push is not atomic across them. If the API refuses one RRset, DNSControl
+reports the error, still applies the others, and finishes with an error. Fix the cause and run `dnscontrol push` again: it changes
+only what is still different.
 
 ## TXT records
 
