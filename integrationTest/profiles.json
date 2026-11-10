@@ -406,6 +406,12 @@
     "domain": "$POWERDNS_DOMAIN",
     "serverName": "$POWERDNS_SERVERNAME"
   },
+  "PRIMEDNS": {
+    "TYPE": "PRIMEDNS",
+    "api_key": "$PRIMEDNS_API_KEY",
+    "api_url": "$PRIMEDNS_API_URL",
+    "domain": "$PRIMEDNS_DOMAIN"
+  },
   "REALTIMEREGISTER": {
     "TYPE": "REALTIMEREGISTER",
     "apikey": "$REALTIMEREGISTER_APIKEY",
