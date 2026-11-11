@@ -415,6 +415,8 @@ jobs:
       - name: Upload provenance to the draft release
         env:
           GH_TOKEN: ${{ github.token }}
+          # This job has no checkout, so gh can't infer the repo from .git.
+          GH_REPO: ${{ github.repository }}
           PROVENANCE_NAME: ${{ needs.provenance.outputs.provenance-name }}
           RELEASE_TAG: ${{ needs.release.outputs.tag }}
         run: |
