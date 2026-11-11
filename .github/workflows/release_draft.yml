@@ -378,12 +378,15 @@ jobs:
     # https://github.com/actions/runner/issues/2205
     if: always() && needs.release.result == 'success'
     permissions:
-      # What the generator's internal jobs declare, minus the contents:write
-      # its (now-bypassed) uploader needed. upload-provenance grants itself
-      # contents:write instead.
+      # Must cover everything the generator's internal jobs declare. GitHub
+      # validates reusable-workflow permissions statically at startup, so
+      # even though upload-assets is false (its uploader job never runs),
+      # that job still declares contents:write and the caller must grant it;
+      # granting only contents:read makes the whole run a startup_failure
+      # (run 43039736356).
       actions: read # generator reads the workflow path
       id-token: write # generator signs the provenance with OIDC
-      contents: read # generator declares this; it no longer uploads anything
+      contents: write # declared by the generator's (skipped) upload-assets job
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0 # zizmor: ignore[unpinned-uses]
     with:
       base64-subjects: "${{ needs.release.outputs.hashes }}"
