@@ -55,16 +55,16 @@ D("example.com", REGISTRAR(), SERVICE("adguard_home"),
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ✅
   - create-domains: ❌
   - [get-zones](../commands/get-zones.md): ❌
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CNAME](../language-reference/domain-modifiers/CNAME.md)
 <!-- provider-features-end -->

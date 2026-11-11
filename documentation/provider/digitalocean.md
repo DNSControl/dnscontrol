@@ -73,29 +73,29 @@ Since `SOA` record support is so limited we do not provide the option to update 
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ✅
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
-    - Not supported: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`DHCID`](../language-reference/domain-modifiers/DHCID.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`DNAME`](../language-reference/domain-modifiers/DNAME.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`DS`](../language-reference/domain-modifiers/DS.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`PTR`](../language-reference/domain-modifiers/PTR.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`SOA`](../language-reference/domain-modifiers/SOA.md) (Technically SOA is supported but in reality the API only permits updates to the TTL. That is insufficient for DNSControl to claim 'support')
-    - Not supported: [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`SVCB`](../language-reference/domain-modifiers/SVCB.md) (Digital Ocean documents that this is not supported.)
-    - Not supported: [`TLSA`](../language-reference/domain-modifiers/TLSA.md) (Digital Ocean documents that this is not supported.)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+    - Not supported: [ALIAS](../language-reference/domain-modifiers/ALIAS.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [DHCID](../language-reference/domain-modifiers/DHCID.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [DNAME](../language-reference/domain-modifiers/DNAME.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [DNSKEY](../language-reference/domain-modifiers/DNSKEY.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [DS](../language-reference/domain-modifiers/DS.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [HTTPS](../language-reference/domain-modifiers/HTTPS.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [NAPTR](../language-reference/domain-modifiers/NAPTR.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [PTR](../language-reference/domain-modifiers/PTR.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [SMIMEA](../language-reference/domain-modifiers/SMIMEA.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [SOA](../language-reference/domain-modifiers/SOA.md) (Technically SOA is supported but in reality the API only permits updates to the TTL. That is insufficient for DNSControl to claim 'support')
+    - Not supported: [SSHFP](../language-reference/domain-modifiers/SSHFP.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [SVCB](../language-reference/domain-modifiers/SVCB.md) (Digital Ocean documents that this is not supported.)
+    - Not supported: [TLSA](../language-reference/domain-modifiers/TLSA.md) (Digital Ocean documents that this is not supported.)
 <!-- provider-features-end -->

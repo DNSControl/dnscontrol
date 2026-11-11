@@ -188,18 +188,18 @@ As shown in the configuration examples above, this can be activated on demand an
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ✅
   - create-domains: ❌
   - [get-zones](../commands/get-zones.md): ✅
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`LOC`](../language-reference/domain-modifiers/LOC.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) [`TLSA`](../language-reference/domain-modifiers/TLSA.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
-    - Not supported: [`DS`](../language-reference/domain-modifiers/DS.md) (Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end.)
-    - Not supported: [`SOA`](../language-reference/domain-modifiers/SOA.md) (💩)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [LOC](../language-reference/domain-modifiers/LOC.md) [MX](../language-reference/domain-modifiers/MX.md) [NAPTR](../language-reference/domain-modifiers/NAPTR.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [SSHFP](../language-reference/domain-modifiers/SSHFP.md) [TLSA](../language-reference/domain-modifiers/TLSA.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+    - Not supported: [DS](../language-reference/domain-modifiers/DS.md) (Only supports DS records at the apex, only for .se and .nu domains; done automatically at back-end.)
+    - Not supported: [SOA](../language-reference/domain-modifiers/SOA.md) (💩)
 <!-- provider-features-end -->

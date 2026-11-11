@@ -111,20 +111,20 @@ As shown in the configuration examples above, this can be activated on demand an
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ✅
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`DHCID`](../language-reference/domain-modifiers/DHCID.md) [`DNAME`](../language-reference/domain-modifiers/DNAME.md) [`LOC`](../language-reference/domain-modifiers/LOC.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`PTR`](../language-reference/domain-modifiers/PTR.md) [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) [`SVCB`](../language-reference/domain-modifiers/SVCB.md) [`TLSA`](../language-reference/domain-modifiers/TLSA.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
-    - Unimplemented: [`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md) (Ask for this feature.)
-    - Unimplemented: [`DS`](../language-reference/domain-modifiers/DS.md) (Ask for this feature.)
-    - Not supported: [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md) (Managed via (Query|Add|Modify|Delete)WebFwd API call. Data not accessible via the resource records list. Hard to integrate this into DNSControl by that.)
-    - Not supported: [`SOA`](../language-reference/domain-modifiers/SOA.md) (The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that.)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [DHCID](../language-reference/domain-modifiers/DHCID.md) [DNAME](../language-reference/domain-modifiers/DNAME.md) [LOC](../language-reference/domain-modifiers/LOC.md) [MX](../language-reference/domain-modifiers/MX.md) [NAPTR](../language-reference/domain-modifiers/NAPTR.md) [NS](../language-reference/domain-modifiers/NS.md) [PTR](../language-reference/domain-modifiers/PTR.md) [SMIMEA](../language-reference/domain-modifiers/SMIMEA.md) [SRV](../language-reference/domain-modifiers/SRV.md) [SSHFP](../language-reference/domain-modifiers/SSHFP.md) [SVCB](../language-reference/domain-modifiers/SVCB.md) [TLSA](../language-reference/domain-modifiers/TLSA.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+    - Unimplemented: [DNSKEY](../language-reference/domain-modifiers/DNSKEY.md) (Ask for this feature.)
+    - Unimplemented: [DS](../language-reference/domain-modifiers/DS.md) (Ask for this feature.)
+    - Not supported: [HTTPS](../language-reference/domain-modifiers/HTTPS.md) (Managed via (Query|Add|Modify|Delete)WebFwd API call. Data not accessible via the resource records list. Hard to integrate this into DNSControl by that.)
+    - Not supported: [SOA](../language-reference/domain-modifiers/SOA.md) (The SOA record is managed on the DNSZone directly. Data only accessible via StatusDNSZone Request, not via the resource records list. Hard to integrate this into DNSControl by that.)
 <!-- provider-features-end -->

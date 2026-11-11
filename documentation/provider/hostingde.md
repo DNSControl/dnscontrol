@@ -84,16 +84,16 @@ The address may not end in a period; the API rejects that.
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ✅
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ✅
   - create-domains: ✅
   - [get-zones](../commands/get-zones.md): ✅
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`DS`](../language-reference/domain-modifiers/DS.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`PTR`](../language-reference/domain-modifiers/PTR.md) [`SOA`](../language-reference/domain-modifiers/SOA.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) [`TLSA`](../language-reference/domain-modifiers/TLSA.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ✅
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [DS](../language-reference/domain-modifiers/DS.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [PTR](../language-reference/domain-modifiers/PTR.md) [SOA](../language-reference/domain-modifiers/SOA.md) [SRV](../language-reference/domain-modifiers/SRV.md) [SSHFP](../language-reference/domain-modifiers/SSHFP.md) [TLSA](../language-reference/domain-modifiers/TLSA.md) [TXT](../language-reference/domain-modifiers/TXT.md)
 <!-- provider-features-end -->

@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/providers/_all"
 	"github.com/fbiville/markdown-table-formatter/pkg/markdown"
@@ -84,7 +85,7 @@ func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
 				continue // no documented record-type support
 			}
 			sb.WriteString("- ")
-			sb.WriteString(category.Title)
+			sb.WriteString(category.PageTitle)
 			sb.WriteString("\n  - ")
 			sb.WriteString(recordTypeList(supported))
 			sb.WriteString("\n")
@@ -94,7 +95,7 @@ func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
 		}
 
 		sb.WriteString("- ")
-		sb.WriteString(category.Title)
+		sb.WriteString(category.PageTitle)
 		sb.WriteString("\n")
 
 		for _, feature := range category.Features {
@@ -110,28 +111,25 @@ func buildFeatureList(matrix *FeatureMatrix, providerName string) string {
 	return sb.String()
 }
 
-// recordTypesNote is appended to the record types list, explaining its
-// annotations.
-const recordTypesNote = `NOTE: "Unimplemented" means that the provider's API supports this record type but DNSControl's implementation does not (yet) implement it. "Not supported" means that the record type is not supported and the reason has been documented. A record type that is not listed is simply not supported.`
-
-// recordTypesSection renders the record types as a bullet list: one bullet
-// per provider naming its supported record types as a sorted list of links,
-// with annotated record types as sub-bullets. Providers without any
-// documented record-type support are omitted.
+// recordTypesSection renders the record types as a bullet list: a NOTE
+// defining the annotations, then one bullet per provider naming its
+// supported record types as a sorted list of links, with annotated record
+// types as sub-bullets. Providers without any documented record-type support
+// are omitted.
 func recordTypesSection(matrix *FeatureMatrix, table FeatureTableDef) string {
 	var sb strings.Builder
+	sb.WriteString(`NOTE: "Unimplemented" means that the provider's API supports this record type but DNSControl's implementation does not (yet) implement it. "Not supported" means that the record type is not supported and the reason has been documented. A record type that is not listed is simply not supported.` + "\n\n")
 	for _, def := range publicDefinitions() {
 		featureMap := matrix.Providers[def.TypeName]
 		supported, unimplemented, notSupported := classifyRecordTypes(featureMap, table.Features)
 		if len(supported) == 0 && len(unimplemented) == 0 && len(notSupported) == 0 {
 			continue // no documented record-type support
 		}
-		fmt.Fprintf(&sb, "- [`%s`](%s.md): %s\n",
+		fmt.Fprintf(&sb, "- [%s](%s.md): %s\n",
 			def.TypeName, providerDocSlug(def), recordTypeList(supported))
 		writeRecordTypeAnnotations(&sb, featureMap, "  - ", "Unimplemented", unimplemented)
 		writeRecordTypeAnnotations(&sb, featureMap, "  - ", "Not supported", notSupported)
 	}
-	fmt.Fprintf(&sb, "\n%s\n", recordTypesNote)
 	return sb.String()
 }
 
@@ -162,8 +160,8 @@ func classifyRecordTypes(featureMap FeatureMap, featureNames []string) (supporte
 }
 
 // sortRecordTypes sorts record-type links by their bare type names. The
-// links themselves do not sort correctly: "[`A`](.../A.md)" sorts after
-// "[`AAAA`](...)" because ']' > 'A'.
+// links themselves do not sort correctly: "[A](.../A.md)" sorts after
+// "[AAAA](...)" because ']' > 'A'.
 func sortRecordTypes(features []string) {
 	slices.SortFunc(features, func(a, b string) int {
 		return strings.Compare(recordTypeName(a), recordTypeName(b))
@@ -171,9 +169,9 @@ func sortRecordTypes(features []string) {
 }
 
 // recordTypeName extracts the bare type name from a record-type feature
-// link: "[`SOA`](../language-reference/domain-modifiers/SOA.md)" -> "SOA".
+// link: "[SOA](../language-reference/domain-modifiers/SOA.md)" -> "SOA".
 func recordTypeName(feature string) string {
-	name, _, _ := strings.Cut(strings.TrimPrefix(feature, "[`"), "`]")
+	name, _, _ := strings.Cut(strings.TrimPrefix(feature, "["), "](")
 	return name
 }
 
@@ -186,7 +184,7 @@ func recordTypeList(features []string) string {
 }
 
 // writeRecordTypeAnnotations renders annotated record types as sub-bullets,
-// e.g. "  * Unimplemented: [`SOA`](...) (reason)".
+// e.g. "  - Unimplemented: [SOA](...) (reason)".
 func writeRecordTypeAnnotations(sb *strings.Builder, featureMap FeatureMap, prefix, label string, features []string) {
 	for _, feature := range features {
 		note := featureMap[feature]
@@ -217,7 +215,7 @@ func markdownTable(matrix *FeatureMatrix, table FeatureTableDef) (string, error)
 		providerLink := providerDocSlug(def)
 
 		var tableDataRow []string
-		tableDataRow = append(tableDataRow, "[`"+providerName+"`]("+providerLink+".md)")
+		tableDataRow = append(tableDataRow, "["+providerName+"]("+providerLink+".md)")
 		for _, featureName := range table.Features {
 			tableDataRow = append(tableDataRow, featureEmoji(featureMap, featureName))
 		}
@@ -258,48 +256,52 @@ func featureEmoji(
 	return "❌"
 }
 
+// recordTypeFeature renders the documentation link for a record type name:
+// "SOA" -> "[SOA](../language-reference/domain-modifiers/SOA.md)".
+func recordTypeFeature(typeName string) string {
+	return fmt.Sprintf("[%s](../language-reference/domain-modifiers/%s.md)", typeName, typeName)
+}
+
+// matrixRecordTypeFeatures returns the record types listed in the feature
+// matrix: every standard record type that dnsconfig.js can create (i.e. has
+// a Make* function), plus ALIAS, a pseudo type implemented by many
+// providers. Provider-specific pseudo types are omitted; each provider's
+// own page documents those. Adding a new record type with a Make* function
+// makes it appear here automatically.
+func matrixRecordTypeFeatures() []string {
+	var features []string
+	for _, typ := range privatetypes.RecordTypes() {
+		if typ.Pseudo && typ.Name != "ALIAS" {
+			continue
+		}
+		if !privatetypes.HasMaker(typ.Name) {
+			continue
+		}
+		features = append(features, recordTypeFeature(typ.Name))
+	}
+	return features
+}
+
 func matrixData() *FeatureMatrix {
 	const (
-		OfficialSupport          = "[Official Support](../provider/index.md#providers-with-official-support)" // vs. community supported
-		ProviderDNSProvider      = "DNS Provider"
-		ProviderRegistrar        = "Registrar"
-		ProviderThreadSafe       = "[Concurrent fetching](../advanced-features/concurrency-verified.md)"
-		DomainModifierA          = "[`A`](../language-reference/domain-modifiers/A.md)"
-		DomainModifierAaaa       = "[`AAAA`](../language-reference/domain-modifiers/AAAA.md)"
-		DomainModifierAlias      = "[`ALIAS`](../language-reference/domain-modifiers/ALIAS.md)"
-		DomainModifierCaa        = "[`CAA`](../language-reference/domain-modifiers/CAA.md)"
-		DomainModifierCname      = "[`CNAME`](../language-reference/domain-modifiers/CNAME.md)"
-		DomainModifierCsync      = "[`CSYNC`](../language-reference/domain-modifiers/CSYNC.md)"
-		DomainModifierDhcid      = "[`DHCID`](../language-reference/domain-modifiers/DHCID.md)"
-		DomainModifierDname      = "[`DNAME`](../language-reference/domain-modifiers/DNAME.md)"
-		DomainModifierDnskey     = "[`DNSKEY`](../language-reference/domain-modifiers/DNSKEY.md)"
-		FeatureAutoDNSSEC        = "[`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)"
-		DomainModifierDs         = "[`DS`](../language-reference/domain-modifiers/DS.md)"
-		DomainModifierHTTPS      = "[`HTTPS`](../language-reference/domain-modifiers/HTTPS.md)"
-		DomainModifierLoc        = "[`LOC`](../language-reference/domain-modifiers/LOC.md)"
-		DomainModifierMx         = "[`MX`](../language-reference/domain-modifiers/MX.md)"
-		DomainModifierNaptr      = "[`NAPTR`](../language-reference/domain-modifiers/NAPTR.md)"
-		DomainModifierNs         = "[`NS`](../language-reference/domain-modifiers/NS.md)"
-		DomainModifierOpenpgpkey = "[`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md)"
-		DomainModifierPtr        = "[`PTR`](../language-reference/domain-modifiers/PTR.md)"
-		DomainModifierRP         = "[`RP`](../language-reference/domain-modifiers/RP.md)"
-		DomainModifierSMIMEA     = "[`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md)"
-		DomainModifierSoa        = "[`SOA`](../language-reference/domain-modifiers/SOA.md)"
-		DomainModifierSrv        = "[`SRV`](../language-reference/domain-modifiers/SRV.md)"
-		DomainModifierSshfp      = "[`SSHFP`](../language-reference/domain-modifiers/SSHFP.md)"
-		DomainModifierSvcb       = "[`SVCB`](../language-reference/domain-modifiers/SVCB.md)"
-		DomainModifierTlsa       = "[`TLSA`](../language-reference/domain-modifiers/TLSA.md)"
-		DomainModifierTxt        = "[`TXT`](../language-reference/domain-modifiers/TXT.md)"
-		DualHost                 = "[dual host](../advanced-features/dual-host.md)"
-		CreateDomains            = "create-domains"
-		GetZones                 = "[get-zones](../commands/get-zones.md)"
+		OfficialSupport     = "[Official Support](../provider/index.md#providers-with-official-support)" // vs. community supported
+		ProviderDNSProvider = "DNS Provider"
+		ProviderRegistrar   = "Registrar"
+		ProviderThreadSafe  = "[Concurrent fetching](../advanced-features/concurrency-verified.md)"
+		FeatureAutoDNSSEC   = "[AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)"
+		DualHost            = "[dual host](../advanced-features/dual-host.md)"
+		CreateDomains       = "create-domains"
+		GetZones            = "[get-zones](../commands/get-zones.md)"
 	)
+
+	recordTypeFeatures := matrixRecordTypeFeatures()
 
 	matrix := &FeatureMatrix{
 		Providers: map[string]FeatureMap{},
 		FeatureTables: []FeatureTableDef{
-			{ // provider type
-				Title: "Provider Type",
+			{ // provider support level and type
+				Title:     "Provider Support Level and Type",
+				PageTitle: "Support Level and Type",
 				Features: []string{
 					OfficialSupport,
 					ProviderDNSProvider,
@@ -307,7 +309,8 @@ func matrixData() *FeatureMatrix {
 				},
 			},
 			{ // provider API
-				Title: "Provider API",
+				Title:     "Provider API-level Features",
+				PageTitle: "API-level Features",
 				Features: []string{
 					ProviderThreadSafe,
 					DualHost,
@@ -318,35 +321,10 @@ func matrixData() *FeatureMatrix {
 				},
 			},
 			{ // record types, rendered as a per-provider bullet list
-				Title:     "Record types",
+				Title:     "Supported Record Types by Provider",
+				PageTitle: "Supported Record Types",
 				ListStyle: true,
-				Features: []string{
-					DomainModifierA,
-					DomainModifierAaaa,
-					DomainModifierAlias,
-					DomainModifierCaa,
-					DomainModifierCname,
-					DomainModifierCsync,
-					DomainModifierDhcid,
-					DomainModifierDname,
-					DomainModifierDnskey,
-					DomainModifierDs,
-					DomainModifierHTTPS,
-					DomainModifierLoc,
-					DomainModifierMx,
-					DomainModifierNaptr,
-					DomainModifierNs,
-					DomainModifierOpenpgpkey,
-					DomainModifierPtr,
-					DomainModifierRP,
-					DomainModifierSMIMEA,
-					DomainModifierSoa,
-					DomainModifierSrv,
-					DomainModifierSshfp,
-					DomainModifierSvcb,
-					DomainModifierTlsa,
-					DomainModifierTxt,
-				},
+				Features:  recordTypeFeatures,
 			},
 		},
 	}
@@ -354,16 +332,6 @@ func matrixData() *FeatureMatrix {
 	for _, def := range publicDefinitions() {
 		providerName := def.TypeName
 		featureMap := FeatureMap{}
-
-		// setRecordType reports support for a record type from the provider's
-		// SupportedTypes, including reason and link annotations.
-		setRecordType := func(
-			featureName string,
-			typeName string,
-		) {
-			note := def.RecordTypeSupport(typeName)
-			featureMap[featureName] = &note
-		}
 
 		if def.OfficiallySupported != nil {
 			featureMap[OfficialSupport] = def.OfficiallySupported
@@ -382,31 +350,12 @@ func matrixData() *FeatureMatrix {
 		)
 		featureMap[ProviderThreadSafe] = def.CanConcur
 		featureMap[FeatureAutoDNSSEC] = def.CanAutoDNSSEC
-		setRecordType(DomainModifierA, "A")
-		setRecordType(DomainModifierAaaa, "AAAA")
-		setRecordType(DomainModifierAlias, "ALIAS")
-		setRecordType(DomainModifierCaa, "CAA")
-		setRecordType(DomainModifierCname, "CNAME")
-		setRecordType(DomainModifierCsync, "CSYNC")
-		setRecordType(DomainModifierDhcid, "DHCID")
-		setRecordType(DomainModifierDname, "DNAME")
-		setRecordType(DomainModifierDnskey, "DNSKEY")
-		setRecordType(DomainModifierDs, "DS")
-		setRecordType(DomainModifierHTTPS, "HTTPS")
-		setRecordType(DomainModifierLoc, "LOC")
-		setRecordType(DomainModifierMx, "MX")
-		setRecordType(DomainModifierNaptr, "NAPTR")
-		setRecordType(DomainModifierNs, "NS")
-		setRecordType(DomainModifierOpenpgpkey, "OPENPGPKEY")
-		setRecordType(DomainModifierPtr, "PTR")
-		setRecordType(DomainModifierRP, "RP")
-		setRecordType(DomainModifierSMIMEA, "SMIMEA")
-		setRecordType(DomainModifierSoa, "SOA")
-		setRecordType(DomainModifierSrv, "SRV")
-		setRecordType(DomainModifierSshfp, "SSHFP")
-		setRecordType(DomainModifierSvcb, "SVCB")
-		setRecordType(DomainModifierTlsa, "TLSA")
-		setRecordType(DomainModifierTxt, "TXT")
+		// RecordTypeSupport answers for any type name, including the
+		// reason and link annotations from the provider's SupportedTypes.
+		for _, feature := range recordTypeFeatures {
+			note := def.RecordTypeSupport(recordTypeName(feature))
+			featureMap[feature] = &note
+		}
 		featureMap[GetZones] = &providers.DocumentationNote{HasFeature: def.CanGetZones, Comment: def.CanGetZonesReason}
 		featureMap[CreateDomains] = &providers.DocumentationNote{HasFeature: def.DocCreateDomains, Comment: def.CreateDomainsReason}
 		featureMap[DualHost] = def.CanDualHost
@@ -442,7 +391,10 @@ type FeatureMatrix struct {
 
 // FeatureTableDef is one section of the provider feature matrix.
 type FeatureTableDef struct {
-	Title     string
+	// Title heads the section on the provider feature matrix page.
+	Title string
+	// PageTitle labels the section on each provider's own page.
+	PageTitle string
 	Features  []string
 	ListStyle bool
 }

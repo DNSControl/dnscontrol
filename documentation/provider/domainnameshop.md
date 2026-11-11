@@ -41,22 +41,22 @@ D("example.com", REGISTRAR(), SERVICE("mydomainnameshop"),
 ## Feature Summary
 
 <!-- provider-features-start -->
-- Provider Type
+- Support Level and Type
   - [Official Support](../provider/index.md#providers-with-official-support): ❌
   - DNS Provider: ✅
   - Registrar: ❌
-- Provider API
+- API-level Features
   - [Concurrent fetching](../advanced-features/concurrency-verified.md): ✅
   - [dual host](../advanced-features/dual-host.md): ❔
   - create-domains: ❌
   - [get-zones](../commands/get-zones.md): ❌
-  - [`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
-- Record types
-  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md) [`CAA`](../language-reference/domain-modifiers/CAA.md) [`CNAME`](../language-reference/domain-modifiers/CNAME.md) [`MX`](../language-reference/domain-modifiers/MX.md) [`NS`](../language-reference/domain-modifiers/NS.md) [`SRV`](../language-reference/domain-modifiers/SRV.md) [`TXT`](../language-reference/domain-modifiers/TXT.md)
-    - Unimplemented: [`ALIAS`](../language-reference/domain-modifiers/ALIAS.md) (Needs custom implementation)
-    - Unimplemented: [`DS`](../language-reference/domain-modifiers/DS.md)
-    - Unimplemented: [`TLSA`](../language-reference/domain-modifiers/TLSA.md) (Has support but no documentation. Needs to be investigated.)
-    - Not supported: [`NAPTR`](../language-reference/domain-modifiers/NAPTR.md) (According to Domainnameshop this will probably never be supported)
-    - Not supported: [`PTR`](../language-reference/domain-modifiers/PTR.md) (According to Domainnameshop this will probably never be supported)
-    - Not supported: [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md) (Might be supported in the future)
+  - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
+- Supported Record Types
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+    - Unimplemented: [ALIAS](../language-reference/domain-modifiers/ALIAS.md) (Needs custom implementation)
+    - Unimplemented: [DS](../language-reference/domain-modifiers/DS.md)
+    - Unimplemented: [TLSA](../language-reference/domain-modifiers/TLSA.md) (Has support but no documentation. Needs to be investigated.)
+    - Not supported: [NAPTR](../language-reference/domain-modifiers/NAPTR.md) (According to Domainnameshop this will probably never be supported)
+    - Not supported: [PTR](../language-reference/domain-modifiers/PTR.md) (According to Domainnameshop this will probably never be supported)
+    - Not supported: [SSHFP](../language-reference/domain-modifiers/SSHFP.md) (Might be supported in the future)
 <!-- provider-features-end -->

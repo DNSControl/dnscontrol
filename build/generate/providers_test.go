@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
@@ -94,28 +95,52 @@ func TestFeatureMatrixStructure(t *testing.T) {
 	if len(matrix.FeatureTables) != 3 {
 		t.Fatalf("got %d tables, want 3", len(matrix.FeatureTables))
 	}
-	if matrix.FeatureTables[0].Title != "Provider Type" || matrix.FeatureTables[1].Title != "Provider API" {
+	if matrix.FeatureTables[0].Title != "Provider Support Level and Type" || matrix.FeatureTables[1].Title != "Provider API-level Features" {
 		t.Fatalf("unexpected table titles: %q, %q", matrix.FeatureTables[0].Title, matrix.FeatureTables[1].Title)
 	}
 	apiTable := matrix.FeatureTables[1]
-	autoDnssec := "[`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)"
+	autoDnssec := "[AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)"
 	if !slices.Contains(apiTable.Features, autoDnssec) {
 		t.Fatal("AUTODNSSEC missing from the Provider API table")
 	}
 	recordTypes := matrix.FeatureTables[2]
-	if recordTypes.Title != "Record types" || !recordTypes.ListStyle {
-		t.Fatalf("table 3 must be the list-style Record types table, got %+v", recordTypes)
+	if recordTypes.Title != "Supported Record Types by Provider" ||
+		recordTypes.PageTitle != "Supported Record Types" || !recordTypes.ListStyle {
+		t.Fatalf("table 3 must be the list-style record types table, got %+v", recordTypes)
 	}
 	if slices.Contains(recordTypes.Features, autoDnssec) {
 		t.Fatal("AUTODNSSEC must not be listed as a record type")
 	}
-	if len(recordTypes.Features) != 25 {
-		t.Fatalf("got %d record types, want 25", len(recordTypes.Features))
+	// The record types are derived from the record catalog: every standard
+	// type that dnsconfig.js can create, plus ALIAS. Each must link to the
+	// type's documentation page.
+	for _, feature := range recordTypes.Features {
+		name := recordTypeName(feature)
+		if feature != recordTypeFeature(name) {
+			t.Fatalf("%s: feature link does not match recordTypeFeature", feature)
+		}
+		typ, ok := privatetypes.LookupRecordType(name)
+		if !ok {
+			t.Fatalf("%s: not a catalog record type", name)
+		}
+		if typ.Pseudo && name != "ALIAS" {
+			t.Fatalf("%s: provider-specific pseudo type listed in the matrix", name)
+		}
+		if !privatetypes.HasMaker(name) {
+			t.Fatalf("%s: listed without a Make function", name)
+		}
+		if _, err := os.Stat(filepath.Join("../../documentation/language-reference/domain-modifiers", name+".md")); err != nil {
+			t.Fatalf("%s: record types must link to an existing docs page: %v", name, err)
+		}
 	}
 	if !slices.IsSortedFunc(recordTypes.Features, func(a, b string) int {
 		return strings.Compare(recordTypeName(a), recordTypeName(b))
 	}) {
 		t.Fatal("record types are not sorted by type name")
+	}
+	// ALIAS is the one pseudo type listed: many providers implement it.
+	if !slices.ContainsFunc(recordTypes.Features, func(f string) bool { return recordTypeName(f) == "ALIAS" }) {
+		t.Fatal("ALIAS missing from the record types")
 	}
 	// Every Basic8 record type must be listed.
 	for _, typ := range []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"} {
@@ -149,13 +174,13 @@ func TestFeatureMatrixStructure(t *testing.T) {
 }
 
 func TestClassifyRecordTypes(t *testing.T) {
-	aaaa := "[`AAAA`](../language-reference/domain-modifiers/AAAA.md)"
-	alias := "[`ALIAS`](../language-reference/domain-modifiers/ALIAS.md)"
-	caa := "[`CAA`](../language-reference/domain-modifiers/CAA.md)"
-	cname := "[`CNAME`](../language-reference/domain-modifiers/CNAME.md)"
-	loc := "[`LOC`](../language-reference/domain-modifiers/LOC.md)"
-	soa := "[`SOA`](../language-reference/domain-modifiers/SOA.md)"
-	srv := "[`SRV`](../language-reference/domain-modifiers/SRV.md)"
+	aaaa := "[AAAA](../language-reference/domain-modifiers/AAAA.md)"
+	alias := "[ALIAS](../language-reference/domain-modifiers/ALIAS.md)"
+	caa := "[CAA](../language-reference/domain-modifiers/CAA.md)"
+	cname := "[CNAME](../language-reference/domain-modifiers/CNAME.md)"
+	loc := "[LOC](../language-reference/domain-modifiers/LOC.md)"
+	soa := "[SOA](../language-reference/domain-modifiers/SOA.md)"
+	srv := "[SRV](../language-reference/domain-modifiers/SRV.md)"
 
 	// Deliberately unsorted input.
 	features := []string{cname, alias, srv, caa, aaaa, soa, loc}
@@ -199,20 +224,20 @@ func TestRecordTypeList(t *testing.T) {
 	if got := recordTypeList(nil); got != "none" {
 		t.Fatalf("empty list renders as %q, want %q", got, "none")
 	}
-	a, b := "[`A`](a.md)", "[`B`](b.md)"
+	a, b := "[A](a.md)", "[B](b.md)"
 	if got := recordTypeList([]string{a, b}); got != a+" "+b {
 		t.Fatalf("list renders as %q", got)
 	}
 }
 
 func TestRecordTypeName(t *testing.T) {
-	if got := recordTypeName("[`SOA`](../language-reference/domain-modifiers/SOA.md)"); got != "SOA" {
+	if got := recordTypeName("[SOA](../language-reference/domain-modifiers/SOA.md)"); got != "SOA" {
 		t.Fatalf("recordTypeName = %q, want SOA", got)
 	}
 }
 
 func TestRecordTypeAnnotations(t *testing.T) {
-	loc := "[`LOC`](../language-reference/domain-modifiers/LOC.md)"
+	loc := "[LOC](../language-reference/domain-modifiers/LOC.md)"
 	featureMap := FeatureMap{loc: providers.Unimplemented("buggy API")}
 	var sb strings.Builder
 	writeRecordTypeAnnotations(&sb, featureMap, "  - ", "Unimplemented", []string{loc})
@@ -261,13 +286,13 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 	}
 
 	for _, want := range []string{
-		"- [Provider Type](#provider-type)",
-		"- [Provider API](#provider-api)",
-		"- [Record types](#record-types)",
-		"### Provider Type <!--(section 1/3)-->",
-		"### Provider API <!--(section 2/3)-->",
-		"### Record types <!--(section 3/3)-->",
-		"[`AUTODNSSEC`](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)",
+		"- [Provider Support Level and Type](#provider-support-level-and-type)",
+		"- [Provider API-level Features](#provider-api-level-features)",
+		"- [Supported Record Types by Provider](#supported-record-types-by-provider)",
+		"### Provider Support Level and Type <!--(section 1/3)-->",
+		"### Provider API-level Features <!--(section 2/3)-->",
+		"### Supported Record Types by Provider <!--(section 3/3)-->",
+		"[AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md)",
 		`NOTE: "Unimplemented" means`,
 	} {
 		if !strings.Contains(got, want) {
@@ -283,7 +308,12 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 		}
 	}
 
-	section := got[strings.Index(got, "### Record types"):strings.Index(got, "<!-- provider-matrix-end -->")]
+	section := got[strings.Index(got, "### Supported Record Types by Provider"):strings.Index(got, "<!-- provider-matrix-end -->")]
+
+	// The NOTE defines the annotations, so it must sit above the list.
+	if !strings.HasPrefix(section, "### Supported Record Types by Provider <!--(section 3/3)-->\n\nNOTE: \"Unimplemented\" means") {
+		t.Error("record types section must start with the NOTE above the list")
+	}
 
 	// The section is a bullet list, not a table.
 	for line := range strings.SplitSeq(section, "\n") {
@@ -295,9 +325,9 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 	// The GENERATOR_TEST providers declare no SupportedTypes, so they default
 	// to Basic8: all eight basic record types render, sorted by type name.
 	var basic8 strings.Builder
-	basic8.WriteString("- [`GENERATOR_TEST_A`](GENERATOR_TEST_A.md):")
+	basic8.WriteString("- [GENERATOR_TEST_A](GENERATOR_TEST_A.md):")
 	for _, typ := range []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"} {
-		fmt.Fprintf(&basic8, " [`%s`](../language-reference/domain-modifiers/%s.md)", typ, typ)
+		fmt.Fprintf(&basic8, " [%s](../language-reference/domain-modifiers/%s.md)", typ, typ)
 	}
 	if !strings.Contains(section, basic8.String()) {
 		t.Errorf("Basic8 providers should render %q", basic8.String())
@@ -305,19 +335,19 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 
 	// Real providers exercise the annotation sub-bullets: CLOUDNS annotates
 	// SOA as Unimplemented and DS as Cannot.
-	wantUnimplemented := "  - Unimplemented: [`SOA`](../language-reference/domain-modifiers/SOA.md)" +
+	wantUnimplemented := "  - Unimplemented: [SOA](../language-reference/domain-modifiers/SOA.md)" +
 		" (Supported by cloudns at a separate API endpoint (/dns/modify-soa.json), not implemented yet)"
 	if !strings.Contains(section, wantUnimplemented) {
 		t.Errorf("CLOUDNS SOA sub-bullet missing:\n%s", wantUnimplemented)
 	}
-	wantNotSupported := "  - Not supported: [`DS`](../language-reference/domain-modifiers/DS.md)" +
+	wantNotSupported := "  - Not supported: [DS](../language-reference/domain-modifiers/DS.md)" +
 		" (Not supported for root, only for children)"
 	if !strings.Contains(section, wantNotSupported) {
 		t.Errorf("CLOUDNS DS sub-bullet missing:\n%s", wantNotSupported)
 	}
 
 	// Providers without any documented record support are skipped.
-	if strings.Contains(section, "- [`DYNADOT`]") {
+	if strings.Contains(section, "- [DYNADOT](") {
 		t.Error("DYNADOT has no record support and must not appear in the record types list")
 	}
 }
@@ -326,23 +356,23 @@ func TestBuildFeatureListRecordTypes(t *testing.T) {
 	matrix := matrixData()
 
 	cloudns := buildFeatureList(matrix, "CLOUDNS")
-	if !strings.Contains(cloudns, "- Record types\n  - [`A`](../language-reference/domain-modifiers/A.md) [`AAAA`](../language-reference/domain-modifiers/AAAA.md)") {
+	if !strings.Contains(cloudns, "- Supported Record Types\n  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md)") {
 		t.Error("CLOUDNS record types should begin with the Basic8 list")
 	}
-	if !strings.Contains(cloudns, "    - Unimplemented: [`SOA`](../language-reference/domain-modifiers/SOA.md) (Supported by cloudns at a separate API endpoint (/dns/modify-soa.json), not implemented yet)") {
+	if !strings.Contains(cloudns, "    - Unimplemented: [SOA](../language-reference/domain-modifiers/SOA.md) (Supported by cloudns at a separate API endpoint (/dns/modify-soa.json), not implemented yet)") {
 		t.Error("CLOUDNS record types should include the SOA annotation sub-bullet")
 	}
-	if !strings.Contains(cloudns, "    - Not supported: [`DS`](../language-reference/domain-modifiers/DS.md) (Not supported for root, only for children)") {
+	if !strings.Contains(cloudns, "    - Not supported: [DS](../language-reference/domain-modifiers/DS.md) (Not supported for root, only for children)") {
 		t.Error("CLOUDNS record types should include the DS annotation sub-bullet")
 	}
-	// The Record types category no longer renders per-type emoji lines.
-	recordTypes := cloudns[strings.Index(cloudns, "- Record types"):]
+	// The record types category no longer renders per-type emoji lines.
+	recordTypes := cloudns[strings.Index(cloudns, "- Supported Record Types"):]
 	if strings.Contains(recordTypes, ": ✅") || strings.Contains(recordTypes, ": ❌") || strings.Contains(recordTypes, ": ❔") {
 		t.Error("record types category still renders per-type emoji lines")
 	}
 
 	dynadot := buildFeatureList(matrix, "DYNADOT")
-	if strings.Contains(dynadot, "- Record types") {
-		t.Error("DYNADOT has no record support; its provider page should omit the Record types category")
+	if strings.Contains(dynadot, "- Supported Record Types") {
+		t.Error("DYNADOT has no record support; its provider page should omit the record types category")
 	}
 }
