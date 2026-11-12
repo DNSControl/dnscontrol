@@ -249,5 +249,6 @@ release:
       --certificate-oidc-issuer https://token.actions.githubusercontent.com
 
     # Then check your download against checksums.txt:
-    sha256sum --ignore-missing -c checksums.txt
+    Linux: sha256sum --ignore-missing -c checksums.txt
+    macOS: shasum -a 256 --ignore-missing -c checksums.txt
     ```
