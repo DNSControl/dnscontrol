@@ -31,6 +31,36 @@ func TestRecordCatalog(t *testing.T) {
 	}
 }
 
+func TestHasMaker(t *testing.T) {
+	// Model a freshly registered type; makers arrive via RegisterMaker, so
+	// HasMaker must flip when one is registered.
+	const codepoint = 65498
+	const name = "HASMAKER_TEST"
+	dnsv2.TypeToRR[codepoint] = func() dnsv2.RR { return &dnsv2.A{} }
+	dnsv2.TypeToString[codepoint] = name
+	dnsv2.StringToType[name] = codepoint
+	t.Cleanup(func() {
+		delete(dnsv2.TypeToRR, codepoint)
+		delete(dnsv2.TypeToString, codepoint)
+		delete(dnsv2.StringToType, name)
+		delete(TypeToMakeRDATA, codepoint)
+		catalogVersion++
+	})
+
+	if HasMaker(name) {
+		t.Fatalf("%s reported a maker before one was registered", name)
+	}
+	RegisterMaker(codepoint, nil)
+	if !HasMaker(name) {
+		t.Fatalf("%s reported no maker after registration", name)
+	}
+	for _, s := range []string{"UNRECOGNIZED", "ANY", "AXFR"} {
+		if HasMaker(s) {
+			t.Errorf("%s should never have a maker", s)
+		}
+	}
+}
+
 func TestCatalogClassificationIsExplicit(t *testing.T) {
 	// Model an ordinary type installed by the DNS library with both an
 	// underscore and a private-use codepoint. Neither makes it a pseudo-type.

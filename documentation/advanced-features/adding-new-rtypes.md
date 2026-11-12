@@ -11,12 +11,11 @@
     - [Step 1: Update `pkg/js/helpers.js`](#step-1-update-pkgjshelpersjs)
     - [Step 2: Update `models/makers.go` (NOT NEEDED FOR CUSTOM TYPES)](#step-2-update-modelsmakersgo-not-needed-for-custom-types)
     - [Step 3: Document it](#step-3-document-it)
-    - [Step 4: Update the matrix](#step-4-update-the-matrix)
-    - [Step 5: Add a `parse_tests` test case](#step-5-add-a-parse_tests-test-case)
-    - [Step 6: Add Integration tests](#step-6-add-integration-tests)
-    - [Step 7: Support more providers](#step-7-support-more-providers)
-    - [Step 8: Write documentation](#step-8-write-documentation)
-    - [Step 9: "go generate"](#step-9-go-generate)
+    - [Step 4: Add a `parse_tests` test case](#step-4-add-a-parse_tests-test-case)
+    - [Step 5: Add Integration tests](#step-5-add-integration-tests)
+    - [Step 6: Support more providers](#step-6-support-more-providers)
+    - [Step 7: Write documentation](#step-7-write-documentation)
+    - [Step 8: "go generate"](#step-8-go-generate)
   - [How to enable an rtype in a provider](#how-to-enable-an-rtype-in-a-provider)
   - [How to add a "builder"](#how-to-add-a-builder)
     - [Legacy builders](#legacy-builders)
@@ -147,38 +146,9 @@ Add documentation:
 - `documentation/language-reference/domain-modifiers/TYPENAME.md` (see SRV.md as an example)
 - `documentation/SUMMARY.md` Add your doc to the TOC.
 
-### Step 4: Update the matrix
+The provider feature matrix picks up the new type automatically: it is derived from the record catalog, not maintained by hand.
 
-In this step we make the new type appear in the feature matrics.
-
-Add this feature to the feature matrix in `dnscontrol/build/generate/featureMatrix.go`. Add it to the variable `matrix` maintaining alphabetical ordering, which should look like this:
-
-{% code title="dnscontrol/build/generate/featureMatrix.go" %}
-
-```diff
-func matrixData() *FeatureMatrix {
-    const (
-        ...
-        DomainModifierCaa    = "[`CAA`](language-reference/domain-modifiers/CAA.md)"
-+       DomainModifierFoo    = "[`FOO`](language-reference/domain-modifiers/FOO.md)"
-        DomainModifierLoc    = "[`LOC`](language-reference/domain-modifiers/LOC.md)"
-        ...
-    )
-    matrix := &FeatureMatrix{
-        Providers: map[string]FeatureMap{},
-        Features: []string{
-            ...
-            DomainModifierCaa,
-+           DomainModifierFoo,
-            DomainModifierLoc,
-            ...
-        },
-    }
-```
-
-{% endcode %}
-
-### Step 5: Add a `parse_tests` test case
+### Step 4: Add a `parse_tests` test case
 
 Add at least one test case to the `pkg/js/parse_tests` directory. Test `013-mx.js` is a very simple one and is good for cloning. See also `017-txt.js`.
 
@@ -196,7 +166,7 @@ If these tests pass you know the `dnsconfig.js` and `helpers.js` code is working
 
 The tests also verify that for every "capability" there is a validation. This is explained in Step 2 (search for `TestCapabilitiesAreFiltered` or `MISSING`)
 
-### Step 6: Add Integration tests
+### Step 5: Add Integration tests
 
 Add an integration test for the new type.  The test group should create the record then attempt to change each field one at at a time.
 
@@ -238,7 +208,7 @@ cd integrationTest
 go test -v -args -verbose -profile BIND
 ```
 
-### Step 7: Support more providers
+### Step 6: Support more providers
 
 Now we activate the type for a provider.
 
@@ -266,7 +236,7 @@ Keep iterating between fixing the code and running the tests. When the tests all
 
 If you find bugs that aren't covered by the tests, please please please add a test that demonstrates the bug (then fix the bug, of course). This will help all future contributors. If you need help with adding tests, please ask!
 
-### Step 8: Write documentation
+### Step 7: Write documentation
 
 Add a new Markdown file to `documentation/language-reference/domain-modifiers`. Copy an existing file (`CNAME.md` is a good example). The section between the lines of `---` is called the front matter and it has the following keys:
 
@@ -305,7 +275,7 @@ Add the new file `FOO.md` to the documentation table of contents `documentation/
 
 {% endcode %}
 
-### Step 9: "go generate"
+### Step 8: "go generate"
 
 Re-generate the documentation:
 
@@ -313,7 +283,7 @@ Re-generate the documentation:
 go generate ./...
 ```
 
-This will regenerate things like the table of which providers have which features and the `dnscontrol.d.ts` file.
+This will regenerate things like the provider feature matrix (the new record type appears there automatically) and the `dnscontrol.d.ts` file. Commit the result.
 
 ## How to enable an rtype in a provider
 
