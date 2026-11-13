@@ -81,7 +81,7 @@ OPTIONS:
 The output of `dnscontrol print-ir --out file.json` can be read by `preview`/`push` using `--ir file.json`.
 
 {% hint style="warning" %}
-**WARNING**: The IR format is not a stable interface. It can change between releases without notice. It is safer to generate an IR file using `print-ir` and modify it than to generate one from scratch.
+**WARNING**: The IR format is not a stable interface. It will change between releases without notice. It is safer to generate an IR file using `print-ir` and modify it than to generate one from scratch.
 {% endhint %}
 
 Each record's fields are stored in `rdata` as a string in zonefile format, exactly as they would appear to the right of the record type in a zonefile:
