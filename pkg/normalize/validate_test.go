@@ -27,7 +27,7 @@ func TestSoaLabelAndTarget(t *testing.T) {
 	dc := models.MustNewDomainConfig("foo.com")
 	for _, test := range tests {
 		experiment := fmt.Sprintf("%s %s", test.label, test.target)
-		rc := dc.MustNewRecordConfig(test.label, 0, dnsv2.TypeSOA, test.target, "bar.foo.com", 1, 1, 1, 1, 1)
+		rc := dc.MustNewRecordConfig(test.label, 0, dnsv2.TypeSOA, test.target, "bar.foo.com.", 1, 1, 1, 1, 1)
 		err := checkTargets(rc, "foo.com")
 		if err != nil && !test.isError {
 			t.Errorf("%v: Error (%v)\n", experiment, err)
