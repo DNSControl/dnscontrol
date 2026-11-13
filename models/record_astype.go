@@ -227,6 +227,10 @@ func (rc *RecordConfig) AsMIKROTIKFWD() privatetypesrdata.MIKROTIKFWD {
 	return rc.GetRDATA().(privatetypesrdata.MIKROTIKFWD)
 }
 
+func (rc *RecordConfig) AsMIKROTIKNXDOMAIN() privatetypesrdata.MIKROTIKNXDOMAIN {
+	return rc.GetRDATA().(privatetypesrdata.MIKROTIKNXDOMAIN)
+}
+
 func (rc *RecordConfig) AsMINFO() dnsrdatav2.MINFO {
 	return rc.GetRDATA().(dnsrdatav2.MINFO)
 }
@@ -241,6 +245,14 @@ func (rc *RecordConfig) AsMX() dnsrdatav2.MX {
 
 func (rc *RecordConfig) AsNAPTR() dnsrdatav2.NAPTR {
 	return rc.GetRDATA().(dnsrdatav2.NAPTR)
+}
+
+func (rc *RecordConfig) AsNETLIFY() privatetypesrdata.NETLIFY {
+	return rc.GetRDATA().(privatetypesrdata.NETLIFY)
+}
+
+func (rc *RecordConfig) AsNETLIFYV6() privatetypesrdata.NETLIFYV6 {
+	return rc.GetRDATA().(privatetypesrdata.NETLIFYV6)
 }
 
 func (rc *RecordConfig) AsNID() dnsrdatav2.NID {
