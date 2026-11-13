@@ -189,6 +189,7 @@ jobs:
       INFOBLOX_DOMAIN: ${{ vars.INFOBLOX_DOMAIN }}
       INFOMANIAK_DOMAIN: ${{ vars.INFOMANIAK_DOMAIN }}
       INWX_DOMAIN: ${{ vars.INWX_DOMAIN }}
+      IONOS_DOMAIN: ${{ vars.IONOS_DOMAIN }}
       JOKER_DOMAIN: ${{ vars.JOKER_DOMAIN }}
       LINODE_DOMAIN: ${{ vars.LINODE_DOMAIN }}
       LOOPIA_DOMAIN: ${{ vars.LOOPIA_DOMAIN }}
@@ -347,6 +348,8 @@ jobs:
       #
       INWX_PASSWORD: ${{ secrets.INWX_PASSWORD }}
       INWX_USER: ${{ secrets.INWX_USER }}
+      #
+      IONOS_API_KEY: ${{ secrets.IONOS_API_KEY }}
       #
       JOKER_PASSWORD: ${{ secrets.JOKER_PASSWORD }}
       JOKER_USERNAME: ${{ secrets.JOKER_USERNAME }}
