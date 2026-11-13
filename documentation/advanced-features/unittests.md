@@ -22,6 +22,10 @@ dnscontrol print-ir --out foo.json --pretty
 **NOTE**: The `--pretty` flag is optional.
 {% endhint %}
 
+{% hint style="info" %}
+**NOTE**: Each record's `rdata` is a string in zonefile format (for example, `"10 mx.example.com."` for an MX record), not a JSON object.
+{% endhint %}
+
 Here is a sample test written in `bash` using the [jq](https://stedolan.github.io/jq/) command.  This fails if the number of MX records in the `stackex.com` domain is not exactly 5:
 
 ```bash

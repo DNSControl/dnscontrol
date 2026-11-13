@@ -119,8 +119,8 @@ func myNewData(typeNum uint16, contents string, origin string) (dnsv2.RDATA, err
 		return nil, fmt.Errorf("NewData(%d, %q, %q) failed: %w", typeNum, contents, origin+".", err)
 	}
 	// We do not need to call normalizeRDATA here because every caller to
-	// myNewData eventually passes the result to newRecordConfigHelper,
-	// which calls SetRDATA, which calls normalizeRDATA.
+	// myNewData eventually passes the result to SetRDATA (directly, or via
+	// newRecordConfigHelper), which calls normalizeRDATA.
 	return rd2, nil
 }
 

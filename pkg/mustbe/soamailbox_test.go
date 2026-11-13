@@ -11,9 +11,11 @@ func TestSoaMailbox(t *testing.T) {
 		arg  any
 		want string
 	}{
-		{"a", "tal.example.com", "tal.example.com"},
+		{"a", "tal.example.com", "tal.example.com."},
+		{"a", "tal.example.com.", "tal.example.com."},
 		{"a", "DEFAULT_NOT_SET.", "default_not_set."},
-		{"b", "tal@example.com", "tal.example.com"},
+		{"b", "tal@example.com", "tal.example.com."},
+		{"c", "tal", "tal"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

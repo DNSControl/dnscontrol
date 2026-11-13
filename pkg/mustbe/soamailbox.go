@@ -13,6 +13,7 @@ import (
 // * Turns normal email addresses (tal@example.com) into SOA Mailbox strings (tal.example.com).
 // * Turns Unicode into PunyCode (just in the hostname part)
 // * Runs ToLower.
+// * Adds the trailing dot if it is missing (tal.example.com -> tal.example.com.).
 // * Does NOT add an origin if this is a shortname. We can't know if it is a shortname because it is dotless.)
 func SoaMailbox(arg any) string {
 	var name string
@@ -46,5 +47,10 @@ func SoaMailbox(arg any) string {
 
 	hostname = domaintags.EfficientToASCII(hostname)
 
-	return username + "." + hostname
+	// The mailbox is a FQDN. Add the trailing dot if it is missing.
+	mbox := username + "." + hostname
+	if !strings.HasSuffix(mbox, ".") {
+		mbox += "."
+	}
+	return mbox
 }

@@ -1,5 +1,5 @@
 $TTL 300
-@                IN NAPTR 100 10 "U" "E2U+sip" "!^.*$!sip:customer-service@example.com!" example
-                 IN NAPTR 102 10 "U" "E2U+email" "!^.*$!mailto:information@example.com!" example
+@                IN NAPTR 100 10 "U" "E2U+sip" "!^.*$!sip:customer-service@example.com!" example.foo.com.
+                 IN NAPTR 102 10 "U" "E2U+email" "!^.*$!mailto:information@example.com!" example.foo.com.
                  IN NAPTR 103 10 "U" "E2U+email" "!^.*$!mailto:information@example.com!" .
                  IN NAPTR 104 10 "U" "E2U+email" "!^.*$!mailto:information@example.com!" .

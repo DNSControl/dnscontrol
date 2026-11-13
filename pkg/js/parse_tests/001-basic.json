@@ -17,9 +17,7 @@
           "filepos": "[line:5:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "1.2.3.4"
-          },
+          "rdata": "1.2.3.4",
           "ttl": 300,
           "type": "A",
           "typenum": 1

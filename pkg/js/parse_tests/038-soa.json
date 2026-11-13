@@ -6,19 +6,11 @@
       "name": "foo.com",
       "records": [
         {
-          "comparablev3": "ns1.foo.com. admin.foo.com X 3600 900 604800 86400",
+          "comparablev3": "ns1.foo.com. admin.foo.com. X 3600 900 604800 86400",
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Expire": 604800,
-            "Mbox": "admin.foo.com",
-            "Minttl": 86400,
-            "Ns": "ns1.foo.com.",
-            "Refresh": 3600,
-            "Retry": 900,
-            "Serial": 0
-          },
+          "rdata": "ns1.foo.com. admin.foo.com. 0 3600 900 604800 86400",
           "ttl": 300,
           "type": "SOA",
           "typenum": 6
