@@ -289,7 +289,11 @@ func MakeOPENPGPKEY(origin string, _ map[string]string, isEnabled nrc.Flags, arg
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeOPENPGPKEY expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.OPENPGPKEY{PublicKey: mustbe.OpenPGPKey(args[0])}, nil
+	key, err := mustbe.OpenPGPKey(args[0])
+	if err != nil {
+		return nil, err
+	}
+	return dnsrdatav2.OPENPGPKEY{PublicKey: key}, nil
 }
 
 func MakePORKBUNURLFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

@@ -381,32 +381,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 					errs = append(errs, err)
 				}
 				rec.SetLabel(name, domain.Name)
-			case "CAA":
-				// Per: https://www.iana.org/assignments/pkix-parameters/pkix-parameters.xhtml#caa-properties excluding reserved tags
-				allowedTags := []string{"issue", "issuewild", "iodef", "contactemail", "contactphone", "issuemail", "issuevmc"}
-				f := rec.AsCAA()
-				if !slices.Contains(allowedTags, f.Tag) {
-					errs = append(errs, fmt.Errorf("CAA tag %s is invalid", f.Tag))
-				}
-			case "OPENPGPKEY":
-				var orig, transformed, final string
-				var err error
-				orig = rec.AsOPENPGPKEY().PublicKey
-				transformed, err = transform.OPENPGPKEY(orig)
-				if err != nil {
-					final = orig
-					errs = append(errs, err)
-				} else {
-					final = transformed
-				}
-				if orig != final {
-					rd, err := models.MakeOPENPGPKEY("", nil, nrc.Flags{}, final)
-					if err != nil {
-						errs = append(errs, err)
-					}
-					rec.SetRDATA(rd)
-				}
-
 			case "TLSA":
 				f := rec.AsTLSA()
 				if f.Usage > 3 {
