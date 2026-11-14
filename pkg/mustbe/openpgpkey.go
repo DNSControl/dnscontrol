@@ -6,14 +6,11 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
-func OpenPGPKey(a any) string {
+// OpenPGPKey returns the key re-encoded as base64. The input may be hex or base64.
+func OpenPGPKey(a any) (string, error) {
 	switch v := a.(type) {
 	case string:
-		k, err := transform.OPENPGPKEY(v)
-		if err != nil {
-			return fmt.Sprintf("Can not decode %q", v)
-		}
-		return k
+		return transform.OPENPGPKEY(v)
 	}
-	panic("mustbe.OpenPGPKey: unhandled type")
+	return "", fmt.Errorf("not a valid OPENPGPKEY: %v", a)
 }
