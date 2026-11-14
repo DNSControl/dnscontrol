@@ -10,6 +10,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 	nrc "github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
+	"github.com/DNSControl/dnscontrol/v5/pkg/ptrmagic"
 	"golang.org/x/net/idna"
 )
 
@@ -151,6 +152,14 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 	label, err := dc.LabelFromDnsconfigjs(name, subdomain)
 	if err != nil {
 		return nil, err
+	}
+	if typeNum == dnsv2.TypePTR {
+		// PTR magic: In a reverse zone, a label that is an IP address is
+		// replaced by its reversed form, relative to the zone.
+		label, err = ptrmagic.PtrNameMagic(label, dc.Name)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	maker, found := privatetypes.TypeToMakeRDATA[typeNum]

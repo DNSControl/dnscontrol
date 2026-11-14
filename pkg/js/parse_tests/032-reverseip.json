@@ -28,7 +28,7 @@
           "comparablev3": "bar.example.com.",
           "filepos": "[line:8:5]",
           "name": "2",
-          "name_unicode": "1.2.3.2",
+          "name_unicode": "2",
           "rdata": {
             "Ptr": "bar.example.com."
           },
@@ -43,7 +43,7 @@
             "skip_fqdn_check": "true"
           },
           "name": "3",
-          "name_unicode": "3.3.2.1.in-addr.arpa",
+          "name_unicode": "3",
           "rdata": {
             "Ptr": "baz.example.com."
           },
@@ -68,7 +68,7 @@
           "comparablev3": "willy.example.com.",
           "filepos": "[line:17:5]",
           "name": "5",
-          "name_unicode": "1.2.3.5",
+          "name_unicode": "5",
           "rdata": {
             "Ptr": "willy.example.com."
           },
@@ -81,7 +81,7 @@
           "comparablev3": "billy.example.com.",
           "filepos": "[line:20:5]",
           "name": "6",
-          "name_unicode": "6.3.2.1.in-addr.arpa",
+          "name_unicode": "6",
           "rdata": {
             "Ptr": "billy.example.com."
           },
@@ -106,7 +106,7 @@
           "comparablev3": "fair.example.com.",
           "filepos": "[line:27:5]",
           "name": "8",
-          "name_unicode": "1.2.3.8",
+          "name_unicode": "8",
           "rdata": {
             "Ptr": "fair.example.com."
           },
@@ -121,7 +121,7 @@
             "skip_fqdn_check": "true"
           },
           "name": "9",
-          "name_unicode": "9.3.2.1.in-addr.arpa",
+          "name_unicode": "9",
           "rdata": {
             "Ptr": "lady.example.com."
           },

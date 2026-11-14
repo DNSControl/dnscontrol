@@ -145,8 +145,32 @@ func isIPv6Label(label string) bool {
 //
 // It applies D_EXTEND() subdomain label rewriting.
 //
+// In a reverse zone, a label written with the zone name appended (as REV()
+// returns it) has the zone name stripped.
+//
 // The returned label is relative to the zone (dc.Name).
 func (dc *DomainConfig) LabelFromDnsconfigjs(rawLabel, subdomainASCII string) (string, error) {
+	label, err := dc.labelFromDnsconfigjs(rawLabel, subdomainASCII)
+	if err != nil {
+		return "", err
+	}
+	return stripReverseZoneSuffix(label, dc.Name), nil
+}
+
+// stripReverseZoneSuffix removes ".zone" from the end of a label in a reverse
+// zone (in-addr.arpa or ip6.arpa). REV("1.2.3.4") returns
+// "4.3.2.1.in-addr.arpa" with no trailing dot, so such labels are accepted
+// in reverse zones. In any other zone the label is returned unchanged.
+func stripReverseZoneSuffix(label, zone string) string {
+	if !isReverseZone(zone) {
+		return label
+	}
+	return strings.TrimSuffix(label, "."+zone)
+}
+
+// labelFromDnsconfigjs implements LabelFromDnsconfigjs, except for the
+// reverse zone suffix stripping.
+func (dc *DomainConfig) labelFromDnsconfigjs(rawLabel, subdomainASCII string) (string, error) {
 	if subdomainASCII == "" {
 		return dc.labelFromDnsconfigjsHelper(rawLabel)
 	}
@@ -174,10 +198,15 @@ func (dc *DomainConfig) LabelFromDnsconfigjs(rawLabel, subdomainASCII string) (s
 		// 2001:db8::1 sub -> 2001:db8::1 (leave it alone)
 		return labelASCII, nil
 	case strings.HasSuffix(labelASCII, ".in-addr.arpa"), strings.HasSuffix(labelASCII, ".ip6.arpa"):
-		// 4.3.2.1.in-addr.arpa -> 4.3 (strip the subdomain suffix)
-		if strings.HasSuffix(labelASCII, subdomainASCII) {
-			return labelASCII[:len(labelASCII)-len(subdomainASCII)-1], nil
-		}
+		// 6.7.8.9.in-addr.arpa -> 6.7.8.9.in-addr.arpa (leave it alone;
+		// LabelFromDnsconfigjs strips the zone suffix)
+		//
+		// NB(tlim): This used to strip the subdomain suffix. A label ending
+		// in ".arpa" only ends with the subdomain when the subdomain is "a"
+		// (an ip6.arpa nibble), and then the label was mangled.
+		//if strings.HasSuffix(labelASCII, subdomainASCII) {
+		//	return labelASCII[:len(labelASCII)-len(subdomainASCII)-1], nil
+		//}
 		return labelASCII, nil
 	default:
 		// one two -> one.two
