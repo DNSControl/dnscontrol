@@ -349,14 +349,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 			//	return errs // Exit early.
 			//}
 
-			// in-addr.arpa magic
-			if strings.HasSuffix(domain.Name, ".in-addr.arpa") || strings.HasSuffix(domain.Name, ".ip6.arpa") {
-				label := rec.GetLabel()
-				if strings.HasSuffix(label, "."+domain.Name) {
-					rec.SetLabel(label[0:(len(label)-len("."+domain.Name))], domain.Name)
-				}
-			}
-
 			// IMPORT_TRANSFORM is a deferred command, not a provider record.
 			// It is consumed below; the resulting records are validated afterwards.
 			if rec.Type != "IMPORT_TRANSFORM" {
@@ -374,13 +366,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 
 			// Canonicalize Targets.
 			switch rec.Type { // #rtype_variations
-			case "PTR":
-				var err error
-				var name string
-				if name, err = transform.PtrNameMagic(rec.GetLabel(), domain.Name); err != nil {
-					errs = append(errs, err)
-				}
-				rec.SetLabel(name, domain.Name)
 			case "TLSA":
 				f := rec.AsTLSA()
 				if f.Usage > 3 {
