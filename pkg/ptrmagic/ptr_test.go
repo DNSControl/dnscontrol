@@ -1,4 +1,4 @@
-package transform
+package ptrmagic
 
 import (
 	"fmt"
