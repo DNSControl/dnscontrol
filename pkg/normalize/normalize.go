@@ -24,13 +24,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		return []error{err}
 	}
 
-	// Phase 1: Normalize. Put nameservers and records into canonical form.
-	for _, domain := range config.Domains {
-		errs = append(errs, normalizeNameservers(domain)...)
-		normalizeRecords(domain)
-	}
-
-	// Phase 2: Apply. Run the features that rewrite or add records.
+	// Phase 1: Apply. Run the features that rewrite or add records.
 	errs = append(errs, flattenSPFs(config)...)
 	errs = append(errs, applyImportTransforms(config)...)
 	for _, domain := range config.Domains {
@@ -39,7 +33,14 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		}
 	}
 
-	// Phase 3: Check each record, including those added in phase 2.
+	// Phase 2: Normalize. Put nameservers and records into canonical form,
+	// including the records added in phase 1.
+	for _, domain := range config.Domains {
+		errs = append(errs, normalizeNameservers(domain)...)
+		normalizeRecords(domain)
+	}
+
+	// Phase 3: Check each record, including those added in phase 1.
 	for _, domain := range config.Domains {
 		errs = append(errs, checkRecords(domain)...)
 	}

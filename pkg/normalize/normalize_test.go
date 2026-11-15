@@ -47,3 +47,34 @@ func TestUnsupportedTypeReportedOnce(t *testing.T) {
 		t.Errorf("expected exactly one unsupported-type error, got %v", errs)
 	}
 }
+
+// Records added by the apply phase are normalized: a record imported with no
+// TTL of its own, and no TTL on the IMPORT_TRANSFORM, gets the default TTL.
+func TestGeneratedRecordsAreNormalized(t *testing.T) {
+	const transform = "0.0.0.0~255.255.255.255~~0.0.0.0"
+
+	src := models.MustNewDomainConfig("example.com")
+	src.AddRecordConfig(src.MustNewRecordConfig("www", 0, dnsv2.TypeA, "192.0.2.1"))
+
+	dst := models.MustNewDomainConfig("internal")
+	dst.AddRecordConfig(dst.MustNewRecordConfig("@", 0, privatetypes.TypeIMPORTTRANSFORM, transform, 0, "", src.Name))
+
+	cfg := &models.DNSConfig{Domains: []*models.DomainConfig{src, dst}}
+	if err := cfg.PostProcess(); err != nil {
+		t.Fatal(err)
+	}
+
+	if errs := ValidateAndNormalizeConfig(cfg); len(errs) != 0 {
+		t.Fatalf("unexpected errors: %v", errs)
+	}
+	if len(dst.Records) != 1 {
+		t.Fatalf("expected 1 record in %s, got %v", dst.Name, dst.Records)
+	}
+	rec := dst.Records[0]
+	if rec.TTL != models.DefaultTTL {
+		t.Errorf("imported record TTL = %d, want %d", rec.TTL, models.DefaultTTL)
+	}
+	if rec.GetLabelFQDN() != "www.example.com.internal" {
+		t.Errorf("imported record FQDN = %q, want %q", rec.GetLabelFQDN(), "www.example.com.internal")
+	}
+}
