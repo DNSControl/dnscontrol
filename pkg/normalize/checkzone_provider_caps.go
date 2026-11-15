@@ -8,16 +8,7 @@ import (
 )
 
 func checkProviderCapabilities(dc *models.DomainConfig) error {
-	var pTypes []string
-	for _, provider := range dc.DNSProviderInstances {
-		pTypes = append(pTypes, provider.ProviderType)
-	}
-	for _, rec := range dc.Records {
-		if err := validateSupportedRecordTypes(rec, dc.Name, pTypes); err != nil {
-			return err
-		}
-	}
-
+	// Record types are checked per record, by validateSupportedRecordTypes.
 	// AUTODNSSEC is not a record type, so SupportedTypes does not cover it.
 	if dc.AutoDNSSEC == "" {
 		return nil
