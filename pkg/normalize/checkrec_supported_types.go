@@ -9,8 +9,8 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-// validateSupportedRecordTypes checks catalog recognition and provider support
-// for original types before transformations and resulting types afterwards.
+// validateSupportedRecordTypes checks that the record's type is in the catalog
+// and is supported by every provider in pTypes.
 func validateSupportedRecordTypes(rec *models.RecordConfig, domain string, pTypes []string) error {
 	if _, known := privatetypes.LookupRecordType(rec.Type); !known {
 		return fmt.Errorf("unknown record type %s in domain %s", rec.Type, domain)

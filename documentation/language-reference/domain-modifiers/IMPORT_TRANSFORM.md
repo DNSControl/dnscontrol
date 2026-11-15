@@ -91,3 +91,32 @@ Only one of `newBase` and `newBase` may be specified. If both are non-null the b
 * An IP address.  Change the IP address of the A record to this IP address. If there are multiple A records at this label, only one A record is generated.
 * A list of IP addresses. Not supported.
 * For CNAMEs, the `.internal` is appended to the end of the target. (same as `NEW_BASE`)
+
+## Parents importing their children
+
+I can't imagine a case where a parent would want to import a child zone. That said, if you do,
+you'll get an error.
+
+For example, this config:
+
+```javascript
+D("internal.example.com", …, A("www", "192.0.2.1"));
+D("example.com", …, IMPORT_TRANSFORM(table, "internal.example.com", 300));
+```
+
+will get this error:
+
+```
+ERROR: The name "www.internal.example.com.example.com." is an error (repeats the domain). …
+```
+
+The record it produces really is `www.internal.example.com.example.com`, so the check is doing its job.
+
+The error can be silenced with `DISABLE_REPEATED_DOMAIN_CHECK` on the source record.
+
+For example:
+
+```javascript
+D("internal.example.com", …, A("www", "192.0.2.1", DISABLE_REPEATED_DOMAIN_CHECK));
+D("example.com", …, IMPORT_TRANSFORM(table, "internal.example.com", 300));
+```
