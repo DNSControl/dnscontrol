@@ -51,6 +51,12 @@ func TestDomainConfig_LabelFromDnsconfigjs(t *testing.T) {
 		{"in-addr short label joins the subdomain", "3.2.1.in-addr.arpa", "1", "4", "4.1"},
 		{"in-addr dotted quad is left alone", "3.2.1.in-addr.arpa", "1", "1.2.3.4", "1.2.3.4"},
 		{"forward zone label joins the subdomain", "example.com", "sub", "www", "www.sub"},
+		{"in-addr zone suffix is stripped", "3.2.1.in-addr.arpa", "", "4.3.2.1.in-addr.arpa", "4"},
+		{"in-addr zone suffix is stripped under a subdomain", "8.9.in-addr.arpa", "7", "6.7.8.9.in-addr.arpa", "6.7"},
+		{"in-addr short label is unchanged", "3.2.1.in-addr.arpa", "", "4", "4"},
+		{"ip6 zone suffix is stripped", ip6Zone, "", "1.0." + ip6Zone, "1.0"},
+		{"forward zone suffix is not stripped", "example.com", "", "www.example.com", "www.example.com"},
+		{"ip6 zone suffix is stripped under subdomain a", ip6Zone, "a", "1.a." + ip6Zone, "1.a"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.tname, func(t *testing.T) {

@@ -16,7 +16,7 @@
           "comparablev3": "ns1.example.com.",
           "filepos": "[line:8:5]",
           "name": "1.2",
-          "name_unicode": "1.2.8.9.in-addr.arpa",
+          "name_unicode": "1.2",
           "rdata": {
             "Ns": "ns1.example.com."
           },
@@ -28,7 +28,7 @@
           "comparablev3": "ns2.example.org.",
           "filepos": "[line:11:5]",
           "name": "6.7",
-          "name_unicode": "6.7.8.9.in-addr.arpa",
+          "name_unicode": "6.7",
           "rdata": {
             "Ns": "ns2.example.org."
           },

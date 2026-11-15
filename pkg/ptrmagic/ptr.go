@@ -1,4 +1,4 @@
-package transform
+package ptrmagic
 
 import (
 	"fmt"
@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
 // PtrNameMagic implements the PTR magic.
@@ -42,7 +44,7 @@ func ipv4magic(name, domain string) (string, error) {
 	}
 
 	// Reverse it.
-	rev, err := ReverseDomainName(ip.String() + "/32")
+	rev, err := transform.ReverseDomainName(ip.String() + "/32")
 	if err != nil {
 		return name, err
 	}
@@ -168,7 +170,7 @@ func ipv6magic(name, domain string) (string, error) {
 	}
 
 	// Reverse it.
-	rev, err := ReverseDomainName(ip.String() + "/128")
+	rev, err := transform.ReverseDomainName(ip.String() + "/128")
 	if err != nil {
 		return name, err
 	}
