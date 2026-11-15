@@ -6,7 +6,7 @@
 
 ## Built-in Tests
 
-DNSControl performs a number of tests during the validation stage. You can find them in `pkg/normalize/validate.go`.
+DNSControl performs a number of tests during the validation stage. You can find them in `pkg/normalize/` (the `v_*.go` files check individual records; the `vz_*.go` files check whole zones).
 
 ## External tests
 
