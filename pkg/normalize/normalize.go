@@ -8,7 +8,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
-	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
 // Warning is a wrapper around error that can be used to indicate it should not
@@ -51,20 +50,6 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 				rec.TTL = models.DefaultTTL
 			}
 
-			// Canonicalize Label:
-			//if rec.GetLabel() == (domain.Name + ".") {
-			//	// If label == ${domain}DOT, change to "@"
-			//	rec.SetLabel("@", domain.Name)
-			//} else if lab, suf := rec.GetLabel(), "."+domain.Name+"."; strings.HasSuffix(lab, suf) {
-			//	// If label ends with DOT${domain}DOT, strip it to a short name.
-			//	rec.SetLabel(lab[:len(lab)-len(suf)], domain.Name)
-			//}
-			// If label ends with dot, add to the list of errors.
-			//if strings.HasSuffix(rec.GetLabel(), ".") {
-			//	errs = append(errs, fmt.Errorf("label %q does not match D(%q)", rec.GetLabel(), domain.Name))
-			//	return errs // Exit early.
-			//}
-
 			// IMPORT_TRANSFORM is a deferred command, not a provider record.
 			// It is consumed below; the resulting records are validated afterwards.
 			if rec.Type != "IMPORT_TRANSFORM" {
@@ -99,35 +84,8 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	}
 
 	// Process IMPORT_TRANSFORM
-	for _, domain := range config.Domains {
-		for _, rec := range domain.Records {
-			if rec.Type == "IMPORT_TRANSFORM" {
-				rd := rec.AsIMPORTTRANSFORM()
-				transformTable := rd.TransformTable
-				ttl := uint32(rd.TTL)
-				suffixstrip := rd.SuffixStrip
-				targetDomain := rd.TargetDomain
-				table, err := transform.DecodeTransformTable(transformTable)
-				if err != nil {
-					errs = append(errs, err)
-					continue
-				}
-				c := config.FindDomain(targetDomain)
-				if c == nil {
-					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", targetDomain)
-					errs = append(errs, err)
-					continue
-				}
-				err = importTransform(c, domain, table, ttl, suffixstrip)
-				if err != nil {
-					errs = append(errs, err)
-				}
-			}
-		}
-	}
-	// Clean up:
-	for _, domain := range config.Domains {
-		deleteImportTransformRecords(domain)
+	if ers := applyImportTransforms(config); len(ers) > 0 {
+		errs = append(errs, ers...)
 	}
 	// Run record transforms
 	for _, domain := range config.Domains {

@@ -56,6 +56,18 @@ something that is both a Reg and a DSP.
 the trailing dot when called in D(REV(foo)) but not in PTR(REV(foo)) (zone context vs. record context).  Then
 downstream code could be simplified.
 
+* NAMESERVER(), NAMESERVER_TTL() are confusing and should be reworked.
+I wonder if it would be less confusing to have a feature called PARENT_NS() that takes
+a single or list of nameservers and a TTL.
+  * PARENT_NS() doesn't exist in a zone?  No changes shoud be done at the parent.
+  * PARENT_NS() exists? Check the parent zone and make correction.
+    * If the zone is a domain:
+      * If there is a REGISTRAR() use it to fix things.  Else print a warning.
+    * If the zone's parent is also in this config, inject NS records into it?  Warn if dups?
+Or maybe a better design is:
+  * REGISTRAR() should also take delegation info.
+        REGISTRAR("foo", DELEGATE( "ns2", "ns2": { ip: "1.2.3.4", "ttl": "5m"} ))
+
 ## Actual new features:
 
 * Handle "unknown types". dnsv2 has a way to managing unknown types. Investigate it and replace the half-written version (see rc.UnknownTypeName)

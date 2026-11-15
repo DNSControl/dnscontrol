@@ -11,34 +11,40 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/transform"
 )
 
-func transformCNAME(target, oldDomain, newDomain, suffixstrip string) string {
-	// Canonicalize the target.  Add the newDomain minus the suffixstrip.
-	//  foo -> foo.oldDomain.newDomain
-	//  foo. -> foo.newDomain
-	nd := strings.TrimPrefix(newDomain, suffixstrip+".")
-	if strings.HasSuffix(target, ".") {
-		return target + nd + "."
+// applyImportTransforms processes every IMPORT_TRANSFORM in the config, then
+// deletes the IMPORT_TRANSFORM pseudo-records.
+func applyImportTransforms(config *models.DNSConfig) (errs []error) {
+	for _, domain := range config.Domains {
+		for _, rec := range domain.Records {
+			if rec.Type == "IMPORT_TRANSFORM" {
+				rd := rec.AsIMPORTTRANSFORM()
+				transformTable := rd.TransformTable
+				ttl := uint32(rd.TTL)
+				suffixstrip := rd.SuffixStrip
+				targetDomain := rd.TargetDomain
+				table, err := transform.DecodeTransformTable(transformTable)
+				if err != nil {
+					errs = append(errs, err)
+					continue
+				}
+				c := config.FindDomain(targetDomain)
+				if c == nil {
+					err = fmt.Errorf("IMPORT_TRANSFORM mentions non-existent domain %q", targetDomain)
+					errs = append(errs, err)
+					continue
+				}
+				err = importTransform(c, domain, table, ttl, suffixstrip)
+				if err != nil {
+					errs = append(errs, err)
+				}
+			}
+		}
 	}
-	return nameutil.ToFqdnWithDot(target, oldDomain) + nd + "."
-}
-
-func newRec(rec *models.RecordConfig, ttl uint32) *models.RecordConfig {
-	rec2, _ := rec.Copy()
-	if ttl != 0 {
-		rec2.TTL = ttl
+	// Clean up:
+	for _, domain := range config.Domains {
+		deleteImportTransformRecords(domain)
 	}
-	return rec2
-}
-
-func transformLabel(label, suffixstrip string) (string, error) {
-	if suffixstrip == "" {
-		return label, nil
-	}
-	suffixstrip = "." + suffixstrip
-	if !strings.HasSuffix(label, suffixstrip) {
-		return "", fmt.Errorf("label %q does not end with %q", label, suffixstrip)
-	}
-	return label[:len(label)-len(suffixstrip)], nil
+	return errs
 }
 
 // import_transform imports the records of one zone into another, modifying records along the way.
@@ -104,6 +110,36 @@ func importTransform(srcDomain, dstDomain *models.DomainConfig,
 		}
 	}
 	return nil
+}
+
+func newRec(rec *models.RecordConfig, ttl uint32) *models.RecordConfig {
+	rec2, _ := rec.Copy()
+	if ttl != 0 {
+		rec2.TTL = ttl
+	}
+	return rec2
+}
+
+func transformCNAME(target, oldDomain, newDomain, suffixstrip string) string {
+	// Canonicalize the target.  Add the newDomain minus the suffixstrip.
+	//  foo -> foo.oldDomain.newDomain
+	//  foo. -> foo.newDomain
+	nd := strings.TrimPrefix(newDomain, suffixstrip+".")
+	if strings.HasSuffix(target, ".") {
+		return target + nd + "."
+	}
+	return nameutil.ToFqdnWithDot(target, oldDomain) + nd + "."
+}
+
+func transformLabel(label, suffixstrip string) (string, error) {
+	if suffixstrip == "" {
+		return label, nil
+	}
+	suffixstrip = "." + suffixstrip
+	if !strings.HasSuffix(label, suffixstrip) {
+		return "", fmt.Errorf("label %q does not end with %q", label, suffixstrip)
+	}
+	return label[:len(label)-len(suffixstrip)], nil
 }
 
 // deleteImportTransformRecords deletes any IMPORT_TRANSFORM records from a domain.
