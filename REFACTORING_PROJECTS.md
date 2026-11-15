@@ -35,8 +35,6 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * There are multiple ways that code strips the trailing dot from a domain name.  Benchmark a few and standardize on the fastest. In pkg/nameutil. Possibly have one that is extra fast but panics if there is no "." at the end.
 
-* pkg/normalize/validate.go has half of the Transform code, the other half is in pkg/transform.  An easy thing would be to move the part of pkg/normalize/validate.go and validate_test.go into pkg/normalize/transform{,_test}.go.  The more difficult thing would be to move all or most of the code to pkg/transform.
-
 * models/record.go FixPostion has an easy TODO.
 
 * models/t_txt.go has an some easy FIXMEs.
