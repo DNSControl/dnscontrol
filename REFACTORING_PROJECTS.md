@@ -54,6 +54,9 @@ something that is both a Reg and a DSP.
 
 * deSEC: BUG: It mutates RecordConfigs, which will create problems if the same zone is sent to multiple providers.
 
+* REV("1.2.3.4") returns "4.3.2.1.in-addr.arpa" with no trailing dot, leaving us guessing later on. It should add
+the trailing dot when called in D(REV(foo)) but not in PTR(REV(foo)) (zone context vs. record context).  Then
+downstream code could be simplified.
 
 ## Actual new features:
 
