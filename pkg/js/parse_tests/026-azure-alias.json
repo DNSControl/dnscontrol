@@ -10,10 +10,7 @@
           "filepos": "[line:3:5]",
           "name": "aaaatest",
           "name_unicode": "aaaatest",
-          "rdata": {
-            "AliasType": "AAAA",
-            "Target": "foo.com."
-          },
+          "rdata": "AAAA foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286
@@ -23,10 +20,7 @@
           "filepos": "[line:2:5]",
           "name": "atest",
           "name_unicode": "atest",
-          "rdata": {
-            "AliasType": "A",
-            "Target": "foo.com."
-          },
+          "rdata": "A foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286
@@ -36,10 +30,7 @@
           "filepos": "[line:4:5]",
           "name": "cnametest",
           "name_unicode": "cnametest",
-          "rdata": {
-            "AliasType": "CNAME",
-            "Target": "foo.com."
-          },
+          "rdata": "CNAME foo.com.",
           "ttl": 300,
           "type": "AZURE_ALIAS",
           "typenum": 65286

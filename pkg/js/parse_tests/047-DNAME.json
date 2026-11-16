@@ -10,9 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Target": "bar.com."
-          },
+          "rdata": "bar.com.",
           "ttl": 300,
           "type": "DNAME",
           "typenum": 39

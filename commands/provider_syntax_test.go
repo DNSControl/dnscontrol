@@ -302,6 +302,32 @@ func TestProviderSyntaxIRLoading(t *testing.T) {
 	require.Equal(t, "both", roundTrip.Domains[0].DNSProviderInstances[0].Name)
 }
 
+func TestIRLoadingRecords(t *testing.T) {
+	// "print-ir --out file" followed by "--ir file" must preserve the records.
+	cfg := loadSyntaxConfig(t, `D("example.com", REGISTRAR("both"), SERVICE("both"),
+		A("@", "192.0.2.1"),
+		MX("@", 10, "mx"),
+		TXT("@", "has \"quotes\" and spaces"),
+		CAA("@", "issue", "letsencrypt.org"),
+		SRV("_sip._tcp", 10, 20, 5060, "sip.example.com."),
+		HTTPS("@", 1, ".", "alpn=h3,h2 port=443"),
+		CF_SINGLE_REDIRECT("name", 301, 'http.host eq "example.com"', 'concat("https://example.net", http.request.uri.path)'),
+	);`)
+	want, err := json.Marshal(cfg)
+	require.NoError(t, err)
+	irPath := filepath.Join(t.TempDir(), "dnsconfig.json")
+	require.NoError(t, os.WriteFile(irPath, want, 0o600))
+	roundTrip, err := GetDNSConfig(GetDNSConfigArgs{JSONFile: irPath})
+	require.NoError(t, err)
+	got, err := json.Marshal(roundTrip)
+	require.NoError(t, err)
+	require.JSONEq(t, string(want), string(got))
+	require.Len(t, roundTrip.Domains[0].Records, len(cfg.Domains[0].Records))
+	for _, rec := range roundTrip.Domains[0].Records {
+		require.NotNil(t, rec.GetRDATA(), rec.Type)
+	}
+}
+
 func TestServiceSyntaxDomainMetadata(t *testing.T) {
 	for _, initializer := range syntaxInitializers {
 		t.Run(initializer.name, func(t *testing.T) {

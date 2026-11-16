@@ -36,7 +36,7 @@ func (rr *MIKROTIKNXDOMAIN) Len() int {
 	return rr.Hdr.Len()
 }
 func (rr *MIKROTIKNXDOMAIN) Data() dnsv2.RDATA {
-	return nil
+	return privatetypesrdata.MIKROTIKNXDOMAIN{}
 }
 func (rr *MIKROTIKNXDOMAIN) Clone() dnsv2.RR {
 	return &MIKROTIKNXDOMAIN{

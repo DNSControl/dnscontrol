@@ -10,9 +10,7 @@
           "filepos": "[line:2:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Target": "foo.com."
-          },
+          "rdata": "foo.com.",
           "ttl": 300,
           "type": "ALIAS",
           "typenum": 65285
