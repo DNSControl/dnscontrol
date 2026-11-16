@@ -24,7 +24,7 @@ require (
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
 	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.26
 	github.com/cloudflare/cloudflare-go/v7 v7.15.0
-	github.com/digitalocean/godo v1.240.0
+	github.com/digitalocean/godo v1.241.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v10 v10.0.0
 	github.com/dustin/go-humanize v1.1.0
