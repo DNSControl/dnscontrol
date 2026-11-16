@@ -187,6 +187,9 @@ provider-PORKBUN:
 provider-POWERDNS:
   - changed-files:
       - any-glob-to-any-file: providers/powerdns/**
+provider-PRIMEDNS:
+  - changed-files:
+      - any-glob-to-any-file: providers/primedns/**
 provider-REALTIMEREGISTER:
   - changed-files:
       - any-glob-to-any-file: providers/realtimeregister/**

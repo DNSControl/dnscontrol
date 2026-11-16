@@ -506,6 +506,7 @@ func makeTests() []*TestGroup {
 				"NS1",               // Test leaves NS1 in a confused state.
 				"OPENPROVIDER",      // Openprovider manages the apex NS records and does not allow changing them.
 				"PORKBUN",           // Record ignored.
+				"PRIMEDNS",          // Apex NS records need the TTL of PrimeDNS's own (8000): see the next group.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
@@ -513,6 +514,15 @@ func makeTests() []*TestGroup {
 			),
 			tc("Single NS at apex", tr("@", dnsv2.TypeNS, "ns1.foo.com.")),
 			tc("Dual NS at apex", tr("@", dnsv2.TypeNS, "ns2.foo.com."), tr("@", dnsv2.TypeNS, "ns1.foo.com.")),
+		),
+
+		// PrimeDNS keeps its own NS records at the apex (not shown by DNSControl) and holds all records of a name
+		// and type on one TTL, so an NS record of the user has to use the TTL of those records: 8000.
+		testgroup("NS only APEX with the TTL of PrimeDNS",
+			only("PRIMEDNS"),
+			tc("Single NS at apex", tr("@", dnsv2.TypeNS, "ns1.foo.com.", withTTL(8000))),
+			tc("Dual NS at apex", tr("@", dnsv2.TypeNS, "ns2.foo.com.", withTTL(8000)), tr("@", dnsv2.TypeNS, "ns1.foo.com.", withTTL(8000))),
+			tc("Change one of two NS at apex", tr("@", dnsv2.TypeNS, "ns2.foo.com.", withTTL(8000)), tr("@", dnsv2.TypeNS, "ns3.foo.com.", withTTL(8000))),
 		),
 
 		//// TXT tests
