@@ -10,9 +10,7 @@
           "filepos": "[line:1:25]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Target": "https://example.com"
-          },
+          "rdata": "\"https://example.com\"",
           "ttl": 300,
           "type": "CLOUDNS_WR",
           "typenum": 65290

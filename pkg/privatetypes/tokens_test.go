@@ -67,6 +67,11 @@ func TestTokensToArgs(t *testing.T) {
 			expected: []string{"one", "", ""},
 		},
 		{
+			name:     "quoted string with escapes",
+			input:    []string{`"`, `eq \"a\" and \\d \065\999`, `"`},
+			expected: []string{`eq "a" and \d A999`},
+		},
+		{
 			name:     "incomplete quoted string at end",
 			input:    []string{"one", "\"", "two"},
 			expected: []string{"one", "\"", "two"},

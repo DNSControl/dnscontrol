@@ -10,10 +10,7 @@
           "filepos": "[line:8:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Mx": "domain-tld.mail.protection.outlook.com.",
-            "Preference": 0
-          },
+          "rdata": "0 domain-tld.mail.protection.outlook.com.",
           "ttl": 3600,
           "type": "MX",
           "typenum": 15
@@ -23,11 +20,7 @@
           "filepos": "[line:8:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Txt": [
-              "MS=ms12345678"
-            ]
-          },
+          "rdata": "\"MS=ms12345678\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -37,9 +30,7 @@
           "filepos": "[line:8:5]",
           "name": "selector1._domainkey",
           "name_unicode": "selector1._domainkey",
-          "rdata": {
-            "Target": "selector1-domain-tld._domainkey.contoso.onmicrosoft.com."
-          },
+          "rdata": "selector1-domain-tld._domainkey.contoso.onmicrosoft.com.",
           "ttl": 3600,
           "type": "CNAME",
           "typenum": 5
@@ -49,9 +40,7 @@
           "filepos": "[line:8:5]",
           "name": "selector2._domainkey",
           "name_unicode": "selector2._domainkey",
-          "rdata": {
-            "Target": "selector2-domain-tld._domainkey.contoso.onmicrosoft.com."
-          },
+          "rdata": "selector2-domain-tld._domainkey.contoso.onmicrosoft.com.",
           "ttl": 3600,
           "type": "CNAME",
           "typenum": 5
@@ -61,12 +50,7 @@
           "filepos": "[line:8:5]",
           "name": "_sipfederationtls._tcp",
           "name_unicode": "_sipfederationtls._tcp",
-          "rdata": {
-            "Port": 5061,
-            "Priority": 100,
-            "Target": "sipfed.online.lync.com.",
-            "Weight": 1
-          },
+          "rdata": "100 1 5061 sipfed.online.lync.com.",
           "ttl": 3600,
           "type": "SRV",
           "typenum": 33
@@ -76,9 +60,7 @@
           "filepos": "[line:8:5]",
           "name": "autodiscover",
           "name_unicode": "autodiscover",
-          "rdata": {
-            "Target": "autodiscover.outlook.com."
-          },
+          "rdata": "autodiscover.outlook.com.",
           "ttl": 3600,
           "type": "CNAME",
           "typenum": 5
@@ -88,9 +70,7 @@
           "filepos": "[line:8:5]",
           "name": "enterpriseenrollment",
           "name_unicode": "enterpriseenrollment",
-          "rdata": {
-            "Target": "enterpriseenrollment-s.manage.microsoft.com."
-          },
+          "rdata": "enterpriseenrollment-s.manage.microsoft.com.",
           "ttl": 3600,
           "type": "CNAME",
           "typenum": 5
@@ -100,9 +80,7 @@
           "filepos": "[line:8:5]",
           "name": "enterpriseregistration",
           "name_unicode": "enterpriseregistration",
-          "rdata": {
-            "Target": "enterpriseregistration.windows.net."
-          },
+          "rdata": "enterpriseregistration.windows.net.",
           "ttl": 3600,
           "type": "CNAME",
           "typenum": 5
@@ -112,10 +90,7 @@
           "filepos": "[line:41:5]",
           "name": "ssub",
           "name_unicode": "ssub",
-          "rdata": {
-            "Mx": "ssub-domain-tld.mail.protection.outlook.com.",
-            "Preference": 0
-          },
+          "rdata": "0 ssub-domain-tld.mail.protection.outlook.com.",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "MX",
@@ -126,9 +101,7 @@
           "filepos": "[line:41:5]",
           "name": "selector1._domainkey.ssub",
           "name_unicode": "selector1._domainkey.ssub",
-          "rdata": {
-            "Target": "selector1-ssub-domain-tld._domainkey.contoso.onmicrosoft.com."
-          },
+          "rdata": "selector1-ssub-domain-tld._domainkey.contoso.onmicrosoft.com.",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "CNAME",
@@ -139,9 +112,7 @@
           "filepos": "[line:41:5]",
           "name": "selector2._domainkey.ssub",
           "name_unicode": "selector2._domainkey.ssub",
-          "rdata": {
-            "Target": "selector2-ssub-domain-tld._domainkey.contoso.onmicrosoft.com."
-          },
+          "rdata": "selector2-ssub-domain-tld._domainkey.contoso.onmicrosoft.com.",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "CNAME",
@@ -152,9 +123,7 @@
           "filepos": "[line:41:5]",
           "name": "autodiscover.ssub",
           "name_unicode": "autodiscover.ssub",
-          "rdata": {
-            "Target": "autodiscover.outlook.com."
-          },
+          "rdata": "autodiscover.outlook.com.",
           "subdomain": "ssub",
           "ttl": 300,
           "type": "CNAME",
@@ -165,10 +134,7 @@
           "filepos": "[line:19:5]",
           "name": "test",
           "name_unicode": "test",
-          "rdata": {
-            "Mx": "test-domain-tld.mail.protection.outlook.com.",
-            "Preference": 0
-          },
+          "rdata": "0 test-domain-tld.mail.protection.outlook.com.",
           "ttl": 300,
           "type": "MX",
           "typenum": 15
@@ -178,9 +144,7 @@
           "filepos": "[line:19:5]",
           "name": "selector1._domainkey.test",
           "name_unicode": "selector1._domainkey.test",
-          "rdata": {
-            "Target": "selector1-test-domain-tld._domainkey.contoso.n-v1.dkim.mail.microsoft."
-          },
+          "rdata": "selector1-test-domain-tld._domainkey.contoso.n-v1.dkim.mail.microsoft.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -190,9 +154,7 @@
           "filepos": "[line:19:5]",
           "name": "selector2._domainkey.test",
           "name_unicode": "selector2._domainkey.test",
-          "rdata": {
-            "Target": "selector2-test-domain-tld._domainkey.contoso.n-v1.dkim.mail.microsoft."
-          },
+          "rdata": "selector2-test-domain-tld._domainkey.contoso.n-v1.dkim.mail.microsoft.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -202,9 +164,7 @@
           "filepos": "[line:19:5]",
           "name": "autodiscover.test",
           "name_unicode": "autodiscover.test",
-          "rdata": {
-            "Target": "autodiscover.outlook.com."
-          },
+          "rdata": "autodiscover.outlook.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -222,10 +182,7 @@
           "filepos": "[line:31:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Mx": "dane-tld.o-v1.mx.microsoft.",
-            "Preference": 0
-          },
+          "rdata": "0 dane-tld.o-v1.mx.microsoft.",
           "ttl": 300,
           "type": "MX",
           "typenum": 15
@@ -235,9 +192,7 @@
           "filepos": "[line:31:5]",
           "name": "selector1._domainkey",
           "name_unicode": "selector1._domainkey",
-          "rdata": {
-            "Target": "selector1-dane-tld._domainkey.contoso.o-v1.dkim.mail.microsoft."
-          },
+          "rdata": "selector1-dane-tld._domainkey.contoso.o-v1.dkim.mail.microsoft.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -247,9 +202,7 @@
           "filepos": "[line:31:5]",
           "name": "selector2._domainkey",
           "name_unicode": "selector2._domainkey",
-          "rdata": {
-            "Target": "selector2-dane-tld._domainkey.contoso.o-v1.dkim.mail.microsoft."
-          },
+          "rdata": "selector2-dane-tld._domainkey.contoso.o-v1.dkim.mail.microsoft.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5
@@ -259,9 +212,7 @@
           "filepos": "[line:31:5]",
           "name": "autodiscover",
           "name_unicode": "autodiscover",
-          "rdata": {
-            "Target": "autodiscover.outlook.com."
-          },
+          "rdata": "autodiscover.outlook.com.",
           "ttl": 300,
           "type": "CNAME",
           "typenum": 5

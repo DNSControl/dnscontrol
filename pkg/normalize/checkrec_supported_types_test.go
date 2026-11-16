@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
@@ -200,5 +201,74 @@ func TestCatalogValidationWithoutResolvedProvider(t *testing.T) {
 		if err := validateSupportedRecordTypes(r, "example.com", pTypes); err != nil {
 			t.Fatalf("providers=%v, error=%v", pTypes, err)
 		}
+	}
+}
+
+const (
+	ProviderNoDS        = "NO_DS_SUPPORT"
+	ProviderFullDS      = "FULL_DS_SUPPORT"
+	ProviderChildDSOnly = "CHILD_DS_SUPPORT"
+	ProviderBothDSCaps  = "BOTH_DS_CAPABILITIES"
+)
+
+func init() {
+	for name, definition := range map[string]providers.Definition{
+		ProviderNoDS: {
+			FriendlyName: ProviderNoDS,
+			SupportedTypes: []string{
+				"Basic8",
+			},
+		},
+		ProviderFullDS: {
+			FriendlyName: ProviderFullDS,
+			SupportedTypes: []string{
+				"Basic8",
+				"DS",
+			},
+		},
+		ProviderChildDSOnly: {
+			FriendlyName: ProviderChildDSOnly,
+			SupportedTypes: []string{
+				"Basic8",
+			},
+			CanUseDSForChildren: providers.Can(),
+		},
+		ProviderBothDSCaps: {
+			FriendlyName: ProviderBothDSCaps,
+			SupportedTypes: []string{
+				"Basic8",
+				"DS",
+			},
+			CanUseDSForChildren: providers.Can(),
+		},
+	} {
+		providers.Register[*validationProvider](name, definition)
+	}
+}
+
+func Test_DSChecks(t *testing.T) {
+	dc := models.MustNewDomainConfig("example.com")
+	apexDS := dc.MustNewRecordConfig("@", 0, dnsv2.TypeDS, 1, 1, 1, 1)
+	childDS := dc.MustNewRecordConfig("child", 0, dnsv2.TypeDS, 1, 1, 1, 1)
+
+	for _, tc := range []struct {
+		pType   string
+		rec     *models.RecordConfig
+		wantErr bool
+	}{
+		{ProviderNoDS, childDS, true},
+		{ProviderFullDS, apexDS, false},
+		{ProviderFullDS, childDS, false},
+		{ProviderBothDSCaps, apexDS, false},
+		{ProviderBothDSCaps, childDS, false},
+		{ProviderChildDSOnly, childDS, false},
+		{ProviderChildDSOnly, apexDS, true},
+	} {
+		t.Run(tc.pType+"/"+tc.rec.GetLabel(), func(t *testing.T) {
+			err := validateSupportedRecordTypes(tc.rec, dc.Name, []string{tc.pType})
+			if (err != nil) != tc.wantErr {
+				t.Errorf("validateSupportedRecordTypes() error = %v, wantErr %v", err, tc.wantErr)
+			}
+		})
 	}
 }

@@ -270,7 +270,10 @@ func MakeNAPTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}
 	// The NAPTR replacement is a domain name; an empty replacement is canonically
 	// the root, ".". Normalize so it renders consistently in zone files.
-	replacement := mustbe.RawString(args[5])
+	replacement, err := mustbe.TargetHostSRV(origin, isEnabled, args[5])
+	if err != nil {
+		return nil, err
+	}
 	if replacement == "" {
 		replacement = "."
 	}
@@ -289,7 +292,11 @@ func MakeOPENPGPKEY(origin string, _ map[string]string, isEnabled nrc.Flags, arg
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeOPENPGPKEY expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.OPENPGPKEY{PublicKey: mustbe.OpenPGPKey(args[0])}, nil
+	key, err := mustbe.OpenPGPKey(args[0])
+	if err != nil {
+		return nil, err
+	}
+	return dnsrdatav2.OPENPGPKEY{PublicKey: key}, nil
 }
 
 func MakePORKBUNURLFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

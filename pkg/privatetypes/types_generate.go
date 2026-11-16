@@ -342,7 +342,7 @@ func generateTypeFile(t *TypeDef) error {
 
 	fmt.Fprintf(&buf, "func (rr *%s) Data() dnsv2.RDATA {\n", typeName)
 	if len(t.Fields) == 0 && len(t.OptionalFields) == 0 && len(t.RuntimeFields) == 0 {
-		fmt.Fprintf(&buf, "\treturn nil\n")
+		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{}\n", typeName)
 	} else {
 		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{", typeName)
 		fields := slices.Concat(t.Fields, t.OptionalFields, t.RuntimeFields)

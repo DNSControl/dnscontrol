@@ -6,7 +6,7 @@
 
 ## Built-in Tests
 
-DNSControl performs a number of tests during the validation stage. You can find them in `pkg/normalize/validate.go`.
+DNSControl performs a number of tests during the validation stage. You can find them in `pkg/normalize/` (the `checkrec_*.go` files check individual records; the `checkzone_*.go` files check whole zones).
 
 ## External tests
 
@@ -20,6 +20,10 @@ dnscontrol print-ir --out foo.json --pretty
 
 {% hint style="info" %}
 **NOTE**: The `--pretty` flag is optional.
+{% endhint %}
+
+{% hint style="info" %}
+**NOTE**: Each record's `rdata` is a string in zonefile format (for example, `"10 mx.example.com."` for an MX record), not a JSON object.
 {% endhint %}
 
 Here is a sample test written in `bash` using the [jq](https://stedolan.github.io/jq/) command.  This fails if the number of MX records in the `stackex.com` domain is not exactly 5:

@@ -107,6 +107,17 @@ func TestParsedFiles(t *testing.T) {
 			}
 			testifyrequire.JSONEqf(t, es, as, "ACTUAL %q = \n```\n%s\n```", expectedFile+".ACTUAL", as)
 
+			// Test that the JSON round-trips (print-ir output can be read by --ir).
+			roundTrip := &models.DNSConfig{}
+			if err := json.Unmarshal(actualJSON, roundTrip); err != nil {
+				t.Fatal(err)
+			}
+			roundTripJSON, err := json.MarshalIndent(roundTrip, "", "  ")
+			if err != nil {
+				t.Fatal(err)
+			}
+			testifyrequire.JSONEq(t, as, string(roundTripJSON), "IR does not round-trip")
+
 			// For each domain, if there is a zone file, test against it:
 
 			var dCount int
@@ -195,6 +206,9 @@ func TestErrors(t *testing.T) {
 		{"FORSALE_BUILDER unknown option", `D("foo.com","reg",FORSALE_BUILDER("@",{uri:"https://foo.com/buy"}))`},
 		{"FORSALE_BUILDER bad price", `D("foo.com","reg",FORSALE_BUILDER("@",{fval:"999 EUR"}))`},
 		{"FORSALE_BUILDER with a record modifier", `D("foo.com","reg",FORSALE_BUILDER("@",{fval:"EUR999"},CF_PROXY_OFF))`},
+		{"MIGADU_BUILDER unknown option", `D("foo.com","reg",MIGADU_BUILDER("foo.com",{ttl:"1h"}))`},
+		{"MIGADU_BUILDER label without the mail domain", `D("foo.com","reg",MIGADU_BUILDER("foo.com",{label:"mail"}))`},
+		{"MIGADU_BUILDER with a record modifier", `D("foo.com","reg",MIGADU_BUILDER("foo.com",{},CF_PROXY_OFF))`},
 	}
 	for _, tst := range tests {
 		t.Run(tst.desc, func(t *testing.T) {

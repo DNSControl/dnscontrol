@@ -10,11 +10,7 @@
           "filepos": "[line:5:5]",
           "name": "_for-sale",
           "name_unicode": "_for-sale",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;\"",
           "ttl": 300,
           "type": "TXT",
           "typenum": 16
@@ -24,11 +20,7 @@
           "filepos": "[line:6:5]",
           "name": "_for-sale.exco",
           "name_unicode": "_for-sale.exco",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;fcod=EXCO-ZGVhZGJlZWYx"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;fcod=EXCO-ZGVhZGJlZWYx\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -38,11 +30,7 @@
           "filepos": "[line:6:5]",
           "name": "_for-sale.exco",
           "name_unicode": "_for-sale.exco",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;fcod=XYZ1-MTExLTIyMi0zMzMtNDQ0"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;fcod=XYZ1-MTExLTIyMi0zMzMtNDQ0\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -52,11 +40,7 @@
           "filepos": "[line:6:5]",
           "name": "_for-sale.exco",
           "name_unicode": "_for-sale.exco",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;ftxt=This domain name is for sale"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;ftxt=This domain name is for sale\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -66,11 +50,7 @@
           "filepos": "[line:6:5]",
           "name": "_for-sale.exco",
           "name_unicode": "_for-sale.exco",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;furi=https://fs.example.com/"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;furi=https://fs.example.com/\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -80,11 +60,7 @@
           "filepos": "[line:6:5]",
           "name": "_for-sale.exco",
           "name_unicode": "_for-sale.exco",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;fval=EUR500"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;fval=EUR500\"",
           "ttl": 3600,
           "type": "TXT",
           "typenum": 16
@@ -94,11 +70,7 @@
           "filepos": "[line:15:5]",
           "name": "_for-sale.sub",
           "name_unicode": "_for-sale.sub",
-          "rdata": {
-            "Txt": [
-              "v=FORSALE1;furi=mailto:hq@example.com?subject=foo"
-            ]
-          },
+          "rdata": "\"v=FORSALE1;furi=mailto:hq@example.com?subject=foo\"",
           "subdomain": "sub",
           "ttl": 300,
           "type": "TXT",

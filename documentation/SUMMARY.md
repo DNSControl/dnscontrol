@@ -66,6 +66,7 @@
     * [LOC_BUILDER_DMS_STR](language-reference/domain-modifiers/LOC_BUILDER_DMS_STR.md)
     * [LOC_BUILDER_STR](language-reference/domain-modifiers/LOC_BUILDER_STR.md)
     * [M365_BUILDER](language-reference/domain-modifiers/M365_BUILDER.md)
+    * [MIGADU_BUILDER](language-reference/domain-modifiers/MIGADU_BUILDER.md)
     * [MX](language-reference/domain-modifiers/MX.md)
     * [NAMESERVER](language-reference/domain-modifiers/NAMESERVER.md)
     * [NAMESERVER_TTL](language-reference/domain-modifiers/NAMESERVER_TTL.md)

@@ -17,9 +17,7 @@
           "filepos": "[line:7:5]",
           "name": "1",
           "name_unicode": "1",
-          "rdata": {
-            "Ptr": "foo.example.com."
-          },
+          "rdata": "foo.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -28,10 +26,8 @@
           "comparablev3": "bar.example.com.",
           "filepos": "[line:8:5]",
           "name": "2",
-          "name_unicode": "1.2.3.2",
-          "rdata": {
-            "Ptr": "bar.example.com."
-          },
+          "name_unicode": "2",
+          "rdata": "bar.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -43,10 +39,8 @@
             "skip_fqdn_check": "true"
           },
           "name": "3",
-          "name_unicode": "3.3.2.1.in-addr.arpa",
-          "rdata": {
-            "Ptr": "baz.example.com."
-          },
+          "name_unicode": "3",
+          "rdata": "baz.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -56,9 +50,7 @@
           "filepos": "[line:14:5]",
           "name": "4",
           "name_unicode": "4",
-          "rdata": {
-            "Ptr": "silly.example.com."
-          },
+          "rdata": "silly.example.com.",
           "subdomain": "4",
           "ttl": 300,
           "type": "PTR",
@@ -68,10 +60,8 @@
           "comparablev3": "willy.example.com.",
           "filepos": "[line:17:5]",
           "name": "5",
-          "name_unicode": "1.2.3.5",
-          "rdata": {
-            "Ptr": "willy.example.com."
-          },
+          "name_unicode": "5",
+          "rdata": "willy.example.com.",
           "subdomain": "5",
           "ttl": 300,
           "type": "PTR",
@@ -81,10 +71,8 @@
           "comparablev3": "billy.example.com.",
           "filepos": "[line:20:5]",
           "name": "6",
-          "name_unicode": "6.3.2.1.in-addr.arpa",
-          "rdata": {
-            "Ptr": "billy.example.com."
-          },
+          "name_unicode": "6",
+          "rdata": "billy.example.com.",
           "subdomain": "6",
           "ttl": 300,
           "type": "PTR",
@@ -95,9 +83,7 @@
           "filepos": "[line:24:5]",
           "name": "7",
           "name_unicode": "7",
-          "rdata": {
-            "Ptr": "my.example.com."
-          },
+          "rdata": "my.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -106,10 +92,8 @@
           "comparablev3": "fair.example.com.",
           "filepos": "[line:27:5]",
           "name": "8",
-          "name_unicode": "1.2.3.8",
-          "rdata": {
-            "Ptr": "fair.example.com."
-          },
+          "name_unicode": "8",
+          "rdata": "fair.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -121,10 +105,8 @@
             "skip_fqdn_check": "true"
           },
           "name": "9",
-          "name_unicode": "9.3.2.1.in-addr.arpa",
-          "rdata": {
-            "Ptr": "lady.example.com."
-          },
+          "name_unicode": "9",
+          "rdata": "lady.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12

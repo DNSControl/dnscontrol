@@ -17,9 +17,7 @@
           "filepos": "[line:7:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.1.1.1"
-          },
+          "rdata": "10.1.1.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -29,9 +27,7 @@
           "filepos": "[line:11:5]",
           "name": "bar",
           "name_unicode": "bar",
-          "rdata": {
-            "Addr": "10.3.3.3"
-          },
+          "rdata": "10.3.3.3",
           "subdomain": "bar",
           "ttl": 300,
           "type": "A",
@@ -42,9 +38,7 @@
           "filepos": "[line:12:5]",
           "name": "www.bar",
           "name_unicode": "www.bar",
-          "rdata": {
-            "Addr": "10.4.4.4"
-          },
+          "rdata": "10.4.4.4",
           "subdomain": "bar",
           "ttl": 300,
           "type": "A",
@@ -55,9 +49,7 @@
           "filepos": "[line:70:5]",
           "name": "a.long.path.of.sub.domains",
           "name_unicode": "a.long.path.of.sub.domains",
-          "rdata": {
-            "Addr": "10.25.25.25"
-          },
+          "rdata": "10.25.25.25",
           "subdomain": "a.long.path.of.sub.domains",
           "ttl": 300,
           "type": "A",
@@ -68,9 +60,7 @@
           "filepos": "[line:71:5]",
           "name": "www.a.long.path.of.sub.domains",
           "name_unicode": "www.a.long.path.of.sub.domains",
-          "rdata": {
-            "Addr": "10.26.26.26"
-          },
+          "rdata": "10.26.26.26",
           "subdomain": "a.long.path.of.sub.domains",
           "ttl": 300,
           "type": "A",
@@ -81,9 +71,7 @@
           "filepos": "[line:8:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.2.2.2"
-          },
+          "rdata": "10.2.2.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -103,9 +91,7 @@
           "filepos": "[line:18:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "20.5.5.5"
-          },
+          "rdata": "20.5.5.5",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -115,9 +101,7 @@
           "filepos": "[line:30:5]",
           "name": "a",
           "name_unicode": "a",
-          "rdata": {
-            "Addr": "20.10.10.10"
-          },
+          "rdata": "20.10.10.10",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -127,9 +111,7 @@
           "filepos": "[line:19:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "20.6.6.6"
-          },
+          "rdata": "20.6.6.6",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -149,9 +131,7 @@
           "filepos": "[line:23:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "30.7.7.7"
-          },
+          "rdata": "30.7.7.7",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -161,9 +141,7 @@
           "filepos": "[line:27:5]",
           "name": "a",
           "name_unicode": "a",
-          "rdata": {
-            "Addr": "30.9.9.9"
-          },
+          "rdata": "30.9.9.9",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -173,9 +151,7 @@
           "filepos": "[line:24:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "30.8.8.8"
-          },
+          "rdata": "30.8.8.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -195,9 +171,7 @@
           "filepos": "[line:36:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "40.12.12.12"
-          },
+          "rdata": "40.12.12.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -207,9 +181,7 @@
           "filepos": "[line:49:5]",
           "name": "morty",
           "name_unicode": "morty",
-          "rdata": {
-            "Addr": "40.17.17.17"
-          },
+          "rdata": "40.17.17.17",
           "subdomain": "morty",
           "ttl": 300,
           "type": "A",
@@ -220,9 +192,7 @@
           "filepos": "[line:50:5]",
           "name": "www.morty",
           "name_unicode": "www.morty",
-          "rdata": {
-            "Addr": "40.18.18.18"
-          },
+          "rdata": "40.18.18.18",
           "subdomain": "morty",
           "ttl": 300,
           "type": "A",
@@ -233,9 +203,7 @@
           "filepos": "[line:37:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "40.12.12.12"
-          },
+          "rdata": "40.12.12.12",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -255,9 +223,7 @@
           "filepos": "[line:41:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "50.13.13.13"
-          },
+          "rdata": "50.13.13.13",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -267,9 +233,7 @@
           "filepos": "[line:42:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "50.14.14.14"
-          },
+          "rdata": "50.14.14.14",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -279,9 +243,7 @@
           "filepos": "[line:45:5]",
           "name": "zip",
           "name_unicode": "zip",
-          "rdata": {
-            "Addr": "50.15.15.15"
-          },
+          "rdata": "50.15.15.15",
           "subdomain": "zip",
           "ttl": 300,
           "type": "A",
@@ -292,9 +254,7 @@
           "filepos": "[line:46:5]",
           "name": "www.zip",
           "name_unicode": "www.zip",
-          "rdata": {
-            "Addr": "50.16.16.16"
-          },
+          "rdata": "50.16.16.16",
           "subdomain": "zip",
           "ttl": 300,
           "type": "A",
@@ -315,9 +275,7 @@
           "filepos": "[line:56:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "60.19.19.19"
-          },
+          "rdata": "60.19.19.19",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -327,9 +285,7 @@
           "filepos": "[line:60:5]",
           "name": "bar",
           "name_unicode": "bar",
-          "rdata": {
-            "Addr": "60.21.21.21"
-          },
+          "rdata": "60.21.21.21",
           "subdomain": "bar",
           "ttl": 300,
           "type": "A",
@@ -340,9 +296,7 @@
           "filepos": "[line:64:5]",
           "name": "baz.bar",
           "name_unicode": "baz.bar",
-          "rdata": {
-            "Addr": "60.23.23.23"
-          },
+          "rdata": "60.23.23.23",
           "subdomain": "baz.bar",
           "ttl": 300,
           "type": "A",
@@ -353,9 +307,7 @@
           "filepos": "[line:65:5]",
           "name": "www.baz.bar",
           "name_unicode": "www.baz.bar",
-          "rdata": {
-            "Addr": "60.24.24.24"
-          },
+          "rdata": "60.24.24.24",
           "subdomain": "baz.bar",
           "ttl": 300,
           "type": "A",
@@ -366,9 +318,7 @@
           "filepos": "[line:61:5]",
           "name": "www.bar",
           "name_unicode": "www.bar",
-          "rdata": {
-            "Addr": "60.22.22.22"
-          },
+          "rdata": "60.22.22.22",
           "subdomain": "bar",
           "ttl": 300,
           "type": "A",
@@ -379,9 +329,7 @@
           "filepos": "[line:57:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "60.20.20.20"
-          },
+          "rdata": "60.20.20.20",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -401,9 +349,7 @@
           "filepos": "[line:77:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.1"
-          },
+          "rdata": "10.0.0.1",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -413,9 +359,7 @@
           "filepos": "[line:78:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.2"
-          },
+          "rdata": "10.0.0.2",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -425,9 +369,7 @@
           "filepos": "[line:82:5]",
           "name": "xn--dsseldorf-q9a",
           "name_unicode": "d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.3"
-          },
+          "rdata": "10.0.0.3",
           "subdomain": "xn--dsseldorf-q9a",
           "ttl": 300,
           "type": "A",
@@ -438,9 +380,7 @@
           "filepos": "[line:83:5]",
           "name": "www.xn--dsseldorf-q9a",
           "name_unicode": "www.d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.4"
-          },
+          "rdata": "10.0.0.4",
           "subdomain": "xn--dsseldorf-q9a",
           "ttl": 300,
           "type": "A",
@@ -451,9 +391,7 @@
           "filepos": "[line:87:5]",
           "name": "xn--tda",
           "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.5"
-          },
+          "rdata": "10.0.0.5",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -464,9 +402,7 @@
           "filepos": "[line:88:5]",
           "name": "www.xn--tda",
           "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.6"
-          },
+          "rdata": "10.0.0.6",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -487,9 +423,7 @@
           "filepos": "[line:94:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.7"
-          },
+          "rdata": "10.0.0.7",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -499,9 +433,7 @@
           "filepos": "[line:99:5]",
           "name": "subdomain",
           "name_unicode": "subdomain",
-          "rdata": {
-            "Addr": "10.0.0.9"
-          },
+          "rdata": "10.0.0.9",
           "subdomain": "subdomain",
           "ttl": 300,
           "type": "A",
@@ -512,9 +444,7 @@
           "filepos": "[line:100:5]",
           "name": "www.subdomain",
           "name_unicode": "www.subdomain",
-          "rdata": {
-            "Addr": "10.0.0.10"
-          },
+          "rdata": "10.0.0.10",
           "subdomain": "subdomain",
           "ttl": 300,
           "type": "A",
@@ -525,9 +455,7 @@
           "filepos": "[line:95:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.8"
-          },
+          "rdata": "10.0.0.8",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -537,9 +465,7 @@
           "filepos": "[line:104:5]",
           "name": "xn--dsseltal-65a",
           "name_unicode": "d\u00fcsseltal",
-          "rdata": {
-            "Addr": "10.0.0.11"
-          },
+          "rdata": "10.0.0.11",
           "subdomain": "xn--dsseltal-65a",
           "ttl": 300,
           "type": "A",
@@ -550,9 +476,7 @@
           "filepos": "[line:105:5]",
           "name": "www.xn--dsseltal-65a",
           "name_unicode": "www.d\u00fcsseltal",
-          "rdata": {
-            "Addr": "10.0.0.12"
-          },
+          "rdata": "10.0.0.12",
           "subdomain": "xn--dsseltal-65a",
           "ttl": 300,
           "type": "A",
@@ -563,9 +487,7 @@
           "filepos": "[line:109:5]",
           "name": "xn--tda",
           "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.13"
-          },
+          "rdata": "10.0.0.13",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -576,9 +498,7 @@
           "filepos": "[line:110:5]",
           "name": "www.xn--tda",
           "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.14"
-          },
+          "rdata": "10.0.0.14",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -599,9 +519,7 @@
           "filepos": "[line:116:5]",
           "name": "@",
           "name_unicode": "@",
-          "rdata": {
-            "Addr": "10.0.0.15"
-          },
+          "rdata": "10.0.0.15",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -611,9 +529,7 @@
           "filepos": "[line:121:5]",
           "name": "subdomain",
           "name_unicode": "subdomain",
-          "rdata": {
-            "Addr": "10.0.0.17"
-          },
+          "rdata": "10.0.0.17",
           "subdomain": "subdomain",
           "ttl": 300,
           "type": "A",
@@ -624,9 +540,7 @@
           "filepos": "[line:122:5]",
           "name": "www.subdomain",
           "name_unicode": "www.subdomain",
-          "rdata": {
-            "Addr": "10.0.0.18"
-          },
+          "rdata": "10.0.0.18",
           "subdomain": "subdomain",
           "ttl": 300,
           "type": "A",
@@ -637,9 +551,7 @@
           "filepos": "[line:117:5]",
           "name": "www",
           "name_unicode": "www",
-          "rdata": {
-            "Addr": "10.0.0.16"
-          },
+          "rdata": "10.0.0.16",
           "ttl": 300,
           "type": "A",
           "typenum": 1
@@ -649,9 +561,7 @@
           "filepos": "[line:126:5]",
           "name": "xn--dsseldorf-q9a",
           "name_unicode": "d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.19"
-          },
+          "rdata": "10.0.0.19",
           "subdomain": "xn--dsseldorf-q9a",
           "ttl": 300,
           "type": "A",
@@ -662,9 +572,7 @@
           "filepos": "[line:127:5]",
           "name": "www.xn--dsseldorf-q9a",
           "name_unicode": "www.d\u00fcsseldorf",
-          "rdata": {
-            "Addr": "10.0.0.20"
-          },
+          "rdata": "10.0.0.20",
           "subdomain": "xn--dsseldorf-q9a",
           "ttl": 300,
           "type": "A",
@@ -675,9 +583,7 @@
           "filepos": "[line:131:5]",
           "name": "xn--tda",
           "name_unicode": "\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.21"
-          },
+          "rdata": "10.0.0.21",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -688,9 +594,7 @@
           "filepos": "[line:132:5]",
           "name": "www.xn--tda",
           "name_unicode": "www.\u00fc",
-          "rdata": {
-            "Addr": "10.0.0.22"
-          },
+          "rdata": "10.0.0.22",
           "subdomain": "xn--tda",
           "ttl": 300,
           "type": "A",
@@ -711,9 +615,7 @@
           "filepos": "[line:138:5]",
           "name": "a.sub",
           "name_unicode": "a.sub",
-          "rdata": {
-            "Target": "b.sub.example.tld."
-          },
+          "rdata": "b.sub.example.tld.",
           "subdomain": "sub",
           "ttl": 300,
           "type": "CNAME",
@@ -724,9 +626,7 @@
           "filepos": "[line:139:5]",
           "name": "b.sub",
           "name_unicode": "b.sub",
-          "rdata": {
-            "Target": "sub.example.tld."
-          },
+          "rdata": "sub.example.tld.",
           "subdomain": "sub",
           "ttl": 300,
           "type": "CNAME",
@@ -737,9 +637,7 @@
           "filepos": "[line:140:5]",
           "name": "c.sub",
           "name_unicode": "c.sub",
-          "rdata": {
-            "Target": "sub.example.tld."
-          },
+          "rdata": "sub.example.tld.",
           "subdomain": "sub",
           "ttl": 300,
           "type": "CNAME",
@@ -750,9 +648,7 @@
           "filepos": "[line:142:5]",
           "name": "e.sub",
           "name_unicode": "e.sub",
-          "rdata": {
-            "Target": "otherdomain.tld."
-          },
+          "rdata": "otherdomain.tld.",
           "subdomain": "sub",
           "ttl": 300,
           "type": "CNAME",

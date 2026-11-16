@@ -43,7 +43,7 @@ var forSaleValueRE = regexp.MustCompile(`^[A-Z]+[0-9]+(\.[0-9]+)?$`)
 // TXT records of RFC 10023 below a label.
 //
 // args is [label, options]. The options object is moved from the metadata list
-// into the argument list by forsaleOptions() (pkg/js/helpers.js), so its
+// into the argument list by builderOptions() (pkg/js/helpers.js), so its
 // values arrive as the JSON types dnsconfig.js produces.
 //
 // Without options a single "v=FORSALE1;" record is created, which the RFC

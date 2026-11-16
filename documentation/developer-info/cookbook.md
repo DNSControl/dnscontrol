@@ -247,8 +247,9 @@ func BuilderROBERT(dc *DomainConfig, ttl uint32, args []any, subdomain string) (
 
 A builder does not receive the `{foo: "foo"}` (Javascript objects) passed to the
 function in `dnsconfig.js`: `RecordBuilderFn` has no metadata parameter. A
-builder that needs an object has to move it into `args` in `pkg/js/helpers.js`
-(see `m365Options()` and `forsaleOptions()`).
+builder that needs an object has to move it into `args` in `pkg/js/helpers.js`:
+pass `builderOptions` as the third argument of `rawrecordBuilder()`, for example
+`var ROBERT = rawrecordBuilder("ROBERT", false, builderOptions);`.
 
 The builder function can do basically anything and generate as many records as it wants. `SPF_BUILDER()` returns many records. `LOC()` returns just one record.
 
