@@ -33,11 +33,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 		}
 	}
 
-	// Phase 2: Normalize. Put nameservers and records into canonical form,
-	// including the records added in phase 1.
+	// Phase 2: Normalize. Put nameservers into canonical form. Records need
+	// no work here: they are put into canonical form when they are constructed.
 	for _, domain := range config.Domains {
 		errs = append(errs, normalizeNameservers(domain)...)
-		normalizeRecords(domain)
 	}
 
 	// Phase 3: Check each record, including those added in phase 1.
