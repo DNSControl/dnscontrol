@@ -47,7 +47,7 @@ func Test_zoneFilePath(t *testing.T) {
 }
 
 // Test_traversalWritesNothing verifies that a zone name containing ".."
-// is rejected before anything is read or written. (GHSA-rrxr-r9rr-crr4)
+// is rejected before anything is read or written.
 func Test_traversalWritesNothing(t *testing.T) {
 	top := t.TempDir()
 	c := &bindProvider{directory: filepath.Join(top, "zones"), filenameformat: "%c.zone"}

@@ -6,7 +6,7 @@ import (
 )
 
 // TestDomainNameValidation verifies that invalid domain names and tags
-// are rejected as soon as dnsconfig.js is processed. (GHSA-rrxr-r9rr-crr4)
+// are rejected as soon as dnsconfig.js is processed.
 func TestDomainNameValidation(t *testing.T) {
 	tests := []struct {
 		name    string
