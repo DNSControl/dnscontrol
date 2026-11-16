@@ -11,20 +11,20 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/privatedns/armprivatedns/v2 v2.0.0
 	github.com/DisposaBoy/JsonConfigReader v0.0.0-20201129172854-99cf318d67e7
 	github.com/G-Core/gcore-dns-sdk-go v0.3.3
-	github.com/PuerkitoBio/goquery v1.13.0
+	github.com/PuerkitoBio/goquery v1.14.0
 	github.com/TomOnTime/utfutil v1.0.0
 	github.com/akamai/AkamaiOPEN-edgegrid-golang/v15 v15.0.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
 	github.com/aws/aws-sdk-go-v2 v1.48.0
 	github.com/aws/aws-sdk-go-v2/config v1.33.18
 	github.com/aws/aws-sdk-go-v2/credentials v1.21.0
-	github.com/aws/aws-sdk-go-v2/service/route53 v1.70.10
+	github.com/aws/aws-sdk-go-v2/service/route53 v1.71.0
 	github.com/aws/aws-sdk-go-v2/service/route53domains v1.47.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0
 	github.com/babolivier/go-doh-client v0.0.0-20201028162107-a76cff4cb8b6
-	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.25
+	github.com/centralnicgroup-opensource/rtldev-middleware-go-sdk/v5 v5.0.26
 	github.com/cloudflare/cloudflare-go/v7 v7.15.0
-	github.com/digitalocean/godo v1.239.0
+	github.com/digitalocean/godo v1.240.0
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/dnsimple/dnsimple-go/v10 v10.0.0
 	github.com/dustin/go-humanize v1.1.0
@@ -38,7 +38,7 @@ require (
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/gopherjs/jquery v0.0.0-20191017083323-73f4c7416038
 	github.com/hetznercloud/hcloud-go/v2 v2.53.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.222
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.223
 	github.com/kylelemons/godebug v1.1.0
 	github.com/luadns/luadns-go v0.3.0
 	github.com/mattn/go-isatty v0.0.24
@@ -66,7 +66,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/domain v1.3.66
 	github.com/transip/gotransip/v6 v6.29.0
 	github.com/urfave/cli/v3 v3.14.0
-	github.com/vercel/terraform-provider-vercel/v5 v5.26.1
+	github.com/vercel/terraform-provider-vercel/v5 v5.27.0
 	github.com/vultr/govultr/v3 v3.34.0
 	github.com/willpower232/go-namecheap v0.0.0-20260720171816-b13495139f3c
 	github.com/xddxdd/ottoext v0.0.0-20221109171055-210517fa4419
@@ -74,7 +74,7 @@ require (
 	golang.org/x/oauth2 v0.38.0
 	golang.org/x/text v0.44.0
 	golang.org/x/time v0.16.0
-	google.golang.org/api v0.313.0
+	google.golang.org/api v0.315.0
 	gopkg.in/ns1/ns1-go.v2 v2.18.0
 	gopkg.in/yaml.v3 v3.0.1
 )
