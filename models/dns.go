@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -105,6 +107,9 @@ type Correction struct {
 	Msg string
 }
 
+// validTagRe matches the tags permitted in "example.com!tag". The empty tag is permitted.
+var validTagRe = regexp.MustCompile(`^([A-Za-z0-9_-][A-Za-z0-9_.-]*)?$`)
+
 // PostProcess performs and post-processing required after running dnsconfig.js and loading the result.
 func (config *DNSConfig) PostProcess() error {
 	for _, domain := range config.Domains {
@@ -113,6 +118,17 @@ func (config *DNSConfig) PostProcess() error {
 		// here so that user input can never crash dnscontrol.
 		if strings.HasSuffix(domain.Name, ".") {
 			return fmt.Errorf("domain name %q must not end with a dot", domain.Name)
+		}
+		// A domain name with an empty label (a leading dot or consecutive
+		// dots, as in "../example.com") is not a valid DNS name.  Providers
+		// use the name to build filenames and URLs, so reject it here.
+		if slices.Contains(strings.Split(domain.Name, "."), "") {
+			return fmt.Errorf("domain name %q must not contain an empty label", domain.Name)
+		}
+		// The tag (the "tag" in "example.com!tag") is used by providers to
+		// build filenames, so restrict it to a conservative character set.
+		if !validTagRe.MatchString(domain.Tag) {
+			return fmt.Errorf("domain %q: tag %q may only contain letters, digits, hyphens, underscores, and dots, and must not start with a dot", domain.Name, domain.Tag)
 		}
 		// dnsconfig.js creates records only via the record constructors
 		// (A(), TXT(), ...), which arrive as .RawRecords and are imported

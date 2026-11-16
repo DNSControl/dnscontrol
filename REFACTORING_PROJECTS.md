@@ -35,8 +35,6 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 * There are multiple ways that code strips the trailing dot from a domain name.  Benchmark a few and standardize on the fastest. In pkg/nameutil. Possibly have one that is extra fast but panics if there is no "." at the end.
 
-* pkg/normalize/validate.go has half of the Transform code, the other half is in pkg/transform.  An easy thing would be to move the part of pkg/normalize/validate.go and validate_test.go into pkg/normalize/transform{,_test}.go.  The more difficult thing would be to move all or most of the code to pkg/transform.
-
 * models/record.go FixPostion has an easy TODO.
 
 * models/t_txt.go has an some easy FIXMEs.
@@ -54,6 +52,21 @@ something that is both a Reg and a DSP.
 
 * deSEC: BUG: It mutates RecordConfigs, which will create problems if the same zone is sent to multiple providers.
 
+* REV("1.2.3.4") returns "4.3.2.1.in-addr.arpa" with no trailing dot, leaving us guessing later on. It should add
+the trailing dot when called in D(REV(foo)) but not in PTR(REV(foo)) (zone context vs. record context).  Then
+downstream code could be simplified.
+
+* NAMESERVER(), NAMESERVER_TTL() are confusing and should be reworked.
+I wonder if it would be less confusing to have a feature called PARENT_NS() that takes
+a single or list of nameservers and a TTL.
+  * PARENT_NS() doesn't exist in a zone?  No changes shoud be done at the parent.
+  * PARENT_NS() exists? Check the parent zone and make correction.
+    * If the zone is a domain:
+      * If there is a REGISTRAR() use it to fix things.  Else print a warning.
+    * If the zone's parent is also in this config, inject NS records into it?  Warn if dups?
+Or maybe a better design is:
+  * REGISTRAR() should also take delegation info.
+        REGISTRAR("foo", DELEGATE( "ns2", "ns2": { ip: "1.2.3.4", "ttl": "5m"} ))
 
 ## Actual new features:
 
