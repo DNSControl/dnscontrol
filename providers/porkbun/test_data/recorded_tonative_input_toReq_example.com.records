@@ -13,3 +13,4 @@
 13	_8443._foo 600 IN SVCB 16 svc.example.net. port="8443" alpn="h2"
 14	fwd 0 IN URL https://example.net/landing ; includePath="no" type="temporary" wildcard="no"
 15	perm 0 IN URL301 https://example.net/moved ; includePath="yes" type="permanent" wildcard="yes"
+16	sub 3600 IN DS 8857 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44
