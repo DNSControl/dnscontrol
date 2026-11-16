@@ -176,3 +176,33 @@ func Test_transform_cname_strip(t *testing.T) {
 		}
 	}
 }
+
+// An IMPORT_TRANSFORM with no TTL keeps the TTL of the source record.
+func TestImportTransformKeepsSourceTTL(t *testing.T) {
+	const transform = "0.0.0.0~255.255.255.255~~0.0.0.0"
+
+	src := models.MustNewDomainConfig("example.com")
+	src.AddRecordConfig(src.MustNewRecordConfig("www", 600, dnsv2.TypeA, "192.0.2.1"))
+
+	dst := models.MustNewDomainConfig("internal")
+	dst.AddRecordConfig(dst.MustNewRecordConfig("@", 0, privatetypes.TypeIMPORTTRANSFORM, transform, 0, "", src.Name))
+
+	cfg := &models.DNSConfig{Domains: []*models.DomainConfig{src, dst}}
+	if err := cfg.PostProcess(); err != nil {
+		t.Fatal(err)
+	}
+
+	if errs := ValidateAndNormalizeConfig(cfg); len(errs) != 0 {
+		t.Fatalf("unexpected errors: %v", errs)
+	}
+	if len(dst.Records) != 1 {
+		t.Fatalf("expected 1 record in %s, got %v", dst.Name, dst.Records)
+	}
+	rec := dst.Records[0]
+	if rec.TTL != 600 {
+		t.Errorf("imported record TTL = %d, want 600", rec.TTL)
+	}
+	if rec.GetLabelFQDN() != "www.example.com.internal" {
+		t.Errorf("imported record FQDN = %q, want %q", rec.GetLabelFQDN(), "www.example.com.internal")
+	}
+}

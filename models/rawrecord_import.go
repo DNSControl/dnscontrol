@@ -40,9 +40,15 @@ func (config *DNSConfig) ImportRawRecords() error {
 			filePos := FixPosition(rawRec.FilePos)
 			typeName := rawRec.Type
 
+			// A record without an explicit TTL gets the default.
+			ttl := rawRec.TTL
+			if ttl == 0 {
+				ttl = DefaultTTL
+			}
+
 			// NB(tlim): We check if something is a builder first because LOC could be a builder or a dnsrdatav2.
 			if IsBuilder(typeName) {
-				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args, rawRec.SubDomain)
+				records, err := dc.runBuilder(typeName, ttl, rawRec.Args, rawRec.SubDomain)
 				if err != nil {
 					return err
 				}
@@ -86,7 +92,7 @@ func (config *DNSConfig) ImportRawRecords() error {
 					return fmt.Errorf("label (first arg) at %s [%s(%s)] must be a string, got %T", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), rawRec.Args[0])
 				}
 
-				rec, err := dc.newRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm, subdomain)
+				rec, err := dc.newRecordConfigFromDnsconfigjs(label, ttl, typeNum, rawRec.Args[1:], mm, subdomain)
 				if err != nil {
 					return fmt.Errorf("ImportRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
