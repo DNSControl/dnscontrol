@@ -46,6 +46,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/infomaniak"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/internetbs"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/inwx"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/ionos"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/joker"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/linode"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/loopia"
