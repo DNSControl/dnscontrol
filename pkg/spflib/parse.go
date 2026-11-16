@@ -62,7 +62,7 @@ func parse(text string, dnsres Resolver, chain []string) (*SPFRecord, error) {
 		}
 		lcpart := strings.ToLower(part) // We have seen "Ip4" instead of "ip4".  Let's be gracious and allow it.
 		rec.Parts = append(rec.Parts, p)
-		if part == "all" {
+		if lcpart == "all" {
 			// all. nothing else matters.
 			break
 		} else if strings.HasPrefix(lcpart, "a") || strings.HasPrefix(lcpart, "mx") {
@@ -70,21 +70,21 @@ func parse(text string, dnsres Resolver, chain []string) (*SPFRecord, error) {
 		} else if strings.HasPrefix(lcpart, "ip4:") || strings.HasPrefix(lcpart, "ip6:") {
 			// ip address, 0 lookups
 			continue
-		} else if strings.HasPrefix(part, "include:") || strings.HasPrefix(part, "redirect=") {
+		} else if strings.HasPrefix(lcpart, "include:") || strings.HasPrefix(lcpart, "redirect=") {
 			// redirect is only partially implemented. redirect is a
 			// complex and IMHO ambiguously defined feature.  We only
 			// implement the most simple edge case: when it is the last item
 			// in the string.  In that situation, it is the equivalent of
 			// include:.
-			if strings.HasPrefix(part, "redirect=") {
+			if strings.HasPrefix(lcpart, "redirect=") {
 				// pi + 2: because pi starts at 0 when it iterates starting on parts[1],
 				// and because len(parts) is one bigger than the highest index.
 				if (pi + 2) != len(parts) {
 					return nil, fmt.Errorf("%s must be last item", part)
 				}
-				p.IncludeDomain = strings.TrimPrefix(part, "redirect=")
+				p.IncludeDomain = part[len("redirect="):]
 			} else {
-				p.IncludeDomain = strings.TrimPrefix(part, "include:")
+				p.IncludeDomain = part[len("include:"):]
 			}
 			p.IsLookup = true
 			if dnsres != nil {
@@ -100,7 +100,7 @@ func parse(text string, dnsres Resolver, chain []string) (*SPFRecord, error) {
 					return nil, fmt.Errorf("in included SPF: %w", err)
 				}
 			}
-		} else if strings.HasPrefix(part, "exists:") || part == "ptr" || strings.HasPrefix(part, "ptr:") {
+		} else if strings.HasPrefix(lcpart, "exists:") || lcpart == "ptr" || strings.HasPrefix(lcpart, "ptr:") {
 			p.IsLookup = true
 		} else {
 			return nil, fmt.Errorf("unsupported SPF part %s", part)
