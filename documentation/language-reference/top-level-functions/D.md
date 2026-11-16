@@ -115,6 +115,8 @@ D_EXTEND("example.com!inside",
 
 A domain name without a `!` is assigned a tag that is the empty string. For example, `example.com` and `example.com!` are equivalent. However, we strongly recommend against using the empty tag, as it risks creating confusion.  In other words, if you have `domain.tld` and `domain.tld!external` you now require humans to remember that `domain.tld` is the external one.  I mean... the internal one.  You may have noticed this mistake, but will your coworkers?  Will you in six months? You get the idea.
 
+A tag may contain only letters, digits, hyphens (`-`), underscores (`_`), and dots (`.`), and may not start with a dot. For example, `example.com!inside` and `example.com!v1.2` are valid; `example.com!in/side` and `example.com!.hidden` are rejected.
+
 DNSControl command line flag `--domains` matches the full name (with the "!").  If you define domains `example.com!john`, `example.com!paul`, and `example.com!george` then:
 
 - `--domains=example.com` will not match any of the three.

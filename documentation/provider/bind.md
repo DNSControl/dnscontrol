@@ -31,6 +31,8 @@ Example:
 
 As of v4.2.0 `dnscontrol push` will create subdirectories along the path to the filename. This includes both the portion of the path created by the `directory` setting and the `filenameformat` setting. For security reasons, the automatic creation of subdirectories is disabled if `dnscontrol` is running as root. (Running DNSControl as root is not recommended in general.)
 
+Zone files are always written within `directory`. A domain name that contains a slash (for example, the RFC 2317 zone `0/26.2.0.192.in-addr.arpa`) is stored in a subdirectory of `directory`. A domain name or tag that would place the zone file outside of `directory` is rejected.
+
 ## Meta configuration
 
 This provider accepts some optional metadata in the `SERVICE()` call.

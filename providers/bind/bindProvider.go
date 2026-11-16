@@ -167,25 +167,13 @@ func (c *bindProvider) ListZones() ([]string, error) {
 
 // GetZoneRecords gets the records of a zone and returns them in RecordConfig format.
 func (c *bindProvider) GetZoneRecords(dc *models.DomainConfig) (models.Records, error) {
-	domain := dc.Name
-
-	var zonefile string
-
 	if _, err := os.Stat(c.directory); os.IsNotExist(err) {
 		printer.Printf("\nWARNING: BIND directory %q does not exist! (will create)\n", c.directory)
 	}
-	zonefile = filepath.Join(c.directory,
-		makeFileName(
-			c.filenameformat,
-			domaintags.DomainNameVarieties{
-				Tag:         dc.Tag,
-				NameRaw:     dc.NameRaw,
-				NameASCII:   domain,
-				NameUnicode: dc.NameUnicode,
-				UniqueName:  dc.UniqueName,
-			},
-		),
-	)
+	zonefile, err := c.zoneFilePath(dc)
+	if err != nil {
+		return nil, err
+	}
 	//fmt.Printf("DEBUG: Reading zonefile %q\n", zonefile)
 	//fmt.Printf("DEBUG: Meta %+v\n", meta)
 	//fmt.Printf("DEBUG: Domain Names %+v\n", ff)
@@ -301,18 +289,10 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 		comments = append(comments, "Automatic DNSSEC signing requested")
 	}
 
-	zonefile = filepath.Join(c.directory,
-		makeFileName(
-			c.filenameformat,
-			domaintags.DomainNameVarieties{
-				Tag:         dc.Tag,
-				NameRaw:     dc.NameRaw,
-				NameASCII:   dc.Name,
-				NameUnicode: dc.NameUnicode,
-				UniqueName:  dc.UniqueName,
-			},
-		),
-	)
+	zonefile, err = c.zoneFilePath(dc)
+	if err != nil {
+		return nil, 0, err
+	}
 
 	// We know there are changes. Update the SOA record's serial number,
 	// basing it on the serial already published in the existing zone.
@@ -345,6 +325,28 @@ func (c *bindProvider) GetZoneRecordsCorrections(dc *models.DomainConfig, foundR
 		})
 
 	return corrections, actualChangeCount, nil
+}
+
+// zoneFilePath returns the path of the zonefile for dc. It rejects any
+// domain name that would place the file outside of c.directory (for
+// example, a name containing ".." elements).  Names that contain a slash
+// (RFC2317 zones such as "0/26.2.0.192.in-addr.arpa") are permitted as
+// long as the result stays within c.directory.
+func (c *bindProvider) zoneFilePath(dc *models.DomainConfig) (string, error) {
+	name := makeFileName(
+		c.filenameformat,
+		domaintags.DomainNameVarieties{
+			Tag:         dc.Tag,
+			NameRaw:     dc.NameRaw,
+			NameASCII:   dc.Name,
+			NameUnicode: dc.NameUnicode,
+			UniqueName:  dc.UniqueName,
+		},
+	)
+	if !filepath.IsLocal(filepath.FromSlash(name)) {
+		return "", fmt.Errorf("BIND zone %q generates filename %q which is outside of directory %q", dc.Name, name, c.directory)
+	}
+	return filepath.Join(c.directory, name), nil
 }
 
 // preprocessFilename pre-processes a filename we're about to os.Create()
