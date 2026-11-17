@@ -319,11 +319,11 @@ func (c *cloudnsProvider) ListZones() ([]string, error) {
 func toRc(dc *models.DomainConfig, r *domainRecord) (*models.RecordConfig, error) {
 	var err error
 
-	ttl_, err := strconv.ParseUint(r.TTL, 10, 32)
+	ttl64, err := strconv.ParseUint(r.TTL, 10, 32)
 	if err != nil {
 		return nil, err
 	}
-	ttl := uint32(ttl_)
+	ttl := uint32(ttl64)
 	label := dc.LabelFromShort(r.Host)
 
 	var rc *models.RecordConfig
