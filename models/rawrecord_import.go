@@ -107,12 +107,11 @@ func (config *DNSConfig) ImportRawRecords() error {
 
 				// The stutter check catches labels that mistakenly include the
 				// zone name. It is skipped when the record opts out via
-				// skip_fqdn_check, and for reverse zones, where labels are
-				// legitimately written as full reverse names (e.g. via REV())
-				// and are reduced to relative form later by normalization.
-				if rec.Metadata["skip_fqdn_check"] != "true" && !isReverseZone(dc.Name) && doesStutter(rec.Name, dc.Name) {
-					// return fmt.Errorf("stutter error at %s %s(%s). Add DISABLE_REPEATED_DOMAIN_CHECK to override", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
-					return stutterError(rec, dc.Name)
+				// skip_fqdn_check. In reverse zones, full reverse names (e.g.
+				// from REV()) have already been made relative by
+				// LabelFromDnsconfigjs, so they do not trigger it.
+				if err := CheckStutter(rec, dc.Name); err != nil {
+					return err
 				}
 
 				// Conversion complete!  Append it.

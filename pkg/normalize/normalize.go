@@ -88,7 +88,7 @@ func checkRecords(domain *models.DomainConfig) (errs []error) {
 		if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
 			errs = append(errs, err)
 		}
-		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name, rec.Metadata); err != nil {
+		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name); err != nil {
 			errs = append(errs, err)
 		}
 		errs = append(errs, checkTargets(rec, domain.Name)...)
