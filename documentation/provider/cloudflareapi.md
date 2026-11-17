@@ -642,7 +642,7 @@ Some of this is documented on the Cloudflare website's [Time to Live (TTL)](http
 - Security
   - [`CAA`](../language-reference/domain-modifiers/CAA.md): ✅
   - [`HTTPS`](../language-reference/domain-modifiers/HTTPS.md): ✅
-  - [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md): ❌
+  - [`OPENPGPKEY`](../language-reference/domain-modifiers/OPENPGPKEY.md): ✅
   - [`SMIMEA`](../language-reference/domain-modifiers/SMIMEA.md): ❌
   - [`SSHFP`](../language-reference/domain-modifiers/SSHFP.md): ✅
   - [`TLSA`](../language-reference/domain-modifiers/TLSA.md): ✅

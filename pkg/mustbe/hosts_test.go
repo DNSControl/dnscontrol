@@ -96,3 +96,31 @@ func TestTargetHostSingleDotViolation(t *testing.T) {
 		}
 	}
 }
+
+func TestTargetHostStrictParamChecking(t *testing.T) {
+	tests := []struct {
+		arg     string
+		isError bool
+	}{
+		{"foo", false},
+		{"foo.", false},
+		{"@", false},
+		{"foo&bar", true},
+		{"foo bar", true},
+		{"elb21.freshdesk.com/", true},
+		{"elb21.freshdesk.com/.", true},
+		{"0/26.2.0.192.in-addr.arpa.", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.arg, func(t *testing.T) {
+			_, err := mustbe.TargetHost("example.com", nrc.Flags{StrictParamChecking: true}, tt.arg)
+			if (err != nil) != tt.isError {
+				t.Errorf("strict: got err=%v, wantErr=%v", err, tt.isError)
+			}
+			// Without the flag, provider data is accepted as-is.
+			if _, err := mustbe.TargetHost("example.com", nrc.Flags{}, tt.arg); err != nil {
+				t.Errorf("unchecked: got err=%v, want nil", err)
+			}
+		})
+	}
+}

@@ -171,7 +171,9 @@ func stripReverseZoneSuffix(label, zone string) string {
 // labelFromDnsconfigjs implements LabelFromDnsconfigjs, except for the
 // reverse zone suffix stripping.
 func (dc *DomainConfig) labelFromDnsconfigjs(rawLabel, subdomainASCII string) (string, error) {
-	if subdomainASCII == "" {
+	// An empty label is rejected, and a label ending in "." is absolute, the
+	// same as without D_EXTEND(); the subdomain does not apply to either.
+	if subdomainASCII == "" || rawLabel == "" || strings.HasSuffix(rawLabel, ".") {
 		return dc.labelFromDnsconfigjsHelper(rawLabel)
 	}
 
