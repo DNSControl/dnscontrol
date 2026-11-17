@@ -12,7 +12,7 @@ type Flags struct {
 	// value parses but is unusable (for example, an SOA with Refresh=0).
 	// Records downloaded from a provider are accepted as-is, so this is
 	// enforced only on user input.
-	// Use with LabelFromDnsconfigjs() ONLY.
+	// Use when parsing from dnsconfig.js only. Data from APIs/providers are allowed less-strict checking.
 	StrictParamChecking bool
 
 	// SrvWeirdSplit the last field contains multiple fields.
