@@ -20,7 +20,7 @@ type rpcRequest struct {
 }
 
 func getAuthorization(username string, password string, host string) (string, error) {
-	idCounter += 1
+	idCounter++
 	reqBody, err := json.Marshal(rpcRequest{
 		ID:     idCounter,
 		Method: "login",
@@ -196,7 +196,7 @@ func (c *openwrtProvider) uciGetAll() (map[string]nativeRecord, error) {
 func (c *openwrtProvider) uciCall(method string, params []any) ([]byte, error) {
 	client := &http.Client{}
 
-	idCounter += 1
+	idCounter++
 	requestBody, err := json.Marshal(rpcRequest{
 		ID:     idCounter,
 		Method: method,
