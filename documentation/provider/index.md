@@ -367,7 +367,7 @@ Jump to a table:
 | [`AZURE_PRIVATE_DNS`](azureprivatedns.md) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`BIND`](bind.md) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [`BUNNY_DNS`](bunnydns.md) | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| [`CLOUDFLAREAPI`](cloudflareapi.md) | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
 | [`CLOUDNS`](cloudns.md) | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ |
 | [`CLOUDPRESS`](cloudpress.md) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | [`CNR`](cnr.md) | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ |

@@ -88,13 +88,10 @@ func checkRecords(domain *models.DomainConfig) (errs []error) {
 		if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
 			errs = append(errs, err)
 		}
-		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name, rec.Metadata); err != nil {
+		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name); err != nil {
 			errs = append(errs, err)
 		}
 		errs = append(errs, checkTargets(rec, domain.Name)...)
-		if err := checkObsoleteMetadata(rec); err != nil {
-			errs = append(errs, err)
-		}
 	}
 	return errs
 }
@@ -116,8 +113,6 @@ func checkZone(d *models.DomainConfig) (errs []error) {
 	errs = append(errs, checkRecordSetHasMultipleTTLs(d.Records)...)
 	// Check for inconsistent R53 weighted routing metadata within a group
 	errs = append(errs, checkR53WeightedGroupConsistency(d.Records)...)
-	// Validate FQDN consistency
-	errs = append(errs, checkFQDNs(d)...)
 	// Verify AutoDNSSEC is valid.
 	errs = append(errs, checkAutoDNSSEC(d)...)
 	return errs

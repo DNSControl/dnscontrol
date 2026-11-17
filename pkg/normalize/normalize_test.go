@@ -9,10 +9,10 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
-// Records added by the apply phase get the per-record checks. Importing a
-// subdomain into its parent produces a label that repeats the zone name, which
-// checkLabel rejects.
-func TestGeneratedRecordsAreChecked(t *testing.T) {
+// IMPORT_TRANSFORM labels are generated from the source records' full names,
+// so they are not checked for repeating the zone name. Importing a subdomain
+// into its parent must not be rejected.
+func TestImportTransformSkipsStutterCheck(t *testing.T) {
 	const transform = "0.0.0.0~255.255.255.255~~0.0.0.0"
 
 	src := models.MustNewDomainConfig("internal.example.com")
@@ -26,16 +26,14 @@ func TestGeneratedRecordsAreChecked(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	errs := ValidateAndNormalizeConfig(cfg)
-	if len(dst.Records) != 1 || dst.Records[0].GetLabel() != "www.internal.example.com" {
-		t.Fatalf("unexpected records in %s: %v", dst.Name, dst.Records)
-	}
-	for _, err := range errs {
-		if strings.Contains(err.Error(), "www.internal.example.com") {
-			return
+	for _, err := range ValidateAndNormalizeConfig(cfg) {
+		if strings.Contains(err.Error(), "repeats the domain") {
+			t.Errorf("IMPORT_TRANSFORM output was stutter-checked: %v", err)
 		}
 	}
-	t.Errorf("expected an error about the label of the imported record, got %v", errs)
+	if !dst.Records.HasRecordTypeName("A", "www.internal.example.com") {
+		t.Errorf("imported record missing from %s", dst.Name)
+	}
 }
 
 // A record type that a provider does not support is reported once.

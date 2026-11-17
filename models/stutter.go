@@ -20,6 +20,16 @@ func doesStutter(name, origin string) bool {
 	return name == origin || strings.HasSuffix(name, "."+origin)
 }
 
+// CheckStutter returns an error if rc's label mistakenly includes the zone
+// name (e.g. "www.example.com" in zone example.com), unless the record opts
+// out with DISABLE_REPEATED_DOMAIN_CHECK (skip_fqdn_check).
+func CheckStutter(rc *RecordConfig, domain string) error {
+	if rc.Metadata["skip_fqdn_check"] != "true" && doesStutter(rc.Name, domain) {
+		return stutterError(rc, domain)
+	}
+	return nil
+}
+
 func stutterError(rc *RecordConfig, domain string) error {
 	label := rc.Name
 	shortname := strings.TrimSuffix(label, "."+domain)

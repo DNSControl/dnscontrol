@@ -31,6 +31,29 @@ func TestDomainConfig_LabelFromFQDNNoDot(t *testing.T) {
 	}
 }
 
+func TestDomainConfig_LabelFromDnsconfigjsErrors(t *testing.T) {
+	tests := []struct {
+		tname     string
+		subdomain string
+		label     string
+	}{
+		{"empty", "", ""},
+		{"empty under a subdomain", "sub", ""},
+		{"trailing dot", "", "foo."},
+		{"trailing dot under a subdomain", "sub", "foo."},
+		{"other zone", "", "foo.other.com."},
+		{"other zone under a subdomain", "sub", "foo.other.com."},
+	}
+	for _, tt := range tests {
+		t.Run(tt.tname, func(t *testing.T) {
+			dc := models.MustNewDomainConfig("example.com")
+			if got, err := dc.LabelFromDnsconfigjs(tt.label, tt.subdomain); err == nil {
+				t.Errorf("LabelFromDnsconfigjs(%q, %q) = %q, want error", tt.label, tt.subdomain, got)
+			}
+		})
+	}
+}
+
 func TestDomainConfig_LabelFromDnsconfigjs(t *testing.T) {
 	const ip6Zone = "8.b.d.0.1.0.0.2.ip6.arpa"
 	const ip6Sub = "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0"
@@ -57,6 +80,8 @@ func TestDomainConfig_LabelFromDnsconfigjs(t *testing.T) {
 		{"ip6 zone suffix is stripped", ip6Zone, "", "1.0." + ip6Zone, "1.0"},
 		{"forward zone suffix is not stripped", "example.com", "", "www.example.com", "www.example.com"},
 		{"ip6 zone suffix is stripped under subdomain a", ip6Zone, "a", "1.a." + ip6Zone, "1.a"},
+		{"fqdn under a subdomain is absolute", "example.com", "sub", "www.sub.example.com.", "www.sub"},
+		{"zone fqdn under a subdomain is the apex", "example.com", "sub", "example.com.", "@"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.tname, func(t *testing.T) {

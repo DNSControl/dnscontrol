@@ -37,7 +37,36 @@ import (
 //   - `$origin.` -> `$origin.`
 //   - `other.com.` -> `other.com.`
 //   - `short` -> `short.$origin`
+//
+// * isEnabled.StrictParamChecking:
+//   - The result is rejected if it contains characters that are not valid in a hostname.
 func TargetHost(origin string, isEnabled nrc.Flags, arg any) (string, error) {
+	name, err := targetHost(origin, isEnabled, arg)
+	if err != nil {
+		return "", err
+	}
+	if isEnabled.StrictParamChecking {
+		if err := CheckTargetChars(name); err != nil {
+			return "", err
+		}
+	}
+	return name, nil
+}
+
+// CheckTargetChars returns an error if target contains characters that are
+// not valid in a hostname. "/" is permitted in reverse (in-addr.arpa) names
+// for RFC 2317 classless delegation.
+func CheckTargetChars(target string) error {
+	if strings.ContainsAny(target, `'" +,|!£$%&()=?^*ç°§;:<>[]()@`) {
+		return fmt.Errorf("target (%v) includes invalid char", target)
+	}
+	if !strings.HasSuffix(target, ".in-addr.arpa.") && strings.Contains(target, "/") {
+		return fmt.Errorf("target (%v) includes invalid char", target)
+	}
+	return nil
+}
+
+func targetHost(origin string, isEnabled nrc.Flags, arg any) (string, error) {
 	// Check for programmer error. Origin shouldn't end in ".", unless it == "." which is a special mode.
 	if origin != "." && strings.HasSuffix(origin, ".") {
 		panic(fmt.Sprintf("mustbe.Host must NOT be called with an origin ending with . (origin=%q)", origin))

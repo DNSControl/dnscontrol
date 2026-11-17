@@ -37,25 +37,6 @@ func TestSoaLabelAndTarget(t *testing.T) {
 	}
 }
 
-func Test_assert_valid_target(t *testing.T) {
-	tests := []struct {
-		experiment string
-		isError    bool
-	}{
-		{"foo", false},
-		{"foo.", false},
-		{"foo&bar", true},
-		{"foo bar", true},
-		{"elb21.freshdesk.com/", true},
-		{"elb21.freshdesk.com/.", true},
-	}
-
-	for _, test := range tests {
-		err := checkTarget(test.experiment)
-		checkError(t, err, test.isError, test.experiment)
-	}
-}
-
 func TestNSAtRoot(t *testing.T) {
 	dc := models.MustNewDomainConfig("foo.com")
 	// do not allow ns records for @
