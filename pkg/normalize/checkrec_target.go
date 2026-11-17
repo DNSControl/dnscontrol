@@ -6,7 +6,6 @@ import (
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
-	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
 // checkTargets returns zero or more errors when problems are found.
@@ -45,14 +44,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		if label != "@" {
 			check(errors.New("SOA record is only valid for bare domain"))
 		}
-	default:
-		if _, known := privatetypes.LookupRecordType(rec.Type); known && rec.GetRDATA() != nil {
-			// Catalog records have already been parsed and validated. Provider
-			// support is checked separately.
-			return errs
-		}
-		errs = append(errs, fmt.Errorf("checkTargets: Unimplemented record type (%v) domain=%v name=%v",
-			rec.Type, domain, rec.GetLabel()))
 	}
 	return errs
 }
