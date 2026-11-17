@@ -588,7 +588,17 @@ func oneZonePopulate(zone *models.DomainConfig, zc *CmdZoneCache) error {
 func oneZone(zone *models.DomainConfig, args PPreviewArgs, push bool) error {
 	var errs []error
 	// Fix the parent zone's delegation: (if able/needed)
-	delegationCorrections, dcCount, err := generateDelegationCorrections(zone, zone.DNSProviderInstances, zone.RegistrarInstance)
+	var delegationCorrections []*models.Correction
+	var dcCount int
+	var err error
+	if existing, pending := splitPendingCreation(zone, push, args.PopulateOnPreview); len(pending) != 0 {
+		// Some providers can't report the nameservers of a zone that does not
+		// exist yet (GetNameservers fails), so the delegation can't be
+		// determined until the zone is created on push.
+		delegationCorrections, err = generatePendingDelegationCorrections(zone, existing, pending)
+	} else {
+		delegationCorrections, dcCount, err = generateDelegationCorrections(zone, zone.DNSProviderInstances, zone.RegistrarInstance)
+	}
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -799,6 +809,20 @@ func reportZonePendingCreation(zone *models.DomainConfig, providerName string, p
 	return zoneWillBeCreated(zone, providerName)
 }
 
+// splitPendingCreation partitions the zone's DNS providers into those where
+// the zone exists and those where this run will report it as pending creation
+// (see reportZonePendingCreation).
+func splitPendingCreation(zone *models.DomainConfig, push, populateOnPreview bool) (existing, pending []*models.DNSProviderInstance) {
+	for _, provider := range zone.DNSProviderInstances {
+		if reportZonePendingCreation(zone, provider.Name, push, populateOnPreview) {
+			pending = append(pending, provider)
+		} else {
+			existing = append(existing, provider)
+		}
+	}
+	return existing, pending
+}
+
 func generatePopulateCorrections(provider *models.DNSProviderInstance, dc *models.DomainConfig, zcache *CmdZoneCache) ([]*models.Correction, error) {
 	lister, ok := provider.Driver.(providers.ZoneLister)
 	if !ok {
@@ -839,14 +863,44 @@ func generateZoneCorrections(zone *models.DomainConfig, provider *models.DNSProv
 	return zoneCorrections, reports, actualChangeCount, nil
 }
 
-func generateDelegationCorrections(zone *models.DomainConfig, providers []*models.DNSProviderInstance, _ *models.RegistrarInstance) ([]*models.Correction, int, error) {
-	// fmt.Printf("DEBUG: generateDelegationCorrections start zone=%q nsList = %v\n", zone.Name, zone.Nameservers)
+// determineNameservers sets the zone's nameservers from the given providers and
+// adds the corresponding NS records to the zone.
+func determineNameservers(zone *models.DomainConfig, providers []*models.DNSProviderInstance) ([]*models.Correction, error) {
 	nsList, err := nameservers.DetermineNameserversForProviders(zone, providers, true)
 	if err != nil {
-		return msg(fmt.Sprintf("DetermineNS: zone %q; Error: %s", zone.Name, err)), 0, err
+		return msg(fmt.Sprintf("DetermineNS: zone %q; Error: %s", zone.Name, err)), err
 	}
 	zone.Nameservers = nsList
 	nameservers.AddNSRecords(zone)
+	return nil, nil
+}
+
+// generatePendingDelegationCorrections is used instead of
+// generateDelegationCorrections when the zone is pending creation at one or
+// more providers. Nameservers are gathered only from the providers where the
+// zone exists (so their record diffs still include the NS records) and the
+// registrar is not checked, since the full nameserver list is not yet known.
+func generatePendingDelegationCorrections(zone *models.DomainConfig, existing, pending []*models.DNSProviderInstance) ([]*models.Correction, error) {
+	if corrections, err := determineNameservers(zone, existing); err != nil {
+		return corrections, err
+	}
+
+	names := make([]string, len(pending))
+	for i, provider := range pending {
+		names[i] = provider.Name
+	}
+	return msg(fmt.Sprintf("Skipping registrar %q: The delegation of %q can not be checked until the zone is created at %s. It will be checked when you run `dnscontrol push`.",
+		zone.RegistrarName,
+		zone.Name,
+		strings.Join(names, ", "),
+	)), nil
+}
+
+func generateDelegationCorrections(zone *models.DomainConfig, providers []*models.DNSProviderInstance, _ *models.RegistrarInstance) ([]*models.Correction, int, error) {
+	// fmt.Printf("DEBUG: generateDelegationCorrections start zone=%q nsList = %v\n", zone.Name, zone.Nameservers)
+	if corrections, err := determineNameservers(zone, providers); err != nil {
+		return corrections, 0, err
+	}
 
 	if len(zone.Nameservers) == 0 && zone.Metadata["no_ns"] != "true" {
 		return []*models.Correction{{Msg: fmt.Sprintf("Skipping registrar %q: No nameservers declared for domain %q. Add {no_ns: 'true'} to force",
