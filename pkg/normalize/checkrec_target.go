@@ -23,10 +23,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		}
 	}
 	switch rec.Type { // #rtype_variations
-
-	// IMPORT_TRANSFORM is not in the record catalog, so the default case would reject it.
-	case "IMPORT_TRANSFORM":
-
 	case "CNAME":
 		if label == "@" {
 			check(errors.New("cannot create CNAME record for bare domain. Use ALIAS"))
