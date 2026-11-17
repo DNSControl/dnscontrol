@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"errors"
+	"strings"
 	"testing"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -246,5 +248,114 @@ func Test_reportZonePendingCreation(t *testing.T) {
 				t.Errorf("reportZonePendingCreation() = %v, want %v", got, tc.want)
 			}
 		})
+	}
+}
+
+// fakeDNSProvider is a models.DNSProvider whose GetNameservers fails when the
+// zone does not exist, like providers that look the zone up at the API.
+type fakeDNSProvider struct {
+	zoneExists bool
+	nsCalls    int
+}
+
+func (f *fakeDNSProvider) AuditRecords(models.Records) []error { return nil }
+
+func (f *fakeDNSProvider) GetNameservers(string) ([]*models.Nameserver, error) {
+	f.nsCalls++
+	if !f.zoneExists {
+		return nil, errors.New("zone not found")
+	}
+	return models.ToNameservers([]string{"ns1.example.net", "ns2.example.net"})
+}
+
+func (f *fakeDNSProvider) GetZoneRecords(*models.DomainConfig) (models.Records, error) {
+	return nil, errors.New("not implemented")
+}
+
+func (f *fakeDNSProvider) GetZoneRecordsCorrections(*models.DomainConfig, models.Records) ([]*models.Correction, int, error) {
+	return nil, 0, errors.New("not implemented")
+}
+
+type fakeRegistrar struct {
+	calls int
+}
+
+func (f *fakeRegistrar) GetRegistrarCorrections(*models.DomainConfig) ([]*models.Correction, error) {
+	f.calls++
+	return nil, nil
+}
+
+func Test_splitPendingCreation(t *testing.T) {
+	zone := models.MustNewDomainConfig("example.com")
+	zone.DNSProviderInstances = []*models.DNSProviderInstance{
+		{ProviderBase: models.ProviderBase{Name: "new"}},
+		{ProviderBase: models.ProviderBase{Name: "old"}},
+	}
+	zone.StorePopulateCorrections("new", []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}})
+
+	tests := []struct {
+		name              string
+		push              bool
+		populateOnPreview bool
+		wantPending       int
+	}{
+		{name: "preview", wantPending: 1},
+		{name: "push", push: true, wantPending: 0},
+		{name: "preview with --populate-on-preview", populateOnPreview: true, wantPending: 0},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			existing, pending := splitPendingCreation(zone, tc.push, tc.populateOnPreview)
+			if len(pending) != tc.wantPending || len(existing)+len(pending) != 2 {
+				t.Errorf("splitPendingCreation() = %d existing, %d pending; want %d pending", len(existing), len(pending), tc.wantPending)
+			}
+			if tc.wantPending == 1 && pending[0].Name != "new" {
+				t.Errorf("splitPendingCreation() pending = %q, want %q", pending[0].Name, "new")
+			}
+		})
+	}
+}
+
+// Previewing a zone that push will create must not fail just because the
+// provider can't list nameservers for a zone that does not exist yet.
+func Test_oneZone_pendingCreationSkipsDelegation(t *testing.T) {
+	newProv := &fakeDNSProvider{zoneExists: false}
+	oldProv := &fakeDNSProvider{zoneExists: true}
+	reg := &fakeRegistrar{}
+
+	zone := models.MustNewDomainConfig("example.com")
+	zone.RegistrarName = "reg"
+	zone.RegistrarInstance = &models.RegistrarInstance{ProviderBase: models.ProviderBase{Name: "reg"}, Driver: reg}
+	zone.DNSProviderInstances = []*models.DNSProviderInstance{
+		{ProviderBase: models.ProviderBase{Name: "new"}, Driver: newProv, NumberOfNameservers: -1},
+		{ProviderBase: models.ProviderBase{Name: "old"}, Driver: oldProv, NumberOfNameservers: -1},
+	}
+	zone.StorePopulateCorrections("new", []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}})
+
+	// Limit record processing to the pending provider; the fake can't diff records.
+	if err := oneZone(zone, PPreviewArgs{FilterArgs: FilterArgs{Providers: "new"}}, false); err != nil {
+		t.Fatalf("oneZone() error = %v, want nil", err)
+	}
+
+	if newProv.nsCalls != 0 {
+		t.Errorf("GetNameservers called %d time(s) on the provider where the zone is pending creation", newProv.nsCalls)
+	}
+	if oldProv.nsCalls != 1 {
+		t.Errorf("GetNameservers called %d time(s) on the provider where the zone exists, want 1", oldProv.nsCalls)
+	}
+	if len(zone.Nameservers) != 2 {
+		t.Errorf("zone has %d nameservers, want 2 from the existing provider", len(zone.Nameservers))
+	}
+	if reg.calls != 0 {
+		t.Errorf("GetRegistrarCorrections called %d time(s), want 0", reg.calls)
+	}
+
+	corrections := zone.GetCorrections("reg")
+	if len(corrections) != 1 || corrections[0].F != nil || !strings.Contains(corrections[0].Msg, "Skipping registrar") {
+		t.Errorf("registrar corrections = %+v, want one informational message", corrections)
+	}
+	if got := zone.GetChangeCount("reg"); got != 0 {
+		t.Errorf("registrar change count = %d, want 0", got)
 	}
 }
