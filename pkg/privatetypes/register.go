@@ -66,6 +66,17 @@ func RecordTypes() []RecordType {
 	return result
 }
 
+// HasMaker reports whether a Make* function is registered for typeName, i.e.
+// whether a record of that type can be created from dnsconfig.js.
+func HasMaker(typeName string) bool {
+	code, ok := dnsv2.StringToType[typeName]
+	if !ok {
+		return false
+	}
+	_, has := TypeToMakeRDATA[code]
+	return has
+}
+
 // Register registers a new private RR type. It panics if the code point or name is already in use.
 func Register(codepoint uint16, typeName string, newFn func() dnsv2.RR, makeFn MakerRn) {
 

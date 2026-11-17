@@ -93,6 +93,7 @@ var providerNames = map[string]string{
 	"AKAMAIEDGEDNS": "akamai-edge-dns",
 	"ROUTE53":       "amazon-route-53",
 	"AZURE_DNS":     "azure-dns",
+	"BUNNY_DNS":     "bunny-dns",
 	"CLOUDFLAREAPI": "cloudflare-dns",
 	"CLOUDNS":       "cloudns",
 	"NS1":           "ns1",

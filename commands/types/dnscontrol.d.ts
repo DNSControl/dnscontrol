@@ -448,6 +448,44 @@ declare const AUTODNSSEC_ON: DomainModifier;
 declare function AZURE_ALIAS(name: string, type: "A" | "AAAA" | "CNAME", target: string, ...modifiers: RecordModifier[]): DomainModifier;
 
 /**
+ * `BUNNY_DNS_PZ` creates a Bunny.net DNS **Pull Zone** record, which points the record's name at a Bunny Pull Zone. The zone then serves the pull zone's cached content.
+ *
+ * This record type is specific to the [Bunny DNS provider](../../provider/bunnydns.md); it cannot be used with any other DNS provider.
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("bunny_dns"),
+ *     BUNNY_DNS_PZ("@", 12345),
+ * );
+ * ```
+ *
+ * The `pullZoneId` parameter is the numeric ID of the Pull Zone, as shown in the Bunny.net dashboard.
+ *
+ * Bunny DNS offers other custom record types (such as Script and Flatten) that DNSControl does not manage; DNSControl leaves them as-is.
+ *
+ * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/bunny-dns/bunny_dns_pz
+ */
+declare function BUNNY_DNS_PZ(name: string, pullZoneId: number, ...modifiers: RecordModifier[]): DomainModifier;
+
+/**
+ * `BUNNY_DNS_RDR` creates a Bunny.net DNS **Redirect** record, which forwards requests for the record's name to a URL of your choosing.
+ *
+ * This record type is specific to the [Bunny DNS provider](../../provider/bunnydns.md); it cannot be used with any other DNS provider.
+ *
+ * ```javascript
+ * D("example.com", REGISTRAR("my_registrar"), SERVICE("bunny_dns"),
+ *     BUNNY_DNS_RDR("@", "https://foo.bar"),
+ * );
+ * ```
+ *
+ * The `target` parameter is the destination URL.
+ *
+ * Bunny DNS offers other custom record types (such as Script and Flatten) that DNSControl does not manage; DNSControl leaves them as-is.
+ *
+ * @see https://docs.dnscontrol.org/language-reference/domain-modifiers/service-provider-specific/bunny-dns/bunny_dns_rdr
+ */
+declare function BUNNY_DNS_RDR(name: string, target: string, ...modifiers: RecordModifier[]): DomainModifier;
+
+/**
  * `CAA` adds a [Certification Authority Authorization record](https://www.rfc-editor.org/rfc/rfc8659) to a domain. The name should be the relative label for the record. Use `@` for the domain apex.
  *
  * Tag can be one of
