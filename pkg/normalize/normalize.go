@@ -19,7 +19,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	if err := providers.Finalize(); err != nil {
 		return []error{err}
 	}
-	err := processSplitHorizonDomains(config)
+	err := checkUniqueDomainNames(config)
 	if err != nil {
 		return []error{err}
 	}
@@ -59,10 +59,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	return errs
 }
 
-// processSplitHorizonDomains finds "domain.tld!tag" domains and pre-processes them.
-func processSplitHorizonDomains(config *models.DNSConfig) error {
-
-	// Verify uniquenames are unique
+// checkUniqueDomainNames returns an error if two domains have the same
+// unique name. For split horizon domains ("domain.tld!tag") the unique name
+// includes the tag; "domain.tld!" is the same as "domain.tld".
+func checkUniqueDomainNames(config *models.DNSConfig) error {
 	seen := map[string]bool{}
 	for _, d := range config.Domains {
 		uniquename := d.GetUniqueName()
