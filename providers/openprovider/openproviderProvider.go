@@ -20,7 +20,7 @@ func init() {
 		SupportedTypes: []string{
 			"Basic8",
 			"TLSA",
-			"NS:Cannot",
+			"NS:Cannot:Openprovider manages the apex nameservers and does not support delegations",
 			"DNSKEY:Cannot:DNSSEC keys are managed by Openprovider",
 			"SOA:Cannot:The SOA record is managed by Openprovider",
 		},

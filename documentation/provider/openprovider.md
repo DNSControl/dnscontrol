@@ -138,5 +138,6 @@ test has been performed against several zones.
 - Supported Record Types
   - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TLSA](../language-reference/domain-modifiers/TLSA.md) [TXT](../language-reference/domain-modifiers/TXT.md)
     - Not supported: [DNSKEY](../language-reference/domain-modifiers/DNSKEY.md) (DNSSEC keys are managed by Openprovider)
+    - Not supported: [NS](../language-reference/domain-modifiers/NS.md) (Openprovider manages the apex nameservers and does not support delegations)
     - Not supported: [SOA](../language-reference/domain-modifiers/SOA.md) (The SOA record is managed by Openprovider)
 <!-- provider-features-end -->

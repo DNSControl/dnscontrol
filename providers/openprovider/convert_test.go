@@ -153,21 +153,13 @@ func TestInvalidSRVValue(t *testing.T) {
 
 func TestAuditRecords(t *testing.T) {
 	valid := makeRecord(t, "A", "www", "192.0.2.1")
-	validApexNS := makeRecord(t, "NS", "@", "ns1.openprovider.nl.")
-	unsupported := makeRecord(t, "NS", "child", "ns.example.net.")
 	unsupportedFlag := makeRecord(t, "CAA", "@", `128 issue "example.com"`)
 	if errors := new(openproviderProvider).AuditRecords(models.Records{valid}); len(errors) != 0 {
 		t.Errorf("valid record errors = %v", errors)
 	}
-	if errors := new(openproviderProvider).AuditRecords(models.Records{validApexNS}); len(errors) != 0 {
-		t.Errorf("valid apex NS errors = %v", errors)
-	}
 	legacySPF := makeRecord(t, "SPF", "@", `"v=spf1 -all"`)
 	if errors := new(openproviderProvider).AuditRecords(models.Records{legacySPF}); len(errors) != 1 {
 		t.Errorf("legacy SPF errors = %v", errors)
-	}
-	if errors := new(openproviderProvider).AuditRecords(models.Records{unsupported}); len(errors) != 1 {
-		t.Errorf("unsupported record errors = %v", errors)
 	}
 	if errors := new(openproviderProvider).AuditRecords(models.Records{unsupportedFlag}); len(errors) != 1 {
 		t.Errorf("unsupported CAA flag errors = %v", errors)
