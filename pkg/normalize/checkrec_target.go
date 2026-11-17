@@ -70,7 +70,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		check(checkTarget(rec.AsPTR().Ptr))
 	case "SOA":
 		f := rec.AsSOA()
-		check(checkSoa(f.Expire, f.Minttl, f.Refresh, f.Retry, f.Mbox))
 		check(checkTarget(f.Ns))
 		if label != "@" {
 			check(errors.New("SOA record is only valid for bare domain"))

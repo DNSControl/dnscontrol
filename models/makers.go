@@ -360,7 +360,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	if err != nil {
 		return nil, err
 	}
-	return dnsrdatav2.SOA{
+	soa := dnsrdatav2.SOA{
 		Ns:      ns,
 		Mbox:    mustbe.SoaMailbox(args[1]),
 		Serial:  mustbe.Uint32(serial),
@@ -368,7 +368,23 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 		Retry:   mustbe.Uint32(rest[1]),
 		Expire:  mustbe.Uint32(rest[2]),
 		Minttl:  mustbe.Uint32(rest[3]),
-	}, nil
+	}
+	if soa.Mbox == "" {
+		return nil, fmt.Errorf("SOA MBox must be specified")
+	}
+	if soa.Refresh == 0 {
+		return nil, fmt.Errorf("SOA Refresh must be non-zero")
+	}
+	if soa.Retry == 0 {
+		return nil, fmt.Errorf("SOA Retry must be non-zero")
+	}
+	if soa.Expire == 0 {
+		return nil, fmt.Errorf("SOA Expire must be non-zero")
+	}
+	if soa.Minttl == 0 {
+		return nil, fmt.Errorf("SOA Minimum TTL must be non-zero")
+	}
+	return soa, nil
 }
 
 func MakeSRV(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
