@@ -116,8 +116,6 @@ func checkZone(d *models.DomainConfig) (errs []error) {
 	errs = append(errs, checkRecordSetHasMultipleTTLs(d.Records)...)
 	// Check for inconsistent R53 weighted routing metadata within a group
 	errs = append(errs, checkR53WeightedGroupConsistency(d.Records)...)
-	// Validate FQDN consistency
-	errs = append(errs, checkFQDNs(d)...)
 	// Verify AutoDNSSEC is valid.
 	errs = append(errs, checkAutoDNSSEC(d)...)
 	return errs
