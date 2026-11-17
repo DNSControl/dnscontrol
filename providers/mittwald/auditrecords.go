@@ -34,7 +34,6 @@ var labelRE = regexp.MustCompile(`^[a-zA-Z0-9_][a-zA-Z0-9_-]{0,62}$`)
 func (*mittwaldProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
-	a.TypesSupported([]string{"A", "AAAA", "CAA", "CNAME", "MX", "SRV", "TXT"})
 	a.Add("*", rejectif.LabelIsWildcard) // Last verified 2026-09-22
 	a.Add("*", labelHasInvalidChars)     // Last verified 2026-09-22
 	a.Add("CAA", caaTagUnsupported)

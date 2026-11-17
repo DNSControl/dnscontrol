@@ -162,10 +162,6 @@ func TestAuditRecords(t *testing.T) {
 	if errors := new(openproviderProvider).AuditRecords(models.Records{validApexNS}); len(errors) != 0 {
 		t.Errorf("valid apex NS errors = %v", errors)
 	}
-	legacySPF := makeRecord(t, "SPF", "@", `"v=spf1 -all"`)
-	if errors := new(openproviderProvider).AuditRecords(models.Records{legacySPF}); len(errors) != 1 {
-		t.Errorf("legacy SPF errors = %v", errors)
-	}
 	if errors := new(openproviderProvider).AuditRecords(models.Records{unsupported}); len(errors) != 1 {
 		t.Errorf("unsupported record errors = %v", errors)
 	}

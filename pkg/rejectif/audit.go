@@ -1,8 +1,6 @@
 package rejectif
 
 import (
-	"fmt"
-
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -24,22 +22,6 @@ func (aud *Auditor) Add(rtype string, fn checker) {
 	if rtype == "TXT" {
 		aud.Add("SPF", fn)
 	}
-}
-
-// TypesSupported registers a check that rejects any record type not in the
-// provided list. This is useful for providers that only support a fixed set of
-// record types.
-func (aud *Auditor) TypesSupported(types []string) {
-	supported := make(map[string]bool, len(types))
-	for _, t := range types {
-		supported[t] = true
-	}
-	aud.Add("*", func(rc *models.RecordConfig) error {
-		if !supported[rc.Type] {
-			return fmt.Errorf("record type %q is not supported", rc.Type)
-		}
-		return nil
-	})
 }
 
 // Audit performs the audit. For each record it calls each function in

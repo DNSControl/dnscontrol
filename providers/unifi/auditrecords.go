@@ -2,22 +2,10 @@ package unifi
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
-
-// Supported record types for UniFi Network
-// Note: NS records are supported but only with IP addresses, not hostnames.
-var supportedRTypes = map[string]struct{}{
-	"A":     {},
-	"AAAA":  {},
-	"CNAME": {},
-	"MX":    {},
-	"TXT":   {},
-	"SRV":   {},
-}
 
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider. If all records are
@@ -40,12 +28,7 @@ func (*unifiProvider) AuditRecords(records models.Records) []error {
 	var errs []error
 	errs = append(errs, a.Audit(records)...)
 
-	// Check for unsupported record types
 	for _, r := range records {
-		if _, ok := supportedRTypes[r.Type]; !ok {
-			errs = append(errs, fmt.Errorf("record type %q is not supported by UniFi", r.Type))
-		}
-
 		// UniFi doesn't support wildcard CNAMEs well
 		if r.Type == "CNAME" && r.GetLabel() == "*" {
 			errs = append(errs, errors.New("UniFi does not support wildcard CNAME records"))

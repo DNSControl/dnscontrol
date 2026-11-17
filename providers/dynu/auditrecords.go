@@ -11,12 +11,6 @@ import (
 func (*dynuProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
 
-	a.TypesSupported([]string{
-		"A", "AAAA", "AFSDB", "CAA", "CERT", "CNAME", "DHCID", "DNAME",
-		"HINFO", "HTTPS", "KEY", "LOC", "MX", "NAPTR", "NS", "OPENPGPKEY",
-		"PTR", "RP", "SMIMEA", "SRV", "SSHFP", "SVCB", "TLSA", "TXT", "URI",
-	}) // Last verified 2026-06-16
-
 	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-06-16
 
 	a.Add("*", rejectif.LabelIsWildcard) // Last verified 2026-06-16

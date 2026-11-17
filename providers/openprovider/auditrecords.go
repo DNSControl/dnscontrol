@@ -9,24 +9,11 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
-var supportedRecordTypes = []string{
-	"A",
-	"AAAA",
-	"CAA",
-	"CNAME",
-	"MX",
-	"NS",
-	"SRV",
-	"TLSA",
-	"TXT",
-}
-
 var supportedCAATags = []string{"issue", "issuewild", "iodef"}
 
 // AuditRecords returns errors for records that Openprovider cannot represent.
 func (*openproviderProvider) AuditRecords(records models.Records) []error {
 	a := rejectif.Auditor{}
-	a.TypesSupported(supportedRecordTypes)
 	a.Add("NS", rejectUnsupportedNS)          // Last verified 2026-09-21
 	a.Add("MX", rejectif.MxNull)              // Last verified 2026-09-21
 	a.Add("SRV", rejectif.SrvHasNullTarget)   // Last verified 2026-09-21
