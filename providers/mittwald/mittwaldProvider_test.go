@@ -188,7 +188,6 @@ func TestAuditRecords(t *testing.T) {
 		{"CAA parameters", mustRecord(t, dc, "@", 300, dnsv2.TypeCAA, 0, "issue", "letsencrypt.org; validationmethods=dns-01"), false},
 		{"CAA forbid all", mustRecord(t, dc, "@", 300, dnsv2.TypeCAA, 0, "issue", ";"), false},
 		{"TXT with one double quote", mustRecord(t, dc, "t", 300, dnsv2.TypeTXT, `"left`), true},
-		{"NS", mustRecord(t, dc, "sub", 300, dnsv2.TypeNS, "ns.example.net."), false},
 	} {
 		if got := len(new(mittwaldProvider).AuditRecords(models.Records{tc.rc})) == 0; got != tc.ok {
 			t.Errorf("%s: accepted=%v, want %v", tc.name, got, tc.ok)

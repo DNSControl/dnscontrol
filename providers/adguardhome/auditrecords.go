@@ -7,15 +7,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/rejectif"
 )
 
-var supportedRTypes = map[string]struct{}{
-	"A":                            {},
-	"AAAA":                         {},
-	"CNAME":                        {},
-	"ALIAS":                        {},
-	"ADGUARDHOME_A_PASSTHROUGH":    {},
-	"ADGUARDHOME_AAAA_PASSTHROUGH": {},
-}
-
 // AuditRecords returns a list of errors corresponding to the records
 // that aren't supported by this provider.  If all records are
 // supported, an empty list is returned.
@@ -28,16 +19,7 @@ func (*adguardHomeProvider) AuditRecords(records models.Records) []error {
 
 	a.Add("ADGUARDHOME_AAAA_PASSTHROUGH", nonNullValue)
 
-	errors := []error{}
-	errors = append(errors, a.Audit(records)...)
-
-	for _, r := range records {
-		if _, ok := supportedRTypes[r.Type]; !ok {
-			errors = append(errors, fmt.Errorf("%s rtype is not supported", r.Type))
-		}
-	}
-
-	return errors
+	return a.Audit(records)
 }
 
 func nonNullValue(v *models.RecordConfig) error {

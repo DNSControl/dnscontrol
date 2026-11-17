@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 )
 
@@ -13,20 +12,6 @@ func (*fortigateProvider) AuditRecords(records models.Records) []error {
 	var problems []error
 
 	for _, rc := range records {
-		switch rc.TypeNum {
-		case dnsv2.TypeA, dnsv2.TypeAAAA,
-			// Supported
-			// case "PTR":
-			// 	// FortiGate limitations: these record types are not fully supported.
-			// 	problems = append(problems,
-			// 		fmt.Errorf("record type %s is not supported by FortiGate provider (name: %s)", rc.Type, rc.GetLabelFQDN()))
-			dnsv2.TypeCNAME:
-
-		default:
-			problems = append(problems,
-				fmt.Errorf("record type %s is not supported by FortiGate provider (name: %s)", rc.Type, rc.GetLabelFQDN()))
-		}
-
 		//Handle CNAME Records limitations
 		if rc.Type == "CNAME" && rc.GetLabel() == "@" {
 			problems = append(problems,
