@@ -19,7 +19,7 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	if err := providers.Finalize(); err != nil {
 		return []error{err}
 	}
-	err := processSplitHorizonDomains(config)
+	err := checkUniqueDomainNames(config)
 	if err != nil {
 		return []error{err}
 	}
@@ -59,10 +59,10 @@ func ValidateAndNormalizeConfig(config *models.DNSConfig) (errs []error) {
 	return errs
 }
 
-// processSplitHorizonDomains finds "domain.tld!tag" domains and pre-processes them.
-func processSplitHorizonDomains(config *models.DNSConfig) error {
-
-	// Verify uniquenames are unique
+// checkUniqueDomainNames returns an error if two domains have the same
+// unique name. For split horizon domains ("domain.tld!tag") the unique name
+// includes the tag; "domain.tld!" is the same as "domain.tld".
+func checkUniqueDomainNames(config *models.DNSConfig) error {
 	seen := map[string]bool{}
 	for _, d := range config.Domains {
 		uniquename := d.GetUniqueName()
@@ -88,7 +88,7 @@ func checkRecords(domain *models.DomainConfig) (errs []error) {
 		if err := validateSupportedRecordTypes(rec, domain.Name, pTypes); err != nil {
 			errs = append(errs, err)
 		}
-		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name, rec.Metadata); err != nil {
+		if err := checkLabel(rec.GetLabel(), rec.Type, domain.Name); err != nil {
 			errs = append(errs, err)
 		}
 		errs = append(errs, checkTargets(rec, domain.Name)...)
@@ -113,8 +113,6 @@ func checkZone(d *models.DomainConfig) (errs []error) {
 	errs = append(errs, checkRecordSetHasMultipleTTLs(d.Records)...)
 	// Check for inconsistent R53 weighted routing metadata within a group
 	errs = append(errs, checkR53WeightedGroupConsistency(d.Records)...)
-	// Validate FQDN consistency
-	errs = append(errs, checkFQDNs(d)...)
 	// Verify AutoDNSSEC is valid.
 	errs = append(errs, checkAutoDNSSEC(d)...)
 	return errs

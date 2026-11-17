@@ -178,7 +178,7 @@ types:
     codepoint: 65292
     fields:
       - name: LuaType
-        type: ToUpperRawString
+        type: RRType
       - name: LuaPayload
         type: RawString
     test_data:
