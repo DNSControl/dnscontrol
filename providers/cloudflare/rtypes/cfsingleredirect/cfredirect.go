@@ -13,9 +13,12 @@ func init() {
 	models.RegisterBuilder("CF_TEMP_REDIRECT", BuilderCFTEMPREDIRECT)
 }
 
+// BuilderCFREDIRECT generates a 301 CF_REDIRECT.
 func BuilderCFREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
 	return builderCFREDIRECThelper(dc, 301, args, subdomain)
 }
+
+// BuilderCFTEMPREDIRECT generates a 302 CF_TEMP_REDIRECT.
 func BuilderCFTEMPREDIRECT(dc *models.DomainConfig, ttl uint32, args []any, subdomain string) (models.Records, error) {
 	return builderCFREDIRECThelper(dc, 302, args, subdomain)
 }

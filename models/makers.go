@@ -47,6 +47,7 @@ func init() {
 	privatetypes.RegisterMaker(dnsv2.TypeTXT, MakeTXT)
 }
 
+// MakeA creates the RDATA for an A record.
 func MakeA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -60,6 +61,7 @@ func MakeA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any)
 	return dnsrdatav2.A{Addr: ip}, nil
 }
 
+// MakeALIAS creates the RDATA for an ALIAS record.
 func MakeALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -71,6 +73,8 @@ func MakeALIAS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}
 	return privatetypesrdata.ALIAS{Target: target}, nil
 }
+
+// MakeAAAA creates the RDATA for a AAAA record.
 func MakeAAAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -83,6 +87,7 @@ func MakeAAAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	return dnsrdatav2.AAAA{Addr: ip}, nil
 }
 
+// MakeCAA creates the RDATA for a CAA record.
 func MakeCAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 3 {
@@ -98,6 +103,7 @@ func MakeCAA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	return dnsrdatav2.CAA{Flag: mustbe.Uint8(args[0]), Tag: tag, Value: mustbe.RawString(args[2])}, nil
 }
 
+// MakeCNAME creates the RDATA for a CNAME record.
 func MakeCNAME(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -110,6 +116,7 @@ func MakeCNAME(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	return dnsrdatav2.CNAME{Target: target}, nil
 }
 
+// MakeCSYNC creates the RDATA for a CSYNC record.
 func MakeCSYNC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 3 {
@@ -131,6 +138,7 @@ func MakeCSYNC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	return rd, nil
 }
 
+// MakeDHCID creates the RDATA for a DHCID record.
 func MakeDHCID(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -138,6 +146,8 @@ func MakeDHCID(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}
 	return dnsrdatav2.DHCID{Digest: mustbe.RawString(args[0])}, nil
 }
+
+// MakeDNAME creates the RDATA for a DNAME record.
 func MakeDNAME(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -149,6 +159,8 @@ func MakeDNAME(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}
 	return dnsrdatav2.DNAME{Target: target}, nil
 }
+
+// MakeDNSKEY creates the RDATA for a DNSKEY record.
 func MakeDNSKEY(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
@@ -163,6 +175,7 @@ func MakeDNSKEY(origin string, _ map[string]string, isEnabled nrc.Flags, args ..
 	}, nil
 }
 
+// MakeDS creates the RDATA for a DS record.
 func MakeDS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
@@ -171,6 +184,7 @@ func MakeDS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	return dnsrdatav2.DS{KeyTag: mustbe.Uint16(args[0]), Algorithm: mustbe.Uint8(args[1]), DigestType: mustbe.Uint8(args[2]), Digest: mustbe.ToLowerRawString(args[3])}, nil
 }
 
+// MakeHTTPS creates the RDATA for a HTTPS record.
 func MakeHTTPS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 3 {
@@ -179,6 +193,7 @@ func MakeHTTPS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	return MakeSVCB(origin, nil, isEnabled, args[0], args[1], args[2])
 }
 
+// MakeLOC creates the RDATA for a LOC record.
 func MakeLOC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	if len(args) != 7 && len(args) != 12 {
 		return nil, fmt.Errorf("MakeLOC expects either 7 or 12 arguments, got %d: %+v", len(args), args)
@@ -223,6 +238,7 @@ func MakeLOC(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	return rd, err
 }
 
+// MakeMIKROTIKFWD creates the RDATA for a MIKROTIKFWD record.
 func MakeMIKROTIKFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	forwardTo, err := mustbe.TargetHost(origin, isEnabled, args[0])
@@ -231,10 +247,14 @@ func MakeMIKROTIKFWD(origin string, _ map[string]string, isEnabled nrc.Flags, ar
 	}
 	return privatetypesrdata.MIKROTIKFWD{ForwardTo: forwardTo}, nil
 }
+
+// MakeMIKROTIKNXDOMAIN creates the RDATA for a MIKROTIKNXDOMAIN record.
 func MakeMIKROTIKNXDOMAIN(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	return privatetypesrdata.MIKROTIKNXDOMAIN{}, nil
 }
+
+// MakeMX creates the RDATA for a MX record.
 func MakeMX(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 2 {
@@ -250,6 +270,7 @@ func MakeMX(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 
 }
 
+// MakeNS creates the RDATA for a NS record.
 func MakeNS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -263,6 +284,8 @@ func MakeNS(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 
 	return dnsrdatav2.NS{Ns: target}, nil
 }
+
+// MakeNAPTR creates the RDATA for a NAPTR record.
 func MakeNAPTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 6 {
@@ -287,6 +310,7 @@ func MakeNAPTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}, nil
 }
 
+// MakeOPENPGPKEY creates the RDATA for a OPENPGPKEY record.
 func MakeOPENPGPKEY(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -299,11 +323,13 @@ func MakeOPENPGPKEY(origin string, _ map[string]string, isEnabled nrc.Flags, arg
 	return dnsrdatav2.OPENPGPKEY{PublicKey: key}, nil
 }
 
+// MakePORKBUNURLFWD creates the RDATA for a PORKBUNURLFWD record.
 func MakePORKBUNURLFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	return privatetypesrdata.PORKBUNURLFWD{}, nil
 }
 
+// MakePTR creates the RDATA for a PTR record.
 func MakePTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {
@@ -316,6 +342,7 @@ func MakePTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	return dnsrdatav2.PTR{Ptr: ptr}, nil
 }
 
+// MakeRP creates the RDATA for a RP record.
 func MakeRP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 2 {
@@ -332,6 +359,7 @@ func MakeRP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any
 	return dnsrdatav2.RP{Mbox: mbox, Txt: txt}, nil
 }
 
+// MakeSMIMEA creates the RDATA for a SMIMEA record.
 func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
@@ -346,6 +374,7 @@ func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ..
 	return rd, nil
 }
 
+// MakeSOA creates the RDATA for a SOA record.
 func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 6 && len(args) != 7 {
@@ -395,6 +424,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	return soa, nil
 }
 
+// MakeSRV creates the RDATA for a SRV record.
 func MakeSRV(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
@@ -407,6 +437,7 @@ func MakeSRV(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	return dnsrdatav2.SRV{Priority: mustbe.Uint16(args[0]), Weight: mustbe.Uint16(args[1]), Port: mustbe.Uint16(args[2]), Target: target}, nil
 }
 
+// MakeSSHFP creates the RDATA for a SSHFP record.
 func MakeSSHFP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 3 {
@@ -415,6 +446,7 @@ func MakeSSHFP(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	return dnsrdatav2.SSHFP{Algorithm: mustbe.Uint8(args[0]), Type: mustbe.Uint8(args[1]), FingerPrint: mustbe.ToLowerRawString(args[2])}, nil
 }
 
+// MakeSVCB creates the RDATA for a SVCB record.
 func MakeSVCB(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	// args can be a string (which we parse) or a []svcbv2.Pair.
@@ -456,6 +488,7 @@ func MakeSVCB(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	panic(fmt.Sprintf("BUG: Invalid params type for SVCB/HTTPS record: %T", params))
 }
 
+// MakeTLSA creates the RDATA for a TLSA record.
 func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 4 {
@@ -486,6 +519,7 @@ func checkTLSAFields(rtype string, usage, selector, matchingType uint8) error {
 	return nil
 }
 
+// MakeTXT creates the RDATA for a TXT record.
 func MakeTXT(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 1 {

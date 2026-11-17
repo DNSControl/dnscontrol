@@ -288,8 +288,8 @@ func (f *fakeRegistrar) GetRegistrarCorrections(*models.DomainConfig) ([]*models
 func Test_splitPendingCreation(t *testing.T) {
 	zone := models.MustNewDomainConfig("example.com")
 	zone.DNSProviderInstances = []*models.DNSProviderInstance{
-		{ProviderBase: models.ProviderBase{Name: "new"}},
-		{ProviderBase: models.ProviderBase{Name: "old"}},
+		{Name: "new"},
+		{Name: "old"},
 	}
 	zone.StorePopulateCorrections("new", []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}})
 
@@ -326,15 +326,15 @@ func Test_oneZone_pendingCreationSkipsDelegation(t *testing.T) {
 
 	zone := models.MustNewDomainConfig("example.com")
 	zone.RegistrarName = "reg"
-	zone.RegistrarInstance = &models.RegistrarInstance{ProviderBase: models.ProviderBase{Name: "reg"}, Driver: reg}
+	zone.RegistrarInstance = &models.RegistrarInstance{Name: "reg", Driver: reg}
 	zone.DNSProviderInstances = []*models.DNSProviderInstance{
-		{ProviderBase: models.ProviderBase{Name: "new"}, Driver: newProv, NumberOfNameservers: -1},
-		{ProviderBase: models.ProviderBase{Name: "old"}, Driver: oldProv, NumberOfNameservers: -1},
+		{Name: "new", Driver: newProv, NumberOfNameservers: -1},
+		{Name: "old", Driver: oldProv, NumberOfNameservers: -1},
 	}
 	zone.StorePopulateCorrections("new", []*models.Correction{{Msg: "Ensuring zone exists", F: func() error { return nil }}})
 
 	// Limit record processing to the pending provider; the fake can't diff records.
-	if err := oneZone(zone, PPreviewArgs{FilterArgs: FilterArgs{Providers: "new"}}, false); err != nil {
+	if err := oneZone(zone, PPreviewArgs{Providers: "new"}, false); err != nil {
 		t.Fatalf("oneZone() error = %v, want nil", err)
 	}
 

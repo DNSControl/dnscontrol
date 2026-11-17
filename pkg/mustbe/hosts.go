@@ -160,6 +160,7 @@ func violatesSingleDotPolicy(s string) bool {
 	return strings.Contains(s, ".")
 }
 
+// MakeErrorSingleDotViolation returns an error for a target missing its trailing dot.
 func MakeErrorSingleDotViolation(s string) error {
 	return fmt.Errorf("target %q must end with a (.) [https://docs.dnscontrol.org/language-reference/why-the-dot]", s)
 }

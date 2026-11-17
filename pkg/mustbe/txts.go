@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Txts joins args into a TXT string slice.
 func Txts(args ...any) []string {
 	if len(args) == 0 {
 		return []string{""}

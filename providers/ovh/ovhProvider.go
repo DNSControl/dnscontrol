@@ -64,6 +64,7 @@ func init() {
 	})
 }
 
+// NoListZone disables zone listing when true.
 var NoListZone bool
 
 func listzonesEnabled() bool {

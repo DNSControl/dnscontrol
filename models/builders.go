@@ -2,6 +2,7 @@ package models
 
 import "fmt"
 
+// RecordBuilderFn is a function that generates RecordConfigs for a builder type.
 type RecordBuilderFn func(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error)
 
 var mapBuilderNameToFn = make(map[string]RecordBuilderFn)
@@ -16,6 +17,7 @@ func RegisterBuilder(typeName string, genFn RecordBuilderFn) {
 	mapBuilderNameToFn[typeName] = genFn
 }
 
+// IsBuilder reports whether name is a registered builder.
 func IsBuilder(name string) bool {
 	_, ok := mapBuilderNameToFn[name]
 	return ok

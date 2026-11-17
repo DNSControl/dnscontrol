@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// Uint8 converts arg to a uint8.
 func Uint8(arg any) uint8 {
 	switch v := arg.(type) {
 	case uint8:
@@ -50,6 +51,7 @@ func Uint8(arg any) uint8 {
 	panic(fmt.Sprintf("value %v is type %T, expected uint8", arg, arg))
 }
 
+// Uint16 converts arg to a uint16.
 func Uint16(arg any) uint16 {
 	switch v := arg.(type) {
 	case uint8:
@@ -100,6 +102,7 @@ func Uint16(arg any) uint16 {
 	panic(fmt.Sprintf("value %v is type %T, expected uint16", arg, arg))
 }
 
+// Uint32 converts arg to a uint32.
 func Uint32(arg any) uint32 {
 	switch v := arg.(type) {
 	case uint8:
@@ -138,6 +141,7 @@ func Uint32(arg any) uint32 {
 	panic(fmt.Sprintf("value %v is type %T, expected uint32", arg, arg))
 }
 
+// Uint64 converts arg to a uint64.
 func Uint64(arg any) uint64 {
 	switch v := arg.(type) {
 	case string:
@@ -152,6 +156,7 @@ func Uint64(arg any) uint64 {
 	panic(fmt.Sprintf("value %v is type %T, expected uint64", arg, arg))
 }
 
+// Int64 converts arg to an int64.
 func Int64(arg any) int64 {
 	switch v := arg.(type) {
 	case int64:
@@ -173,6 +178,7 @@ func Int64(arg any) int64 {
 	panic(fmt.Sprintf("value %v is type %T, expected int64", arg, arg))
 }
 
+// Float32 converts arg to a float32.
 func Float32(arg any) float32 {
 	switch v := arg.(type) {
 	case float32:
@@ -195,6 +201,7 @@ func Float32(arg any) float32 {
 	panic(fmt.Sprintf("value %v is type %T, expected float32", arg, arg))
 }
 
+// Float64 converts arg to a float64.
 func Float64(arg any) float64 {
 	switch v := arg.(type) {
 	case float64:

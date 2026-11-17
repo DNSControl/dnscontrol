@@ -321,6 +321,7 @@ func (rc *RecordConfig) Key() RecordKey {
 	return RecordKey{rc.NameFQDN, t}
 }
 
+// IsTTLSignificant reports whether the record's TTL is meaningful.
 func (rc *RecordConfig) IsTTLSignificant() bool {
 	// "private types" don't really have a useful TTL.
 	// There may be better ways to determine this.  Right now

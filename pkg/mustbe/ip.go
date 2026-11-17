@@ -6,6 +6,7 @@ import (
 	"net/netip"
 )
 
+// IPv4 converts a to an IPv4 address.
 func IPv4(a any) (netip.Addr, error) {
 	switch v := a.(type) {
 	case float64:
@@ -44,6 +45,7 @@ func IPv4(a any) (netip.Addr, error) {
 	panic(fmt.Sprintf("mustbe.IPv4: unhandled type: %T", a))
 }
 
+// IPv6 converts a to an IPv6 address.
 func IPv6(a any) (netip.Addr, error) {
 	switch v := a.(type) {
 	case string:

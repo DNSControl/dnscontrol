@@ -1,11 +1,12 @@
 package nrc
 
+// Flags modifies the behavior of NewRecordConfig* and Make*() functions.
 type Flags struct {
 	// EnforceOneDotPolicy instructs mustbe.Target* functions to return an error
 	// if it looks like the user forgot the trailing dot. This is enforced by
 	// the rule, "If a hostname contains any dots (even a single dot), there
 	// must be a trailing dot."
-	// Use with LabelFromDnsconfigjs() ONLY.
+	// Use when parsing from dnsconfig.js only. Labels from APIs/providers are allowed less-strict checking.
 	EnforceOneDotPolicy bool
 
 	// StrictParamChecking instructs Make*() functions to return an error if a

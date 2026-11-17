@@ -13,6 +13,7 @@ func init() {
 	RegisterBuilder("LOC", BuilderLOC)
 }
 
+// BuilderLOC generates LOC records from dnsconfig.js arguments.
 func BuilderLOC(dc *DomainConfig, ttl uint32, args []any, subdomain string) (Records, error) {
 
 	// args includes the label at args[0], so the parameter counts are +1:
