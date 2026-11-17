@@ -369,20 +369,22 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 		Expire:  mustbe.Uint32(rest[2]),
 		Minttl:  mustbe.Uint32(rest[3]),
 	}
-	if soa.Mbox == "" {
-		return nil, fmt.Errorf("SOA MBox must be specified")
-	}
-	if soa.Refresh == 0 {
-		return nil, fmt.Errorf("SOA Refresh must be non-zero")
-	}
-	if soa.Retry == 0 {
-		return nil, fmt.Errorf("SOA Retry must be non-zero")
-	}
-	if soa.Expire == 0 {
-		return nil, fmt.Errorf("SOA Expire must be non-zero")
-	}
-	if soa.Minttl == 0 {
-		return nil, fmt.Errorf("SOA Minimum TTL must be non-zero")
+	if isEnabled.EnforceValidValues {
+		if soa.Mbox == "" {
+			return nil, fmt.Errorf("SOA MBox must be specified")
+		}
+		if soa.Refresh == 0 {
+			return nil, fmt.Errorf("SOA Refresh must be non-zero")
+		}
+		if soa.Retry == 0 {
+			return nil, fmt.Errorf("SOA Retry must be non-zero")
+		}
+		if soa.Expire == 0 {
+			return nil, fmt.Errorf("SOA Expire must be non-zero")
+		}
+		if soa.Minttl == 0 {
+			return nil, fmt.Errorf("SOA Minimum TTL must be non-zero")
+		}
 	}
 	return soa, nil
 }

@@ -8,6 +8,13 @@ type Flags struct {
 	// Use with LabelFromDnsconfigjs() ONLY.
 	EnforceOneDotPolicy bool
 
+	// EnforceValidValues instructs Make*() functions to return an error if a
+	// value parses but is unusable (for example, an SOA with Refresh=0).
+	// Records downloaded from a provider are accepted as-is, so this is
+	// enforced only on user input.
+	// Use with LabelFromDnsconfigjs() ONLY.
+	EnforceValidValues bool
+
 	// SrvWeirdSplit the last field contains multiple fields.
 	// Only for use with NewRecordConfigParse() && rtype=="SRV" && len(args) == 2.
 	// Some APIs deliver SRV fields as two strings: "priority" and "weight port hostname."
