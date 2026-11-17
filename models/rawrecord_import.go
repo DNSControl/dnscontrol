@@ -101,6 +101,9 @@ func (config *DNSConfig) ImportRawRecords() error {
 				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
+				if _, ok := rec.Metadata["ignore_name_disable_safety_check"]; ok {
+					return fmt.Errorf("metadata error at %s [%s(%s)]: IGNORE_NAME_DISABLE_SAFETY_CHECK no longer supported. Please use DISABLE_IGNORE_SAFETY_CHECK for the entire domain", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
+				}
 
 				// The stutter check catches labels that mistakenly include the
 				// zone name. It is skipped when the record opts out via

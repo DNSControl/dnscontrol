@@ -92,10 +92,6 @@ func checkRecords(domain *models.DomainConfig) (errs []error) {
 			errs = append(errs, err)
 		}
 		errs = append(errs, checkTargets(rec, domain.Name)...)
-		errs = append(errs, checkTLSASMIMEA(rec, domain.Name)...)
-		if err := checkObsoleteMetadata(rec); err != nil {
-			errs = append(errs, err)
-		}
 	}
 	return errs
 }

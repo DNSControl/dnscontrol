@@ -57,6 +57,7 @@ func init() {
 			"HTTPS",
 			"LOC",
 			"NAPTR",
+			"OPENPGPKEY",
 			"PTR",
 			"SSHFP",
 			"SVCB",

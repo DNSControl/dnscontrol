@@ -113,16 +113,19 @@ func TestFormatDslEscaping(t *testing.T) {
 		label string
 		rtype string
 		args  []any
+		// badTarget is set if the target is (correctly) rejected by dnsconfig.js
+		// for containing invalid characters.
+		badTarget bool
 	}{
-		{"label", hostile, "A", []any{"192.0.2.1"}},
-		{"ns", "sub", "NS", []any{hostile + ".example.net."}},
-		{"apex ns", "@", "NS", []any{"ns1.example.net.\n" + hostile}},
-		{"caa", "@", "CAA", []any{0, "issue", hostile}},
-		{"caa critical", "@", "CAA", []any{128, "issue", hostile}},
-		{"https", "svc", "HTTPS", []any{1, ".", "alpn=h2,h3 port=8443 ipv4hint=192.0.2.1,192.0.2.2"}},
-		{"svcb", "svc", "SVCB", []any{1, "svc.example.net.", "alpn=h2 no-default-alpn"}},
-		{"svcb alias", "svc", "SVCB", []any{0, "pool.example.net.", ""}},
-		{"dnskey", "key", "DNSKEY", []any{257, 3, 13, "AABBCCDD"}},
+		{"label", hostile, "A", []any{"192.0.2.1"}, false},
+		{"ns", "sub", "NS", []any{hostile + ".example.net."}, true},
+		{"apex ns", "@", "NS", []any{"ns1.example.net.\n" + hostile}, false},
+		{"caa", "@", "CAA", []any{0, "issue", hostile}, false},
+		{"caa critical", "@", "CAA", []any{128, "issue", hostile}, false},
+		{"https", "svc", "HTTPS", []any{1, ".", "alpn=h2,h3 port=8443 ipv4hint=192.0.2.1,192.0.2.2"}, false},
+		{"svcb", "svc", "SVCB", []any{1, "svc.example.net.", "alpn=h2 no-default-alpn"}, false},
+		{"svcb alias", "svc", "SVCB", []any{0, "pool.example.net.", ""}, false},
+		{"dnskey", "key", "DNSKEY", []any{257, 3, 13, "AABBCCDD"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -133,6 +136,15 @@ func TestFormatDslEscaping(t *testing.T) {
 			line := formatDsl(rc, 300)
 			script := fmt.Sprintf("D(\"example.com\", NewRegistrar(\"none\"), DnsProvider(NewDnsProvider(\"none\")),\n%s\n);\n", line)
 			conf, err := js.ExecuteJavascriptString([]byte(script), false, nil)
+			if tt.badTarget {
+				// The error must quote the whole hostile string as a single
+				// target, proving it was not split into injected code.
+				want := fmt.Sprintf("target (%s.example.net.) includes invalid char", strings.ToLower(hostile))
+				if err == nil || !strings.Contains(err.Error(), want) {
+					t.Fatalf("got err=%v, want it to contain %q\n%s", err, want, line)
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("generated line does not parse: %v\n%s", err, line)
 			}

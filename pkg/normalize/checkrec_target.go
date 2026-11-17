@@ -11,19 +11,9 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 )
 
-// make sure target is valid reference for cnames, mx, etc.
-func checkTarget(target string) error {
-	if strings.ContainsAny(target, `'" +,|!£$%&()=?^*ç°§;:<>[]()@`) {
-		return fmt.Errorf("target (%v) includes invalid char", target)
-	}
-	if !strings.HasSuffix(target, ".in-addr.arpa.") && strings.Contains(target, "/") {
-		return fmt.Errorf("target (%v) includes invalid char", target)
-	}
-	return nil
-}
-
 // checkTargets returns zero or more errors when problems are found.
-// FYI: Many of these checks are obsolete since Make*() does the same thing. We'll be removing the duplicate checks over time.
+// Checks of the RDATA itself are done by the Make*() functions. What remains
+// here are checks that depend on the record's label.
 func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	label := rec.GetLabel()
 	check := func(e error) {
@@ -40,10 +30,7 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	// IMPORT_TRANSFORM is not in the record catalog, so the default case would reject it.
 	case "IMPORT_TRANSFORM":
 
-	case "ALIAS":
-		check(checkTarget(rec.AsALIAS().Target))
 	case "CNAME":
-		check(checkTarget(rec.AsCNAME().Target))
 		if label == "@" {
 			check(errors.New("cannot create CNAME record for bare domain. Use ALIAS"))
 		}
@@ -52,31 +39,14 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 		if labelFQDN == targetFQDN {
 			check(errors.New("CNAME loop (target points at itself)"))
 		}
-	case "DNAME":
-		check(checkTarget(rec.AsDNAME().Target))
-	case "MX":
-		check(checkTarget(rec.AsMX().Mx))
-	case "NAPTR":
-		target := rec.AsNAPTR().Replacement
-		if target != "" {
-			check(checkTarget(target))
-		}
 	case "NS":
-		check(checkTarget(rec.AsNS().Ns))
 		if label == "@" {
 			check(errors.New("cannot create NS record for bare domain. Use NAMESERVER instead"))
 		}
-	case "PTR":
-		check(checkTarget(rec.AsPTR().Ptr))
 	case "SOA":
-		f := rec.AsSOA()
-		check(checkSoa(f.Expire, f.Minttl, f.Refresh, f.Retry, f.Mbox))
-		check(checkTarget(f.Ns))
 		if label != "@" {
 			check(errors.New("SOA record is only valid for bare domain"))
 		}
-	case "SRV":
-		check(checkTarget(rec.AsSRV().Target))
 	case "LUA":
 		f := rec.AsLUA()
 		upper := strings.ToUpper(f.LuaType)

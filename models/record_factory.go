@@ -177,7 +177,7 @@ func (dc *DomainConfig) newRecordConfigFromDnsconfigjs(name string, ttl uint32, 
 		}
 	}()
 
-	rd, err := maker(targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true}, args...)
+	rd, err := maker(targetOrigin, metadata, nrc.Flags{EnforceOneDotPolicy: true, StrictParamChecking: true}, args...)
 	if err != nil {
 		return nil, fmt.Errorf("dnsconfigjs: failed to create RDATA for type %s: %w", dnsutilv2.TypeToString(typeNum), err)
 	}
