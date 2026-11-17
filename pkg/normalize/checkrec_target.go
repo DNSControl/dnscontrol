@@ -3,9 +3,7 @@ package normalize
 import (
 	"errors"
 	"fmt"
-	"strings"
 
-	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nameutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
@@ -46,16 +44,6 @@ func checkTargets(rec *models.RecordConfig, domain string) (errs []error) {
 	case "SOA":
 		if label != "@" {
 			check(errors.New("SOA record is only valid for bare domain"))
-		}
-	case "LUA":
-		f := rec.AsLUA()
-		upper := strings.ToUpper(f.LuaType)
-		if upper == "" {
-			check(errors.New("LUA records must specify an emitted rtype"))
-			break
-		}
-		if _, ok := dnsv2.StringToType[upper]; !ok {
-			check(fmt.Errorf("LUA emitted rtype (%s) is not a valid DNS type", f.LuaType))
 		}
 	default:
 		if _, known := privatetypes.LookupRecordType(rec.Type); known && rec.GetRDATA() != nil {

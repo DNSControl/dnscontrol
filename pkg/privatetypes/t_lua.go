@@ -9,6 +9,7 @@ import (
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
+	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 
@@ -59,7 +60,11 @@ func (rr *LUA) Parse(tokens []string, s string) error {
 	if len(args) != 2 {
 		return fmt.Errorf("LUA requires exactly 2 arguments, got %d: %v", len(args), args)
 	}
-	rr.LuaType = mustbe.ToUpperRawString(args[0])
+	targetHost0, err := mustbe.RRType("", nrc.Flags{}, args[0])
+	if err != nil {
+		return err
+	}
+	rr.LuaType = targetHost0
 	rr.LuaPayload = mustbe.RawString(args[1])
 	return nil
 }
