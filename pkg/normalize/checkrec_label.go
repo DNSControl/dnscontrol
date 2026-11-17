@@ -10,12 +10,6 @@ func checkLabel(label string, rType string, domain string) error {
 	if label == "@" {
 		return nil
 	}
-	if label == "" {
-		return fmt.Errorf("empty %s label (\"\") in %s. Did you mean \"@\" instead?", rType, domain)
-	}
-	if label[len(label)-1] == '.' {
-		return fmt.Errorf("label %s.%s ends with a (.)", label, domain)
-	}
 
 	// Underscores are permitted in labels, but we print a warning unless they
 	// are used in a way we consider typical.  Yes, we're opinionated here.
