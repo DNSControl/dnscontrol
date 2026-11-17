@@ -41,6 +41,9 @@ of being some in LabelFromDnsconfigjs() and other places.
 
 ## Bad decisions to reverse
 
+* The preview/push code is incredibly complex and difficult to understand, therefore difficult
+to debug. It could probably be reworked to be more simple and easier to debug.
+
 * Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
 something that is both a Reg and a DSP.
 
