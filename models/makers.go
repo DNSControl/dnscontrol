@@ -337,7 +337,13 @@ func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ..
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeSMIMEA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}, nil
+	rd := dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}
+	if isEnabled.EnforceValidValues {
+		if err := checkTLSAFields("SMIMEA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
+			return nil, err
+		}
+	}
+	return rd, nil
 }
 
 func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -455,7 +461,29 @@ func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeTLSA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}, nil
+	rd := dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}
+	if isEnabled.EnforceValidValues {
+		if err := checkTLSAFields("TLSA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
+			return nil, err
+		}
+	}
+	return rd, nil
+}
+
+// checkTLSAFields checks that the Usage, Selector and MatchingType of a TLSA
+// or SMIMEA record are assigned values. 255 is reserved for private use in
+// all three (RFC 6698 sections 7.2-7.4) and is permitted.
+func checkTLSAFields(rtype string, usage, selector, matchingType uint8) error {
+	if usage > 3 && usage != 255 {
+		return fmt.Errorf("%s Usage %d is invalid", rtype, usage)
+	}
+	if selector > 1 && selector != 255 {
+		return fmt.Errorf("%s Selector %d is invalid", rtype, selector)
+	}
+	if matchingType > 2 && matchingType != 255 {
+		return fmt.Errorf("%s MatchingType %d is invalid", rtype, matchingType)
+	}
+	return nil
 }
 
 func MakeTXT(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
