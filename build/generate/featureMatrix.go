@@ -256,22 +256,45 @@ func featureEmoji(
 	return "❌"
 }
 
+// recordTypeDocSlugs maps record types whose documentation page is named
+// after the dnsconfig.js function that creates them, not the type itself.
+var recordTypeDocSlugs = map[string]string{
+	"CLOUDFLAREAPI_SINGLE_REDIRECT": "CF_SINGLE_REDIRECT",
+}
+
+// recordTypeDocSlug returns the name of a record type's documentation page.
+func recordTypeDocSlug(typeName string) string {
+	if slug, ok := recordTypeDocSlugs[typeName]; ok {
+		return slug
+	}
+	return typeName
+}
+
 // recordTypeFeature renders the documentation link for a record type name:
 // "SOA" -> "[SOA](../language-reference/domain-modifiers/SOA.md)".
 func recordTypeFeature(typeName string) string {
-	return fmt.Sprintf("[%s](../language-reference/domain-modifiers/%s.md)", typeName, typeName)
+	return fmt.Sprintf("[%s](../language-reference/domain-modifiers/%s.md)", typeName, recordTypeDocSlug(typeName))
+}
+
+// notUserCreatable lists catalog types that have a Make* function but no
+// dnsconfig.js function: users cannot create them in dnsconfig.js, so the
+// feature matrix does not list them. NETLIFY and NETLIFYV6 are artifacts of
+// the Netlify API; the provider ignores them when reading zones.
+var notUserCreatable = map[string]bool{
+	"NETLIFY":   true,
+	"NETLIFYV6": true,
 }
 
 // matrixRecordTypeFeatures returns the record types listed in the feature
-// matrix: every standard record type that dnsconfig.js can create (i.e. has
-// a Make* function), plus ALIAS, a pseudo type implemented by many
-// providers. Provider-specific pseudo types are omitted; each provider's
-// own page documents those. Adding a new record type with a Make* function
-// makes it appear here automatically.
+// matrix: every type dnsconfig.js can create (i.e. has a Make* function),
+// including provider-specific pseudo types such as ALIAS, AZURE_ALIAS and
+// R53_ALIAS. Types without a dnsconfig.js function are omitted. Adding a
+// new record type with a Make* function makes it appear here
+// automatically.
 func matrixRecordTypeFeatures() []string {
 	var features []string
 	for _, typ := range privatetypes.RecordTypes() {
-		if typ.Pseudo && typ.Name != "ALIAS" {
+		if notUserCreatable[typ.Name] {
 			continue
 		}
 		if !privatetypes.HasMaker(typ.Name) {

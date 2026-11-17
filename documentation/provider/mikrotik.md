@@ -178,5 +178,5 @@ Records are compared using `diff2.ByRecord()` with custom comparison functions t
   - [get-zones](../commands/get-zones.md): ✅
   - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
 - Supported Record Types
-  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MIKROTIK_FORWARDER](../language-reference/domain-modifiers/MIKROTIK_FORWARDER.md) [MIKROTIK_FWD](../language-reference/domain-modifiers/MIKROTIK_FWD.md) [MIKROTIK_NXDOMAIN](../language-reference/domain-modifiers/MIKROTIK_NXDOMAIN.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
 <!-- provider-features-end -->

@@ -66,5 +66,5 @@ D("example.com", REGISTRAR(), SERVICE("adguard_home"),
   - [get-zones](../commands/get-zones.md): ❌
   - [AUTODNSSEC](../language-reference/domain-modifiers/AUTODNSSEC_ON.md): ❌
 - Supported Record Types
-  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CNAME](../language-reference/domain-modifiers/CNAME.md)
+  - [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ADGUARDHOME_AAAA_PASSTHROUGH](../language-reference/domain-modifiers/ADGUARDHOME_AAAA_PASSTHROUGH.md) [ADGUARDHOME_A_PASSTHROUGH](../language-reference/domain-modifiers/ADGUARDHOME_A_PASSTHROUGH.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CNAME](../language-reference/domain-modifiers/CNAME.md)
 <!-- provider-features-end -->

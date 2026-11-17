@@ -111,25 +111,24 @@ func TestFeatureMatrixStructure(t *testing.T) {
 	if slices.Contains(recordTypes.Features, autoDnssec) {
 		t.Fatal("AUTODNSSEC must not be listed as a record type")
 	}
-	// The record types are derived from the record catalog: every standard
-	// type that dnsconfig.js can create, plus ALIAS. Each must link to the
-	// type's documentation page.
+	// The record types are derived from the record catalog: every type
+	// dnsconfig.js can create, including provider-specific pseudo types.
+	// Each must link to the type's documentation page.
 	for _, feature := range recordTypes.Features {
 		name := recordTypeName(feature)
 		if feature != recordTypeFeature(name) {
 			t.Fatalf("%s: feature link does not match recordTypeFeature", feature)
 		}
-		typ, ok := privatetypes.LookupRecordType(name)
-		if !ok {
+		if _, ok := privatetypes.LookupRecordType(name); !ok {
 			t.Fatalf("%s: not a catalog record type", name)
-		}
-		if typ.Pseudo && name != "ALIAS" {
-			t.Fatalf("%s: provider-specific pseudo type listed in the matrix", name)
 		}
 		if !privatetypes.HasMaker(name) {
 			t.Fatalf("%s: listed without a Make function", name)
 		}
-		if _, err := os.Stat(filepath.Join("../../documentation/language-reference/domain-modifiers", name+".md")); err != nil {
+		if notUserCreatable[name] {
+			t.Fatalf("%s: listed despite having no dnsconfig.js function", name)
+		}
+		if _, err := os.Stat(filepath.Join("../../documentation/language-reference/domain-modifiers", recordTypeDocSlug(name)+".md")); err != nil {
 			t.Fatalf("%s: record types must link to an existing docs page: %v", name, err)
 		}
 	}
@@ -138,9 +137,23 @@ func TestFeatureMatrixStructure(t *testing.T) {
 	}) {
 		t.Fatal("record types are not sorted by type name")
 	}
-	// ALIAS is the one pseudo type listed: many providers implement it.
-	if !slices.ContainsFunc(recordTypes.Features, func(f string) bool { return recordTypeName(f) == "ALIAS" }) {
-		t.Fatal("ALIAS missing from the record types")
+	// Provider-specific pseudo types are listed along with ALIAS, which many
+	// providers implement. They used to be omitted from the matrix entirely.
+	for _, name := range []string{
+		"ALIAS", "AKAMAICDN", "AZURE_ALIAS", "R53_ALIAS", "CLOUDNS_WR",
+		"CF_WORKER_ROUTE", "CLOUDFLAREAPI_SINGLE_REDIRECT", "MIKROTIK_FORWARDER",
+		"FRAME", "LUA", "URL301", "BUNNY_DNS_PZ",
+	} {
+		if !slices.ContainsFunc(recordTypes.Features, func(f string) bool { return recordTypeName(f) == name }) {
+			t.Fatalf("%s missing from the record types", name)
+		}
+	}
+	// NETLIFY and NETLIFYV6 have no dnsconfig.js function, so they are not
+	// listed even though they have Make functions.
+	for _, name := range []string{"NETLIFY", "NETLIFYV6"} {
+		if slices.ContainsFunc(recordTypes.Features, func(f string) bool { return recordTypeName(f) == name }) {
+			t.Fatalf("%s listed despite having no dnsconfig.js function", name)
+		}
 	}
 	// Every Basic8 record type must be listed.
 	for _, typ := range []string{"A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"} {
@@ -154,6 +167,23 @@ func TestFeatureMatrixStructure(t *testing.T) {
 		if !found {
 			t.Fatalf("Basic8 record type %s is missing from the matrix", typ)
 		}
+	}
+	// Provider-specific pseudo types appear under the providers that declare
+	// them, and under BIND, whose "*" claims the entire catalog (bind.md
+	// documents that it writes every type verbatim).
+	azureAlias := recordTypeFeature("AZURE_ALIAS")
+	for _, provider := range []string{"AZURE_DNS", "AZURE_PRIVATE_DNS", "BIND"} {
+		if note := matrix.Providers[provider][azureAlias]; note == nil || !note.HasFeature {
+			t.Fatalf("%s must claim AZURE_ALIAS support", provider)
+		}
+	}
+	mikrotikForwarder := recordTypeFeature("MIKROTIK_FORWARDER")
+	if note := matrix.Providers["MIKROTIK"][mikrotikForwarder]; note == nil || !note.HasFeature {
+		t.Fatal("MIKROTIK must claim MIKROTIK_FORWARDER support")
+	}
+	cfSingleRedirect := recordTypeFeature("CLOUDFLAREAPI_SINGLE_REDIRECT")
+	if note := matrix.Providers["CLOUDFLAREAPI"][cfSingleRedirect]; note == nil || !note.HasFeature {
+		t.Fatal("CLOUDFLAREAPI must claim CLOUDFLAREAPI_SINGLE_REDIRECT support")
 	}
 	// The buckets must partition the features without duplicates.
 	for name, featureMap := range matrix.Providers {
@@ -233,6 +263,19 @@ func TestRecordTypeList(t *testing.T) {
 func TestRecordTypeName(t *testing.T) {
 	if got := recordTypeName("[SOA](../language-reference/domain-modifiers/SOA.md)"); got != "SOA" {
 		t.Fatalf("recordTypeName = %q, want SOA", got)
+	}
+}
+
+func TestRecordTypeDocSlug(t *testing.T) {
+	if got := recordTypeDocSlug("SOA"); got != "SOA" {
+		t.Fatalf("recordTypeDocSlug(SOA) = %q, want SOA", got)
+	}
+	// The page is named for the dnsconfig.js function that creates the type.
+	if got := recordTypeDocSlug("CLOUDFLAREAPI_SINGLE_REDIRECT"); got != "CF_SINGLE_REDIRECT" {
+		t.Fatalf("recordTypeDocSlug(CLOUDFLAREAPI_SINGLE_REDIRECT) = %q, want CF_SINGLE_REDIRECT", got)
+	}
+	if got := recordTypeFeature("CLOUDFLAREAPI_SINGLE_REDIRECT"); got != "[CLOUDFLAREAPI_SINGLE_REDIRECT](../language-reference/domain-modifiers/CF_SINGLE_REDIRECT.md)" {
+		t.Fatalf("recordTypeFeature(CLOUDFLAREAPI_SINGLE_REDIRECT) = %q", got)
 	}
 }
 
@@ -350,6 +393,26 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 	if strings.Contains(section, "- [DYNADOT](") {
 		t.Error("DYNADOT has no record support and must not appear in the record types list")
 	}
+
+	// Provider-specific pseudo types render under the providers that declare
+	// them, and under BIND, whose "*" claims the entire catalog.
+	azureAlias := "[AZURE_ALIAS](../language-reference/domain-modifiers/AZURE_ALIAS.md)"
+	for line := range strings.SplitSeq(section, "\n") {
+		switch {
+		case strings.HasPrefix(line, "- [AZURE_DNS](azuredns.md):"):
+			if !strings.Contains(line, azureAlias) {
+				t.Error("AZURE_DNS bullet must list AZURE_ALIAS")
+			}
+		case strings.HasPrefix(line, "- [BIND](bind.md):"):
+			if !strings.Contains(line, azureAlias) {
+				t.Error("BIND's \"*\" claims every type; its bullet must list AZURE_ALIAS")
+			}
+		case strings.HasPrefix(line, "- [AZURE_PRIVATE_DNS](azureprivatedns.md):"):
+			if !strings.Contains(line, azureAlias) {
+				t.Error("AZURE_PRIVATE_DNS bullet must list AZURE_ALIAS")
+			}
+		}
+	}
 }
 
 func TestBuildFeatureListRecordTypes(t *testing.T) {
@@ -374,5 +437,13 @@ func TestBuildFeatureListRecordTypes(t *testing.T) {
 	dynadot := buildFeatureList(matrix, "DYNADOT")
 	if strings.Contains(dynadot, "- Supported Record Types") {
 		t.Error("DYNADOT has no record support; its provider page should omit the record types category")
+	}
+
+	azuredns := buildFeatureList(matrix, "AZURE_DNS")
+	if !strings.Contains(azuredns, "[AZURE_ALIAS](../language-reference/domain-modifiers/AZURE_ALIAS.md)") {
+		t.Error("AZURE_DNS page must list AZURE_ALIAS")
+	}
+	if !strings.Contains(azuredns, "    - Not supported: [ALIAS](../language-reference/domain-modifiers/ALIAS.md) (Azure DNS does not provide a generic ALIAS functionality. Use AZURE_ALIAS instead.)") {
+		t.Error("AZURE_DNS page must annotate ALIAS as not supported")
 	}
 }

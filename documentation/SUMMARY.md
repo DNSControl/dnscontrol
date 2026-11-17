@@ -100,6 +100,9 @@
             * [R53_ALIAS](language-reference/domain-modifiers/R53_ALIAS.md)
         * Azure DNS
             * [AZURE_ALIAS](language-reference/domain-modifiers/AZURE_ALIAS.md)
+        * Bunny DNS
+            * [BUNNY_DNS_PZ](language-reference/domain-modifiers/BUNNY_DNS_PZ.md)
+            * [BUNNY_DNS_RDR](language-reference/domain-modifiers/BUNNY_DNS_RDR.md)
         * Cloudflare DNS
             * [CF_REDIRECT](language-reference/domain-modifiers/CF_REDIRECT.md)
             * [CF_SINGLE_REDIRECT](language-reference/domain-modifiers/CF_SINGLE_REDIRECT.md)

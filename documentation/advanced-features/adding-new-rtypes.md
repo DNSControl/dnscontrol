@@ -146,7 +146,9 @@ Add documentation:
 - `documentation/language-reference/domain-modifiers/TYPENAME.md` (see SRV.md as an example)
 - `documentation/SUMMARY.md` Add your doc to the TOC.
 
-The provider feature matrix picks up the new type automatically: it is derived from the record catalog, not maintained by hand.
+The provider feature matrix picks up the new type automatically: it is derived from the record catalog, not maintained by hand. Provider-specific types appear there too, listed under each provider that declares them in its `SupportedTypes`. A build test fails if the documentation page is missing.
+
+Exception: a type that has a `Make*` function but no dnsconfig.js function (i.e. users cannot create it) is not listed in the matrix; such a type is added to the `notUserCreatable` list in `build/generate/featureMatrix.go`.
 
 ### Step 4: Add a `parse_tests` test case
 
