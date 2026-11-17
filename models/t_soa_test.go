@@ -34,7 +34,7 @@ func TestMakeSOA(t *testing.T) {
 		experiment := fmt.Sprintf("%q %d %d %d %d", tt.mbox, tt.refresh, tt.retry, tt.expire, tt.minttl)
 		t.Run(experiment, func(t *testing.T) {
 			// User input (dnsconfig.js) is checked.
-			strict := nrc.Flags{EnforceValidValues: true}
+			strict := nrc.Flags{StrictParamChecking: true}
 			_, err := models.MakeSOA("example.com", nil, strict, "ns1.example.com.", tt.mbox, tt.refresh, tt.retry, tt.expire, tt.minttl)
 			if (err != nil) != tt.isError {
 				t.Errorf("6 args: got err=%v, wantErr=%v", err, tt.isError)

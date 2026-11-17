@@ -35,7 +35,7 @@ func TestMakeTLSASMIMEA(t *testing.T) {
 		for _, tt := range tests {
 			t.Run(rtype+" "+tt.name, func(t *testing.T) {
 				// User input (dnsconfig.js) is checked.
-				_, err := maker("example.com", nil, nrc.Flags{EnforceValidValues: true}, tt.usage, tt.selector, tt.matchingType, "abcdef01")
+				_, err := maker("example.com", nil, nrc.Flags{StrictParamChecking: true}, tt.usage, tt.selector, tt.matchingType, "abcdef01")
 				if (err != nil) != tt.isError {
 					t.Errorf("got err=%v, wantErr=%v", err, tt.isError)
 				}

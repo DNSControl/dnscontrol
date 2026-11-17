@@ -338,7 +338,7 @@ func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ..
 		return nil, fmt.Errorf("MakeSMIMEA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	rd := dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}
-	if isEnabled.EnforceValidValues {
+	if isEnabled.StrictParamChecking {
 		if err := checkTLSAFields("SMIMEA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
 			return nil, err
 		}
@@ -375,7 +375,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 		Expire:  mustbe.Uint32(rest[2]),
 		Minttl:  mustbe.Uint32(rest[3]),
 	}
-	if isEnabled.EnforceValidValues {
+	if isEnabled.StrictParamChecking {
 		if soa.Mbox == "" {
 			return nil, fmt.Errorf("SOA MBox must be specified")
 		}
@@ -462,7 +462,7 @@ func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 		return nil, fmt.Errorf("MakeTLSA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
 	rd := dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}
-	if isEnabled.EnforceValidValues {
+	if isEnabled.StrictParamChecking {
 		if err := checkTLSAFields("TLSA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
 			return nil, err
 		}
