@@ -16,10 +16,8 @@
           "comparablev3": "host11.example.com.",
           "filepos": "[line:5:5]",
           "name": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2011:abcd::11",
-          "rdata": {
-            "Ptr": "host11.example.com."
-          },
+          "name_unicode": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "host11.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -28,10 +26,8 @@
           "comparablev3": "host22.example.com.",
           "filepos": "[line:6:5]",
           "name": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.d.c.b.a.1.1.0.2.ip6.arpa",
-          "rdata": {
-            "Ptr": "host22.example.com."
-          },
+          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "host22.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -50,10 +46,8 @@
           "comparablev3": "server11.example.com.",
           "filepos": "[line:10:5]",
           "name": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2001:db8::11",
-          "rdata": {
-            "Ptr": "server11.example.com."
-          },
+          "name_unicode": "1.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "server11.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -62,10 +56,8 @@
           "comparablev3": "server22.example.com.",
           "filepos": "[line:11:5]",
           "name": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa",
-          "rdata": {
-            "Ptr": "server22.example.com."
-          },
+          "name_unicode": "2.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "server22.example.com.",
           "ttl": 300,
           "type": "PTR",
           "typenum": 12
@@ -74,10 +66,8 @@
           "comparablev3": "abcd.example.com.",
           "filepos": "[line:15:5]",
           "name": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2001:db8::abcd",
-          "rdata": {
-            "Ptr": "abcd.example.com."
-          },
+          "name_unicode": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "abcd.example.com.",
           "subdomain": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
           "ttl": 300,
           "type": "PTR",
@@ -87,10 +77,8 @@
           "comparablev3": "abce.example.com.",
           "filepos": "[line:16:5]",
           "name": "e.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
-          "name_unicode": "2001:db8::abce",
-          "rdata": {
-            "Ptr": "abce.example.com."
-          },
+          "name_unicode": "e.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+          "rdata": "abce.example.com.",
           "subdomain": "d.c.b.a.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
           "ttl": 300,
           "type": "PTR",

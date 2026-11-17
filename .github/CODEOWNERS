@@ -37,6 +37,7 @@ providers/infoblox @matthewmgamble
 providers/infomaniak @jbelien
 providers/internetbs @pragmaton
 providers/inwx @patschi
+providers/ionos @n-rodriguez
 providers/joker @atrull
 providers/linode @koesie10
 providers/loopia @systemcrash

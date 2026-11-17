@@ -52,7 +52,7 @@ type Config struct {
 // TypeInfo describes how a mustbe type maps to Go code.
 type TypeInfo struct {
 	GoType      string // Go type of the struct field
-	NeedsOrigin bool   // mustbe call needs an origin string as first arg
+	NeedsOrigin bool   // mustbe call is X(origin, isEnabled, arg) and returns (value, error)
 	NeedsNetip  bool   // requires "net/netip" import
 	IsString    bool   // field is a Go string (affects len/string formatting)
 }
@@ -60,6 +60,7 @@ type TypeInfo struct {
 var typeInfo = map[string]TypeInfo{
 	"RawString":        {GoType: "string", IsString: true},
 	"ToUpperRawString": {GoType: "string", IsString: true},
+	"RRType":           {GoType: "string", IsString: true, NeedsOrigin: true},
 	"TargetHost":       {GoType: "string", IsString: true, NeedsOrigin: true},
 	"BoolString":       {GoType: "string", IsString: true},
 	"Bool":             {GoType: "bool"},
@@ -148,7 +149,7 @@ func anyNonString(fields []FieldDef) bool {
 // needsNrc returns true if any field requires nrc functions.
 func needsNrc(fields []FieldDef) bool {
 	for _, f := range fields {
-		if f.Type == "TargetHost" {
+		if info(f.Type).NeedsOrigin {
 			return true
 		}
 	}
@@ -158,7 +159,7 @@ func needsNrc(fields []FieldDef) bool {
 // needsTxtutil returns true if any field requires txtutil functions.
 func needsTxtutil(fields []FieldDef) bool {
 	for _, f := range fields {
-		if f.Type == "RawString" || f.Type == "ToUpperRawString" {
+		if f.Type == "RawString" || f.Type == "ToUpperRawString" || f.Type == "RRType" {
 			return true
 		}
 	}
@@ -342,7 +343,7 @@ func generateTypeFile(t *TypeDef) error {
 
 	fmt.Fprintf(&buf, "func (rr *%s) Data() dnsv2.RDATA {\n", typeName)
 	if len(t.Fields) == 0 && len(t.OptionalFields) == 0 && len(t.RuntimeFields) == 0 {
-		fmt.Fprintf(&buf, "\treturn nil\n")
+		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{}\n", typeName)
 	} else {
 		fmt.Fprintf(&buf, "\treturn privatetypesrdata.%s{", typeName)
 		fields := slices.Concat(t.Fields, t.OptionalFields, t.RuntimeFields)
@@ -581,7 +582,7 @@ func generateRdataFile(t *TypeDef) error {
 		for _, f := range append(t.Fields, t.OptionalFields...) {
 			// Special-case behaviors requested by generator requirements.
 			switch f.Type {
-			case "RawString", "ToUpperRawString":
+			case "RawString", "ToUpperRawString", "RRType":
 				fmt.Fprintf(&buf, "\tparts = append(parts, txtutil.ZoneifyString(rd.%s))\n", f.Name)
 			case "TargetHost":
 				fmt.Fprintf(&buf, "\tparts = append(parts, rd.%s)\n", f.Name)

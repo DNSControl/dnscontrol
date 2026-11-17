@@ -115,6 +115,9 @@ provider-INTERNETBS:
 provider-INWX:
   - changed-files:
       - any-glob-to-any-file: providers/inwx/**
+provider-IONOS:
+  - changed-files:
+      - any-glob-to-any-file: providers/ionos/**
 provider-JOKER:
   - changed-files:
       - any-glob-to-any-file: providers/joker/**

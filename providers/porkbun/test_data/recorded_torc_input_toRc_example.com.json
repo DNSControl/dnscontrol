@@ -141,5 +141,16 @@
       "ttl": "600",
       "type": "SVCB"
     }
+  },
+  {
+    "index": 14,
+    "value": {
+      "content": "8857 13 2 4b9b6b073edd97feb5bc12dc4e1b32d2c6af7ae23a293936ceb87bb10494ec44",
+      "id": "214",
+      "name": "sub.example.com",
+      "prio": "0",
+      "ttl": "3600",
+      "type": "DS"
+    }
   }
 ]

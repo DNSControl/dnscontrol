@@ -276,3 +276,41 @@ func TestParseRedirectLast(t *testing.T) {
 	}
 	t.Log(rec.Print())
 }
+
+func TestParseCaseInsensitiveMechanisms(t *testing.T) {
+	// Mechanism names are case-insensitive (RFC 7208 section 4.6.1).
+	tests := []struct {
+		input   string
+		wantErr bool
+		lookups int
+		parts   int
+		domain  string
+	}{
+		{"v=spf1 ip4:192.0.2.1 -ALL", false, 0, 2, ""},
+		{"v=spf1 ip4:192.0.2.1 -All mx", false, 0, 2, ""},
+		{"v=spf1 PTR -all", false, 1, 2, ""},
+		{"v=spf1 EXISTS:example.com -all", false, 1, 2, ""},
+		{"v=spf1 Include:Example.COM -all", false, 1, 2, "Example.COM"},
+		{"v=spf1 REDIRECT=Example.COM", false, 1, 1, "Example.COM"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			rec, err := Parse(tt.input, nil)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("Parse(%q) error = %v, wantErr %v", tt.input, err, tt.wantErr)
+			}
+			if err != nil {
+				return
+			}
+			if got := rec.Lookups(); got != tt.lookups {
+				t.Errorf("Parse(%q) lookups = %d, want %d", tt.input, got, tt.lookups)
+			}
+			if got := len(rec.Parts); got != tt.parts {
+				t.Errorf("Parse(%q) parts = %d, want %d", tt.input, got, tt.parts)
+			}
+			if got := rec.Parts[0].IncludeDomain; got != tt.domain {
+				t.Errorf("Parse(%q) include domain = %q, want %q", tt.input, got, tt.domain)
+			}
+		})
+	}
+}

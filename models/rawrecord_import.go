@@ -40,9 +40,15 @@ func (config *DNSConfig) ImportRawRecords() error {
 			filePos := FixPosition(rawRec.FilePos)
 			typeName := rawRec.Type
 
+			// A record without an explicit TTL gets the default.
+			ttl := rawRec.TTL
+			if ttl == 0 {
+				ttl = DefaultTTL
+			}
+
 			// NB(tlim): We check if something is a builder first because LOC could be a builder or a dnsrdatav2.
 			if IsBuilder(typeName) {
-				records, err := dc.runBuilder(typeName, rawRec.TTL, rawRec.Args, rawRec.SubDomain)
+				records, err := dc.runBuilder(typeName, ttl, rawRec.Args, rawRec.SubDomain)
 				if err != nil {
 					return err
 				}
@@ -86,7 +92,7 @@ func (config *DNSConfig) ImportRawRecords() error {
 					return fmt.Errorf("label (first arg) at %s [%s(%s)] must be a string, got %T", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), rawRec.Args[0])
 				}
 
-				rec, err := dc.newRecordConfigFromDnsconfigjs(label, rawRec.TTL, typeNum, rawRec.Args[1:], mm, subdomain)
+				rec, err := dc.newRecordConfigFromDnsconfigjs(label, ttl, typeNum, rawRec.Args[1:], mm, subdomain)
 				if err != nil {
 					return fmt.Errorf("ImportRawRecords error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
@@ -95,15 +101,17 @@ func (config *DNSConfig) ImportRawRecords() error {
 				if rec.Metadata, err = mergeMetas(rawRec.Metas); err != nil {
 					return fmt.Errorf("metadata error at %s [%s(%s)]: %w", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args), err)
 				}
+				if _, ok := rec.Metadata["ignore_name_disable_safety_check"]; ok {
+					return fmt.Errorf("metadata error at %s [%s(%s)]: IGNORE_NAME_DISABLE_SAFETY_CHECK no longer supported. Please use DISABLE_IGNORE_SAFETY_CHECK for the entire domain", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
+				}
 
 				// The stutter check catches labels that mistakenly include the
 				// zone name. It is skipped when the record opts out via
-				// skip_fqdn_check, and for reverse zones, where labels are
-				// legitimately written as full reverse names (e.g. via REV())
-				// and are reduced to relative form later by normalization.
-				if rec.Metadata["skip_fqdn_check"] != "true" && !isReverseZone(dc.Name) && doesStutter(rec.Name, dc.Name) {
-					// return fmt.Errorf("stutter error at %s %s(%s). Add DISABLE_REPEATED_DOMAIN_CHECK to override", filePos, typeName, txtutil.ZoneifyManyAny(rawRec.Args))
-					return stutterError(rec, dc.Name)
+				// skip_fqdn_check. In reverse zones, full reverse names (e.g.
+				// from REV()) have already been made relative by
+				// LabelFromDnsconfigjs, so they do not trigger it.
+				if err := CheckStutter(rec, dc.Name); err != nil {
+					return err
 				}
 
 				// Conversion complete!  Append it.

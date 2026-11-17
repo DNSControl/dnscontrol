@@ -270,7 +270,10 @@ func MakeNAPTR(origin string, _ map[string]string, isEnabled nrc.Flags, args ...
 	}
 	// The NAPTR replacement is a domain name; an empty replacement is canonically
 	// the root, ".". Normalize so it renders consistently in zone files.
-	replacement := mustbe.RawString(args[5])
+	replacement, err := mustbe.TargetHostSRV(origin, isEnabled, args[5])
+	if err != nil {
+		return nil, err
+	}
 	if replacement == "" {
 		replacement = "."
 	}
@@ -289,7 +292,11 @@ func MakeOPENPGPKEY(origin string, _ map[string]string, isEnabled nrc.Flags, arg
 	if len(args) != 1 {
 		return nil, fmt.Errorf("MakeOPENPGPKEY expects exactly 1 argument, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.OPENPGPKEY{PublicKey: mustbe.OpenPGPKey(args[0])}, nil
+	key, err := mustbe.OpenPGPKey(args[0])
+	if err != nil {
+		return nil, err
+	}
+	return dnsrdatav2.OPENPGPKEY{PublicKey: key}, nil
 }
 
 func MakePORKBUNURLFWD(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -330,7 +337,13 @@ func MakeSMIMEA(origin string, _ map[string]string, isEnabled nrc.Flags, args ..
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeSMIMEA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}, nil
+	rd := dnsrdatav2.SMIMEA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.RawString(args[3])}
+	if isEnabled.StrictParamChecking {
+		if err := checkTLSAFields("SMIMEA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
+			return nil, err
+		}
+	}
+	return rd, nil
 }
 
 func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -353,7 +366,7 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 	if err != nil {
 		return nil, err
 	}
-	return dnsrdatav2.SOA{
+	soa := dnsrdatav2.SOA{
 		Ns:      ns,
 		Mbox:    mustbe.SoaMailbox(args[1]),
 		Serial:  mustbe.Uint32(serial),
@@ -361,7 +374,25 @@ func MakeSOA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...an
 		Retry:   mustbe.Uint32(rest[1]),
 		Expire:  mustbe.Uint32(rest[2]),
 		Minttl:  mustbe.Uint32(rest[3]),
-	}, nil
+	}
+	if isEnabled.StrictParamChecking {
+		if soa.Mbox == "" {
+			return nil, fmt.Errorf("SOA MBox must be specified")
+		}
+		if soa.Refresh == 0 {
+			return nil, fmt.Errorf("SOA Refresh must be non-zero")
+		}
+		if soa.Retry == 0 {
+			return nil, fmt.Errorf("SOA Retry must be non-zero")
+		}
+		if soa.Expire == 0 {
+			return nil, fmt.Errorf("SOA Expire must be non-zero")
+		}
+		if soa.Minttl == 0 {
+			return nil, fmt.Errorf("SOA Minimum TTL must be non-zero")
+		}
+	}
+	return soa, nil
 }
 
 func MakeSRV(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
@@ -430,7 +461,29 @@ func MakeTLSA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...a
 	if len(args) != 4 {
 		return nil, fmt.Errorf("MakeTLSA expects exactly 4 arguments, got %d: %+v", len(args), args)
 	}
-	return dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}, nil
+	rd := dnsrdatav2.TLSA{Usage: mustbe.Uint8(args[0]), Selector: mustbe.Uint8(args[1]), MatchingType: mustbe.Uint8(args[2]), Certificate: mustbe.ToLowerRawString(args[3])}
+	if isEnabled.StrictParamChecking {
+		if err := checkTLSAFields("TLSA", rd.Usage, rd.Selector, rd.MatchingType); err != nil {
+			return nil, err
+		}
+	}
+	return rd, nil
+}
+
+// checkTLSAFields checks that the Usage, Selector and MatchingType of a TLSA
+// or SMIMEA record are assigned values. 255 is reserved for private use in
+// all three (RFC 6698 sections 7.2-7.4) and is permitted.
+func checkTLSAFields(rtype string, usage, selector, matchingType uint8) error {
+	if usage > 3 && usage != 255 {
+		return fmt.Errorf("%s Usage %d is invalid", rtype, usage)
+	}
+	if selector > 1 && selector != 255 {
+		return fmt.Errorf("%s Selector %d is invalid", rtype, selector)
+	}
+	if matchingType > 2 && matchingType != 255 {
+		return fmt.Errorf("%s MatchingType %d is invalid", rtype, matchingType)
+	}
+	return nil
 }
 
 func MakeTXT(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {

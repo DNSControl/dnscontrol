@@ -107,6 +107,17 @@ func TestParsedFiles(t *testing.T) {
 			}
 			testifyrequire.JSONEqf(t, es, as, "ACTUAL %q = \n```\n%s\n```", expectedFile+".ACTUAL", as)
 
+			// Test that the JSON round-trips (print-ir output can be read by --ir).
+			roundTrip := &models.DNSConfig{}
+			if err := json.Unmarshal(actualJSON, roundTrip); err != nil {
+				t.Fatal(err)
+			}
+			roundTripJSON, err := json.MarshalIndent(roundTrip, "", "  ")
+			if err != nil {
+				t.Fatal(err)
+			}
+			testifyrequire.JSONEq(t, as, string(roundTripJSON), "IR does not round-trip")
+
 			// For each domain, if there is a zone file, test against it:
 
 			var dCount int

@@ -1,0 +1,3146 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "id": "003b99d5-5d6c-f928-bb24-1dbae54e7a2b",
+      "name": "foo254.example.com",
+      "type": "TXT",
+      "content": "\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "id": "00f27012-c7db-7dd6-d3b4-5d57e0b7cb00",
+      "name": "pager101-rec0004.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "id": "056ddc43-8b8c-a354-9bae-94b1ac481f4f",
+      "name": "foosp.example.com",
+      "type": "TXT",
+      "content": "\"with spaces\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "id": "0585aabc-cfc1-df09-bd2e-1e31d84e1fa3",
+      "name": "pager101-rec0091.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "id": "07505f1d-b5d6-d18b-f513-006c54db795e",
+      "name": "a.example.com",
+      "type": "CNAME",
+      "content": "xn--ndaaa.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "id": "0aadd59b-5615-5908-08b3-2741e69b0e87",
+      "name": "pager101-rec0010.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "id": "0aeffaac-e9c8-f66d-3357-323c422c4a05",
+      "name": "xn--fiq228c.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "id": "0c746e95-0775-39f4-b3c5-ca6629d81efb",
+      "name": "foo.example.com",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff:0:0:0:fe71:aaaa",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "id": "0e49225e-bb7a-bc93-cc1d-cfc730a3ad9e",
+      "name": "xn--ndaaa.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "id": "0e49225e-bb7a-bc93-cc1d-cfc730a3ad9e",
+      "name": "xn--ndaaa.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "id": "0f066aeb-f1f5-1780-8dda-14847e6a9cbb",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "bar.com",
+      "ttl": 300,
+      "prio": 50,
+      "disabled": false
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "id": "0fe781df-2bba-be7d-0182-a310b323efcb",
+      "name": "bar.example.com",
+      "type": "CNAME",
+      "content": "redact2.acm-validations.aws",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "id": "1315f8e0-9dcb-484d-4aa9-afa7364a608a",
+      "name": "example.com",
+      "type": "TXT",
+      "content": "\"asimple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "id": "14dc0760-2850-3527-2530-021163617b01",
+      "name": "pager101-rec0002.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "id": "1594ed83-68b3-04b7-3b96-94dc57355ed3",
+      "name": "nmx.example.com",
+      "type": "MX",
+      "content": "www.example.com",
+      "ttl": 300,
+      "prio": 9,
+      "disabled": false
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "id": "177abe8a-6923-ea62-18ed-dd2396479eaa",
+      "name": "pager101-rec0055.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "id": "17d9df0d-d381-0a64-af84-adb1ab27de8b",
+      "name": "pager101-rec0095.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "id": "188baa87-14f3-c13c-2a95-2b73a5e8db5f",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 21,
+    "value": {
+      "id": "1b16bffe-e7fe-757a-196f-cd0aa96ff018",
+      "name": "example.com",
+      "type": "MX",
+      "content": "example.com",
+      "ttl": 300,
+      "prio": 2,
+      "disabled": false
+    }
+  },
+  {
+    "index": 22,
+    "value": {
+      "id": "1b5f003c-ba85-facd-95a0-fe57890e6669",
+      "name": "pager101-rec0036.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 23,
+    "value": {
+      "id": "1c9a36d3-860c-5e6c-16b1-4fdc2dd20934",
+      "name": "pager101-rec0063.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 24,
+    "value": {
+      "id": "202c87f6-5f6d-30e4-762b-e506a32d495d",
+      "name": "pager101-rec0083.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 26,
+    "value": {
+      "id": "226681af-1359-e475-2d11-a14a0435d7c7",
+      "name": "dyndns-city2.example.com",
+      "type": "A",
+      "content": "91.42.1.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 27,
+    "value": {
+      "id": "22ed7778-e994-cf0e-b08c-8a6691ef6f79",
+      "name": "xyz.example.com",
+      "type": "NS",
+      "content": "ns1.foo.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 28,
+    "value": {
+      "id": "2328a696-52b8-312a-e994-4fb694fe2398",
+      "name": "pager101-rec0082.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 29,
+    "value": {
+      "id": "2359e7f8-aadc-d3d1-1dfe-f88305f22698",
+      "name": "pager101-rec0096.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 30,
+    "value": {
+      "id": "247d3504-626a-924a-0483-c5cf20239360",
+      "name": "pager101-rec0088.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 31,
+    "value": {
+      "id": "252568e9-0179-5e70-5776-2dd4c3bff5ed",
+      "name": "pager101-rec0042.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 32,
+    "value": {
+      "id": "26d3ecc9-376e-4d67-5532-400a746d65b5",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 33,
+    "value": {
+      "id": "26f0fe4c-d931-40e5-554f-64235ca06ad7",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 700,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 34,
+    "value": {
+      "id": "2762586e-0cbc-7fa8-9f3b-5251eea06d7f",
+      "name": "nmx.example.com",
+      "type": "A",
+      "content": "1.2.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 35,
+    "value": {
+      "id": "2763b34b-1058-c24e-448d-2343751173cb",
+      "name": "pager101-rec0052.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 36,
+    "value": {
+      "id": "2b19a3ae-3f09-356d-af60-b3a7531520c5",
+      "name": "pager101-rec0071.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 37,
+    "value": {
+      "id": "2d338add-62d3-56ea-cfee-934997cdf0ed",
+      "name": "pager101-rec0018.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 38,
+    "value": {
+      "id": "2d4dbcf9-791e-2378-597d-1d7f8734da84",
+      "name": "pager101-rec0009.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 39,
+    "value": {
+      "id": "32b00321-f1c8-348f-7190-14b28496de85",
+      "name": "example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 40,
+    "value": {
+      "id": "34c05514-e82c-7306-9922-2111e80e1e8f",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "mx.google.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 41,
+    "value": {
+      "id": "35cb9797-1f69-f48c-d6a2-ba1f4f405c5d",
+      "name": "foo509.example.com",
+      "type": "TXT",
+      "content": "\"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\" \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 42,
+    "value": {
+      "id": "36261f67-634b-86fa-5da9-6a584184d9f3",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 400,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 43,
+    "value": {
+      "id": "36261f67-634b-86fa-5da9-6a584184d9f3",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 700,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 44,
+    "value": {
+      "id": "386a87e8-dab8-3185-bea3-7ccbe1d18e6f",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "6 7 foo.com",
+      "ttl": 333,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 45,
+    "value": {
+      "id": "386a87e8-dab8-3185-bea3-7ccbe1d18e6f",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "6 7 foo.com",
+      "ttl": 4400,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 46,
+    "value": {
+      "id": "39c594b4-2e79-204b-d07f-1f1cc8e0efda",
+      "name": "pager101-rec0090.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 47,
+    "value": {
+      "id": "3a952c7e-d0cb-8dd9-9bd6-74580162020e",
+      "name": "pager101-rec0053.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 48,
+    "value": {
+      "id": "3bfb5872-eece-a28b-a97c-3fb68ae80eb2",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "5.4.5.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 50,
+    "value": {
+      "id": "3d0a14e0-70d9-d8b8-81a2-d8bf40e856e4",
+      "name": "testdefined.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 51,
+    "value": {
+      "id": "3d0a14e0-70d9-d8b8-81a2-d8bf40e856e4",
+      "name": "testdefined.example.com",
+      "type": "A",
+      "content": "9.9.9.9",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 53,
+    "value": {
+      "id": "3f0823a7-5e47-48f2-6e2c-f3bf05da070b",
+      "name": "example.com",
+      "type": "MX",
+      "content": "www.example.com",
+      "ttl": 300,
+      "prio": 8,
+      "disabled": false
+    }
+  },
+  {
+    "index": 54,
+    "value": {
+      "id": "3f984c2b-23e8-9dd6-0b2f-547e8e4a1fd4",
+      "name": "example.com",
+      "type": "A",
+      "content": "1.2.3.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 55,
+    "value": {
+      "id": "3f9de17f-31df-e441-72c4-b7ad2520c006",
+      "name": "pager101-rec0058.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 56,
+    "value": {
+      "id": "40db08b3-8063-a14e-341e-16222014a294",
+      "name": "example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 57,
+    "value": {
+      "id": "415bad72-4fc1-906b-eaec-b9f7c5e2c89d",
+      "name": "mail.example.com",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 58,
+    "value": {
+      "id": "4312caa3-931e-5f10-e525-f29f24c1ac31",
+      "name": "pager101-rec0066.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 59,
+    "value": {
+      "id": "4394d938-00f4-7e28-fa28-ca63720663d1",
+      "name": "pager101-rec0068.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 60,
+    "value": {
+      "id": "458c8944-8515-6344-ae56-4ed224ec89d7",
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "content": "google.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 61,
+    "value": {
+      "id": "469202e1-ec91-1d6a-462d-6fb63189a882",
+      "name": "pager101-rec0021.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 62,
+    "value": {
+      "id": "471cdc84-8982-f862-0a3d-3102469b3439",
+      "name": "example.com",
+      "type": "MX",
+      "content": "bar.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 63,
+    "value": {
+      "id": "471cdc84-8982-f862-0a3d-3102469b3439",
+      "name": "example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 64,
+    "value": {
+      "id": "4733ac41-3fbd-8c04-f227-35cada1d5984",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 65,
+    "value": {
+      "id": "496df760-aee7-75d6-3bec-96564d546b18",
+      "name": "pager101-rec0016.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 66,
+    "value": {
+      "id": "4991ba83-c323-e573-27b0-b24b2b1c8555",
+      "name": "pager101-rec0057.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 67,
+    "value": {
+      "id": "49b2fa0f-33b1-b905-3371-07a811a47cc1",
+      "name": "foobt.example.com",
+      "type": "TXT",
+      "content": "\"blah`blah\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 68,
+    "value": {
+      "id": "49dd1a75-e035-5166-e217-11068b09e36d",
+      "name": "pager101-rec0099.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 69,
+    "value": {
+      "id": "4a29ca9e-aa01-4c1b-2bcb-a703e3d01e46",
+      "name": "pager101-rec0014.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 70,
+    "value": {
+      "id": "4a340291-9b55-9245-74f0-63110644f786",
+      "name": "pager101-rec0080.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 71,
+    "value": {
+      "id": "4b996b71-fec7-db19-105f-40096d1f5abd",
+      "name": "pager101-rec0011.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 72,
+    "value": {
+      "id": "4e7e9c32-4446-edae-773f-4b4a04876638",
+      "name": "pager101-rec0073.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 73,
+    "value": {
+      "id": "529fa80e-aee7-87be-4659-9002b11143c4",
+      "name": "example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 74,
+    "value": {
+      "id": "52bc2579-ec3d-e9d2-0621-146843ecc9a8",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 76,
+    "value": {
+      "id": "54cc2f38-c333-0fbb-b057-2da1c6c370cd",
+      "name": "pager101-rec0039.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 77,
+    "value": {
+      "id": "54d93aee-724b-6964-0738-915988db92c8",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 78,
+    "value": {
+      "id": "5595c1e5-0ed0-8806-61cb-a2c00a496494",
+      "name": "pager101-rec0046.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 80,
+    "value": {
+      "id": "56f09258-722c-c56b-7cbc-33eeb31fb8ab",
+      "name": "example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 81,
+    "value": {
+      "id": "56f09258-722c-c56b-7cbc-33eeb31fb8ab",
+      "name": "example.com",
+      "type": "A",
+      "content": "4.4.4.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 82,
+    "value": {
+      "id": "572c1a3c-f720-8ac1-a196-065cc534125b",
+      "name": "pager101-rec0100.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 83,
+    "value": {
+      "id": "5bc39e60-1cd5-608b-680a-2e1c7299a2db",
+      "name": "zzz.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 84,
+    "value": {
+      "id": "5c648486-ba9e-3218-05ae-9fc2fcae5452",
+      "name": "testtxt.example.com",
+      "type": "TXT",
+      "content": "\"changed\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 85,
+    "value": {
+      "id": "5c648486-ba9e-3218-05ae-9fc2fcae5452",
+      "name": "testtxt.example.com",
+      "type": "TXT",
+      "content": "\"simple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 86,
+    "value": {
+      "id": "5c9f511a-1e4e-37e6-53d8-32e7d8b2f544",
+      "name": "pager101-rec0075.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 87,
+    "value": {
+      "id": "5d730ca3-ce71-526a-c5d9-b0e382365b78",
+      "name": "pager101-rec0097.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 88,
+    "value": {
+      "id": "5d75dbc6-36bf-3d1f-57c0-9015f6dd2e35",
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "content": "foo.example.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 89,
+    "value": {
+      "id": "5dae8b04-c195-c900-a9bc-5c7235159b7b",
+      "name": "zzz.example.com",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff:0:0:0:fe71:cccc",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 90,
+    "value": {
+      "id": "60925bb3-11b7-8a76-5dc5-f3db531847b7",
+      "name": "pager101-rec0019.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 91,
+    "value": {
+      "id": "60c14a84-c059-c482-30d3-c179514ef9c1",
+      "name": "pager101-rec0012.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 92,
+    "value": {
+      "id": "60dc1869-e8b6-b8f7-41de-24523c63911f",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 93,
+    "value": {
+      "id": "61282221-5c0c-4c40-8130-0693007e63db",
+      "name": "pager101-rec0037.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 94,
+    "value": {
+      "id": "62bcb1c7-d1ee-7ea2-ea0e-67701cfdddd5",
+      "name": "example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 95,
+    "value": {
+      "id": "6325d0f2-5196-610c-61cf-3ff6a402243a",
+      "name": "pager101-rec0008.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 96,
+    "value": {
+      "id": "640a1806-ca67-aaa8-ad4e-c4cc82071822",
+      "name": "pager101-rec0085.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 97,
+    "value": {
+      "id": "64f74b7c-a308-4e9c-4556-f94d17fe895b",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 99,
+    "value": {
+      "id": "6772efbe-2958-a2d6-b6e1-5091688350d6",
+      "name": "pager101-rec0015.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 100,
+    "value": {
+      "id": "6804a84e-1a52-df5b-f3a1-bfbc209bb326",
+      "name": "final.example.com",
+      "type": "TXT",
+      "content": "\"TestDNSProviders was successful!\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 101,
+    "value": {
+      "id": "68f7af47-6fba-5165-d6b9-c5723c47d671",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org; validationmethods=dns-01; accounturi=https://acme-v02.api.letsencrypt.org/acme/acct/1234\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 102,
+    "value": {
+      "id": "68f7af47-6fba-5165-d6b9-c5723c47d671",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 103,
+    "value": {
+      "id": "68f7af47-6fba-5165-d6b9-c5723c47d671",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issuewild \";\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 104,
+    "value": {
+      "id": "68f7af47-6fba-5165-d6b9-c5723c47d671",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issuewild \"example.com\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 105,
+    "value": {
+      "id": "68f7af47-6fba-5165-d6b9-c5723c47d671",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issuewild \"letsencrypt.org\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 106,
+    "value": {
+      "id": "696cbf84-9f73-c08b-b368-81940af574ef",
+      "name": "decoy.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 107,
+    "value": {
+      "id": "696cbf84-9f73-c08b-b368-81940af574ef",
+      "name": "decoy.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 108,
+    "value": {
+      "id": "696cbf84-9f73-c08b-b368-81940af574ef",
+      "name": "decoy.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 109,
+    "value": {
+      "id": "69fbd493-ab49-f8ba-9c68-3657f0495ac8",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 110,
+    "value": {
+      "id": "69fbd493-ab49-f8ba-9c68-3657f0495ac8",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 111,
+    "value": {
+      "id": "6a1642ed-4672-3fe2-72d1-03561e6499c3",
+      "name": "pager101-rec0040.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 112,
+    "value": {
+      "id": "6b86dd1c-5aca-1333-3b24-7a672737304d",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "11.11.11.11",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 113,
+    "value": {
+      "id": "6b86dd1c-5aca-1333-3b24-7a672737304d",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "12.12.12.12",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 114,
+    "value": {
+      "id": "6b86dd1c-5aca-1333-3b24-7a672737304d",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "13.13.13.13",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 115,
+    "value": {
+      "id": "6b86dd1c-5aca-1333-3b24-7a672737304d",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "14.14.14.14",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 116,
+    "value": {
+      "id": "6b86dd1c-5aca-1333-3b24-7a672737304d",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "9.9.9.9",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 117,
+    "value": {
+      "id": "6bb3f36b-d20d-d730-3652-b17dadeffa97",
+      "name": "dyndns-city1.example.com",
+      "type": "A",
+      "content": "91.42.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 118,
+    "value": {
+      "id": "6bc9b18a-a231-e1fd-2659-99e8edffecb0",
+      "name": "pager101-rec0005.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 119,
+    "value": {
+      "id": "6c5d7ad6-e911-b3f3-b86a-e7bb58864a73",
+      "name": "bar.example.com",
+      "type": "MX",
+      "content": "bar.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 120,
+    "value": {
+      "id": "6c90522d-0bcf-602f-5a47-f8e380e90756",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 121,
+    "value": {
+      "id": "6c90522d-0bcf-602f-5a47-f8e380e90756",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "5.6.7.8",
+      "ttl": 400,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 122,
+    "value": {
+      "id": "6d04bdd8-834a-8b4f-d7e9-e0005db1cac3",
+      "name": "foo.example.com",
+      "type": "TXT",
+      "content": "\"simple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 123,
+    "value": {
+      "id": "6d07acef-818c-f1e3-9a66-e10125c0edf8",
+      "name": "pager101-rec0089.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 124,
+    "value": {
+      "id": "6e3abd6c-09d2-a238-bcf5-6981a2668149",
+      "name": "pager101-rec0081.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 125,
+    "value": {
+      "id": "6e6ce95c-5302-9d5e-eefb-eb278a2db140",
+      "name": "pager101-rec0072.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 126,
+    "value": {
+      "id": "707daa4b-219f-bac5-3530-0b391c2dc424",
+      "name": "foosc2.example.com",
+      "type": "TXT",
+      "content": "\"wssemi ; colon\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 127,
+    "value": {
+      "id": "70dc6cbc-6e43-6d78-f852-b346d338c623",
+      "name": "foo510.example.com",
+      "type": "TXT",
+      "content": "\"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\" \"EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 128,
+    "value": {
+      "id": "71aaf967-099e-375f-595b-5a7e9442881a",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 129,
+    "value": {
+      "id": "71aaf967-099e-375f-595b-5a7e9442881a",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 130,
+    "value": {
+      "id": "73989eaf-1875-2019-911f-652e4ad02c29",
+      "name": "pager101-rec0070.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 131,
+    "value": {
+      "id": "73d8c1ac-16b2-7c7f-e2ec-152af4b607e3",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "6 7 foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 132,
+    "value": {
+      "id": "73d8c1ac-16b2-7c7f-e2ec-152af4b607e3",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "6 7 foo.com",
+      "ttl": 300,
+      "prio": 52,
+      "disabled": false
+    }
+  },
+  {
+    "index": 133,
+    "value": {
+      "id": "73d8c1ac-16b2-7c7f-e2ec-152af4b607e3",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "62 7 foo.com",
+      "ttl": 300,
+      "prio": 52,
+      "disabled": false
+    }
+  },
+  {
+    "index": 134,
+    "value": {
+      "id": "73d8c1ac-16b2-7c7f-e2ec-152af4b607e3",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "62 72 foo.com",
+      "ttl": 300,
+      "prio": 52,
+      "disabled": false
+    }
+  },
+  {
+    "index": 135,
+    "value": {
+      "id": "7434a312-1bbd-4215-11f9-4f93befb9aef",
+      "name": "foo.bat.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 136,
+    "value": {
+      "id": "7ca1344f-defb-1798-b57f-abd8aa2eff26",
+      "name": "pager101-rec0041.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 137,
+    "value": {
+      "id": "7e1bd2ff-8c79-75d3-6636-1deb3d1b0e9d",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "0 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 138,
+    "value": {
+      "id": "7e1bd2ff-8c79-75d3-6636-1deb3d1b0e9d",
+      "name": "example.com",
+      "type": "CAA",
+      "content": "128 issue \"letsencrypt.org\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 139,
+    "value": {
+      "id": "7e2fcfad-0270-0558-b4f2-85974389046e",
+      "name": "pager101-rec0045.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 140,
+    "value": {
+      "id": "7e8143dd-9bbb-5de6-71d1-3dd7167d6ca6",
+      "name": "pager101-rec0032.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 141,
+    "value": {
+      "id": "7f832ad4-4fe4-7cfa-7c96-2ba790b35d70",
+      "name": "pager101-rec0028.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 142,
+    "value": {
+      "id": "80631319-1627-b815-2036-2ec4a28771a5",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 143,
+    "value": {
+      "id": "80631319-1627-b815-2036-2ec4a28771a5",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 50,
+      "disabled": false
+    }
+  },
+  {
+    "index": 144,
+    "value": {
+      "id": "809d1188-abce-8176-2807-fca13a89cac0",
+      "name": "pager101-rec0098.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 145,
+    "value": {
+      "id": "80d885a6-5c39-e446-aa64-934dc59bf1a5",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 146,
+    "value": {
+      "id": "80d885a6-5c39-e446-aa64-934dc59bf1a5",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 147,
+    "value": {
+      "id": "80d885a6-5c39-e446-aa64-934dc59bf1a5",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 400,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 148,
+    "value": {
+      "id": "81ae0727-5275-fa24-39c0-c9762f222a31",
+      "name": "mail.example.com",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 149,
+    "value": {
+      "id": "82855683-29ad-372a-dfce-300d9a48785c",
+      "name": "pager101-rec0001.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 150,
+    "value": {
+      "id": "82cbe510-7b3b-4bc8-bf08-a969c5f80daf",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 151,
+    "value": {
+      "id": "8514b587-f3f3-0a26-4946-32f8cf7212e7",
+      "name": "pager101-rec0094.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 152,
+    "value": {
+      "id": "851935b6-9de0-b606-8030-c7f5d88294ea",
+      "name": "testa.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 153,
+    "value": {
+      "id": "851935b6-9de0-b606-8030-c7f5d88294ea",
+      "name": "testa.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 154,
+    "value": {
+      "id": "8558e550-5ef8-69c1-c899-d5e9183f1abc",
+      "name": "pager101-rec0035.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 155,
+    "value": {
+      "id": "880f0ce3-2efe-2a05-ba42-3702cc600f9e",
+      "name": "foo765.example.com",
+      "type": "TXT",
+      "content": "\"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\" \"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 156,
+    "value": {
+      "id": "88e3c91d-3c9f-2ff6-37ca-c79a3a93b38a",
+      "name": "foosq.example.com",
+      "type": "TXT",
+      "content": "\"quo'te\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 157,
+    "value": {
+      "id": "89cbf2a5-67a2-70c0-e65c-f6dde83e9a43",
+      "name": "pager101-rec0077.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 158,
+    "value": {
+      "id": "8a1da436-95b7-135c-4cda-7d88ccc552b2",
+      "name": "pager101-rec0033.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 159,
+    "value": {
+      "id": "8b00e9ea-dde6-f0f8-66b2-bbaec92fdcae",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 160,
+    "value": {
+      "id": "8b926d1a-3489-6200-904e-87c69ee98f92",
+      "name": "testaaaa.example.com",
+      "type": "AAAA",
+      "content": "2607:f8b0:4006:820:0:0:0:2006",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 161,
+    "value": {
+      "id": "8b926d1a-3489-6200-904e-87c69ee98f92",
+      "name": "testaaaa.example.com",
+      "type": "AAAA",
+      "content": "2607:f8b0:4006:820:0:0:0:2013",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 162,
+    "value": {
+      "id": "8bab46bc-5023-807e-d095-1bb3d7ae6c45",
+      "name": "pager101-rec0023.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 163,
+    "value": {
+      "id": "8d509108-0d9c-05b0-c2df-64d8d5666d61",
+      "name": "foo.example.com",
+      "type": "NS",
+      "content": "example.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 165,
+    "value": {
+      "id": "9142565c-3dfa-9e45-af73-17882282d849",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "example.com",
+      "ttl": 300,
+      "prio": 8,
+      "disabled": false
+    }
+  },
+  {
+    "index": 166,
+    "value": {
+      "id": "91e4d900-8149-cefc-2282-245ea04098f5",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "foo.example.com",
+      "ttl": 300,
+      "prio": 10,
+      "disabled": false
+    }
+  },
+  {
+    "index": 167,
+    "value": {
+      "id": "93087c9d-ad9d-dd0c-9916-b9ecfb81b98a",
+      "name": "pager101-rec0069.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 168,
+    "value": {
+      "id": "933af26e-f00f-ce40-a078-6a5b8a9003f2",
+      "name": "pager101-rec0064.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 169,
+    "value": {
+      "id": "95c2b72f-650c-5df0-1b20-9dc493b1b7dc",
+      "name": "pager101-rec0027.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 170,
+    "value": {
+      "id": "978c800f-72ce-36b7-c236-6587c4e5958f",
+      "name": "foosc1.example.com",
+      "type": "TXT",
+      "content": "\"semi;colon\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 171,
+    "value": {
+      "id": "9a01e22e-d13a-d620-5919-79cc4726e1ce",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 172,
+    "value": {
+      "id": "9adfd3fe-7005-2556-d8b6-f7f8ae8c6476",
+      "name": "example.com",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 173,
+    "value": {
+      "id": "9bd0f7a8-c559-9ae1-0d52-8b32d7a2fbc5",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "60 70 foo2.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 174,
+    "value": {
+      "id": "9da8693a-c58c-8303-9a88-628fcec00141",
+      "name": "*.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 175,
+    "value": {
+      "id": "9e5b18bf-e0b3-8a8a-3c40-dace626e2388",
+      "name": "pager101-rec0034.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 176,
+    "value": {
+      "id": "9ebd4674-907c-22d3-90ad-0597e2d9b0dc",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 177,
+    "value": {
+      "id": "9ecdce19-3536-e7b2-bdc8-fe515b89fa87",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "bar.example.com",
+      "ttl": 300,
+      "prio": 20,
+      "disabled": false
+    }
+  },
+  {
+    "index": 178,
+    "value": {
+      "id": "9f77e877-0841-ecb4-efb2-cbde100e6c9f",
+      "name": "pager101-rec0087.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 180,
+    "value": {
+      "id": "a2c12073-d674-8cb4-bc8f-c7b626ee1e0c",
+      "name": "foo.bat.example.com",
+      "type": "TXT",
+      "content": "\"simple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 181,
+    "value": {
+      "id": "a48126d9-d291-b012-8d44-cc2d4e493583",
+      "name": "pager101-rec0050.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 182,
+    "value": {
+      "id": "a4829bc9-7dc3-8b66-0f57-2207cf23fa42",
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "content": "redact1.acm-validations.aws",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 183,
+    "value": {
+      "id": "a54e16ef-634d-e297-98a7-5b405fcb6738",
+      "name": "zzz.example.com",
+      "type": "A",
+      "content": "4.4.4.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 184,
+    "value": {
+      "id": "a60587c3-13b3-87e7-a09e-58931912b344",
+      "name": "nmx.example.com",
+      "type": "MX",
+      "content": "nmx.example.com",
+      "ttl": 300,
+      "prio": 3,
+      "disabled": false
+    }
+  },
+  {
+    "index": 185,
+    "value": {
+      "id": "a613ecf2-1ba8-6a25-73cf-53bdb960d2a0",
+      "name": "pager101-rec0093.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 186,
+    "value": {
+      "id": "a68f3af9-9449-4b4e-6bd4-caaf77a413ed",
+      "name": "pager101-rec0022.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 187,
+    "value": {
+      "id": "a88d0bd6-d89d-dd52-5043-9b9f8d66a651",
+      "name": "pager101-rec0076.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 189,
+    "value": {
+      "id": "aabefaf7-515e-0185-4580-577c3bfa6918",
+      "name": "foo766.example.com",
+      "type": "TXT",
+      "content": "\"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ\" \"J\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 190,
+    "value": {
+      "id": "ab97850c-b135-6695-fc2d-e6f7d519f137",
+      "name": "pager101-rec0030.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 191,
+    "value": {
+      "id": "ad13b041-c073-177f-29cc-f0e37954404e",
+      "name": "bar.example.com",
+      "type": "A",
+      "content": "5.4.5.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 192,
+    "value": {
+      "id": "adefad54-0a64-f9ee-0198-fe00ed5688af",
+      "name": "bar.example.com",
+      "type": "A",
+      "content": "5.4.5.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 193,
+    "value": {
+      "id": "adf2bccc-19e1-685f-12e4-50dd861c5500",
+      "name": "pager101-rec0065.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 194,
+    "value": {
+      "id": "af48279a-a420-00c5-83c6-6b93f1a6071f",
+      "name": "pager101-rec0031.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 195,
+    "value": {
+      "id": "af4f9eab-eec0-6a6f-f0e8-4ea3d2273488",
+      "name": "pager101-rec0059.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 196,
+    "value": {
+      "id": "b2f38a87-bbbe-a2aa-668f-e0cb3cbd2abb",
+      "name": "pager101-rec0078.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 197,
+    "value": {
+      "id": "b5622c44-e77b-56eb-c830-6a6f182020cd",
+      "name": "foo256.example.com",
+      "type": "TXT",
+      "content": "\"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\" \"C\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 198,
+    "value": {
+      "id": "b78e37bb-2604-04bb-f9ff-7e971bc5fb0c",
+      "name": "pager101-rec0086.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 199,
+    "value": {
+      "id": "b8eda854-c301-3203-d155-279c0139f676",
+      "name": "pager101-rec0061.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 200,
+    "value": {
+      "id": "b9fd45dc-c2b8-7836-fe8d-c7b837ebc24b",
+      "name": "pager101-rec0048.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 201,
+    "value": {
+      "id": "ba604f8a-e23b-994f-97a0-ed983c33f234",
+      "name": "pager101-rec0044.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 202,
+    "value": {
+      "id": "bb7acb2b-1d0d-6561-61a0-af1808c93689",
+      "name": "pager101-rec0043.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 203,
+    "value": {
+      "id": "bcf19a22-d77d-935f-3be3-1b94e99fa6ef",
+      "name": "example.com",
+      "type": "TXT",
+      "content": "\"simple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 204,
+    "value": {
+      "id": "bf2914be-f798-10b0-87a3-6fbafd29269b",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "2.2.2.2",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 205,
+    "value": {
+      "id": "bfefb324-2039-63fa-7b3d-eed36d46e445",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "65 75 foo3.com",
+      "ttl": 300,
+      "prio": 15,
+      "disabled": false
+    }
+  },
+  {
+    "index": 206,
+    "value": {
+      "id": "bfefb324-2039-63fa-7b3d-eed36d46e445",
+      "name": "_sip._tcp.example.com",
+      "type": "SRV",
+      "content": "65 75 foo4.com",
+      "ttl": 300,
+      "prio": 15,
+      "disabled": false
+    }
+  },
+  {
+    "index": 207,
+    "value": {
+      "id": "c00a9b21-7e44-562d-1341-b9862058ab4d",
+      "name": "pager101-rec0054.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 208,
+    "value": {
+      "id": "c01f2c22-c9df-3216-115b-efdea280ef9b",
+      "name": "final.example.com",
+      "type": "TXT",
+      "content": "\"TestDNSProviders was successful!\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 209,
+    "value": {
+      "id": "c06f99f0-9ab7-7d02-7dbf-df8b9bc2620a",
+      "name": "pager101-rec0067.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 210,
+    "value": {
+      "id": "c10bc0b1-241a-33f1-e02b-d7c926d92518",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 211,
+    "value": {
+      "id": "c183f459-913d-d0e0-7a1e-dbead4d8ac4d",
+      "name": "pager101-rec0020.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 212,
+    "value": {
+      "id": "c1dbf722-742f-c372-956b-78bb520f48b7",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "3.4.5.6",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 213,
+    "value": {
+      "id": "c2410521-89fd-0001-67a7-e9d3f89912b2",
+      "name": "pager101-rec0047.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 214,
+    "value": {
+      "id": "c320c63e-7705-de9f-2239-306ebfd6e9b7",
+      "name": "pager101-rec0038.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 215,
+    "value": {
+      "id": "c3b6209a-e5e5-c56f-2e5b-2f75d70df1cc",
+      "name": "example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 216,
+    "value": {
+      "id": "c5647a7d-86e9-90c5-3e81-372b9ed5a59a",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "bar.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 217,
+    "value": {
+      "id": "c5647a7d-86e9-90c5-3e81-372b9ed5a59a",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 218,
+    "value": {
+      "id": "c7f63540-8eef-6593-1a86-27c45c6841dd",
+      "name": "pager101-rec0062.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 219,
+    "value": {
+      "id": "c96cfcd2-0a1c-3481-ff6e-6055568c9475",
+      "name": "dyndns-city2.example.com",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff:0:0:0:fe71:ce78",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 220,
+    "value": {
+      "id": "caccdb7e-a697-2b34-6603-6948557fb0a8",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 221,
+    "value": {
+      "id": "cd89b3d8-1f78-3965-e6ff-2a65fbb5186a",
+      "name": "dyndns-city1.example.com",
+      "type": "AAAA",
+      "content": "2003:dd:d7ff:0:0:0:fe71:ce77",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 223,
+    "value": {
+      "id": "ce60f560-8bf3-f61b-caff-cf4e33e0f9dd",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 224,
+    "value": {
+      "id": "ceb91b89-ff8e-7589-c652-7cb2be3897bf",
+      "name": "pager101-rec0084.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 225,
+    "value": {
+      "id": "cf4cdff1-898a-2bcb-4b72-0e72d1b831bb",
+      "name": "pager101-rec0029.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 226,
+    "value": {
+      "id": "cff3f01f-716c-d1d0-fd47-b4dd097abc04",
+      "name": "pager101-rec0074.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 227,
+    "value": {
+      "id": "d25f7625-a675-c2d7-aff5-aee9bdd41b03",
+      "name": "pager101-rec0000.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 229,
+    "value": {
+      "id": "d5d0decd-0e0e-c696-c791-ec20b4dee0ad",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 231,
+    "value": {
+      "id": "d6617cd1-f802-a339-73d8-5e0313204275",
+      "name": "pager101-rec0025.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 232,
+    "value": {
+      "id": "d6c3927b-844d-8acf-f5ad-e5475fd8d506",
+      "name": "pager101-rec0006.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 233,
+    "value": {
+      "id": "d985b6b9-c99e-18ec-b6fb-181792f9b56f",
+      "name": "pager101-rec0092.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 234,
+    "value": {
+      "id": "db48357c-e0f5-587d-eed8-0303887f3e89",
+      "name": "xn--o-0gab.example.com",
+      "type": "CNAME",
+      "content": "xn--ndaaa.xn--vhquv",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 235,
+    "value": {
+      "id": "dd4789ac-eb28-97d8-0334-d134a36ec963",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "alt1.aspmx.l.google.com",
+      "ttl": 300,
+      "prio": 20,
+      "disabled": false
+    }
+  },
+  {
+    "index": 236,
+    "value": {
+      "id": "dd6accdf-3bf1-d129-4b20-db717bb820ca",
+      "name": "pager101-rec0017.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 237,
+    "value": {
+      "id": "ddef6724-4a00-748f-8499-6355281132b9",
+      "name": "xyz.example.com",
+      "type": "NS",
+      "content": "ns2.foo.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 238,
+    "value": {
+      "id": "deb4fcc5-5393-8467-132e-26bed95cf9f3",
+      "name": "pager101-rec0056.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 239,
+    "value": {
+      "id": "df9ba335-e859-f005-4c33-a7e6916efb90",
+      "name": "bar.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 240,
+    "value": {
+      "id": "dff9ac9d-cd70-5947-7829-64d6f91c4aaf",
+      "name": "foo.example.com",
+      "type": "TXT",
+      "content": "\"simple\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 241,
+    "value": {
+      "id": "e0656150-c8f5-e58f-84f4-4b8ffabc3273",
+      "name": "pager101-rec0007.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 242,
+    "value": {
+      "id": "e231b8e8-5578-3faf-a8af-c971321678bc",
+      "name": "example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 1000,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 243,
+    "value": {
+      "id": "e231b8e8-5578-3faf-a8af-c971321678bc",
+      "name": "example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 500,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 244,
+    "value": {
+      "id": "e231b8e8-5578-3faf-a8af-c971321678bc",
+      "name": "example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 666,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 245,
+    "value": {
+      "id": "e237b240-f62d-e2df-af80-c69240fb9a11",
+      "name": "testignore.example.com",
+      "type": "A",
+      "content": "8.8.8.8",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 246,
+    "value": {
+      "id": "e3bff1c4-6cff-d5c4-91ee-a25a11f3302c",
+      "name": "foo255.example.com",
+      "type": "TXT",
+      "content": "\"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 247,
+    "value": {
+      "id": "e66e046e-b69d-917a-26e8-cb26dd745461",
+      "name": "pager101-rec0013.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 248,
+    "value": {
+      "id": "e6ed5398-7dca-c508-7d55-53fef5636874",
+      "name": "pager101-rec0026.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 249,
+    "value": {
+      "id": "e7270473-a94b-995b-cfd1-026a2fcbe656",
+      "name": "foo764.example.com",
+      "type": "TXT",
+      "content": "\"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\" \"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 251,
+    "value": {
+      "id": "e83b0f07-643c-2927-94e1-45105a2cadfa",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 252,
+    "value": {
+      "id": "e8aad643-55f2-6dc9-7baa-42852cf20b0a",
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "content": "google2.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 253,
+    "value": {
+      "id": "eb251668-12c5-a4dc-b7a2-35ab93ecbb7e",
+      "name": "pager101-rec0060.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 254,
+    "value": {
+      "id": "ec719143-5cae-f0cd-f321-d533b737b1c8",
+      "name": "foo.example.com",
+      "type": "MX",
+      "content": "aspmx.l.google.com",
+      "ttl": 300,
+      "prio": 10,
+      "disabled": false
+    }
+  },
+  {
+    "index": 255,
+    "value": {
+      "id": "ecc0f4be-ea89-7dce-b46a-307459ef093f",
+      "name": "mail.bat.example.com",
+      "type": "CNAME",
+      "content": "ghs.googlehosted.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 256,
+    "value": {
+      "id": "ed580cdd-b149-50fc-8a97-34d73fba0441",
+      "name": "foows1.example.com",
+      "type": "TXT",
+      "content": "\"trailingws \"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 257,
+    "value": {
+      "id": "ef78137b-4313-c238-3ea8-bcc402281acb",
+      "name": "pager101-rec0024.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 258,
+    "value": {
+      "id": "efb042f9-fbd8-6a9a-8dd5-9b1bb92ac152",
+      "name": "foo511.example.com",
+      "type": "TXT",
+      "content": "\"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\" \"F\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 259,
+    "value": {
+      "id": "efcf72ce-ff0e-1c40-4c5f-ec7daec2b354",
+      "name": "pager101-rec0049.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 260,
+    "value": {
+      "id": "efefc48d-3275-1d7f-f7ab-0df98b4f4552",
+      "name": "foo.bat.example.com",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 261,
+    "value": {
+      "id": "f10babe2-224b-d8ef-896a-4b5d48d1a81f",
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "content": "www.google.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 262,
+    "value": {
+      "id": "f10babe2-224b-d8ef-896a-4b5d48d1a81f",
+      "name": "testcname.example.com",
+      "type": "CNAME",
+      "content": "www.yahoo.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 263,
+    "value": {
+      "id": "f2111c57-3426-2d07-baae-93da62bca87c",
+      "name": "pager101-rec0079.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 264,
+    "value": {
+      "id": "f293b5d0-aa26-a8c5-eac1-3731127b40dd",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "foo.com",
+      "ttl": 300,
+      "prio": 5,
+      "disabled": false
+    }
+  },
+  {
+    "index": 265,
+    "value": {
+      "id": "f30f0d89-3bd9-d405-fca8-3e8731bd574a",
+      "name": "pager101-rec0003.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 266,
+    "value": {
+      "id": "f3451c80-d211-50f2-5154-5676b0444994",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.2.3.8",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 267,
+    "value": {
+      "id": "f68bd05c-265c-d4f4-514c-9e631512ec10",
+      "name": "pager101-rec0051.example.com",
+      "type": "A",
+      "content": "1.2.3.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 268,
+    "value": {
+      "id": "f72dedad-3f55-12e3-be00-b37da62a4cbe",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "4.5.6.7",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 269,
+    "value": {
+      "id": "f74dfea7-19aa-ae7c-b876-f6b6f11320b7",
+      "name": "testa.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 333,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 270,
+    "value": {
+      "id": "f74dfea7-19aa-ae7c-b876-f6b6f11320b7",
+      "name": "testa.example.com",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": 999,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 271,
+    "value": {
+      "id": "f942a884-ae6f-5ef4-4690-38c15d6e3cac",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "3.3.3.3",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 272,
+    "value": {
+      "id": "f97c9184-6552-cecb-5312-162730b9f048",
+      "name": "testmx.example.com",
+      "type": "MX",
+      "content": "bar.com",
+      "ttl": 300,
+      "prio": 50,
+      "disabled": false
+    }
+  },
+  {
+    "index": 273,
+    "value": {
+      "id": "fb789ec7-e5d6-fcdd-9d23-c412c249a920",
+      "name": "foo.example.com",
+      "type": "A",
+      "content": "2.3.4.5",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 274,
+    "value": {
+      "id": "fc771e91-736f-6597-4c7e-d38be0520eac",
+      "name": "foo.example.com",
+      "type": "TXT",
+      "content": "\"v=spf1 ip4:99.99.99.99 -all\"",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 275,
+    "value": {
+      "id": "fcb28389-9799-228b-715e-5eb6ad955d29",
+      "name": "foo.example.com",
+      "type": "CNAME",
+      "content": "example.com",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 276,
+    "value": {
+      "id": "fd6f1864-5bf6-a33a-3083-803fea03962a",
+      "name": "bar.bat.example.com",
+      "type": "A",
+      "content": "5.4.5.4",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  },
+  {
+    "index": 277,
+    "value": {
+      "id": "fe8deab8-7997-b060-99d7-efb077c9f342",
+      "name": "www.example.com",
+      "type": "A",
+      "content": "1.2.3.9",
+      "ttl": 300,
+      "prio": 0,
+      "disabled": false
+    }
+  }
+]

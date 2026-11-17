@@ -69,8 +69,11 @@ func (rc *RecordConfig) validateRDATA() {
 /*
 
 TODO():
+Problem: Validation code for some rtypes are scattered in pkg/normalize. It would be better
+if each RDATA could validate itself, thus packaing everything related to an RDATA in one place.
 
-Add this interface. Update pkg/normalize/validate.go to call the interface (if it exists for the RDATA).  The type-specific code currently
+Proposed solution:
+Add this interface. Update pkg/normalize/ to call the interface (if it exists for the RDATA).  The type-specific code currently
 in pkg/normalize/validate.go files such as t_ds.go, t_sshfp.go, t_tlsa.go, t_txt.go (all in `models/`).
 The functions rejectifTargetEqualsLabel and rejectifInvalidR53Weight providers/route53/auditrecords.go will move to models/t_r53alias.go
 
