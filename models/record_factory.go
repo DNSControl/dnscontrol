@@ -230,9 +230,8 @@ func anyToTypeNum(a any) (uint16, error) {
 		typeNum, err := dnsutilv2.StringToType(v)
 		if err == nil {
 			return typeNum, nil
-		} else {
-			return 0, fmt.Errorf("anyToTypeNum(%q) failed: %w", v, err)
 		}
+		return 0, fmt.Errorf("anyToTypeNum(%q) failed: %w", v, err)
 	}
 	return 0, fmt.Errorf("anyToTypeNum called with unknown type: %T", a)
 }

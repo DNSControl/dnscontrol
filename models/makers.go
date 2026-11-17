@@ -15,7 +15,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/mustbe"
 	"github.com/DNSControl/dnscontrol/v5/pkg/nrc"
 	"github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
-	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	privatetypesrdata "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
 

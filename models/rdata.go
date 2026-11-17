@@ -11,6 +11,7 @@ import (
 
 	dnsv2 "codeberg.org/miekg/dns"
 	dnsrdatav2 "codeberg.org/miekg/dns/rdata"
+	// Imported for their side effect of registering the private types.
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes"
 	_ "github.com/DNSControl/dnscontrol/v5/pkg/privatetypes/rdata"
 )
