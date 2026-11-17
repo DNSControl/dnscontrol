@@ -28,13 +28,20 @@ func (rd LUA) String() string {
 	return strings.Join(parts, " ")
 }
 
-func MakeLUA(origin string, _ map[string]string, _ nrc.Flags, args ...any) (dnsv2.RDATA, error) {
+func MakeLUA(origin string, _ map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error) {
 	mustbe.ValidArgs(args)
 	if len(args) != 2 {
 		return nil, fmt.Errorf("LUA expects 2 arguments, got %d: %+v", len(args), args)
 	}
+	if isEnabled.TargetIsFqdnNoDot {
+		origin = "."
+	}
+	targetHost0, err := mustbe.RRType(origin, isEnabled, args[0])
+	if err != nil {
+		return nil, err
+	}
 	return LUA{
-		LuaType:    mustbe.ToUpperRawString(args[0]),
+		LuaType:    targetHost0,
 		LuaPayload: mustbe.RawString(args[1]),
 	}, nil
 }
