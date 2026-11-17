@@ -21,6 +21,7 @@ type Client struct {
 	client      *cnrcl.APIClient
 }
 
+// SetConversionObserver sets the conversion observer.
 func (client *Client) SetConversionObserver(observer providers.ConversionObserver) {
 	client.observer = observer
 }

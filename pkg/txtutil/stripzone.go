@@ -6,6 +6,7 @@ import (
 	dnsutilv2 "codeberg.org/miekg/dns/dnsutil"
 )
 
+// StripZone returns label relative to zone.
 func StripZone(label, zone string) string {
 	// Special cases.
 	if label == "" || label == "@" {
@@ -32,6 +33,7 @@ func StripZone(label, zone string) string {
 	return label
 }
 
+// Extend returns host as an FQDN within zone.
 func Extend(host, zone string) string {
 	if zone == "" {
 		// TODO(tlim): Issue a warning? This is a "flag" that means

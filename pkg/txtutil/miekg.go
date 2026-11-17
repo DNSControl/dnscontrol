@@ -50,6 +50,8 @@ func ZoneifyString(s string) string {
 	}
 	return ZoneifyStringQuoted(s)
 }
+
+// ZoneifyStringQuoted returns s as a quoted zonefile string.
 func ZoneifyStringQuoted(s string) string {
 	rdtxt := dnsrdatav2.TXT{Txt: []string{s}}
 	return rdtxt.String()

@@ -8,6 +8,7 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/soautil"
 )
 
+// AddSoaIfMissing adds a default SOA record if dc has none.
 func AddSoaIfMissing(dc *models.DomainConfig, defaultSoaValues SoaDefaults) {
 	// Exit if SOA already exists.
 	for _, rec := range dc.Records {

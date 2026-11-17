@@ -19,8 +19,10 @@ import (
 //	demoRC2, err := TypeToMakeRDATA[dnsv2.TypeCNAME](mustbe.Host("www", "example.com"))
 //	demoRC3, err := TypeToMakeRDATA[privatetypes.TypeCFWORKERROUTE](mustbe.RawString("example.com/*"), mustbe.RawString("example.com/worker"))
 
+// MakerRn is a function that creates RDATA from arguments.
 type MakerRn func(origin string, metadata map[string]string, isEnabled nrc.Flags, args ...any) (dnsv2.RDATA, error)
 
+// TypeToMakeRDATA maps a type number to its MakerRn.
 var TypeToMakeRDATA = make(map[uint16]MakerRn)
 
 // pseudoTypes records classification explicitly, independently of names and

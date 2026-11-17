@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// RawString converts a to a string as-is.
 func RawString(a any) string {
 	switch v := a.(type) {
 	case string:

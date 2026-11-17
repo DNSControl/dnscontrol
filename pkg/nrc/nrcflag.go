@@ -1,5 +1,6 @@
 package nrc
 
+// Flags controls how strictly record data is validated.
 type Flags struct {
 	// EnforceOneDotPolicy instructs mustbe.Target* functions to return an error
 	// if it looks like the user forgot the trailing dot. This is enforced by

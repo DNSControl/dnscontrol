@@ -113,6 +113,7 @@ func (dc *DomainConfig) ToShort(name string) string {
 	return nameutil.ToShort(name, dc.Name)
 }
 
+// PopulateNamesFromRaw sets the domain's name fields from rawname.
 func (dc *DomainConfig) PopulateNamesFromRaw(rawname string) {
 	dcn := domaintags.MakeDomainNameVarieties(rawname)
 	dc.Name = dcn.NameASCII
