@@ -25,10 +25,6 @@ Useful refactoring projects. Please feel free to pick up any of these.
   as `!ConcurBroken`, and audit existing `Cannot`/`Unimplemented` notes to
   distinguish known limitations from untested providers. Implement in a separate PR.
 
-* PTR() "magic" should be reworked as a builder called PTR(). It will be much more
-cleaner and more testable. Plus it will consolidate the code into one place instead
-of being some in LabelFromDnsconfigjs() and other places.
-
 * PopulateNamesFromRaw() and MakeDomainNameVarieties() seem like a silly design.  Maybe move them to pkg/nameutil, or maybe models (since that's where makeLabelNameUnicode() is)
 
 * All the LOC() builders should be in Go, not helpers.js.
@@ -44,12 +40,9 @@ of being some in LabelFromDnsconfigjs() and other places.
 * The preview/push code is incredibly complex and difficult to understand, therefore difficult
 to debug. It could probably be reworked to be more simple and easier to debug.
 
-* Providers, not Registrars + DNS Service Providers.  It should be possible to make a PROVIDER() function that returns
-something that is both a Reg and a DSP.
-
 * External providers: It should be possible to add a provider without updating the source code to "dnscontrol". Teraform does it, why can't we?
 
-* mustbe.TargetHost() accepts "." as a special flag. This can probably be replaced by nrc.Flags{}
+* mustbe.TargetHost() accepts "" or "." as a special flag. This can probably be replaced by nrc.Flags{}
 
 * models.SetLabel() should be removed (it's only used in a few places) or enhanced to also create the .NameUnicode/.NameFQDNUnicode fields. Then de-duplicate the code that does this for NewRecordConfig().
 
@@ -69,10 +62,16 @@ a single or list of nameservers and a TTL.
     * If the zone's parent is also in this config, inject NS records into it?  Warn if dups?
 Or maybe a better design is:
   * REGISTRAR() should also take delegation info.
-        REGISTRAR("foo", DELEGATE( "ns2", "ns2": { ip: "1.2.3.4", "ttl": "5m"} ))
+        REGISTRAR("foo", DELEGATE( "ns2", "ns2": { a: "1.2.3.4", aaaa: "1234::1", "ttl": "5m"} ))
 
 ## Actual new features:
 
 * Handle "unknown types". dnsv2 has a way to managing unknown types. Investigate it and replace the half-written version (see rc.UnknownTypeName)
 
 * pkg/diff2/analyze.go: Smarter diffs. Diffs could just show which fields changed. For example, if just the preference of an MX record changes, show "old -> new" just for the priority.
+
+
+Projects for Dec 2026:
+* Unknown types
+* Fix all the issues listed in Github!
+* Smarter diffs
