@@ -13,13 +13,6 @@ import (
 	"github.com/DNSControl/dnscontrol/v5/pkg/providers"
 )
 
-// supportedRecordTypes is the set of DNS record types supported by NetBird.
-var supportedRecordTypes = map[string]bool{
-	"A":     true,
-	"AAAA":  true,
-	"CNAME": true,
-}
-
 /*
 
 NetBird API DNS provider:
@@ -90,14 +83,8 @@ func init() {
 }
 
 // AuditRecords returns a list of errors for records that aren't supported.
-func (*netbirdProvider) AuditRecords(records models.Records) []error {
-	var errs []error
-	for _, rc := range records {
-		if !supportedRecordTypes[rc.Type] {
-			errs = append(errs, fmt.Errorf("NETBIRD does not support %s records", rc.Type))
-		}
-	}
-	return errs
+func (*netbirdProvider) AuditRecords(_ models.Records) []error {
+	return nil
 }
 
 // parseEnabled parses the "netbird_enabled" metadata field.
