@@ -172,7 +172,7 @@ func TestFeatureMatrixStructure(t *testing.T) {
 	// them, and under BIND, whose "*" claims the entire catalog (bind.md
 	// documents that it writes every type verbatim).
 	azureAlias := recordTypeFeature("AZURE_ALIAS")
-	for _, provider := range []string{"AZURE_DNS", "AZURE_PRIVATE_DNS", "BIND"} {
+	for _, provider := range []string{"AZURE_DNS", "BIND"} {
 		if note := matrix.Providers[provider][azureAlias]; note == nil || !note.HasFeature {
 			t.Fatalf("%s must claim AZURE_ALIAS support", provider)
 		}
@@ -408,8 +408,8 @@ func TestGenerateFeatureMatrixRendersRecordTypesList(t *testing.T) {
 				t.Error("BIND's \"*\" claims every type; its bullet must list AZURE_ALIAS")
 			}
 		case strings.HasPrefix(line, "- [AZURE_PRIVATE_DNS](azureprivatedns.md):"):
-			if !strings.Contains(line, azureAlias) {
-				t.Error("AZURE_PRIVATE_DNS bullet must list AZURE_ALIAS")
+			if strings.Contains(line, azureAlias) {
+				t.Error("AZURE_PRIVATE_DNS bullet must not list AZURE_ALIAS")
 			}
 		}
 	}

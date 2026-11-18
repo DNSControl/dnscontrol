@@ -96,7 +96,7 @@ func init() {
 		Maintainer:   "@matthewmgamble",
 		SupportedTypes: []string{
 			"Basic8",
-			"AZURE_ALIAS",
+			"AZURE_ALIAS:Cannot:Azure Private DNS does not support alias records",
 			"PTR",
 			"CAA:Cannot:Azure Private DNS does not support CAA records",
 			"NS:Cannot",
