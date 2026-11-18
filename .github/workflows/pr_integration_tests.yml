@@ -146,7 +146,11 @@ jobs:
       - warm-gomod-cache
     env:
       TEST_RESULTS: "/tmp/test-results"
-      GOTESTSUM_FORMAT: testname
+      # standard-verbose streams each line of test output as it happens.
+      # (The "testname" format only prints a line when a test completes,
+      # and since nearly everything runs as subtests of TestDNSProviders,
+      # nothing appeared in the GitHub UI until the very end.)
+      GOTESTSUM_FORMAT: standard-verbose
 
       # PROVIDER DOMAIN LIST
       # Providers are only tested if their _DOMAIN is set.
