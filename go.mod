@@ -193,4 +193,4 @@ require (
 
 tool golang.org/x/tools/cmd/stringer
 
-replace codeberg.org/miekg/dns => codeberg.org/TomOnTime/dns v0.6.116-0.20261106021038-99f642b89f88
+replace codeberg.org/miekg/dns => codeberg.org/TomOnTime/dns v0.6.116-0.20261118130851-8ae596c34f2a
