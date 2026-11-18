@@ -171,7 +171,13 @@ release:
   header: |
     Greetings DNS fans!
 
-    Thanks to all contributors involved in this release! This is a community project and we couldn't do it without all of your contributions!
+    ## Release highlights
+
+    See list below for details.
+
+    ## Thanks!
+
+    Thanks to all contributors involved in this release! This is a community project done entirely by volunteers. We we couldn't do it without all of your contributions!
 
     Sincerely,
     --Tom Limoncelli
@@ -180,10 +186,6 @@ release:
 
     Everyone is invited to the __Monthly DNSControl Community Video Conference Call__ on the 2nd Tuesday of each month. Join whether you are a new user with questions or an experienced developer that wants to discuss DNSControl internals... or anything in between! Meeting details on
     [GitHub Discussions](https://github.com/DNSControl/dnscontrol/discussions?discussions_q=label%3AAnnouncement%3Afuture_vc).
-
-    ## Experimental: Try the new D() syntax!
-
-    Select credential entries directly with REGISTRAR() and SERVICE() in dnsconfig.js. The legacy syntax remains supported; this revision replaces the experimental PROVIDER()/DNS_SERVICE() syntax from v5.3.0. See the examples in the [conversion guide](https://docs.dnscontrol.org/getting-started/converting-dnsconfig). Please test it and share feedback!
 
   footer: |
     ## Deprecation warnings
