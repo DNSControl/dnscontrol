@@ -185,6 +185,24 @@ func GetDNSConfig(args GetDNSConfigArgs) (*models.DNSConfig, error) {
 		if err = dec.Decode(cfg); err != nil {
 			return nil, err
 		}
+
+		// RecordConfig.NameFQDN is not serialized (json:"-"), so records
+		// decoded from an IR file have no FQDN and GetLabelFQDN() returns
+		// "".  Reconstruct the label now that the domain (origin) is known,
+		// otherwise FQDN-based validation (checkDuplicates and friends)
+		// reports bogus errors for valid zones. See issue #4854.
+		for _, d := range cfg.Domains {
+			for _, r := range d.Records {
+				if r != nil {
+					r.SetLabel(r.GetLabel(), d.Name)
+				}
+			}
+			for _, r := range d.EnsureAbsent {
+				if r != nil {
+					r.SetLabel(r.GetLabel(), d.Name)
+				}
+			}
+		}
 	}
 
 	return preloadProviders(cfg)
