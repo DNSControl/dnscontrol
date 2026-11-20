@@ -34,6 +34,10 @@ func (*nameoceanProvider) AuditRecords(records models.Records) []error {
 
 	a.Add("TXT", rejectif.TxtIsEmpty) // Last verified 2026-11-20
 
+	a.Add("TXT", rejectif.TxtStartsOrEndsWithSpaces) // Last verified 2026-11-20: the API trims them
+
+	a.Add("NS", nsTargetIsZoneApex) // Last verified 2026-11-20
+
 	a.Add("TXT", rejectif.TxtLongerThan(maxTXTLength)) // Last verified 2026-11-20
 
 	errs := a.Audit(records)
@@ -83,4 +87,20 @@ func srvOnePerLabel(records models.Records) []error {
 		seen[label] = true
 	}
 	return errs
+}
+
+// nsTargetIsZoneApex rejects a delegation whose nameserver is the zone itself
+// (foo.example.com NS example.com.), which NameOcean refuses.
+func nsTargetIsZoneApex(rc *models.RecordConfig) error {
+	label := rc.GetLabel()
+	fqdn := strings.TrimSuffix(rc.GetLabelFQDN(), ".")
+	if label == "@" || label == "" {
+		return nil
+	}
+	zone := strings.TrimPrefix(fqdn, label+".")
+	target := strings.TrimSuffix(strings.ToLower(rc.GetTargetField()), ".")
+	if target == strings.ToLower(zone) {
+		return errors.New("NS target is the zone apex")
+	}
+	return nil
 }

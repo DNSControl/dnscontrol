@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	dnsv2 "codeberg.org/miekg/dns"
 	"github.com/DNSControl/dnscontrol/v5/models"
@@ -278,5 +279,43 @@ func TestDefinition(t *testing.T) {
 	}
 	if !def.CanGetZones || !def.DocCreateDomains {
 		t.Errorf("CanGetZones = %v, DocCreateDomains = %v; want both true", def.CanGetZones, def.DocCreateDomains)
+	}
+}
+
+func TestRateLimitedRequestIsRetried(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		body, _ := io.ReadAll(r.Body)
+		if !strings.Contains(string(body), `"zone":"example.com"`) {
+			t.Errorf("attempt %d sent body %q", calls, body)
+		}
+		if calls == 1 {
+			w.Header().Set("Retry-After", "1")
+			w.WriteHeader(http.StatusTooManyRequests)
+			io.WriteString(w, `{"error":"Request was throttled.","code":"rate_limited"}`)
+			return
+		}
+		io.WriteString(w, `{"zone":"example.com","serial":2,"applied":true}`)
+	}))
+	defer srv.Close()
+
+	p := &nameoceanProvider{}
+	if err := p.Initialize(map[string]string{"token": "t", "apiurl": srv.URL}, nil, nil); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := p.applyZone("example.com", "1", &zoneDocument{Zone: "example.com"}); err != nil {
+		t.Fatalf("applyZone: %v", err)
+	}
+	if calls != 2 {
+		t.Errorf("calls = %d, want 2", calls)
+	}
+}
+
+func TestRetryAfter(t *testing.T) {
+	for in, want := range map[string]time.Duration{"": 5 * time.Second, "3": 3 * time.Second, "999": 65 * time.Second, "x": 5 * time.Second} {
+		if got := retryAfter(in); got != want {
+			t.Errorf("retryAfter(%q) = %s, want %s", in, got, want)
+		}
 	}
 }

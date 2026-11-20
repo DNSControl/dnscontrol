@@ -8,7 +8,11 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
+	"time"
+
+	"github.com/DNSControl/dnscontrol/v5/pkg/printer"
 )
 
 // defaultAPIURL is the NameOcean API v1 base URL.
@@ -71,6 +75,21 @@ type applyResponse struct {
 	} `json:"summary"`
 }
 
+// maxRetries is how often a request is repeated after HTTP 429.
+const maxRetries = 6
+
+// retryAfter turns a Retry-After header (seconds) into a wait, 1s to 65s.
+func retryAfter(value string) time.Duration {
+	secs, err := strconv.Atoi(strings.TrimSpace(value))
+	if err != nil || secs < 1 {
+		secs = 5
+	}
+	if secs > 65 {
+		secs = 65
+	}
+	return time.Duration(secs) * time.Second
+}
+
 func (p *nameoceanProvider) do(method, path string, query url.Values, body any) (*http.Response, []byte, error) {
 	var reader io.Reader
 	if body != nil {
@@ -93,14 +112,33 @@ func (p *nameoceanProvider) do(method, path string, query url.Values, body any) 
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
-	resp, err := p.client.Do(req)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer resp.Body.Close()
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, nil, err
+	var resp *http.Response
+	var data []byte
+	for attempt := 0; ; attempt++ {
+		if attempt > 0 && reader != nil {
+			// the body was consumed by the previous attempt
+			if seeker, ok := reader.(io.Seeker); ok {
+				if _, err := seeker.Seek(0, io.SeekStart); err != nil {
+					return nil, nil, err
+				}
+			}
+		}
+		resp, err = p.client.Do(req)
+		if err != nil {
+			return nil, nil, err
+		}
+		data, err = io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return nil, nil, err
+		}
+		// 120 requests a minute per API key: wait as long as the API says, then try again
+		if resp.StatusCode != http.StatusTooManyRequests || attempt >= maxRetries {
+			break
+		}
+		wait := retryAfter(resp.Header.Get("Retry-After"))
+		printer.Debugf("NAMEOCEAN: rate limited, retrying in %s\n", wait)
+		time.Sleep(wait)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		apiErr := &apiError{Status: resp.StatusCode}
