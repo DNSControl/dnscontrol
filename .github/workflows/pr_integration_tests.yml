@@ -203,6 +203,7 @@ jobs:
       MYTHICBEASTS_DOMAIN: ${{ vars.MYTHICBEASTS_DOMAIN }}
       NAMECHEAP_DOMAIN: ${{ vars.NAMECHEAP_DOMAIN }}
       NAMEDOTCOM_DOMAIN: ${{ vars.NAMEDOTCOM_DOMAIN }}
+      NAMEOCEAN_DOMAIN: ${{ vars.NAMEOCEAN_DOMAIN }}
       NETBIRD_DOMAIN: ${{ vars.NETBIRD_DOMAIN }}
       NETCUP_DOMAIN: ${{ vars.NETCUP_DOMAIN }}
       NETLIFY_DOMAIN: ${{ vars.NETLIFY_DOMAIN }}
@@ -378,6 +379,8 @@ jobs:
       NAMEDOTCOM_KEY: ${{ secrets.NAMEDOTCOM_KEY }}
       NAMEDOTCOM_URL: ${{ secrets.NAMEDOTCOM_URL }}
       NAMEDOTCOM_USER: ${{ secrets.NAMEDOTCOM_USER }}
+      #
+      NAMEOCEAN_API_KEY: ${{ secrets.NAMEOCEAN_API_KEY }}
       #
       NETBIRD_TOKEN: ${{ secrets.NETBIRD_TOKEN }}
       #

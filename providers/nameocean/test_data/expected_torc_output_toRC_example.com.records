@@ -1,0 +1,20 @@
+1	@ 3600 IN A 192.0.2.1
+2	www 300 IN A 192.0.2.2
+3	www 900 IN AAAA 2001:db8::1
+4	alias 1800 IN CNAME www.example.com.
+5	apexalias 3600 IN CNAME example.com.
+6	ext 3600 IN CNAME target.example.net.
+7	@ 86400 IN ALIAS lb.example.net.
+8	@ 3600 IN MX 10 mail.example.com.
+9	@ 3600 IN MX 20 example.com.
+10	@ 3600 IN TXT "v=spf1 include:_spf.example.net -all"
+11	_acme 30 IN TXT "short-lived"
+12	sub 86400 IN NS ns1.example.net.
+13	sub 3600 IN DS 8857 13 2 4B9B6B073EDD97FEB5BC12DC4E1B32D2C6AF7AE23A293936CEB87BB10494EC44
+14	@ 3600 IN CAA 0 issue "letsencrypt.org"
+15	@ 3600 IN CAA 128 iodef "mailto:security@example.com"
+16	_sip._tcp 3600 IN SRV 10 20 5060 sip.example.com.
+17	@ 3600 IN HTTPS 1 . alpn="h2,h3"
+18	_8443._foo 3600 IN SVCB 16 svc.example.net. alpn="h2" port="8443"
+19	alt 3600 IN HTTPS 0 example.com.
+20	* 3600 IN A 192.0.2.3

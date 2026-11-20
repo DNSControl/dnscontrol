@@ -48,6 +48,7 @@ providers/mittwald @twiesing
 providers/mythicbeasts @tomfitzhenry
 providers/namecheap @willpower232
 # providers/namedotcom NEEDS VOLUNTEER
+providers/nameocean @akarca
 providers/netbird @yzqzss
 providers/netcup @kordianbruck
 providers/netlify @SphericalKat

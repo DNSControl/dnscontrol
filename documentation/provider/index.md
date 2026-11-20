@@ -70,6 +70,7 @@ Jump to a section:
 | [MYTHICBEASTS](mythicbeasts.md) | ❌ | ✅ | ❌ |
 | [NAMECHEAP](namecheap.md) | ❌ | ✅ | ✅ |
 | [NAMEDOTCOM](namedotcom.md) | ❌ | ✅ | ✅ |
+| [NAMEOCEAN](nameocean.md) | ❌ | ✅ | ❌ |
 | [NETBIRD](netbird.md) | ❌ | ✅ | ❌ |
 | [NETCUP](netcup.md) | ❌ | ✅ | ❌ |
 | [NETLIFY](netlify.md) | ❌ | ✅ | ❌ |
@@ -154,6 +155,7 @@ Jump to a section:
 | [MYTHICBEASTS](mythicbeasts.md) | ✅ | ✅ | ❌ | ❌ | ❌ |
 | [NAMECHEAP](namecheap.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
 | [NAMEDOTCOM](namedotcom.md) | ✅ | ✅ | ❌ | ✅ | ❌ |
+| [NAMEOCEAN](nameocean.md) | ✅ | ❌ | ✅ | ✅ | ❔ |
 | [NETBIRD](netbird.md) | ✅ | ❌ | ✅ | ✅ | ❌ |
 | [NETCUP](netcup.md) | ✅ | ❌ | ❌ | ❌ | ❌ |
 | [NETLIFY](netlify.md) | ✅ | ❌ | ❌ | ✅ | ❌ |
@@ -283,6 +285,8 @@ NOTE: "Unimplemented" means that the provider's API supports this record type bu
 - [NAMECHEAP](namecheap.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [FRAME](../language-reference/domain-modifiers/FRAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md) [URL](../language-reference/domain-modifiers/URL.md) [URL301](../language-reference/domain-modifiers/URL301.md)
 - [NAMEDOTCOM](namedotcom.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
   - Not supported: [PTR](../language-reference/domain-modifiers/PTR.md) (PTR records are not supported (See Link): https://www.name.com/support/articles/205188508-Reverse-DNS-records)
+- [NAMEOCEAN](nameocean.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [HTTPS](../language-reference/domain-modifiers/HTTPS.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [SVCB](../language-reference/domain-modifiers/SVCB.md) [TXT](../language-reference/domain-modifiers/TXT.md)
+  - Not supported: [PTR](../language-reference/domain-modifiers/PTR.md) (NameOcean keys PTR records by IP address, not by DNS label)
 - [NETBIRD](netbird.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md)
 - [NETCUP](netcup.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TLSA](../language-reference/domain-modifiers/TLSA.md) [TXT](../language-reference/domain-modifiers/TXT.md)
 - [NETLIFY](netlify.md): [A](../language-reference/domain-modifiers/A.md) [AAAA](../language-reference/domain-modifiers/AAAA.md) [ALIAS](../language-reference/domain-modifiers/ALIAS.md) [CAA](../language-reference/domain-modifiers/CAA.md) [CNAME](../language-reference/domain-modifiers/CNAME.md) [MX](../language-reference/domain-modifiers/MX.md) [NS](../language-reference/domain-modifiers/NS.md) [SRV](../language-reference/domain-modifiers/SRV.md) [TXT](../language-reference/domain-modifiers/TXT.md)
@@ -399,6 +403,7 @@ Providers in this category and their maintainers are:
 |[`MIKROTIK`](mikrotik.md)|@hedger|
 |[`MISAKA`](misaka.md)|@ZeroClover|
 |[`NAMECHEAP`](namecheap.md)|@willpower232|
+|[`NAMEOCEAN`](nameocean.md)|@akarca|
 |[`NETCUP`](netcup.md)|@kordianbruck|
 |[`NETLIFY`](netlify.md)|@SphericalKat|
 |[`NETNOD`](netnod.md)|@Netnod @vilhelmprytz|
