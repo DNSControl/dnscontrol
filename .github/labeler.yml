@@ -148,6 +148,9 @@ provider-NAMECHEAP:
 provider-NAMEDOTCOM:
   - changed-files:
       - any-glob-to-any-file: providers/namedotcom/**
+provider-NAMEOCEAN:
+  - changed-files:
+      - any-glob-to-any-file: providers/nameocean/**
 provider-NETBIRD:
   - changed-files:
       - any-glob-to-any-file: providers/netbird/**

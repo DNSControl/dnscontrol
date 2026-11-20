@@ -57,6 +57,7 @@ import (
 	_ "github.com/DNSControl/dnscontrol/v5/providers/mythicbeasts"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/namecheap"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/namedotcom"
+	_ "github.com/DNSControl/dnscontrol/v5/providers/nameocean"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/netbird"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/netcup"
 	_ "github.com/DNSControl/dnscontrol/v5/providers/netlify"
