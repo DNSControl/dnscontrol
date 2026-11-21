@@ -22,7 +22,7 @@ Example:
 | `token` | yes | A NameOcean API key. |
 | `apiurl` | no | The API base URL. Defaults to `https://nameocean.net/api/v1`. |
 
-Create the API key at [nameocean.net/dashboard/api](https://nameocean.net/dashboard/api/). The key needs the `dns:read` and `dns:write` scopes. NameOcean only accepts API requests from accounts that have two-step login turned on; without it, every request fails with HTTP 401 or 403.
+Create the API key at [nameocean.net/dashboard/api](https://nameocean.net/dashboard/api/). The key needs the `dns:read` and `dns:write` scopes. List the domains DNSControl manages under "Only these domains" so the key cannot touch anything else in the account. NameOcean only accepts API requests from accounts that have two-step login turned on; without it, every request fails with HTTP 401 or 403.
 
 ## Metadata
 
@@ -65,7 +65,7 @@ NameOcean also has HTTP redirects (`REDIRECT`), which are a NameOcean feature ra
 
 * The apex NS records are always `ns1.nameocean.net` through `ns4.nameocean.net` and cannot be changed, so dual hosting is not supported. Apex `NS()` records in `dnsconfig.js` are ignored with a warning; NS records for delegated subdomains work.
 * `DS` records are supported for delegated subdomains only. For the zone's own DNSSEC, use the NameOcean dashboard (`AUTODNSSEC_ON` is not implemented yet).
-* TXT values cannot contain double quotes and are limited to 506 characters.
+* TXT values cannot contain double quotes, start or end with a space, or be longer than 506 characters.
 * CAA records accept the `issue`, `issuewild` and `iodef` tags, with flags `0` or `128`.
 * A label can hold only one SRV record.
 * NameOcean manages some records itself (for example the address behind an HTTP redirect and ACME challenge TXT records). They are not part of the zone document and DNSControl does not see or change them.
