@@ -305,8 +305,9 @@ func listFiles(call otto.FunctionCall) otto.Value {
 	if call.Argument(2).IsDefined() && !call.Argument(2).IsNull() {
 		if call.Argument(2).IsString() {
 			fileExtension = call.Argument(2).String() // Which file extension to filter for.
-			if !strings.HasPrefix(fileExtension, ".") {
+			if fileExtension != "*" && !strings.HasPrefix(fileExtension, ".") {
 				// If it doesn't start with a dot, probably user forgot it and we do it instead.
+				// "*" means no filter, so it must be left alone.
 				fileExtension = "." + fileExtension
 			}
 		} else {
@@ -315,7 +316,7 @@ func listFiles(call otto.FunctionCall) otto.Value {
 	}
 
 	// Now we're doing the actual work: Listing files.
-	// Folders are ending with a slash. Can be identified later on from the user with JavaScript.
+	// With no filter ("*"), directories (including dir itself) are listed too.
 	// Additionally, when more smart logic required, user can use regex in JS.
 	files := make([]string, 0)      // init files list
 	dirClean := filepath.Clean(dir) // let's clean it here once, instead of over-and-over again within loop
