@@ -76,3 +76,28 @@ D("example.com", REG, TXT("@", VALUE));
 func jsString(s string) string {
 	return `"` + filepath.ToSlash(s) + `"`
 }
+
+// TestGlobExtensionFilter checks glob()'s third argument, including "*"
+// (no filter).
+func TestGlobExtensionFilter(t *testing.T) {
+	dir := "pkg/js/parse_tests/complexImports/a"
+	tests := []struct{ desc, ext, want string }{
+		{"default is .js", ``, dir + "/a.js," + dir + "/c/c.js"},
+		{"dot is optional", `, true, "js"`, dir + "/a.js," + dir + "/c/c.js"},
+		{"no match", `, true, ".json"`, ""},
+		{"star means no filter", `, true, "*"`, dir + "," + dir + "/a.js," + dir + "/c," + dir + "/c/c.js"},
+		{"star non-recursive", `, false, "*"`, dir + "," + dir + "/a.js"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.desc, func(t *testing.T) {
+			oldCur, oldCfg := currentDirectory, configDirectory
+			currentDirectory, configDirectory = ".", ""
+			t.Cleanup(func() { currentDirectory, configDirectory = oldCur, oldCfg })
+
+			script := `D("x.com", "none", TXT("@", "" + glob("` + dir + `"` + tt.ext + `).join(",")));`
+			conf, err := ExecuteJavascriptString([]byte(script), true, nil)
+			testifyrequire.NoError(t, err)
+			testifyrequire.Equal(t, tt.want, conf.Domains[0].Records[0].GetTargetTXTJoined())
+		})
+	}
+}
