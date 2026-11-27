@@ -38,11 +38,41 @@ function initialize() {
     defaultArgs = [];
 }
 
+// _isObject(v) reports whether v is a function or a non-null object
+// (including arrays), like underscore.js's _.isObject().
+function _isObject(v) {
+    var t = typeof v;
+    return t === "function" || (t === "object" && !!v);
+}
+
+// _isEmpty(v) reports whether v has no elements, like underscore.js's
+// _.isEmpty(): null, undefined, "", [], {} and non-objects (such as
+// numbers and booleans) are empty.
+function _isEmpty(v) {
+    if (v == null) {
+        return true;
+    }
+    if (Array.isArray(v) || typeof v === "string") {
+        return v.length === 0;
+    }
+    if (!_isObject(v)) {
+        return true;
+    }
+    return Object.keys(v).length === 0;
+}
+
+// _difference(a, b) returns the elements of array a that are not in array b.
+function _difference(a, b) {
+    return a.filter(function (x) {
+        return b.indexOf(x) === -1;
+    });
+}
+
 function _isDomain(d) {
     return (
-        _.isArray(d.nameservers) &&
-        _.isArray(d.rawrecords) &&
-        _.isString(d.name)
+        Array.isArray(d.nameservers) &&
+        Array.isArray(d.rawrecords) &&
+        typeof d.name === "string"
     );
 }
 
@@ -267,14 +297,17 @@ function processDargs(m, domain) {
     // function: call it with domain
     // array: process recursively
     // object: merge it into metadata
-    if (_.isFunction(m)) {
+    if (typeof m === "function") {
         m(domain);
-    } else if (_.isArray(m)) {
+    } else if (Array.isArray(m)) {
         for (var j in m) {
             processDargs(m[j], domain);
         }
-    } else if (_.isObject(m)) {
-        _.extend(domain.meta, m);
+    } else if (_isObject(m)) {
+        // Copy all enumerable properties, including inherited ones.
+        for (var key in m) {
+            domain.meta[key] = m[key];
+        }
     } else {
         throw (
             "WARNING: domain modifier type unsupported: " +
@@ -426,7 +459,7 @@ function DEFAULTS() {
 
 // TTL(v): Set the TTL for a DNS record.
 function TTL(v) {
-    if (_.isString(v)) {
+    if (typeof v === "string") {
         v = stringToDuration(v);
     }
     return function (r) {
@@ -455,7 +488,7 @@ function stringToDuration(v) {
 
 // DefaultTTL(v): Set the default TTL for the domain.
 function DefaultTTL(v) {
-    if (_.isString(v)) {
+    if (typeof v === "string") {
         v = stringToDuration(v);
     }
     return function (d) {
@@ -516,7 +549,7 @@ function SERVICE(name, nsCount, meta) {
             throw "SERVICE configMetadata must be a JSON value.";
         }
         meta = _copyProviderMetadata(meta);
-        if (meta && _.isArray(meta.ip_conversions)) {
+        if (meta && Array.isArray(meta.ip_conversions)) {
             meta.ip_conversions = format_tt(meta.ip_conversions);
         }
     }
@@ -574,7 +607,7 @@ function _dnsProviderModifier(name, nsCount) {
 //             'answer_type',
 //             function (value) {
 //                 return (
-//                     _.isString(value) &&
+//                     typeof value === "string" &&
 //                     ['DUAL', 'A', 'AAAA'].indexOf(value) !== -1
 //                 );
 //             },
@@ -598,7 +631,7 @@ function _dnsProviderModifier(name, nsCount) {
 //     transform: function (record, args, modifier) {
 //         record.name = args.name;
 //         record.target = args.target;
-//         if (_.isObject(record.azure_alias)) {
+//         if (_isObject(record.azure_alias)) {
 //             record.azure_alias['type'] = args.type;
 //         } else {
 //             record.azure_alias = { type: args.type };
@@ -607,7 +640,7 @@ function _dnsProviderModifier(name, nsCount) {
 // });
 
 function validateAzureAliasType(value) {
-    if (!_.isString(value)) {
+    if (typeof value !== "string") {
         return false;
     }
     return ["A", "AAAA", "CNAME"].indexOf(value) !== -1;
@@ -619,7 +652,7 @@ function R53_ZONE(zone_id) {
         if (_isDomain(r)) {
             r.meta.zone_id = zone_id;
             //console.debug("R53_Opt store zoneid in domainmeta", zone_id);
-        } else if (_.isObject(r.r53_alias)) {
+        } else if (_isObject(r.r53_alias)) {
             r.r53_alias["zone_id"] = zone_id;
             //console.debug("R53_Opt store zoneid in recordr53alias", zone_id);
         } else {
@@ -632,7 +665,7 @@ function R53_ZONE(zone_id) {
 // R53_EVALUATE_TARGET_HEALTH(enabled)
 function R53_EVALUATE_TARGET_HEALTH(enabled) {
     return function (r) {
-        if (_.isObject(r.r53_alias)) {
+        if (_isObject(r.r53_alias)) {
             r.r53_alias["evaluate_target_health"] = enabled.toString();
         } else {
             r.r53_alias = { evaluate_target_health: enabled.toString() };
@@ -650,7 +683,7 @@ function r53AliasOptions(record, processedArgs, processedMetas) {
         "",
     ];
 
-    if (_.isObject(record.r53_alias)) {
+    if (_isObject(record.r53_alias)) {
         replacement[3] = record.r53_alias["evaluate_target_health"] || "false";
         replacement[4] = record.r53_alias["zone_id"] || "";
     }
@@ -661,14 +694,14 @@ function r53AliasOptions(record, processedArgs, processedMetas) {
 // R53_WEIGHT(weight, set_identifier) configures Route 53 weighted routing.
 // weight: integer 0-255, set_identifier: unique string within the weighted group.
 function R53_WEIGHT(weight, set_identifier) {
-    if (!_.isNumber(weight) || weight < 0 || weight > 255) {
+    if (typeof weight !== "number" || weight < 0 || weight > 255) {
         throw "R53_WEIGHT: weight must be a number between 0 and 255";
     }
-    if (!_.isString(set_identifier) || set_identifier === "") {
+    if (typeof set_identifier !== "string" || set_identifier === "") {
         throw "R53_WEIGHT: set_identifier must be a non-empty string";
     }
     return function (r) {
-        if (!_.isObject(r.meta)) {
+        if (!_isObject(r.meta)) {
             r.meta = {};
         }
         r.meta["r53_weight"] = weight.toString();
@@ -678,11 +711,11 @@ function R53_WEIGHT(weight, set_identifier) {
 
 // R53_HEALTH_CHECK_ID(health_check_id) associates a Route 53 health check with the record.
 function R53_HEALTH_CHECK_ID(health_check_id) {
-    if (!_.isString(health_check_id) || health_check_id === "") {
+    if (typeof health_check_id !== "string" || health_check_id === "") {
         throw "R53_HEALTH_CHECK_ID: health_check_id must be a non-empty string";
     }
     return function (r) {
-        if (!_.isObject(r.meta)) {
+        if (!_isObject(r.meta)) {
             r.meta = {};
         }
         r.meta["r53_health_check_id"] = health_check_id;
@@ -690,7 +723,7 @@ function R53_HEALTH_CHECK_ID(health_check_id) {
 }
 
 function validateR53AliasType(value) {
-    if (!_.isString(value)) {
+    if (typeof value !== "string") {
         return false;
     }
     return (
@@ -1016,7 +1049,7 @@ function NAMESERVER(name) {
 
 // NAMESERVER_TTL(v): Set the TTL for NAMESERVER records.
 function NAMESERVER_TTL(v) {
-    if (_.isString(v)) {
+    if (typeof v === "string") {
         v = stringToDuration(v);
     }
     return { ns_ttl: v.toString() };
@@ -1030,20 +1063,24 @@ function format_tt(transform_table) {
         var ip = transform_table[i];
         var newIP = ip.newIP;
         if (newIP) {
-            if (_.isArray(newIP)) {
-                newIP = _.map(newIP, function (i) {
-                    return num2dot(i);
-                }).join(",");
+            if (Array.isArray(newIP)) {
+                newIP = newIP
+                    .map(function (i) {
+                        return num2dot(i);
+                    })
+                    .join(",");
             } else {
                 newIP = num2dot(newIP);
             }
         }
         var newBase = ip.newBase;
         if (newBase) {
-            if (_.isArray(newBase)) {
-                newBase = _.map(newBase, function (i) {
-                    return num2dot(i);
-                }).join(",");
+            if (Array.isArray(newBase)) {
+                newBase = newBase
+                    .map(function (i) {
+                        return num2dot(i);
+                    })
+                    .join(",");
             } else {
                 newBase = num2dot(newBase);
             }
@@ -1217,7 +1254,7 @@ function num2dot(num) {
     if (num === undefined) {
         return "";
     }
-    if (_.isString(num)) {
+    if (typeof num === "string") {
         return num;
     }
     var d = num % 256;
@@ -1703,28 +1740,36 @@ function DKIM_BUILDER(value) {
     // PHASE 1: NORMALIZATION
     // ========================================
 
-    // Apply defaults using _.defaults()
-    value = _.defaults(value, {
+    // Apply defaults to any field that is undefined.
+    var dkimDefaults = {
         version: "DKIM1",
         pubkey: "",
         label: "@",
-    });
+    };
+    for (var key in dkimDefaults) {
+        if (value[key] === undefined) {
+            value[key] = dkimDefaults[key];
+        }
+    }
 
     // Normalize string|array fields to always be arrays
-    if (!_.isEmpty(value.hashtypes)) {
-        value.hashtypes = _.isString(value.hashtypes)
-            ? [value.hashtypes]
-            : value.hashtypes;
+    if (!_isEmpty(value.hashtypes)) {
+        value.hashtypes =
+            typeof value.hashtypes === "string"
+                ? [value.hashtypes]
+                : value.hashtypes;
     }
 
-    if (!_.isEmpty(value.servicetypes)) {
-        value.servicetypes = _.isString(value.servicetypes)
-            ? [value.servicetypes]
-            : value.servicetypes;
+    if (!_isEmpty(value.servicetypes)) {
+        value.servicetypes =
+            typeof value.servicetypes === "string"
+                ? [value.servicetypes]
+                : value.servicetypes;
     }
 
-    if (!_.isEmpty(value.flags)) {
-        value.flags = _.isString(value.flags) ? [value.flags] : value.flags;
+    if (!_isEmpty(value.flags)) {
+        value.flags =
+            typeof value.flags === "string" ? [value.flags] : value.flags;
     }
 
     // ========================================
@@ -1742,12 +1787,12 @@ function DKIM_BUILDER(value) {
     var ALLOWED_FLAGS = ["y", "s"];
 
     // Required fields
-    if (_.isEmpty(value.selector)) {
+    if (_isEmpty(value.selector)) {
         throw "DKIM_BUILDER selector cannot be empty";
     }
 
     // Version validation
-    if (!_.contains(ALLOWED_VERSIONS, value.version)) {
+    if (ALLOWED_VERSIONS.indexOf(value.version) === -1) {
         throw (
             "DKIM_BUILDER version must be one of: " +
             ALLOWED_VERSIONS.join(", ")
@@ -1756,8 +1801,8 @@ function DKIM_BUILDER(value) {
 
     // Keytype validation
     if (
-        !_.isEmpty(value.keytype) &&
-        !_.contains(ALLOWED_KEYTYPES, value.keytype)
+        !_isEmpty(value.keytype) &&
+        ALLOWED_KEYTYPES.indexOf(value.keytype) === -1
     ) {
         throw (
             "DKIM_BUILDER keytype must be one of: " +
@@ -1769,9 +1814,9 @@ function DKIM_BUILDER(value) {
     }
 
     // Hashtypes validation (now always an array after normalization)
-    if (!_.isEmpty(value.hashtypes)) {
+    if (!_isEmpty(value.hashtypes)) {
         var allowedHashtypes = ALLOWED_HASHTYPES[value.keytype || "rsa"];
-        var invalidHashtypes = _.difference(value.hashtypes, allowedHashtypes);
+        var invalidHashtypes = _difference(value.hashtypes, allowedHashtypes);
         if (invalidHashtypes.length > 0) {
             throw (
                 "DKIM_BUILDER hashtypes for " +
@@ -1783,8 +1828,8 @@ function DKIM_BUILDER(value) {
     }
 
     // Servicetypes validation (now always an array after normalization)
-    if (!_.isEmpty(value.servicetypes)) {
-        var invalidServicetypes = _.difference(
+    if (!_isEmpty(value.servicetypes)) {
+        var invalidServicetypes = _difference(
             value.servicetypes,
             ALLOWED_SERVICETYPES
         );
@@ -1797,8 +1842,8 @@ function DKIM_BUILDER(value) {
     }
 
     // Flags validation (now always an array after normalization)
-    if (!_.isEmpty(value.flags)) {
-        var invalidFlags = _.difference(value.flags, ALLOWED_FLAGS);
+    if (!_isEmpty(value.flags)) {
+        var invalidFlags = _difference(value.flags, ALLOWED_FLAGS);
         if (invalidFlags.length > 0) {
             throw (
                 "DKIM_BUILDER flags must be one of: " + ALLOWED_FLAGS.join(", ")
@@ -1823,7 +1868,7 @@ function DKIM_BUILDER(value) {
         record.push("k=" + value.keytype);
     }
 
-    if (!_.isEmpty(value.note)) {
+    if (!_isEmpty(value.note)) {
         record.push("n=" + _encodeDKIMQuotedPrintable(value.note));
     }
 
@@ -1977,7 +2022,7 @@ function DMARC_BUILDER(value) {
     // Failure reporting options
     if (value.ruf && value.failureOptions) {
         var fo = "0";
-        if (_.isObject(value.failureOptions)) {
+        if (_isObject(value.failureOptions)) {
             if (value.failureOptions.DKIM) {
                 fo = "d";
             }
@@ -2004,7 +2049,7 @@ function DMARC_BUILDER(value) {
 
     // Report interval
     if (value.reportInterval) {
-        if (_.isString(value.reportInterval)) {
+        if (typeof value.reportInterval === "string") {
             value.reportInterval = stringToDuration(value.reportInterval);
         }
 
@@ -2218,22 +2263,22 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
             var processedMetas = [];
             for (var i = 0; i < rawArgs.length; i++) {
                 var r = rawArgs[i];
-                if (_.isFunction(r)) {
+                if (typeof r === "function") {
                     r(record);
-                } else if (_.isArray(r)) {
+                } else if (Array.isArray(r)) {
                     // An array argument (e.g. TXT("n", ["a", "b"])) is a set of
                     // string segments; join them into a single argument,
                     // mirroring the legacy recordBuilder. Arrays are never
-                    // metadata, so this must be checked before _.isObject()
+                    // metadata, so this must be checked before _isObject()
                     // (which is true for arrays).
                     processedArgs.push(r.join(""));
-                } else if (_.isObject(r)) {
+                } else if (_isObject(r)) {
                     // Convert a transform array to its encoded string form
                     // (see format_tt), mirroring the legacy recordBuilder.
                     // Otherwise the array crosses to Go as an unparseable
                     // string and IP() numbers are never converted to dotted
                     // decimal.
-                    if (r.transform && _.isArray(r.transform)) {
+                    if (r.transform && Array.isArray(r.transform)) {
                         r.transform = format_tt(r.transform);
                     }
                     processedMetas.push(r);
@@ -2255,7 +2300,7 @@ function rawrecordBuilder(type, noLabel, optionalsFn) {
             // Modifier functions may have written to record.meta. Capture that
             // so it propagates to Go as a meta; otherwise it would be silently
             // dropped.
-            if (_.isObject(record.meta) && !_.isEmpty(record.meta)) {
+            if (_isObject(record.meta) && !_isEmpty(record.meta)) {
                 processedMetas.push(record.meta);
             }
 
