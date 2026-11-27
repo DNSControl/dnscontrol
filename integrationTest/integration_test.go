@@ -257,10 +257,11 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("TTL",
-			not("DESEC"),   // deSEC does not support TTL lower than 3600.
-			not("NETCUP"),  // NETCUP does not support TTLs.
-			not("LINODE"),  // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
-			not("OPENWRT"), // OpenWRT does not support per record TTL
+			not("DESEC"),     // deSEC does not support TTL lower than 3600.
+			not("NETCUP"),    // NETCUP does not support TTLs.
+			not("LINODE"),    // Linode does not support arbitrary TTLs: 666 and 1000 are both rounded up to 3600.
+			not("NAMEOCEAN"), // NameOcean takes 5m/15m/30m/1h/1d only: 666 and 1000 both become 900.
+			not("OPENWRT"),   // OpenWRT does not support per record TTL
 			tc("Start", tr("@", dnsv2.TypeA, "8.8.8.8", withTTL(666)), tr("www", dnsv2.TypeA, "1.2.3.4"), tr("www", dnsv2.TypeA, "5.6.7.8")),
 			tc("Change a ttl", tr("@", dnsv2.TypeA, "8.8.8.8", withTTL(1000)), tr("www", dnsv2.TypeA, "1.2.3.4"), tr("www", dnsv2.TypeA, "5.6.7.8")),
 			tc("Change single target from set", tr("@", dnsv2.TypeA, "8.8.8.8", withTTL(1000)), tr("www", dnsv2.TypeA, "2.2.2.2"), tr("www", dnsv2.TypeA, "5.6.7.8")),
@@ -339,7 +340,8 @@ func makeTests() []*TestGroup {
 				//
 				// Let's just ignore ECH test for Vercel for now.
 				"VERCEL",
-				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
+				"HEDNS",     // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
+				"NAMEOCEAN", // Validates the ECHConfigList; the dummy test value is not one.
 			),
 			tc("Start",
 				tr("@", dnsv2.TypeHTTPS, `3 example.com. alpn="h2,h3" port="999"`)),
@@ -377,7 +379,8 @@ func makeTests() []*TestGroup {
 				//
 				// Let's just ignore ECH test for Vercel for now.
 				"VERCEL",
-				"HEDNS", // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
+				"HEDNS",     // BUG: https://github.com/DNSControl/dnscontrol/issues/4328
+				"NAMEOCEAN", // Validates the ECHConfigList; the dummy test value is not one.
 			),
 			tc("Start",
 				tr("@", dnsv2.TypeSVCB, `3 example.com. alpn="h2,h3" port="999"`)),
@@ -507,6 +510,7 @@ func makeTests() []*TestGroup {
 				"NS1",               // Test leaves NS1 in a confused state.
 				"OPENPROVIDER",      // Openprovider manages the apex NS records and does not allow changing them.
 				"PORKBUN",           // Record ignored.
+				"NAMEOCEAN",         // Apex NS records are always ns1-ns4.nameocean.net.
 				"REALTIMEREGISTER",  // "Cannot be a SOA level record for type NS"
 				"SAKURACLOUD",       // Silently ignores requests to remove NS at @.
 				"TRANSIP",           // "it is not allowed to have an NS for an @ record"
@@ -997,7 +1001,7 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("DS (children only)",
-			not("CLOUDNS", "CLOUDFLAREAPI"),
+			not("CLOUDNS", "CLOUDFLAREAPI", "NAMEOCEAN"), // NAMEOCEAN: a DS needs the child's NS records first
 			// Use a valid digest value here.  Some providers verify that a valid digest is in use.  See RFC 4034 and
 			// https://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xhtml
 			// https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml
@@ -1016,7 +1020,7 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("DS (children only) CLOUDNS",
-			only("CLOUDNS", "CLOUDFLAREAPI"),
+			only("CLOUDNS", "CLOUDFLAREAPI", "NAMEOCEAN"),
 			// Cloudns requires NS records before creating DS Record. Verify
 			// they are done in the right order, even if they are listed in
 			// the wrong order in dnsconfig.js.
@@ -1089,7 +1093,10 @@ func makeTests() []*TestGroup {
 		),
 
 		testgroup("ALIAS to nonfqdn",
-			not("DNSMADEEASY"), // DME validates ANAME target resolvability at create time; an unpublished in-zone target can't resolve
+			not(
+				"DNSMADEEASY", // DME validates ANAME target resolvability at create time; an unpublished in-zone target can't resolve
+				"NAMEOCEAN",   // Also resolves the ALIAS target when it is saved.
+			),
 			tc("ALIAS at root",
 				tr("foo", dnsv2.TypeA, "1.2.3.4"),
 				alias("@", "foo"),

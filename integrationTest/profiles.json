@@ -325,6 +325,11 @@
     "apiuser": "$NAMEDOTCOM_USER",
     "domain": "$NAMEDOTCOM_DOMAIN"
   },
+  "NAMEOCEAN": {
+    "TYPE": "NAMEOCEAN",
+    "domain": "$NAMEOCEAN_DOMAIN",
+    "token": "$NAMEOCEAN_API_KEY"
+  },
   "NETBIRD": {
     "TYPE": "NETBIRD",
     "domain": "$NETBIRD_DOMAIN",

@@ -1,0 +1,199 @@
+[
+  {
+    "index": 1,
+    "value": {
+      "name": "@",
+      "type": "A",
+      "value": "192.0.2.1",
+      "ttl": "1h"
+    }
+  },
+  {
+    "index": 2,
+    "value": {
+      "name": "www",
+      "type": "A",
+      "value": "192.0.2.2",
+      "ttl": "5m"
+    }
+  },
+  {
+    "index": 3,
+    "value": {
+      "name": "www",
+      "type": "AAAA",
+      "value": "2001:db8::1",
+      "ttl": "15m"
+    }
+  },
+  {
+    "index": 4,
+    "value": {
+      "name": "alias",
+      "type": "CNAME",
+      "value": "www.example.com",
+      "ttl": "30m"
+    }
+  },
+  {
+    "index": 5,
+    "value": {
+      "name": "apexalias",
+      "type": "CNAME",
+      "value": "@",
+      "ttl": "1h"
+    }
+  },
+  {
+    "index": 6,
+    "value": {
+      "name": "ext",
+      "type": "CNAME",
+      "value": "target.example.net",
+      "ttl": "1h"
+    }
+  },
+  {
+    "index": 7,
+    "value": {
+      "name": "@",
+      "type": "ALIAS",
+      "value": "lb.example.net",
+      "ttl": "1d"
+    }
+  },
+  {
+    "index": 8,
+    "value": {
+      "name": "@",
+      "type": "MX",
+      "value": "mail.example.com",
+      "ttl": "1h",
+      "priority": 10
+    }
+  },
+  {
+    "index": 9,
+    "value": {
+      "name": "@",
+      "type": "MX",
+      "value": "@",
+      "ttl": "1h",
+      "priority": 20
+    }
+  },
+  {
+    "index": 10,
+    "value": {
+      "name": "@",
+      "type": "TXT",
+      "value": "v=spf1 include:_spf.example.net -all",
+      "ttl": "1h"
+    }
+  },
+  {
+    "index": 11,
+    "value": {
+      "name": "_acme",
+      "type": "TXT",
+      "value": "short-lived",
+      "ttl": "30"
+    }
+  },
+  {
+    "index": 12,
+    "value": {
+      "name": "sub",
+      "type": "NS",
+      "value": "ns1.example.net",
+      "ttl": "1d"
+    }
+  },
+  {
+    "index": 13,
+    "value": {
+      "name": "sub",
+      "type": "DS",
+      "value": "4b9b6b073edd97feb5bc12dc4e1b32d2c6af7ae23a293936ceb87bb10494ec44",
+      "ttl": "1h",
+      "key_tag": 8857,
+      "algorithm": 13,
+      "digest_type": 2
+    }
+  },
+  {
+    "index": 14,
+    "value": {
+      "name": "@",
+      "type": "CAA",
+      "value": "letsencrypt.org",
+      "ttl": "1h",
+      "tag": "issue",
+      "flags": 0
+    }
+  },
+  {
+    "index": 15,
+    "value": {
+      "name": "@",
+      "type": "CAA",
+      "value": "mailto:security@example.com",
+      "ttl": "1h",
+      "tag": "iodef",
+      "flags": 128
+    }
+  },
+  {
+    "index": 16,
+    "value": {
+      "name": "_sip._tcp",
+      "type": "SRV",
+      "value": "sip.example.com",
+      "ttl": "1h",
+      "priority": 10,
+      "weight": 20,
+      "port": 5060
+    }
+  },
+  {
+    "index": 17,
+    "value": {
+      "name": "@",
+      "type": "HTTPS",
+      "value": ".",
+      "ttl": "1h",
+      "priority": 1,
+      "params": "alpn=h2,h3"
+    }
+  },
+  {
+    "index": 18,
+    "value": {
+      "name": "_8443._foo",
+      "type": "SVCB",
+      "value": "svc.example.net",
+      "ttl": "1h",
+      "priority": 16,
+      "params": "alpn=h2 port=8443"
+    }
+  },
+  {
+    "index": 19,
+    "value": {
+      "name": "alt",
+      "type": "HTTPS",
+      "value": "@",
+      "ttl": "1h",
+      "priority": 0
+    }
+  },
+  {
+    "index": 20,
+    "value": {
+      "name": "*",
+      "type": "A",
+      "value": "192.0.2.3",
+      "ttl": "1h"
+    }
+  }
+]
