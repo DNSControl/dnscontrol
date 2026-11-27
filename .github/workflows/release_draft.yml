@@ -13,9 +13,11 @@ name: "RELEASE: Make release candidate"
 #
 # Either way, GoReleaser produces a DRAFT release; the release job then
 # cosign-signs checksums.txt (keyless, one Sigstore bundle) and uploads the
-# bundle alongside the artifacts, the "provenance" job generates SLSA
-# provenance (multiple.intoto.jsonl), and the "upload-provenance" job
-# attaches it to the same draft. You edit the notes and click publish.
+# bundle alongside the artifacts, and registers GitHub-native build
+# attestations for every release artifact (what "gh attestation verify"
+# talks to). The "provenance" job generates SLSA provenance
+# (multiple.intoto.jsonl), and the "upload-provenance" job attaches it to
+# the same draft. You edit the notes and click publish.
 
 on:
   push:
@@ -115,8 +117,11 @@ jobs:
     permissions:
       packages: write
       contents: write
-      # Keyless cosign signing needs this job's OIDC identity token.
+      # Keyless cosign signing and the build-attestations step below need
+      # this job's OIDC identity token.
       id-token: write
+      # Register GitHub-native build attestations ("gh attestation verify").
+      attestations: write
     outputs:
       # Subject digests (base64 sha256sum) handed to the SLSA provenance job.
       hashes: ${{ steps.hash.outputs.hashes }}
@@ -292,6 +297,26 @@ jobs:
           cd dist
           hashes="$(sha256sum -- *.tar.gz *.zip *.rpm *.deb checksums.txt | base64 -w0)"
           echo "hashes=$hashes" >> "$GITHUB_OUTPUT"
+
+      # Dual provenance is intentional: this step registers GitHub-native
+      # attestations with GitHub's attestation API (what "gh attestation
+      # verify" talks to, and what the release notes' "Verify downloads"
+      # section documents), while the "provenance" job below generates the
+      # SLSA multiple.intoto.jsonl release asset that OpenSSF Scorecard's
+      # Signed-Releases check looks for (issue #3468). The two mechanisms
+      # serve different consumers; don't "unify" them. Subjects mirror the
+      # SLSA provenance subjects computed above: every release artifact
+      # plus checksums.txt, so verifying checksums.txt via the attestation
+      # transitively covers everything else too.
+      - name: Generate build attestations
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/*.tar.gz
+            dist/*.zip
+            dist/*.rpm
+            dist/*.deb
+            dist/checksums.txt
 
       - name: Install cosign
         uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3

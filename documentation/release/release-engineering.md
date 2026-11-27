@@ -8,6 +8,7 @@
   - [Start the release automation](#start-the-release-automation)
 - [Manual (escape hatch)](#manual-escape-hatch)
 - [Release it to the public](#release-it-to-the-public)
+- [What the release workflow guarantees, and how to verify it](#what-the-release-workflow-guarantees-and-how-to-verify-it)
 - [Step 3: Create the release notes](#step-3-create-the-release-notes)
 - [Step 4: Announce it via email](#step-4-announce-it-via-email)
 - [Tip: How to bump the major version](#tip-how-to-bump-the-major-version)
@@ -181,6 +182,110 @@ When you submit it:
 
 - "Pre-Release" for rc releases, "Latest" for real releases.
 - Create a discussion for this release
+
+## What the release workflow guarantees, and how to verify it
+
+Every release carries three layers of cryptographic supply-chain evidence.
+All three are keyless: the signing identity is the release workflow itself
+(`DNSControl/dnscontrol/.github/workflows/release_draft.yml`), certified by
+GitHub's OIDC issuer and recorded in the public Sigstore transparency log.
+There are no signing keys to manage or trust.
+
+- **cosign signature** — `checksums.txt.sigstore.json`, a keyless Sigstore
+  bundle over `checksums.txt`, uploaded to the release page. Consumed by
+  `cosign verify-blob`.
+- **SLSA provenance** — `multiple.intoto.jsonl`, a SLSA Level 3 statement
+  attached to the release page by the `upload-provenance` job. Consumed by
+  `slsa-verifier verify-artifact`; this is also the asset OpenSSF
+  Scorecard's Signed-Releases check looks for (issue #3468).
+- **GitHub attestation** — build provenance for every release artifact,
+  registered with GitHub's attestation API by the
+  `Generate build attestations` step. Consumed by
+  `gh attestation verify`.
+
+### Why both SLSA provenance and GitHub attestations?
+
+The two mechanisms are intentional and not redundant — their consumers
+differ:
+
+- `gh attestation verify` talks only to GitHub's attestation API. Before
+  the `Generate build attestations` step existed, it returned HTTP 404 for
+  every dnscontrol release.
+- OpenSSF Scorecard's Signed-Releases check (issue #3468) looks for a
+  signature or provenance file on the release page, not in the
+  attestation API.
+- `slsa-verifier` consumes the `multiple.intoto.jsonl` asset; it does not
+  use the attestation API.
+
+Don't "unify" the two mechanisms.
+
+### Post-release verification checklist
+
+After a release ships, walk all layers (the same commands the release
+notes' "Verify downloads" footer documents):
+
+```shell
+VERSION=5.10.1   # example: the version just released
+FILE=dnscontrol_${VERSION}_linux_amd64.tar.gz
+gh release download "v${VERSION}" --repo DNSControl/dnscontrol \
+  --pattern "$FILE" --pattern checksums.txt \
+  --pattern 'checksums.txt.sigstore.json' --pattern 'multiple.intoto.jsonl'
+
+# 1. cosign bundle over checksums.txt:
+cosign verify-blob checksums.txt \
+  --bundle checksums.txt.sigstore.json \
+  --certificate-identity-regexp 'https://github\.com/DNSControl/dnscontrol/\.github/workflows/release_draft\.yml@refs/(tags|heads)/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+# 2. GitHub attestation for any release asset (including checksums.txt):
+gh attestation verify "$FILE" --repo DNSControl/dnscontrol
+
+# 3. SLSA provenance. Releases cut via the release workflow
+#    (workflow_dispatch) record the BRANCH they were cut from, so use
+#    --source-branch. Releases cut by manually pushing a tag record the
+#    tag instead; use --source-tag for those.
+slsa-verifier verify-artifact \
+  --provenance-path multiple.intoto.jsonl \
+  --source-uri git+https://github.com/DNSControl/dnscontrol \
+  --source-branch main \
+  "$FILE"
+
+# 4. checksums:
+sha256sum -c checksums.txt --ignore-missing
+```
+
+Notes:
+
+- `multiple.intoto.jsonl` is a Sigstore bundle (signature, certificate,
+  and DSSE envelope in one file) — the stock output of
+  `slsa-github-generator` v2.x. It is intentionally shipped as-is, not
+  rewritten to a bare DSSE envelope: `slsa-verifier` 2.7.0+ reads it
+  directly. Older `slsa-verifier` versions cannot parse the bundle;
+  unwrap the DSSE envelope first
+  (`jq -c '.dsseEnvelope' multiple.intoto.jsonl > multiple.dsse.jsonl`)
+  and pass that file to `--provenance-path`.
+- The `refs/(tags|heads)/` pattern in the cosign check matches both
+  release entry paths: a manually pushed tag signs with a `refs/tags/`
+  identity, a dispatch run with a `refs/heads/` one.
+- Releases cut before the `Generate build attestations` step landed have
+  no attestations registered; verify those via the cosign bundle and
+  `checksums.txt`, as their release notes describe.
+
+### History
+
+- #3468 — OpenSSF Scorecard flagged releases as unsigned; the original
+  request for release signing.
+- #3563 (closed, May 2025) — first attempt: SLSA provenance via the
+  generator's built-in uploader. The uploader created a second draft
+  release on repos with many releases, and the approach was abandoned.
+- #5011 (merged, Oct 2026) — cosign keyless signing plus SLSA
+  provenance. The generator's uploader is replaced by the
+  `upload-provenance` job, which attaches `multiple.intoto.jsonl` with
+  `gh release upload` (resolves the draft by pending tag name and is
+  idempotent).
+- This change — the `Generate build attestations` step, so
+  `gh attestation verify` works on every release, plus these
+  verification docs.
 
 ## Step 3: Create the release notes
 
