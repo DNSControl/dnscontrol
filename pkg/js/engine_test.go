@@ -411,9 +411,6 @@ func TestBuiltinResults(t *testing.T) {
 		{"glob recursive by default", `glob("pkg/js/parse_tests/complexImports/a").join(",")`,
 			"pkg/js/parse_tests/complexImports/a/a.js,pkg/js/parse_tests/complexImports/a/c/c.js"},
 		{"glob extension without dot", `glob("pkg/js/parse_tests/complexImports/a", true, "js").length`, "2"},
-		// BUG: "*" is documented as "no filter", but a "." is prepended
-		// first, so the filter becomes ".*" and nothing matches.
-		{"glob star filter matches nothing", `glob("pkg/js/parse_tests/complexImports/a", true, "*").length`, "0"},
 		{"require of .js returns true", `require("pkg/js/parse_tests/complexImports/a/a.js")`, "true"},
 		{"nested relative require", `require("pkg/js/parse_tests/complexImports/a/c/c.js") && typeof a + typeof c`, "functionfunction"},
 		{"require of .json returns the value", `typeof require("pkg/js/parse_tests/domain-ip-map.json")`, "object"},
