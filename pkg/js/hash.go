@@ -13,7 +13,7 @@ import (
 // Exposes sha1, sha256, and sha512 hashing functions to Javascript.
 func hashFunc(call otto.FunctionCall) otto.Value {
 	if len(call.ArgumentList) != 2 {
-		throw(call.Otto, "require takes exactly two arguments")
+		throw(call.Otto, "HASH takes exactly two arguments")
 	}
 	algorithm := call.Argument(0).String() // The algorithm to use for hashing
 	value := call.Argument(1).String()     // The value to hash
